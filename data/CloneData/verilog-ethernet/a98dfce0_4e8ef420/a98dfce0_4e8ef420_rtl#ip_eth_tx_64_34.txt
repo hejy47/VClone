@@ -1,0 +1,76 @@
+Source Block: verilog-ethernet/rtl/ip_eth_tx_64.v@220:250@HdlStmProcess
+        4'd7: count2keep = 8'b01111111;
+        4'd8: count2keep = 8'b11111111;
+    endcase
+endfunction
+
+always @* begin
+    shift_ip_payload_tdata[31:0] = save_ip_payload_tdata_reg[63:32];
+    shift_ip_payload_tkeep[3:0] = save_ip_payload_tkeep_reg[7:4];
+    shift_ip_payload_extra_cycle = save_ip_payload_tlast_reg & (save_ip_payload_tkeep_reg[7:4] != 0);
+
+    if (shift_ip_payload_extra_cycle) begin
+        shift_ip_payload_tdata[63:32] = 0;
+        shift_ip_payload_tkeep[7:4] = 0;
+        shift_ip_payload_tvalid = 1;
+        shift_ip_payload_tlast = save_ip_payload_tlast_reg;
+        shift_ip_payload_tuser = save_ip_payload_tuser_reg;
+        shift_ip_payload_input_tready = flush_save;
+    end else begin
+        shift_ip_payload_tdata[63:32] = input_ip_payload_tdata[31:0];
+        shift_ip_payload_tkeep[7:4] = input_ip_payload_tkeep[3:0];
+        shift_ip_payload_tvalid = input_ip_payload_tvalid;
+        shift_ip_payload_tlast = (input_ip_payload_tlast & (input_ip_payload_tkeep[7:4] == 0));
+        shift_ip_payload_tuser = (input_ip_payload_tuser & (input_ip_payload_tkeep[7:4] == 0));
+        shift_ip_payload_input_tready = ~(input_ip_payload_tlast & input_ip_payload_tvalid & transfer_in_save) & ~save_ip_payload_tlast_reg;
+    end
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_ip_hdr_ready_next = 0;
+
+Diff Content:
+- 231         shift_ip_payload_tdata[63:32] = 0;
+- 232         shift_ip_payload_tkeep[7:4] = 0;
+- 233         shift_ip_payload_tvalid = 1;
++ 233         shift_ip_payload_tdata[63:32] = 32'd0;
++ 233         shift_ip_payload_tkeep[7:4] = 4'd0;
++ 233         shift_ip_payload_tvalid = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip_eth_rx_64.v@250:280
+        4'd7: count2keep = 8'b01111111;
+        4'd8: count2keep = 8'b11111111;
+    endcase
+endfunction
+
+always @* begin
+    shift_eth_payload_tdata[31:0] = save_eth_payload_tdata_reg[63:32];
+    shift_eth_payload_tkeep[3:0] = save_eth_payload_tkeep_reg[7:4];
+    shift_eth_payload_extra_cycle = save_eth_payload_tlast_reg & (save_eth_payload_tkeep_reg[7:4] != 0);
+
+    if (shift_eth_payload_extra_cycle) begin
+        shift_eth_payload_tdata[63:32] = 0;
+        shift_eth_payload_tkeep[7:4] = 0;
+        shift_eth_payload_tvalid = 1;
+        shift_eth_payload_tlast = save_eth_payload_tlast_reg;
+        shift_eth_payload_tuser = save_eth_payload_tuser_reg;
+        shift_eth_payload_input_tready = flush_save;
+    end else begin
+        shift_eth_payload_tdata[63:32] = input_eth_payload_tdata[31:0];
+        shift_eth_payload_tkeep[7:4] = input_eth_payload_tkeep[3:0];
+        shift_eth_payload_tvalid = input_eth_payload_tvalid;
+        shift_eth_payload_tlast = (input_eth_payload_tlast & (input_eth_payload_tkeep[7:4] == 0));
+        shift_eth_payload_tuser = (input_eth_payload_tuser & (input_eth_payload_tkeep[7:4] == 0));
+        shift_eth_payload_input_tready = ~(input_eth_payload_tlast & input_eth_payload_tvalid & transfer_in_save);
+    end
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    flush_save = 0;
+

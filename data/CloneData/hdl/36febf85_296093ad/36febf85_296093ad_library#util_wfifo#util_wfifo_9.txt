@@ -1,0 +1,64 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@148:160@HdlStmFor
+
+  assign fifo_wr = adc_wr;
+
+  genvar m;
+  generate
+  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+
+  // read
+
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+
+Diff Content:
+- 153   for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
+- 154   assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
++ 154   always @(posedge dout_clk or negedge dout_rstn) begin
++ 154     if (dout_rstn == 1'b0) begin
++ 154       dout_waddr_rel_t_m <= 3'd0;
++ 154       dout_waddr_rel <= 'd0;
++ 154       dout_ovf_int <= 1'b1;
++ 154     end else begin
++ 154       dout_waddr_rel_t_m <= {dout_waddr_rel_t_m[1:0], din_waddr_rel_t};
++ 154       if (dout_waddr_rel_t_s == 1'b1) begin
++ 154         dout_waddr_rel <= din_waddr_rel;
++ 154         if (dout_raddr == dout_waddr_rel) begin
++ 154           dout_ovf_int <= dout_ovf;
++ 154         end else begin
++ 154           dout_ovf_int <= 1'b1;
++ 154         end
++ 154       end
++ 154     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_wfifo/util_wfifo.v@146:156
+
+  // write
+
+  assign fifo_wr = adc_wr;
+
+  genvar m;
+  generate
+  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+
+Clone Blocks 2:
+hdl/library/util_wfifo/util_wfifo.v@144:154
+    end
+  end
+
+  // write
+
+  assign fifo_wr = adc_wr;
+
+  genvar m;
+  generate
+  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
+

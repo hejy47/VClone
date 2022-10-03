@@ -1,0 +1,87 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_rx_pnmon.v@253:263@HdlStmAssign
+    end
+  endfunction
+
+  // device specific, assuming lower nibble is lost-
+
+  assign adc_pn0_data_i_s = (IQSEL == 1) ? adc_data_q : adc_data_i;
+  assign adc_pn0_data_q_s = (IQSEL == 1) ? adc_data_i : adc_data_q;
+  assign adc_pn0_data_q_rev_s = brfn(adc_pn0_data_q_s);
+  assign adc_pn0_data_s = {adc_pn0_data_i_s, adc_pn0_data_q_rev_s[3:0]};
+  assign adc_pn0_iq_match_s = (adc_pn0_data_i_s[7:0] == adc_pn0_data_q_rev_s[11:4]) ? 1'b1 : 1'b0;
+  assign adc_pn0_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn0_data_in : adc_pn0_data_pn;
+
+Diff Content:
+- 258   assign adc_pn0_data_i_s = (IQSEL == 1) ? adc_data_q : adc_data_i;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_rx_pnmon.v@254:264
+  endfunction
+
+  // device specific, assuming lower nibble is lost-
+
+  assign adc_pn0_data_i_s = (IQSEL == 1) ? adc_data_q : adc_data_i;
+  assign adc_pn0_data_q_s = (IQSEL == 1) ? adc_data_i : adc_data_q;
+  assign adc_pn0_data_q_rev_s = brfn(adc_pn0_data_q_s);
+  assign adc_pn0_data_s = {adc_pn0_data_i_s, adc_pn0_data_q_rev_s[3:0]};
+  assign adc_pn0_iq_match_s = (adc_pn0_data_i_s[7:0] == adc_pn0_data_q_rev_s[11:4]) ? 1'b1 : 1'b0;
+  assign adc_pn0_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn0_data_in : adc_pn0_data_pn;
+
+
+Clone Blocks 2:
+hdl/library/axi_ad9361/axi_ad9361_rx_pnmon.v@258:268
+  assign adc_pn0_data_i_s = (IQSEL == 1) ? adc_data_q : adc_data_i;
+  assign adc_pn0_data_q_s = (IQSEL == 1) ? adc_data_i : adc_data_q;
+  assign adc_pn0_data_q_rev_s = brfn(adc_pn0_data_q_s);
+  assign adc_pn0_data_s = {adc_pn0_data_i_s, adc_pn0_data_q_rev_s[3:0]};
+  assign adc_pn0_iq_match_s = (adc_pn0_data_i_s[7:0] == adc_pn0_data_q_rev_s[11:4]) ? 1'b1 : 1'b0;
+  assign adc_pn0_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn0_data_in : adc_pn0_data_pn;
+
+  always @(posedge adc_clk) begin
+    adc_pn0_valid <= adc_valid;
+    adc_pn0_data <= (adc_pn0_iq_match_s == 1'b0) ? 16'hdead : adc_pn0_data_s;
+    adc_pn0_valid_in <= adc_pn0_valid;
+
+Clone Blocks 3:
+hdl/library/axi_ad9361/axi_ad9361_rx_pnmon.v@256:266
+  // device specific, assuming lower nibble is lost-
+
+  assign adc_pn0_data_i_s = (IQSEL == 1) ? adc_data_q : adc_data_i;
+  assign adc_pn0_data_q_s = (IQSEL == 1) ? adc_data_i : adc_data_q;
+  assign adc_pn0_data_q_rev_s = brfn(adc_pn0_data_q_s);
+  assign adc_pn0_data_s = {adc_pn0_data_i_s, adc_pn0_data_q_rev_s[3:0]};
+  assign adc_pn0_iq_match_s = (adc_pn0_data_i_s[7:0] == adc_pn0_data_q_rev_s[11:4]) ? 1'b1 : 1'b0;
+  assign adc_pn0_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn0_data_in : adc_pn0_data_pn;
+
+  always @(posedge adc_clk) begin
+    adc_pn0_valid <= adc_valid;
+
+Clone Blocks 4:
+hdl/library/axi_ad9361/axi_ad9361_rx_pnmon.v@257:267
+
+  assign adc_pn0_data_i_s = (IQSEL == 1) ? adc_data_q : adc_data_i;
+  assign adc_pn0_data_q_s = (IQSEL == 1) ? adc_data_i : adc_data_q;
+  assign adc_pn0_data_q_rev_s = brfn(adc_pn0_data_q_s);
+  assign adc_pn0_data_s = {adc_pn0_data_i_s, adc_pn0_data_q_rev_s[3:0]};
+  assign adc_pn0_iq_match_s = (adc_pn0_data_i_s[7:0] == adc_pn0_data_q_rev_s[11:4]) ? 1'b1 : 1'b0;
+  assign adc_pn0_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn0_data_in : adc_pn0_data_pn;
+
+  always @(posedge adc_clk) begin
+    adc_pn0_valid <= adc_valid;
+    adc_pn0_data <= (adc_pn0_iq_match_s == 1'b0) ? 16'hdead : adc_pn0_data_s;
+
+Clone Blocks 5:
+hdl/library/axi_ad9361/axi_ad9361_rx_pnmon.v@255:265
+
+  // device specific, assuming lower nibble is lost-
+
+  assign adc_pn0_data_i_s = (IQSEL == 1) ? adc_data_q : adc_data_i;
+  assign adc_pn0_data_q_s = (IQSEL == 1) ? adc_data_i : adc_data_q;
+  assign adc_pn0_data_q_rev_s = brfn(adc_pn0_data_q_s);
+  assign adc_pn0_data_s = {adc_pn0_data_i_s, adc_pn0_data_q_rev_s[3:0]};
+  assign adc_pn0_iq_match_s = (adc_pn0_data_i_s[7:0] == adc_pn0_data_q_rev_s[11:4]) ? 1'b1 : 1'b0;
+  assign adc_pn0_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn0_data_in : adc_pn0_data_pn;
+
+  always @(posedge adc_clk) begin
+

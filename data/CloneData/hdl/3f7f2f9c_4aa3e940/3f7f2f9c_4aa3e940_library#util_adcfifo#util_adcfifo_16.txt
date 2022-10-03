@@ -1,0 +1,88 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@160:172@HdlStmProcess
+
+  assign dma_xfer_status = 4'd0;
+  assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
+  assign dma_waddr_rel_s =  {dma_waddr_rel,{ADDRESS_PADDING_WIDTH{1'b0}}};
+
+  always @(posedge dma_clk) begin
+    dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+  end
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rst <= 1'b1;
+      dma_waddr_rel <= 'd0;
+
+Diff Content:
+- 165   always @(posedge dma_clk) begin
+- 166     dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+- 167   end
++ 167   sync_gray #(
++ 167     .DATA_WIDTH (ADC_ADDRESS_WIDTH),
++ 167     .ASYNC_CLK (1))
++ 167   i_dma_waddr_sync (
++ 167     .in_clk (adc_clk),
++ 167     .in_resetn (1'b1),
++ 167     .in_count (adc_waddr_int),
++ 167     .out_resetn (1'b1),
++ 167     .out_clk (dma_clk),
++ 167     .out_count (dma_waddr_int_s));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_adcfifo/util_adcfifo.v@156:166
+    end
+  end
+
+  // read interface
+
+  assign dma_xfer_status = 4'd0;
+  assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
+  assign dma_waddr_rel_s =  {dma_waddr_rel,{ADDRESS_PADDING_WIDTH{1'b0}}};
+
+  always @(posedge dma_clk) begin
+    dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+
+Clone Blocks 2:
+hdl/library/util_adcfifo/util_adcfifo.v@157:167
+  end
+
+  // read interface
+
+  assign dma_xfer_status = 4'd0;
+  assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
+  assign dma_waddr_rel_s =  {dma_waddr_rel,{ADDRESS_PADDING_WIDTH{1'b0}}};
+
+  always @(posedge dma_clk) begin
+    dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+  end
+
+Clone Blocks 3:
+hdl/library/util_adcfifo/util_adcfifo.v@158:168
+
+  // read interface
+
+  assign dma_xfer_status = 4'd0;
+  assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
+  assign dma_waddr_rel_s =  {dma_waddr_rel,{ADDRESS_PADDING_WIDTH{1'b0}}};
+
+  always @(posedge dma_clk) begin
+    dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+  end
+
+
+Clone Blocks 4:
+hdl/library/xilinx/axi_adcfifo/axi_adcfifo_dma.v@139:150
+  end
+
+  // read interface
+
+  assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
+  assign dma_waddr_rel_s = (DMA_MEM_RATIO == 2) ? {dma_waddr_rel, 1'd0} :
+    ((DMA_MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} : {dma_waddr_rel, 3'd0});
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rst <= 1'b1;
+      dma_waddr_rel_t_m <= 'd0;
+

@@ -1,0 +1,54 @@
+Source Block: hdl/library/common/ad_axis_inf_rx.v@149:159@HdlStmAssign
+    end
+  end
+
+  // read interface
+
+  assign inf_ready_s = inf_ready | ~inf_valid;
+
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      rcnt <= 'd0;
+      inf_valid <= 'd0;
+
+Diff Content:
++ 154   always @(rcnt or wlast_0 or wdata_0 or wlast_1 or wdata_1 or
++ 154     wlast_2 or wdata_2 or wlast_3 or wdata_3 or wlast_4 or wdata_4 or
++ 154     wlast_5 or wdata_5 or wlast_6 or wdata_6 or wlast_7 or wdata_7) begin
++ 154     case (rcnt)
++ 154       3'd0: begin
++ 154         inf_last_s = wlast_0;
++ 154         inf_data_s = wdata_0;
++ 154       end
++ 154       3'd1: begin
++ 154         inf_last_s = wlast_1;
++ 154         inf_data_s = wdata_1;
++ 154       end
++ 154       3'd2: begin
++ 154         inf_last_s = wlast_2;
++ 154         inf_data_s = wdata_2;
++ 154       end
++ 154       3'd3: begin
++ 154         inf_last_s = wlast_3;
++ 154         inf_data_s = wdata_3;
++ 154       end
++ 154       3'd4: begin
++ 154         inf_last_s = wlast_4;
++ 154         inf_data_s = wdata_4;
++ 154       end
++ 154       3'd5: begin
++ 154         inf_last_s = wlast_5;
++ 154         inf_data_s = wdata_5;
++ 154       end
++ 154       3'd6: begin
++ 154         inf_last_s = wlast_6;
++ 154         inf_data_s = wdata_6;
++ 154       end
++ 154       default: begin
++ 154         inf_last_s = wlast_7;
++ 154         inf_data_s = wdata_7;
++ 154       end
++ 154     endcase
++ 154   end
+
+Clone Blocks:

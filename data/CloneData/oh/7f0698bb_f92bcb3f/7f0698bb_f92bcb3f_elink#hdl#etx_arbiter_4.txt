@@ -1,0 +1,25 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@91:103@HdlStmAssign
+
+   assign txrd_data[PW-1:0] = {txrd_packet[PW-1:8],   
+                               txrd_ctrlmode[3:0], 
+			       txrd_packet[3:0]};
+
+   assign txwr_data[PW-1:0] = {txwr_packet[PW-1:8],   
+                               txwr_ctrlmode[3:0], 
+			       txwr_packet[3:0]};
+ 
+   //##########################################################################
+   //# Arbiter
+   //##########################################################################
+  
+
+Diff Content:
+- 96    assign txwr_data[PW-1:0] = {txwr_packet[PW-1:8],   
+- 97                                txwr_ctrlmode[3:0], 
+- 98 			       txwr_packet[3:0]};
++ 98    assign txwr_splice_packet[PW-1:0] = {txwr_packet[PW-1:8],   
++ 98 					1'b0,
++ 98 					txwr_ctrlmode[3:0], 
++ 98 					txwr_packet[2:0]};
+
+Clone Blocks:

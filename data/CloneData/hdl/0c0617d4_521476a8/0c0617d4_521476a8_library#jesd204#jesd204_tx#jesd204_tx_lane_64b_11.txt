@@ -1,0 +1,50 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_lane_64b.v@77:89@HdlStmFor
+wire [11:0] crc12;
+
+/* Reorder octets MSB first */
+genvar i;
+generate
+  for (i = 0; i < 64; i = i + 8) begin: g_link_data
+    assign tx_data_msb_s[i+:8] = tx_data[64-1-i-:8];
+  end
+endgenerate
+
+jesd204_scrambler_64b #(
+  .WIDTH(64),
+  .DESCRAMBLE(0)
+
+Diff Content:
+- 82   for (i = 0; i < 64; i = i + 8) begin: g_link_data
+- 83     assign tx_data_msb_s[i+:8] = tx_data[64-1-i-:8];
++ 83   reg [63:0] scrambled_data;
++ 83   reg lmc_edge_d1 = 'b0;
++ 83   reg lmc_edge_d2 = 'b0;
++ 83   reg lmc_quarter_edge_d1 = 'b0;
++ 83   reg lmc_quarter_edge_d2 = 'b0;
++ 83   reg tx_ready_d1 = 'b0;
++ 83   wire [63:0] tx_data_msb_s;
++ 83   wire [63:0] scrambled_data_r;
++ 83   wire [11:0] crc12;
++ 83   /* Reorder octets MSB first */
++ 83   genvar i;
++ 83   generate
++ 83     for (i = 0; i < 64; i = i + 8) begin: g_link_data
++ 83       assign tx_data_msb_s[i+:8] = tx_data[64-1-i-:8];
++ 83     end
++ 83   endgenerate
++ 83   jesd204_scrambler_64b #(
++ 83     .WIDTH(64),
++ 83     .DESCRAMBLE(0)
++ 83   ) i_scrambler (
++ 83     .clk(clk),
++ 83     .reset(1'b0),
++ 83     .enable(~cfg_disable_scrambler),
++ 83     .data_in(tx_data_msb_s),
++ 83     .data_out(scrambled_data_r));
++ 83   always @(posedge clk) begin
++ 83     lmc_edge_d1 <= lmc_edge;
++ 83     lmc_edge_d2 <= lmc_edge_d1;
++ 83     lmc_quarter_edge_d1 <= lmc_quarter_edge;
++ 83     lmc_quarter_edge_d2 <= lmc_quarter_edge_d1;
+
+Clone Blocks:

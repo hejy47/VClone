@@ -1,0 +1,451 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3620:3630@HdlIdDef
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+
+Diff Content:
+- 3625    wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3615:3625
+   wire [3:0]		ctrlmode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1761:1771
+   wire [DW-1:0]	data_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			fifo_empty;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			fifo_read;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [14*LW-1:0]	fifo_tran_out;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			rdmesh_frame;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [2*LW-1:0]	rdmesh_tran;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@3612:3622
+   wire			access_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			check_next_dstaddr_tlc;	// From link_txo_launcher of link_txo_launcher.v
+   wire [3:0]		ctrlmode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [3:0]		ctrlmode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@1762:1772
+   wire [1:0]		datamode_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			fifo_empty;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			fifo_read;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [14*LW-1:0]	fifo_tran_out;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			rdmesh_frame;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [2*LW-1:0]	rdmesh_tran;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@3620:3630
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 6:
+oh/elink/dv/elink_e16_model.v@3616:3626
+   wire [DW-1:0]	data_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 7:
+oh/elink/dv/elink_e16_model.v@1763:1773
+   wire [1:0]		datamode_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			fifo_empty;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			fifo_read;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [14*LW-1:0]	fifo_tran_out;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			rdmesh_frame;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [2*LW-1:0]	rdmesh_tran;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			wait_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 8:
+oh/elink/dv/elink_e16_model.v@3623:3633
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			wait_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			wr_fifo_full;		// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 9:
+oh/elink/dv/elink_e16_model.v@3616:3626
+   wire [DW-1:0]	data_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 10:
+oh/elink/dv/elink_e16_model.v@3625:3635
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			wait_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			wr_fifo_full;		// From link_txo_fifo of link_txo_fifo.v
+   wire			write_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			write_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 11:
+oh/elink/dv/elink_e16_model.v@3612:3622
+   wire			access_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			check_next_dstaddr_tlc;	// From link_txo_launcher of link_txo_launcher.v
+   wire [3:0]		ctrlmode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [3:0]		ctrlmode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 12:
+oh/elink/dv/elink_e16_model.v@3617:3627
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 13:
+oh/elink/dv/elink_e16_model.v@1763:1773
+   wire [1:0]		datamode_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			fifo_empty;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			fifo_read;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [14*LW-1:0]	fifo_tran_out;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			rdmesh_frame;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [2*LW-1:0]	rdmesh_tran;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			wait_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 14:
+oh/elink/dv/elink_e16_model.v@3622:3632
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			wait_out;		// From e16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 15:
+oh/elink/dv/elink_e16_model.v@3618:3628
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+
+Clone Blocks 16:
+oh/elink/dv/elink_e16_model.v@3613:3623
+   wire			check_next_dstaddr_tlc;	// From link_txo_launcher of link_txo_launcher.v
+   wire [3:0]		ctrlmode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [3:0]		ctrlmode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 17:
+oh/elink/dv/elink_e16_model.v@3619:3629
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 18:
+oh/elink/dv/elink_e16_model.v@3617:3627
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 19:
+oh/elink/dv/elink_e16_model.v@3621:3631
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 20:
+oh/elink/dv/elink_e16_model.v@1761:1771
+   wire [DW-1:0]	data_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			fifo_empty;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			fifo_read;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [14*LW-1:0]	fifo_tran_out;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			rdmesh_frame;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [2*LW-1:0]	rdmesh_tran;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 21:
+oh/elink/dv/elink_e16_model.v@3614:3624
+   wire [3:0]		ctrlmode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [3:0]		ctrlmode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 22:
+oh/elink/dv/elink_e16_model.v@1764:1774
+   wire [AW-1:0]	dstaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			fifo_empty;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			fifo_read;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [14*LW-1:0]	fifo_tran_out;		// From link_rxi_fifo of link_rxi_fifo.v
+   wire			rdmesh_frame;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [2*LW-1:0]	rdmesh_tran;		// From link_rxi_launcher of link_rxi_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			wait_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+   wire			write_out;		// From rde16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 23:
+oh/elink/dv/elink_e16_model.v@4641:4651
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			mesh_frame;		// From link_txo_mesh_launcher of link_txo_mesh_launcher.v
+   wire			mesh_req;		// From link_txo_mesh_launcher of link_txo_mesh_launcher.v
+   wire			mesh_rotate_dis;	// From link_txo_mesh_launcher of link_txo_mesh_launcher.v
+   wire [2*LW-1:0]	mesh_tran;		// From link_txo_mesh_launcher of link_txo_mesh_launcher.v
+   wire			mesh_wait_int;		// From link_txo_mesh_launcher of link_txo_mesh_launcher.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 24:
+oh/elink/dv/elink_e16_model.v@3622:3632
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			wait_out;		// From e16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 25:
+oh/elink/dv/elink_e16_model.v@3614:3624
+   wire [3:0]		ctrlmode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [3:0]		ctrlmode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [DW-1:0]	data_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 26:
+oh/elink/dv/elink_e16_model.v@3625:3635
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			wait_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			wr_fifo_full;		// From link_txo_fifo of link_txo_fifo.v
+   wire			write_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			write_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 27:
+oh/elink/dv/elink_e16_model.v@3619:3629
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+
+Clone Blocks 28:
+oh/elink/dv/elink_e16_model.v@3623:3633
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			wait_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			wr_fifo_full;		// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 29:
+oh/elink/dv/elink_e16_model.v@3621:3631
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks 30:
+oh/elink/dv/elink_e16_model.v@3618:3628
+   wire [1:0]		datamode_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [1:0]		datamode_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	dstaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+
+Clone Blocks 31:
+oh/elink/dv/elink_e16_model.v@3624:3634
+   wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
+   wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
+   wire [AW-1:0]	srcaddr_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire [AW-1:0]	srcaddr_reg;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
+   wire			wait_out;		// From e16_mesh_interface of e16_mesh_interface.v
+   wire			wr_fifo_full;		// From link_txo_fifo of link_txo_fifo.v
+   wire			write_out;		// From e16_mesh_interface of e16_mesh_interface.v
+

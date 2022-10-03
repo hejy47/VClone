@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/erx_io.v@285:307@HdlStmFor
+   //#############################  
+   BUFIO bufio_lclk (.I(rxi_lclk), 
+		     .O(rx_lclk_iddr));
+   //DATA
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+     begin : gen_iddr
+	IDDR #(.DDR_CLK_EDGE  ("SAME_EDGE_PIPELINED"))
+	iddr_data (
+		   .Q1 (rx_word[i]),
+		   .Q2 (rx_word[i+8]),
+		   .C  (rx_lclk_iddr),
+		   .CE (1'b1),
+		   .D  (rxi_delay_out[i]),
+		   .R  (reset),
+		   .S  (1'b0)
+		   );
+     end
+     endgenerate
+
+   //FRAME
+   IDDR #(.DDR_CLK_EDGE  ("SAME_EDGE_PIPELINED"))
+	iddr_frame (
+
+Diff Content:
+- 292 	IDDR #(.DDR_CLK_EDGE  ("SAME_EDGE_PIPELINED"))
+- 296 		   .C  (rx_lclk_iddr),
+- 299 		   .R  (reset),
++ 292 	IDDR #(.DDR_CLK_EDGE  ("SAME_EDGE"), .SRTYPE("ASYNC"))
++ 296 		   .C  (rx_lclk),
++ 299 		   .R  (reset_sync),
+
+Clone Blocks:

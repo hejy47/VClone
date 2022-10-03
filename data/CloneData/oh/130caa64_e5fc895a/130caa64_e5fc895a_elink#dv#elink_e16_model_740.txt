@@ -1,0 +1,46 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5707:5722@HdlStmProcess
+
+   //##########################
+   //# mesh output busses  
+   //##########################
+
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       access_out <= 1'b0;
+     else if(clk_en)
+       if(!wait_in)
+	 access_out <= access;
+
+   always @ (posedge clk)
+     if (clk_en)
+       if(!wait_in & access)
+	 begin
+
+Diff Content:
+- 5712    always @ (posedge clk or posedge reset)
+- 5713      if(reset)
+- 5714        access_out <= 1'b0;
+- 5715      else if(clk_en)
+- 5716        if(!wait_in)
+- 5717 	 access_out <= access;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@5684:5699
+
+   //##########################
+   //# mesh input busses
+   //##########################
+
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       access_reg <= 1'b0;
+     else if(clk_en)
+       if(~wait_int)
+	 access_reg <= access_in;
+      
+   always @ (posedge clk)
+     if(clk_en)
+       if(~wait_int & access_in)
+	 begin
+

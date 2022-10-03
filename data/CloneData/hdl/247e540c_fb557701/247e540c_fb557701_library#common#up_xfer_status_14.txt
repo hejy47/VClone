@@ -1,0 +1,61 @@
+Source Block: hdl/library/common/up_xfer_status.v@68:78@HdlIdDef
+  reg             up_xfer_toggle = 'd0;
+
+  // internal signals
+
+  wire            d_xfer_enable_s;
+  wire            up_xfer_toggle_s;
+
+  // device status transfer
+
+  assign d_xfer_enable_s = d_xfer_state ^ d_xfer_toggle;
+
+
+Diff Content:
+- 73   wire            up_xfer_toggle_s;
++ 73   wire                        d_xfer_enable_s;
++ 73   wire                        up_xfer_toggle_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_xfer_status.v@67:77
+  reg             up_xfer_toggle_m3 = 'd0;
+  reg             up_xfer_toggle = 'd0;
+
+  // internal signals
+
+  wire            d_xfer_enable_s;
+  wire            up_xfer_toggle_s;
+
+  // device status transfer
+
+  assign d_xfer_enable_s = d_xfer_state ^ d_xfer_toggle;
+
+Clone Blocks 2:
+hdl/library/common/up_xfer_cntrl.v@67:77
+  reg             d_xfer_toggle_m3 = 'd0;
+  reg             d_xfer_toggle = 'd0;
+
+  // internal signals
+
+  wire            up_xfer_enable_s;
+  wire            d_xfer_toggle_s;
+
+  // device control transfer
+
+  assign up_xfer_enable_s = up_xfer_state ^ up_xfer_toggle;
+
+Clone Blocks 3:
+hdl/library/common/up_xfer_cntrl.v@68:78
+  reg             d_xfer_toggle = 'd0;
+
+  // internal signals
+
+  wire            up_xfer_enable_s;
+  wire            d_xfer_toggle_s;
+
+  // device control transfer
+
+  assign up_xfer_enable_s = up_xfer_state ^ up_xfer_toggle;
+
+

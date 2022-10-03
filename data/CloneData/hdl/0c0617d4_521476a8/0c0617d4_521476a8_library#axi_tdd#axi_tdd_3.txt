@@ -1,0 +1,26 @@
+Source Block: hdl/library/axi_tdd/axi_tdd.v@180:198@HdlStmProcess
+    end else begin
+      tdd_rx_valid <= 1'b1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_vco_overlap <= 1'b0;
+      tdd_rf_overlap <= 1'b0;
+    end else begin
+      tdd_vco_overlap <= tdd_rx_vco_en & tdd_tx_vco_en;
+      tdd_rf_overlap <= tdd_rx_rf_en & tdd_tx_rf_en;
+    end
+  end
+
+  assign tdd_status = {6'b0, tdd_rf_overlap, tdd_vco_overlap};
+
+  // instantiations
+
+
+Diff Content:
+- 186     if(rst == 1'b1) begin
++ 186     if (rst == 1'b1) begin
+
+Clone Blocks:

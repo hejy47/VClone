@@ -1,0 +1,89 @@
+Source Block: oh/padring/hdl/oh_padring.v@151:188@HdlStmFor
+      
+      //#############################
+      // EAST
+      //#############################
+
+      for(i=0;i<EA_DOMAINS;i=i+1)
+	begin: ea_pads
+	   oh_pads_domain #(.DIR("EO"),
+			    .TYPE(TYPE),
+			    .NGPIO(EA_GPIO),
+			    .NVDDIO(EA_VDDIO),
+			    .NVSSIO(EA_VSSIO),
+			    .NVDD(EA_VDD),
+			    .NVSS(EA_VSS),
+			    .POC(1),
+			    .LEFTCUT(1),
+			    .RIGHTCUT(1))			    
+	   i0 (.vdd     (vdd),
+	       .vss     (vss),
+	       // Outputs
+	       .din     (ea_din[EA_GPIO-1:0]),
+	       // Inouts
+	       .pad     (ea_pad[EA_GPIO-1:0]),
+	       .vddio   (ea_vddio[i]),
+	       .vssio	(ea_vssio[i]),
+	       .poc	(ea_poc[i]),
+	       // Inputs
+	       .dout	(ea_dout[EA_GPIO-1:0]),
+	       .oen	(ea_oen[EA_GPIO-1:0]),
+	       .ie	(ea_ie[EA_GPIO-1:0]),
+	       .cfg	(ea_cfg[EA_GPIO*8-1:0]));
+	   
+	end
+      
+      //#############################
+      // WEST
+      //#############################
+
+
+Diff Content:
+- 157 	begin: ea_pads
+- 158 	   oh_pads_domain #(.DIR("EO"),
+- 159 			    .TYPE(TYPE),
+- 160 			    .NGPIO(EA_GPIO),
+- 161 			    .NVDDIO(EA_VDDIO),
+- 162 			    .NVSSIO(EA_VSSIO),
+- 163 			    .NVDD(EA_VDD),
+- 164 			    .NVSS(EA_VSS),
+- 165 			    .POC(1),
+- 166 			    .LEFTCUT(1),
+- 167 			    .RIGHTCUT(1))			    
+- 168 	   i0 (.vdd     (vdd),
+- 169 	       .vss     (vss),
+- 171 	       .din     (ea_din[EA_GPIO-1:0]),
+- 173 	       .pad     (ea_pad[EA_GPIO-1:0]),
+- 174 	       .vddio   (ea_vddio[i]),
+- 175 	       .vssio	(ea_vssio[i]),
+- 176 	       .poc	(ea_poc[i]),
+- 178 	       .dout	(ea_dout[EA_GPIO-1:0]),
+- 179 	       .oen	(ea_oen[EA_GPIO-1:0]),
+- 180 	       .ie	(ea_ie[EA_GPIO-1:0]),
+- 181 	       .cfg	(ea_cfg[EA_GPIO*8-1:0]));
+- 183 	end
++ 183         begin: ea_pads
++ 183            oh_pads_domain #(.DIR("EO"),
++ 183                             .TYPE(TYPE),
++ 183                             .NGPIO(EA_GPIO),
++ 183                             .NVDDIO(EA_VDDIO),
++ 183                             .NVSSIO(EA_VSSIO),
++ 183                             .NVDD(EA_VDD),
++ 183                             .NVSS(EA_VSS),
++ 183                             .POC(1),
++ 183                             .LEFTCUT(1),
++ 183                             .RIGHTCUT(1))
++ 183            i0 (.vdd     (vdd),
++ 183                .vss     (vss),
++ 183                .din     (ea_din[EA_GPIO-1:0]),
++ 183                .pad     (ea_pad[EA_GPIO-1:0]),
++ 183                .vddio   (ea_vddio[i]),
++ 183                .vssio	(ea_vssio[i]),
++ 183                .poc	(ea_poc[i]),
++ 183                .dout	(ea_dout[EA_GPIO-1:0]),
++ 183                .oen	(ea_oen[EA_GPIO-1:0]),
++ 183                .ie	(ea_ie[EA_GPIO-1:0]),
++ 183                .cfg	(ea_cfg[EA_GPIO*8-1:0]));
++ 183         end
+
+Clone Blocks:

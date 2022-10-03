@@ -1,0 +1,73 @@
+Source Block: hdl/library/intel/avl_dacfifo/avl_dacfifo_rd.v@188:251@HdlStmProcess
+    end
+  end
+
+  // FSM to generate the necessary Avalon Write transactions
+
+  always @(posedge avl_clk) begin
+    if (avl_fifo_reset_s == 1'b1) begin
+       avl_read_state <= IDLE;
+       avl_burstcount <= AVL_BURST_LENGTH;
+    end else begin
+      case (avl_read_state)
+        IDLE : begin
+          if (avl_xfer_req_in == 1'b1) begin
+            avl_read_state <= XFER_STAGING;
+          end else begin
+            avl_read_state <= IDLE;
+          end
+        end
+        XFER_STAGING : begin
+          if (avl_xfer_req_in == 1'b1) begin
+            if (avl_mem_request_data == 1'b1) begin
+              if (avl_address + AVL_BURST_LENGTH <= avl_last_address) begin
+                avl_read_state <= XFER_FULL_BURST;
+                avl_burstcount <= AVL_BURST_LENGTH;
+              end else begin
+                avl_read_state <= XFER_PARTIAL_BURST;
+                avl_burstcount <= avl_last_burstcount;
+              end
+            end
+          end else begin
+            avl_read_state <= IDLE;
+          end
+        end
+        // Avalon transaction with full burst length
+        XFER_FULL_BURST : begin
+          if (avl_burstcounter < avl_burstcount) begin
+            avl_read_state <= XFER_FULL_BURST;
+          end else begin
+            avl_read_state <= XFER_STAGING;
+          end
+        end
+        // Avalon transaction with the remaining data, burst length is less than
+        // the maximum supported burst length
+        XFER_PARTIAL_BURST : begin
+          if (avl_burstcounter < avl_burstcount) begin
+            avl_read_state <= XFER_PARTIAL_BURST;
+          end else begin
+            avl_read_state <= XFER_END;
+          end
+        end
+        XFER_END : begin
+          avl_read_state <= IDLE;
+        end
+        default : begin
+            avl_read_state <= IDLE;
+        end
+      endcase
+    end
+  end
+
+  // FSM outputs
+
+  assign avl_read_int_s = ((avl_read_state == XFER_FULL_BURST)    ||
+                           (avl_read_state == XFER_PARTIAL_BURST)) ? 1 : 0;
+
+Diff Content:
+- 195        avl_read_state <= IDLE;
+- 196        avl_burstcount <= AVL_BURST_LENGTH;
++ 196       avl_read_state <= IDLE;
++ 196       avl_burstcount <= AVL_BURST_LENGTH;
+
+Clone Blocks:

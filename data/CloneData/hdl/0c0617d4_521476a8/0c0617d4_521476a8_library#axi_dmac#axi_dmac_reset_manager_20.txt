@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@104:120@HdlStmProcess
+  end else begin
+    do_reset <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (state == STATE_STARTUP || state == STATE_ENABLED) begin
+    do_enable <= 1'b1;
+  end else begin
+    do_enable <= 1'b0;
+  end
+end
+
+/*
+ * If ctrl_enable goes from 1 to 0 a shutdown procedure is initiated. During the
+ * shutdown procedure all domains are signaled that a shutdown should occur. The
+ * domains will then complete any active transactions that are required to
+
+Diff Content:
+- 109 always @(posedge clk) begin
+- 110   if (state == STATE_STARTUP || state == STATE_ENABLED) begin
+- 111     do_enable <= 1'b1;
+- 112   end else begin
+- 113     do_enable <= 1'b0;
+- 114   end
+- 115 end
+
+Clone Blocks:

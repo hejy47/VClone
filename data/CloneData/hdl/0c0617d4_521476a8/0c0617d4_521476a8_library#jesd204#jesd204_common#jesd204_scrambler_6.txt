@@ -1,0 +1,48 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_scrambler.v@62:72@HdlIdDef
+wire [WIDTH-1:0] swizzle_in;
+wire [WIDTH-1:0] feedback;
+wire [WIDTH-1+15:0] full_state;
+
+generate
+genvar i;
+for (i = 0; i < WIDTH / 8; i = i + 1) begin: gen_swizzle
+  assign swizzle_in[WIDTH-1-i*8:WIDTH-i*8-8] = data_in[i*8+7:i*8];
+  assign data_out[WIDTH-1-i*8:WIDTH-i*8-8] = swizzle_out[i*8+7:i*8];
+end
+endgenerate
+
+Diff Content:
+- 67 genvar i;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_common/jesd204_scrambler.v@63:76
+wire [WIDTH-1:0] feedback;
+wire [WIDTH-1+15:0] full_state;
+
+generate
+genvar i;
+for (i = 0; i < WIDTH / 8; i = i + 1) begin: gen_swizzle
+  assign swizzle_in[WIDTH-1-i*8:WIDTH-i*8-8] = data_in[i*8+7:i*8];
+  assign data_out[WIDTH-1-i*8:WIDTH-i*8-8] = swizzle_out[i*8+7:i*8];
+end
+endgenerate
+
+assign full_state = {state,DESCRAMBLE ? swizzle_in : feedback};
+assign feedback = full_state[WIDTH-1+15:15] ^ full_state[WIDTH-1+14:14] ^ swizzle_in;
+
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_common/jesd204_scrambler.v@59:69
+
+reg [14:0] state = 'h7f80;
+reg [WIDTH-1:0] swizzle_out;
+wire [WIDTH-1:0] swizzle_in;
+wire [WIDTH-1:0] feedback;
+wire [WIDTH-1+15:0] full_state;
+
+generate
+genvar i;
+for (i = 0; i < WIDTH / 8; i = i + 1) begin: gen_swizzle
+  assign swizzle_in[WIDTH-1-i*8:WIDTH-i*8-8] = data_in[i*8+7:i*8];
+

@@ -1,0 +1,29 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3324:3338@HdlStmProcess
+			       c2_txo_rotate_dis | c3_txo_rotate_dis;
+
+   //###########################################
+   //# Rotation mechanism and requests creation
+   //###########################################
+   always @ (posedge txo_lclk or posedge reset)
+     if(reset)
+       grants_reg[3:0] <= 4'b0000;
+     else
+       grants_reg[3:0] <= grants[3:0];
+
+   assign txo_rotate_dis[3:0] = {c3_txo_rotate_dis,
+				 c2_txo_rotate_dis,
+				 c1_txo_rotate_dis,
+				 c0_txo_rotate_dis};
+
+Diff Content:
+- 3329    always @ (posedge txo_lclk or posedge reset)
+- 3330      if(reset)
+- 3331        grants_reg[3:0] <= 4'b0000;
+- 3332      else
+- 3333        grants_reg[3:0] <= grants[3:0];
++ 3333    input             c0_rdmesh_wait_in; // wait
++ 3333    input             c1_rdmesh_wait_in; // wait
++ 3333    input             c2_rdmesh_wait_in; // wait
++ 3333    input             c3_rdmesh_wait_in; // wait
+
+Clone Blocks:

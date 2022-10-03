@@ -1,0 +1,21 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@58:69@HdlStmAssign
+       io_valid_reg[7:0] <= 8'b11111111;
+     else
+       io_valid_reg[7:0] <= 8'b0;
+
+   //Access signal for FIFO
+   assign io_access = (&io_valid_reg[7:0])               | // full vector
+		      (~io_frame | (|io_valid_reg[7:0]));  // partial vector 
+          
+   //########################################
+   //# DATA CAPTURE
+   //########################################
+
+
+Diff Content:
+- 63    assign io_access = (&io_valid_reg[7:0])               | // full vector
+- 64 		      (~io_frame | (|io_valid_reg[7:0]));  // partial vector 
++ 64    assign io_access = transfer_done                 | // full vector
++ 64 		      (~io_frame & transfer_active);  // partial vector 
+
+Clone Blocks:

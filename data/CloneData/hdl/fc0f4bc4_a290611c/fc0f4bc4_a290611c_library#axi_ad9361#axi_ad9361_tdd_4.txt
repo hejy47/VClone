@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tdd.v@223:233@HdlStmAssign
+  assign  tdd_rx_valid_i1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
+  assign  tdd_rx_valid_q1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
+
+  assign  tdd_enabled = tdd_enable_synced_s;
+
+  // instantiations
+
+  up_tdd_cntrl i_up_tdd_cntrl(
+    .clk(clk),
+
+Diff Content:
++ 228   assign  tdd_terminal_type = ~tdd_terminal_type_s;
+
+Clone Blocks:

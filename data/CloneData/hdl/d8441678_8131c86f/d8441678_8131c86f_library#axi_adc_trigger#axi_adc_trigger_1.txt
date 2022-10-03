@@ -1,0 +1,51 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@278:299@HdlStmProcess
+  end
+
+
+  // keep data in sync with the trigger. The trigger bypasses the variable fifo.
+  // The data goes through and it is delayed with 4 clock cycles)
+  always @(posedge clk) begin
+    trigger_out_m1 <= trigger_out_s;
+    trigger_out_m2 <= trigger_out_m1;
+    if (trigger_out_m1 & ~trigger_out_s) begin
+      trigger_out_hold <= 1'b1;
+    end
+    if (trigger_out_ack) begin
+      trigger_out_hold <= 1'b0;
+    end
+
+    trigger_out_ack <= trigger_out_hold & (data_valid_a | data_valid_b);
+  end
+
+  assign trigger_out_la = trigger_out_mixed;
+  assign trigger_out = trigger_out_hold | trigger_out_m2;
+
+  always @(posedge clk) begin
+
+Diff Content:
+- 284     trigger_out_m1 <= trigger_out_s;
+- 285     trigger_out_m2 <= trigger_out_m1;
+- 286     if (trigger_out_m1 & ~trigger_out_s) begin
+- 287       trigger_out_hold <= 1'b1;
+- 288     end
+- 289     if (trigger_out_ack) begin
+- 293     trigger_out_ack <= trigger_out_hold & (data_valid_a | data_valid_b);
++ 289     if (reset == 1'b1) begin
++ 289       trigger_out_m1 <= 1'b0;
++ 289       trigger_out_m2 <= 1'b0;
++ 289       trigger_out_ack <= 1'b0;
++ 290     end else begin
++ 290       if (data_out_valid == 1'b1) begin
++ 290         trigger_out_m1 <= trigger_out_s | trigger_out_hold;
++ 290         trigger_out_m2 <= trigger_out_m1;
++ 290         trigger_out_ack <= trigger_out_hold;
++ 290       end
++ 290       if (~trigger_out_m1 & trigger_out_s & ~data_out_valid) begin
++ 290         trigger_out_hold <= 1'b1;
++ 290       end
++ 290       if (trigger_out_ack) begin
++ 290         trigger_out_hold <= 1'b0;
++ 290       end
++ 294   assign data_out_valid = data_valid_a | data_valid_b;
+
+Clone Blocks:

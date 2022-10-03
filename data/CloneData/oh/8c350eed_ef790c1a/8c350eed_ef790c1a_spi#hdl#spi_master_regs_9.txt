@@ -1,0 +1,25 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@145:159@HdlStmProcess
+			  
+   //####################################
+   //# PSIZE (packet size)
+   //####################################
+
+   always @ (posedge clk or negedge nreset)
+     if (~nreset)
+       psize_reg[7:0] <= PSIZE;   
+     else if(psize_write)
+       psize_reg[7:0] <= reg_wdata[7:0];
+   
+   //####################################
+   //# CLKDIV 
+   //####################################
+
+
+Diff Content:
+- 150    always @ (posedge clk or negedge nreset)
+- 151      if (~nreset)
+- 152        psize_reg[7:0] <= PSIZE;   
+- 153      else if(psize_write)
+- 154        psize_reg[7:0] <= reg_wdata[7:0];
+
+Clone Blocks:

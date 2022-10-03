@@ -1,0 +1,51 @@
+Source Block: oh/common/hdl/oh_fifo_sync.v@45:76@HdlStmProcess
+   
+   assign empty       = (count[AW:0]==0);   
+   assign almost_full = (count[AW:0] >=ALMOST_FULL);   
+   assign full        = (count==DEPTH);
+   
+   always @ ( posedge clk or negedge nreset) 
+     if(!nreset) 
+       begin	   
+          wr_addr[AW-1:0] <= 'd0;
+          rd_addr[AW-1:0] <= 'b0;
+          count[AW-1:0]   <= 'b0;
+       end 
+     else if(wr_en & rd_en) 
+       begin
+	  wr_addr <= wr_addr + 'd1;
+	  rd_addr <= rd_addr + 'd1;	      
+       end 
+     else if(wr_en) 
+       begin
+	  wr_addr <= wr_addr + 'd1;
+	  count   <= count   + 'd1;	
+       end 
+     else if(rd_en) 
+       begin	      
+          rd_addr <= rd_addr + 'd1;
+          count   <= count   - 'd1;
+       end
+   
+   // GENERIC DUAL PORTED MEMORY
+   defparam mem.DW=DW;
+   defparam mem.AW=AW;   
+   oh_memory_dp mem (
+
+Diff Content:
+- 55           count[AW-1:0]   <= 'b0;
+- 59 	  wr_addr <= wr_addr + 'd1;
+- 60 	  rd_addr <= rd_addr + 'd1;	      
+- 64 	  wr_addr <= wr_addr + 'd1;
+- 65 	  count   <= count   + 'd1;	
+- 69           rd_addr <= rd_addr + 'd1;
+- 70           count   <= count   - 'd1;
++ 55           count[AW:0]     <= 'b0;
++ 60 	  wr_addr[AW-1:0] <= wr_addr[AW-1:0] + 'd1;
++ 60 	  rd_addr[AW-1:0] <= rd_addr[AW-1:0] + 'd1;	      
++ 65 	  wr_addr[AW-1:0] <= wr_addr[AW-1:0] + 'd1;
++ 65 	  count[AW:0]     <= count[AW:0]     + 'd1;	
++ 70           rd_addr[AW-1:0] <= rd_addr[AW-1:0] + 'd1;
++ 70           count[AW:0]     <= count[AW:0]     - 'd1;
+
+Clone Blocks:

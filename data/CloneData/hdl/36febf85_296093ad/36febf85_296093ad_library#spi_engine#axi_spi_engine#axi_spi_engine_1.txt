@@ -1,0 +1,37 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@195:224@HdlStmProcess
+	end else begin
+		up_rack <= up_rreq;
+	end
+end
+
+always @(posedge s_axi_aclk) begin
+	case (up_raddr)
+	8'h00: up_rdata <= PCORE_VERSION;
+	8'h01: up_rdata <= PCORE_ID;
+	8'h02: up_rdata <= up_scratch;
+	8'h10: up_rdata <= up_reset;
+	8'h20: up_rdata <= up_irq_mask;
+	8'h21: up_rdata <= up_irq_pending;
+	8'h22: up_rdata <= up_irq_source;
+	8'h30: up_rdata <= sync_id;
+	8'h34: up_rdata <= cmd_fifo_room;
+	8'h35: up_rdata <= sdo_fifo_room;
+	8'h36: up_rdata <= sdi_fifo_level;
+	8'h3a: up_rdata <= sdi_fifo_out_data;
+	8'h3c: up_rdata <= sdi_fifo_out_data; /* PEEK register */
+	8'h40: up_rdata <= {offload0_enable};
+	8'h41: up_rdata <= {offload0_enabled};
+	default: up_rdata <= 'h00;
+	endcase
+end
+
+always @(posedge s_axi_aclk) begin
+	if (up_resetn == 1'b0) begin
+		sync_id <= 'h00;
+		sync_id_pending <= 1'b0;
+
+Diff Content:
+- 203 	8'h01: up_rdata <= PCORE_ID;
++ 203 	8'h01: up_rdata <= ID;
+
+Clone Blocks:

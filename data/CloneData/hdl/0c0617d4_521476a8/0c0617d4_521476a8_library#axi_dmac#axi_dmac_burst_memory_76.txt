@@ -1,0 +1,73 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@307:325@HdlStmProcess
+  end
+end
+
+assign dest_id_next_inc = inc_id(dest_id_next);
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_id_next <= 'h00;
+    dest_id_reduced_msb_next <= 1'b0;
+  end else if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_id_next <= dest_id_next_inc;
+    dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+
+Diff Content:
+- 312 always @(posedge dest_clk) begin
+- 313   if (dest_reset == 1'b1) begin
+- 314     dest_id_next <= 'h00;
+- 315     dest_id_reduced_msb_next <= 1'b0;
+- 316   end else if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+- 317     dest_id_next <= dest_id_next_inc;
+- 318     dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+- 320 end
++ 318   always @(posedge src_clk) begin
++ 318     if (src_last_beat == 1'b1) begin
++ 318       burst_len_mem[src_id_reduced] <= src_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN];
++ 318     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@323:338
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_ready == 1'b1) begin
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
+    dest_beat_counter <= 'h00;
+  end else if (dest_beat == 1'b1) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@317:331
+    dest_id_next <= dest_id_next_inc;
+    dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_ready == 1'b1) begin
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+

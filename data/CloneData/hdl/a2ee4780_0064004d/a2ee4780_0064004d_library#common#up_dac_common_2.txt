@@ -1,0 +1,80 @@
+Source Block: hdl/library/common/up_dac_common.v@166:238@HdlStmProcess
+
+  // processor write interface
+
+  assign up_wack = up_wack_int;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_core_preset <= 1'd1;
+      up_mmcm_preset <= 1'd1;
+      up_wack_int <= 'd0;
+      up_scratch <= 'd0;
+      up_dac_clk_enb_int <= 'd1;
+      up_dac_clk_enb <= 'd0;
+      up_mmcm_resetn <= 'd0;
+      up_resetn <= 'd0;
+      up_dac_sync <= 'd0;
+      up_dac_par_type <= 'd0;
+      up_dac_par_enb <= 'd0;
+      up_dac_r1_mode <= 'd0;
+      up_dac_datafmt <= 'd0;
+      up_dac_datarate <= 'd0;
+      up_dac_frame <= 'd0;
+      up_dac_clksel <= 'd0;
+      up_pps_irq_mask <= 1'b1;
+    end else begin
+      up_dac_clk_enb_int <= ~up_dac_clk_enb;
+      up_core_preset <= ~up_resetn;
+      up_mmcm_preset <= ~up_mmcm_resetn;
+      up_wack_int <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
+        up_pps_irq_mask <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+        up_dac_clk_enb <= up_wdata[2];
+        up_mmcm_resetn <= up_wdata[1];
+        up_resetn <= up_wdata[0];
+      end
+      if (up_dac_sync == 1'b1) begin
+        if (up_xfer_done_s == 1'b1) begin
+          up_dac_sync <= 1'b0;
+        end
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+        up_dac_sync <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
+        up_dac_par_type <= up_wdata[7];
+        up_dac_par_enb <= up_wdata[6];
+        up_dac_r1_mode <= up_wdata[5];
+        up_dac_datafmt <= up_wdata[4];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
+        up_dac_datarate <= up_wdata[15:0];
+      end
+      if (up_dac_frame == 1'b1) begin
+        if (up_xfer_done_s == 1'b1) begin
+          up_dac_frame <= 1'b0;
+        end
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
+        up_dac_frame <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h18)) begin
+        up_dac_clksel <= up_wdata[0];
+      end
+    end
+  end
+
+  assign up_drp_sel = up_drp_sel_int;
+  assign up_drp_wr = up_drp_wr_int;
+  assign up_drp_addr = up_drp_addr_int;
+  assign up_drp_wdata = up_drp_wdata_int;
+
+Diff Content:
+- 188       up_dac_clksel <= 'd0;
++ 188       up_dac_clksel <= CLK_EDGE_SEL;
+
+Clone Blocks:

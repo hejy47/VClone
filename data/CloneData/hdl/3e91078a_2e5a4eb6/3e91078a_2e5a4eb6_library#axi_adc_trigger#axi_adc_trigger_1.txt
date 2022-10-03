@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@466:489@HdlStmProcess
+      (trigger_b_fall_edge & fall_edge[1]) |
+      (trigger_b_rise_edge & rise_edge[1]) |
+      (trigger_b_any_edge & any_edge[1]));
+  end
+
+   always @(*) begin
+    case(trigger_out_control[3:0])
+      4'h0: trigger_out_mixed = trigger_a;
+      4'h1: trigger_out_mixed = trigger_b;
+      4'h2: trigger_out_mixed = trigger_a | trigger_b;
+      4'h3: trigger_out_mixed = trigger_a & trigger_b;
+      4'h4: trigger_out_mixed = trigger_a ^ trigger_b;
+      4'h5: trigger_out_mixed = trigger_in;
+      4'h6: trigger_out_mixed = trigger_a | trigger_in;
+      4'h7: trigger_out_mixed = trigger_b | trigger_in;
+      4'h8: trigger_out_mixed = trigger_a | trigger_b | trigger_in;
+      default: trigger_out_mixed = trigger_a;
+    endcase
+  end
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      comp_high_a <= 1'b0;
+      old_comp_high_a <= 1'b0;
+
+Diff Content:
+- 482       default: trigger_out_mixed = trigger_a;
++ 482       4'hf: trigger_out_mixed = 1'b0; // trigger disable
++ 482       default: trigger_out_mixed = 1'b0;
+
+Clone Blocks:

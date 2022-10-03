@@ -1,0 +1,36 @@
+Source Block: hdl/library/prcfg/bist/prcfg_dac.v@181:191@HdlStmAssign
+                cos_tone <= 16'h5A82;
+              end
+    endcase
+  end
+
+  assign dac_data_mode1 = {sin_tone, cos_tone};
+
+  // prbs generation
+  always @(posedge clk) begin
+    if(dst_dac_drd == 1'h1) begin
+      dac_prbs <= pn(dac_prbs);
+
+Diff Content:
+- 186   assign dac_data_mode1 = {sin_tone, cos_tone};
++ 186   assign dac_data_mode1 = {cos_tone, sin_tone};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/bist/prcfg_dac.v@184:198
+  end
+
+  assign dac_data_mode1 = {sin_tone, cos_tone};
+
+  // prbs generation
+  always @(posedge clk) begin
+    if(dst_dac_drd == 1'h1) begin
+      dac_prbs <= pn(dac_prbs);
+    end
+  end
+
+  assign dac_data_mode2 = dac_prbs;
+
+  // constant pattern generator
+  always @(posedge clk) begin
+

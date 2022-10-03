@@ -1,0 +1,56 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@567:599@HdlStmProcess
+//reg [15:0] videocap_buf2 [0:VCAPW];
+
+reg [15:0] videocap_rgbin = 0;
+
+// CAPTURE
+always @(posedge zE7M) begin
+  videocap_hs <= {videocap_hs[8:0], videoHS};
+  videocap_vs <= {videocap_vs[8:0], videoVS};
+  
+  videocap_rgbin <= {videoR3,videoR2,videoR1,videoR0,1'b00, 
+                    videoG3,videoG2,videoG1,videoG0,2'b00,
+                    videoB3,videoB2,videoB1,videoB0,1'b00};
+  
+  if (!videocap_mode) begin
+    // do nothing
+  end else if (videocap_vs[6:1]=='b000111) begin
+    videocap_y2 <= 0;
+  end else if (videocap_hs[6:1]=='b000111) begin
+    videocap_x <= 0;
+    if (videocap_y2>videocap_height) begin
+    end else begin
+      videocap_y2 <= videocap_y2 + 1'b1;
+    end
+  end else if (videocap_x<VCAPW) begin
+    videocap_x <= videocap_x + 1'b1;
+    videocap_buf[videocap_x-videocap_prex] <= videocap_rgbin;
+  end
+end
+
+always @(posedge z_sample_clk) begin
+  znUDS_sync  <= {znUDS_sync[1:0],znUDS};
+  znLDS_sync  <= {znLDS_sync[1:0],znLDS};
+  znAS_sync   <= {znAS_sync[1:0],znAS};
+
+Diff Content:
+- 576   videocap_rgbin <= {videoR3,videoR2,videoR1,videoR0,1'b00, 
+- 577                     videoG3,videoG2,videoG1,videoG0,2'b00,
+- 578                     videoB3,videoB2,videoB1,videoB0,1'b00};
++ 578   videocap_rgbin <= {videoR3,videoR2,videoR1,videoR0,videoR3, 
++ 578                     videoG3,videoG2,videoG1,videoG0,videoG3,videoG2,
++ 578                     videoB3,videoB2,videoB1,videoB0,videoB3};
++ 594 always @(negedge zE7M) begin
++ 594   videocap_rgbin2 <= {videoR3,videoR2,videoR1,videoR0,videoR3, 
++ 594                     videoG3,videoG2,videoG1,videoG0,videoG3,videoG2,
++ 594                     videoB3,videoB2,videoB1,videoB0,videoB3};
++ 594   if (!videocap_mode) begin
++ 594   end else if (videocap_hs[6:1]=='b000111) begin
++ 594     videocap_x2 <= 0;
++ 594   end else if (videocap_x2<VCAPW) begin
++ 594     videocap_x2 <= videocap_x2 + 1'b1;
++ 594     videocap_buf2[videocap_x2-videocap_prex] <= videocap_rgbin2;
++ 594   end
++ 594 end
+
+Clone Blocks:

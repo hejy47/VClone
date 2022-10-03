@@ -1,0 +1,26 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@166:184@HdlStmProcess
+    .din (dma_waddr),
+    .dout (dma_waddr_b2g_s));
+
+  // save the last write address
+
+  always @(posedge dma_clk) begin
+    if (dma_rst == 1'b1) begin
+      dma_lastaddr_g <= 'b0;
+    end else begin
+      if (dma_bypass == 1'b0) begin
+        dma_lastaddr_g <= (dma_xfer_last == 1'b1)? dma_waddr_b2g_s : dma_lastaddr_g;
+      end
+    end
+  end
+
+  // DAC / Read interface
+
+  // The memory module is ready if it's not empty
+
+
+Diff Content:
+- 172     if (dma_rst == 1'b1) begin
++ 172     if (dma_rst_int_s == 1'b1) begin
+
+Clone Blocks:

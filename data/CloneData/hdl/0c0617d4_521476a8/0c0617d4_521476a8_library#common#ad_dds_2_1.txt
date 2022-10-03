@@ -1,0 +1,31 @@
+Source Block: hdl/library/common/ad_dds_2.v@58:68@HdlIdDef
+  input   [        15:0]  dds_scale_1,
+  output  [  DDS_DW-1:0]  dds_data);
+
+ // Local parameters
+
+ localparam CORDIC = 1;
+ localparam POLYNOMIAL = 2;
+
+ // The width for Polynomial DDS is fixed (16)
+ localparam DDS_D_DW = (DDS_TYPE == CORDIC) ? CORDIC_DW : 16;
+ localparam DDS_P_DW = (DDS_TYPE == CORDIC) ? CORDIC_PHASE_DW : 16;
+
+Diff Content:
+- 63  localparam CORDIC = 1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_dds_2.v@59:69
+  output  [  DDS_DW-1:0]  dds_data);
+
+ // Local parameters
+
+ localparam CORDIC = 1;
+ localparam POLYNOMIAL = 2;
+
+ // The width for Polynomial DDS is fixed (16)
+ localparam DDS_D_DW = (DDS_TYPE == CORDIC) ? CORDIC_DW : 16;
+ localparam DDS_P_DW = (DDS_TYPE == CORDIC) ? CORDIC_PHASE_DW : 16;
+ // concatenation or truncation width
+

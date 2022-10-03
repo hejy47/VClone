@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/ecfg.v@306:317@HdlStmProcess
+   assign ecfg_coreid[IDW-1:0] = ecfg_coreid_reg[IDW-1:0];
+
+   //###########################
+   //# ESYSDATAIN
+   //###########################
+   always @ (posedge mi_clk)
+     ecfg_datain_reg <= ecfg_datain;
+   
+   //###########################
+   //# ESYSDATAOUT
+   //###########################
+   always @ (posedge mi_clk)
+
+Diff Content:
+- 312      ecfg_datain_reg <= ecfg_datain;
++ 312      ecfg_datain_reg[10:0] <= ecfg_datain[10:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/ecfg/hdl/ecfg.v@306:317
+   assign ecfg_coreid[IDW-1:0] = ecfg_coreid_reg[IDW-1:0];
+
+   //###########################
+   //# ESYSDATAIN
+   //###########################
+   always @ (posedge mi_clk)
+     ecfg_datain_reg <= ecfg_datain;
+   
+   //###########################
+   //# ESYSDATAOUT
+   //###########################
+   always @ (posedge mi_clk)
+

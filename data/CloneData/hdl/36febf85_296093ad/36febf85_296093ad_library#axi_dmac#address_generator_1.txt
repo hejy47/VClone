@@ -1,0 +1,22 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@67:77@HdlIdDef
+
+parameter C_ID_WIDTH = 3;
+parameter C_DMA_DATA_WIDTH = 64;
+parameter C_BEATS_PER_BURST_WIDTH = 4;
+parameter C_BYTES_PER_BEAT_WIDTH = $clog2(C_DMA_DATA_WIDTH/8);
+localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
+
+`include "inc_id.h"
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+
+Diff Content:
+- 72 localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
++ 72 parameter ID_WIDTH = 3;
++ 72 parameter DMA_DATA_WIDTH = 64;
++ 72 parameter BEATS_PER_BURST_WIDTH = 4;
++ 72 parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8);
++ 72 localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
+
+Clone Blocks:

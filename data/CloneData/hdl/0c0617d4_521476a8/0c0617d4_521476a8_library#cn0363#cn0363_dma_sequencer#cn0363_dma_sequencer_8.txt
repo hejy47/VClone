@@ -1,0 +1,49 @@
+Source Block: hdl/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v@148:164@HdlStmProcess
+  end else if (dma_wr_en == 1'b1) begin
+    dma_wr_sync = 1'b0;
+  end
+end
+
+always @(*) begin
+  case (count)
+  'h0: phase_ready <= 1'b1;
+  'h7: phase_ready <= 1'b1;
+  default: phase_ready <= 1'b0;
+  endcase
+end
+
+always @(*) begin
+  case (count)
+  'h1: data_ready <= 1'b1;
+  'h8: data_ready <= 1'b1;
+
+Diff Content:
+- 153 always @(*) begin
+- 154   case (count)
+- 155   'h0: phase_ready <= 1'b1;
+- 156   'h7: phase_ready <= 1'b1;
+- 157   default: phase_ready <= 1'b0;
+- 158   endcase
+- 159 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v@156:172
+  'h7: phase_ready <= 1'b1;
+  default: phase_ready <= 1'b0;
+  endcase
+end
+
+always @(*) begin
+  case (count)
+  'h1: data_ready <= 1'b1;
+  'h8: data_ready <= 1'b1;
+  default: data_ready <= 1'b0;
+  endcase
+end
+
+always @(*) begin
+  case (count)
+  'h2: data_filtered_ready <= 1'b1;
+  'h9: data_filtered_ready <= 1'b1;
+

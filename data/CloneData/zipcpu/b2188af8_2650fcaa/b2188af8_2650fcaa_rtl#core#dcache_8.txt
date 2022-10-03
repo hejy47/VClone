@@ -1,0 +1,66 @@
+Source Block: zipcpu/rtl/core/dcache.v@620:630@HdlStmAssign
+	//
+	// We can use our FIFO addresses to pre-calculate when an ACK is going
+	// to be the last_noncachable_ack.
+
+
+	assign o_pipe_stalled= o_busy;
+
+	reg	lock_gbl, lock_lcl;
+	initial	lock_gbl = 0;
+	initial	lock_lcl = 0;
+	always @(posedge i_clk)
+
+Diff Content:
+- 625 	assign o_pipe_stalled= o_busy;
++ 625 	always @(*)
++ 625 	if (OPT_PIPE)
++ 625 		o_pipe_stalled = (cyc)&&((!o_wb_we)||(i_wb_stall))
++ 625 					||(r_rd_pending)||(r_svalid)||(r_dvalid)
++ 625 					||(o_valid);
++ 625 	else
++ 625 		o_pipe_stalled = o_busy;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/dcache.v@623:633
+
+
+	assign o_pipe_stalled= o_busy;
+
+	reg	lock_gbl, lock_lcl;
+	initial	lock_gbl = 0;
+	initial	lock_lcl = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		lock_gbl <= 1'b0;
+
+Clone Blocks 2:
+zipcpu/rtl/core/dcache.v@622:632
+	// to be the last_noncachable_ack.
+
+
+	assign o_pipe_stalled= o_busy;
+
+	reg	lock_gbl, lock_lcl;
+	initial	lock_gbl = 0;
+	initial	lock_lcl = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+
+Clone Blocks 3:
+zipcpu/rtl/core/dcache.v@622:632
+	// to be the last_noncachable_ack.
+
+
+	assign o_pipe_stalled= o_busy;
+
+	reg	lock_gbl, lock_lcl;
+	initial	lock_gbl = 0;
+	initial	lock_lcl = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+

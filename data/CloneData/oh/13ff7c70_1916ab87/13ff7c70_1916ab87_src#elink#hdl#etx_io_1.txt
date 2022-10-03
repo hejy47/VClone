@@ -1,0 +1,35 @@
+Source Block: oh/src/elink/hdl/etx_io.v@119:141@HdlStmFor
+   //# IO DRIVER STUFF
+   //############################################  
+
+   //DATA
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+     begin : gen_oddr
+	ODDR #(.DDR_CLK_EDGE  ("SAME_EDGE"))
+	oddr_data (
+		   .Q  (txo_data_ddr[i]),
+		   .C  (tx_lclk_io),
+		   .CE (1'b1),
+		   .D1 (tx_data16[i+8] ^ invert_pins),
+		   .D2 (tx_data16[i] ^ invert_pins),
+		   .R  (1'b0),
+		   .S  (1'b0)
+		   );
+     end
+     endgenerate
+
+   //FRAME
+   ODDR #(.DDR_CLK_EDGE  ("SAME_EDGE"))
+   oddr_frame (
+
+Diff Content:
+- 126 	ODDR #(.DDR_CLK_EDGE  ("SAME_EDGE"))
+- 130 		   .CE (1'b1),
+- 132 		   .D2 (tx_data16[i] ^ invert_pins),
+- 133 		   .R  (1'b0),
+- 134 		   .S  (1'b0)
++ 126 	ODDRE1
++ 134 		   .D2 (tx_data16[i] ^ invert_pins)
+
+Clone Blocks:

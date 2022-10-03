@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_dac.v@256:274@HdlStmProcess
+      dac_mem_enable <= (dac_mem_init_d & ~dac_mem_init) ? 1'b1 : dac_mem_enable;
+    end
+    dac_xfer_init <= dac_xfer_init_s;
+  end
+
+  always @(posedge dac_clk) begin
+    if (dac_xfer_out == 1'b0) begin
+      dac_mem_waddr <= 'b0;
+      dac_mem_waddr_m <= 'b0;
+    end else begin
+      dac_mem_waddr_m <= g2b(axi_mem_waddr_g);
+      dac_mem_waddr <= dac_mem_waddr_m;
+    end
+  end
+
+  assign dac_mem_addr_diff_s = {1'b1, dac_mem_waddr} - dac_mem_raddr;
+  assign dac_mem_raddr_diff_s = {1'b1, dac_mem_raddr_next} - dac_mem_raddr;
+  assign dac_mem_valid_s = (dac_mem_enable) ? dac_valid : 1'b0;
+
+
+Diff Content:
+- 264       dac_mem_waddr_m <= 'b0;
+- 266       dac_mem_waddr_m <= g2b(axi_mem_waddr_g);
+- 267       dac_mem_waddr <= dac_mem_waddr_m;
++ 264       dac_mem_waddr_m1 <= 'b0;
++ 264       dac_mem_waddr_m2 <= 'b0;
++ 267       dac_mem_waddr_m1 <= axi_mem_waddr_g;
++ 267       dac_mem_waddr_m2 <= dac_mem_waddr_m1;
++ 267       dac_mem_waddr <= g2b(dac_mem_waddr_m2);
+
+Clone Blocks:

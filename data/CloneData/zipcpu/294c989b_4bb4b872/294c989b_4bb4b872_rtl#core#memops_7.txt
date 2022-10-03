@@ -1,0 +1,36 @@
+Source Block: zipcpu/rtl/core/memops.v@224:236@HdlStmProcess
+		else
+			o_err <= ((i_stb)&&(misaligned));
+
+	assign	o_busy = (r_wb_cyc_gbl)||(r_wb_cyc_lcl);
+
+	always @(posedge i_clk)
+		if (i_stb)
+			o_wreg    <= i_oreg;
+	always @(posedge i_clk)
+	if ((OPT_ZERO_ON_IDLE)&&(!i_wb_ack))
+		o_result <= 32'h0;
+	else begin
+		casez(r_op)
+
+Diff Content:
+- 230 		if (i_stb)
++ 230 	if (i_reset)
++ 230 		o_wreg <= 0;
++ 230 	else if (i_stb)
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/memops.v@222:232
+		else if ((o_wb_cyc_gbl)||(o_wb_cyc_lcl))
+			o_err <= i_wb_err;
+		else
+			o_err <= ((i_stb)&&(misaligned));
+
+	assign	o_busy = (r_wb_cyc_gbl)||(r_wb_cyc_lcl);
+
+	always @(posedge i_clk)
+		if (i_stb)
+			o_wreg    <= i_oreg;
+	always @(posedge i_clk)
+

@@ -1,0 +1,51 @@
+Source Block: miaow/scripts/xilinx/axi_slave_v1_0_S00_AXI.v@246:285@HdlStmProcess
+        executeState <= executeStateNext;
+        cycle_counter <= cycle_counter_next;
+      end
+    end
+
+    always @(*) begin
+      executeStateNext <= executeState;
+      cycle_counter_next <= cycle_counter;
+      executeStart <= 1'b0;
+      resultsReady <= 1'b0;
+      execute <= 1'b1;
+      case(executeState)
+        IDLE_STATE: begin
+          execute <= 1'b0;
+          if(slv_reg_wren && ~slv_reg_wren_buffer && axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 7'h00) begin
+            executeStart <= 1'b1;
+            executeStateNext <= EXECUTE_STATE;
+            cycle_counter_next <= 32'd0;
+          end
+        end
+        EXECUTE_STATE: begin
+          cycle_counter_next <= cycle_counter + 32'd1;
+          if(cu2dispatch_wf_done_in) begin
+            executeStateNext <= RESULT_STATE;
+          end
+        end
+        RESULT_STATE: begin
+          resultsReady <= 1'b1;
+          if(slv_reg_rden && axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 7'h00) begin
+            executeStateNext <= IDLE_STATE;
+          end
+        end
+        default: executeStateNext <= IDLE_STATE;
+      endcase
+    end
+
+    always @(*) begin
+      lsu2sgpr_dest_wr_en_reg <= 4'd0;
+      if(slv_reg_wren && ~slv_reg_wren_buffer && axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 7'h0A) begin
+        lsu2sgpr_dest_wr_en_reg <= 4'b1111;
+
+Diff Content:
++ 280     always @(*) begin
++ 280       singleVectorWrEn_reg <= 4'd0;
++ 280       if(slv_reg_wren && ~slv_reg_wren_buffer && axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 7'h75) begin
++ 280         singleVectorWrEn_reg <= 4'b1111;
++ 280       end
++ 280     end
+
+Clone Blocks:

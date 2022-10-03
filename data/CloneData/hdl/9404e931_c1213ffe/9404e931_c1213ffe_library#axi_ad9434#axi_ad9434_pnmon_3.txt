@@ -1,0 +1,118 @@
+Source Block: hdl/library/axi_ad9434/axi_ad9434_pnmon.v@183:201@HdlStmProcess
+  endfunction
+
+  // pn sequence selection
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+
+  always @(posedge adc_clk) begin
+    // TODO: verify if this works
+    adc_pn_data_in <= adc_data;
+    if(adc_pnseq_sel == 4'b0) begin
+      adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+    end else begin
+      adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+    end
+  end
+
+  // pn oos & pn err
+  ad_pnmon #(.DATA_WIDTH(48)) i_pnmon (
+    .adc_clk (adc_clk),
+    .adc_valid_in (1'b1),
+
+Diff Content:
+- 190     adc_pn_data_in <= adc_data;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@160:180
+
+  // pn sequence select
+
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+
+  always @(posedge adc_clk) begin
+    adc_valid_in <= ~adc_valid_in;
+    adc_pn_data_in <= {adc_pn_data_in[15:0], ~adc_data[15], adc_data[14:0]};
+    if (adc_valid_in == 1'b1) begin
+      if (adc_pnseq_sel == 4'd0) begin
+        adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+      end else begin
+        adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+      end
+    end
+  end
+
+  // pn oos & pn err
+
+  ad_pnmon #(.DATA_WIDTH(32)) i_pnmon (
+    .adc_clk (adc_clk),
+
+Clone Blocks 2:
+hdl/library/axi_ad9265/axi_ad9265_pnmon.v@160:180
+
+  // pn sequence select
+
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+
+  always @(posedge adc_clk) begin
+    adc_valid_in <= ~adc_valid_in;
+    adc_pn_data_in <= {adc_pn_data_in[15:0], adc_data[15:0]};
+    if(adc_valid_in == 1'b1) begin
+      if (adc_pnseq_sel == 4'd0) begin
+        adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+      end else begin
+        adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+      end
+    end
+  end
+
+  // pn oos & pn err
+
+  ad_pnmon #(.DATA_WIDTH(32)) i_pnmon (
+    .adc_clk (adc_clk),
+
+Clone Blocks 3:
+hdl/library/axi_ad9250/axi_ad9250_pnmon.v@157:174
+
+  // pn sequence select
+
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+
+  always @(posedge adc_clk) begin
+    adc_pn_data_in <= {~adc_data[13], adc_data[12:0], ~adc_data[27], adc_data[26:14]};
+    if (adc_pnseq_sel == 4'd0) begin
+      adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+    end else begin
+      adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+    end
+  end
+
+  // pn oos & pn err
+
+  ad_pnmon #(.DATA_WIDTH(28)) i_pnmon (
+    .adc_clk (adc_clk),
+
+Clone Blocks 4:
+hdl/library/axi_ad9652/axi_ad9652_pnmon.v@160:180
+
+  // pn sequence select
+
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+
+  always @(posedge adc_clk) begin
+    adc_valid_in <= ~adc_valid_in;
+    adc_pn_data_in <= {adc_pn_data_in[15:0], adc_data[15:0]};
+    if (adc_valid_in == 1'b1) begin
+      if (adc_pnseq_sel == 4'd0) begin
+        adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+      end else begin
+        adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+      end
+    end
+  end
+
+  // pn oos & pn err
+
+  ad_pnmon #(.DATA_WIDTH(32)) i_pnmon (
+    .adc_clk (adc_clk),
+

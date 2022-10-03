@@ -1,0 +1,52 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616_control.v@173:201@HdlStmProcess
+
+  assign up_write_req = (up_waddr[7:0] == 8'h14) ? up_wreq_s : 1'h0;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack <= 1'b0;
+      up_rdata <= 32'b0;
+    end else begin
+      up_rack <= (up_raddr[7:0] == 8'h13) ? up_read_valid_s : up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[7:0])
+            8'h00 : up_rdata = PCORE_VERSION;
+            8'h01 : up_rdata = ID;
+            8'h02 : up_rdata = up_scratch;
+            8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
+            8'h11 : up_rdata = up_conv_rate;
+            8'h12 : up_rdata = up_burst_length;
+            8'h13 : up_rdata = up_read_data_s;
+        endcase
+      end
+    end
+  end
+
+  assign up_read_req = (up_raddr[7:0] == 8'h13) ? up_rreq_s : 1'b0;
+
+  // instantiations
+
+
+Diff Content:
+- 183       up_rack <= (up_raddr[7:0] == 8'h13) ? up_read_valid_s : up_rreq_s;
+- 184       if (up_rreq_s == 1'b1) begin
+- 186             8'h00 : up_rdata = PCORE_VERSION;
+- 187             8'h01 : up_rdata = ID;
+- 188             8'h02 : up_rdata = up_scratch;
+- 189             8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
+- 190             8'h11 : up_rdata = up_conv_rate;
+- 191             8'h12 : up_rdata = up_burst_length;
+- 192             8'h13 : up_rdata = up_read_data_s;
++ 184       up_rack <= up_rack_s;
++ 184       if (up_rack_s == 1'b1) begin
++ 192           8'h00 : up_rdata = PCORE_VERSION;
++ 192           8'h01 : up_rdata = ID;
++ 192           8'h02 : up_rdata = up_scratch;
++ 192           8'h10 : up_rdata = {29'b0, up_cnvst_en, up_resetn};
++ 192           8'h11 : up_rdata = up_conv_rate;
++ 192           8'h12 : up_rdata = {27'b0, up_burst_length};
++ 192           8'h13 : up_rdata = up_read_data_s;
+
+Clone Blocks:

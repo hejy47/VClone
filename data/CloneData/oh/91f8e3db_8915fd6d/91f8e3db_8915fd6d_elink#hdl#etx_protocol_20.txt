@@ -1,0 +1,39 @@
+Source Block: oh/elink/hdl/etx_protocol.v@103:117@HdlStmProcess
+   //if burst, you get immediate "ack"
+   //otherwise you get ack in one cycle (since it takes 2 clocks for trans to exit IO)  
+   reg 		 done;
+   wire 	 tx_io_wait;
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       done <= 1'b0;                 
+     else
+       done <= tx_access & ~done & ~tx_burst;
+  
+   assign tx_io_wait = tx_access & ~done & ~tx_burst;//tx_burst_reg
+
+   //Ugly hack. When there is an async wait coming in and we are in the middle of a transction
+   //we sample in a new value to realign the pipeline since the current transaction already went
+
+Diff Content:
+- 108    always @ (posedge clk or negedge nreset)
+- 109      if(!nreset)
+- 110        done <= 1'b0;                 
+- 111      else
+- 112        done <= tx_access & ~done & ~tx_burst;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@109:119
+     if(!nreset)
+       done <= 1'b0;                 
+     else
+       done <= tx_access & ~done & ~tx_burst;
+  
+   assign tx_io_wait = tx_access & ~done & ~tx_burst;//tx_burst_reg
+
+   //Ugly hack. When there is an async wait coming in and we are in the middle of a transction
+   //we sample in a new value to realign the pipeline since the current transaction already went
+   //out to the IO.(must be a better way???)
+   assign adjust     = tx_io_wait_reg & (tx_rd_wait | tx_wr_wait);
+

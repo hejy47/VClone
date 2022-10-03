@@ -1,0 +1,167 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@147:201@HdlStmProcess
+  end else if (ctrl_enable == 1'b0) begin
+    needs_reset <= 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    state <= STATE_DO_RESET;
+  end else begin
+    case (state)
+    STATE_DO_RESET: begin
+      state <= STATE_RESET;
+    end
+    STATE_RESET: begin
+      /*
+       * Wait for the reset sequence to complete. Stay in this state when
+       * ctrl_enable == 1'b0, otherwise we'd go through the reset sequence
+       * again and again.
+       */
+      if (ctrl_enable == 1'b1 && req_resetn == 1'b1) begin
+        state <= STATE_DISABLED;
+      end
+    end
+    STATE_DISABLED: begin
+      if (needs_reset == 1'b1) begin
+        state <= STATE_DO_RESET;
+      end else if (ctrl_pause == 1'b0) begin
+        state <= STATE_STARTUP;
+      end
+    end
+    STATE_STARTUP: begin
+      /* Wait for all domains to be ready */
+      if (enabled_all == 1'b1) begin
+        state <= STATE_ENABLED;
+      end
+    end
+    STATE_ENABLED: begin
+      if (needs_reset == 1'b1 || ctrl_pause == 1'b1) begin
+        state <= STATE_SHUTDOWN;
+      end
+    end
+    STATE_SHUTDOWN: begin
+      /* Wait for all domains to complete outstanding transactions */
+      if (disabled_all == 1'b1) begin
+        state <= STATE_DISABLED;
+      end
+    end
+    endcase
+  end
+end
+
+/*
+ * Chain the reset through all clock domains. This makes sure that is asserted
+ * for at least 4 clock cycles of the slowest domain, no matter what. If
+ * successive domains have the same clock they'll share their reset signal.
+
+Diff Content:
+- 152 always @(posedge clk) begin
+- 153   if (resetn == 1'b0) begin
+- 154     state <= STATE_DO_RESET;
+- 155   end else begin
+- 156     case (state)
+- 157     STATE_DO_RESET: begin
+- 158       state <= STATE_RESET;
+- 160     STATE_RESET: begin
+- 161       /*
+- 162        * Wait for the reset sequence to complete. Stay in this state when
+- 163        * ctrl_enable == 1'b0, otherwise we'd go through the reset sequence
+- 164        * again and again.
+- 165        */
+- 166       if (ctrl_enable == 1'b1 && req_resetn == 1'b1) begin
+- 167         state <= STATE_DISABLED;
+- 169     end
+- 170     STATE_DISABLED: begin
+- 171       if (needs_reset == 1'b1) begin
+- 172         state <= STATE_DO_RESET;
+- 173       end else if (ctrl_pause == 1'b0) begin
+- 174         state <= STATE_STARTUP;
+- 176     end
+- 177     STATE_STARTUP: begin
+- 178       /* Wait for all domains to be ready */
+- 179       if (enabled_all == 1'b1) begin
+- 180         state <= STATE_ENABLED;
+- 182     end
+- 183     STATE_ENABLED: begin
+- 184       if (needs_reset == 1'b1 || ctrl_pause == 1'b1) begin
+- 185         state <= STATE_SHUTDOWN;
+- 187     end
+- 188     STATE_SHUTDOWN: begin
+- 189       /* Wait for all domains to complete outstanding transactions */
+- 190       if (disabled_all == 1'b1) begin
+- 191         state <= STATE_DISABLED;
+- 194     endcase
+- 196 end
++ 158   /*
++ 158    * If ctrl_enable goes from 1 to 0 a shutdown procedure is initiated. During the
++ 158    * shutdown procedure all domains are signaled that a shutdown should occur. The
++ 158    * domains will then complete any active transactions that are required to
++ 158    * complete according to the interface semantics. Once a domain has completed
++ 158    * its transactions it will indicate that it has been shutdown. Once all domains
++ 158    * indicate that they have been disabled a reset pulse will be generated to all
++ 158    * domains to clear all residual state. The reset pulse is long enough so that it
++ 158    * is active in all domains for at least 4 clock cycles.
++ 158    *
++ 158    * Once the reset signal is de-asserted the DMA is in an idle state and can be
++ 158    * enabled again. If the DMA receives a enable while it is performing a shutdown
++ 158    * sequence it will only be re-enabled once the shutdown sequence has
++ 158    * successfully completed.
++ 158    *
++ 158    * If ctrl_pause is asserted all domains will be disabled. But there will be no
++ 158    * reset, so when the ctrl_pause signal is de-asserted again the DMA will resume
++ 158    * with its previous state.
++ 158    *
++ 158    */
++ 158   /*
++ 158    * If ctrl_enable goes low, even for a single clock cycle, we want to go through
++ 158    * a full reset sequence. This might happen when the state machine is busy, e.g.
++ 158    * going through a startup sequence. To avoid missing the event store it for
++ 158    * later.
++ 158    */
++ 158   always @(posedge clk) begin
++ 158     if (state == STATE_RESET) begin
++ 158       needs_reset <= 1'b0;
++ 158     end else if (ctrl_enable == 1'b0) begin
++ 158       needs_reset <= 1'b1;
++ 167   end
++ 167   always @(posedge clk) begin
++ 167     if (resetn == 1'b0) begin
++ 167       state <= STATE_DO_RESET;
++ 167     end else begin
++ 167       case (state)
++ 167       STATE_DO_RESET: begin
++ 167         state <= STATE_RESET;
++ 174       STATE_RESET: begin
++ 174         /*
++ 174          * Wait for the reset sequence to complete. Stay in this state when
++ 174          * ctrl_enable == 1'b0, otherwise we'd go through the reset sequence
++ 174          * again and again.
++ 174          */
++ 174         if (ctrl_enable == 1'b1 && req_resetn == 1'b1) begin
++ 174           state <= STATE_DISABLED;
++ 174         end
++ 180       STATE_DISABLED: begin
++ 180         if (needs_reset == 1'b1) begin
++ 180           state <= STATE_DO_RESET;
++ 180         end else if (ctrl_pause == 1'b0) begin
++ 180           state <= STATE_STARTUP;
++ 180         end
++ 185       STATE_STARTUP: begin
++ 185         /* Wait for all domains to be ready */
++ 185         if (enabled_all == 1'b1) begin
++ 185           state <= STATE_ENABLED;
++ 185         end
++ 191       STATE_ENABLED: begin
++ 191         if (needs_reset == 1'b1 || ctrl_pause == 1'b1) begin
++ 191           state <= STATE_SHUTDOWN;
++ 191         end
++ 191       end
++ 191       STATE_SHUTDOWN: begin
++ 191         /* Wait for all domains to complete outstanding transactions */
++ 191         if (disabled_all == 1'b1) begin
++ 191           state <= STATE_DISABLED;
++ 191         end
++ 192       endcase
+
+Clone Blocks:

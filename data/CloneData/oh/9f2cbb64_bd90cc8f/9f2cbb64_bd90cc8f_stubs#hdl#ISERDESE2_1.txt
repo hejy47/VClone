@@ -1,0 +1,34 @@
+Source Block: oh/stubs/hdl/ISERDESE2.v@58:69@HdlStmProcess
+
+
+   reg [3:0] even_samples;
+   reg [3:0] odd_samples;
+   
+   always @ (posedge CLK)
+     even_samples[3:0] <= {odd_samples[2:0],D};
+
+   always @ (negedge CLK)
+     odd_samples[3:0] <= {odd_samples[2:0],D};
+
+   assign Q1 = odd_samples[0];
+
+Diff Content:
+- 64      even_samples[3:0] <= {odd_samples[2:0],D};
++ 64      even_samples[3:0] <= {even_samples[2:0],D};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/stubs/hdl/ISERDESE2.v@61:72
+   reg [3:0] odd_samples;
+   
+   always @ (posedge CLK)
+     even_samples[3:0] <= {odd_samples[2:0],D};
+
+   always @ (negedge CLK)
+     odd_samples[3:0] <= {odd_samples[2:0],D};
+
+   assign Q1 = odd_samples[0];
+   assign Q2 = even_samples[0];
+   assign Q3 = odd_samples[1];
+   assign Q4 = even_samples[1];
+

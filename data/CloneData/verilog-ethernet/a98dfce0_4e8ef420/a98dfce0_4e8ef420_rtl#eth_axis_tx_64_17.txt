@@ -1,0 +1,213 @@
+Source Block: verilog-ethernet/rtl/eth_axis_tx_64.v@152:295@HdlStmProcess
+        shift_eth_payload_tuser = (input_eth_payload_tuser & (input_eth_payload_tkeep[7:2] == 0));
+        shift_eth_payload_input_tready = ~(input_eth_payload_tlast & input_eth_payload_tvalid & transfer_in_save);
+    end
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_eth_hdr_ready_next = 0;
+    input_eth_payload_tready_next = 0;
+
+    store_eth_hdr = 0;
+
+    flush_save = 0;
+    transfer_in_save = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_axis_tdata_int = 0;
+    output_axis_tkeep_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+            flush_save = 1;
+            input_eth_hdr_ready_next = 1;
+
+            if (input_eth_hdr_ready & input_eth_hdr_valid) begin
+                store_eth_hdr = 1;
+                input_eth_hdr_ready_next = 0;
+                state_next = STATE_WRITE_HEADER;
+                if (output_axis_tready_int) begin
+                    output_axis_tvalid_int = 1;
+                    output_axis_tdata_int[ 7: 0] = input_eth_dest_mac[47:40];
+                    output_axis_tdata_int[15: 8] = input_eth_dest_mac[39:32];
+                    output_axis_tdata_int[23:16] = input_eth_dest_mac[31:24];
+                    output_axis_tdata_int[31:24] = input_eth_dest_mac[23:16];
+                    output_axis_tdata_int[39:32] = input_eth_dest_mac[15: 8];
+                    output_axis_tdata_int[47:40] = input_eth_dest_mac[ 7: 0];
+                    output_axis_tdata_int[55:48] = input_eth_src_mac[47:40];
+                    output_axis_tdata_int[63:56] = input_eth_src_mac[39:32];
+                    output_axis_tkeep_int = 8'hff;
+                    frame_ptr_next = 8;
+                    input_eth_payload_tready_next = output_axis_tready_int_early;
+                    state_next = STATE_WRITE_HEADER_LAST;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_WRITE_HEADER: begin
+            // write header
+            if (output_axis_tready_int) begin
+                frame_ptr_next = frame_ptr_reg + 8;
+                output_axis_tvalid_int = 1;
+                state_next = STATE_WRITE_HEADER;
+                case (frame_ptr_reg)
+                    5'd00: begin
+                        output_axis_tdata_int[ 7: 0] = input_eth_dest_mac[47:40];
+                        output_axis_tdata_int[15: 8] = input_eth_dest_mac[39:32];
+                        output_axis_tdata_int[23:16] = input_eth_dest_mac[31:24];
+                        output_axis_tdata_int[31:24] = input_eth_dest_mac[23:16];
+                        output_axis_tdata_int[39:32] = input_eth_dest_mac[15: 8];
+                        output_axis_tdata_int[47:40] = input_eth_dest_mac[ 7: 0];
+                        output_axis_tdata_int[55:48] = input_eth_src_mac[47:40];
+                        output_axis_tdata_int[63:56] = input_eth_src_mac[39:32];
+                        output_axis_tkeep_int = 8'hff;
+                        input_eth_payload_tready_next = output_axis_tready_int_early & shift_eth_payload_input_tready;
+                        state_next = STATE_WRITE_HEADER_LAST;
+                    end
+                endcase
+            end else begin
+                state_next = STATE_WRITE_HEADER;
+            end
+        end
+        STATE_WRITE_HEADER_LAST: begin
+            // last header word requires first payload word; process accordingly
+            input_eth_payload_tready_next = output_axis_tready_int_early & shift_eth_payload_input_tready;
+
+            if (input_eth_payload_tready & shift_eth_payload_tvalid) begin
+                frame_ptr_next = frame_ptr_reg + 8;
+                output_axis_tvalid_int = 1;
+                transfer_in_save = 1;   
+                
+                output_axis_tdata_int[ 7: 0] = eth_src_mac_reg[31:24];
+                output_axis_tdata_int[15: 8] = eth_src_mac_reg[23:16];
+                output_axis_tdata_int[23:16] = eth_src_mac_reg[15: 8];
+                output_axis_tdata_int[31:24] = eth_src_mac_reg[ 7: 0];
+                output_axis_tdata_int[39:32] = eth_type_reg[15: 8];
+                output_axis_tdata_int[47:40] = eth_type_reg[ 7: 0];
+                output_axis_tdata_int[55:48] = shift_eth_payload_tdata[55:48];
+                output_axis_tdata_int[63:56] = shift_eth_payload_tdata[63:56];
+                output_axis_tkeep_int = {shift_eth_payload_tkeep[7:6], 6'h3F};
+                output_axis_tlast_int = shift_eth_payload_tlast;
+                output_axis_tuser_int = shift_eth_payload_tuser;
+
+                if (shift_eth_payload_tlast) begin
+                    input_eth_payload_tready_next = 0;
+                    flush_save = 1;
+                    input_eth_hdr_ready_next = 1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WRITE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_WRITE_HEADER_LAST;
+            end
+        end
+        STATE_WRITE_PAYLOAD: begin
+            // write payload
+            input_eth_payload_tready_next = output_axis_tready_int_early & shift_eth_payload_input_tready;
+
+            output_axis_tdata_int = shift_eth_payload_tdata;
+            output_axis_tkeep_int = shift_eth_payload_tkeep;
+            output_axis_tvalid_int = shift_eth_payload_tvalid;
+            output_axis_tlast_int = shift_eth_payload_tlast;
+            output_axis_tuser_int = shift_eth_payload_tuser;
+
+            if (output_axis_tready_int & shift_eth_payload_tvalid) begin
+                // word transfer through
+                transfer_in_save = 1;
+                if (shift_eth_payload_tlast) begin
+                    input_eth_payload_tready_next = 0;
+                    flush_save = 1;
+                    input_eth_hdr_ready_next = 1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WRITE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_WRITE_PAYLOAD;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 160     input_eth_hdr_ready_next = 0;
+- 161     input_eth_payload_tready_next = 0;
+- 163     store_eth_hdr = 0;
+- 165     flush_save = 0;
+- 166     transfer_in_save = 0;
+- 170     output_axis_tdata_int = 0;
+- 171     output_axis_tkeep_int = 0;
+- 172     output_axis_tvalid_int = 0;
+- 173     output_axis_tlast_int = 0;
+- 174     output_axis_tuser_int = 0;
+- 179             frame_ptr_next = 0;
+- 180             flush_save = 1;
+- 181             input_eth_hdr_ready_next = 1;
+- 184                 store_eth_hdr = 1;
+- 185                 input_eth_hdr_ready_next = 0;
+- 187                 if (output_axis_tready_int) begin
+- 188                     output_axis_tvalid_int = 1;
+- 198                     frame_ptr_next = 8;
+- 208             if (output_axis_tready_int) begin
+- 209                 frame_ptr_next = frame_ptr_reg + 8;
+- 210                 output_axis_tvalid_int = 1;
+- 236                 frame_ptr_next = frame_ptr_reg + 8;
+- 237                 output_axis_tvalid_int = 1;
+- 238                 transfer_in_save = 1;   
+- 253                     input_eth_payload_tready_next = 0;
+- 254                     flush_save = 1;
+- 255                     input_eth_hdr_ready_next = 1;
+- 274             if (output_axis_tready_int & shift_eth_payload_tvalid) begin
+- 276                 transfer_in_save = 1;
+- 278                     input_eth_payload_tready_next = 0;
+- 279                     flush_save = 1;
+- 280                     input_eth_hdr_ready_next = 1;
++ 161     input_eth_hdr_ready_next = 1'b0;
++ 161     input_eth_payload_tready_next = 1'b0;
++ 163     store_eth_hdr = 1'b0;
++ 166     flush_save = 1'b0;
++ 166     transfer_in_save = 1'b0;
++ 174     output_axis_tdata_int = 64'd0;
++ 174     output_axis_tkeep_int = 8'd0;
++ 174     output_axis_tvalid_int = 1'b0;
++ 174     output_axis_tlast_int = 1'b0;
++ 174     output_axis_tuser_int = 1'b0;
++ 181             frame_ptr_next = 8'd0;
++ 181             flush_save = 1'b1;
++ 181             input_eth_hdr_ready_next = 1'b1;
++ 185                 store_eth_hdr = 1'b1;
++ 185                 input_eth_hdr_ready_next = 1'b0;
++ 188                 if (output_axis_tready_int_reg) begin
++ 188                     output_axis_tvalid_int = 1'b1;
++ 198                     frame_ptr_next = 8'd8;
++ 210             if (output_axis_tready_int_reg) begin
++ 210                 frame_ptr_next = frame_ptr_reg + 8'd8;
++ 210                 output_axis_tvalid_int = 1'b1;
++ 238                 frame_ptr_next = frame_ptr_reg + 8'd8;
++ 238                 output_axis_tvalid_int = 1'b1;
++ 238                 transfer_in_save = 1'b1;
++ 255                     input_eth_payload_tready_next = 1'b0;
++ 255                     flush_save = 1'b1;
++ 255                     input_eth_hdr_ready_next = 1'b1;
++ 274             if (output_axis_tready_int_reg & shift_eth_payload_tvalid) begin
++ 276                 transfer_in_save = 1'b1;
++ 280                     input_eth_payload_tready_next = 1'b0;
++ 280                     flush_save = 1'b1;
++ 280                     input_eth_hdr_ready_next = 1'b1;
+
+Clone Blocks:

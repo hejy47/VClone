@@ -1,0 +1,92 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@249:272@HdlStmProcess
+  .out_clk(spi_clk),
+  .out_resetn(1'b1),
+  .out_bits(trigger_s)
+);
+
+always @(posedge spi_clk) begin
+  if (spi_resetn == 1'b0) begin
+    spi_active <= 1'b0;
+  end else begin
+    if (spi_active == 1'b0) begin
+      // start offload when we have a valid trigger, offload is enabled and
+      // the DMA is enabled
+      if (trigger_s == 1'b1 && spi_enable == 1'b1 && offload_sdi_ready == 1'b1)
+        spi_active <= 1'b1;
+    end else if (cmd_ready == 1'b1 && spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) begin
+      spi_active <= 1'b0;
+    end
+  end
+end
+
+always @(posedge spi_clk) begin
+  if (cmd_valid == 1'b0) begin
+    spi_cmd_rd_addr <= 'h00;
+  end else if (cmd_ready == 1'b1) begin
+
+Diff Content:
+- 254 always @(posedge spi_clk) begin
+- 255   if (spi_resetn == 1'b0) begin
+- 256     spi_active <= 1'b0;
+- 258     if (spi_active == 1'b0) begin
+- 261       if (trigger_s == 1'b1 && spi_enable == 1'b1 && offload_sdi_ready == 1'b1)
+- 262         spi_active <= 1'b1;
+- 263     end else if (cmd_ready == 1'b1 && spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) begin
+- 267 end
++ 263   assign spi_enable = ctrl_enable;
++ 263   assign ctrl_enabled = spi_enable | spi_active;
++ 263   end endgenerate
++ 263   assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
++ 263   wire trigger_s;
++ 263   sync_bits #(
++ 263     .NUM_OF_BITS(1),
++ 263     .ASYNC_CLK(ASYNC_TRIG)
++ 263   ) i_sync_trigger (
++ 263     .in_bits(trigger),
++ 263     .out_clk(spi_clk),
++ 263     .out_resetn(1'b1),
++ 263     .out_bits(trigger_s));
++ 263   always @(posedge spi_clk) begin
++ 263     if (spi_resetn == 1'b0) begin
++ 264     end else begin
++ 264       if (spi_active == 1'b0) begin
++ 264         if (trigger_s == 1'b1 && spi_enable == 1'b1 && offload_sdi_ready == 1'b1)
++ 264           spi_active <= 1'b1;
++ 264       end else if (cmd_ready == 1'b1 && spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) begin
++ 264         spi_active <= 1'b0;
++ 264       end
++ 264     end
++ 264   end
++ 264   always @(posedge spi_clk) begin
++ 264     if (cmd_valid == 1'b0) begin
++ 264       spi_cmd_rd_addr <= 'h00;
++ 264     end else if (cmd_ready == 1'b1) begin
++ 264       spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad5766/axi_ad5766.v@228:250
+    assign spi_mem_reset_s = ctrl_mem_reset;
+  end endgenerate
+
+  assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
+
+  always @(posedge spi_clk) begin
+    if (spi_resetn == 1'b0) begin
+      spi_active <= 1'b0;
+    end else begin
+      if (spi_active == 1'b0) begin
+        if ((trigger_s == 1'b1 && spi_enable_s == 1'b1)) begin
+          spi_active <= 1'b1;
+        end
+      end else if (cmd_ready == 1'b1 && spi_cmd_rd_addr_next == ctrl_cmd_wr_addr) begin
+          spi_active <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge spi_clk) begin
+    if (cmd_valid == 1'b0) begin
+      spi_cmd_rd_addr <= 'h00;
+    end else if (cmd_ready == 1'b1) begin
+

@@ -1,0 +1,25 @@
+Source Block: zipcpu/rtl/zipsystem.v@948:960@HdlStmProcess
+		if (sel_counter)      w_ack_idx = w_ack_idx | 3'h5;
+		if (sel_dmac)         w_ack_idx = w_ack_idx | 3'h6;
+		if (sel_pic)          w_ack_idx = w_ack_idx | 3'h7;
+	end
+
+	always @(posedge i_clk)
+	if (sys_stb)
+		ack_idx <= w_ack_idx;
+
+	always @(posedge i_clk)
+	begin
+		case(ack_idx)
+		3'h0: { sys_ack, sys_idata } <= { mmus_ack, mmus_data };
+
+Diff Content:
++ 955 	reg	last_sys_stb;
++ 955 	initial	last_sys_stb = 0;
++ 955 	always @(posedge i_clk)
++ 955 	if (i_reset)
++ 955 		last_sys_stb <= 0;
++ 955 	else
++ 955 		last_sys_stb <= sys_stb;
+
+Clone Blocks:

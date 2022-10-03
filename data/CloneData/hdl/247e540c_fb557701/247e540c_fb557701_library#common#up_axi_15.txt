@@ -1,0 +1,59 @@
+Source Block: hdl/library/common/up_axi.v@160:189@HdlStmProcess
+
+  // read channel interface
+
+  assign up_axi_rresp = 2'd0;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_axi_arready <= 'd0;
+      up_axi_rvalid <= 'd0;
+      up_axi_rdata <= 'd0;
+    end else begin
+      if (up_axi_arready == 1'b1) begin
+        up_axi_arready <= 1'b0;
+      end else if (up_rack_s == 1'b1) begin
+        up_axi_arready <= 1'b1;
+      end
+      if ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1)) begin
+        up_axi_rvalid <= 1'b0;
+        up_axi_rdata <= 32'd0;
+      end else if (up_rack_d == 1'b1) begin
+        up_axi_rvalid <= 1'b1;
+        up_axi_rdata <= up_rdata_d;
+      end
+    end
+  end
+
+  assign up_rack_s = (up_rcount == 5'h1f) ? 1'b1 : (up_rcount[4] & up_rack);
+  assign up_rdata_s = (up_rcount == 5'h1f) ? {2{16'hdead}} : up_rdata;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Diff Content:
+- 167       up_axi_arready <= 'd0;
+- 168       up_axi_rvalid <= 'd0;
+- 169       up_axi_rdata <= 'd0;
+- 171       if (up_axi_arready == 1'b1) begin
+- 172         up_axi_arready <= 1'b0;
+- 174         up_axi_arready <= 1'b1;
+- 176       if ((up_axi_rready == 1'b1) && (up_axi_rvalid == 1'b1)) begin
+- 177         up_axi_rvalid <= 1'b0;
+- 178         up_axi_rdata <= 32'd0;
+- 180         up_axi_rvalid <= 1'b1;
+- 181         up_axi_rdata <= up_rdata_d;
++ 169       up_axi_arready_int <= 'd0;
++ 169       up_axi_rvalid_int <= 'd0;
++ 169       up_axi_rdata_int <= 'd0;
++ 172       if (up_axi_arready_int == 1'b1) begin
++ 172         up_axi_arready_int <= 1'b0;
++ 174         up_axi_arready_int <= 1'b1;
++ 178       if ((up_axi_rready == 1'b1) && (up_axi_rvalid_int == 1'b1)) begin
++ 178         up_axi_rvalid_int <= 1'b0;
++ 178         up_axi_rdata_int <= 32'd0;
++ 181         up_axi_rvalid_int <= 1'b1;
++ 181         up_axi_rdata_int <= up_rdata_d;
++ 184   assign up_rreq = up_rreq_int;
++ 184   assign up_raddr = up_raddr_int;
+
+Clone Blocks:

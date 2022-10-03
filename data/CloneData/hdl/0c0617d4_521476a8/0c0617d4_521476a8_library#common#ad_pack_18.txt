@@ -1,0 +1,61 @@
+Source Block: hdl/library/common/ad_pack.v@121:147@HdlStmProcess
+    idata_dd <= idata_dd_nx;
+  end
+end
+
+integer i;
+always @(*) begin
+  out_mask = 'b0;
+  idata_packed = 'bx;
+  if (STEP>0) begin
+    for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
+      if (in_use_nx[i]) begin
+        out_mask = {O_W{1'b1}} << i;
+        idata_packed = idata_dd_nx >> i*UNIT_W;
+      end
+    end
+  end else begin
+    if (in_use_nx[0]) begin
+      out_mask = {O_W{1'b1}};
+      idata_packed = idata_dd_nx;
+    end
+  end
+end
+
+assign pack_wr = ivalid_d & |in_use_nx[SH_W-O_W:0];
+
+generate
+  if (O_REG) begin : o_reg
+
+Diff Content:
+- 126 always @(*) begin
+- 127   out_mask = 'b0;
+- 128   idata_packed = 'bx;
+- 129   if (STEP>0) begin
+- 130     for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
+- 131       if (in_use_nx[i]) begin
+- 132         out_mask = {O_W{1'b1}} << i;
+- 133         idata_packed = idata_dd_nx >> i*UNIT_W;
+- 135     end
+- 136   end else begin
+- 137     if (in_use_nx[0]) begin
+- 138       out_mask = {O_W{1'b1}};
+- 139       idata_packed = idata_dd_nx;
+- 142 end
++ 133   integer i;
++ 133   always @(*) begin
++ 133     out_mask = 'b0;
++ 133     idata_packed = 'bx;
++ 133     if (STEP>0) begin
++ 133       for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
++ 133         if (in_use_nx[i]) begin
++ 133           out_mask = {O_W{1'b1}} << i;
++ 133           idata_packed = idata_dd_nx >> i*UNIT_W;
++ 133         end
++ 133       end
++ 133     end else begin
++ 133       if (in_use_nx[0]) begin
++ 133         out_mask = {O_W{1'b1}};
++ 133         idata_packed = idata_dd_nx;
+
+Clone Blocks:

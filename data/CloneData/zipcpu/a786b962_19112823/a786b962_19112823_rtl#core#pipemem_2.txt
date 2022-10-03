@@ -1,0 +1,34 @@
+Source Block: zipcpu/rtl/core/pipemem.v@105:125@HdlStmProcess
+	initial	rdaddr = 0;
+	initial	wraddr = 0;
+
+	reg	misaligned;
+
+	always	@(*)
+	if (OPT_ALIGNMENT_ERR)
+	begin
+		casez({ i_op[2:1], i_addr[1:0] })
+		4'b01?1: misaligned = 1'b1;
+		4'b0110: misaligned = 1'b1;
+		4'b10?1: misaligned = 1'b1;
+		default: misaligned = 1'b0;
+		endcase
+	end else
+		misaligned = 1'b0;
+
+	always @(posedge i_clk)
+		fifo_oreg[wraddr] <= { i_oreg, i_op[2:1], i_addr[1:0] };
+
+	initial	wraddr = 0;
+
+Diff Content:
+- 114 		4'b01?1: misaligned = 1'b1;
+- 115 		4'b0110: misaligned = 1'b1;
+- 116 		4'b10?1: misaligned = 1'b1;
+- 117 		default: misaligned = 1'b0;
++ 117 		4'b01?1: misaligned = i_pipe_stb;
++ 117 		4'b0110: misaligned = i_pipe_stb;
++ 117 		4'b10?1: misaligned = i_pipe_stb;
++ 117 		default: misaligned = i_pipe_stb;
+
+Clone Blocks:

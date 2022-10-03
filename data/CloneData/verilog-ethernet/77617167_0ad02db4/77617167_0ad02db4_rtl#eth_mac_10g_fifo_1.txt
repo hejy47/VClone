@@ -1,0 +1,183 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_fifo.v@219:304@HdlStmIf
+end
+
+// PTP timestamping
+generate
+
+if (TX_PTP_TS_ENABLE) begin
+    
+    ptp_clock_cdc #(
+        .TS_WIDTH(PTP_TS_WIDTH),
+        .NS_WIDTH(4),
+        .FNS_WIDTH(16),
+        .USE_SAMPLE_CLOCK(PTP_USE_SAMPLE_CLOCK)
+    )
+    tx_ptp_cdc (
+        .input_clk(logic_clk),
+        .input_rst(logic_rst),
+        .output_clk(tx_clk),
+        .output_rst(tx_rst),
+        .sample_clk(ptp_sample_clk),
+        .input_ts(ptp_ts_96),
+        .input_ts_step(ptp_ts_step),
+        .output_ts(tx_ptp_ts_96),
+        .output_ts_step(),
+        .output_pps(),
+        .locked()
+    );
+
+    axis_async_fifo #(
+        .DEPTH(TX_PTP_TS_FIFO_DEPTH),
+        .DATA_WIDTH(PTP_TS_WIDTH),
+        .KEEP_ENABLE(0),
+        .LAST_ENABLE(0),
+        .ID_ENABLE(TX_PTP_TAG_ENABLE),
+        .ID_WIDTH(PTP_TAG_WIDTH),
+        .DEST_ENABLE(0),
+        .USER_ENABLE(0),
+        .FRAME_FIFO(0)
+    )
+    tx_ptp_ts_fifo (
+        .async_rst(logic_rst | tx_rst),
+
+        // AXI input
+        .s_clk(tx_clk),
+        .s_axis_tdata(tx_axis_ptp_ts_96),
+        .s_axis_tkeep(0),
+        .s_axis_tvalid(tx_axis_ptp_ts_valid),
+        .s_axis_tready(),
+        .s_axis_tlast(0),
+        .s_axis_tid(tx_axis_ptp_ts_tag),
+        .s_axis_tdest(0),
+        .s_axis_tuser(0),
+
+        // AXI output
+        .m_clk(logic_clk),
+        .m_axis_tdata(m_axis_tx_ptp_ts_96),
+        .m_axis_tkeep(),
+        .m_axis_tvalid(m_axis_tx_ptp_ts_valid),
+        .m_axis_tready(m_axis_tx_ptp_ts_ready),
+        .m_axis_tlast(),
+        .m_axis_tid(m_axis_tx_ptp_ts_tag),
+        .m_axis_tdest(),
+        .m_axis_tuser(),
+
+        // Status
+        .s_status_overflow(),
+        .s_status_bad_frame(),
+        .s_status_good_frame(),
+        .m_status_overflow(),
+        .m_status_bad_frame(),
+        .m_status_good_frame()
+    );
+
+end else begin
+
+    assign m_axis_tx_ptp_ts_96 = {PTP_TS_WIDTH{1'b0}};
+    assign m_axis_tx_ptp_ts_tag = {PTP_TAG_WIDTH{1'b0}};
+    assign m_axis_tx_ptp_ts_valid = 1'b0;
+
+    assign tx_ptp_ts_96 = {PTP_TS_WIDTH{1'b0}};
+
+end
+
+if (RX_PTP_TS_ENABLE) begin
+
+    ptp_clock_cdc #(
+        .TS_WIDTH(PTP_TS_WIDTH),
+
+Diff Content:
+- 258         .async_rst(logic_rst | tx_rst),
++ 261         .s_rst(tx_rst),
++ 272         .m_rst(logic_rst),
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mac_phy_10g_fifo.v@239:324
+end
+
+// PTP timestamping
+generate
+
+if (TX_PTP_TS_ENABLE) begin
+    
+    ptp_clock_cdc #(
+        .TS_WIDTH(PTP_TS_WIDTH),
+        .NS_WIDTH(4),
+        .FNS_WIDTH(16),
+        .USE_SAMPLE_CLOCK(PTP_USE_SAMPLE_CLOCK)
+    )
+    tx_ptp_cdc (
+        .input_clk(logic_clk),
+        .input_rst(logic_rst),
+        .output_clk(tx_clk),
+        .output_rst(tx_rst),
+        .sample_clk(ptp_sample_clk),
+        .input_ts(ptp_ts_96),
+        .input_ts_step(ptp_ts_step),
+        .output_ts(tx_ptp_ts_96),
+        .output_ts_step(),
+        .output_pps(),
+        .locked()
+    );
+
+    axis_async_fifo #(
+        .DEPTH(TX_PTP_TS_FIFO_DEPTH),
+        .DATA_WIDTH(PTP_TS_WIDTH),
+        .KEEP_ENABLE(0),
+        .LAST_ENABLE(0),
+        .ID_ENABLE(TX_PTP_TAG_ENABLE),
+        .ID_WIDTH(PTP_TAG_WIDTH),
+        .DEST_ENABLE(0),
+        .USER_ENABLE(0),
+        .FRAME_FIFO(0)
+    )
+    tx_ptp_ts_fifo (
+        .async_rst(logic_rst | tx_rst),
+
+        // AXI input
+        .s_clk(tx_clk),
+        .s_axis_tdata(tx_axis_ptp_ts_96),
+        .s_axis_tkeep(0),
+        .s_axis_tvalid(tx_axis_ptp_ts_valid),
+        .s_axis_tready(),
+        .s_axis_tlast(0),
+        .s_axis_tid(tx_axis_ptp_ts_tag),
+        .s_axis_tdest(0),
+        .s_axis_tuser(0),
+
+        // AXI output
+        .m_clk(logic_clk),
+        .m_axis_tdata(m_axis_tx_ptp_ts_96),
+        .m_axis_tkeep(),
+        .m_axis_tvalid(m_axis_tx_ptp_ts_valid),
+        .m_axis_tready(m_axis_tx_ptp_ts_ready),
+        .m_axis_tlast(),
+        .m_axis_tid(m_axis_tx_ptp_ts_tag),
+        .m_axis_tdest(),
+        .m_axis_tuser(),
+
+        // Status
+        .s_status_overflow(),
+        .s_status_bad_frame(),
+        .s_status_good_frame(),
+        .m_status_overflow(),
+        .m_status_bad_frame(),
+        .m_status_good_frame()
+    );
+
+end else begin
+
+    assign m_axis_tx_ptp_ts_96 = {PTP_TS_WIDTH{1'b0}};
+    assign m_axis_tx_ptp_ts_tag = {PTP_TAG_WIDTH{1'b0}};
+    assign m_axis_tx_ptp_ts_valid = 1'b0;
+
+    assign tx_ptp_ts_96 = {PTP_TS_WIDTH{1'b0}};
+
+end
+
+if (RX_PTP_TS_ENABLE) begin
+
+    ptp_clock_cdc #(
+        .TS_WIDTH(PTP_TS_WIDTH),
+

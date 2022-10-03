@@ -1,0 +1,43 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@93:128@HdlStmProcess
+		else if (~addr_valid)
+			enabled <= 1'b0;
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		address <= 'h00;
+		last_burst_len <= 'h00;
+		req_ready <= 1'b1;
+		addr_valid <= 1'b0;
+	end else begin
+		if (~enabled) begin
+			req_ready <= 1'b1;
+		end else if (req_ready) begin
+			if (req_valid && enable) begin
+				address <= req_address;
+				req_ready <= 1'b0;
+			end
+		end else begin
+			if (addr_valid && addr_ready) begin
+				address <= address + MAX_BURST_SIZE_BEATS;
+				addr_valid <= 1'b0;
+				if (eot)
+					req_ready <= 1'b1;
+			end else if (id != wait_id && enable) begin
+				addr_valid <= 1'b1;
+			end
+		end
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		id <='h0;
+	end else begin
+
+Diff Content:
+- 114 				address <= address + MAX_BURST_SIZE_BEATS;
++ 114 				address <= address + MAX_BEATS_PER_BURST;
+
+Clone Blocks:

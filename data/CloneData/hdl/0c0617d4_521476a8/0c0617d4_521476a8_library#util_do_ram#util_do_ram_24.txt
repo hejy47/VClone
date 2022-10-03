@@ -1,0 +1,77 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@133:148@HdlStmProcess
+  else if (wr_last_beat) begin
+    s_axis_ready <= 1'b0;
+  end
+end
+
+always @(posedge s_axis_aclk) begin
+  if (s_axis_valid & s_axis_ready)
+    wr_response_eot <= s_axis_last | (wr_addr == wr_length);
+  else
+    wr_response_eot <= 1'b0;
+end
+
+always @(posedge s_axis_aclk) begin
+  if (wr_last_beat)
+    wr_response_measured_length <= {wr_addr, {SRC_ADDR_ALIGN{1'b1}}};
+end
+
+Diff Content:
+- 138 always @(posedge s_axis_aclk) begin
+- 139   if (s_axis_valid & s_axis_ready)
+- 140     wr_response_eot <= s_axis_last | (wr_addr == wr_length);
+- 141   else
+- 142     wr_response_eot <= 1'b0;
+- 143 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_do_ram/util_do_ram.v@140:153
+    wr_response_eot <= s_axis_last | (wr_addr == wr_length);
+  else
+    wr_response_eot <= 1'b0;
+end
+
+always @(posedge s_axis_aclk) begin
+  if (wr_last_beat)
+    wr_response_measured_length <= {wr_addr, {SRC_ADDR_ALIGN{1'b1}}};
+end
+
+reg wr_full = 1'b0;
+// Protect against larger transfers than storage
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+
+Clone Blocks 2:
+hdl/library/util_do_ram/util_do_ram.v@145:155
+always @(posedge s_axis_aclk) begin
+  if (wr_last_beat)
+    wr_response_measured_length <= {wr_addr, {SRC_ADDR_ALIGN{1'b1}}};
+end
+
+reg wr_full = 1'b0;
+// Protect against larger transfers than storage
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_full <= 1'b0;
+  else if (&wr_addr & (s_axis_valid & s_axis_ready))
+
+Clone Blocks 3:
+hdl/library/util_do_ram/util_do_ram.v@147:162
+    wr_response_measured_length <= {wr_addr, {SRC_ADDR_ALIGN{1'b1}}};
+end
+
+reg wr_full = 1'b0;
+// Protect against larger transfers than storage
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_full <= 1'b0;
+  else if (&wr_addr & (s_axis_valid & s_axis_ready))
+    wr_full <= 1'b1;
+end
+
+// Do not roll over write address
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable | wr_last_beat)
+    wr_addr <= 'h0;
+

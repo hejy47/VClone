@@ -1,0 +1,46 @@
+Source Block: oh/memory/hdl/fifo_cdc.v@41:51@HdlStmAssign
+   wire 	      valid;   
+   reg 		      access_out;
+      
+   assign wr_en    = access_in;//&~full
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out =  full;
+
+   //Keep access high until "acknowledge"
+   always @ (posedge clk_out or posedge reset_out)
+     if(reset_out)
+       access_out <=1'b0;   
+
+Diff Content:
+- 46    assign wait_out =  full;
++ 46    assign wait_out = full;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/memory/hdl/fifo_cdc.v@39:49
+   wire 	      empty;
+   wire 	      full;
+   wire 	      valid;   
+   reg 		      access_out;
+      
+   assign wr_en    = access_in;//&~full
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out =  full;
+
+   //Keep access high until "acknowledge"
+   always @ (posedge clk_out or posedge reset_out)
+
+Clone Blocks 2:
+oh/memory/hdl/fifo_cdc.v@40:50
+   wire 	      full;
+   wire 	      valid;   
+   reg 		      access_out;
+      
+   assign wr_en    = access_in;//&~full
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out =  full;
+
+   //Keep access high until "acknowledge"
+   always @ (posedge clk_out or posedge reset_out)
+     if(reset_out)
+

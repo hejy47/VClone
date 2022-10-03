@@ -1,0 +1,80 @@
+Source Block: oh/emesh/hdl/emesh_if.v@63:75@HdlStmAssign
+   assign cmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];	 
+   assign rmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];	 
+   assign xmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];
+
+
+   assign emesh_wait_out = cmesh_wait_in |
+			   rmesh_wait_in |
+			   xmesh_wait_in;
+  	 	 
+   //#####################################################
+   //# (RMESH/XMESH/CMESH)-->EMESH
+   //#####################################################
+
+
+Diff Content:
+- 68    assign emesh_wait_out = cmesh_wait_in |
+- 69 			   rmesh_wait_in |
+- 70 			   xmesh_wait_in;
++ 70    assign emesh_ready_out = cmesh_ready_in &
++ 70 			    rmesh_ready_in &
++ 70 			    xmesh_ready_in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emesh/hdl/emesh_if.v@59:69
+   //Don't drive on xmesh for now
+   assign xmesh_access_out = 1'b0;
+      
+   //Distribute emesh to xmesh,cmesh, rmesh
+   assign cmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];	 
+   assign rmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];	 
+   assign xmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];
+
+
+   assign emesh_wait_out = cmesh_wait_in |
+			   rmesh_wait_in |
+
+Clone Blocks 2:
+oh/emesh/hdl/emesh_if.v@81:91
+   //TODO: Make round robin?? (Fancify)
+   assign emesh_packet_out[PW-1:0] = cmesh_access_in ? cmesh_packet_in[PW-1:0] :
+				     rmesh_access_in ? rmesh_packet_in[PW-1:0] :
+				                       xmesh_packet_in[PW-1:0];
+   
+   assign cmesh_wait_out = (cmesh_access_in & emesh_wait_in);
+   
+
+   assign rmesh_wait_out = rmesh_access_in & 
+			   (emesh_wait_in | cmesh_access_in);
+				
+
+Clone Blocks 3:
+oh/emesh/hdl/emesh_if.v@60:70
+   assign xmesh_access_out = 1'b0;
+      
+   //Distribute emesh to xmesh,cmesh, rmesh
+   assign cmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];	 
+   assign rmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];	 
+   assign xmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];
+
+
+   assign emesh_wait_out = cmesh_wait_in |
+			   rmesh_wait_in |
+			   xmesh_wait_in;
+
+Clone Blocks 4:
+oh/emesh/hdl/emesh_if.v@58:68
+
+   //Don't drive on xmesh for now
+   assign xmesh_access_out = 1'b0;
+      
+   //Distribute emesh to xmesh,cmesh, rmesh
+   assign cmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];	 
+   assign rmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];	 
+   assign xmesh_packet_out[PW-1:0] = emesh_packet_in[PW-1:0];
+
+
+   assign emesh_wait_out = cmesh_wait_in |
+

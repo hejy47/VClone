@@ -1,0 +1,34 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_common/up_tpl_common.v@99:125@HdlStmProcess
+  // processor read interface
+
+  assign up_rack = up_rack_int;
+  assign up_rdata = up_rdata_int;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack_int <= 'd0;
+      up_rdata_int <= 'd0;
+    end else begin
+      up_rack_int <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[6:0])
+          7'h00: up_rdata_int <= up_profile_sel;
+          7'h01: up_rdata_int <= NUM_PROFILES;
+         default: up_rdata_int <= up_rdata_jesd_params;
+        endcase
+      end else begin
+        up_rdata_int <= 32'd0;
+      end
+    end
+  end
+
+  integer i;
+  always @(*) begin
+    for (i=0; i<NUM_PROFILES; i = i + 1) begin:jesd_param
+      up_rdata_jesd_params = 0;
+
+Diff Content:
+- 114          default: up_rdata_int <= up_rdata_jesd_params;
++ 114           default: up_rdata_int <= up_rdata_jesd_params;
+
+Clone Blocks:

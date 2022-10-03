@@ -1,0 +1,54 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap.v@155:171@HdlStmProcess
+  end else begin
+    irq <= |up_irq_pending;
+  end
+end
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_irq_source <= 2'b00;
+  end else begin
+    up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
+  end
+end
+
+// Register Interface
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+
+Diff Content:
+- 160 always @(posedge s_axi_aclk) begin
+- 161   if (s_axi_aresetn == 1'b0) begin
+- 162     up_irq_source <= 2'b00;
+- 163   end else begin
+- 164     up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
+- 166 end
++ 164   always @(posedge s_axi_aclk) begin
++ 164     if (s_axi_aresetn == 1'b0) begin
++ 164       up_irq_source <= 2'b00;
++ 164     end else begin
++ 164       up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
++ 164     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_fan_control/axi_fan_control.v@694:710
+  end else begin
+    irq <= |up_irq_pending;
+  end
+end
+
+always @(posedge up_clk) begin
+  if (up_resetn == 1'b0) begin
+    up_irq_source <= 4'b0000;
+  end else begin
+    up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
+  end
+end
+
+//tacho measurement logic
+always @(posedge up_clk) begin
+  if (up_resetn == 1'b0) begin
+    tacho_edge_det <= 'h0;
+

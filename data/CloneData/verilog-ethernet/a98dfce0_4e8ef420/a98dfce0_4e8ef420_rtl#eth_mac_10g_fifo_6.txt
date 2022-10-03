@@ -1,0 +1,56 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_fifo.v@122:142@HdlStmProcess
+    end else begin
+        rx_sync_reg_1 <= rx_sync_reg_1 ^ {rx_error_bad_frame_int, rx_error_bad_frame_int};
+    end
+end
+
+always @(posedge logic_clk or posedge logic_rst) begin
+    if (logic_rst) begin
+        rx_sync_reg_2 <= 0;
+        rx_sync_reg_3 <= 0;
+        rx_sync_reg_4 <= 0;
+    end else begin
+        rx_sync_reg_2 <= rx_sync_reg_1;
+        rx_sync_reg_3 <= rx_sync_reg_2;
+        rx_sync_reg_4 <= rx_sync_reg_3;
+    end
+end
+
+eth_mac_10g #(
+    .ENABLE_PADDING(ENABLE_PADDING),
+    .ENABLE_DIC(ENABLE_DIC),
+    .MIN_FRAME_LENGTH(MIN_FRAME_LENGTH)
+
+Diff Content:
+- 129         rx_sync_reg_2 <= 0;
+- 130         rx_sync_reg_3 <= 0;
+- 131         rx_sync_reg_4 <= 0;
++ 131         rx_sync_reg_2 <= 2'd0;
++ 131         rx_sync_reg_3 <= 2'd0;
++ 131         rx_sync_reg_4 <= 2'd0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mac_1g_fifo.v@119:139
+    end else begin
+        rx_sync_reg_1 <= rx_sync_reg_1 ^ {rx_error_bad_frame_int, rx_error_bad_frame_int};
+    end
+end
+
+always @(posedge logic_clk or posedge logic_rst) begin
+    if (logic_rst) begin
+        rx_sync_reg_2 <= 0;
+        rx_sync_reg_3 <= 0;
+        rx_sync_reg_4 <= 0;
+    end else begin
+        rx_sync_reg_2 <= rx_sync_reg_1;
+        rx_sync_reg_3 <= rx_sync_reg_2;
+        rx_sync_reg_4 <= rx_sync_reg_3;
+    end
+end
+
+eth_mac_1g #(
+    .ENABLE_PADDING(ENABLE_PADDING),
+    .MIN_FRAME_LENGTH(MIN_FRAME_LENGTH)
+)
+

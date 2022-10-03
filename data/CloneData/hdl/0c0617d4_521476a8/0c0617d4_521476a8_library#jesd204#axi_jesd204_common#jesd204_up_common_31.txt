@@ -1,0 +1,29 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@183:199@HdlStmProcess
+  end else begin
+    up_reset_synchronizer_vector <= {1'b0,up_reset_synchronizer_vector[1]};
+  end
+end
+
+always @(posedge up_clk or posedge core_reset_ext) begin
+  if (core_reset_ext == 1'b1) begin
+    up_core_reset_ext_synchronizer_vector <= 2'b11;
+  end else begin
+    up_core_reset_ext_synchronizer_vector <= {1'b0,up_core_reset_ext_synchronizer_vector[1]};
+  end
+end
+
+always @(posedge core_clk) begin
+  if (core_cfg_transfer_en == 1'b1) begin
+    core_cfg_octets_per_multiframe <= up_cfg_octets_per_multiframe;
+    core_cfg_octets_per_frame <= up_cfg_octets_per_frame;
+
+Diff Content:
+- 188 always @(posedge up_clk or posedge core_reset_ext) begin
+- 189   if (core_reset_ext == 1'b1) begin
+- 190     up_core_reset_ext_synchronizer_vector <= 2'b11;
+- 191   end else begin
+- 192     up_core_reset_ext_synchronizer_vector <= {1'b0,up_core_reset_ext_synchronizer_vector[1]};
+- 193   end
+- 194 end
+
+Clone Blocks:

@@ -1,0 +1,26 @@
+Source Block: oh/elink/hdl/etx_io.v@100:116@HdlStmProcess
+       tx_io_wait_reg <= tx_io_wait;
+   
+   //#############################
+   //# Frame Signal
+   //#############################  
+   always @ (posedge tx_lclk or posedge ioreset)
+     if(ioreset)
+       tx_frame <= 1'b0;   
+     else if(tx_pointer[0] & tx_access)
+       tx_frame <= 1'b1;
+     else if(tx_pointer[7] & ~tx_burst)
+       tx_frame <= 1'b0;
+   
+   //#############################
+   //# SELECTING DATA PER CYCLE
+   //#############################  
+   //optimize later...
+
+Diff Content:
+- 105    always @ (posedge tx_lclk or posedge ioreset)
+- 106      if(ioreset)
++ 106    always @ (posedge tx_lclk or posedge reset)
++ 106      if(reset)
+
+Clone Blocks:

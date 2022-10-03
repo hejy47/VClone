@@ -1,0 +1,31 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@401:411@HdlIdDef
+// introduced by the level shifters. This can improve the timing significantly
+// on higher SCLK rates. Devices like ad4630 have an echod SCLK, which can be
+// used to latch the MISO lines, improving the overall timing margin of the
+// interface.
+
+wire cs_active_s = (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]);
+genvar i;
+
+// NOTE: SPI configuration (CPOL/PHA) is only hardware configurable at this point
+generate
+if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
+
+Diff Content:
+- 406 wire cs_active_s = (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@402:412
+// on higher SCLK rates. Devices like ad4630 have an echod SCLK, which can be
+// used to latch the MISO lines, improving the overall timing margin of the
+// interface.
+
+wire cs_active_s = (inst_d1 == CMD_CHIPSELECT) & ~(&cmd_d1[NUM_OF_CS-1:0]);
+genvar i;
+
+// NOTE: SPI configuration (CPOL/PHA) is only hardware configurable at this point
+generate
+if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
+
+

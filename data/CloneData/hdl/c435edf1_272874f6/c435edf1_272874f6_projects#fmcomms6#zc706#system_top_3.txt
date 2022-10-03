@@ -1,0 +1,75 @@
+Source Block: hdl/projects/fmcomms6/zc706/system_top.v@160:186@HdlStmProcess
+  wire            adc_enable_1;
+  wire    [15:0]  adc_data_1;
+
+  // pack-unpack place holder
+
+  always @(posedge adc_clk) begin 
+    adc_data_cnt <= adc_data_cnt + 1'b1;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt[0] & adc_data_cnt[1];
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[63:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt[0] & adc_data_cnt[1];
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[63:16]};
+      end
+      default: begin
+        adc_dma_wr <= adc_data_cnt[0];
+        adc_dma_wdata <= {adc_data_1, adc_data_0, adc_dma_wdata[63:32]};
+      end
+    endcase
+  end
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+    .dt (gpio_t[15:0]),
+
+Diff Content:
+- 166     adc_data_cnt <= adc_data_cnt + 1'b1;
+- 169         adc_dma_wr <= adc_data_cnt[0] & adc_data_cnt[1];
+- 170         adc_dma_wdata <= {adc_data_1, adc_dma_wdata[63:16]};
+- 173         adc_dma_wr <= adc_data_cnt[0] & adc_data_cnt[1];
+- 174         adc_dma_wdata <= {adc_data_0, adc_dma_wdata[63:16]};
+- 177         adc_dma_wr <= adc_data_cnt[0];
+- 178         adc_dma_wdata <= {adc_data_1, adc_data_0, adc_dma_wdata[63:32]};
++ 170         adc_dma_wr <= ~adc_dma_wr;
++ 170         adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
++ 174         adc_dma_wr <= ~adc_dma_wr;
++ 174         adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
++ 178         adc_dma_wr <= 1'b1;
++ 178         adc_dma_wdata <= {adc_data_1, adc_data_0};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms1/zc706/system_top.v@222:248
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin 
+    adc_data_cnt <= adc_data_cnt + 1'b1;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt[0] & adc_data_cnt[1];
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[63:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt[0] & adc_data_cnt[1];
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[63:16]};
+      end
+      default: begin
+        adc_dma_wr <= adc_data_cnt[0];
+        adc_dma_wdata <= {adc_data_1, adc_data_0, adc_dma_wdata[63:32]};
+      end
+    endcase
+  end
+
+  system_wrapper i_system_wrapper (
+    .DDR_addr (DDR_addr),
+    .DDR_ba (DDR_ba),
+    .DDR_cas_n (DDR_cas_n),
+

@@ -1,0 +1,35 @@
+Source Block: oh/common/dv/dv_driver.v@120:147@HdlStmFor
+   //###########################################
+   //MEMORY
+   //###########################################
+   genvar k;
+   generate
+      for(j=0;j<N;j=j+1) begin : mem	 
+	 ememory #(.NAME(NAME),
+		   .IDW(IDW),
+		   .AW(AW)
+		   )
+	 ememory(// Outputs
+		 .wait_out		(mem_wait_out[j]),
+		 .access_out		(mem_access_out[j]),
+		 .packet_out		(mem_packet_out[(j+1)*PW-1:j*PW]),
+		 // Inputs
+		 .clk			(clk),
+		 .nreset		(nreset),
+		 .coreid		(coreid[IDW-1:0]),
+		 .access_in		(dut_access[j]),
+		 .packet_in		(dut_packet[(j+1)*PW-1:j*PW]),
+		 .wait_in		(dut_wait[i])
+		 );
+      end	 
+	 
+   endgenerate
+   
+   //###########################################
+   //MUX BETWEEN STIMULUS AND MEMORY
+
+Diff Content:
+- 140 		 .wait_in		(dut_wait[i])
++ 140 		 .wait_in		(dut_wait[j])
+
+Clone Blocks:

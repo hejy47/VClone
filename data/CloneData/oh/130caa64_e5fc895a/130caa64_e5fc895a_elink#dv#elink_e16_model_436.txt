@@ -1,0 +1,40 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3899:3912@HdlStmProcess
+   //# entries only.
+   //# In this case byte0 of the first entry of the transaction
+   //# ({byte0,ctrlmode[3:0],dstaddr[31:28]}) will be a "zevel" but we don't care
+   //# since this byte is replaced later anyway.
+   
+   always @ (posedge cclk)
+     if (cclk_en)
+       if(!wr_fifo_full)
+	 even_byte[LW-1:0] <= tran_in[LW-1:0];
+
+   always @ (posedge cclk)
+     if (cclk_en)
+       if (wr_write)
+	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
+
+Diff Content:
+- 3904    always @ (posedge cclk)
+- 3905      if (cclk_en)
+- 3906        if(!wr_fifo_full)
+- 3907 	 even_byte[LW-1:0] <= tran_in[LW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3904:3917
+   always @ (posedge cclk)
+     if (cclk_en)
+       if(!wr_fifo_full)
+	 even_byte[LW-1:0] <= tran_in[LW-1:0];
+
+   always @ (posedge cclk)
+     if (cclk_en)
+       if (wr_write)
+	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
+   
+   //# Read (for dispatch)
+   assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+   //# Read (first short word of the next transaction to dispatch)
+

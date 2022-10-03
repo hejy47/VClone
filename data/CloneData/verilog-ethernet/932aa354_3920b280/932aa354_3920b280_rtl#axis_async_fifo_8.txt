@@ -1,0 +1,58 @@
+Source Block: verilog-ethernet/rtl/axis_async_fifo.v@338:356@HdlStmProcess
+        rd_ptr_gray_sync1_reg <= rd_ptr_gray_reg;
+        rd_ptr_gray_sync2_reg <= rd_ptr_gray_sync1_reg;
+    end
+end
+
+always @(posedge m_clk) begin
+    if (m_rst_sync3_reg) begin
+        wr_ptr_gray_sync1_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_gray_sync2_reg <= {ADDR_WIDTH+1{1'b0}};
+    end else begin
+        wr_ptr_gray_sync1_reg <= wr_ptr_gray_reg;
+        wr_ptr_gray_sync2_reg <= wr_ptr_gray_sync1_reg;
+    end
+end
+
+// status synchronization
+always @(posedge s_clk) begin
+    if (s_rst_sync3_reg) begin
+        overflow_sync1_reg <= 1'b0;
+
+Diff Content:
+- 348         wr_ptr_gray_sync1_reg <= wr_ptr_gray_reg;
++ 346         wr_ptr_update_sync1_reg <= 1'b0;
++ 346         wr_ptr_update_sync2_reg <= 1'b0;
++ 346         wr_ptr_update_sync3_reg <= 1'b0;
++ 348         if (!FRAME_FIFO) begin
++ 348             wr_ptr_gray_sync1_reg <= wr_ptr_gray_reg;
++ 348         end else if (wr_ptr_update_sync2_reg ^ wr_ptr_update_sync3_reg) begin
++ 348             wr_ptr_gray_sync1_reg <= wr_ptr_sync_gray_reg;
++ 348         end
++ 349         wr_ptr_update_sync1_reg <= wr_ptr_update_reg;
++ 349         wr_ptr_update_sync2_reg <= wr_ptr_update_sync1_reg;
++ 349         wr_ptr_update_sync3_reg <= wr_ptr_update_sync2_reg;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_async_fifo.v@328:346
+        mem[wr_addr_reg[ADDR_WIDTH-1:0]] <= s_axis;
+    end
+end
+
+// pointer synchronization
+always @(posedge s_clk) begin
+    if (s_rst_sync3_reg) begin
+        rd_ptr_gray_sync1_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_sync2_reg <= {ADDR_WIDTH+1{1'b0}};
+    end else begin
+        rd_ptr_gray_sync1_reg <= rd_ptr_gray_reg;
+        rd_ptr_gray_sync2_reg <= rd_ptr_gray_sync1_reg;
+    end
+end
+
+always @(posedge m_clk) begin
+    if (m_rst_sync3_reg) begin
+        wr_ptr_gray_sync1_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_gray_sync2_reg <= {ADDR_WIDTH+1{1'b0}};
+

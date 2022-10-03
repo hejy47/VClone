@@ -1,0 +1,32 @@
+Source Block: oh/elink/dv/dv_elink.v@181:192@HdlStmAssign
+
+
+   
+   assign  emem_access           = rxwr_access | rxrd_access;
+    
+   assign  emem_packet[PW-1:0]   = rxwr_access ? rxwr_packet[PW-1:0]:
+                                                 rxrd_packet[PW-1:0];
+     
+   /*ememory AUTO_TEMPLATE ( 
+                        // Outputs
+                        .\(.*\)_out       (txrr_\1[]),
+                        .\(.*\)_in        (emem_\1[]),
+
+Diff Content:
++ 187    assign rxrd_wait = emem_wait | rxwr_access;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/dv_elink.v@179:189
+		.txrr_access		(txrr_access),
+		.txrr_packet		(txrr_packet[PW-1:0]));
+
+
+   
+   assign  emem_access           = rxwr_access | rxrd_access;
+    
+   assign  emem_packet[PW-1:0]   = rxwr_access ? rxwr_packet[PW-1:0]:
+                                                 rxrd_packet[PW-1:0];
+     
+   /*ememory AUTO_TEMPLATE ( 
+

@@ -1,0 +1,45 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1600:1610@HdlStmAssign
+   always @ (posedge rxi_lclk)
+     if (fifo_write)
+       fifo_mem[wr_addr[FAD-1:0]] <= fifo_data_in[2*LW:0];
+
+   //# Read from fifo
+   assign fifo_data_out[2*LW:0] = fifo_mem[rd_addr[FAD-1:0]];
+
+   //# Since the size of the FIFO is parametrized I prefer to sample the output
+   //# data to prevent timing issues for the big number of entries (big mux on read)
+   //# This shouldn't add any performance loss just latency increase
+
+
+Diff Content:
+- 1605    assign fifo_data_out[2*LW:0] = fifo_mem[rd_addr[FAD-1:0]];
++ 1605    parameter LW   = `CFG_LW;//lvds tranceiver pairs per side
++ 1605    parameter DW   = `CFG_DW;//data width  
++ 1605    parameter AW   = `CFG_AW;//address width
++ 1605    input             reset;     // reset input
++ 1605    input [3:0] 	     ext_yid_k; // external y-id 
++ 1605    input [3:0] 	     ext_xid_k; // external x-id
++ 1605    input             vertical_k;// specifies if block is vertical or horizontal
++ 1605    input [3:0] 	     who_am_i;  // specifies what link is that (north,east,south,west)
++ 1605    input 	     cfg_extcomp_dis;// Disable external coordinates comparison
++ 1605    input [LW-1:0]    rxi_data;  // Byte word
++ 1605    input             rxi_lclk;  // receive clock (adjusted to the frame/data)
++ 1605    input             rxi_frame; // indicates new transmission
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1595:1607
+
+   //##################################
+   //#   Input FIFO of the receiver
+   //##################################
+
+   always @ (posedge rxi_lclk)
+     if (fifo_write)
+       fifo_mem[wr_addr[FAD-1:0]] <= fifo_data_in[2*LW:0];
+
+   //# Read from fifo
+   assign fifo_data_out[2*LW:0] = fifo_mem[rd_addr[FAD-1:0]];
+
+   //# Since the size of the FIFO is parametrized I prefer to sample the output
+

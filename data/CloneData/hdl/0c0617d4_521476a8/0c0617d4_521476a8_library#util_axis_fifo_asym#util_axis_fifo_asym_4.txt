@@ -1,0 +1,73 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@74:84@HdlIdDef
+// bus width ratio
+localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
+
+// atomic parameters - NOTE: depth is always defined by the slave attributes
+localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
+localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
+localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+
+// slave and master sequencers
+reg [$clog2(RATIO)-1:0] s_axis_counter;
+
+Diff Content:
+- 79 localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@76:86
+
+// atomic parameters - NOTE: depth is always defined by the slave attributes
+localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
+localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
+localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+
+// slave and master sequencers
+reg [$clog2(RATIO)-1:0] s_axis_counter;
+reg [$clog2(RATIO)-1:0] m_axis_counter;
+
+
+Clone Blocks 2:
+hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@70:80
+
+// define which interface has a wider bus
+localparam RATIO_TYPE = (S_DATA_WIDTH >= M_DATA_WIDTH) ? 1 : 0;
+
+// bus width ratio
+localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
+
+// atomic parameters - NOTE: depth is always defined by the slave attributes
+localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
+localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
+localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+
+Clone Blocks 3:
+hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@75:85
+localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
+
+// atomic parameters - NOTE: depth is always defined by the slave attributes
+localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
+localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
+localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+
+// slave and master sequencers
+reg [$clog2(RATIO)-1:0] s_axis_counter;
+reg [$clog2(RATIO)-1:0] m_axis_counter;
+
+Clone Blocks 4:
+hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@73:83
+
+// bus width ratio
+localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
+
+// atomic parameters - NOTE: depth is always defined by the slave attributes
+localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
+localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
+localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+
+// slave and master sequencers
+

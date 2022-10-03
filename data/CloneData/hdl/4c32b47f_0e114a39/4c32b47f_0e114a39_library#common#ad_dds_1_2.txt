@@ -1,0 +1,36 @@
+Source Block: hdl/library/common/ad_dds_1.v@47:57@HdlIdDef
+  // internal registers
+
+  // internal signals
+
+  wire    [15:0]  sine_s;
+  wire    [33:0]  s1_data_s;
+
+  // sine
+
+  ad_dds_sine #(.DELAY_DATA_WIDTH(1)) i_dds_sine (
+    .clk (clk),
+
+Diff Content:
+- 52   wire    [33:0]  s1_data_s;
++ 52   wire    [CORDIC_DW-1:0] sine_s;
++ 52   wire    [         15:0] sine16_s;
++ 52   wire    [          3:0] zeros;
++ 52   wire    [         33:0] s1_data_s;
++ 52   assign zeros = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_dds_1.v@46:56
+
+  // internal registers
+
+  // internal signals
+
+  wire    [15:0]  sine_s;
+  wire    [33:0]  s1_data_s;
+
+  // sine
+
+  ad_dds_sine #(.DELAY_DATA_WIDTH(1)) i_dds_sine (
+

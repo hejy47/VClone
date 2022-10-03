@@ -1,0 +1,48 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_core.v@84:120@HdlStmFor
+
+  localparam CDW = DATA_PATH_WIDTH * 16;
+
+  generate
+  genvar i;
+  for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
+    ad_ip_jesd204_tpl_dac_channel #(
+      .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+      .DATAPATH_DISABLE (DATAPATH_DISABLE),
+      .DAC_DDS_TYPE (DAC_DDS_TYPE),
+      .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+      .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW)
+    ) i_channel (
+      .clk (clk),
+      .dac_enable (enable[i]),
+      .dac_data (dac_data_s[CDW*i+:CDW]),
+      .dma_data (dac_ddata[CDW*i+:CDW]),
+
+      .dac_data_sync (dac_sync),
+      .dac_dds_format (dac_dds_format),
+
+      .dac_data_sel (dac_data_sel[4*i+:4]),
+
+      .dac_dds_scale_0 (dac_dds_scale_0[16*i+:16]),
+      .dac_dds_init_0 (dac_dds_init_0[16*i+:16]),
+      .dac_dds_incr_0 (dac_dds_incr_0[16*i+:16]),
+      .dac_dds_scale_1 (dac_dds_scale_1[16*i+:16]),
+      .dac_dds_init_1 (dac_dds_init_1[16*i+:16]),
+      .dac_dds_incr_1 (dac_dds_incr_1[16*i+:16]),
+
+      .dac_pat_data_0 (dac_pat_data_0[16*i+:16]),
+      .dac_pat_data_1 (dac_pat_data_1[16*i+:16])
+    );
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 93       .DAC_DDS_TYPE (DAC_DDS_TYPE),
+- 94       .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+- 95       .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW)
++ 95       .DDS_TYPE (DDS_TYPE),
++ 95       .DDS_CORDIC_DW (DDS_CORDIC_DW),
++ 95       .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW)
+
+Clone Blocks:

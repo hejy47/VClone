@@ -1,0 +1,34 @@
+Source Block: hdl/library/axi_dmac/dest_fifo_inf.v@101:117@HdlStmProcess
+    valid <= 1'b0;
+    underflow <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    data_id <= 'h00;
+  end else if (fifo_last_beat == 1'b1) begin
+    data_id <= inc_id(data_id);
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    active <= 1'b0;
+  end else if (req_valid == 1'b1) begin
+
+Diff Content:
+- 106 always @(posedge clk) begin
+- 107   if (resetn == 1'b0) begin
+- 108     data_id <= 'h00;
+- 109   end else if (fifo_last_beat == 1'b1) begin
+- 110     data_id <= inc_id(data_id);
+- 112 end
++ 110   always @(posedge clk) begin
++ 110     if (resetn == 1'b0) begin
++ 110       data_id <= 'h00;
++ 110     end else if (fifo_last_beat == 1'b1) begin
++ 110       data_id <= inc_id(data_id);
++ 110     end
+
+Clone Blocks:

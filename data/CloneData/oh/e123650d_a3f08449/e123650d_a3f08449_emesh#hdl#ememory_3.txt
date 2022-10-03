@@ -1,0 +1,45 @@
+Source Block: oh/emesh/hdl/ememory.v@70:80@HdlStmAssign
+	// Inputs
+	.packet_in			(packet_in[PW-1:0]));
+   
+      
+   //Access-in
+   assign en     =  access_in & ~wait_all & ~wait_all;
+   assign mem_rd = (access_in & ~write_in & ~wait_all);   
+
+
+   //Pushback Circuit (pass through problems?)
+   assign wait_all = (wait_random | wait_in);
+
+Diff Content:
+- 75    assign en     =  access_in & ~wait_all & ~wait_all;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emesh/hdl/ememory.v@76:86
+   assign mem_rd = (access_in & ~write_in & ~wait_all);   
+
+
+   //Pushback Circuit (pass through problems?)
+   assign wait_all = (wait_random | wait_in);
+   assign wait_out = wait_all;// & access_in
+   
+   //Address-in (shifted by three bits, 64 bit wide memory)
+   assign addr[MAW-1:0] = dstaddr_in[MAW+2:3];     
+
+   //Shift up
+
+Clone Blocks 2:
+oh/emesh/hdl/ememory.v@71:81
+	.packet_in			(packet_in[PW-1:0]));
+   
+      
+   //Access-in
+   assign en     =  access_in & ~wait_all & ~wait_all;
+   assign mem_rd = (access_in & ~write_in & ~wait_all);   
+
+
+   //Pushback Circuit (pass through problems?)
+   assign wait_all = (wait_random | wait_in);
+   assign wait_out = wait_all;// & access_in
+

@@ -1,0 +1,264 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@155:245@HdlStmFor
+assign saved_data = {data, data_d1, data_d2[(DATA_PATH_WIDTH*8)-1:(DATA_PATH_WIDTH-4)*8]};
+assign saved_char_is_align = {char_is_align, char_is_align_d1, char_is_align_d2[DATA_PATH_WIDTH-1:DATA_PATH_WIDTH-4]};
+
+genvar ii;
+generate
+for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_replace_byte
+  assign prev_data_1[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+3+ii)*8 +: 8];
+  assign prev_data_2[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+2+ii)*8 +: 8];
+  assign prev_data_3[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+1+ii)*8 +: 8];
+  assign prev_prev_data_1[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+2+ii)*8 +: 8];
+  assign prev_prev_data_2[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+ii)*8 +: 8];
+  assign prev_prev_data_3[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-2+ii)*8 +: 8];
+  assign prev_char_is_align_1[ii] = saved_char_is_align[(DATA_PATH_WIDTH+3+ii)];
+  assign prev_char_is_align_2[ii] = saved_char_is_align[(DATA_PATH_WIDTH+2+ii)];
+  assign prev_char_is_align_3[ii] = saved_char_is_align[(DATA_PATH_WIDTH+1+ii)];
+
+  if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+    assign prev_data_4[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+ii)*8 +: 8];
+    assign prev_data_6[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-2+ii)*8 +: 8];
+    assign prev_prev_data_4[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-4+ii)*8 +: 8];
+    assign prev_prev_data_6[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-8+ii)*8 +: 8];
+    assign prev_char_is_align_4[ii] = saved_char_is_align[(DATA_PATH_WIDTH+ii)];
+    assign prev_char_is_align_6[ii] = saved_char_is_align[(DATA_PATH_WIDTH-2+ii)];
+  end else begin
+    assign prev_data_4[ii*8 +:8] = 'bX;
+    assign prev_data_6[ii*8 +:8] = 'bX;
+    assign prev_prev_data_4[ii*8 +:8] = 'bX;
+    assign prev_prev_data_6[ii*8 +:8] = 'bX;
+    assign prev_char_is_align_4[ii] = 'bX;
+    assign prev_char_is_align_6[ii] = 'bX;
+  end
+
+  always @(*) begin
+    case(cfg_octets_per_frame)
+      0:
+        begin
+          prev_data[ii*8 +:8] = prev_data_1[ii*8 +:8];
+          prev_prev_data[ii*8 +:8] = prev_prev_data_1[ii*8 +:8];
+          prev_char_is_align[ii] = prev_char_is_align_1[ii];
+        end
+      1:
+        begin
+          prev_data[ii*8 +:8] = prev_data_2[ii*8 +:8];
+          prev_prev_data[ii*8 +:8] = prev_prev_data_2[ii*8 +:8];
+          prev_char_is_align[ii] = prev_char_is_align_2[ii];
+        end
+      2:
+        begin
+          prev_data[ii*8 +:8] = prev_data_3[ii*8 +:8];
+          prev_prev_data[ii*8 +:8] = prev_prev_data_3[ii*8 +:8];
+          prev_char_is_align[ii] = prev_char_is_align_3[ii];
+        end
+      3:
+        begin
+          prev_data[ii*8 +:8] = prev_data_4[ii*8 +:8];
+          prev_prev_data[ii*8 +:8] = prev_prev_data_4[ii*8 +:8];
+          prev_char_is_align[ii] = prev_char_is_align_4[ii];
+        end
+      5:
+        begin
+          prev_data[ii*8 +:8] = prev_data_6[ii*8 +:8];
+          prev_prev_data[ii*8 +:8] = prev_prev_data_6[ii*8 +:8];
+          prev_char_is_align[ii] = prev_char_is_align_6[ii];
+        end
+      default:
+        begin
+          prev_data[ii*8 +:8] = 'bX;
+          prev_prev_data[ii*8 +:8] = 'bX;
+          prev_char_is_align[ii] = 1'bX;
+        end
+    endcase
+  end
+
+  if(IS_RX) begin : gen_rx
+    // RX
+    assign char_is_align[ii] = !reset && (rx_char_is_a[ii] | rx_char_is_f[ii]);
+    assign data_replaced[ii*8 +: 8] = char_is_align[ii] ? data_prev_eof[ii*8 +: 8] : data[ii*8 +: 8];
+    assign data_prev_eof[ii*8 +: 8] = single_eof ? data_prev_eof_single : prev_char_is_align[ii] ? data_prev_prev_eof[ii*8 +: 8] : prev_data[ii*8 +: 8];
+    assign data_prev_prev_eof[ii*8 +: 8] = prev_prev_data[ii*8 +: 8];
+  end else begin : gen_tx
+    // TX
+    assign data_prev_eof[ii*8 +: 8] = single_eof ? data_prev_eof_single : prev_data[ii*8 +: 8];
+    assign char_is_align[ii] = !reset && (tx_eomf[ii] || (eof[ii] && !(single_eof ? char_is_align_prev_single : prev_char_is_align[ii]))) && (data[ii*8 +: 8] == data_prev_eof[ii*8 +: 8]);
+    assign data_replaced[ii*8 +: 8] = char_is_align[ii] ? (tx_eomf[ii] ? 8'h7c : 8'hfc) : data[ii*8 +: 8];
+  end
+end
+endgenerate
+
+assign data_out = (cfg_disable_char_replacement || !cfg_disable_scrambler || ENABLED==0) ? data : data_replaced;
+assign charisk_out = (IS_RX || !cfg_disable_scrambler || cfg_disable_char_replacement || ENABLED==0) ? 'b0 : char_is_align;
+
+
+Diff Content:
+- 160 for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_replace_byte
+- 161   assign prev_data_1[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+3+ii)*8 +: 8];
+- 162   assign prev_data_2[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+2+ii)*8 +: 8];
+- 163   assign prev_data_3[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+1+ii)*8 +: 8];
+- 164   assign prev_prev_data_1[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+2+ii)*8 +: 8];
+- 165   assign prev_prev_data_2[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+ii)*8 +: 8];
+- 166   assign prev_prev_data_3[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-2+ii)*8 +: 8];
+- 167   assign prev_char_is_align_1[ii] = saved_char_is_align[(DATA_PATH_WIDTH+3+ii)];
+- 168   assign prev_char_is_align_2[ii] = saved_char_is_align[(DATA_PATH_WIDTH+2+ii)];
+- 169   assign prev_char_is_align_3[ii] = saved_char_is_align[(DATA_PATH_WIDTH+1+ii)];
+- 171   if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+- 172     assign prev_data_4[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+ii)*8 +: 8];
+- 173     assign prev_data_6[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-2+ii)*8 +: 8];
+- 174     assign prev_prev_data_4[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-4+ii)*8 +: 8];
+- 175     assign prev_prev_data_6[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-8+ii)*8 +: 8];
+- 176     assign prev_char_is_align_4[ii] = saved_char_is_align[(DATA_PATH_WIDTH+ii)];
+- 177     assign prev_char_is_align_6[ii] = saved_char_is_align[(DATA_PATH_WIDTH-2+ii)];
+- 178   end else begin
+- 179     assign prev_data_4[ii*8 +:8] = 'bX;
+- 180     assign prev_data_6[ii*8 +:8] = 'bX;
+- 181     assign prev_prev_data_4[ii*8 +:8] = 'bX;
+- 182     assign prev_prev_data_6[ii*8 +:8] = 'bX;
+- 183     assign prev_char_is_align_4[ii] = 'bX;
+- 184     assign prev_char_is_align_6[ii] = 'bX;
+- 187   always @(*) begin
+- 188     case(cfg_octets_per_frame)
+- 189       0:
+- 190         begin
+- 191           prev_data[ii*8 +:8] = prev_data_1[ii*8 +:8];
+- 192           prev_prev_data[ii*8 +:8] = prev_prev_data_1[ii*8 +:8];
+- 193           prev_char_is_align[ii] = prev_char_is_align_1[ii];
+- 194         end
+- 195       1:
+- 196         begin
+- 197           prev_data[ii*8 +:8] = prev_data_2[ii*8 +:8];
+- 198           prev_prev_data[ii*8 +:8] = prev_prev_data_2[ii*8 +:8];
+- 199           prev_char_is_align[ii] = prev_char_is_align_2[ii];
+- 200         end
+- 201       2:
+- 202         begin
+- 203           prev_data[ii*8 +:8] = prev_data_3[ii*8 +:8];
+- 204           prev_prev_data[ii*8 +:8] = prev_prev_data_3[ii*8 +:8];
+- 205           prev_char_is_align[ii] = prev_char_is_align_3[ii];
+- 206         end
+- 207       3:
+- 208         begin
+- 209           prev_data[ii*8 +:8] = prev_data_4[ii*8 +:8];
+- 210           prev_prev_data[ii*8 +:8] = prev_prev_data_4[ii*8 +:8];
+- 211           prev_char_is_align[ii] = prev_char_is_align_4[ii];
+- 212         end
+- 213       5:
+- 214         begin
+- 215           prev_data[ii*8 +:8] = prev_data_6[ii*8 +:8];
+- 216           prev_prev_data[ii*8 +:8] = prev_prev_data_6[ii*8 +:8];
+- 217           prev_char_is_align[ii] = prev_char_is_align_6[ii];
+- 218         end
+- 219       default:
+- 220         begin
+- 221           prev_data[ii*8 +:8] = 'bX;
+- 222           prev_prev_data[ii*8 +:8] = 'bX;
+- 223           prev_char_is_align[ii] = 1'bX;
+- 224         end
+- 225     endcase
+- 228   if(IS_RX) begin : gen_rx
+- 230     assign char_is_align[ii] = !reset && (rx_char_is_a[ii] | rx_char_is_f[ii]);
+- 231     assign data_replaced[ii*8 +: 8] = char_is_align[ii] ? data_prev_eof[ii*8 +: 8] : data[ii*8 +: 8];
+- 232     assign data_prev_eof[ii*8 +: 8] = single_eof ? data_prev_eof_single : prev_char_is_align[ii] ? data_prev_prev_eof[ii*8 +: 8] : prev_data[ii*8 +: 8];
+- 233     assign data_prev_prev_eof[ii*8 +: 8] = prev_prev_data[ii*8 +: 8];
+- 234   end else begin : gen_tx
+- 236     assign data_prev_eof[ii*8 +: 8] = single_eof ? data_prev_eof_single : prev_data[ii*8 +: 8];
+- 237     assign char_is_align[ii] = !reset && (tx_eomf[ii] || (eof[ii] && !(single_eof ? char_is_align_prev_single : prev_char_is_align[ii]))) && (data[ii*8 +: 8] == data_prev_eof[ii*8 +: 8]);
+- 238     assign data_replaced[ii*8 +: 8] = char_is_align[ii] ? (tx_eomf[ii] ? 8'h7c : 8'hfc) : data[ii*8 +: 8];
+- 240 end
++ 184   always @(posedge clk) begin
++ 184     if(reset) begin
++ 184       data_prev_eof_single <= 'b0;
++ 184     end else begin
++ 184       if(|eof && (!IS_RX || !(|char_is_align))) begin
++ 184         data_prev_eof_single <= data_prev_eof_single_int;
++ 184       end
++ 184     end
++ 225   always @(posedge clk) begin
++ 225     if(reset) begin
++ 225       char_is_align_prev_single <= 'b0;
++ 225     end else begin
++ 225       if(|eof) begin
++ 225         char_is_align_prev_single <= |char_is_align;
++ 225       end
++ 225     end
++ 238   assign saved_data = {data, data_d1, data_d2[(DATA_PATH_WIDTH*8)-1:(DATA_PATH_WIDTH-4)*8]};
++ 238   assign saved_char_is_align = {char_is_align, char_is_align_d1, char_is_align_d2[DATA_PATH_WIDTH-1:DATA_PATH_WIDTH-4]};
++ 238   genvar ii;
++ 238   generate
++ 238   for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_replace_byte
++ 238     assign prev_data_1[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+3+ii)*8 +: 8];
++ 238     assign prev_data_2[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+2+ii)*8 +: 8];
++ 238     assign prev_data_3[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+1+ii)*8 +: 8];
++ 238     assign prev_prev_data_1[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+2+ii)*8 +: 8];
++ 238     assign prev_prev_data_2[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+ii)*8 +: 8];
++ 238     assign prev_prev_data_3[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-2+ii)*8 +: 8];
++ 238     assign prev_char_is_align_1[ii] = saved_char_is_align[(DATA_PATH_WIDTH+3+ii)];
++ 238     assign prev_char_is_align_2[ii] = saved_char_is_align[(DATA_PATH_WIDTH+2+ii)];
++ 238     assign prev_char_is_align_3[ii] = saved_char_is_align[(DATA_PATH_WIDTH+1+ii)];
++ 238     if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
++ 238       assign prev_data_4[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH+ii)*8 +: 8];
++ 238       assign prev_data_6[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-2+ii)*8 +: 8];
++ 238       assign prev_prev_data_4[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-4+ii)*8 +: 8];
++ 238       assign prev_prev_data_6[ii*8 +:8] = saved_data[(DATA_PATH_WIDTH-8+ii)*8 +: 8];
++ 238       assign prev_char_is_align_4[ii] = saved_char_is_align[(DATA_PATH_WIDTH+ii)];
++ 238       assign prev_char_is_align_6[ii] = saved_char_is_align[(DATA_PATH_WIDTH-2+ii)];
++ 238     end else begin
++ 238       assign prev_data_4[ii*8 +:8] = 'bX;
++ 238       assign prev_data_6[ii*8 +:8] = 'bX;
++ 238       assign prev_prev_data_4[ii*8 +:8] = 'bX;
++ 238       assign prev_prev_data_6[ii*8 +:8] = 'bX;
++ 238       assign prev_char_is_align_4[ii] = 'bX;
++ 238       assign prev_char_is_align_6[ii] = 'bX;
++ 238     end
++ 238     always @(*) begin
++ 238       case(cfg_octets_per_frame)
++ 238         0:
++ 238           begin
++ 238             prev_data[ii*8 +:8] = prev_data_1[ii*8 +:8];
++ 238             prev_prev_data[ii*8 +:8] = prev_prev_data_1[ii*8 +:8];
++ 238             prev_char_is_align[ii] = prev_char_is_align_1[ii];
++ 238           end
++ 238         1:
++ 238           begin
++ 238             prev_data[ii*8 +:8] = prev_data_2[ii*8 +:8];
++ 238             prev_prev_data[ii*8 +:8] = prev_prev_data_2[ii*8 +:8];
++ 238             prev_char_is_align[ii] = prev_char_is_align_2[ii];
++ 238           end
++ 238         2:
++ 238           begin
++ 238             prev_data[ii*8 +:8] = prev_data_3[ii*8 +:8];
++ 238             prev_prev_data[ii*8 +:8] = prev_prev_data_3[ii*8 +:8];
++ 238             prev_char_is_align[ii] = prev_char_is_align_3[ii];
++ 238           end
++ 238         3:
++ 238           begin
++ 238             prev_data[ii*8 +:8] = prev_data_4[ii*8 +:8];
++ 238             prev_prev_data[ii*8 +:8] = prev_prev_data_4[ii*8 +:8];
++ 238             prev_char_is_align[ii] = prev_char_is_align_4[ii];
++ 238           end
++ 238         5:
++ 238           begin
++ 238             prev_data[ii*8 +:8] = prev_data_6[ii*8 +:8];
++ 238             prev_prev_data[ii*8 +:8] = prev_prev_data_6[ii*8 +:8];
++ 238             prev_char_is_align[ii] = prev_char_is_align_6[ii];
++ 238           end
++ 238         default:
++ 238           begin
++ 238             prev_data[ii*8 +:8] = 'bX;
++ 238             prev_prev_data[ii*8 +:8] = 'bX;
++ 238             prev_char_is_align[ii] = 1'bX;
++ 238           end
++ 238       endcase
++ 238     end
++ 238     if(IS_RX) begin : gen_rx
++ 238       assign char_is_align[ii] = !reset && (rx_char_is_a[ii] | rx_char_is_f[ii]);
++ 238       assign data_replaced[ii*8 +: 8] = char_is_align[ii] ? data_prev_eof[ii*8 +: 8] : data[ii*8 +: 8];
++ 238       assign data_prev_eof[ii*8 +: 8] = single_eof ? data_prev_eof_single : prev_char_is_align[ii] ? data_prev_prev_eof[ii*8 +: 8] : prev_data[ii*8 +: 8];
++ 238       assign data_prev_prev_eof[ii*8 +: 8] = prev_prev_data[ii*8 +: 8];
++ 238     end else begin : gen_tx
++ 238       assign data_prev_eof[ii*8 +: 8] = single_eof ? data_prev_eof_single : prev_data[ii*8 +: 8];
++ 238       assign char_is_align[ii] = !reset && (tx_eomf[ii] || (eof[ii] && !(single_eof ? char_is_align_prev_single : prev_char_is_align[ii]))) && (data[ii*8 +: 8] == data_prev_eof[ii*8 +: 8]);
++ 238       assign data_replaced[ii*8 +: 8] = char_is_align[ii] ? (tx_eomf[ii] ? 8'h7c : 8'hfc) : data[ii*8 +: 8];
++ 238     end
+
+Clone Blocks:

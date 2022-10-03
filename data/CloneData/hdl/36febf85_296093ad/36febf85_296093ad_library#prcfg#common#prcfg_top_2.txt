@@ -1,0 +1,84 @@
+Source Block: hdl/library/prcfg/common/prcfg_top.v@111:121@HdlIdDef
+
+  wire    [31:0]                    adc_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     adc_gpio_out_s_inv[31:0];
+
+  wire    [31:0]                    dac_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     dac_gpio_out_s_inv[31:0];
+
+  genvar l_inst;
+
+  generate
+    for(l_inst = 0; l_inst < NUM_CHANNEL; l_inst = l_inst + 1) begin: tx_rx_data_path
+
+Diff Content:
++ 116   wire    [(NUM_CHANNEL - 1):0]     core_adc_enable_s;
++ 116   wire    [(NUM_CHANNEL - 1):0]     core_adc_valid_s;
++ 116   wire    [(NUM_CHANNEL - 1):0]     core_adc_data_s[15:0];
++ 116   wire    [(NUM_CHANNEL - 1):0]     dma_adc_enable_s;
++ 116   wire    [(NUM_CHANNEL - 1):0]     dma_adc_valid_s;
++ 116   wire    [(NUM_CHANNEL - 1):0]     dma_adc_data_s[15:0];
++ 116   wire    [(NUM_CHANNEL - 1):0]     core_dac_enable_s;
++ 116   wire    [(NUM_CHANNEL - 1):0]     core_dac_valid_s;
++ 116   wire    [(NUM_CHANNEL - 1):0]     core_dac_data_s[15:0];
++ 116   wire    [(NUM_CHANNEL - 1):0]     dma_dac_enable_s;
++ 116   wire    [(NUM_CHANNEL - 1):0]     dma_dac_valid_s;
++ 116   wire    [(NUM_CHANNEL - 1):0]     dma_dac_data_s[15:0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/common/prcfg_top.v@107:117
+  output                            dma_adc_dwr;
+  output                            dma_adc_dsync;
+  output  [(DBUS_WIDTH - 1):0]      dma_adc_ddata;
+  input                             dma_adc_ovf;
+
+  wire    [31:0]                    adc_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     adc_gpio_out_s_inv[31:0];
+
+  wire    [31:0]                    dac_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     dac_gpio_out_s_inv[31:0];
+
+
+Clone Blocks 2:
+hdl/library/prcfg/common/prcfg_top.v@110:120
+  input                             dma_adc_ovf;
+
+  wire    [31:0]                    adc_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     adc_gpio_out_s_inv[31:0];
+
+  wire    [31:0]                    dac_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     dac_gpio_out_s_inv[31:0];
+
+  genvar l_inst;
+
+  generate
+
+Clone Blocks 3:
+hdl/library/prcfg/common/prcfg_top.v@108:118
+  output                            dma_adc_dsync;
+  output  [(DBUS_WIDTH - 1):0]      dma_adc_ddata;
+  input                             dma_adc_ovf;
+
+  wire    [31:0]                    adc_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     adc_gpio_out_s_inv[31:0];
+
+  wire    [31:0]                    dac_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     dac_gpio_out_s_inv[31:0];
+
+  genvar l_inst;
+
+Clone Blocks 4:
+hdl/library/prcfg/common/prcfg_top.v@113:123
+  wire    [(NUM_CHANNEL - 1):0]     adc_gpio_out_s_inv[31:0];
+
+  wire    [31:0]                    dac_gpio_out_s[(NUM_CHANNEL - 1):0];
+  wire    [(NUM_CHANNEL - 1):0]     dac_gpio_out_s_inv[31:0];
+
+  genvar l_inst;
+
+  generate
+    for(l_inst = 0; l_inst < NUM_CHANNEL; l_inst = l_inst + 1) begin: tx_rx_data_path
+      if(ADC_EN == ENABELED) begin
+        if(l_inst == 0) begin
+

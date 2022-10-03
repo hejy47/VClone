@@ -1,0 +1,62 @@
+Source Block: zipcpu/rtl/aux/fwb_slave.v@316:337@HdlStmProcess
+			assert(f_nacks <= f_nreqs);
+			assert(f_outstanding < (1<<F_LGDEPTH)-1);
+		end else
+			assert(f_outstanding < (1<<F_LGDEPTH)-1);
+
+	always @(posedge i_clk)
+		if ((i_wb_cyc)&&(f_outstanding == 0))
+		begin
+			// If nothing is outstanding, then there should be
+			// no acknowledgements ... however, an acknowledgement
+			// *can* come back on the same clock as the stb is
+			// going out.
+			assert((!i_wb_ack)||((i_wb_stb)&&(!i_wb_stall)));
+			// The same is true of errors.  They may not be
+			// created before the request gets through
+			assert((!i_wb_err)||((i_wb_stb)&&(!i_wb_stall)));
+		end
+
+	generate if (!F_OPT_RMW_BUS_OPTION)
+	begin
+		// If we aren't waiting for anything, and we aren't issuing
+		// any requests, then then our transaction is over and we
+
+Diff Content:
+- 328 			assert((!i_wb_ack)||((i_wb_stb)&&(!i_wb_stall)));
+- 331 			assert((!i_wb_err)||((i_wb_stb)&&(!i_wb_stall)));
++ 331 			if (F_OPT_MINCLOCK_DELAY)
++ 331 			begin
++ 331 				assert(!i_wb_ack);
++ 331 				assert(!i_wb_err);
++ 331 			end else begin
++ 331 				assert((!i_wb_ack)||((i_wb_stb)&&(!i_wb_stall)));
++ 331 				assert((!i_wb_err)||((i_wb_stb)&&(!i_wb_stall)));
++ 331 			end
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/aux/fwb_master.v@326:347
+			assume(f_nacks <= f_nreqs);
+			assert(f_outstanding < (1<<F_LGDEPTH)-1);
+		end else
+			assume(f_outstanding < (1<<F_LGDEPTH)-1);
+
+	always @(posedge i_clk)
+		if ((i_wb_cyc)&&(f_outstanding == 0))
+		begin
+			// If nothing is outstanding, then there should be
+			// no acknowledgements ... however, an acknowledgement
+			// *can* come back on the same clock as the stb is
+			// going out.
+			assume((!i_wb_ack)||((i_wb_stb)&&(!i_wb_stall)));
+			// The same is true of errors.  They may not be
+			// created before the request gets through
+			assume((!i_wb_err)||((i_wb_stb)&&(!i_wb_stall)));
+		end
+
+	generate if (F_OPT_SOURCE)
+	begin : SRC
+		// Any opening bus request starts with both CYC and STB high
+		// This is true for the master only, and more specifically
+

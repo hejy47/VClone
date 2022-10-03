@@ -1,0 +1,218 @@
+Source Block: oh/elink/dv/dut_axi_elink.v@133:143@HdlIdDef
+   wire [7:0]		elink1_txo_data_n;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_p;	// From elink1 of elink.v
+   wire			elink1_txo_frame_n;	// From elink1 of elink.v
+   wire			elink1_txo_frame_p;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+   wire [M_IDW-1:0]	m_axi_arid;		// From emaxi of emaxi.v
+   wire [7:0]		m_axi_arlen;		// From emaxi of emaxi.v
+
+Diff Content:
+- 138    wire			elink1_txo_lclk_p;	// From elink1 of elink.v
++ 138    wire			elink1_chip_nreset;	// From elink1 of axi_elink.v
++ 138    wire			elink1_elink_active;	// From elink1 of axi_elink.v
++ 138    wire [31:0]		elink1_m_axi_araddr;	// From elink1 of axi_elink.v
++ 138    wire [1:0]		elink1_m_axi_arburst;	// From elink1 of axi_elink.v
++ 138    wire [3:0]		elink1_m_axi_arcache;	// From elink1 of axi_elink.v
++ 138    wire [M_IDW-1:0]	elink1_m_axi_arid;	// From elink1 of axi_elink.v
++ 138    wire [7:0]		elink1_m_axi_arlen;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_arlock;	// From elink1 of axi_elink.v
++ 138    wire [2:0]		elink1_m_axi_arprot;	// From elink1 of axi_elink.v
++ 138    wire [3:0]		elink1_m_axi_arqos;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_arready;	// From esaxi of esaxi.v
++ 138    wire [2:0]		elink1_m_axi_arsize;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_arvalid;	// From elink1 of axi_elink.v
++ 138    wire [31:0]		elink1_m_axi_awaddr;	// From elink1 of axi_elink.v
++ 138    wire [1:0]		elink1_m_axi_awburst;	// From elink1 of axi_elink.v
++ 138    wire [3:0]		elink1_m_axi_awcache;	// From elink1 of axi_elink.v
++ 138    wire [M_IDW-1:0]	elink1_m_axi_awid;	// From elink1 of axi_elink.v
++ 138    wire [7:0]		elink1_m_axi_awlen;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_awlock;	// From elink1 of axi_elink.v
++ 138    wire [2:0]		elink1_m_axi_awprot;	// From elink1 of axi_elink.v
++ 138    wire [3:0]		elink1_m_axi_awqos;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_awready;	// From esaxi of esaxi.v
++ 138    wire [2:0]		elink1_m_axi_awsize;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_awvalid;	// From elink1 of axi_elink.v
++ 138    wire [S_IDW-1:0]	elink1_m_axi_bid;	// From esaxi of esaxi.v
++ 138    wire			elink1_m_axi_bready;	// From elink1 of axi_elink.v
++ 138    wire [1:0]		elink1_m_axi_bresp;	// From esaxi of esaxi.v
++ 138    wire			elink1_m_axi_bvalid;	// From esaxi of esaxi.v
++ 138    wire [31:0]		elink1_m_axi_rdata;	// From esaxi of esaxi.v
++ 138    wire [S_IDW-1:0]	elink1_m_axi_rid;	// From esaxi of esaxi.v
++ 138    wire			elink1_m_axi_rlast;	// From esaxi of esaxi.v
++ 138    wire			elink1_m_axi_rready;	// From elink1 of axi_elink.v
++ 138    wire [1:0]		elink1_m_axi_rresp;	// From esaxi of esaxi.v
++ 138    wire			elink1_m_axi_rvalid;	// From esaxi of esaxi.v
++ 138    wire [63:0]		elink1_m_axi_wdata;	// From elink1 of axi_elink.v
++ 138    wire [M_IDW-1:0]	elink1_m_axi_wid;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_wlast;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_wready;	// From esaxi of esaxi.v
++ 138    wire [7:0]		elink1_m_axi_wstrb;	// From elink1 of axi_elink.v
++ 138    wire			elink1_m_axi_wvalid;	// From elink1 of axi_elink.v
++ 138    wire			elink1_rxo_rd_wait_n;	// From elink1 of axi_elink.v
++ 138    wire			elink1_rxo_rd_wait_p;	// From elink1 of axi_elink.v
++ 138    wire			elink1_rxo_wr_wait_n;	// From elink1 of axi_elink.v
++ 138    wire			elink1_rxo_wr_wait_p;	// From elink1 of axi_elink.v
++ 138    wire			elink1_rxrr_wait;	// From esaxi of esaxi.v
++ 138    wire [7:0]		elink1_txo_data_n;	// From elink1 of axi_elink.v
++ 138    wire [7:0]		elink1_txo_data_p;	// From elink1 of axi_elink.v
++ 138    wire			elink1_txo_frame_n;	// From elink1 of axi_elink.v
++ 138    wire			elink1_txo_frame_p;	// From elink1 of axi_elink.v
++ 138    wire			elink1_txo_lclk_n;	// From elink1 of axi_elink.v
++ 138    wire			elink1_txo_lclk_p;	// From elink1 of axi_elink.v
++ 138    wire			elink1_txrd_access;	// From esaxi of esaxi.v
++ 138    wire [PW-1:0]	elink1_txrd_packet;	// From esaxi of esaxi.v
++ 138    wire			elink1_txwr_access;	// From esaxi of esaxi.v
++ 138    wire [PW-1:0]	elink1_txwr_packet;	// From esaxi of esaxi.v
++ 138    wire			emem_txrd_access;	// From etx_fifo of etx_fifo.v
++ 138    wire [PW-1:0]	emem_txrd_packet;	// From etx_fifo of etx_fifo.v
++ 138    wire			emem_txrr_access;	// From etx_fifo of etx_fifo.v
++ 138    wire [PW-1:0]	emem_txrr_packet;	// From etx_fifo of etx_fifo.v
++ 138    wire			emem_txwr_access;	// From etx_fifo of etx_fifo.v
++ 138    wire [PW-1:0]	emem_txwr_packet;	// From etx_fifo of etx_fifo.v
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/dut_axi_elink.v@135:145
+   wire			elink1_txo_frame_n;	// From elink1 of elink.v
+   wire			elink1_txo_frame_p;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+   wire [M_IDW-1:0]	m_axi_arid;		// From emaxi of emaxi.v
+   wire [7:0]		m_axi_arlen;		// From emaxi of emaxi.v
+   wire			m_axi_arlock;		// From emaxi of emaxi.v
+   wire [2:0]		m_axi_arprot;		// From emaxi of emaxi.v
+
+Clone Blocks 2:
+oh/elink/dv/dut_axi_elink.v@132:142
+   wire			elink1_rxo_wr_wait_p;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_n;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_p;	// From elink1 of elink.v
+   wire			elink1_txo_frame_n;	// From elink1 of elink.v
+   wire			elink1_txo_frame_p;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+   wire [M_IDW-1:0]	m_axi_arid;		// From emaxi of emaxi.v
+
+Clone Blocks 3:
+oh/elink/dv/dut_axi_elink.v@134:144
+   wire [7:0]		elink1_txo_data_p;	// From elink1 of elink.v
+   wire			elink1_txo_frame_n;	// From elink1 of elink.v
+   wire			elink1_txo_frame_p;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+   wire [M_IDW-1:0]	m_axi_arid;		// From emaxi of emaxi.v
+   wire [7:0]		m_axi_arlen;		// From emaxi of emaxi.v
+   wire			m_axi_arlock;		// From emaxi of emaxi.v
+
+Clone Blocks 4:
+oh/elink/dv/dut_axi_elink.v@139:149
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+   wire [M_IDW-1:0]	m_axi_arid;		// From emaxi of emaxi.v
+   wire [7:0]		m_axi_arlen;		// From emaxi of emaxi.v
+   wire			m_axi_arlock;		// From emaxi of emaxi.v
+   wire [2:0]		m_axi_arprot;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arqos;		// From emaxi of emaxi.v
+   wire			m_axi_arready;		// From elink0 of axi_elink.v
+   wire [2:0]		m_axi_arsize;		// From emaxi of emaxi.v
+   wire			m_axi_arvalid;		// From emaxi of emaxi.v
+
+Clone Blocks 5:
+oh/elink/dv/dut_axi_elink.v@136:146
+   wire			elink1_txo_frame_p;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+   wire [M_IDW-1:0]	m_axi_arid;		// From emaxi of emaxi.v
+   wire [7:0]		m_axi_arlen;		// From emaxi of emaxi.v
+   wire			m_axi_arlock;		// From emaxi of emaxi.v
+   wire [2:0]		m_axi_arprot;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arqos;		// From emaxi of emaxi.v
+
+Clone Blocks 6:
+oh/elink/dv/dut_axi_elink.v@129:139
+   wire			elink1_rxo_rd_wait_n;	// From elink1 of elink.v
+   wire			elink1_rxo_rd_wait_p;	// From elink1 of elink.v
+   wire			elink1_rxo_wr_wait_n;	// From elink1 of elink.v
+   wire			elink1_rxo_wr_wait_p;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_n;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_p;	// From elink1 of elink.v
+   wire			elink1_txo_frame_n;	// From elink1 of elink.v
+   wire			elink1_txo_frame_p;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+
+Clone Blocks 7:
+oh/elink/dv/dut_axi_elink.v@131:141
+   wire			elink1_rxo_wr_wait_n;	// From elink1 of elink.v
+   wire			elink1_rxo_wr_wait_p;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_n;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_p;	// From elink1 of elink.v
+   wire			elink1_txo_frame_n;	// From elink1 of elink.v
+   wire			elink1_txo_frame_p;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+
+Clone Blocks 8:
+oh/elink/dv/dut_axi_elink.v@130:140
+   wire			elink1_rxo_rd_wait_p;	// From elink1 of elink.v
+   wire			elink1_rxo_wr_wait_n;	// From elink1 of elink.v
+   wire			elink1_rxo_wr_wait_p;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_n;	// From elink1 of elink.v
+   wire [7:0]		elink1_txo_data_p;	// From elink1 of elink.v
+   wire			elink1_txo_frame_n;	// From elink1 of elink.v
+   wire			elink1_txo_frame_p;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+
+Clone Blocks 9:
+oh/elink/dv/dut_axi_elink.v@137:147
+   wire			elink1_txo_lclk_n;	// From elink1 of elink.v
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+   wire [M_IDW-1:0]	m_axi_arid;		// From emaxi of emaxi.v
+   wire [7:0]		m_axi_arlen;		// From emaxi of emaxi.v
+   wire			m_axi_arlock;		// From emaxi of emaxi.v
+   wire [2:0]		m_axi_arprot;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arqos;		// From emaxi of emaxi.v
+   wire			m_axi_arready;		// From elink0 of axi_elink.v
+
+Clone Blocks 10:
+oh/elink/dv/dut_axi_elink.v@138:148
+   wire			elink1_txo_lclk_p;	// From elink1 of elink.v
+   wire [31:0]		m_axi_araddr;		// From emaxi of emaxi.v
+   wire [1:0]		m_axi_arburst;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arcache;		// From emaxi of emaxi.v
+   wire [M_IDW-1:0]	m_axi_arid;		// From emaxi of emaxi.v
+   wire [7:0]		m_axi_arlen;		// From emaxi of emaxi.v
+   wire			m_axi_arlock;		// From emaxi of emaxi.v
+   wire [2:0]		m_axi_arprot;		// From emaxi of emaxi.v
+   wire [3:0]		m_axi_arqos;		// From emaxi of emaxi.v
+   wire			m_axi_arready;		// From elink0 of axi_elink.v
+   wire [2:0]		m_axi_arsize;		// From emaxi of emaxi.v
+

@@ -1,0 +1,19 @@
+Source Block: hdl/library/axi_ad9434/axi_ad9434_pnmon.v@179:189@HdlStmAssign
+      pn23 = dout;
+    end
+  endfunction
+
+  // pn sequence selection
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_data : adc_pn_data_pn;
+
+  always @(posedge adc_clk) begin
+    if(adc_pnseq_sel == 4'b0) begin
+      adc_pn_data_pn <= pn9(adc_pn_data_pn_s);
+    end else begin
+
+Diff Content:
+- 184   assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_data : adc_pn_data_pn;
++ 184   assign adc_data_inv_s = {adc_data[11:0], adc_data[23:12], adc_data[35:24], adc_data[47:36]};
++ 184   assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_data_inv_s : adc_pn_data_pn;
+
+Clone Blocks:

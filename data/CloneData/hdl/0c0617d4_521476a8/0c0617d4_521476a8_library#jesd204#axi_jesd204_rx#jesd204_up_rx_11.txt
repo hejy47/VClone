@@ -1,0 +1,96 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/jesd204_up_rx.v@133:184@HdlStmProcess
+  })
+);
+
+localparam LANE_BASE_ADDR = 'h300 / 32;
+
+always @(*) begin
+  case (up_raddr)
+  /* Core configuration */
+  12'h010: up_rdata = ELASTIC_BUFFER_SIZE; /* Elastic buffer size in octets */
+
+  /* JESD RX configuraton */
+  12'h090: up_rdata = {
+    /* 17-31 */ 15'h00, /* Reserved for future additions */
+    /*    16 */ up_cfg_buffer_early_release, /* Release buffer as soon as all lanes are ready. */
+    /* 10-15 */ 6'b0000, /* Reserved for future extensions of buffer_delay */
+    /* 02-09 */ up_cfg_buffer_delay, /* Buffer release delay */
+    /* 00-01 */ 2'b00 /* Data path width alignment */
+  };
+  12'h91: up_rdata = {
+    /* 15-31 */ 17'h00, /* Reserved for future additions */
+    /* 08-14 */ up_ctrl_err_statistics_mask,
+    /* 01-07 */ 7'h0,
+    /*    00 */ up_ctrl_err_statistics_reset
+  };
+  12'h92: up_rdata = {
+    /* 08-31 */ 24'h0,
+    /* 00-07 */ up_cfg_frame_align_err_threshold
+  };
+
+  /* 0x93-0x9f reserved for future use */
+
+  /* JESD RX status */
+  12'ha0: up_rdata = {
+    /* 04-31 */ 28'h00, /* Reserved for future additions */
+    /* 02-03 */ 2'b00, /* Reserved for future extensions of ctrl_state */
+    /* 00-01 */ up_status_ctrl_state /* State of the internal state machine */
+  };
+  default: begin
+    if (up_raddr[11:3] >= LANE_BASE_ADDR &&
+        up_raddr[11:3] < LANE_BASE_ADDR + NUM_LANES) begin
+      up_rdata = up_lane_rdata[up_raddr[11:3] - LANE_BASE_ADDR];
+    end else begin
+      up_rdata = 'h00;
+    end
+  end
+  endcase
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_cfg_buffer_early_release <= 1'b0;
+    up_cfg_buffer_delay <= 'h00;
+
+Diff Content:
+- 138 always @(*) begin
+- 139   case (up_raddr)
+- 140   /* Core configuration */
+- 141   12'h010: up_rdata = ELASTIC_BUFFER_SIZE; /* Elastic buffer size in octets */
+- 143   /* JESD RX configuraton */
+- 144   12'h090: up_rdata = {
+- 145     /* 17-31 */ 15'h00, /* Reserved for future additions */
+- 146     /*    16 */ up_cfg_buffer_early_release, /* Release buffer as soon as all lanes are ready. */
+- 147     /* 10-15 */ 6'b0000, /* Reserved for future extensions of buffer_delay */
+- 148     /* 02-09 */ up_cfg_buffer_delay, /* Buffer release delay */
+- 149     /* 00-01 */ 2'b00 /* Data path width alignment */
+- 150   };
+- 151   12'h91: up_rdata = {
+- 152     /* 15-31 */ 17'h00, /* Reserved for future additions */
+- 153     /* 08-14 */ up_ctrl_err_statistics_mask,
+- 154     /* 01-07 */ 7'h0,
+- 155     /*    00 */ up_ctrl_err_statistics_reset
+- 156   };
+- 157   12'h92: up_rdata = {
+- 158     /* 08-31 */ 24'h0,
+- 159     /* 00-07 */ up_cfg_frame_align_err_threshold
+- 160   };
+- 162   /* 0x93-0x9f reserved for future use */
+- 164   /* JESD RX status */
+- 165   12'ha0: up_rdata = {
+- 166     /* 04-31 */ 28'h00, /* Reserved for future additions */
+- 167     /* 02-03 */ 2'b00, /* Reserved for future extensions of ctrl_state */
+- 168     /* 00-01 */ up_status_ctrl_state /* State of the internal state machine */
+- 169   };
+- 170   default: begin
+- 171     if (up_raddr[11:3] >= LANE_BASE_ADDR &&
+- 172         up_raddr[11:3] < LANE_BASE_ADDR + NUM_LANES) begin
+- 173       up_rdata = up_lane_rdata[up_raddr[11:3] - LANE_BASE_ADDR];
+- 174     end else begin
+- 175       up_rdata = 'h00;
+- 176     end
+- 177   end
+- 178   endcase
+- 179 end
+
+Clone Blocks:

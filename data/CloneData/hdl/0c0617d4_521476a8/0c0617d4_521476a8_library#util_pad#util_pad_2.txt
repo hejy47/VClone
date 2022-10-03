@@ -1,0 +1,81 @@
+Source Block: hdl/library/util_pad/util_pad.v@49:71@HdlStmIf
+    end
+  end
+end
+
+// Add padding
+if (IN_BITS_PER_SAMPLE < OUT_BITS_PER_SAMPLE) begin
+  integer i;
+  always @(*) begin
+    for (i=0;i<NUM_OF_SAMPLES;i=i+1) begin
+      if (PADDING_TO_MSB_LSB_N==1) begin
+        data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+          {{OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{data_in[(i+1)*IN_BITS_PER_SAMPLE-1]&SIGN_EXTEND[0]}},
+          data_in[i*IN_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE]};
+      end else begin
+        data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+          {data_in[((i+1)*IN_BITS_PER_SAMPLE)-1 -: OUT_BITS_PER_SAMPLE],
+          {OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{1'b0}}};
+      end
+    end
+  end
+end
+
+endmodule
+
+Diff Content:
+- 54 if (IN_BITS_PER_SAMPLE < OUT_BITS_PER_SAMPLE) begin
+- 55   integer i;
+- 56   always @(*) begin
+- 57     for (i=0;i<NUM_OF_SAMPLES;i=i+1) begin
+- 58       if (PADDING_TO_MSB_LSB_N==1) begin
+- 59         data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+- 60           {{OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{data_in[(i+1)*IN_BITS_PER_SAMPLE-1]&SIGN_EXTEND[0]}},
+- 61           data_in[i*IN_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE]};
+- 62       end else begin
+- 63         data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+- 64           {data_in[((i+1)*IN_BITS_PER_SAMPLE)-1 -: OUT_BITS_PER_SAMPLE],
+- 65           {OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{1'b0}}};
+- 69 end
++ 65   if (IN_BITS_PER_SAMPLE < OUT_BITS_PER_SAMPLE) begin
++ 65     integer i;
++ 65     always @(*) begin
++ 65       for (i=0;i<NUM_OF_SAMPLES;i=i+1) begin
++ 65         if (PADDING_TO_MSB_LSB_N==1) begin
++ 65           data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
++ 65             {{OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{data_in[(i+1)*IN_BITS_PER_SAMPLE-1]&SIGN_EXTEND[0]}},
++ 65             data_in[i*IN_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE]};
++ 65         end else begin
++ 65           data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
++ 65             {data_in[((i+1)*IN_BITS_PER_SAMPLE)-1 -: OUT_BITS_PER_SAMPLE],
++ 65             {OUT_BITS_PER_SAMPLE-IN_BITS_PER_SAMPLE{1'b0}}};
++ 65         end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_pad/util_pad.v@33:56
+  input [NUM_OF_SAMPLES*IN_BITS_PER_SAMPLE-1:0] data_in,
+  output reg [NUM_OF_SAMPLES*OUT_BITS_PER_SAMPLE-1:0] data_out
+);
+
+// Remove padding
+if (IN_BITS_PER_SAMPLE >= OUT_BITS_PER_SAMPLE) begin
+  integer i;
+  always @(*) begin
+    for (i=0;i<NUM_OF_SAMPLES;i=i+1) begin
+      if (PADDING_TO_MSB_LSB_N==1) begin
+        data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+          data_in[i*IN_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE];
+      end else begin
+        data_out[i*OUT_BITS_PER_SAMPLE +: OUT_BITS_PER_SAMPLE] =
+          data_in[((i+1)*IN_BITS_PER_SAMPLE)-1 -: OUT_BITS_PER_SAMPLE];
+      end
+    end
+  end
+end
+
+// Add padding
+if (IN_BITS_PER_SAMPLE < OUT_BITS_PER_SAMPLE) begin
+  integer i;
+  always @(*) begin
+

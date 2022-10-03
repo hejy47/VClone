@@ -1,0 +1,31 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@695:718@HdlStmProcess
+    videocap_x <= videocap_x + 1'b1;
+    videocap_buf[videocap_x-videocap_prex] <= videocap_rgbin;
+  end
+end
+
+always @(posedge dcm7_180) begin
+  videocap_rgbin2 <= {videoR3,videoR2,videoR1,videoR0,videoR3, 
+                    videoG3,videoG2,videoG1,videoG0,videoG3,videoG2,
+                    videoB3,videoB2,videoB1,videoB0,videoB3};
+  
+  if (!videocap_mode) begin
+    // do nothing
+  end else if (videocap_hs[6:1]=='b000111) begin
+    videocap_x2 <= 0;
+  end else if (videocap_x2<VCAPW) begin
+    videocap_x2 <= videocap_x2 + 1'b1;
+    videocap_buf2[videocap_x2-videocap_prex] <= videocap_rgbin2;
+  end
+end
+
+always @(posedge z_sample_clk) begin
+  znUDS_sync  <= {znUDS_sync[1:0],znUDS};
+  znLDS_sync  <= {znLDS_sync[1:0],znLDS};
+  znAS_sync   <= {znAS_sync[1:0],znAS};
+
+Diff Content:
++ 713 reg [15:0] wraprow  = 16;
++ 713 reg [15:0] wraprow2 = 'h130;
+
+Clone Blocks:

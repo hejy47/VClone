@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@266:284@HdlStmProcess
+ * The output register of the memory creates a extra clock cycle of latency on
+ * the data path. We need to handle this more the handshaking signals. If data
+ * is available in the memory it will be available one clock cycle later in the
+ * output register.
+ */
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_mem_data_valid <= 1'b0;
+  end else if (dest_valid == 1'b1) begin
+    dest_mem_data_valid <= 1'b1;
+  end else if (dest_mem_data_ready == 1'b1) begin
+    dest_mem_data_valid <= 1'b0;
+  end
+end
+
+/*
+ * This clears dest_data_last after the last beat. Strictly speaking this is not
+ * necessary if this followed AXI handshaking rules since dest_data_last would
+ * be qualified by dest_data_valid and it is OK to retain the previous value of
+
+Diff Content:
+- 271 always @(posedge dest_clk) begin
+- 272   if (dest_reset == 1'b1) begin
+- 273     dest_mem_data_valid <= 1'b0;
+- 274   end else if (dest_valid == 1'b1) begin
+- 275     dest_mem_data_valid <= 1'b1;
+- 276   end else if (dest_mem_data_ready == 1'b1) begin
+- 277     dest_mem_data_valid <= 1'b0;
+- 278   end
+- 279 end
+
+Clone Blocks:

@@ -1,0 +1,55 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@157:186@HdlStmProcess
+      endcase
+    end
+  end
+end
+
+always @(*) begin
+  case (up_raddr)
+  9'h101: up_rdata <= up_transfer_id;
+  9'h102: up_rdata <= up_dma_req_valid;
+  9'h103: up_rdata <= {29'h00, up_dma_enable_tlen_reporting, up_dma_last, up_dma_cyclic}; // Flags
+  9'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
+  9'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
+  9'h106: up_rdata <= up_dma_x_length;
+  9'h107: up_rdata <= request_y_length;
+  9'h108: up_rdata <= request_dest_stride;
+  9'h109: up_rdata <= request_src_stride;
+  9'h10a: up_rdata <= {up_partial_length_valid,27'b0,up_transfer_done_bitmap};
+  9'h10b: up_rdata <= up_transfer_id_eot;
+  9'h10c: up_rdata <= 32'h0;
+  9'h112: up_rdata <= up_measured_transfer_length;
+  9'h113: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH-1 : 0];   // Length
+  9'h114: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH+: 2];  // ID
+  default: up_rdata <= 32'h00;
+  endcase
+end
+
+generate
+if (DMA_2D_TRANSFER == 1) begin
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
+
+Diff Content:
+- 162 always @(*) begin
+- 163   case (up_raddr)
+- 164   9'h101: up_rdata <= up_transfer_id;
+- 165   9'h102: up_rdata <= up_dma_req_valid;
+- 166   9'h103: up_rdata <= {29'h00, up_dma_enable_tlen_reporting, up_dma_last, up_dma_cyclic}; // Flags
+- 167   9'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
+- 168   9'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
+- 169   9'h106: up_rdata <= up_dma_x_length;
+- 170   9'h107: up_rdata <= request_y_length;
+- 171   9'h108: up_rdata <= request_dest_stride;
+- 172   9'h109: up_rdata <= request_src_stride;
+- 173   9'h10a: up_rdata <= {up_partial_length_valid,27'b0,up_transfer_done_bitmap};
+- 174   9'h10b: up_rdata <= up_transfer_id_eot;
+- 175   9'h10c: up_rdata <= 32'h0;
+- 176   9'h112: up_rdata <= up_measured_transfer_length;
+- 177   9'h113: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH-1 : 0];   // Length
+- 178   9'h114: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH+: 2];  // ID
+- 179   default: up_rdata <= 32'h00;
+- 180   endcase
+- 181 end
+
+Clone Blocks:

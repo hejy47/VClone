@@ -1,0 +1,80 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1391:1401@HdlStmAssign
+   //# transaction completion
+   assign rxi_assemble_cnt_max = (rxi_assemble_cnt[2:0] == 3'b110);
+   assign tran_assembled = fifo_data_val & (single_write_complete | rxi_assemble_cnt_max);
+
+   //# burst transaction detection
+   assign burst_tran = (rxi_assemble_cnt[2:0] == 3'b000) & ~start_tran;
+
+   //###########################################
+   //# Secondary-FIFOs transaction distribution
+   //###########################################
+
+
+Diff Content:
+- 1396    assign burst_tran = (rxi_assemble_cnt[2:0] == 3'b000) & ~start_tran;
++ 1396 module e16_toggle2pulse(/*AUTOARG*/
++ 1396    out,
++ 1396    clk, in, reset
++ 1396    );
++ 1396    input  clk; 
++ 1396    input  in;   
++ 1396    output out;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1387:1397
+   //assign read_jump = ~fifo_data_reg[1] & (rxi_assemble_cnt[2:0] == 3'b010);
+   //# read transaction "jump" feature is disabled because of the test-and-set inst
+   assign read_jump = 1'b0;
+
+   //# transaction completion
+   assign rxi_assemble_cnt_max = (rxi_assemble_cnt[2:0] == 3'b110);
+   assign tran_assembled = fifo_data_val & (single_write_complete | rxi_assemble_cnt_max);
+
+   //# burst transaction detection
+   assign burst_tran = (rxi_assemble_cnt[2:0] == 3'b000) & ~start_tran;
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1388:1398
+   //# read transaction "jump" feature is disabled because of the test-and-set inst
+   assign read_jump = 1'b0;
+
+   //# transaction completion
+   assign rxi_assemble_cnt_max = (rxi_assemble_cnt[2:0] == 3'b110);
+   assign tran_assembled = fifo_data_val & (single_write_complete | rxi_assemble_cnt_max);
+
+   //# burst transaction detection
+   assign burst_tran = (rxi_assemble_cnt[2:0] == 3'b000) & ~start_tran;
+
+   //###########################################
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1384:1394
+   assign single_write_complete = single_write & (rxi_assemble_cnt[2:0] == 3'b100);
+
+   //# read transaction "jumps" over data part of the counter
+   //assign read_jump = ~fifo_data_reg[1] & (rxi_assemble_cnt[2:0] == 3'b010);
+   //# read transaction "jump" feature is disabled because of the test-and-set inst
+   assign read_jump = 1'b0;
+
+   //# transaction completion
+   assign rxi_assemble_cnt_max = (rxi_assemble_cnt[2:0] == 3'b110);
+   assign tran_assembled = fifo_data_val & (single_write_complete | rxi_assemble_cnt_max);
+
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@1378:1388
+     else if(fifo_data_val)
+       rxi_assemble_cnt[2:0] <= rxi_assemble_cnt_next[2:0];
+
+   //# single write transaction completion
+//   assign single_write = access & write & ~(&(datamode[1:0]));
+   assign single_write = 1'b0; // no special treatment for single writes
+   assign single_write_complete = single_write & (rxi_assemble_cnt[2:0] == 3'b100);
+
+   //# read transaction "jumps" over data part of the counter
+   //assign read_jump = ~fifo_data_reg[1] & (rxi_assemble_cnt[2:0] == 3'b010);
+   //# read transaction "jump" feature is disabled because of the test-and-set inst
+

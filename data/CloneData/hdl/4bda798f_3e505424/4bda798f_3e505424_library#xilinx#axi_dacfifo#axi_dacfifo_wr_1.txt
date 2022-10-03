@@ -1,0 +1,27 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/axi_dacfifo_wr.v@309:328@HdlStmProcess
+  assign dma_rst_s = dma_rst_m2;
+
+  // DMA beat counter
+
+  assign dma_xfer_init = dma_xfer_req & ~dma_xfer_req_d;
+  always @(posedge dma_clk) begin
+    dma_xfer_req_d <= dma_xfer_req;
+    if ((dma_rst_s == 1'b1) || (dma_xfer_init == 1'b1)) begin
+      dma_last_beats <= 4'b0;
+    end else begin
+      if ((dma_ready == 1'b1) && (dma_valid == 1'b1)) begin
+        dma_last_beats <= (dma_last_beats < MEM_RATIO-1) ? dma_last_beats + 1 : 0;
+      end
+    end
+  end
+
+  // Write address generation for the asymmetric memory
+
+  assign dma_mem_addr_diff_s = {1'b1, dma_mem_waddr} - dma_mem_raddr_s;
+  assign dma_mem_raddr_s = (MEM_RATIO == 1) ?  dma_mem_raddr :
+
+Diff Content:
+- 320         dma_last_beats <= (dma_last_beats < MEM_RATIO-1) ? dma_last_beats + 1 : 0;
++ 320         dma_last_beats <= (dma_last_beats < MEM_RATIO-1) ? dma_last_beats + 4'b1 : 4'b0;
+
+Clone Blocks:

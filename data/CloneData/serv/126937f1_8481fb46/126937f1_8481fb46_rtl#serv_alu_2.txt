@@ -1,0 +1,27 @@
+Source Block: serv/rtl/serv_alu.v@109:128@HdlStmProcess
+                 (i_rd_sel == ALU_RESULT_BOOL) ? result_bool : 1'bx;
+
+
+   reg 	eq_r;
+
+   always @(posedge clk) begin
+      if (i_init) begin
+	 result_lt_r <= result_lt;
+	 eq_r <= result_eq;
+      end else begin
+	 eq_r <= 1'b1;
+	 if (result_lt_r)
+	   result_lt_r <= 1'b0;
+      end
+      en_r <= i_en;
+   end
+
+   assign result_eq = eq_r & (i_rs1 == i_op_b);
+
+endmodule
+
+Diff Content:
+- 120 	 if (result_lt_r)
+- 121 	   result_lt_r <= 1'b0;
+
+Clone Blocks:

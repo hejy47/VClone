@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@84:94@HdlIdDef
+  DATA_WIDTH_SRC : DATA_WIDTH_DEST;
+localparam MEM_RATIO = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
+  DATA_WIDTH_SRC / DATA_WIDTH_DEST : DATA_WIDTH_DEST / DATA_WIDTH_SRC;
+
+/* A burst can have up to 256 beats */
+localparam BURST_LEN = MAX_BYTES_PER_BURST / (DATA_WIDTH_MEM / 8);
+localparam BURST_LEN_WIDTH = BURST_LEN > 128 ? 8 :
+  BURST_LEN > 64 ? 7 :
+  BURST_LEN > 32 ? 6 :
+  BURST_LEN > 16 ? 5 :
+  BURST_LEN > 8 ? 4 :
+
+Diff Content:
+- 89 localparam BURST_LEN = MAX_BYTES_PER_BURST / (DATA_WIDTH_MEM / 8);
+
+Clone Blocks:

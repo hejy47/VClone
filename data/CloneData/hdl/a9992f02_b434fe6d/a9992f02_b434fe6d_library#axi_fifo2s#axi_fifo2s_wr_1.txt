@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_fifo2s/axi_fifo2s_wr.v@229:280@HdlStmProcess
+    end
+  endfunction
+
+  // fifo interface
+
+  always @(posedge m_clk) begin
+    if (m_rst == 1'b1) begin
+      m_waddr <= 'd0;
+      m_waddr_g <= 'd0;
+      m_xfer_req_m <= 'd0;
+      m_xfer_init <= 'd0;
+      m_xfer_limit <= 'd0;
+      m_xfer_enable <= 'd0;
+      m_xfer_addr <= 'd0;
+      m_rel_enable <= 'd0;
+      m_rel_toggle <= 'd0;
+      m_rel_waddr <= 'd0;
+    end else begin
+      if ((m_wr == 1'b1) && (m_xfer_enable == 1'b1)) begin
+        m_waddr <= m_waddr + 1'b1;
+      end
+      m_waddr_g <= b2g(m_waddr);
+      m_xfer_req_m <= {m_xfer_req_m[1:0], axi_xfer_req};
+      m_xfer_init <= m_xfer_req_m[1] & ~m_xfer_req_m[2];
+      if (m_xfer_init == 1'b1) begin
+        m_xfer_limit <= 1'd1;
+      end else if (m_xfer_addr >= AXI_ADDRLIMIT) begin
+        m_xfer_limit <= 1'd0;
+      end
+      if (m_xfer_init == 1'b1) begin
+        m_xfer_enable <= 1'b1;
+        m_xfer_addr <= AXI_ADDRESS;
+      end else if ((m_waddr[1:0] == 2'h3) && (m_wr == 1'b1)) begin
+        m_xfer_enable <= m_xfer_req_m[2] & m_xfer_limit;
+        m_xfer_addr <= m_xfer_addr + AXI_AWINCR;
+      end
+      if (m_waddr[1:0] == 2'h3) begin
+        m_rel_enable <= m_wr;
+      end else begin
+        m_rel_enable <= 1'd0;
+      end
+      if (m_rel_enable == 1'b1) begin
+        m_rel_toggle <= ~m_rel_toggle;
+        m_rel_waddr <= m_waddr;
+      end
+    end
+  end
+
+  // fifo signals on axi side
+
+  assign axi_rel_toggle_s = axi_rel_toggle_m[2] ^ axi_rel_toggle_m[1];
+
+
+Diff Content:
+- 255       end else if (m_xfer_addr >= AXI_ADDRLIMIT) begin
++ 255       end else if ((m_xfer_addr >= AXI_ADDRLIMIT) || (m_xfer_enable == 1'b0)) begin
+
+Clone Blocks:

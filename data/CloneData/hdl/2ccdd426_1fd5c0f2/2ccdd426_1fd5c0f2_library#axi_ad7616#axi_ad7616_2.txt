@@ -1,0 +1,50 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616.v@410:452@HdlStmIf
+
+  end
+
+  endgenerate
+
+  generate if (IF_TYPE == PARALLEL) begin
+
+    assign sclk = 1'h0;
+    assign sdo = 1'h0;
+    assign irq = 1'h0;
+
+    assign up_wack_if_s = 1'h0;
+    assign up_rack_if_s = 1'h0;
+    assign up_rdata_if_s = 1'h0;
+
+    axi_ad7616_pif i_ad7616_parallel_interface (
+      .cs_n(cs_n),
+      .db_o(db_o),
+      .db_i(db_i),
+      .db_t(db_t),
+      .rd_n(rd_n),
+      .wr_n(wr_n),
+      .m_axis_tdata(m_axis_tdata),
+      .m_axis_tvalid(m_axis_tvalid),
+      .m_axis_tready(m_axis_ready_s),
+      .m_axis_xfer_req(m_axis_xfer_req),
+      .end_of_conv(trigger_s),
+      .burst_length(burst_length_s),
+      .clk(up_clk),
+      .rstn(up_rstn),
+      .rd_req(rd_req_s),
+      .wr_req(wr_req_s),
+      .wr_data(wr_data_s),
+      .rd_data(rd_data_s),
+      .rd_dvalid(rd_dvalid_s)
+    );
+
+  end
+  endgenerate
+
+  axi_ad7616_control #(
+    .ID(ID),
+    .IF_TYPE(IF_TYPE)
+
+Diff Content:
+- 444       .rd_dvalid(rd_dvalid_s)
++ 444       .rd_valid(rd_valid_s)
+
+Clone Blocks:

@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@200:210@HdlIdDef
+ * for at least 4 clock cycles of the slowest domain, no matter what. If
+ * successive domains have the same clock they'll share their reset signal.
+ */
+
+wire [3:0] reset_async_chain;
+wire [3:0] reset_sync_chain;
+wire [2:0] reset_chain_clks = {clk, src_clk, dest_clk};
+
+localparam GEN_ASYNC_RESET = {
+  ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
+  ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
+
+Diff Content:
+- 205 wire [3:0] reset_sync_chain;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@199:209
+ * Chain the reset through all clock domains. This makes sure that is asserted
+ * for at least 4 clock cycles of the slowest domain, no matter what. If
+ * successive domains have the same clock they'll share their reset signal.
+ */
+
+wire [3:0] reset_async_chain;
+wire [3:0] reset_sync_chain;
+wire [2:0] reset_chain_clks = {clk, src_clk, dest_clk};
+
+localparam GEN_ASYNC_RESET = {
+  ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@201:211
+ * successive domains have the same clock they'll share their reset signal.
+ */
+
+wire [3:0] reset_async_chain;
+wire [3:0] reset_sync_chain;
+wire [2:0] reset_chain_clks = {clk, src_clk, dest_clk};
+
+localparam GEN_ASYNC_RESET = {
+  ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
+  ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
+  1'b1
+

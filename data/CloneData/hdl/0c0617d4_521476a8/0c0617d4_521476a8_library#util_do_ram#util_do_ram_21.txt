@@ -1,0 +1,48 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@120:130@HdlIdDef
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable)
+    s_axis_ready <= 1'b0;
+
+Diff Content:
+- 125 wire wr_last_beat;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_do_ram/util_do_ram.v@115:128
+    wr_request_ready <= 1'b0;
+  else if (wr_response_eot)
+    wr_request_ready <= 1'b1;
+end
+
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+
+Clone Blocks 2:
+hdl/library/util_do_ram/util_do_ram.v@121:131
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable)
+    s_axis_ready <= 1'b0;
+  else if (wr_request_valid & wr_request_ready)
+

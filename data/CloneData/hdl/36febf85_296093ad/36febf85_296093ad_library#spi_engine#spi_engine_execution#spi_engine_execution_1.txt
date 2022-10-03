@@ -1,0 +1,24 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@192:208@HdlStmProcess
+			endcase
+		end
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		cs <= 'hff;
+	end else if (inst_d1 == CMD_CHIPSELECT && cs_sleep_counter_compare == 1'b1) begin
+		cs <= cmd_d1[NUM_CS-1:0];
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		sync_valid <= 1'b0;
+	end else begin
+
+Diff Content:
+- 201 		cs <= cmd_d1[NUM_CS-1:0];
++ 201 		cs <= cmd_d1[NUM_OF_CS-1:0];
+
+Clone Blocks:

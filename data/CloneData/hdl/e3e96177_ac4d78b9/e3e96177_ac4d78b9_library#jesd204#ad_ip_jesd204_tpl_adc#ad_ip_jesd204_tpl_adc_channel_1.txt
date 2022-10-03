@@ -1,0 +1,34 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_channel.v@59:82@HdlStmFor
+    .pn_err (pn_err)
+  );
+
+  generate
+  genvar n;
+  for (n = 0; n < DATA_PATH_WIDTH; n = n + 1) begin: g_datafmt
+    ad_datafmt #(
+      .DATA_WIDTH (CONVERTER_RESOLUTION)
+    ) i_ad_datafmt (
+      .clk (clk),
+
+      .valid (1'b1),
+      .data (raw_data[n*CONVERTER_RESOLUTION+:CONVERTER_RESOLUTION]),
+      .valid_out (),
+      .data_out (fmt_data[n*16+:16]),
+
+      .dfmt_enable (dfmt_enable),
+      .dfmt_type (dfmt_type),
+      .dfmt_se (dfmt_sign_extend)
+    );
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 66       .DATA_WIDTH (CONVERTER_RESOLUTION)
+- 73       .data_out (fmt_data[n*16+:16]),
++ 66       .DATA_WIDTH (CONVERTER_RESOLUTION),
++ 66       .OCTETS_PER_SAMPLE (OCTETS_PER_SAMPLE)
++ 73       .data_out (fmt_data[n*BITS_PER_SAMPLE+:BITS_PER_SAMPLE]),
+
+Clone Blocks:

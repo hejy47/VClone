@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@285:303@HdlStmProcess
+ * dest_data_last when dest_data_valid is not asserted. But clearing the signal
+ * here doesn't cost much and can simplify some of the more congested
+ * combinatorical logic further up the pipeline since we can assume that
+ * fifo_last == 1'b1 implies fifo_valid == 1'b1.
+ */
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_mem_data_last <= 1'b0;
+  end else if (dest_beat == 1'b1) begin
+    dest_mem_data_last <= dest_last;
+  end else if (dest_mem_data_ready == 1'b1) begin
+    dest_mem_data_last <= 1'b0;
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_beat == 1'b1) begin
+    if (dest_last == 1'b1) begin
+      dest_mem_data_strb <= {DATA_WIDTH_MEM_DEST/8{1'b1}} >> ~dest_burst_len_data[BYTES_PER_BEAT_WIDTH_DEST-1:0];
+
+Diff Content:
+- 290 always @(posedge dest_clk) begin
+- 291   if (dest_reset == 1'b1) begin
+- 292     dest_mem_data_last <= 1'b0;
+- 293   end else if (dest_beat == 1'b1) begin
+- 294     dest_mem_data_last <= dest_last;
+- 295   end else if (dest_mem_data_ready == 1'b1) begin
+- 296     dest_mem_data_last <= 1'b0;
+- 298 end
++ 296   always @(*) begin
++ 296     if (src_last_beat == 1'b1) begin
++ 296       src_id_next = inc_id(src_id);
++ 296     end else begin
++ 296       src_id_next = src_id;
++ 296     end
+
+Clone Blocks:

@@ -1,0 +1,45 @@
+Source Block: serv/rtl/serv_mpram.v@69:79@HdlIdDef
+
+   wire 	     wgo = !(|wcnt_lo) & ((i_run & (i_rd_wen | i_csr_en)) | i_trap);
+
+   reg 		     trap_r;
+   reg 		     trap_2r;
+   reg 		     trap_3r;
+
+   always @(posedge i_clk) begin
+      trap_r <= i_trap;
+      trap_2r <= trap_r;
+      trap_3r <= trap_2r;
+
+Diff Content:
+- 74    reg 		     trap_3r;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_mpram.v@67:77
+//		                    (i_trap ? CSR_MEPC  : i_csr_addr);
+   assign waddr[2:0] = wcnt_hi;
+
+   wire 	     wgo = !(|wcnt_lo) & ((i_run & (i_rd_wen | i_csr_en)) | i_trap);
+
+   reg 		     trap_r;
+   reg 		     trap_2r;
+   reg 		     trap_3r;
+
+   always @(posedge i_clk) begin
+      trap_r <= i_trap;
+
+Clone Blocks 2:
+serv/rtl/serv_mpram.v@68:78
+   assign waddr[2:0] = wcnt_hi;
+
+   wire 	     wgo = !(|wcnt_lo) & ((i_run & (i_rd_wen | i_csr_en)) | i_trap);
+
+   reg 		     trap_r;
+   reg 		     trap_2r;
+   reg 		     trap_3r;
+
+   always @(posedge i_clk) begin
+      trap_r <= i_trap;
+      trap_2r <= trap_r;
+

@@ -1,0 +1,43 @@
+Source Block: hdl/library/common/ad_upack.v@94:110@HdlStmProcess
+wire                  ovalid_s;
+
+assign unit_valid = (in_use | inmask);
+assign in_use_nx = unit_valid >> O_W;
+
+always @(posedge clk) begin
+  if (reset) begin
+    in_use <= 'h0;
+  end else if (ovalid_s) begin
+    in_use <= in_use_nx;
+  end
+end
+
+always @(*) begin
+  inmask = {I_W{ivalid}};
+  if (STEP>0) begin
+    for (i = STEP; i < O_W; i=i+STEP) begin
+
+Diff Content:
+- 99 always @(posedge clk) begin
+- 100   if (reset) begin
+- 101     in_use <= 'h0;
+- 102   end else if (ovalid_s) begin
+- 103     in_use <= in_use_nx;
+- 104   end
+- 105 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_upack.v@92:102
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+wire                  ovalid_s;
+
+assign unit_valid = (in_use | inmask);
+assign in_use_nx = unit_valid >> O_W;
+
+always @(posedge clk) begin
+  if (reset) begin
+    in_use <= 'h0;
+  end else if (ovalid_s) begin
+

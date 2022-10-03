@@ -1,0 +1,40 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@87:99@HdlStmAssign
+				                   txrd_packet[6:3];
+     
+   assign txwr_ctrlmode[3:0] =  ctrlmode_bypass ?  ctrlmode[3:0] : 
+				                   txwr_packet[6:3];
+
+   assign txrd_data[PW-1:0] = {txrd_packet[PW-1:8],   
+                               txrd_ctrlmode[3:0], 
+			       txrd_packet[3:0]};
+
+   assign txwr_data[PW-1:0] = {txwr_packet[PW-1:8],   
+                               txwr_ctrlmode[3:0], 
+			       txwr_packet[3:0]};
+ 
+
+Diff Content:
+- 92    assign txrd_data[PW-1:0] = {txrd_packet[PW-1:8],   
+- 93                                txrd_ctrlmode[3:0], 
+- 94 			       txrd_packet[3:0]};
++ 94    assign txrd_splice_packet[PW-1:0] = {txrd_packet[PW-1:8],   
++ 94 					1'b0,
++ 94 					txrd_ctrlmode[3:0], 
++ 94 					txrd_packet[2:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_arbiter.v@84:95
+   //# Insert special control mode in packet
+   //##########################################################################
+   assign txrd_ctrlmode[3:0] =  ctrlmode_bypass ?  ctrlmode[3:0] : 
+				                   txrd_packet[6:3];
+     
+   assign txwr_ctrlmode[3:0] =  ctrlmode_bypass ?  ctrlmode[3:0] : 
+				                   txwr_packet[6:3];
+
+   assign txrd_data[PW-1:0] = {txrd_packet[PW-1:8],   
+                               txrd_ctrlmode[3:0], 
+			       txrd_packet[3:0]};
+
+

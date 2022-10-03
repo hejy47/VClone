@@ -1,0 +1,24 @@
+Source Block: oh/src/common/hdl/oh_clockdiv.v@85:96@HdlStmAssign
+     else if(clkfall0)
+       clkout0_reg <= 1'b0;
+
+   //bypass divider on "divide by 1"
+   //TODO: Fix clock glitch!
+   assign clkout0 = (clkdiv[7:0]==8'd0) ? clk :        // bypass
+		                          clkout0_reg; // all others
+
+   //###########################################
+   //# CLKOUT1
+   //###########################################
+   always @ (posedge clk or negedge nreset)
+
+Diff Content:
+- 90    assign clkout0 = (clkdiv[7:0]==8'd0) ? clk :        // bypass
+- 91 		                          clkout0_reg; // all others
++ 91    oh_clockmux #(.N(2))
++ 91    iclkmux0 (.clkout(clkout0),
++ 91 	      .clk(clk),
++ 91               .en(clk0_sel[1:0]),
++ 91               .clkin({clk, clkout0_reg}));
+
+Clone Blocks:

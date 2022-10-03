@@ -1,0 +1,32 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@280:304@HdlStmProcess
+  reg offload0_enable_reg;
+  reg offload0_mem_reset_reg;
+  wire offload0_enabled_s;
+
+  // the software reset should reset all the registers
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+      up_irq_mask <= 'h00;
+      offload0_enable_reg <= 1'b0;
+      offload0_mem_reset_reg <= 1'b0;
+    end else begin
+      if (up_wreq_s) begin
+        case (up_waddr_s)
+          8'h20: up_irq_mask <= up_wdata_s;
+          8'h40: offload0_enable_reg <= up_wdata_s[0];
+          8'h42: offload0_mem_reset_reg <= up_wdata_s[0];
+        endcase
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      up_rack_ff <= 'd0;
+    end else begin
+
+Diff Content:
++ 289       pulse_gen_period <= 'h00;
++ 295           8'h48: pulse_gen_period <= up_wdata_s;
+
+Clone Blocks:

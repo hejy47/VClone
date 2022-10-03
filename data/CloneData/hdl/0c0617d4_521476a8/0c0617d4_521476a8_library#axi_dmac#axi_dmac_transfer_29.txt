@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_transfer.v@246:256@HdlStmAssign
+ * Things become a lot easier if we gate incoming requests in a central place
+ * before they are propagated downstream. Otherwise we'd need to take special
+ * care to not accidentally accept requests while the DMA is going through a
+ * shutdown and reset phase.
+ */
+assign req_valid_gated = req_enable & req_valid;
+assign req_ready = req_enable & req_ready_gated;
+
+generate if (DMA_2D_TRANSFER == 1) begin
+
+dmac_2d_transfer #(
+
+Diff Content:
+- 251 assign req_valid_gated = req_enable & req_valid;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_transfer.v@247:257
+ * before they are propagated downstream. Otherwise we'd need to take special
+ * care to not accidentally accept requests while the DMA is going through a
+ * shutdown and reset phase.
+ */
+assign req_valid_gated = req_enable & req_valid;
+assign req_ready = req_enable & req_ready_gated;
+
+generate if (DMA_2D_TRANSFER == 1) begin
+
+dmac_2d_transfer #(
+  .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+

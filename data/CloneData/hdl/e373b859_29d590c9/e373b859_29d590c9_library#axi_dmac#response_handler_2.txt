@@ -1,0 +1,27 @@
+Source Block: hdl/library/axi_dmac/response_handler.v@71:90@HdlStmProcess
+
+assign bready = active && resp_ready;
+assign resp_valid = active && bvalid;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		enabled <= 1'b0;
+	end else begin
+	if (enable)
+	    enabled <= 1'b1;
+	else if (wait_id == id)
+	    enabled <= 1'b0;
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		id <= 'h0;
+	end else begin
+
+Diff Content:
+- 82 	else if (wait_id == id)
++ 82 	else if (request_id == id)
+
+Clone Blocks:

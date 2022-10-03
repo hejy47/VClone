@@ -1,0 +1,67 @@
+Source Block: hdl/library/axi_ad9250/axi_ad9250_if.v@119:136@HdlStmFor
+  // frame-alignment
+
+  genvar n;
+
+  generate
+  for (n = 0; n < 4; n = n + 1) begin: g_xcvr_if
+  ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_sof),
+    .rx_ip_data (rx_data[((n*32)+31):(n*32)]),
+    .rx_sof (),
+    .rx_data (rx_data_s[((n*32)+31):(n*32)]));
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 124   for (n = 0; n < 4; n = n + 1) begin: g_xcvr_if
++ 124   for (n = 0; n < 2; n = n + 1) begin: g_xcvr_if
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9680/axi_ad9680_if.v@132:149
+  // frame-alignment
+
+  genvar n;
+
+  generate
+  for (n = 0; n < 4; n = n + 1) begin: g_xcvr_if
+  ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_sof),
+    .rx_ip_data (rx_data[((n*32)+31):(n*32)]),
+    .rx_sof (),
+    .rx_data (rx_data_s[((n*32)+31):(n*32)]));
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Clone Blocks 2:
+hdl/library/axi_ad9625/axi_ad9625_if.v@234:251
+  // frame-alignment
+
+  genvar n;
+
+  generate
+  for (n = 0; n < 8; n = n + 1) begin: g_xcvr_if
+  ad_xcvr_rx_if #(.DEVICE_TYPE (DEVICE_TYPE)) i_xcvr_if (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_sof),
+    .rx_ip_data (rx_data[((n*32)+31):(n*32)]),
+    .rx_sof (),
+    .rx_data (rx_data_s[((n*32)+31):(n*32)]));
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+

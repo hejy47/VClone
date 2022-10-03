@@ -1,0 +1,56 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@407:421@HdlStmAssign
+      endcase
+    end
+  end
+end
+
+assign dbg_ids = {
+  src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0,
+  src_request_id, 1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0,
+  dest_address_id, 1'b0, dest_request_id
+};
+
+always @(posedge s_axi_aclk)
+begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+
+Diff Content:
+- 412 assign dbg_ids = {
+- 413   src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0,
+- 414   src_request_id, 1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0,
+- 415   dest_address_id, 1'b0, dest_request_id
++ 415 assign dbg_ids0 = {
++ 415   {DBG_ID_PADDING{1'b0}}, dest_data_id,
++ 415   {DBG_ID_PADDING{1'b0}}, dest_response_id,
++ 415   {DBG_ID_PADDING{1'b0}}, dest_address_id,
++ 415   {DBG_ID_PADDING{1'b0}}, dest_request_id
++ 415 };
++ 415 assign dbg_ids1 = {
++ 415   {DBG_ID_PADDING{1'b0}}, src_data_id,
++ 415   {DBG_ID_PADDING{1'b0}}, src_response_id,
++ 415   {DBG_ID_PADDING{1'b0}}, src_address_id,
++ 415   {DBG_ID_PADDING{1'b0}}, src_request_id
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac.v@413:430
+  src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0,
+  src_request_id, 1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0,
+  dest_address_id, 1'b0, dest_request_id
+};
+
+always @(posedge s_axi_aclk)
+begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+  end else begin
+    up_rack <= up_rreq;
+  end
+end
+
+always @(posedge s_axi_aclk)
+begin
+  if (up_rreq) begin
+    case (up_raddr)
+

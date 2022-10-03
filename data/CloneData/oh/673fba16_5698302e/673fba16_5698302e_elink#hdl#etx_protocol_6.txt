@@ -1,0 +1,33 @@
+Source Block: oh/elink/hdl/etx_protocol.v@159:169@HdlStmAssign
+   
+   //#############################
+   //# Wait propagation circuit
+   //#############################	      
+   assign etx_wr_wait = (tx_wr_wait | tx_io_wait | burst_negedge) & ~adjust;
+   assign etx_rd_wait = (tx_rd_wait | tx_io_wait | burst_negedge) & ~adjust;
+  
+endmodule // etx_protocol
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+// End:
+
+Diff Content:
+- 164    assign etx_rd_wait = (tx_rd_wait | tx_io_wait | burst_negedge) & ~adjust;
++ 164    assign etx_wr_wait = (tx_wr_wait | tx_io_wait ) & ~adjust;
++ 164    assign etx_rd_wait = (tx_rd_wait | tx_io_wait ) & ~adjust;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@158:168
+			  tx_burst_reg;
+   
+   //#############################
+   //# Wait propagation circuit
+   //#############################	      
+   assign etx_wr_wait = (tx_wr_wait | tx_io_wait | burst_negedge) & ~adjust;
+   assign etx_rd_wait = (tx_rd_wait | tx_io_wait | burst_negedge) & ~adjust;
+  
+endmodule // etx_protocol
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+

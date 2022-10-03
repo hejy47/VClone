@@ -1,0 +1,60 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@280:296@HdlStmProcess
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_beat_counter <= 'h00;
+  end else if (dest_beat == 1'b1) begin
+    dest_beat_counter <= dest_beat_counter + 1'b1;
+  end
+end
+
+axi_dmac_resize_src #(
+  .DATA_WIDTH_SRC (DATA_WIDTH_SRC),
+  .DATA_WIDTH_MEM (DATA_WIDTH)
+) i_resize_src (
+
+Diff Content:
++ 291 assign dest_burst_info_length = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1:0];
++ 291 assign dest_burst_info_partial = dest_burst_len_data[BYTES_PER_BURST_WIDTH];
++ 291 assign dest_burst_info_id = dest_id;
++ 291 always @(posedge dest_clk) begin
++ 291   dest_burst_info_write <= (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1);
++ 291 end
++ 291 generate if (DATA_WIDTH_SRC < DATA_WIDTH_DEST) begin
++ 291   reg [DEST_SRC_RATIO_WIDTH-1:0] src_num_beats = {DEST_SRC_RATIO_WIDTH{1'b1}};
++ 291   reg [BYTES_PER_BEAT_WIDTH_SRC-1:0] src_data_valid_bytes_d = 'h00;
++ 291   reg src_data_partial_burst_d = 'h0;
++ 291   always @(posedge src_clk) begin
++ 291     if (src_mem_data_last == 1'b1 && src_mem_data_valid == 1'b1) begin
++ 291       if (src_data_valid) begin
++ 291         src_num_beats  <= {DEST_SRC_RATIO_WIDTH{1'b0}};
++ 291       end else begin
++ 291         src_num_beats  <= {DEST_SRC_RATIO_WIDTH{1'b1}};
++ 291       end
++ 291     end else if (src_data_valid) begin
++ 291       src_num_beats <= src_num_beats + 1'b1;
++ 291     end
++ 291   end
++ 291   always @(posedge src_clk) begin
++ 291     if (src_data_valid == 1'b1) begin
++ 291       src_data_valid_bytes_d <= src_data_valid_bytes;
++ 291       src_data_partial_burst_d <= src_data_partial_burst;
++ 291     end
++ 291   end
++ 291   assign src_burst_len_data = {src_data_partial_burst_d,
++ 291                                src_beat_counter,
++ 291                                src_num_beats,
++ 291                                src_data_valid_bytes_d};
++ 291 end else begin
++ 291   assign src_burst_len_data = {src_data_partial_burst,
++ 291                                src_beat_counter,
++ 291                                src_data_valid_bytes};
++ 291 end
++ 291 endgenerate
++ 291 assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH];
+
+Clone Blocks:

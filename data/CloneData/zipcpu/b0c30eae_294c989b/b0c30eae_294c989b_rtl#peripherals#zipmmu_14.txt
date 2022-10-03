@@ -1,0 +1,44 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@361:391@HdlStmProcess
+	//
+	// Step one -- handle the control bus--i_wbs_cyc_stb
+	//
+	//
+	//////////////////////////////////////////
+	always @(posedge i_clk)
+	begin
+		// Write to the Translation lookaside buffer
+		if (wr_vtable)
+			tlb_vdata[wr_tlb_addr]<=i_wbs_data[(DW-1):LGPGSZB];
+		if (wr_ptable)
+			tlb_pdata[wr_tlb_addr]<=i_wbs_data[(AW+1):LGPGSZB];
+		// Set the context register for the page
+		if ((wr_vtable)||(wr_ptable))
+			tlb_flags[wr_tlb_addr] <= i_wbs_data[3:1];
+		// Otherwise, keep track of the accessed bit if we
+		// ever access this page
+		else if ((!kernel_context)&&(s_pending)&&(s_tlb_hit)&&((!r_we)||(!ro_flag)))
+			tlb_flags[s_tlb_addr][2] <= 1'b1;
+		if (wr_vtable)
+			tlb_cdata[wr_tlb_addr][((LGCTXT>=8)? 7:(LGCTXT-1)):0]
+				<= i_wbs_data[((LGCTXT>=8)? 11:(4+LGCTXT-1)):4];
+		if ((wr_ptable)&&(LGCTXT > 8))
+			tlb_cdata[wr_tlb_addr][(LGCTXT-1):8]
+				<= i_wbs_data[(4+LGCTXT-8-1):4];
+	end
+	// Writing to the control word
+	initial z_context = 1'b1;
+	initial r_context_word = 0;
+	always @(posedge i_clk)
+	if (wr_control)
+
+Diff Content:
+- 375 			tlb_flags[wr_tlb_addr] <= i_wbs_data[3:1];
+- 378 		else if ((!kernel_context)&&(s_pending)&&(s_tlb_hit)&&((!r_we)||(!ro_flag)))
+- 379 			tlb_flags[s_tlb_addr][2] <= 1'b1;
++ 375 			tlb_flags[wr_tlb_addr] <= i_wbs_data[3:0];
++ 379 		else if ((!kernel_context)&&(pending_page_valid))
++ 379 			tlb_flags[s_tlb_addr][`AXFLAG] <= 1'b1;
++ 379 		else if ((!kernel_context)&&(this_page_valid));
++ 379 			tlb_flags[s_tlb_addr][`AXFLAG] <= 1'b1;
+
+Clone Blocks:

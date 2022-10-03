@@ -1,0 +1,24 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@79:89@HdlIdDef
+  BURST_LEN > 4 ? 3 :
+  BURST_LEN > 2 ? 2 : 1;
+
+localparam ADDRESS_WIDTH = BURST_LEN_WIDTH + ID_WIDTH - 1;
+
+localparam AUX_FIFO_SIZE = 2**(ID_WIDTH-1);
+
+/*
+ * The burst memory is separated into 2**(ID_WIDTH-1) segments. Each segment can
+ * hold up to BURST_LEN beats. The addresses that are used to access the memory
+ * are split into two parts. The MSBs index the segment and the LSBs index a
+
+Diff Content:
++ 84 localparam DEST_SRC_RATIO = DATA_WIDTH_DEST/DATA_WIDTH_SRC;
++ 84 localparam DEST_SRC_RATIO_WIDTH = DEST_SRC_RATIO > 64 ? 7 :
++ 84   DEST_SRC_RATIO > 32 ? 6 :
++ 84   DEST_SRC_RATIO > 16 ? 5 :
++ 84   DEST_SRC_RATIO > 8 ? 4 :
++ 84   DEST_SRC_RATIO > 4 ? 3 :
++ 84   DEST_SRC_RATIO > 2 ? 2 :
++ 84   DEST_SRC_RATIO > 1 ? 1 : 0;
+
+Clone Blocks:

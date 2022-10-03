@@ -1,0 +1,183 @@
+Source Block: verilog-ethernet/rtl/eth_demux_4.v@224:260@HdlStmProcess
+    output_eth_payload_tvalid_int = input_eth_payload_tvalid & input_eth_payload_tready;
+    output_eth_payload_tlast_int = input_eth_payload_tlast;
+    output_eth_payload_tuser_int = input_eth_payload_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_eth_hdr_ready_reg <= 0;
+        input_eth_payload_tready_reg <= 0;
+        output_0_eth_hdr_valid_reg <= 0;
+        output_1_eth_hdr_valid_reg <= 0;
+        output_2_eth_hdr_valid_reg <= 0;
+        output_3_eth_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_eth_hdr_ready_reg <= input_eth_hdr_ready_next;
+        input_eth_payload_tready_reg <= input_eth_payload_tready_next;
+        output_0_eth_hdr_valid_reg <= output_0_eth_hdr_valid_next;
+        output_1_eth_hdr_valid_reg <= output_1_eth_hdr_valid_next;
+        output_2_eth_hdr_valid_reg <= output_2_eth_hdr_valid_next;
+        output_3_eth_hdr_valid_reg <= output_3_eth_hdr_valid_next;
+        output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+        output_eth_src_mac_reg <= output_eth_src_mac_next;
+        output_eth_type_reg <= output_eth_type_next;
+    end
+end
+
+// output datapath logic
+reg [7:0] output_eth_payload_tdata_reg = 0;
+reg       output_0_eth_payload_tvalid_reg = 0;
+reg       output_1_eth_payload_tvalid_reg = 0;
+
+Diff Content:
+- 231         select_reg <= 0;
+- 232         frame_reg <= 0;
+- 233         input_eth_hdr_ready_reg <= 0;
+- 234         input_eth_payload_tready_reg <= 0;
+- 235         output_0_eth_hdr_valid_reg <= 0;
+- 236         output_1_eth_hdr_valid_reg <= 0;
+- 237         output_2_eth_hdr_valid_reg <= 0;
+- 238         output_3_eth_hdr_valid_reg <= 0;
+- 239         output_eth_dest_mac_reg <= 0;
+- 240         output_eth_src_mac_reg <= 0;
+- 241         output_eth_type_reg <= 0;
+- 251         output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+- 252         output_eth_src_mac_reg <= output_eth_src_mac_next;
+- 253         output_eth_type_reg <= output_eth_type_next;
++ 241         select_reg <= 2'd0;
++ 241         frame_reg <= 1'b0;
++ 241         input_eth_hdr_ready_reg <= 1'b0;
++ 241         input_eth_payload_tready_reg <= 1'b0;
++ 241         output_0_eth_hdr_valid_reg <= 1'b0;
++ 241         output_1_eth_hdr_valid_reg <= 1'b0;
++ 241         output_2_eth_hdr_valid_reg <= 1'b0;
++ 241         output_3_eth_hdr_valid_reg <= 1'b0;
++ 254     output_eth_dest_mac_reg <= output_eth_dest_mac_next;
++ 254     output_eth_src_mac_reg <= output_eth_src_mac_next;
++ 254     output_eth_type_reg <= output_eth_type_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mux_2.v@207:241
+    output_eth_payload_tvalid_int = current_input_tvalid & current_input_tready & frame_reg;
+    output_eth_payload_tlast_int = current_input_tlast;
+    output_eth_payload_tuser_int = current_input_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_0_eth_hdr_ready_reg <= 0;
+        input_1_eth_hdr_ready_reg <= 0;
+        input_0_eth_payload_tready_reg <= 0;
+        input_1_eth_payload_tready_reg <= 0;
+        output_eth_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_0_eth_hdr_ready_reg <= input_0_eth_hdr_ready_next;
+        input_1_eth_hdr_ready_reg <= input_1_eth_hdr_ready_next;
+        input_0_eth_payload_tready_reg <= input_0_eth_payload_tready_next;
+        input_1_eth_payload_tready_reg <= input_1_eth_payload_tready_next;
+        output_eth_hdr_valid_reg <= output_eth_hdr_valid_next;
+        output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+        output_eth_src_mac_reg <= output_eth_src_mac_next;
+        output_eth_type_reg <= output_eth_type_next;
+    end
+end
+
+// output datapath logic
+reg [7:0] output_eth_payload_tdata_reg = 0;
+reg       output_eth_payload_tvalid_reg = 0;
+reg       output_eth_payload_tlast_reg = 0;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_demux_64_4.v@231:267
+    output_eth_payload_tvalid_int = input_eth_payload_tvalid & input_eth_payload_tready;
+    output_eth_payload_tlast_int = input_eth_payload_tlast;
+    output_eth_payload_tuser_int = input_eth_payload_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_eth_hdr_ready_reg <= 0;
+        input_eth_payload_tready_reg <= 0;
+        output_0_eth_hdr_valid_reg <= 0;
+        output_1_eth_hdr_valid_reg <= 0;
+        output_2_eth_hdr_valid_reg <= 0;
+        output_3_eth_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_eth_hdr_ready_reg <= input_eth_hdr_ready_next;
+        input_eth_payload_tready_reg <= input_eth_payload_tready_next;
+        output_0_eth_hdr_valid_reg <= output_0_eth_hdr_valid_next;
+        output_1_eth_hdr_valid_reg <= output_1_eth_hdr_valid_next;
+        output_2_eth_hdr_valid_reg <= output_2_eth_hdr_valid_next;
+        output_3_eth_hdr_valid_reg <= output_3_eth_hdr_valid_next;
+        output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+        output_eth_src_mac_reg <= output_eth_src_mac_next;
+        output_eth_type_reg <= output_eth_type_next;
+    end
+end
+
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_0_eth_payload_tvalid_reg = 0;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/eth_mux_64_2.v@215:249
+    output_eth_payload_tvalid_int = current_input_tvalid & current_input_tready & frame_reg;
+    output_eth_payload_tlast_int = current_input_tlast;
+    output_eth_payload_tuser_int = current_input_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_0_eth_hdr_ready_reg <= 0;
+        input_1_eth_hdr_ready_reg <= 0;
+        input_0_eth_payload_tready_reg <= 0;
+        input_1_eth_payload_tready_reg <= 0;
+        output_eth_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_0_eth_hdr_ready_reg <= input_0_eth_hdr_ready_next;
+        input_1_eth_hdr_ready_reg <= input_1_eth_hdr_ready_next;
+        input_0_eth_payload_tready_reg <= input_0_eth_payload_tready_next;
+        input_1_eth_payload_tready_reg <= input_1_eth_payload_tready_next;
+        output_eth_hdr_valid_reg <= output_eth_hdr_valid_next;
+        output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+        output_eth_src_mac_reg <= output_eth_src_mac_next;
+        output_eth_type_reg <= output_eth_type_next;
+    end
+end
+
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+

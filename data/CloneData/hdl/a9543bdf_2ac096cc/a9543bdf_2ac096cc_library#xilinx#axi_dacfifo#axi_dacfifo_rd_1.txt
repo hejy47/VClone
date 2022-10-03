@@ -1,0 +1,46 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/axi_dacfifo_rd.v@173:183@HdlStmAssign
+
+  // read data channel
+
+  assign axi_last_beats_s = {1'b0, axi_last_beats} - 1;
+  assign axi_dvalid_s = ((axi_last_beats_cntr > axi_last_beats_s) && (axi_araddr_prev == axi_last_raddr)) ? 0 : axi_rvalid & axi_rready;
+  assign axi_dlast_s = (axi_araddr_prev == axi_last_raddr) ? 1 : 0;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_ddata <= 'd0;
+      axi_rready <= 1'b0;
+
+Diff Content:
+- 178   assign axi_dlast_s = (axi_araddr_prev == axi_last_raddr) ? 1 : 0;
++ 178   assign axi_dlast_s = (axi_araddr == axi_last_raddr) ? 1 : 0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/axi_dacfifo/axi_dacfifo_rd.v@171:181
+    end
+  end
+
+  // read data channel
+
+  assign axi_last_beats_s = {1'b0, axi_last_beats} - 1;
+  assign axi_dvalid_s = ((axi_last_beats_cntr > axi_last_beats_s) && (axi_araddr_prev == axi_last_raddr)) ? 0 : axi_rvalid & axi_rready;
+  assign axi_dlast_s = (axi_araddr_prev == axi_last_raddr) ? 1 : 0;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+
+Clone Blocks 2:
+hdl/library/xilinx/axi_dacfifo/axi_dacfifo_rd.v@172:182
+  end
+
+  // read data channel
+
+  assign axi_last_beats_s = {1'b0, axi_last_beats} - 1;
+  assign axi_dvalid_s = ((axi_last_beats_cntr > axi_last_beats_s) && (axi_araddr_prev == axi_last_raddr)) ? 0 : axi_rvalid & axi_rready;
+  assign axi_dlast_s = (axi_araddr_prev == axi_last_raddr) ? 1 : 0;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_ddata <= 'd0;
+

@@ -1,0 +1,92 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3913:3923@HdlStmAssign
+   
+   //# Read (for dispatch)
+   assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+   //# Read (first short word of the next transaction to dispatch)
+   assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
+
+   //# Read (second short word of the next transaction to dispatch)
+   assign traninfo1_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo1_tlc[FAD-1:0]];
+
+   //# Read (third short word of the next transaction to dispatch)
+
+Diff Content:
+- 3918    assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
++ 3918    link_txo_wr link_txo_wr(.cfg_burst_dis	(txo_cfg_reg[4]),
++ 3918 			   .cfg_multicast_dis	(txo_cfg_reg[5]),
++ 3918 			   .txo_wr_wait_int	(txo_wr_wait_int),
++ 3918 			   /*AUTOINST*/
++ 3918 			   .txo_wr_data_even	(txo_wr_data_even[LW-1:0]),
++ 3918 			   .txo_wr_data_odd	(txo_wr_data_odd[LW-1:0]),
++ 3918 			   .txo_wr_frame	(txo_wr_frame),
++ 3918 			   .txo_wr_launch_req_tlc(txo_wr_launch_req_tlc),
++ 3918 			   .txo_wr_rotate_dis	(txo_wr_rotate_dis),
++ 3918 			   .c0_emesh_wait_out	(c0_emesh_wait_out),
++ 3918 			   .c1_emesh_wait_out	(c1_emesh_wait_out),
++ 3918 			   .c2_emesh_wait_out	(c2_emesh_wait_out),
++ 3918 			   .c3_emesh_wait_out	(c3_emesh_wait_out),
++ 3918 			   .c0_mesh_wait_out	(c0_mesh_wait_out),
++ 3918 			   .c3_mesh_wait_out	(c3_mesh_wait_out),
++ 3918 			   .txo_lclk		(txo_lclk),
++ 3918 			   .reset		(reset),
++ 3918 			   .ext_yid_k		(ext_yid_k[3:0]),
++ 3918 			   .ext_xid_k		(ext_xid_k[3:0]),
++ 3918 			   .who_am_i		(who_am_i[3:0]),
++ 3918 			   .txo_wr_wait		(txo_wr_wait),
++ 3918 			   .c0_clk_in		(c0_clk_in),
++ 3918 			   .c1_clk_in		(c1_clk_in),
++ 3918 			   .c2_clk_in		(c2_clk_in),
++ 3918 			   .c3_clk_in		(c3_clk_in),
++ 3918 			   .c0_emesh_tran_in	(c0_emesh_tran_in[2*LW-1:0]),
++ 3918 			   .c0_emesh_frame_in	(c0_emesh_frame_in),
++ 3918 			   .c1_emesh_tran_in	(c1_emesh_tran_in[2*LW-1:0]),
++ 3918 			   .c1_emesh_frame_in	(c1_emesh_frame_in),
++ 3918 			   .c2_emesh_tran_in	(c2_emesh_tran_in[2*LW-1:0]),
++ 3918 			   .c2_emesh_frame_in	(c2_emesh_frame_in),
++ 3918 			   .c3_emesh_tran_in	(c3_emesh_tran_in[2*LW-1:0]),
++ 3918 			   .c3_emesh_frame_in	(c3_emesh_frame_in),
++ 3918 			   .c0_mesh_access_in	(c0_mesh_access_in),
++ 3918 			   .c0_mesh_write_in	(c0_mesh_write_in),
++ 3918 			   .c0_mesh_dstaddr_in	(c0_mesh_dstaddr_in[AW-1:0]),
++ 3918 			   .c0_mesh_srcaddr_in	(c0_mesh_srcaddr_in[AW-1:0]),
++ 3918 			   .c0_mesh_data_in	(c0_mesh_data_in[DW-1:0]),
++ 3918 			   .c0_mesh_datamode_in	(c0_mesh_datamode_in[1:0]),
++ 3918 			   .c0_mesh_ctrlmode_in	(c0_mesh_ctrlmode_in[3:0]),
++ 3918 			   .c3_mesh_access_in	(c3_mesh_access_in),
++ 3918 			   .c3_mesh_write_in	(c3_mesh_write_in),
++ 3918 			   .c3_mesh_dstaddr_in	(c3_mesh_dstaddr_in[AW-1:0]),
++ 3918 			   .c3_mesh_srcaddr_in	(c3_mesh_srcaddr_in[AW-1:0]),
++ 3918 			   .c3_mesh_data_in	(c3_mesh_data_in[DW-1:0]),
++ 3918 			   .c3_mesh_datamode_in	(c3_mesh_datamode_in[1:0]),
++ 3918 			   .c3_mesh_ctrlmode_in	(c3_mesh_ctrlmode_in[3:0]));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3910:3920
+     if (cclk_en)
+       if (wr_write)
+	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
+   
+   //# Read (for dispatch)
+   assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+   //# Read (first short word of the next transaction to dispatch)
+   assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
+
+   //# Read (second short word of the next transaction to dispatch)
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@3916:3926
+
+   //# Read (first short word of the next transaction to dispatch)
+   assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
+
+   //# Read (second short word of the next transaction to dispatch)
+   assign traninfo1_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo1_tlc[FAD-1:0]];
+
+   //# Read (third short word of the next transaction to dispatch)
+   assign traninfo2_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo2_tlc[FAD-1:0]];
+
+   assign next_ctrlmode_tlc[3:0]   = traninfo0_tlc[LW-1:LW-4];
+

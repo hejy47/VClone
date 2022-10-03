@@ -1,0 +1,32 @@
+Source Block: hdl/projects/daq1/cpld/daq1_cpld.v@144:168@HdlStmProcess
+  wire          rdnwr;
+  wire          cpld_rdata_s;
+
+  // SCLK counter for control signals
+
+  always @(posedge fmc_spi_sclk or posedge fmc_spi_csn) begin
+    if (fmc_spi_csn == 1'b1) begin
+      fmc_spi_counter <= 6'h0;
+      fmc_spi_dev_sel <= 8'h0;
+      fmc_cpld_addr <= 8'h0;
+    end else begin
+      fmc_spi_counter <= fmc_spi_counter + 1;
+      if (fmc_spi_counter <= 7) begin
+        fmc_spi_dev_sel <= {fmc_spi_dev_sel[6:0], fmc_spi_sdio};
+      end
+      if (fmc_spi_counter <= 15) begin
+        fmc_cpld_addr <= {fmc_cpld_addr[6:0], fmc_spi_sdio};
+      end
+    end
+  end
+
+  // chip select control
+
+  assign adc_spicsn = (fmc_spi_dev_sel == FMC_SPI_SEL_AD9684) ? (fmc_spi_csn | fmc_spi_csn_enb) : 1'b1;
+  assign dac_spicsn = (fmc_spi_dev_sel == FMC_SPI_SEL_AD9122) ? (fmc_spi_csn | fmc_spi_csn_enb) : 1'b1;
+
+Diff Content:
+- 151       fmc_spi_counter <= 6'h0;
+- 155       fmc_spi_counter <= fmc_spi_counter + 1;
+
+Clone Blocks:

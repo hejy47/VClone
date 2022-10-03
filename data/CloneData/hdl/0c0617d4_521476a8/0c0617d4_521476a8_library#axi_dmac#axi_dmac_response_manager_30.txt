@@ -1,0 +1,68 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@156:177@HdlStmProcess
+end
+
+assign response_eot = (state == STATE_WRITE_RESPR) ? req_eot : 1'b1;
+assign response_partial = (state == STATE_WRITE_RESPR) ? req_response_partial : 1'b0;
+
+always @(posedge req_clk)
+begin
+  if (req_resetn == 1'b0) begin
+    response_valid <= 1'b0;
+  end else begin
+    if (nx_state == STATE_WRITE_RESPR || nx_state == STATE_WRITE_ZRCMPL) begin
+      response_valid <= 1'b1;
+    end else if (response_ready == 1'b1) begin
+      response_valid <= 1'b0;
+    end
+  end
+end
+
+always @(posedge req_clk)
+begin
+  if (state == STATE_ZERO_COMPL) begin
+    measured_burst_length <= {BYTES_PER_BURST_WIDTH{1'b1}};
+
+Diff Content:
+- 161 always @(posedge req_clk)
+- 162 begin
+- 163   if (req_resetn == 1'b0) begin
+- 164     response_valid <= 1'b0;
+- 165   end else begin
+- 166     if (nx_state == STATE_WRITE_RESPR || nx_state == STATE_WRITE_ZRCMPL) begin
+- 167       response_valid <= 1'b1;
+- 168     end else if (response_ready == 1'b1) begin
+- 172 end
++ 168   assign response_eot = (state == STATE_WRITE_RESPR) ? req_eot : 1'b1;
++ 168   assign response_partial = (state == STATE_WRITE_RESPR) ? req_response_partial : 1'b0;
++ 168   always @(posedge req_clk)
++ 168   begin
++ 168     if (req_resetn == 1'b0) begin
++ 169     end else begin
++ 169       if (nx_state == STATE_WRITE_RESPR || nx_state == STATE_WRITE_ZRCMPL) begin
++ 169         response_valid <= 1'b1;
++ 169       end else if (response_ready == 1'b1) begin
++ 169         response_valid <= 1'b0;
++ 169       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_response_manager.v@144:161
+    req_response_partial <= response_dest_partial;
+    req_response_dest_data_burst_length <= response_dest_data_burst_length;
+  end
+end
+
+always @(posedge req_clk)
+begin
+  if (req_resetn == 1'b0) begin
+    response_dest_ready <= 1'b1;
+  end else begin
+    response_dest_ready <= (nx_state == STATE_IDLE);
+  end
+end
+
+assign response_eot = (state == STATE_WRITE_RESPR) ? req_eot : 1'b1;
+assign response_partial = (state == STATE_WRITE_RESPR) ? req_response_partial : 1'b0;
+
+always @(posedge req_clk)
+

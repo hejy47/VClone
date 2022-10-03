@@ -1,0 +1,38 @@
+Source Block: hdl/library/cn0363/cn0363_phase_data_sync/cn0363_phase_data_sync.v@139:157@HdlStmProcess
+  if (s_axis_sample_valid == 1'b1 && data_counter != 2'h3) begin
+    sample_hold <= {sample_hold[15:0],s_axis_sample_data};
+  end
+end
+
+always @(posedge clk) begin
+  if (s_axis_sample_valid == 1'b1) begin
+    if (data_counter == 2'h2 && sample_has_stat == 1'b0) begin
+      data_counter <= 2'h0;
+    end else begin
+      data_counter <= data_counter + 1'b1;
+    end
+  end
+end
+
+assign sync = s_axis_sample_data[3:0] == 'h00 && data_counter == 'h3;
+
+always @(posedge clk) begin
+  if (processing_resetn == 1'b0) begin
+
+Diff Content:
+- 144 always @(posedge clk) begin
+- 145   if (s_axis_sample_valid == 1'b1) begin
+- 146     if (data_counter == 2'h2 && sample_has_stat == 1'b0) begin
+- 147       data_counter <= 2'h0;
+- 148     end else begin
+- 149       data_counter <= data_counter + 1'b1;
+- 152 end
++ 149   always @(posedge clk) begin
++ 149     if (s_axis_sample_valid == 1'b1) begin
++ 149       if (data_counter == 2'h2 && sample_has_stat == 1'b0) begin
++ 149         data_counter <= 2'h0;
++ 149       end else begin
++ 149         data_counter <= data_counter + 1'b1;
++ 149       end
+
+Clone Blocks:

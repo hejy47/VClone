@@ -1,0 +1,32 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4533:4548@HdlStmProcess
+     if(reset)
+       tran_frame <= 1'b0;
+     else
+       tran_frame <= txo_launch_ack_del2;
+
+   always @ (posedge txo_lclk)
+     begin
+	byte_odd_del[LW-1:0]   <= byte_odd[LW-1:0];
+	tran_byte_odd[LW-1:0]  <= byte_odd_del[LW-1:0];
+	tran_byte_even[LW-1:0] <= byte_even[LW-1:0];
+     end
+
+   //###################
+   //# ERROR CHECKERS 
+   //###################
+   // synthesis translate_off
+
+Diff Content:
+- 4538    always @ (posedge txo_lclk)
+- 4539      begin
+- 4540 	byte_odd_del[LW-1:0]   <= byte_odd[LW-1:0];
+- 4541 	tran_byte_odd[LW-1:0]  <= byte_odd_del[LW-1:0];
+- 4542 	tran_byte_even[LW-1:0] <= byte_even[LW-1:0];
+- 4543      end
++ 4543    always @ (negedge txo_lclk or posedge reset)
++ 4543      if (reset)
++ 4543        data_even_lsh[LW-1:0] <= {(LW){1'b0}};
++ 4543      else
++ 4543        data_even_lsh[LW-1:0]  <= data_even_lsl[LW-1:0];
+
+Clone Blocks:

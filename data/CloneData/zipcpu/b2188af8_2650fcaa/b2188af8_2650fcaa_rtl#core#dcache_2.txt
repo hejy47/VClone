@@ -1,0 +1,73 @@
+Source Block: zipcpu/rtl/core/dcache.v@90:100@HdlIdDef
+			LGNLINES=5, // Log of the number of separate cache lines
+			NAUX=5;	// # of aux d-wires to keep aligned w/memops
+	parameter [0:0]	OPT_LOCAL_BUS=1'b1;
+	parameter [0:0]	OPT_LOCK=1'b1;
+	localparam 	SDRAM_BIT = 26;
+	localparam	FLASH_BIT = 22;
+	localparam	BLKRAM_BIT= 15;
+	localparam	AW = ADDRESS_WIDTH; // Just for ease of notation below
+	localparam	CS = LGCACHELEN; // Number of bits in a cache address
+	localparam	LS = CS-LGNLINES; // Bits to spec position w/in cline
+	localparam	LGAUX = 3; // log_2 of the maximum number of piped data
+
+Diff Content:
+- 95 	localparam	FLASH_BIT = 22;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/dcache.v@92:102
+	parameter [0:0]	OPT_LOCAL_BUS=1'b1;
+	parameter [0:0]	OPT_LOCK=1'b1;
+	localparam 	SDRAM_BIT = 26;
+	localparam	FLASH_BIT = 22;
+	localparam	BLKRAM_BIT= 15;
+	localparam	AW = ADDRESS_WIDTH; // Just for ease of notation below
+	localparam	CS = LGCACHELEN; // Number of bits in a cache address
+	localparam	LS = CS-LGNLINES; // Bits to spec position w/in cline
+	localparam	LGAUX = 3; // log_2 of the maximum number of piped data
+	localparam	DW = 32; // Bus data width
+	input			i_clk, i_reset;
+
+Clone Blocks 2:
+zipcpu/rtl/core/dcache.v@89:99
+			ADDRESS_WIDTH=30,
+			LGNLINES=5, // Log of the number of separate cache lines
+			NAUX=5;	// # of aux d-wires to keep aligned w/memops
+	parameter [0:0]	OPT_LOCAL_BUS=1'b1;
+	parameter [0:0]	OPT_LOCK=1'b1;
+	localparam 	SDRAM_BIT = 26;
+	localparam	FLASH_BIT = 22;
+	localparam	BLKRAM_BIT= 15;
+	localparam	AW = ADDRESS_WIDTH; // Just for ease of notation below
+	localparam	CS = LGCACHELEN; // Number of bits in a cache address
+	localparam	LS = CS-LGNLINES; // Bits to spec position w/in cline
+
+Clone Blocks 3:
+zipcpu/rtl/core/dcache.v@91:101
+			NAUX=5;	// # of aux d-wires to keep aligned w/memops
+	parameter [0:0]	OPT_LOCAL_BUS=1'b1;
+	parameter [0:0]	OPT_LOCK=1'b1;
+	localparam 	SDRAM_BIT = 26;
+	localparam	FLASH_BIT = 22;
+	localparam	BLKRAM_BIT= 15;
+	localparam	AW = ADDRESS_WIDTH; // Just for ease of notation below
+	localparam	CS = LGCACHELEN; // Number of bits in a cache address
+	localparam	LS = CS-LGNLINES; // Bits to spec position w/in cline
+	localparam	LGAUX = 3; // log_2 of the maximum number of piped data
+	localparam	DW = 32; // Bus data width
+
+Clone Blocks 4:
+zipcpu/rtl/core/dcache.v@93:103
+	parameter [0:0]	OPT_LOCK=1'b1;
+	localparam 	SDRAM_BIT = 26;
+	localparam	FLASH_BIT = 22;
+	localparam	BLKRAM_BIT= 15;
+	localparam	AW = ADDRESS_WIDTH; // Just for ease of notation below
+	localparam	CS = LGCACHELEN; // Number of bits in a cache address
+	localparam	LS = CS-LGNLINES; // Bits to spec position w/in cline
+	localparam	LGAUX = 3; // log_2 of the maximum number of piped data
+	localparam	DW = 32; // Bus data width
+	input			i_clk, i_reset;
+	// Interface from the CPU
+

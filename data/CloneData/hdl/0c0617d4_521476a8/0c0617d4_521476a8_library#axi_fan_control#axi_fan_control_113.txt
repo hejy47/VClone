@@ -1,0 +1,65 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@703:734@HdlStmProcess
+    up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
+  end
+end
+
+//tacho measurement logic
+always @(posedge up_clk) begin
+  if (up_resetn == 1'b0) begin
+    tacho_edge_det <= 'h0;
+    tacho_meas <= 'h0;
+    tacho_meas_new <= 'h0;
+    tacho_delayed <= 'h0;
+  end else begin
+    //edge detection of tacho signal
+    tacho_delayed <= tacho;
+    tacho_edge_det <= tacho & ~tacho_delayed;
+    if ((tacho_edge_det == 1'b1) && (pwm_change_done)) begin
+      //measurement is recorded
+      tacho_meas <= counter_reg;
+      //signal indicates new measurement completed
+      tacho_meas_new <= 1'b1;
+    end else if(tacho_meas_ack == 1'b1) begin
+      //acknowledge received from state machine
+      //resetting new measurement flag
+      tacho_meas_new <= 'h0;
+    end
+  end
+end
+
+//pwm change proc
+always @(posedge up_clk) begin
+  if (up_resetn == 1'b0) begin
+    pwm_change_done <= 1'b1;
+
+Diff Content:
+- 708 always @(posedge up_clk) begin
+- 709   if (up_resetn == 1'b0) begin
+- 710     tacho_edge_det <= 'h0;
+- 711     tacho_meas <= 'h0;
+- 712     tacho_meas_new <= 'h0;
+- 713     tacho_delayed <= 'h0;
+- 714   end else begin
+- 716     tacho_delayed <= tacho;
+- 717     tacho_edge_det <= tacho & ~tacho_delayed;
+- 718     if ((tacho_edge_det == 1'b1) && (pwm_change_done)) begin
+- 720       tacho_meas <= counter_reg;
+- 722       tacho_meas_new <= 1'b1;
+- 723     end else if(tacho_meas_ack == 1'b1) begin
+- 729 end
++ 723   always @(posedge up_clk) begin
++ 723     if (up_resetn == 1'b0) begin
++ 723       tacho_edge_det <= 'h0;
++ 723       tacho_meas <= 'h0;
++ 726       tacho_delayed <= 'h0;
++ 726     end else begin
++ 726       tacho_delayed <= tacho;
++ 726       tacho_edge_det <= tacho & ~tacho_delayed;
++ 726       if ((tacho_edge_det == 1'b1) && (pwm_change_done)) begin
++ 726         tacho_meas <= counter_reg;
++ 726         tacho_meas_new <= 1'b1;
++ 726       end else if(tacho_meas_ack == 1'b1) begin
++ 726         tacho_meas_new <= 'h0;
++ 726       end
+
+Clone Blocks:

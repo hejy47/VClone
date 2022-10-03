@@ -1,0 +1,51 @@
+Source Block: oh/esaxi/hdl/esaxi_v1_0_S00_AXI.v@530:566@HdlStmProcess
+   // Handle eLink response data
+
+   // always read response data immediately
+   assign emrr_rd_en = ~emrr_empty;
+
+   always @( posedge S_AXI_ACLK ) begin
+      if ( S_AXI_ARESETN == 1'b0 ) begin
+
+         axi_rvalid <= 1'b0;
+         axi_rdata  <= 'd0;
+         axi_rresp  <= 2'd0;
+
+      end else begin
+
+         if( ~emrr_empty ) begin
+
+            axi_rvalid <= 1'b1;
+            axi_rresp  <= 2'd0;
+
+            case( axi_araddr[1:0] )
+
+              2'b00: axi_rdata <= emrr_rd_data[31:0];
+              2'b01: axi_rdata <= {emrr_rd_data[23:0], 8'd0};
+              2'b10: axi_rdata <= {emrr_rd_data[15:0], 16'd0};
+              default: axi_rdata <= {emrr_rd_data[7:0], 24'd0};
+
+            endcase // case ( axi_araddr[1:0] }...
+
+         end else if( S_AXI_RREADY ) begin // if ( ~emrr_empty )
+
+            axi_rvalid <= 1'b0;
+
+         end
+      end // else: !if( S_AXI_ARESETN == 1'b0 )
+   end // always @ ( posedge S_AXI_ACLK )
+   
+endmodule
+
+Diff Content:
+- 549             case( axi_araddr[1:0] )
+- 551               2'b00: axi_rdata <= emrr_rd_data[31:0];
+- 552               2'b01: axi_rdata <= {emrr_rd_data[23:0], 8'd0};
+- 553               2'b10: axi_rdata <= {emrr_rd_data[15:0], 16'd0};
+- 554               default: axi_rdata <= {emrr_rd_data[7:0], 24'd0};
++ 549             case( axi_arsize[1:0] )
++ 554               2'b00: axi_rdata <= {4{emrr_rd_data[7:0]}};
++ 554               2'b01: axi_rdata <= {2{emrr_rd_data[15:0]}};
++ 554               default: axi_rdata <= emrr_rd_data;
+
+Clone Blocks:

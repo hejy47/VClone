@@ -1,0 +1,37 @@
+Source Block: oh/elink/hdl/ecfg_if.v@127:138@HdlStmAssign
+   assign mi_addr[19:0] =  rx_wr ? rxwr_dstaddr[19:0] :
+			   tx_rd ? txrd_dstaddr[19:0] :
+			           txwr_dstaddr[19:0];
+   
+   //Data (prepare for it)
+   assign mi_din[63:0]  =  rx_wr ? {rxwr_srcaddr[31:0],rxwr_data[31:0]} :
+                                   {txwr_srcaddr[31:0],txwr_data[31:0]};
+
+   //Interface clock (gate?)
+   assign mi_clk = sys_clk;
+   
+   //Wait signals
+
+Diff Content:
+- 132    assign mi_din[63:0]  =  rx_wr ? {rxwr_srcaddr[31:0],rxwr_data[31:0]} :
+- 133                                    {txwr_srcaddr[31:0],txwr_data[31:0]};
++ 133    assign mi_din[63:0]  =  rx_wr ? rxwr_data[63:0] :
++ 133                                    txwr_data[63:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/ecfg_if.v@122:134
+   //DODO: 64 bit writes?
+   assign mi_we         =  mi_wr;   
+   assign mi_en         =  mi_wr | mi_rd;
+
+   //Read/write address
+   assign mi_addr[19:0] =  rx_wr ? rxwr_dstaddr[19:0] :
+			   tx_rd ? txrd_dstaddr[19:0] :
+			           txwr_dstaddr[19:0];
+   
+   //Data (prepare for it)
+   assign mi_din[63:0]  =  rx_wr ? {rxwr_srcaddr[31:0],rxwr_data[31:0]} :
+                                   {txwr_srcaddr[31:0],txwr_data[31:0]};
+
+

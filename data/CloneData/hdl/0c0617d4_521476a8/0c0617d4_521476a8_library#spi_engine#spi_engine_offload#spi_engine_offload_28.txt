@@ -1,0 +1,17 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@180:190@HdlStmAssign
+ * offload command sequence through SPI Engine regmap
+ */
+
+assign status_sync_data = sync_data;
+assign status_sync_valid = sync_valid;
+assign sync_ready = status_sync_ready;
+
+generate if (ASYNC_SPI_CLK) begin
+
+/*
+ * The synchronization circuit takes care that there are no glitches on the
+
+Diff Content:
+- 185 assign sync_ready = status_sync_ready;
+
+Clone Blocks:

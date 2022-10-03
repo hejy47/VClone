@@ -1,0 +1,63 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@233:251@HdlStmProcess
+
+assign do_compl = (state == STATE_WRITE_ZRCMPL) && response_ready;
+
+// Once the last completion request from request generator is received
+// we can wait for completions from the destination side
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    completion_req_last_found <= 1'b0;
+  end else if (completion_req) begin
+    completion_req_last_found <= completion_req_last;
+  end else if (state ==STATE_ZERO_COMPL && ~(|to_complete_count)) begin
+    completion_req_last_found <= 1'b0;
+  end
+end
+
+// Once the last completion is received wit until all completions are done
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    completion_req_ready <= 1'b1;
+
+Diff Content:
+- 238 always @(posedge req_clk) begin
+- 239   if (req_resetn == 1'b0) begin
+- 240     completion_req_last_found <= 1'b0;
+- 241   end else if (completion_req) begin
+- 242     completion_req_last_found <= completion_req_last;
+- 243   end else if (state ==STATE_ZERO_COMPL && ~(|to_complete_count)) begin
+- 244     completion_req_last_found <= 1'b0;
+- 246 end
++ 244   assign do_compl = (state == STATE_WRITE_ZRCMPL) && response_ready;
++ 244   always @(posedge req_clk) begin
++ 244     if (req_resetn == 1'b0) begin
++ 244       completion_req_last_found <= 1'b0;
++ 244     end else if (completion_req) begin
++ 244       completion_req_last_found <= completion_req_last;
++ 244     end else if (state ==STATE_ZERO_COMPL && ~(|to_complete_count)) begin
++ 244       completion_req_last_found <= 1'b0;
++ 244     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_response_manager.v@244:262
+    completion_req_last_found <= 1'b0;
+  end
+end
+
+// Once the last completion is received wit until all completions are done
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    completion_req_ready <= 1'b1;
+  end else if (completion_req_valid && completion_req_last) begin
+    completion_req_ready <= 1'b0;
+  end else if (to_complete_count == 0) begin
+    completion_req_ready <= 1'b1;
+  end
+end
+
+assign completion_req = completion_req_ready && completion_req_valid;
+
+// Track transfers so we can tell when did the destination completed all its
+// transfers
+

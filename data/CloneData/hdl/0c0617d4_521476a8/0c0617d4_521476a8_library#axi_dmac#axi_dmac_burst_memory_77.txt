@@ -1,0 +1,85 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@317:331@HdlStmProcess
+    dest_id_next <= dest_id_next_inc;
+    dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_ready == 1'b1) begin
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+
+Diff Content:
+- 322 always @(posedge dest_clk) begin
+- 323   if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+- 324     dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+- 326 end
++ 324   assign dest_ready = ~dest_mem_data_valid | dest_mem_data_ready;
++ 324   assign dest_last = dest_beat_counter == dest_burst_len;
++ 324   assign dest_beat = dest_valid & dest_ready;
++ 324   assign dest_last_beat = dest_last & dest_beat;
++ 324   assign dest_raddr = {dest_id_reduced,dest_beat_counter};
++ 324   assign dest_burst_valid = dest_data_request_id != dest_id_next;
++ 324   assign dest_burst_ready = ~dest_valid | dest_last_beat;
++ 324   /*
++ 324    * The data valid signal for the destination side is asserted if there are one
++ 324    * or more pending bursts. It is de-asserted if there are no more pending burst
++ 324    * and it is the last beat of the current burst
++ 324    */
++ 324   always @(posedge dest_clk) begin
++ 324     if (dest_reset == 1'b1) begin
++ 324       dest_valid <= 1'b0;
++ 324     end else if (dest_burst_valid == 1'b1) begin
++ 324       dest_valid <= 1'b1;
++ 324     end else if (dest_last_beat == 1'b1) begin
++ 324       dest_valid <= 1'b0;
++ 324     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@323:338
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_ready == 1'b1) begin
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
+    dest_beat_counter <= 'h00;
+  end else if (dest_beat == 1'b1) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@307:325
+  end
+end
+
+assign dest_id_next_inc = inc_id(dest_id_next);
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_id_next <= 'h00;
+    dest_id_reduced_msb_next <= 1'b0;
+  end else if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_id_next <= dest_id_next_inc;
+    dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+

@@ -1,0 +1,55 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/util_dacfifo_bypass.v@205:225@HdlStmProcess
+
+  // Read address generation for the asymmetric memory
+
+  assign dac_mem_rea_s = dac_valid & dac_mem_ready;
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_mem_raddr <= 'h0;
+      dac_mem_raddr_g <= 'h0;
+    end else begin
+      if (dac_mem_rea_s == 1'b1) begin
+        dac_mem_raddr <= dac_mem_raddr + 1;
+      end
+      dac_mem_raddr_g <= dac_mem_raddr_b2g_s;
+    end
+  end
+
+  ad_b2g #(
+    .DATA_WIDTH (DAC_ADDRESS_WIDTH))
+  i_dac_mem_raddr_b2g (
+    .din (dac_mem_raddr),
+
+Diff Content:
+- 216         dac_mem_raddr <= dac_mem_raddr + 1;
++ 216         dac_mem_raddr <= dac_mem_raddr + 1'b1;
++ 220   always @(posedge dac_clk) begin
++ 220     dac_mem_rea <= dac_mem_rea_s;
++ 220   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/altera/avl_dacfifo/util_dacfifo_bypass.v@200:220
+
+  // Read address generation for the asymmetric memory
+
+  assign dac_mem_rea_s = dac_valid & dac_mem_ready;
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_mem_raddr <= 'h0;
+      dac_mem_raddr_g <= 'h0;
+    end else begin
+      if (dac_mem_rea_s == 1'b1) begin
+        dac_mem_raddr <= dac_mem_raddr + 1'b1;
+      end
+      dac_mem_raddr_g <= dac_mem_raddr_b2g_s;
+    end
+  end
+
+  ad_b2g #(
+    .DATA_WIDTH (DAC_ADDRESS_WIDTH))
+  i_dac_mem_raddr_b2g (
+    .din (dac_mem_raddr),
+

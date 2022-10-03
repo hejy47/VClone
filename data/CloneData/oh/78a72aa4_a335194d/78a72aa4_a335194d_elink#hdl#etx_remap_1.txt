@@ -1,0 +1,31 @@
+Source Block: oh/elink/hdl/etx_remap.v@35:45@HdlStmAssign
+   
+   reg 		   emesh_access_out;
+   reg [PW-1:0]    emesh_packet_out;
+
+   
+   assign addr_in[31:0]   =  emesh_packet_in[39:8];
+   assign write_in        =  emesh_packet_in[1];
+      
+   assign addr_remap[31:0] = {addr_in[29:18],//ID
+			      addr_in[17:16],//SPECIAL GROUP
+                             {(2){(|addr_in[17:16])}},//ZERO IF NOT SPECIAL
+
+Diff Content:
+- 40    assign addr_in[31:0]   =  emesh_packet_in[39:8];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_remap.v@36:46
+   reg 		   emesh_access_out;
+   reg [PW-1:0]    emesh_packet_out;
+
+   
+   assign addr_in[31:0]   =  emesh_packet_in[39:8];
+   assign write_in        =  emesh_packet_in[1];
+      
+   assign addr_remap[31:0] = {addr_in[29:18],//ID
+			      addr_in[17:16],//SPECIAL GROUP
+                             {(2){(|addr_in[17:16])}},//ZERO IF NOT SPECIAL
+			     addr_in[15:0]
+

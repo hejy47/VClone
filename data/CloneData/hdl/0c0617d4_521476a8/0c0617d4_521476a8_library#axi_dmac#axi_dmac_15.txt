@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@290:302@HdlIdDef
+  (BYTES_PER_BURST_LIMIT_DEST < BYTES_PER_BURST_LIMIT_SRC) ?
+  BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
+
+/* Make sure the requested MAX_BYTES_PER_BURST does not exceed what the
+   interfaces can support. Limit the value if necessary. */
+localparam REAL_MAX_BYTES_PER_BURST =
+  BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
+    BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
+
+/* MM has no alignment requirements */
+localparam DMA_LENGTH_ALIGN_SRC =
+  DMA_TYPE_SRC == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_SRC;
+localparam DMA_LENGTH_ALIGN_DEST =
+
+Diff Content:
+- 295 localparam REAL_MAX_BYTES_PER_BURST =
+- 296   BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
+- 297     BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac.v@295:306
+localparam REAL_MAX_BYTES_PER_BURST =
+  BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
+    BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
+
+/* MM has no alignment requirements */
+localparam DMA_LENGTH_ALIGN_SRC =
+  DMA_TYPE_SRC == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_SRC;
+localparam DMA_LENGTH_ALIGN_DEST =
+  DMA_TYPE_DEST == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_DEST;
+
+/* Choose the larger of the two */
+ localparam DMA_LENGTH_ALIGN =
+

@@ -1,0 +1,50 @@
+Source Block: hdl/library/axi_adcfifo/axi_adcfifo_dma.v@61:72@HdlIdDef
+  parameter   DMA_DATA_WIDTH =  64;
+  parameter   DMA_READY_ENABLE = 1;
+
+  localparam  DMA_MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
+  localparam  DMA_ADDR_WIDTH = 8;
+  localparam  AXI_ADDR_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDR_WIDTH - 1) :
+    ((DMA_MEM_RATIO == 4) ? (DMA_ADDR_WIDTH - 2) : (DMA_ADDR_WIDTH - 3));
+ 
+  // adc write
+
+  input                           axi_clk;
+  input                           axi_drst;
+
+Diff Content:
+- 66   localparam  AXI_ADDR_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDR_WIDTH - 1) :
+- 67     ((DMA_MEM_RATIO == 4) ? (DMA_ADDR_WIDTH - 2) : (DMA_ADDR_WIDTH - 3));
++ 67   localparam  DMA_ADDRESS_WIDTH = 8;
++ 67   localparam  AXI_ADDRESS_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDRESS_WIDTH - 1) :
++ 67     ((DMA_MEM_RATIO == 4) ? (DMA_ADDRESS_WIDTH - 2) : (DMA_ADDRESS_WIDTH - 3));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adcfifo/axi_adcfifo_dma.v@59:69
+
+  parameter   AXI_DATA_WIDTH = 512;
+  parameter   DMA_DATA_WIDTH =  64;
+  parameter   DMA_READY_ENABLE = 1;
+
+  localparam  DMA_MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
+  localparam  DMA_ADDR_WIDTH = 8;
+  localparam  AXI_ADDR_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDR_WIDTH - 1) :
+    ((DMA_MEM_RATIO == 4) ? (DMA_ADDR_WIDTH - 2) : (DMA_ADDR_WIDTH - 3));
+ 
+  // adc write
+
+Clone Blocks 2:
+hdl/library/axi_adcfifo/axi_adcfifo_dma.v@60:70
+  parameter   AXI_DATA_WIDTH = 512;
+  parameter   DMA_DATA_WIDTH =  64;
+  parameter   DMA_READY_ENABLE = 1;
+
+  localparam  DMA_MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
+  localparam  DMA_ADDR_WIDTH = 8;
+  localparam  AXI_ADDR_WIDTH = (DMA_MEM_RATIO == 2) ? (DMA_ADDR_WIDTH - 1) :
+    ((DMA_MEM_RATIO == 4) ? (DMA_ADDR_WIDTH - 2) : (DMA_ADDR_WIDTH - 3));
+ 
+  // adc write
+
+

@@ -1,0 +1,48 @@
+Source Block: oh/spi/hdl/spi_master_io.v@50:60@HdlIdDef
+   input 	   miso;       // slave output
+
+   reg [7:0] 	   baud_counter = 'b0; //works b/c of free running counter!
+   reg [2:0] 	   spi_state;
+   reg [PW-1:0]    tx_shiftreg;
+   reg [7:0] 	   bit_count;
+   
+   //#################################
+   //# STATE MACHINE
+   //#################################
+   
+
+Diff Content:
+- 55    reg [7:0] 	   bit_count;
++ 55    reg [1:0] 	   spi_state;
++ 55    reg [2:0] 	   bit_count;
++ 55    reg 		   sclk;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_master_io.v@47:57
+   output 	   sclk;       // spi clock
+   output 	   mosi;       // slave input
+   output 	   ss;         // slave select
+   input 	   miso;       // slave output
+
+   reg [7:0] 	   baud_counter = 'b0; //works b/c of free running counter!
+   reg [2:0] 	   spi_state;
+   reg [PW-1:0]    tx_shiftreg;
+   reg [7:0] 	   bit_count;
+   
+   //#################################
+
+Clone Blocks 2:
+oh/spi/hdl/spi_master_io.v@49:59
+   output 	   ss;         // slave select
+   input 	   miso;       // slave output
+
+   reg [7:0] 	   baud_counter = 'b0; //works b/c of free running counter!
+   reg [2:0] 	   spi_state;
+   reg [PW-1:0]    tx_shiftreg;
+   reg [7:0] 	   bit_count;
+   
+   //#################################
+   //# STATE MACHINE
+   //#################################
+

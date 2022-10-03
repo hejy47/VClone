@@ -1,0 +1,33 @@
+Source Block: hdl/library/common/ad_pnmon.v@86:96@HdlStmAssign
+
+  // Ignore sporadic zeros in middle of pattern if not out of sync
+  // but OOS_THRESHOLD consecutive zeros would assert out of sync.
+  assign adc_valid_zero = ALLOW_ZERO_MASKING & adc_pattern_has_zero &
+                          ~adc_pn_oos_int & adc_pn_match_z_s;
+  assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s | adc_valid_zero);
+
+
+  // pn oos and counters (16 to clear and set).
+
+  assign adc_pn_oos = adc_pn_oos_int;
+
+Diff Content:
+- 91   assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s | adc_valid_zero);
++ 91   assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s | adc_valid_zero_d);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_pnmon.v@84:95
+  assign adc_pn_match_s = adc_pn_match_d & ~adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos_int ^ adc_pn_match_s);
+
+  // Ignore sporadic zeros in middle of pattern if not out of sync
+  // but OOS_THRESHOLD consecutive zeros would assert out of sync.
+  assign adc_valid_zero = ALLOW_ZERO_MASKING & adc_pattern_has_zero &
+                          ~adc_pn_oos_int & adc_pn_match_z_s;
+  assign adc_pn_err_s = ~(adc_pn_oos_int | adc_pn_match_s | adc_valid_zero);
+
+
+  // pn oos and counters (16 to clear and set).
+
+

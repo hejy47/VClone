@@ -1,0 +1,52 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@124:140@HdlStmProcess
+
+assign eomb  = sync_word[4:0] == 5'b00001;
+assign eoemb = sync_word[9] & eomb;
+
+
+always @(posedge clk) begin
+  if (next_state[BIT_EMB_INIT] || sh_count == cfg_beats_per_multiframe) begin
+    sh_count <= 'h0;
+  end else begin
+    sh_count <= sh_count + 8'b1;
+  end
+end
+
+reg [1:0] emb_vcount = 'b0;
+always @(posedge clk) begin
+  if (state[BIT_EMB_INIT]) begin
+    emb_vcount <= 'b0;
+
+Diff Content:
+- 129 always @(posedge clk) begin
+- 130   if (next_state[BIT_EMB_INIT] || sh_count == cfg_beats_per_multiframe) begin
+- 131     sh_count <= 'h0;
+- 132   end else begin
+- 133     sh_count <= sh_count + 8'b1;
+- 135 end
++ 133   assign crc12 = {sync_word[31:29],sync_word[27:25],
++ 133                   sync_word[23:21],sync_word[19:17]};
++ 133   assign crc3 = {sync_word[31:29]};
++ 133   assign cmd0 = {sync_word[15:13],sync_word[11],
++ 133                  sync_word[7:5]};
++ 133   assign cmd1 = {sync_word[27:25],
++ 133                  sync_word[19:17],
++ 133                  sync_word[11]};
++ 133   assign cmd3 = {sync_word[31:29],sync_word[27:25],
++ 133                  sync_word[23:21],sync_word[19:17],
++ 133                  sync_word[15:13],sync_word[11],
++ 133                  sync_word[7:5]};
++ 133   assign cmd = cfg_header_mode == 0 ? {12'b0,cmd0} :
++ 133                cfg_header_mode == 1 ? {12'b0,cmd1} :
++ 133                cfg_header_mode == 3 ? cmd3 : 'b0;
++ 133   assign fec = {sync_word[31:10],sync_word[8:5]};
++ 133   assign eomb  = sync_word[4:0] == 5'b00001;
++ 133   assign eoemb = sync_word[9] & eomb;
++ 133   always @(posedge clk) begin
++ 133     if (next_state[BIT_EMB_INIT] || sh_count == cfg_beats_per_multiframe) begin
++ 133       sh_count <= 'h0;
++ 133     end else begin
++ 133       sh_count <= sh_count + 8'b1;
++ 133     end
+
+Clone Blocks:

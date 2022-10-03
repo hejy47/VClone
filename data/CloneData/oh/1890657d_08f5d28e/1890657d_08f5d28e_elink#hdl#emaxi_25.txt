@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/emaxi.v@497:516@HdlStmProcess
+   assign  txrr_dstaddr_fifo[31:0] = readinfo_out[40:9];
+
+   //Pipeline axi transaction to account for FIFO read latency   
+   reg [63:0] 	 m_axi_rdata_fifo;
+   reg 		 txrr_access_fifo;   
+   always @( posedge m_axi_aclk)
+     if(!m_axi_aresetn) 
+       begin
+	  txrr_access_fifo      <= 1'b0;	  
+       end
+     else	 
+       begin
+	  txrr_access_fifo       <= fifo_rd_en;
+	  m_axi_rdata_fifo[63:0] <= m_axi_rdata[63:0];      
+       end
+
+   //Alignment Mux (one cycle)
+   always @ (posedge m_axi_aclk )
+     if(!m_axi_aresetn)
+       begin
+
+Diff Content:
+- 502    always @( posedge m_axi_aclk)
+- 505 	  txrr_access_fifo      <= 1'b0;	  
+- 509 	  txrr_access_fifo       <= fifo_rd_en;
+- 510 	  m_axi_rdata_fifo[63:0] <= m_axi_rdata[63:0];      
++ 502    always @ (posedge m_axi_aclk)
++ 505 	  txrr_access_fifo  <= 1'b0;	  
++ 505 	  txrr_access       <= 1'b0;	  
++ 510 	  txrr_access_fifo   <= fifo_rd_en;
++ 510 	  txrr_access        <= txrr_access_fifo;	  
+
+Clone Blocks:

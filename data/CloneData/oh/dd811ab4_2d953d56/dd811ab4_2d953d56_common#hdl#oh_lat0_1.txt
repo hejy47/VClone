@@ -1,0 +1,34 @@
+Source Block: oh/common/hdl/oh_lat0.v@28:40@HdlStmProcess
+   reg  [DW-1:0]   out_real_sh;
+
+ 
+   /* verilator lint_off COMBDLY */
+   // # Real lat0
+   always @ (/*AUTOSENSE*/clk or in_sl)
+     if (~clk)
+       out_real_sh[DW-1:0] <= in_sl[DW-1:0];
+   /* verilator lint_on COMBDLY */
+
+
+`ifdef DV_FAKELAT
+   // # negedge FF
+
+Diff Content:
+- 33    always @ (/*AUTOSENSE*/clk or in_sl)
++ 33    always @ (clk or in_sl)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_lat0.v@23:33
+
+   input  [DW-1:0] in_sl; 
+   input 	   clk;
+   output [DW-1:0] out_sh;
+
+   reg  [DW-1:0]   out_real_sh;
+
+ 
+   /* verilator lint_off COMBDLY */
+   // # Real lat0
+   always @ (/*AUTOSENSE*/clk or in_sl)
+

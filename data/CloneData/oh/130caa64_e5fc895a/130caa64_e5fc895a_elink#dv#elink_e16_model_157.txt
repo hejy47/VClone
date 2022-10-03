@@ -1,0 +1,40 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1544:1555@HdlStmProcess
+   //# even bytes
+   always @ (posedge rxi_lclk)
+     data_even_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+   //# odd bytes
+   always @ (negedge rxi_lclk)
+     data_odd_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+   //##################################################
+   //# We should differentiate between read and write
+   //# transactions since link_rxi_buffer can accept
+   //# the transactions of one type only.
+
+Diff Content:
+- 1549    always @ (negedge rxi_lclk)
+- 1550      data_odd_reg[LW-1:0] <= rxi_data[LW-1:0];
++ 1550    input             txo_rd_wait;     // wait indicator on read transactions   
++ 1550    input             txo_wr_wait;     // wait indicator on write transactions  
++ 1550    input 	    c0_clk_in;         // clock of the core  
++ 1550    input 	    c1_clk_in;         // clock of the core  
++ 1550    input 	    c2_clk_in;         // clock of the core  
++ 1550    input 	    c3_clk_in;         // clock of the core  
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1540:1551
+	  frame_reg     <= rxi_frame;
+	  frame_reg_del <= frame_reg;
+       end
+
+   //# even bytes
+   always @ (posedge rxi_lclk)
+     data_even_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+   //# odd bytes
+   always @ (negedge rxi_lclk)
+     data_odd_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+

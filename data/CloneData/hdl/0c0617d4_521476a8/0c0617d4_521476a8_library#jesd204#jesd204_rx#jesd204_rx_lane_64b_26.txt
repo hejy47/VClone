@@ -1,0 +1,51 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@250:261@HdlStmFor
+
+
+/* Reorder octets LSB first */
+genvar i;
+generate
+  for (i = 0; i < 64; i = i + 8) begin: g_link_data
+    assign data_descrambled_reordered[i+:8] = data_descrambled[64-1-i-:8];
+  end
+endgenerate
+
+
+endmodule
+
+Diff Content:
+- 255   for (i = 0; i < 64; i = i + 8) begin: g_link_data
+- 256     assign data_descrambled_reordered[i+:8] = data_descrambled[64-1-i-:8];
++ 256   elastic_buffer #(
++ 256     .IWIDTH(64),
++ 256     .OWIDTH(TPL_DATA_PATH_WIDTH*8),
++ 256     .SIZE(ELASTIC_BUFFER_SIZE),
++ 256     .ASYNC_CLK(ASYNC_CLK)
++ 256   ) i_elastic_buffer (
++ 256     .clk(clk),
++ 256     .reset(reset),
++ 256     .device_clk(device_clk),
++ 256     .device_reset(device_reset),
++ 256     .wr_data(data_descrambled_reordered),
++ 256     .rd_data(rx_data),
++ 256     .ready_n(buffer_ready_n),
++ 256     .do_release_n(buffer_release_n));
++ 256   always @(posedge clk) begin
++ 256     if (lmfc_edge) begin
++ 256       status_lane_skew <= sh_count;
++ 256     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@248:258
+  end
+end
+
+
+/* Reorder octets LSB first */
+genvar i;
+generate
+  for (i = 0; i < 64; i = i + 8) begin: g_link_data
+    assign data_descrambled_reordered[i+:8] = data_descrambled[64-1-i-:8];
+  end
+endgenerate
+

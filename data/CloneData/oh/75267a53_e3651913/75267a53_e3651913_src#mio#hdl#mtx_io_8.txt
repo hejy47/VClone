@@ -1,0 +1,40 @@
+Source Block: oh/src/mio/hdl/mtx_io.v@62:80@HdlStmProcess
+   
+   //########################################
+   //# SHIFT REGISTER  (SHIFT DOWN)
+   //########################################
+
+   always @ (posedge io_clk)
+     if(transfer_active & dmode8)//8 bit
+       shiftreg[63:0] <= {8'b0,shiftreg[IOW-8-1:0]};   
+     else if(transfer_active & dmode16)//16 bit
+       shiftreg[63:0] <= {16'b0,shiftreg[IOW-16-1:0]};
+     else if(transfer_active & dmode32)//32 bit
+       shiftreg[63:0] <= {32'b0,shiftreg[IOW-32-1:0]};   
+     else
+       shiftreg[63:0] = io_packet[IOW-1:0];
+   
+   //########################################
+   //# DDR OUTPUT
+   //########################################
+
+
+Diff Content:
+- 68      if(transfer_active & dmode8)//8 bit
+- 69        shiftreg[63:0] <= {8'b0,shiftreg[IOW-8-1:0]};   
+- 70      else if(transfer_active & dmode16)//16 bit
+- 71        shiftreg[63:0] <= {16'b0,shiftreg[IOW-16-1:0]};
+- 72      else if(transfer_active & dmode32)//32 bit
+- 73        shiftreg[63:0] <= {32'b0,shiftreg[IOW-32-1:0]};   
+- 74      else
+- 75        shiftreg[63:0] = io_packet[IOW-1:0];
++ 75      if(reload)
++ 75        shiftreg[63:0] <= io_packet[IOW-1:0];
++ 75      else if(dmode8)//8 bit
++ 75        shiftreg[63:0] <= {8'b0,shiftreg[IOW-1:8]};   
++ 75      else if(dmode16)//16 bit
++ 75        shiftreg[63:0] <= {16'b0,shiftreg[IOW-1:16]};
++ 75      else if(dmode32)//32 bit
++ 75        shiftreg[63:0] <= {32'b0,shiftreg[IOW-1:32]};   
+
+Clone Blocks:

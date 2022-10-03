@@ -1,0 +1,51 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@454:497@HdlStmProcess
+	//
+	//
+	initial	s_pending = 1'b0;
+	initial	r_pending = 1'b0;
+	initial	r_valid   = 1'b0;
+	always @(posedge i_clk)
+	begin
+		if (!o_rtn_stall)
+		begin
+			r_pending <= i_wbm_stb;
+			r_we      <= i_wbm_we;
+			o_addr    <= { { (gie_context)?
+				i_wbm_addr[(AW-1):LGPGSZW] : last_ppage },
+				i_wbm_addr[(LGPGSZW-1):0]};
+			r_addr    <= i_wbm_addr;
+			r_data    <= i_wbm_data;
+			r_sel     <= i_wbm_sel;
+			r_valid   <= (i_wbm_stb)&&(
+				(gie_context)
+				||((last_page_valid)
+					&&(i_wbm_addr[(DW-3):(DW-2-VAW)] == last_vpage)
+					&&((!last_ro)||(!i_wbm_we))));
+			s_pending <= 1'b0;
+		end else if (!r_valid) begin
+			r_valid <= (!miss_pending)&&((last_page_valid)
+					&&(r_addr[(DW-3):(DW-2-VAW)]== last_vpage)
+					&&((!last_ro)||(!r_we)));
+			o_addr <= { last_ppage , i_wbm_addr[(LGPGSZW-1):0] };
+			r_pending<= (r_pending);
+			s_pending <=(r_pending)&&(!gie_context);
+		end
+
+		if ((i_reset)||(!i_wbm_cyc)||(o_rtn_err)||((o_cyc)&&(i_err)))
+		begin
+			s_pending <= 1'b0;
+			r_pending <= 1'b0;
+			r_valid   <= 1'b0;
+		end
+	end
+	// Second clock: know which buffer entry this belong in.
+	// If we don't already know, then the pipeline must be stalled for a
+	// while ...
+	genvar k, s;
+	generate
+
+Diff Content:
+- 481 			o_addr <= { last_ppage , i_wbm_addr[(LGPGSZW-1):0] };
++ 481 			o_addr <= { last_ppage , r_addr[(LGPGSZW-1):0] };
+
+Clone Blocks:

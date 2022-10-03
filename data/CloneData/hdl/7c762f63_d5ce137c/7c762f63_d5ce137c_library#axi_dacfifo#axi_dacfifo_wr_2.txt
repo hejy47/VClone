@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_wr.v@433:443@HdlStmAssign
+  end
+
+  // If there is enough data and the AXI interface is ready, we can start to read
+  // out data from the memory
+
+  assign axi_mem_eot_s = axi_last_transaction_d & ~axi_last_transaction;
+  assign axi_mem_rvalid_s =  axi_mem_read_en & axi_wready_s;
+  assign axi_mem_last_s = (axi_wvalid_counter == axi_awlen) ? axi_mem_rvalid_s : 1'b0;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+
+Diff Content:
+- 438   assign axi_mem_eot_s = axi_last_transaction_d & ~axi_last_transaction;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dacfifo/axi_dacfifo_wr.v@434:444
+
+  // If there is enough data and the AXI interface is ready, we can start to read
+  // out data from the memory
+
+  assign axi_mem_eot_s = axi_last_transaction_d & ~axi_last_transaction;
+  assign axi_mem_rvalid_s =  axi_mem_read_en & axi_wready_s;
+  assign axi_mem_last_s = (axi_wvalid_counter == axi_awlen) ? axi_mem_rvalid_s : 1'b0;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_mem_rvalid <= 1'b0;
+
+Clone Blocks 2:
+hdl/library/axi_dacfifo/axi_dacfifo_wr.v@435:445
+  // If there is enough data and the AXI interface is ready, we can start to read
+  // out data from the memory
+
+  assign axi_mem_eot_s = axi_last_transaction_d & ~axi_last_transaction;
+  assign axi_mem_rvalid_s =  axi_mem_read_en & axi_wready_s;
+  assign axi_mem_last_s = (axi_wvalid_counter == axi_awlen) ? axi_mem_rvalid_s : 1'b0;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_mem_rvalid <= 1'b0;
+      axi_mem_rvalid_d <= 1'b0;
+

@@ -1,0 +1,23 @@
+Source Block: oh/elink/hdl/etx_protocol.v@113:128@HdlStmAssign
+
+   assign burst_type_match  = {last_ctrlmode[3:0],last_datamode[1:0],last_write}
+			       ==
+		   	      {etx_ctrlmode[3:0],etx_datamode[1:0], etx_write};
+
+   assign tx_burst     =  tx_access                  & //avoid garbage
+                          ~tx_wr_wait_reg            & //clear on wait
+                          etx_write                  & //write 
+	       	          (etx_datamode[1:0]==2'b11) & //double only
+		          burst_type_match           & //same types
+		          burst_addr_match;            //inc by 8
+
+   //#############################
+   //# Wait propagation circuit
+   //#############################	      
+   assign etx_wr_wait = tx_wr_wait  | tx_io_wait;
+
+Diff Content:
+- 118    assign tx_burst     =  tx_access                  & //avoid garbage
++ 118    assign tx_burst_in =  tx_access                  & //avoid garbage
+
+Clone Blocks:

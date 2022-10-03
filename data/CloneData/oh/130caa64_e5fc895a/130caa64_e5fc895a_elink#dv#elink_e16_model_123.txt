@@ -1,0 +1,31 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1414:1424@HdlStmAssign
+//   assign comp_addr[5:0]  = vertical_k ? {dstaddr[31:29],dstaddr[25:23]} : 
+//                                         {dstaddr[28:26],dstaddr[22:20]} ;   
+   assign comp_addr[5:0]  = vertical_k ? dstaddr[31:26] : dstaddr[25:20];   
+
+//   assign chip_addr[2:0]   = vertical_k ?  ext_yid_k[2:0] : ext_xid_k[2:0];
+   assign chip_addr[5:2] = vertical_k ?  ext_yid_k[3:0] : ext_xid_k[3:0];
+   assign chip_addr[1:0] = 2'b11;
+//   assign chip_addr_n[3:0] =~chip_addr[3:0];
+   //# high comparison
+//   assign {carry_high,comp_high[5:0]} = comp_addr[5:0] + {chip_addr_n[2:0],3'b101};
+   assign {carry_high,comp_high[5:0]} = {1'b0,comp_addr[5:0]} - {1'b0,chip_addr[5:0]};
+
+Diff Content:
+- 1419    assign chip_addr[5:2] = vertical_k ?  ext_yid_k[3:0] : ext_xid_k[3:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1415:1425
+//                                         {dstaddr[28:26],dstaddr[22:20]} ;   
+   assign comp_addr[5:0]  = vertical_k ? dstaddr[31:26] : dstaddr[25:20];   
+
+//   assign chip_addr[2:0]   = vertical_k ?  ext_yid_k[2:0] : ext_xid_k[2:0];
+   assign chip_addr[5:2] = vertical_k ?  ext_yid_k[3:0] : ext_xid_k[3:0];
+   assign chip_addr[1:0] = 2'b11;
+//   assign chip_addr_n[3:0] =~chip_addr[3:0];
+   //# high comparison
+//   assign {carry_high,comp_high[5:0]} = comp_addr[5:0] + {chip_addr_n[2:0],3'b101};
+   assign {carry_high,comp_high[5:0]} = {1'b0,comp_addr[5:0]} - {1'b0,chip_addr[5:0]};
+   //# channels matching
+

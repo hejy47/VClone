@@ -1,0 +1,45 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@153:167@HdlStmProcess
+  end else if (crc12_on && eomb) begin
+    crc12_rdy <= 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (eomb) begin
+    crc12_calculated_prev <= crc12_calculated;
+  end
+end
+
+assign event_crc12_mismatch = crc12_rdy && eomb && (crc12_calculated_prev != crc12_received);
+
+assign err_cnt_rst = reset || ctrl_err_statistics_reset;
+
+
+Diff Content:
+- 158 always @(posedge clk) begin
+- 159   if (eomb) begin
+- 160     crc12_calculated_prev <= crc12_calculated;
+- 162 end
++ 160   reg crc12_rdy = 'b0;
++ 160   always @(posedge clk) begin
++ 160     if (reset == 1'b1) begin
++ 160       crc12_rdy <= 1'b0;
++ 160     end else if (crc12_on && eomb) begin
++ 160       crc12_rdy <= 1'b1;
++ 160     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@159:169
+  if (eomb) begin
+    crc12_calculated_prev <= crc12_calculated;
+  end
+end
+
+assign event_crc12_mismatch = crc12_rdy && eomb && (crc12_calculated_prev != crc12_received);
+
+assign err_cnt_rst = reset || ctrl_err_statistics_reset;
+
+error_monitor #(
+  .EVENT_WIDTH(4),
+

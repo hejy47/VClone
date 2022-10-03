@@ -1,0 +1,40 @@
+Source Block: zipcpu/rtl/peripherals/ziptimer.v@94:110@HdlStmProcess
+
+	wire	auto_reload;
+	wire	[(VW-1):0]	reload_value;
+
+	initial	r_running = 1'b0;
+	always @(posedge i_clk)
+		if (i_rst)
+			r_running <= 1'b0;
+		else if (wb_write)
+			r_running <= (|i_wb_data[(VW-1):0]);
+		else if ((o_int)&&(~auto_reload))
+			r_running <= 1'b0;
+
+	generate
+	if (RELOADABLE != 0)
+	begin
+		reg	r_auto_reload;
+
+Diff Content:
+- 100 		if (i_rst)
+- 104 		else if ((o_int)&&(~auto_reload))
++ 100 		if (i_reset)
++ 104 		else if ((r_zero)&&(!auto_reload))
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/ziptimer.v@93:103
+	assign	wb_write = ((i_wb_cyc)&&(i_wb_stb)&&(i_wb_we));
+
+	wire	auto_reload;
+	wire	[(VW-1):0]	reload_value;
+
+	initial	r_running = 1'b0;
+	always @(posedge i_clk)
+		if (i_rst)
+			r_running <= 1'b0;
+		else if (wb_write)
+			r_running <= (|i_wb_data[(VW-1):0]);
+

@@ -1,0 +1,47 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4280:4300@HdlStmProcess
+   //# create an "artificial gap" in the frame signal.
+   //# If burst request was denied we should de-assert frame signal 
+   
+   assign make_gap = tran_read & ~burst_tran;
+
+   always @ (posedge txo_lclk or posedge reset)
+     if(reset)
+       begin
+	  txo_launch_ack_del1 <= 1'b0;
+	  txo_launch_ack_del2 <= 1'b0;
+       end
+     else
+       begin
+	  txo_launch_ack_del1 <= txo_launch_ack      & ~make_gap;
+	  txo_launch_ack_del2 <= txo_launch_ack_del1 & ~burst_req_denied;
+       end
+
+   assign txo_op_ack       = txo_launch_ack      &  txo_launch_ack_del1;
+   assign txo_op_ack_first = txo_launch_ack_del1 & ~txo_launch_ack_del2;
+
+   //# Request and rotate disable
+
+Diff Content:
+- 4285    always @ (posedge txo_lclk or posedge reset)
+- 4287        begin
+- 4288 	  txo_launch_ack_del1 <= 1'b0;
+- 4289 	  txo_launch_ack_del2 <= 1'b0;
+- 4290        end
+- 4291      else
+- 4292        begin
+- 4293 	  txo_launch_ack_del1 <= txo_launch_ack      & ~make_gap;
+- 4294 	  txo_launch_ack_del2 <= txo_launch_ack_del1 & ~burst_req_denied;
+- 4295        end
++ 4285    always @ (posedge cclk or posedge reset)
++ 4295        frame_del <= 1'b0;
++ 4295      else if(cclk_en)
++ 4295        if(!wr_fifo_full)
++ 4295 	 frame_del <= frame_in;
++ 4295    assign wr_write = (frame_in | frame_del) & ~wr_fifo_full;
++ 4295    assign tran_written = ~frame_in & frame_del & ~wr_fifo_full;
++ 4295    always @ (posedge cclk)
++ 4295      if (cclk_en)
++ 4295        if(!wr_fifo_full)
++ 4295 	 even_byte[LW-1:0] <= tran_in[LW-1:0];
+
+Clone Blocks:

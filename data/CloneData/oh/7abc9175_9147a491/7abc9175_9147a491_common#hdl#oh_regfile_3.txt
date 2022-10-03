@@ -1,0 +1,20 @@
+Source Block: oh/common/hdl/oh_regfile.v@25:35@HdlIdDef
+
+   localparam RAW = $clog2(REGS);
+
+   genvar 	       i;
+   
+   reg [RW-1:0] mem [0:REGS-1];
+
+   //TODO: Make an array of cells
+   
+   //#########################################
+   // write ports
+
+Diff Content:
+- 30    reg [RW-1:0] mem [0:REGS-1];
++ 30    reg [RW-1:0]  mem [0:REGS-1];
++ 30    wire [WP-1:0] write_en [0:REGS-1];
++ 30    genvar 	 i,j;
+
+Clone Blocks:

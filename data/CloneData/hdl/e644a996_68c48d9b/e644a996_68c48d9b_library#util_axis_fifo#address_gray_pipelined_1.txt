@@ -1,0 +1,79 @@
+Source Block: hdl/library/util_axis_fifo/address_gray_pipelined.v@61:77@HdlStmProcess
+wire [ADDRESS_WIDTH:0] _m_axis_waddr;
+
+assign s_axis_waddr = _s_axis_waddr[ADDRESS_WIDTH-1:0];
+assign m_axis_raddr = _m_axis_raddr[ADDRESS_WIDTH-1:0];
+
+always @(*)
+begin
+  if (s_axis_ready && s_axis_valid)
+    _s_axis_waddr_next <= _s_axis_waddr + 1;
+  else
+    _s_axis_waddr_next <= _s_axis_waddr;
+end
+
+always @(posedge s_axis_aclk)
+begin
+  if (s_axis_aresetn == 1'b0) begin
+    _s_axis_waddr <= 'h00;
+
+Diff Content:
+- 69     _s_axis_waddr_next <= _s_axis_waddr + 1;
++ 69     _s_axis_waddr_next <= _s_axis_waddr + 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/address_gray_pipelined.v@69:86
+    _s_axis_waddr_next <= _s_axis_waddr + 1;
+  else
+    _s_axis_waddr_next <= _s_axis_waddr;
+end
+
+always @(posedge s_axis_aclk)
+begin
+  if (s_axis_aresetn == 1'b0) begin
+    _s_axis_waddr <= 'h00;
+  end else begin
+    _s_axis_waddr <= _s_axis_waddr_next;
+  end
+end
+
+always @(*)
+begin
+  if (m_axis_ready && m_axis_valid)
+    _m_axis_raddr_next <= _m_axis_raddr + 1;
+
+Clone Blocks 2:
+hdl/library/util_axis_fifo/address_gray_pipelined.v@59:69
+reg [ADDRESS_WIDTH:0] _m_axis_raddr = 'h00;
+reg [ADDRESS_WIDTH:0] _m_axis_raddr_next;
+wire [ADDRESS_WIDTH:0] _m_axis_waddr;
+
+assign s_axis_waddr = _s_axis_waddr[ADDRESS_WIDTH-1:0];
+assign m_axis_raddr = _m_axis_raddr[ADDRESS_WIDTH-1:0];
+
+always @(*)
+begin
+  if (s_axis_ready && s_axis_valid)
+    _s_axis_waddr_next <= _s_axis_waddr + 1;
+
+Clone Blocks 3:
+hdl/library/util_axis_fifo/address_gray.v@65:81
+wire [ADDRESS_WIDTH:0] m_axis_raddr_gray_next;
+wire [ADDRESS_WIDTH:0] m_axis_waddr_gray;
+
+assign s_axis_waddr = _s_axis_waddr[ADDRESS_WIDTH-1:0];
+
+always @(*)
+begin
+  if (s_axis_ready && s_axis_valid)
+    _s_axis_waddr_next <= _s_axis_waddr + 1;
+  else
+    _s_axis_waddr_next <= _s_axis_waddr;
+end
+
+assign s_axis_waddr_gray_next = _s_axis_waddr_next ^ _s_axis_waddr_next[ADDRESS_WIDTH:1];
+
+always @(posedge s_axis_aclk)
+begin
+

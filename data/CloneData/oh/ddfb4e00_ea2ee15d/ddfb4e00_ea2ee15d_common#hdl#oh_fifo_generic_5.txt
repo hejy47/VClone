@@ -1,0 +1,50 @@
+Source Block: oh/common/hdl/oh_fifo_generic.v@46:56@HdlStmAssign
+   reg [AW-1:0]    wr_count;
+
+   // fifo indicators
+   assign empty     = (rd_count[AW-1:0] == 'b0);
+   assign full      = (wr_count[AW-1:0] == DEPTH);
+   assign prog_full = (wr_count[AW-1:0] >= PROG_FULL);   
+
+   // write side state machine
+   always @ ( posedge wr_clk or negedge nreset) 
+     if(!nreset) 
+       begin	   
+
+Diff Content:
+- 51    assign prog_full = (wr_count[AW-1:0] >= PROG_FULL);   
++ 51    assign empty    =  (rd_addr_gray[AW:0] == wr_addr_gray_sync[AW:0]);
++ 51    assign full     =  (wr_addr[AW-1:0] == rd_addr_sync[AW-1:0]) &
++ 51 		      (wr_addr[AW]     != rd_addr_sync[AW]);
++ 51    assign prog_full = (wr_addr_ahead[AW-1:0] == rd_addr_sync[AW-1:0]) &
++ 51 		      (wr_addr_ahead[AW]     != rd_addr_sync[AW]);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_fifo_generic.v@45:55
+   reg [AW-1:0]    rd_count;
+   reg [AW-1:0]    wr_count;
+
+   // fifo indicators
+   assign empty     = (rd_count[AW-1:0] == 'b0);
+   assign full      = (wr_count[AW-1:0] == DEPTH);
+   assign prog_full = (wr_count[AW-1:0] >= PROG_FULL);   
+
+   // write side state machine
+   always @ ( posedge wr_clk or negedge nreset) 
+     if(!nreset) 
+
+Clone Blocks 2:
+oh/common/hdl/oh_fifo_generic.v@44:54
+   reg [AW-1:0]    rd_addr;
+   reg [AW-1:0]    rd_count;
+   reg [AW-1:0]    wr_count;
+
+   // fifo indicators
+   assign empty     = (rd_count[AW-1:0] == 'b0);
+   assign full      = (wr_count[AW-1:0] == DEPTH);
+   assign prog_full = (wr_count[AW-1:0] >= PROG_FULL);   
+
+   // write side state machine
+   always @ ( posedge wr_clk or negedge nreset) 
+

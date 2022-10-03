@@ -1,0 +1,64 @@
+Source Block: oh/src/mio/hdl/mtx_io.v@37:57@HdlStmProcess
+   assign dmode8   = (iowidth[1:0]==2'b00);
+   assign dmode16  = (iowidth[1:0]==2'b01);
+   assign dmode32  = (iowidth[1:0]==2'b10);
+   assign dmode64  = (iowidth[1:0]==2'b11);
+  
+   always @ (posedge io_clk or negedge io_nreset)
+     if(!io_nreset)
+       io_valid_reg[7:0] <= 'b0;
+     else if(transfer_active & dmode8 )
+       io_valid_reg[7:0] <= {1'b0,io_valid_reg[7:1]};
+     else if(transfer_active & dmode16 )
+       io_valid_reg[7:0] <= {2'b0,io_valid_reg[7:2]};
+     else if(transfer_active & dmode32 )
+       io_valid_reg[7:0] <= {4'b0,io_valid_reg[7:4]};
+     else if(transfer_active & dmode32 )
+       io_valid_reg[7:0] <= 'b0;
+
+   assign transfer_active = |io_valid_reg[7:0];
+   
+   //pipeline access signal
+   always @ (posedge io_clk or negedge io_nreset)
+
+Diff Content:
+- 45      else if(transfer_active & dmode8 )
+- 46        io_valid_reg[7:0] <= {1'b0,io_valid_reg[7:1]};
+- 47      else if(transfer_active & dmode16 )
+- 48        io_valid_reg[7:0] <= {2'b0,io_valid_reg[7:2]};
+- 49      else if(transfer_active & dmode32 )
+- 50        io_valid_reg[7:0] <= {4'b0,io_valid_reg[7:4]};
+- 51      else if(transfer_active & dmode32 )
+- 52        io_valid_reg[7:0] <= 'b0;
++ 52      else if(reload)
++ 52        io_valid_reg[7:0] <= io_valid[7:0];
++ 52      else
++ 52        io_valid_reg[7:0] <= io_valid_next[7:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mrx_io.v@43:65
+   assign dmode16  = (iowidth[1:0]==2'b01);
+   assign dmode32  = (iowidth[1:0]==2'b10);
+   assign dmode64  = (iowidth[1:0]==2'b11);
+
+   //Keep track of valid bytes in shift register
+   always @ (posedge rx_clk or negedge io_nreset)
+     if(!io_nreset)
+       io_valid_reg[7:0] <= 8'b0;
+     else if(io_frame & dmode8)
+       io_valid_reg[7:0] <= {io_valid_reg[6:0],1'b1};
+     else if(io_frame & dmode16)
+       io_valid_reg[7:0] <= {io_valid_reg[5:0],2'b11};
+     else if(io_frame & dmode32)
+       io_valid_reg[7:0] <= {io_valid_reg[3:0],4'b1111};
+     else if(io_frame & dmode64)
+       io_valid_reg[7:0] <= 8'b11111111;
+     else
+       io_valid_reg[7:0] <= 8'b0;
+
+   //Access signal for FIFO
+   assign io_access = (&io_valid_reg[7:0])               | // full vector
+		      (~io_frame | (|io_valid_reg[7:0]));  // partial vector 
+          
+

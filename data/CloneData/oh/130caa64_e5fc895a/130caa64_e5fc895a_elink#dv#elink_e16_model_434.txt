@@ -1,0 +1,17 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3880:3890@HdlStmAssign
+       frame_del <= 1'b0;
+     else if(cclk_en)
+       if(!wr_fifo_full)
+	 frame_del <= frame_in;
+
+   assign wr_write = (frame_in | frame_del) & ~wr_fifo_full;
+
+   //###################################
+   //# Full transaction write completed
+   //###################################
+   assign tran_written = ~frame_in & frame_del & ~wr_fifo_full;
+
+Diff Content:
+- 3885    assign wr_write = (frame_in | frame_del) & ~wr_fifo_full;
+
+Clone Blocks:

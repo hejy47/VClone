@@ -1,0 +1,40 @@
+Source Block: hdl/library/xilinx/axi_xcvrlb/axi_xcvrlb.v@162:189@HdlStmFor
+
+  // instantiations
+
+  genvar n;
+  generate
+  for (n = 0; n < NUM_OF_LANES; n = n + 1) begin: g_lanes
+  axi_xcvrlb_1 #(
+    .XCVR_TYPE (XCVR_TYPE),
+    .CPLL_FBDIV_4_5(CPLL_FBDIV_4_5),
+    .CPLL_FBDIV(CPLL_FBDIV))
+  i_xcvrlb_1 (
+    .ref_clk (ref_clk),
+    .rx_p (rx_p[n]),
+    .rx_n (rx_n[n]),
+    .tx_p (tx_p[n]),
+    .tx_n (tx_n[n]),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_resetn (up_resetn),
+    .up_status (up_status_s[n]),
+    .up_pll_locked (up_pll_locked_s[n])
+    );
+  end
+  endgenerate
+
+  up_axi #(.AXI_ADDRESS_WIDTH (10)) i_axi (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+
+Diff Content:
+- 171     .CPLL_FBDIV(CPLL_FBDIV))
+- 172   i_xcvrlb_1 (
+- 182     .up_pll_locked (up_pll_locked_s[n])
+- 183     );
++ 172     .CPLL_FBDIV(CPLL_FBDIV)
++ 172   ) i_xcvrlb_1 (
++ 183     .up_pll_locked (up_pll_locked_s[n]));
+
+Clone Blocks:

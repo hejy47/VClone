@@ -1,0 +1,19 @@
+Source Block: oh/common/hdl/oh_regfile.v@22:32@HdlIdDef
+    input [RP-1:0]     rd_valid, // read access
+    input [RP*AW-1:0]  rd_addr, // register address
+    output [RP*DW-1:0] rd_data // output data
+    );
+
+   genvar i;
+   
+   reg [DW-1:0] mem [0:REGS-1];
+   
+   //#########################################
+   // write port
+
+Diff Content:
+- 27    genvar i;
++ 27    localparam RAW = $clog2(REGS);
++ 27    genvar 	       i;
+
+Clone Blocks:

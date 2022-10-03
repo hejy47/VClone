@@ -1,0 +1,43 @@
+Source Block: oh/stdlib/hdl/oh_mux4.v@16:29@HdlStmAssign
+    input [N-1:0]  in1,
+    input [N-1:0]  in0,
+    output [N-1:0] out  //selected data output
+    );
+
+   assign out[N-1:0] = ({(N){sel0}} & in0[N-1:0] |
+			 {(N){sel1}} & in1[N-1:0] |
+			 {(N){sel2}} & in2[N-1:0] |
+			 {(N){sel3}} & in3[N-1:0]);
+
+`ifdef TARGET_SIM
+   wire 	    error;
+   assign error = (sel0 | sel1 | sel2 | sel3) &
+   		  ~(sel0 ^ sel1 ^ sel2 ^ sel3);
+
+Diff Content:
+- 22 			 {(N){sel1}} & in1[N-1:0] |
+- 23 			 {(N){sel2}} & in2[N-1:0] |
+- 24 			 {(N){sel3}} & in3[N-1:0]);
++ 24 			{(N){sel1}} & in1[N-1:0] |
++ 24 			{(N){sel2}} & in2[N-1:0] |
++ 24 			{(N){sel3}} & in3[N-1:0]);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/stdlib/hdl/oh_mux7.v@22:36
+    input [N-1:0]  in1,
+    input [N-1:0]  in0,
+    output [N-1:0] out  //selected data output
+    );
+
+   assign out[N-1:0] = ({(N){sel0}} & in0[N-1:0] |
+			 {(N){sel1}} & in1[N-1:0] |
+			 {(N){sel2}} & in2[N-1:0] |
+			 {(N){sel3}} & in3[N-1:0] |
+			 {(N){sel4}} & in4[N-1:0] |
+			 {(N){sel5}} & in5[N-1:0] |
+			 {(N){sel6}} & in6[N-1:0]);
+
+
+endmodule // oh_mux7
+

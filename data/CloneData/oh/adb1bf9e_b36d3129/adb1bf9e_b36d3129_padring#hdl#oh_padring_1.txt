@@ -1,0 +1,88 @@
+Source Block: oh/padring/hdl/oh_padring.v@86:122@HdlStmFor
+            
+      //#############################
+      // NORTH
+      //#############################
+
+      for(i=0;i<NO_DOMAINS;i=i+1)
+	begin: no_pads
+	   oh_pads_domain #(.DIR("NO"),
+			    .TYPE(TYPE),
+			    .NGPIO(NO_GPIO),
+			    .NVDDIO(NO_VDDIO),
+			    .NVSSIO(NO_VSSIO),
+			    .NVDD(NO_VDD),
+			    .NVSS(NO_VSS),
+			    .POC(1),
+			    .LEFTCUT(1),
+			    .RIGHTCUT(1))			    
+	   i0 (.vdd     (vdd),
+	       .vss     (vss),
+	       // Outputs
+	       .din     (no_din[NO_GPIO-1:0]),
+	       // Inouts
+	       .pad     (no_pad[NO_GPIO-1:0]),
+	       .vddio   (no_vddio[i]),
+	       .vssio	(no_vssio[i]),
+	       .poc	(no_poc[i]),
+	       // Inputs
+	       .dout	(no_dout[NO_GPIO-1:0]),
+	       .oen	(no_oen[NO_GPIO-1:0]),
+	       .ie	(no_ie[NO_GPIO-1:0]),
+	       .cfg	(no_cfg[NO_GPIO*8-1:0]));	   
+	end
+      
+      //#############################
+      // SOUTH
+      //#############################
+
+
+Diff Content:
+- 92 	begin: no_pads
+- 93 	   oh_pads_domain #(.DIR("NO"),
+- 94 			    .TYPE(TYPE),
+- 95 			    .NGPIO(NO_GPIO),
+- 96 			    .NVDDIO(NO_VDDIO),
+- 97 			    .NVSSIO(NO_VSSIO),
+- 98 			    .NVDD(NO_VDD),
+- 99 			    .NVSS(NO_VSS),
+- 100 			    .POC(1),
+- 101 			    .LEFTCUT(1),
+- 102 			    .RIGHTCUT(1))			    
+- 103 	   i0 (.vdd     (vdd),
+- 104 	       .vss     (vss),
+- 106 	       .din     (no_din[NO_GPIO-1:0]),
+- 108 	       .pad     (no_pad[NO_GPIO-1:0]),
+- 109 	       .vddio   (no_vddio[i]),
+- 110 	       .vssio	(no_vssio[i]),
+- 111 	       .poc	(no_poc[i]),
+- 113 	       .dout	(no_dout[NO_GPIO-1:0]),
+- 114 	       .oen	(no_oen[NO_GPIO-1:0]),
+- 115 	       .ie	(no_ie[NO_GPIO-1:0]),
+- 116 	       .cfg	(no_cfg[NO_GPIO*8-1:0]));	   
+- 117 	end
++ 117         begin: no_pads
++ 117            oh_pads_domain #(.DIR("NO"),
++ 117                             .TYPE(TYPE),
++ 117                             .NGPIO(NO_GPIO),
++ 117                             .NVDDIO(NO_VDDIO),
++ 117                             .NVSSIO(NO_VSSIO),
++ 117                             .NVDD(NO_VDD),
++ 117                             .NVSS(NO_VSS),
++ 117                             .POC(1),
++ 117                             .LEFTCUT(1),
++ 117                             .RIGHTCUT(1))
++ 117            i0 (.vdd     (vdd),
++ 117                .vss     (vss),
++ 117                .din     (no_din[NO_GPIO-1:0]),
++ 117                .pad     (no_pad[NO_GPIO-1:0]),
++ 117                .vddio   (no_vddio[i]),
++ 117                .vssio	(no_vssio[i]),
++ 117                .poc	(no_poc[i]),
++ 117                .dout	(no_dout[NO_GPIO-1:0]),
++ 117                .oen	(no_oen[NO_GPIO-1:0]),
++ 117                .ie	(no_ie[NO_GPIO-1:0]),
++ 117                .cfg	(no_cfg[NO_GPIO*8-1:0]));
++ 117         end
+
+Clone Blocks:

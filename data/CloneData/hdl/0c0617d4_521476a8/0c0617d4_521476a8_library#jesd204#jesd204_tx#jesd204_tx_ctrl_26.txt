@@ -1,0 +1,105 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@126:149@HdlStmProcess
+  .out_bits(status_sync)
+);
+
+assign status_sync_masked = status_sync | cfg_links_disable;
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sync_request <= {NUM_LINKS{1'b0}};
+  end else begin
+    /* TODO: SYNC must be asserted at least 4 frames before interpreted as a
+     * sync request and the /K28.5/ symbol generation has lasted for at
+     * least 1 frame + 9 octets */
+    if (cfg_continuous_cgs == 1'b1) begin
+      sync_request <= 1'b1;
+    end else begin
+      sync_request <= ~(&status_sync_masked) | ctrl_manual_sync_request;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (sync_request == 1'b0 && sync_request_received == 1'b1) begin
+    lmfc_edge_d1 <= lmfc_edge;
+    lmfc_edge_d2 <= lmfc_edge_d1;
+
+Diff Content:
+- 131 always @(posedge clk) begin
+- 132   if (reset == 1'b1) begin
+- 133     sync_request <= {NUM_LINKS{1'b0}};
+- 134   end else begin
+- 135     /* TODO: SYNC must be asserted at least 4 frames before interpreted as a
+- 136      * sync request and the /K28.5/ symbol generation has lasted for at
+- 137      * least 1 frame + 9 octets */
+- 138     if (cfg_continuous_cgs == 1'b1) begin
+- 139       sync_request <= 1'b1;
+- 141       sync_request <= ~(&status_sync_masked) | ctrl_manual_sync_request;
+- 144 end
++ 139   localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
++ 139   localparam ILAS_COUNTER_WIDTH = (DATA_PATH_WIDTH == 4) ? 6 : 5;
++ 139   localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
++ 139   localparam BEATS_PER_MF_WIDTH = 10-DPW_LOG2;
++ 139   wire [BEATS_PER_MF_WIDTH-1:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe[9:DPW_LOG2];
++ 139   wire octets_per_mf_4_mod_8 = (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2];
++ 139   wire [7:0] cfg_lmfc_per_ilas = octets_per_mf_4_mod_8 ? cfg_mframes_per_ilas/2 : cfg_mframes_per_ilas;
++ 139   reg lmfc_edge_d1 = 1'b0;
++ 139   reg lmfc_edge_d2 = 1'b0;
++ 139   reg eof_reset_d;
++ 139   reg ilas_reset = 1'b1;
++ 139   reg ilas_data_reset = 1'b1;
++ 139   reg sync_request = 1'b0;
++ 139   reg sync_request_received = 1'b0;
++ 139   reg last_ilas_mframe = 1'b0;
++ 139   reg [7:0] mframe_counter = 'h00;
++ 139   reg [ILAS_COUNTER_WIDTH-1:0] ilas_counter = 'h00;
++ 139   wire ilas_config_rd_start;
++ 139   reg ilas_config_rd_d1 = 1'b1;
++ 139   reg cgs_enable = 1'b1;
++ 139   wire [DATA_PATH_WIDTH*8-1:0] ilas_default_data;
++ 139   wire [NUM_LINKS-1:0] status_sync_masked;
++ 139   genvar ii;
++ 139   genvar jj;
++ 139   sync_bits #(
++ 139     .NUM_OF_BITS (NUM_LINKS)
++ 139   ) i_cdc_sync (
++ 139     .in_bits(sync),
++ 139     .out_clk(clk),
++ 139     .out_resetn(1'b1),
++ 139     .out_bits(status_sync));
++ 139   assign status_sync_masked = status_sync | cfg_links_disable;
++ 139   always @(posedge clk) begin
++ 139     if (reset == 1'b1) begin
++ 139       sync_request <= {NUM_LINKS{1'b0}};
++ 141       /* TODO: SYNC must be asserted at least 4 frames before interpreted as a
++ 141        * sync request and the /K28.5/ symbol generation has lasted for at
++ 141        * least 1 frame + 9 octets */
++ 141       if (cfg_continuous_cgs == 1'b1) begin
++ 141         sync_request <= 1'b1;
++ 141       end else begin
++ 141         sync_request <= ~(&status_sync_masked) | ctrl_manual_sync_request;
++ 141       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@141:159
+      sync_request <= ~(&status_sync_masked) | ctrl_manual_sync_request;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (sync_request == 1'b0 && sync_request_received == 1'b1) begin
+    lmfc_edge_d1 <= lmfc_edge;
+    lmfc_edge_d2 <= lmfc_edge_d1;
+  end else begin
+    lmfc_edge_d1 <= 1'b0;
+    lmfc_edge_d2 <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sync_request_received <= 1'b0;
+  end else if (sync_request == 1'b1) begin
+

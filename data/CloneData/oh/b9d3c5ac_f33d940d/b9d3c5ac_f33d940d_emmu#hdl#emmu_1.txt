@@ -1,0 +1,34 @@
+Source Block: oh/emmu/hdl/emmu.v@93:105@HdlStmAssign
+   /*MMU WRITE LOGIC            */
+   /*****************************/
+   assign emmu_write  = mi_en & mi_we;
+      
+   //write controls
+   assign emmu_wr_en[5:0] = (emmu_write & ~mi_addr[2]) ? 6'b001111 :
+	                    (emmu_write & mi_addr[2])  ? 6'b110000 :
+			                                6'b000000 ;
+
+   //write data
+   assign emmu_wr_data[63:0] = {mi_din[31:0], mi_din[31:0]};
+
+`ifdef TARGET_XILINX
+
+Diff Content:
+- 100 			                                6'b000000 ;
++ 100 			                                 6'b000000 ;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/hdl/emmu.v@98:108
+   assign emmu_wr_en[5:0] = (emmu_write & ~mi_addr[2]) ? 6'b001111 :
+	                    (emmu_write & mi_addr[2])  ? 6'b110000 :
+			                                6'b000000 ;
+
+   //write data
+   assign emmu_wr_data[63:0] = {mi_din[31:0], mi_din[31:0]};
+
+`ifdef TARGET_XILINX
+   memory_dp_48x4096 memory_dp_48x4096(
+				       //write (portA)
+				       .clka	(mi_clk),
+

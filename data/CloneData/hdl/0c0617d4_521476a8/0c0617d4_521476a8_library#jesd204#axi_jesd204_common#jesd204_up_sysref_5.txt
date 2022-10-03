@@ -1,0 +1,55 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_sysref.v@93:122@HdlStmProcess
+  end else begin
+    up_sysref_status <= (up_sysref_status & ~up_sysref_status_clear) | up_sysref_event;
+  end
+end
+
+always @(*) begin
+  case (up_raddr)
+  /* JESD SYSREF configuraton */
+  12'h040: up_rdata = {
+    /* 02-31 */ 30'h00, /* Reserved for future use */
+    /*    01 */ up_cfg_sysref_oneshot,
+    /*    00 */ up_cfg_sysref_disable
+  };
+  12'h041: up_rdata = {
+    /* 10-31 */ 22'h00, /* Reserved for future use */
+    /* 02-09 */ up_cfg_lmfc_offset,
+    /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
+  };
+  12'h042: up_rdata = {
+    /* 02-31 */ 30'h00,
+    /* 00-01 */ up_sysref_status
+  };
+  default: up_rdata = 32'h00000000;
+  endcase
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_cfg_sysref_oneshot <= 1'b0;
+    up_cfg_lmfc_offset <= 'h00;
+
+Diff Content:
+- 98 always @(*) begin
+- 99   case (up_raddr)
+- 100   /* JESD SYSREF configuraton */
+- 101   12'h040: up_rdata = {
+- 102     /* 02-31 */ 30'h00, /* Reserved for future use */
+- 103     /*    01 */ up_cfg_sysref_oneshot,
+- 104     /*    00 */ up_cfg_sysref_disable
+- 105   };
+- 106   12'h041: up_rdata = {
+- 107     /* 10-31 */ 22'h00, /* Reserved for future use */
+- 108     /* 02-09 */ up_cfg_lmfc_offset,
+- 109     /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
+- 110   };
+- 111   12'h042: up_rdata = {
+- 112     /* 02-31 */ 30'h00,
+- 113     /* 00-01 */ up_sysref_status
+- 114   };
+- 115   default: up_rdata = 32'h00000000;
+- 116   endcase
+- 117 end
+
+Clone Blocks:

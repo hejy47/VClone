@@ -1,0 +1,38 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/axi_jesd204_rx.v@140:150@HdlIdDef
+wire [7:0] up_cfg_buffer_delay;
+wire [7:0] up_cfg_lmfc_offset;
+wire [7:0] up_cfg_frame_align_err_threshold;
+
+wire up_reset;
+wire up_reset_synchronizer;
+
+up_axi #(
+  .AXI_ADDRESS_WIDTH (14)
+) i_up_axi (
+  .up_rstn(~up_reset),
+
+Diff Content:
++ 145 wire up_event_frame_alignment_error;
++ 145 sync_event i_sync_frame_align_err (
++ 145   .in_clk(core_clk),
++ 145   .in_event(core_event_frame_alignment_error),
++ 145   .out_clk(s_axi_aclk),
++ 145   .out_event(up_event_frame_alignment_error)
++ 145 );
++ 145 assign up_irq_trigger = {4'b0,up_event_frame_alignment_error};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_rx/axi_jesd204_rx.v@139:149
+wire up_cfg_buffer_early_release;
+wire [7:0] up_cfg_buffer_delay;
+wire [7:0] up_cfg_lmfc_offset;
+wire [7:0] up_cfg_frame_align_err_threshold;
+
+wire up_reset;
+wire up_reset_synchronizer;
+
+up_axi #(
+  .AXI_ADDRESS_WIDTH (14)
+) i_up_axi (
+

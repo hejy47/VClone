@@ -1,0 +1,32 @@
+Source Block: hdl/library/util_pmod_adc/util_pmod_adc.v@184:208@HdlStmProcess
+    adc_clk_en <= ((adc_state == ADC_READ_CNV_RESULT) && (sclk_clk_cnt != 0)) ? 1'b1 : 1'b0;
+  end
+
+  // read data from the ADC
+
+  always @(negedge adc_spi_clk) begin
+      sclk_clk_cnt_m1 <= sclk_clk_cnt;
+      if((adc_clk_en == 1'b1) && (sclk_clk_cnt != 0)) begin
+          adc_data   <= {3'b0, adc_data[11:0], adc_sdo};
+          if ((adc_sw_reset == 1'b1) && (sclk_clk_cnt == SPI_WORD_LENGTH - ADC_RESET_LENGTH + 1)) begin
+            sclk_clk_cnt <= 16'b0;
+          end else begin
+            sclk_clk_cnt <= sclk_clk_cnt - 1;
+          end
+      end
+      else if(adc_state != ADC_READ_CNV_RESULT) begin
+          adc_data     <= 16'h0;
+          sclk_clk_cnt <= SPI_WORD_LENGTH - 1;
+      end
+  end
+
+  // update the ADC current state and the control signals
+
+  always @(posedge clk) begin
+    if(reset == 1'b1) begin
+
+Diff Content:
+- 200           adc_data     <= 16'h0;
++ 200           adc_data   <= 16'h0;
+
+Clone Blocks:

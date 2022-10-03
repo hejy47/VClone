@@ -1,0 +1,72 @@
+Source Block: hdl/library/common/ad_tdd_control.v@536:555@HdlStmProcess
+    end else begin
+      tdd_tx_rf_en <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2 || tdd_continuous_tx) begin
+        tdd_tx_dp_en <= 1'b1;
+      end
+      else if (counter_at_tdd_tx_dp_off_1 || counter_at_tdd_tx_dp_off_2) begin
+        tdd_tx_dp_en <= 1'b0;
+      end
+    end else begin
+      tdd_tx_dp_en <= 1'b0;
+    end
+  end
+
+endmodule
+
+
+Diff Content:
+- 543       if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2 || tdd_continuous_tx) begin
++ 543       if (tdd_txnrx_only_en) begin
++ 543         tdd_tx_dp_en <= tdd_txnrx_only;
++ 543       end
++ 543       else if (counter_at_tdd_tx_dp_on_1 || counter_at_tdd_tx_dp_on_2) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_tdd_control.v@414:431
+    else begin
+      counter_at_tdd_tx_dp_on_2 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(tdd_counter == tdd_tx_dp_off_1_s) begin
+      counter_at_tdd_tx_dp_off_1 <= 1'b1;
+    end
+    else begin
+      counter_at_tdd_tx_dp_off_1 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_dp_off_2_s)) begin
+      counter_at_tdd_tx_dp_off_2 <= 1'b1;
+    end
+
+Clone Blocks 2:
+hdl/library/common/ad_tdd_control.v@405:422
+    else begin
+      counter_at_tdd_tx_dp_on_1 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_dp_on_2_s)) begin
+      counter_at_tdd_tx_dp_on_2 <= 1'b1;
+    end
+    else begin
+      counter_at_tdd_tx_dp_on_2 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(tdd_counter == tdd_tx_dp_off_1_s) begin
+      counter_at_tdd_tx_dp_off_1 <= 1'b1;
+    end
+

@@ -1,0 +1,36 @@
+Source Block: hdl/library/common/ad_tdd_control.v@180:190@HdlStmAssign
+  wire   [23:0]   tdd_tx_dp_off_2_s;
+  wire            tdd_endof_frame;
+  wire            tdd_endof_burst;
+  wire            tdd_txrx_only_en_s;
+
+  assign  tdd_counter_status = tdd_counter;
+
+  // ***************************************************************************
+  // tdd counter (state machine)
+  // ***************************************************************************
+
+
+Diff Content:
++ 185   always @(posedge clk) begin
++ 185     if (rst == 1'b1) begin
++ 185       tdd_sync_en <= 1'b0;
++ 185       tdd_sync_d1 <= 1'b0;
++ 185       tdd_sync_d2 <= 1'b0;
++ 185       tdd_sync_d3 <= 1'b0;
++ 185     end else begin
++ 185       tdd_sync_en <= tdd_enable;
++ 185       tdd_sync_d1 <= tdd_sync;
++ 185       tdd_sync_d2 <= tdd_sync_d1;
++ 185       tdd_sync_d3 <= tdd_sync_d2;
++ 185     end
++ 185   end
++ 185   always @(posedge clk) begin
++ 185     if (rst == 1'b1) begin
++ 185       tdd_enable_synced <= 1'b0;
++ 185     end else begin
++ 185       tdd_enable_synced <= ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) ? tdd_enable : tdd_enable_synced;
++ 185     end
++ 185   end
+
+Clone Blocks:

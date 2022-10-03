@@ -1,0 +1,23 @@
+Source Block: hdl/library/util_adc_pack/util_adc_pack.v@251:264@HdlStmProcess
+    begin
+      temp_data_1 = 0;
+    end
+  end
+
+  always @(temp_data_0, temp_data_1, enable_cnt_0)
+  begin
+    packed_data = temp_data_0 | temp_data_1 << enable_cnt_0 * DATA_WIDTH;
+  end
+
+  always @(enable_cnt)
+  begin
+    case(enable_cnt)
+     4'h1: path_enabled = 8'h01;
+
+Diff Content:
+- 256   always @(temp_data_0, temp_data_1, enable_cnt_0)
+- 257   begin
+- 258     packed_data = temp_data_0 | temp_data_1 << enable_cnt_0 * DATA_WIDTH;
+- 259   end
+
+Clone Blocks:

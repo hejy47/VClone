@@ -1,0 +1,74 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/util_dacfifo_bypass.v@225:253@HdlStmProcess
+    .din (dac_mem_raddr),
+    .dout (dac_mem_raddr_b2g_s));
+
+  // The memory module is ready if it's not empty
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_mem_addr_diff <= 'b0;
+      dac_mem_waddr_m1 <= 'b0;
+      dac_mem_waddr_m2 <= 'b0;
+      dac_mem_waddr <= 'b0;
+      dac_mem_ready <= 1'b0;
+    end else begin
+      dac_mem_waddr_m1 <= dma_mem_waddr_g;
+      dac_mem_waddr_m2 <= dac_mem_waddr_m1;
+      dac_mem_waddr <= dac_mem_waddr_m2_g2b_s;
+      dac_mem_addr_diff <= dac_address_diff_s[DAC_ADDRESS_WIDTH-1:0];
+      if (dac_mem_addr_diff > 0) begin
+        dac_mem_ready <= 1'b1;
+      end else begin
+        dac_mem_ready <= 1'b0;
+      end
+    end
+  end
+
+  ad_g2b #(
+    .DATA_WIDTH (DMA_ADDRESS_WIDTH))
+  i_dac_mem_waddr_g2b (
+    .din (dac_mem_waddr_m2),
+
+Diff Content:
+- 232       dac_mem_addr_diff <= 'b0;
+- 236       dac_mem_ready <= 1'b0;
+- 241       dac_mem_addr_diff <= dac_address_diff_s[DAC_ADDRESS_WIDTH-1:0];
+- 242       if (dac_mem_addr_diff > 0) begin
+- 243         dac_mem_ready <= 1'b1;
+- 244       end else begin
+- 245         dac_mem_ready <= 1'b0;
+- 246       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/altera/avl_dacfifo/util_dacfifo_bypass.v@220:248
+    .din (dac_mem_raddr),
+    .dout (dac_mem_raddr_b2g_s));
+
+  // The memory module is ready if it's not empty
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_mem_addr_diff <= 'b0;
+      dac_mem_waddr_m1 <= 'b0;
+      dac_mem_waddr_m2 <= 'b0;
+      dac_mem_waddr <= 'b0;
+      dac_mem_ready <= 1'b0;
+    end else begin
+      dac_mem_waddr_m1 <= dma_mem_waddr_g;
+      dac_mem_waddr_m2 <= dac_mem_waddr_m1;
+      dac_mem_waddr <= dac_mem_waddr_m2_g2b_s;
+      dac_mem_addr_diff <= dac_address_diff_s[DAC_ADDRESS_WIDTH-1:0];
+      if (dac_mem_addr_diff > 0) begin
+        dac_mem_ready <= 1'b1;
+      end else begin
+        dac_mem_ready <= 1'b0;
+      end
+    end
+  end
+
+  ad_g2b #(
+    .DATA_WIDTH (DMA_ADDRESS_WIDTH))
+  i_dac_mem_waddr_g2b (
+    .din (dac_mem_waddr_m2),
+

@@ -1,0 +1,69 @@
+Source Block: hdl/projects/fmcomms2/ac701/system_top.v@243:259@HdlStmFor
+    .I (gpio_o[8+n]),
+    .O (gpio_i[8+n]),
+    .T (gpio_t[8+n]),
+    .IO (gpio_ctl[n]));
+  end
+  for (n = 0; n <= 7; n = n + 1) begin: g_iobuf_gpio_status
+  IOBUF i_iobuf_gpio_status (
+    .I (gpio_o[0+n]),
+    .O (gpio_i[0+n]),
+    .T (gpio_t[0+n]),
+    .IO (gpio_status[n]));
+  end
+
+  endgenerate    
+
+  system_wrapper i_system_wrapper (
+    .ddr3_addr (ddr3_addr),
+
+Diff Content:
+- 248   for (n = 0; n <= 7; n = n + 1) begin: g_iobuf_gpio_status
+- 249   IOBUF i_iobuf_gpio_status (
+- 250     .I (gpio_o[0+n]),
+- 251     .O (gpio_i[0+n]),
+- 252     .T (gpio_t[0+n]),
+- 253     .IO (gpio_status[n]));
+- 254   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms2/vc707/system_top.v@243:259
+    .I (gpio_o[8+n]),
+    .O (gpio_i[8+n]),
+    .T (gpio_t[8+n]),
+    .IO (gpio_ctl[n]));
+  end
+  for (n = 0; n <= 7; n = n + 1) begin: g_iobuf_gpio_status
+  IOBUF i_iobuf_gpio_status (
+    .I (gpio_o[0+n]),
+    .O (gpio_i[0+n]),
+    .T (gpio_t[0+n]),
+    .IO (gpio_status[n]));
+  end
+
+  endgenerate    
+
+  system_wrapper i_system_wrapper (
+    .ddr3_addr (ddr3_addr),
+
+Clone Blocks 2:
+hdl/projects/fmcomms2/kc705/system_top.v@252:268
+    .I (gpio_o[8+n]),
+    .O (gpio_i[8+n]),
+    .T (gpio_t[8+n]),
+    .IO (gpio_ctl[n]));
+  end
+  for (n = 0; n <= 7; n = n + 1) begin: g_iobuf_gpio_status
+  IOBUF i_iobuf_gpio_status (
+    .I (gpio_o[0+n]),
+    .O (gpio_i[0+n]),
+    .T (gpio_t[0+n]),
+    .IO (gpio_status[n]));
+  end
+
+  endgenerate    
+
+  system_wrapper i_system_wrapper (
+    .ddr3_1_n (ddr3_1_n),
+

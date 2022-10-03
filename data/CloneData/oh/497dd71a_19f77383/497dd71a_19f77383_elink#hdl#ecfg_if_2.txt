@@ -1,0 +1,21 @@
+Source Block: oh/elink/hdl/ecfg_if.v@96:109@HdlStmAssign
+		      (dstaddr[19:16]==4'hF) &
+		      (dstaddr[10:8]=={2'b01,rxsel});
+   
+
+   //dma select (group 5)
+   assign mi_dma_en = mi_match &
+		      (dstaddr[19:16]==4'hF) & 
+		      (dstaddr[10:8]==3'h5)  & 
+		      (dstaddr[5]==rxsel);
+   
+
+   //mmu select
+   assign mi_mmu_en = mi_match & 
+		      (dstaddr[19:16]==4'hE) &
+
+Diff Content:
+- 102 		      (dstaddr[19:16]==4'hF) & 
++ 102 		      (dstaddr[19:16]==`EGROUP_MMR) & 
+
+Clone Blocks:

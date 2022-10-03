@@ -1,0 +1,49 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_adc.v@119:129@HdlStmAssign
+    mode        <= control[ 7:4];
+  end
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
+
+  ad_pnmon #(
+    .DATA_WIDTH(8)
+  ) i_pn_mon (
+    .adc_clk(clk),
+
+Diff Content:
+- 124   assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
++ 124   assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_data_s} : adc_pn_data;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/qpsk/prcfg_adc.v@117:127
+  always @(posedge clk) begin
+    channel_sel <= control[ 3:0];
+    mode        <= control[ 7:4];
+  end
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
+
+  ad_pnmon #(
+    .DATA_WIDTH(8)
+
+Clone Blocks 2:
+hdl/library/prcfg/qpsk/prcfg_adc.v@112:125
+      pn = dout;
+    end
+  endfunction
+
+  // update control and status registers
+  always @(posedge clk) begin
+    channel_sel <= control[ 3:0];
+    mode        <= control[ 7:4];
+  end
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
+
+

@@ -1,0 +1,51 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1595:1607@HdlStmProcess
+
+   //##################################
+   //#   Input FIFO of the receiver
+   //##################################
+
+   always @ (posedge rxi_lclk)
+     if (fifo_write)
+       fifo_mem[wr_addr[FAD-1:0]] <= fifo_data_in[2*LW:0];
+
+   //# Read from fifo
+   assign fifo_data_out[2*LW:0] = fifo_mem[rd_addr[FAD-1:0]];
+
+   //# Since the size of the FIFO is parametrized I prefer to sample the output
+
+Diff Content:
+- 1600    always @ (posedge rxi_lclk)
+- 1601      if (fifo_write)
+- 1602        fifo_mem[wr_addr[FAD-1:0]] <= fifo_data_in[2*LW:0];
++ 1602 module link_receiver(/*AUTOARG*/
++ 1602    rxi_wr_wait, rxi_rd_wait, c0_emesh_frame_out, c0_emesh_tran_out,
++ 1602    c3_emesh_frame_out, c3_emesh_tran_out, c0_rdmesh_frame_out,
++ 1602    c0_rdmesh_tran_out, c1_rdmesh_frame_out, c1_rdmesh_tran_out,
++ 1602    c2_rdmesh_frame_out, c2_rdmesh_tran_out, c3_rdmesh_frame_out,
++ 1602    c3_rdmesh_tran_out, c0_mesh_access_out, c0_mesh_write_out,
++ 1602    c0_mesh_dstaddr_out, c0_mesh_srcaddr_out, c0_mesh_data_out,
++ 1602    c0_mesh_datamode_out, c0_mesh_ctrlmode_out, c3_mesh_access_out,
++ 1602    c3_mesh_write_out, c3_mesh_dstaddr_out, c3_mesh_srcaddr_out,
++ 1602    c3_mesh_data_out, c3_mesh_datamode_out, c3_mesh_ctrlmode_out,
++ 1602    reset, ext_yid_k, ext_xid_k, vertical_k, who_am_i, cfg_extcomp_dis,
++ 1602    rxi_data, rxi_lclk, rxi_frame, c0_clk_in, c1_clk_in, c2_clk_in,
++ 1602    c3_clk_in, c0_emesh_wait_in, c3_emesh_wait_in, c0_mesh_wait_in,
++ 1602    c3_mesh_wait_in, c0_rdmesh_wait_in, c1_rdmesh_wait_in,
++ 1602    c2_rdmesh_wait_in, c3_rdmesh_wait_in
++ 1602    );
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1600:1610
+   always @ (posedge rxi_lclk)
+     if (fifo_write)
+       fifo_mem[wr_addr[FAD-1:0]] <= fifo_data_in[2*LW:0];
+
+   //# Read from fifo
+   assign fifo_data_out[2*LW:0] = fifo_mem[rd_addr[FAD-1:0]];
+
+   //# Since the size of the FIFO is parametrized I prefer to sample the output
+   //# data to prevent timing issues for the big number of entries (big mux on read)
+   //# This shouldn't add any performance loss just latency increase
+
+

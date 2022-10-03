@@ -1,0 +1,31 @@
+Source Block: hdl/projects/ad9081_fmca_ebz/zcu102/system_top.v@166:176@HdlStmAssign
+
+  assign rx_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_device_clk_internal;
+
+  // spi
+
+  assign spi0_csb   = spi0_csn[0];
+  assign spi1_csb   = spi1_csn[0];
+
+
+  ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi (
+    .spi_csn (spi1_csn[0]),
+
+Diff Content:
+- 171   assign spi0_csb   = spi0_csn[0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/ad9081_fmca_ebz/zcu102/system_top.v@167:177
+  assign rx_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_device_clk_internal;
+
+  // spi
+
+  assign spi0_csb   = spi0_csn[0];
+  assign spi1_csb   = spi1_csn[0];
+
+
+  ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi (
+    .spi_csn (spi1_csn[0]),
+    .spi_clk (spi1_sclk),
+

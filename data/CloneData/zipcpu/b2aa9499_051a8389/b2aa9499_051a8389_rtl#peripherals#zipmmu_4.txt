@@ -1,0 +1,32 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@600:624@HdlStmProcess
+		pf_cachable <= cachable;
+
+	initial	pf_stb = 1'b0;
+	initial	last_ppage = 0;
+	initial	last_vpage = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		pf_stb <= 1'b0;
+		last_ppage <= 0;
+		last_vpage <= 0;
+	end else if ((!kernel_context)&&(r_pending)&&(!last_page_valid))
+	begin
+		last_ppage <= ppage;
+		last_vpage <= vpage;
+		last_exe   <= exe_flag;
+		last_ro    <= ro_flag;
+		pf_stb <= 1'b1;
+	end else
+		pf_stb <= 1'b0;
+
+	initial	status_word = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+		status_word <= 0;
+
+Diff Content:
++ 610 		last_tlb   <= 0;
++ 612 		last_tlb   <= s_tlb_addr;
+
+Clone Blocks:

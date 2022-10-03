@@ -1,0 +1,31 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@1613:1623@HdlIdDef
+reg display_sprite = 0;
+
+reg [4:0] preheat_x = 0;
+reg preheat = 0;
+
+reg x_safe_area = 0;
+
+always @(posedge vga_clk) begin
+  if (counter_x >= h_max-preheat_x && !preheat) begin
+    counter_8x <= margin_x;
+    counter_x_hi <= 0;
+
+Diff Content:
++ 1618 reg display_pixels = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@1611:1621
+reg[7:0] pidx2;
+
+reg display_sprite = 0;
+
+reg [4:0] preheat_x = 0;
+reg preheat = 0;
+
+reg x_safe_area = 0;
+
+always @(posedge vga_clk) begin
+  if (counter_x >= h_max-preheat_x && !preheat) begin
+

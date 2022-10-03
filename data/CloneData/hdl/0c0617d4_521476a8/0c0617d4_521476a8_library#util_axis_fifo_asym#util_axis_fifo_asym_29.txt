@@ -1,0 +1,21 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@242:252@HdlStmAssign
+    // the FIFO has the same room as the atomic FIFO
+    assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
+
+  end
+
+  assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
+
+endgenerate
+
+// slave handshake counter
+
+
+Diff Content:
+- 247   assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
++ 247       assign m_axis_data = m_axis_data_int_s;
++ 247       assign m_axis_valid = (|m_axis_tlast_int_s) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
++ 247       assign m_axis_empty = |m_axis_empty_int_s;
++ 247       assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
+
+Clone Blocks:

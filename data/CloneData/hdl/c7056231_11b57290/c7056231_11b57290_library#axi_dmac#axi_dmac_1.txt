@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@215:232@HdlIdDef
+  DMA_DATA_WIDTH_DEST > 128 ? 5 :
+  DMA_DATA_WIDTH_DEST > 64 ? 4 :
+  DMA_DATA_WIDTH_DEST > 32 ? 3 :
+  DMA_DATA_WIDTH_DEST > 16 ? 2 :
+  DMA_DATA_WIDTH_DEST > 8 ? 1 : 0;
+localparam BYTES_PER_BEAT_WIDTH_SRC = DMA_DATA_WIDTH_SRC > 1024 ? 8 :
+  DMA_DATA_WIDTH_SRC > 512 ? 7 :
+  DMA_DATA_WIDTH_SRC > 256 ? 6 :
+  DMA_DATA_WIDTH_SRC > 128 ? 5 :
+  DMA_DATA_WIDTH_SRC > 64 ? 4 :
+  DMA_DATA_WIDTH_SRC > 32 ? 3 :
+  DMA_DATA_WIDTH_SRC > 16 ? 2 :
+  DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
+
+// Register interface signals
+reg  [31:0]  up_rdata = 'd0;
+reg          up_wack = 1'b0;
+reg          up_rack = 1'b0;
+
+Diff Content:
++ 227 localparam ID_WIDTH = (FIFO_SIZE*2) > 1024 ? 8 :
++ 227   (FIFO_SIZE*2) > 512 ? 7 :
++ 227   (FIFO_SIZE*2) > 256 ? 6 :
++ 227   (FIFO_SIZE*2) > 128 ? 5 :
++ 227   (FIFO_SIZE*2) > 64 ? 4 :
++ 227   (FIFO_SIZE*2) > 32 ? 3 :
++ 227   (FIFO_SIZE*2) > 16 ? 2 :
++ 227   (FIFO_SIZE*2) > 8 ? 1 : 0;
+
+Clone Blocks:

@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/etx_protocol.v@95:109@HdlStmProcess
+   //if burst, you get immediate "ack"
+   //otherwise you get ack in one cycle  
+   reg 		 done;
+   wire 	 tx_io_wait;
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       done <= 1'b0;                 
+     else
+       done <= tx_access & ~done;
+  
+   assign tx_io_wait = tx_access & ~done & ~tx_burst;//tx_burst_reg
+
+   assign adjust     = tx_io_wait_reg & (tx_rd_wait | tx_wr_wait);
+  		      
+
+Diff Content:
+- 104        done <= tx_access & ~done;
++ 104        done <= tx_access & ~done & ~tx_burst;
+
+Clone Blocks:

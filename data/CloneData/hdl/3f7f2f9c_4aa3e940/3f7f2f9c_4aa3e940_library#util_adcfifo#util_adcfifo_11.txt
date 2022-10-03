@@ -1,0 +1,48 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@105:130@HdlStmProcess
+    .rst_async (adc_rst),
+    .clk (adc_clk),
+    .rstn (),
+    .rst (adc_rst_s));
+
+  always @(posedge adc_clk) begin
+    if (adc_rst_s == 1'b1) begin
+      adc_xfer_req_m <= 'd0;
+      adc_xfer_init <= 'd0;
+      adc_xfer_enable <= 'd0;
+    end else begin
+      adc_xfer_req_m <= {adc_xfer_req_m[1:0], dma_xfer_req};
+      adc_xfer_init <= adc_xfer_req_m[1] & ~adc_xfer_req_m[2];
+      if (adc_xfer_init == 1'b1) begin
+        adc_xfer_enable <= 1'b1;
+      end else if ((adc_waddr_int >= ADC_ADDR_LIMIT - 1) ||
+        (adc_xfer_req_m[2] == 1'b0)) begin
+        adc_xfer_enable <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge adc_clk) begin
+    if (adc_rst_s == 1'b1) begin
+      adc_wr_int <= 'd0;
+      adc_wdata_int <= 'd0;
+
+Diff Content:
+- 113       adc_xfer_init <= 'd0;
+- 114       adc_xfer_enable <= 'd0;
+- 118       if (adc_xfer_init == 1'b1) begin
+- 119         adc_xfer_enable <= 1'b1;
+- 120       end else if ((adc_waddr_int >= ADC_ADDR_LIMIT - 1) ||
+- 121         (adc_xfer_req_m[2] == 1'b0)) begin
+- 122         adc_xfer_enable <= 1'b0;
+- 123       end
++ 116     end
++ 116   end
++ 116   always @(posedge adc_clk) begin
++ 116     if (adc_rst_s == 1'b1) begin
++ 116       adc_xfer_init <= 'd0;
++ 116     end else begin
++ 125   assign dma_wr = dma_wr_int_s & dma_xfer_req;
++ 125   assign adc_end_of_capture_s = ((adc_waddr_int_s == ADC_ADDR_LIMIT) || (adc_xfer_req_m[2] == 1'b0)) &&
++ 125                                    (adc_wr_int == 1'b1);
+
+Clone Blocks:

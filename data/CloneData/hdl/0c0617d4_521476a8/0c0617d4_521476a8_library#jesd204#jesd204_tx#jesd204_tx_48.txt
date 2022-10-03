@@ -1,0 +1,45 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@336:346@HdlStmAssign
+
+end
+endgenerate
+
+assign lmfc_edge = device_lmfc_edge;
+assign lmfc_clk = device_lmfc_clk;
+
+assign frame_mark_reset = (LINK_MODE == 1) ? eof_gen_reset : ~tx_ready_64b_next;
+
+jesd204_frame_mark #(
+  .DATA_PATH_WIDTH            (DATA_PATH_WIDTH)
+
+Diff Content:
+- 341 assign lmfc_clk = device_lmfc_clk;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx.v@338:348
+endgenerate
+
+assign lmfc_edge = device_lmfc_edge;
+assign lmfc_clk = device_lmfc_clk;
+
+assign frame_mark_reset = (LINK_MODE == 1) ? eof_gen_reset : ~tx_ready_64b_next;
+
+jesd204_frame_mark #(
+  .DATA_PATH_WIDTH            (DATA_PATH_WIDTH)
+) i_frame_mark (
+  .clk                        (clk),
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_tx/jesd204_tx.v@335:345
+  assign tx_ready = link_tx_ready;
+
+end
+endgenerate
+
+assign lmfc_edge = device_lmfc_edge;
+assign lmfc_clk = device_lmfc_clk;
+
+assign frame_mark_reset = (LINK_MODE == 1) ? eof_gen_reset : ~tx_ready_64b_next;
+
+jesd204_frame_mark #(
+

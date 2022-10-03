@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_ad9963/axi_ad9963_if.v@238:261@HdlStmFor
+    .S0(up_dac_ce),
+    .S1(1'b0)
+    );
+
+  generate
+  for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin: g_tx_data
+  ODDR #(
+    .DDR_CLK_EDGE ("SAME_EDGE"),
+    .INIT (1'b0),
+    .SRTYPE ("SYNC"))
+  i_tx_data_oddr (
+    .CE (1'b1),
+    .R (dac_rst),
+    .S (1'b0),
+    .C (dac_clk),
+    .D1 (tx_data_p[l_inst]),
+    .D2 (tx_data_n[l_inst]),
+    .Q (tx_data[l_inst]));
+    end
+  endgenerate
+
+  ODDR #(
+    .DDR_CLK_EDGE ("SAME_EDGE"),
+    .INIT (1'b0),
+
+Diff Content:
+- 247     .SRTYPE ("SYNC"))
+- 248   i_tx_data_oddr (
++ 248     .SRTYPE ("SYNC")
++ 248   ) i_tx_data_oddr (
+
+Clone Blocks:

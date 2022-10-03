@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/etx_protocol.v@68:78@HdlIdDef
+		      .srcaddr_out	(),
+		      .packet_in	(etx_packet[PW-1:0]));//input
+   
+   //Hold transaction while waiting
+   //This transaction should be flushed out on wait????
+   reg 	 tx_access_reg;  
+   always @ (posedge clk)
+     if(!nreset)
+       begin
+	  tx_access_reg <= 'b0;
+	  tx_packet[PW-1:0] <= 'b0;	  
+
+Diff Content:
+- 73    reg 	 tx_access_reg;  
+
+Clone Blocks:

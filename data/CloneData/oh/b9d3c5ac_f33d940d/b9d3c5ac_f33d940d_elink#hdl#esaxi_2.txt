@@ -1,0 +1,56 @@
+Source Block: oh/elink/hdl/esaxi.v@334:382@HdlStmProcess
+          else if( last_rd_beat )
+            read_active <= 1'b0;         
+       end // else: !if( s_axi_aresetn == 1'b0 )
+   
+   //Read address channel state machine
+   always @( posedge s_axi_aclk ) 
+      if (~s_axi_aresetn) 
+	begin
+           axi_araddr[31:0] <= 0;
+           axi_arlen        <= 8'd0;
+           axi_arburst      <= 2'd0;
+           axi_arsize       <= 2'b0;
+           s_axi_rlast      <= 1'b0;
+           //s_axi_rid        <= 'd0;         
+	end
+      else 
+	begin         
+         if( s_axi_arready & s_axi_arvalid ) 
+	   begin
+	      //TODO: something is wrong..
+              axi_araddr[31:0]  <= { ecfg_coreid[11:c_s_axi_addr_width-20],
+				     s_axi_araddr[29:0] };     // start address of transfer
+              axi_arlen   <= s_axi_arlen;
+              axi_arburst <= s_axi_arburst;
+              axi_arsize  <= s_axi_arsize;
+              s_axi_rlast   <= ~(|s_axi_arlen);
+              //s_axi_rid     <= s_axi_arid;              
+         end 
+	 else if( s_axi_rvalid & s_axi_rready) 
+	   begin	      
+              axi_arlen <= axi_arlen - 1;
+              if(axi_arlen == 8'd1)
+		s_axi_rlast <= 1'b1;              
+              if( s_axi_arburst == 2'b01) 
+		begin //incremental burst
+		   // the read address for all the beats in the transaction are increments by awsize
+		   // note: this should be based on awsize instead to support narrow bursts, i think?
+		   axi_araddr[c_s_axi_addr_width - 1:addr_lsb] <= axi_araddr[c_s_axi_addr_width - 1:addr_lsb] + 1;
+		   //araddr aligned to 4 byte boundary
+		   axi_araddr[addr_lsb-1:0]  <= {addr_lsb{1'b0}};   
+		   //for awsize = 4 bytes (010)
+		end
+           end // if ( s_axi_rvalid & s_axi_rready)
+	end // else: !if( s_axi_aresetn == 1'b0 )
+   
+
+   //###################################################
+   //#WRITE DATA
+   //###################################################  
+
+Diff Content:
+- 345            axi_arsize       <= 2'b0;
++ 345            axi_arsize[2:0]  <= 3'b0;
+
+Clone Blocks:

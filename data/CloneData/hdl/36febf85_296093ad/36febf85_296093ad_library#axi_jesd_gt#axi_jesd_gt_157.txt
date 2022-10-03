@@ -1,0 +1,43 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@498:512@HdlStmIf
+  BUFG i_bufg_tx_clk (
+    .I (tx_out_clk[0]),
+    .O (tx_clk_g));
+  end
+
+  if (PCORE_DEVICE_TYPE == 1) begin
+  BUFG_GT i_bufg_rx_clk (
+    .I (rx_out_clk[0]),
+    .O (rx_clk_g));
+  end
+
+  if (PCORE_DEVICE_TYPE == 1) begin
+  BUFG_GT i_bufg_tx_clk (
+    .I (tx_out_clk[0]),
+    .O (tx_clk_g));
+
+Diff Content:
+- 503   if (PCORE_DEVICE_TYPE == 1) begin
+- 504   BUFG_GT i_bufg_rx_clk (
+- 505     .I (rx_out_clk[0]),
+- 506     .O (rx_clk_g));
+- 507   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@492:506
+  BUFG i_bufg_rx_clk (
+    .I (rx_out_clk[0]),
+    .O (rx_clk_g));
+  end
+
+  if (PCORE_DEVICE_TYPE == 0) begin
+  BUFG i_bufg_tx_clk (
+    .I (tx_out_clk[0]),
+    .O (tx_clk_g));
+  end
+
+  if (PCORE_DEVICE_TYPE == 1) begin
+  BUFG_GT i_bufg_rx_clk (
+    .I (rx_out_clk[0]),
+    .O (rx_clk_g));
+

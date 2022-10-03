@@ -1,0 +1,101 @@
+Source Block: oh/spi/dv/dut_spi.v@56:66@HdlStmAssign
+   //###################
+   // GLUE
+   //###################
+   assign clkout     = clk1;
+   assign clk        = clk1;
+   assign wait_out   = 1'b0;
+   assign dut_active = 1'b1;
+
+   //######################################################################
+   //# DUT
+   //######################################################################
+
+Diff Content:
+- 61    assign wait_out   = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/gpio/dv/dut_gpio.v@55:65
+
+   //######################################################################
+   //DUT
+   //######################################################################
+
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   assign clkout          = clk1;
+   assign clk             = clk1;
+   
+   always @ (posedge clk)
+
+Clone Blocks 2:
+oh/spi/dv/dut_spi.v@55:65
+
+   //###################
+   // GLUE
+   //###################
+   assign clkout     = clk1;
+   assign clk        = clk1;
+   assign wait_out   = 1'b0;
+   assign dut_active = 1'b1;
+
+   //######################################################################
+   //# DUT
+
+Clone Blocks 3:
+oh/common/dv/dut_gray.v@29:39
+
+   /*AUTOINPUT*/
+   /*AUTOOUTPUT*/
+   /*AUTOWIRE*/
+
+   wire [31:0] 	     gray;
+   
+   //tie offs for Dv
+   assign dut_active = 1'b1;
+   assign wait_out   = 1'b0;
+   assign clkout     = clk1;
+
+Clone Blocks 4:
+oh/spi/dv/dut_spi.v@54:64
+   // End of automatics
+
+   //###################
+   // GLUE
+   //###################
+   assign clkout     = clk1;
+   assign clk        = clk1;
+   assign wait_out   = 1'b0;
+   assign dut_active = 1'b1;
+
+   //######################################################################
+
+Clone Blocks 5:
+oh/emmu/dv/dut_emmu.v@48:58
+   /*AUTOINPUT*/
+  
+   // End of automatics
+   /*AUTOWIRE*/
+      
+   assign clkout     = clk1;   
+   assign dut_active = 1'b1;
+   assign wait_out   = 1'b0;
+   
+   emmu eemu (// Outputs
+	      .reg_rdata		(),
+
+Clone Blocks 6:
+oh/spi/dv/dut_spi.v@57:67
+   // GLUE
+   //###################
+   assign clkout     = clk1;
+   assign clk        = clk1;
+   assign wait_out   = 1'b0;
+   assign dut_active = 1'b1;
+
+   //######################################################################
+   //# DUT
+   //######################################################################
+
+

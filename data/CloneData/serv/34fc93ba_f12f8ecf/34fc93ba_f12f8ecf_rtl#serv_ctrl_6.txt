@@ -1,0 +1,61 @@
+Source Block: serv/rtl/serv_ctrl.v@73:83@HdlIdDef
+   wire       pc_plus_offset_aligned = pc_plus_offset & en_r;
+
+
+   reg        en_r  = 1'b1;
+   reg        en_2r = 1'b0;
+   reg        en_3r = 1'b0;
+
+   always @(posedge clk) begin
+      en_r <= i_en;
+      en_2r <= en_r;
+      en_3r <= en_2r;
+
+Diff Content:
++ 78    reg 	      en_pc_r = 1'b1;
++ 78    reg 	      en_pc_2r = 1'b0;
++ 78    reg 	      en_pc_3r = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_ctrl.v@72:82
+
+   wire       pc_plus_offset_aligned = pc_plus_offset & en_r;
+
+
+   reg        en_r  = 1'b1;
+   reg        en_2r = 1'b0;
+   reg        en_3r = 1'b0;
+
+   always @(posedge clk) begin
+      en_r <= i_en;
+      en_2r <= en_r;
+
+Clone Blocks 2:
+serv/rtl/serv_ctrl.v@71:81
+      .o_v ());
+
+   wire       pc_plus_offset_aligned = pc_plus_offset & en_r;
+
+
+   reg        en_r  = 1'b1;
+   reg        en_2r = 1'b0;
+   reg        en_3r = 1'b0;
+
+   always @(posedge clk) begin
+      en_r <= i_en;
+
+Clone Blocks 3:
+serv/rtl/serv_ctrl.v@68:78
+      .b   (i_offset),
+      .clr (!i_en),
+      .q   (pc_plus_offset),
+      .o_v ());
+
+   wire       pc_plus_offset_aligned = pc_plus_offset & en_r;
+
+
+   reg        en_r  = 1'b1;
+   reg        en_2r = 1'b0;
+   reg        en_3r = 1'b0;
+

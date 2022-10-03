@@ -1,0 +1,45 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_ilas_monitor.v@60:70@HdlIdDef
+
+  output data_ready_n
+);
+
+
+localparam STATE_ILAS = 1'b1;
+localparam STATE_DATA = 1'b0;
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+
+wire octets_per_mf_4_mod_8 = (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2];
+reg state = STATE_ILAS;
+
+Diff Content:
+- 65 localparam STATE_ILAS = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_ilas_monitor.v@61:71
+  output data_ready_n
+);
+
+
+localparam STATE_ILAS = 1'b1;
+localparam STATE_DATA = 1'b0;
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+
+wire octets_per_mf_4_mod_8 = (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2];
+reg state = STATE_ILAS;
+reg next_state;
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_rx/jesd204_ilas_monitor.v@62:72
+);
+
+
+localparam STATE_ILAS = 1'b1;
+localparam STATE_DATA = 1'b0;
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+
+wire octets_per_mf_4_mod_8 = (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2];
+reg state = STATE_ILAS;
+reg next_state;
+reg prev_was_last = 1'b0;
+

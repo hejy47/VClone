@@ -1,0 +1,88 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@322:332@HdlStmAssign
+reg z_ready_latch = 'b1;
+reg z_ovr = 0;
+assign zXRDY  = 1'bZ; //z_ready_latch?1'bZ:1'b0; //works only if bZ?  1'bZ
+assign znCINH = !z_ovr; //1; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout_z3_latched) ? data_z3_hi16_latched : ((/*zDOE & */dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3_latched) ? {data_z3_low16_latched, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+
+Diff Content:
+- 327 assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
++ 327 assign znSLAVEN = (/*dataout &&*/ slaven)?1'b0:1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@326:336
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout_z3_latched) ? data_z3_hi16_latched : ((/*zDOE & */dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3_latched) ? {data_z3_low16_latched, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+// autoconf status
+reg z3_confdone = 0;
+
+// zorro synchronizers
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@320:330
+
+reg z_ready = 'b1;
+reg z_ready_latch = 'b1;
+reg z_ovr = 0;
+assign zXRDY  = 1'bZ; //z_ready_latch?1'bZ:1'b0; //works only if bZ?  1'bZ
+assign znCINH = !z_ovr; //1; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout_z3_latched) ? data_z3_hi16_latched : ((/*zDOE & */dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@318:328
+assign zDIR3     = dataout_z3; // a16-a23 <- input
+assign zDIR4     = dataout_z3; // a8-a15 <- input
+
+reg z_ready = 'b1;
+reg z_ready_latch = 'b1;
+reg z_ovr = 0;
+assign zXRDY  = 1'bZ; //z_ready_latch?1'bZ:1'b0; //works only if bZ?  1'bZ
+assign znCINH = !z_ovr; //1; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+Clone Blocks 4:
+amiga2000-gfxcard/z2-minispartan/z2.v@323:333
+reg z_ovr = 0;
+assign zXRDY  = 1'bZ; //z_ready_latch?1'bZ:1'b0; //works only if bZ?  1'bZ
+assign znCINH = !z_ovr; //1; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout_z3_latched) ? data_z3_hi16_latched : ((/*zDOE & */dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3_latched) ? {data_z3_low16_latched, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+// autoconf status
+
+Clone Blocks 5:
+amiga2000-gfxcard/z2-minispartan/z2.v@325:335
+assign znCINH = !z_ovr; //1; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout_z3_latched) ? data_z3_hi16_latched : ((/*zDOE & */dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3_latched) ? {data_z3_low16_latched, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+// autoconf status
+reg z3_confdone = 0;
+
+

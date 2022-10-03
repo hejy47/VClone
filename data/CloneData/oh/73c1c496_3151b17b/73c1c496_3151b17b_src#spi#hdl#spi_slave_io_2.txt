@@ -1,0 +1,32 @@
+Source Block: oh/src/spi/hdl/spi_slave_io.v@116:126@HdlStmAssign
+   
+   //#################################
+   //# TX SHIFT REGISTER
+   //#################################
+
+   assign tx_load   = byte_done; // & (spi_state[1:0]==`SPI_CMD);
+   assign tx_shift  = ~ss & spi_en;
+   
+   oh_par2ser #(.PW(8),
+		.SW(1))
+   tx_par2ser (.dout	   (miso),
+
+Diff Content:
+- 121    assign tx_load   = byte_done; // & (spi_state[1:0]==`SPI_CMD);
++ 121    assign tx_load   = byte_done; // & (spi_state[1:0]==`SPI_CMD_STATE);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/spi/hdl/spi_slave_io.v@117:127
+   //#################################
+   //# TX SHIFT REGISTER
+   //#################################
+
+   assign tx_load   = byte_done; // & (spi_state[1:0]==`SPI_CMD);
+   assign tx_shift  = ~ss & spi_en;
+   
+   oh_par2ser #(.PW(8),
+		.SW(1))
+   tx_par2ser (.dout	   (miso),
+	       .access_out (),
+

@@ -1,0 +1,52 @@
+Source Block: hdl/library/axi_fmcadc5_sync/axi_fmcadc5_sync.v@292:332@HdlStmProcess
+        up_cal_min_1 <= rx_cal_min_1_s;
+      end
+    end
+  end
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_cal_enable <= 1'd0;
+      up_cor_enable <= 1'd0;
+      up_cor_enable_t <= 1'd0;
+      up_cor_scale_0 <= 16'd0;
+      up_cor_offset_0 <= 16'd0;
+      up_cor_scale_1 <= 16'd0;
+      up_cor_offset_1 <= 16'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0060)) begin
+        up_cal_enable <= up_wdata_s[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0061)) begin
+        up_cor_enable <= up_wdata_s[0];
+        up_cor_enable_t <= ~up_cor_enable_t;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+        up_cor_scale_0 <= up_wdata_s[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+        up_cor_offset_0 <= up_wdata_s[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+        up_cor_scale_1 <= up_wdata_s[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+        up_cor_offset_1 <= up_wdata_s[15:0];
+      end
+    end
+  end
+
+  // calibration signal register(s) 
+
+  assign vcal = up_vcal;
+
+
+Diff Content:
+- 317       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+- 320       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
+- 323       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0068)) begin
++ 317       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h0069)) begin
++ 320       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h006a)) begin
++ 323       if ((up_wreq_s == 1'b1) && (up_waddr_s == 14'h006b)) begin
+
+Clone Blocks:

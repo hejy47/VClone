@@ -1,0 +1,29 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4340:4354@HdlStmProcess
+   //#####################
+   //# Bursting logic
+   //#####################
+
+   //# keeping track of the address increment mode of burst transaction
+   always @ (posedge txo_lclk or posedge reset)
+     if(reset)
+       byte0_inc0     <= 1'b0;
+     else if(start_new_read)
+       byte0_inc0     <= next_inc0_match;
+   
+   //# reference destination address and controls
+   always @(posedge txo_lclk)
+     if(start_new_read)
+       begin
+
+Diff Content:
+- 4345    always @ (posedge txo_lclk or posedge reset)
+- 4347        byte0_inc0     <= 1'b0;
+- 4348      else if(start_new_read)
+- 4349        byte0_inc0     <= next_inc0_match;
++ 4345    always @(posedge cclk or posedge reset)
++ 4349        wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
++ 4349      else if(cclk_en)
++ 4349        if(wr_write)
++ 4349 	 wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
+
+Clone Blocks:

@@ -1,0 +1,35 @@
+Source Block: hdl/library/util_cpack/util_cpack.v@83:93@HdlIdDef
+
+  localparam  CH_SCNT   = CH_DW/16;
+  localparam  CH_MCNT   = 8;
+  localparam  P_DW      = CH_CNT*CH_DW;
+  localparam  P_CNT     = CH_CNT;
+  localparam  P_SCNT    = P_DW/16;
+
+  // adc interface
+
+  input                             adc_rst;
+  input                             adc_clk;
+
+Diff Content:
+- 88   localparam  P_SCNT    = P_DW/16;
++ 88   localparam  SAMPLES_PCHANNEL    = CHANNEL_DATA_WIDTH/16;
++ 88   localparam  NUM_OF_CHANNELS_M   = 8;
++ 88   localparam  BUS_DATA_WIDTH      = NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH;
++ 88   localparam  NUM_OF_CHANNELS_P   = NUM_OF_CHANNELS;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_cpack/util_cpack.v@82:92
+  parameter   CH_CNT    = 8;
+
+  localparam  CH_SCNT   = CH_DW/16;
+  localparam  CH_MCNT   = 8;
+  localparam  P_DW      = CH_CNT*CH_DW;
+  localparam  P_CNT     = CH_CNT;
+  localparam  P_SCNT    = P_DW/16;
+
+  // adc interface
+
+  input                             adc_rst;
+

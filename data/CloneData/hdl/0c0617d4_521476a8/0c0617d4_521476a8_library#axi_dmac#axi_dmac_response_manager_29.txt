@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@154:164@HdlStmAssign
+    response_dest_ready <= (nx_state == STATE_IDLE);
+  end
+end
+
+assign response_eot = (state == STATE_WRITE_RESPR) ? req_eot : 1'b1;
+assign response_partial = (state == STATE_WRITE_RESPR) ? req_response_partial : 1'b0;
+
+always @(posedge req_clk)
+begin
+  if (req_resetn == 1'b0) begin
+    response_valid <= 1'b0;
+
+Diff Content:
+- 159 assign response_partial = (state == STATE_WRITE_RESPR) ? req_response_partial : 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_response_manager.v@153:163
+  end else begin
+    response_dest_ready <= (nx_state == STATE_IDLE);
+  end
+end
+
+assign response_eot = (state == STATE_WRITE_RESPR) ? req_eot : 1'b1;
+assign response_partial = (state == STATE_WRITE_RESPR) ? req_response_partial : 1'b0;
+
+always @(posedge req_clk)
+begin
+  if (req_resetn == 1'b0) begin
+

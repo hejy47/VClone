@@ -1,0 +1,46 @@
+Source Block: oh/elink/hdl/etx_protocol.v@77:99@HdlStmProcess
+			 (~etx_write & ~tx_rd_wait_sync)
+			 );
+   
+
+   //Prepare transaction / with burst
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       begin
+	  tx_packet[PW-1:0] <= 'b0;
+	  tx_access         <= 1'b0;	  
+	  tx_burst          <= 1'b0;//TODO
+       end
+   else if(~tx_io_wait)
+       begin
+	  tx_packet[PW-1:0] <= etx_packet[PW-1:0];
+	  tx_access         <= etx_valid;
+	  tx_burst          <= 1'b0;//TODO
+       end
+   
+  
+   //#############################
+   //# Wait signals (async)
+   //#############################
+
+Diff Content:
+- 87 	  tx_burst          <= 1'b0;//TODO
+- 93 	  tx_burst          <= 1'b0;//TODO
++ 94    packet2emesh p2m1 (.access_out	(last_access),
++ 94 		     .write_out		(last_write),
++ 94 		      .datamode_out	(last_datamode[1:0]),
++ 94 		     .ctrlmode_out	(last_ctrlmode[3:0]),
++ 94 		     .dstaddr_out	(last_dstaddr[31:0]),
++ 94 		     .data_out		(),
++ 94 		     .srcaddr_out	(),
++ 94 		     .packet_in		(tx_packet[PW-1:0]));//input
++ 94    assign burst_addr[31:0]  = last_dstaddr[31:0]+ 4'd8;
++ 94    assign burst_type_match = {last_ctrlmode[3:0],last_datamode[1:0],last_write}
++ 94 			      ==
++ 94 		   	      {etx_ctrlmode[3:0],etx_datamode[1:0], etx_write};
++ 94    assign tx_burst     = etx_write                             & //write 
++ 94 	       	        (etx_datamode[1:0]==2'b11)            & //double only
++ 94 			burst_type_match                      & //same types
++ 94 			(burst_addr[31:0]==etx_dstaddr[31:0]);  //inc by 8
+
+Clone Blocks:

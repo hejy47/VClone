@@ -1,0 +1,67 @@
+Source Block: hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@181:191@HdlIdDef
+// m_axis_empty - FIFO is empty if read pointer equal to write pointer
+// m_axis_valid - FIFO has a valid output data, if it's not empty
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+
+Diff Content:
+- 186 wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@182:192
+// m_axis_valid - FIFO has a valid output data, if it's not empty
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+endmodule
+
+Clone Blocks 2:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@183:192
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+endmodule
+
+Clone Blocks 3:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@185:192
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+endmodule
+
+Clone Blocks 4:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@184:192
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+endmodule
+

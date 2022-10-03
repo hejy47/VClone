@@ -1,0 +1,54 @@
+Source Block: oh/common/hdl/oh_fifo_sync.v@33:70@HdlStmProcess
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   
+   always @ (posedge clk or negedge nreset) 
+     if(~nreset) 
+       begin	   
+          wr_addr[AW-1:0]   <= 'd0;
+          rd_addr[AW-1:0]   <= 'b0;
+          rd_count[AW-1:0]  <= 'b0;
+       end
+     else if(clear) 
+       begin	   
+          wr_addr[AW-1:0]   <= 'd0;
+          rd_addr[AW-1:0]   <= 'b0;
+          rd_count[AW-1:0]  <= 'b0;
+       end
+     else if(fifo_write & fifo_read) 
+       begin
+	  wr_addr[AW-1:0] <= wr_addr[AW-1:0] + 'd1;
+	  rd_addr[AW-1:0] <= rd_addr[AW-1:0] + 'd1;	      
+       end 
+     else if(fifo_write) 
+       begin
+	  wr_addr[AW-1:0] <= wr_addr[AW-1:0]  + 'd1;
+	  rd_count[AW-1:0]<= rd_count[AW-1:0] + 'd1;	
+       end 
+     else if(fifo_read) 
+       begin	      
+          rd_addr[AW-1:0] <= rd_addr[AW-1:0]  + 'd1;
+          rd_count[AW-1:0]<= rd_count[AW-1:0] - 'd1;
+       end
+   
+   // GENERIC DUAL PORTED MEMORY
+   oh_memory_dp 
+     #(.DW(DW),
+       .DEPTH(DEPTH))
+
+Diff Content:
++ 65    generate
++ 65       if(REG)
++ 65 	begin
++ 65 	   reg empty_reg;	   
++ 65 	   always @ (posedge clk)
++ 65 	     empty_reg <= fifo_empty;
++ 65 	   assign empty= empty_reg;
++ 65 	end
++ 65       else
++ 65 	assign empty= fifo_empty;
++ 65    endgenerate
+
+Clone Blocks:

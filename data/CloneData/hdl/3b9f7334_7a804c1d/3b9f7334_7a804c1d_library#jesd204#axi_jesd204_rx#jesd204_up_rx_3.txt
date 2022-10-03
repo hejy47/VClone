@@ -1,0 +1,38 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/jesd204_up_rx.v@126:149@HdlStmProcess
+    end
+  end
+  endcase
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_cfg_buffer_early_release <= 1'b0;
+    up_cfg_buffer_delay <= 'h00;
+  end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
+    case (up_waddr)
+    /* JESD RX configuraton */
+    12'h090: begin
+      up_cfg_buffer_early_release <= up_wdata[16];
+      up_cfg_buffer_delay <= up_wdata[9:2];
+    end
+    endcase
+  end
+end
+
+genvar i;
+generate for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+    jesd204_up_rx_lane i_up_rx_lane (
+      .up_clk(up_clk),
+
+Diff Content:
++ 134     up_ctrl_err_statistics_mask <= 3'h0;
++ 134     up_ctrl_err_statistics_reset <= 1'b0;
++ 142   end else if (up_wreq == 1'b1) begin
++ 142     case (up_waddr)
++ 142     12'h91: begin
++ 142       up_ctrl_err_statistics_mask <= up_wdata[10:8];
++ 142       up_ctrl_err_statistics_reset <= up_wdata[0];
++ 142     end
++ 142     endcase
+
+Clone Blocks:

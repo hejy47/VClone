@@ -1,0 +1,45 @@
+Source Block: hdl/library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v@115:125@HdlStmAssign
+assign m_sdi_ready  = `spi_engine_interconnect_mux(s0_sdi_ready, s1_sdi_ready);
+assign s0_sdi_valid = `spi_engine_interconnect_mux(m_sdi_valid, 1'b0);
+assign s1_sdi_valid = `spi_engine_interconnect_mux(1'b0, m_sdi_valid);
+
+assign s0_sync       = m_sync;
+assign s1_sync       = m_sync;
+assign m_sync_ready  = `spi_engine_interconnect_mux(s0_sync_ready, s1_sync_ready);
+assign s0_sync_valid = `spi_engine_interconnect_mux(m_sync_valid, 1'b0);
+assign s1_sync_valid = `spi_engine_interconnect_mux(1'b0, m_sync_valid);
+
+always @(posedge clk) begin
+
+Diff Content:
+- 120 assign s1_sync       = m_sync;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v@109:119
+assign m_sdo_valid  = `spi_engine_interconnect_mux(s0_sdo_valid, s1_sdo_valid);
+assign s0_sdo_ready = `spi_engine_interconnect_mux(m_sdo_ready, 1'b0);
+assign s1_sdo_ready = `spi_engine_interconnect_mux(1'b0, m_sdo_ready);
+
+assign s0_sdi_data  = m_sdi_data;
+assign s1_sdi_data  = m_sdi_data;
+assign m_sdi_ready  = `spi_engine_interconnect_mux(s0_sdi_ready, s1_sdi_ready);
+assign s0_sdi_valid = `spi_engine_interconnect_mux(m_sdi_valid, 1'b0);
+assign s1_sdi_valid = `spi_engine_interconnect_mux(1'b0, m_sdi_valid);
+
+assign s0_sync       = m_sync;
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v@114:124
+assign s1_sdi_data  = m_sdi_data;
+assign m_sdi_ready  = `spi_engine_interconnect_mux(s0_sdi_ready, s1_sdi_ready);
+assign s0_sdi_valid = `spi_engine_interconnect_mux(m_sdi_valid, 1'b0);
+assign s1_sdi_valid = `spi_engine_interconnect_mux(1'b0, m_sdi_valid);
+
+assign s0_sync       = m_sync;
+assign s1_sync       = m_sync;
+assign m_sync_ready  = `spi_engine_interconnect_mux(s0_sync_ready, s1_sync_ready);
+assign s0_sync_valid = `spi_engine_interconnect_mux(m_sync_valid, 1'b0);
+assign s1_sync_valid = `spi_engine_interconnect_mux(1'b0, m_sync_valid);
+
+

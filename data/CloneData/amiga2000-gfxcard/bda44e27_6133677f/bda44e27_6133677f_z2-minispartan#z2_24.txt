@@ -1,0 +1,59 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@195:205@HdlIdDef
+parameter max_fill = 1000;
+parameter q_msb = 21; // -> 20 bit wide RAM addresses (16-bit words) = 2MB
+parameter lds_bit = q_msb+1;
+parameter uds_bit = q_msb+2;
+
+reg [(q_msb+2):0] writeq_addr [0:max_fill-1]; // 21=uds 20=lds
+reg [15:0] writeq_data [0:max_fill-1];
+reg [12:0] writeq_fill = 0;
+reg [12:0] writeq_drain = 0;
+
+reg [1:0] znAS_sync  = 2'b11;
+
+Diff Content:
+- 200 reg [(q_msb+2):0] writeq_addr [0:max_fill-1]; // 21=uds 20=lds
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@196:206
+parameter q_msb = 21; // -> 20 bit wide RAM addresses (16-bit words) = 2MB
+parameter lds_bit = q_msb+1;
+parameter uds_bit = q_msb+2;
+
+reg [(q_msb+2):0] writeq_addr [0:max_fill-1]; // 21=uds 20=lds
+reg [15:0] writeq_data [0:max_fill-1];
+reg [12:0] writeq_fill = 0;
+reg [12:0] writeq_drain = 0;
+
+reg [1:0] znAS_sync  = 2'b11;
+reg [2:0] znUDS_sync = 3'b000;
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@197:207
+parameter lds_bit = q_msb+1;
+parameter uds_bit = q_msb+2;
+
+reg [(q_msb+2):0] writeq_addr [0:max_fill-1]; // 21=uds 20=lds
+reg [15:0] writeq_data [0:max_fill-1];
+reg [12:0] writeq_fill = 0;
+reg [12:0] writeq_drain = 0;
+
+reg [1:0] znAS_sync  = 2'b11;
+reg [2:0] znUDS_sync = 3'b000;
+reg [2:0] znLDS_sync = 3'b000;
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@198:208
+parameter uds_bit = q_msb+2;
+
+reg [(q_msb+2):0] writeq_addr [0:max_fill-1]; // 21=uds 20=lds
+reg [15:0] writeq_data [0:max_fill-1];
+reg [12:0] writeq_fill = 0;
+reg [12:0] writeq_drain = 0;
+
+reg [1:0] znAS_sync  = 2'b11;
+reg [2:0] znUDS_sync = 3'b000;
+reg [2:0] znLDS_sync = 3'b000;
+reg [1:0] zREAD_sync = 2'b00;
+

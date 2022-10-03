@@ -1,0 +1,50 @@
+Source Block: hdl/library/xilinx/common/ad_data_out.v@110:129@HdlStmIf
+    .Q (tx_data_oddr_s));
+  end
+  endgenerate
+
+  generate
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+  ODDR #(.DDR_CLK_EDGE (IDDR_CLK_EDGE)) i_tx_data_oddr (
+    .CE (1'b1),
+    .R (1'b0),
+    .S (1'b0),
+    .C (tx_clk),
+    .D1 (tx_data_n),
+    .D2 (tx_data_p),
+    .Q (tx_data_oddr_s));
+  end
+  endgenerate
+
+  // odelay
+
+  generate
+
+Diff Content:
+- 116   ODDR #(.DDR_CLK_EDGE (IDDR_CLK_EDGE)) i_tx_data_oddr (
++ 116   ODDR #(
++ 116     .DDR_CLK_EDGE (IDDR_CLK_EDGE)
++ 116   ) i_tx_data_oddr (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/common/ad_data_out.v@99:116
+  endgenerate
+
+  // transmit data interface, oddr -> odelay -> obuf
+
+  generate
+  if ((FPGA_TECHNOLOGY == ULTRASCALE) || (FPGA_TECHNOLOGY == ULTRASCALE_PLUS)) begin
+  ODDRE1 i_tx_data_oddr (
+    .SR (1'b0),
+    .C (tx_clk),
+    .D1 (tx_data_n),
+    .D2 (tx_data_p),
+    .Q (tx_data_oddr_s));
+  end
+  endgenerate
+
+  generate
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+  ODDR #(.DDR_CLK_EDGE (IDDR_CLK_EDGE)) i_tx_data_oddr (
+

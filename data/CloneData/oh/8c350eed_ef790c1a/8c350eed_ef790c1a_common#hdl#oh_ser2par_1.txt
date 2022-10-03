@@ -1,0 +1,34 @@
+Source Block: oh/common/hdl/oh_ser2par.v@19:37@HdlStmIf
+   //###############################################################
+   //# BODY
+   //###############################################################
+   reg [DW-1:0]    dout;
+   generate
+      if(TYPE=="MSB")
+	begin
+	   always @ (posedge clk)
+	     dout[DW-1:0] = {dout[DW-2:0],din};
+	end
+      else
+	begin
+	   always @ (posedge clk)
+	     dout[DW-1:0] = {din,dout[DW-1:1]};
+	end
+   endgenerate
+   
+endmodule // oh_ser2par
+
+
+Diff Content:
+- 24       if(TYPE=="MSB")
+- 25 	begin
+- 26 	   always @ (posedge clk)
+- 27 	     dout[DW-1:0] = {dout[DW-2:0],din};
+- 28 	end
+- 29       else
+- 30 	begin
+- 31 	   always @ (posedge clk)
+- 32 	     dout[DW-1:0] = {din,dout[DW-1:1]};
+- 33 	end
+
+Clone Blocks:

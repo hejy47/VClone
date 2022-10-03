@@ -1,0 +1,315 @@
+Source Block: hdl/library/common/ad_gt_es.v@388:695@HdlStmProcess
+  end
+
+  // eye scan state machine- write vertical and horizontal offsets
+  // and read back sample and error counters
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_es_fsm <= ES_FSM_IDLE;
+    end else begin
+      if (up_es_stop == 1'b1) begin
+        up_es_fsm <= ES_FSM_IDLE;
+      end else begin
+        case (up_es_fsm)
+          ES_FSM_IDLE: begin // idle
+            if (up_es_start == 1'b1) begin
+              up_es_fsm <= ES_FSM_STATUS;
+            end else begin
+              up_es_fsm <= ES_FSM_IDLE;
+            end
+          end
+       
+          ES_FSM_STATUS: begin // set status
+            up_es_fsm <= ES_FSM_INIT;
+          end
+       
+          ES_FSM_INIT: begin // initialize
+            if (up_es_init == 1'b1) begin
+              up_es_fsm <= ES_FSM_CTRLINIT_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_HOFFSET_READ;
+            end
+          end
+       
+          ES_FSM_CTRLINIT_READ: begin // control read
+            up_es_fsm <= ES_FSM_CTRLINIT_RRDY;
+          end
+          ES_FSM_CTRLINIT_RRDY: begin // control ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_CTRLINIT_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_CTRLINIT_RRDY;
+            end
+          end
+          ES_FSM_CTRLINIT_WRITE: begin // control write
+            up_es_fsm <= ES_FSM_CTRLINIT_WRDY;
+          end
+          ES_FSM_CTRLINIT_WRDY: begin // control ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_SDATA0_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_CTRLINIT_WRDY;
+            end
+          end
+      
+          ES_FSM_SDATA0_WRITE: begin // sdata write
+            up_es_fsm <= ES_FSM_SDATA0_WRDY;
+          end
+          ES_FSM_SDATA0_WRDY: begin // sdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_SDATA1_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_SDATA0_WRDY;
+            end
+          end
+          ES_FSM_SDATA1_WRITE: begin // sdata write
+            up_es_fsm <= ES_FSM_SDATA1_WRDY;
+          end
+          ES_FSM_SDATA1_WRDY: begin // sdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_SDATA2_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_SDATA1_WRDY;
+            end
+          end
+          ES_FSM_SDATA2_WRITE: begin // sdata write
+            up_es_fsm <= ES_FSM_SDATA2_WRDY;
+          end
+          ES_FSM_SDATA2_WRDY: begin // sdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_SDATA3_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_SDATA2_WRDY;
+            end
+          end
+          ES_FSM_SDATA3_WRITE: begin // sdata write
+            up_es_fsm <= ES_FSM_SDATA3_WRDY;
+          end
+          ES_FSM_SDATA3_WRDY: begin // sdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_SDATA4_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_SDATA3_WRDY;
+            end
+          end
+          ES_FSM_SDATA4_WRITE: begin // sdata write
+            up_es_fsm <= ES_FSM_SDATA4_WRDY;
+          end
+          ES_FSM_SDATA4_WRDY: begin // sdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_QDATA0_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_SDATA4_WRDY;
+            end
+          end
+      
+          ES_FSM_QDATA0_WRITE: begin // qdata write
+            up_es_fsm <= ES_FSM_QDATA0_WRDY;
+          end
+          ES_FSM_QDATA0_WRDY: begin // qdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_QDATA1_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_QDATA0_WRDY;
+            end
+          end
+          ES_FSM_QDATA1_WRITE: begin // qdata write
+            up_es_fsm <= ES_FSM_QDATA1_WRDY;
+          end
+          ES_FSM_QDATA1_WRDY: begin // qdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_QDATA2_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_QDATA1_WRDY;
+            end
+          end
+          ES_FSM_QDATA2_WRITE: begin // qdata write
+            up_es_fsm <= ES_FSM_QDATA2_WRDY;
+          end
+          ES_FSM_QDATA2_WRDY: begin // qdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_QDATA3_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_QDATA2_WRDY;
+            end
+          end
+          ES_FSM_QDATA3_WRITE: begin // qdata write
+            up_es_fsm <= ES_FSM_QDATA3_WRDY;
+          end
+          ES_FSM_QDATA3_WRDY: begin // qdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_QDATA4_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_QDATA3_WRDY;
+            end
+          end
+          ES_FSM_QDATA4_WRITE: begin // qdata write
+            up_es_fsm <= ES_FSM_QDATA4_WRDY;
+          end
+          ES_FSM_QDATA4_WRDY: begin // qdata ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_HOFFSET_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_QDATA4_WRDY;
+            end
+          end
+      
+          ES_FSM_HOFFSET_READ: begin // horizontal offset read
+            up_es_fsm <= ES_FSM_HOFFSET_RRDY;
+          end
+          ES_FSM_HOFFSET_RRDY: begin // horizontal offset ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_HOFFSET_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_HOFFSET_RRDY;
+            end
+          end
+          ES_FSM_HOFFSET_WRITE: begin // horizontal offset write
+            up_es_fsm <= ES_FSM_HOFFSET_WRDY;
+          end
+          ES_FSM_HOFFSET_WRDY: begin // horizontal offset ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_VOFFSET_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_HOFFSET_WRDY;
+            end
+          end
+      
+          ES_FSM_VOFFSET_READ: begin // vertical offset read
+            up_es_fsm <= ES_FSM_VOFFSET_RRDY;
+          end
+          ES_FSM_VOFFSET_RRDY: begin // vertical offset ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_VOFFSET_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_VOFFSET_RRDY;
+            end
+          end
+          ES_FSM_VOFFSET_WRITE: begin // vertical offset write
+            up_es_fsm <= ES_FSM_VOFFSET_WRDY;
+          end
+          ES_FSM_VOFFSET_WRDY: begin // vertical offset ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_CTRLSTART_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_VOFFSET_WRDY;
+            end
+          end
+      
+          ES_FSM_CTRLSTART_READ: begin // control read
+            up_es_fsm <= ES_FSM_CTRLSTART_RRDY;
+          end
+          ES_FSM_CTRLSTART_RRDY: begin // control ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_CTRLSTART_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_CTRLSTART_RRDY;
+            end
+          end
+          ES_FSM_CTRLSTART_WRITE: begin // control write
+            up_es_fsm <= ES_FSM_CTRLSTART_WRDY;
+          end
+          ES_FSM_CTRLSTART_WRDY: begin // control ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_STATUS_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_CTRLSTART_WRDY;
+            end
+          end
+      
+          ES_FSM_STATUS_READ: begin // status read
+            up_es_fsm <= ES_FSM_STATUS_RRDY;
+          end
+          ES_FSM_STATUS_RRDY: begin // status ready
+            if (up_es_drp_ready == 1'b0) begin
+              up_es_fsm <= ES_FSM_STATUS_RRDY;
+            end else if (up_es_drp_rdata[3:0] == 4'b0101) begin
+              up_es_fsm <= ES_FSM_CTRLSTOP_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_STATUS_READ;
+            end
+          end
+      
+          ES_FSM_CTRLSTOP_READ: begin // control read
+            up_es_fsm <= ES_FSM_CTRLSTOP_RRDY;
+          end
+          ES_FSM_CTRLSTOP_RRDY: begin // control ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_CTRLSTOP_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_CTRLSTOP_RRDY;
+            end
+          end
+          ES_FSM_CTRLSTOP_WRITE: begin // control write
+            up_es_fsm <= ES_FSM_CTRLSTOP_WRDY;
+          end
+          ES_FSM_CTRLSTOP_WRDY: begin // control ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_SCNT_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_CTRLSTOP_WRDY;
+            end
+          end
+      
+          ES_FSM_SCNT_READ: begin // read sample count
+            up_es_fsm <= ES_FSM_SCNT_RRDY;
+          end
+          ES_FSM_SCNT_RRDY: begin // sample count ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_ECNT_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_SCNT_RRDY;
+            end
+          end
+      
+          ES_FSM_ECNT_READ: begin // read error count
+            up_es_fsm <= ES_FSM_ECNT_RRDY;
+          end
+          ES_FSM_ECNT_RRDY: begin // error count ready
+            if (up_es_drp_ready == 1'b1) begin
+              up_es_fsm <= ES_FSM_DMA_WRITE;
+            end else begin
+              up_es_fsm <= ES_FSM_ECNT_RRDY;
+            end
+          end
+       
+          ES_FSM_DMA_WRITE: begin // dma write
+            up_es_fsm <= ES_FSM_DMA_READY;
+          end
+          ES_FSM_DMA_READY: begin // dma ack
+            if (axi_bvalid == 1'b1) begin
+              up_es_fsm <= ES_FSM_UPDATE;
+            end else begin
+              up_es_fsm <= ES_FSM_DMA_READY;
+            end
+          end
+      
+          ES_FSM_UPDATE: begin // update
+            if (up_es_eos_s == 1'b1) begin
+              up_es_fsm <= ES_FSM_IDLE;
+            end else if (up_es_ut == 1'b1) begin
+              up_es_fsm <= ES_FSM_HOFFSET_READ;
+            end else begin
+              up_es_fsm <= ES_FSM_VOFFSET_READ;
+            end
+          end
+      
+          default: begin
+            up_es_fsm <= ES_FSM_IDLE;
+          end
+        endcase
+      end
+    end
+  end
+
+  // drp signals controlled by the fsm
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+
+Diff Content:
+- 667             if (axi_bvalid == 1'b1) begin
++ 667             if (up_es_dma_ack == 1'b1) begin
+
+Clone Blocks:

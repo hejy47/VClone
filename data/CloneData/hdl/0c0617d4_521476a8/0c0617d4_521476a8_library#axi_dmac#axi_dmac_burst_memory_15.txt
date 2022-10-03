@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@139:149@HdlIdDef
+ * offset 0 in the segment memory. But this is OK since the beat counter
+ * increments modulo the segment size and both the write and read side agree on
+ * the order.
+ */
+
+reg [ID_WIDTH-1:0] src_id_next;
+reg [ID_WIDTH-1:0] src_id = 'h0;
+reg src_id_reduced_msb = 1'b0;
+reg [BURST_LEN_WIDTH_SRC-1:0] src_beat_counter = 'h00;
+
+reg [ID_WIDTH-1:0] dest_id_next = 'h0;
+
+Diff Content:
+- 144 reg [ID_WIDTH-1:0] src_id_next;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@140:150
+ * increments modulo the segment size and both the write and read side agree on
+ * the order.
+ */
+
+reg [ID_WIDTH-1:0] src_id_next;
+reg [ID_WIDTH-1:0] src_id = 'h0;
+reg src_id_reduced_msb = 1'b0;
+reg [BURST_LEN_WIDTH_SRC-1:0] src_beat_counter = 'h00;
+
+reg [ID_WIDTH-1:0] dest_id_next = 'h0;
+reg dest_id_reduced_msb_next = 1'b0;
+

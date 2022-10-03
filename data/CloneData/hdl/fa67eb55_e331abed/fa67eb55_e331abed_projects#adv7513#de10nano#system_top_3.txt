@@ -1,0 +1,103 @@
+Source Block: hdl/projects/adv7513/de10nano/system_top.v@131:141@HdlStmAssign
+
+  // instantiations
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11:4] = gpio_bd_i[5:0];
+
+  assign gpio_bd_o[7:0] = gpio_o[7:0];
+  assign ltc2308_cs = gpio_o[41];
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_hdmi_i2c (
+
+Diff Content:
+- 136   assign gpio_i[11:4] = gpio_bd_i[5:0];
++ 136   assign gpio_i[63:14] = gpio_o[63:14];
++ 136   assign gpio_i[13:8] = gpio_bd_i[5:0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/adv7513/de10nano/system_top.v@134:144
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11:4] = gpio_bd_i[5:0];
+
+  assign gpio_bd_o[7:0] = gpio_o[7:0];
+  assign ltc2308_cs = gpio_o[41];
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_hdmi_i2c (
+    .dio_t ({i2c0_out_clk,i2c0_out_data}),
+    .dio_i (2'b0),
+    .dio_o ({i2c0_scl_in_clk,i2c0_sda}),
+
+Clone Blocks 2:
+hdl/projects/adv7513/de10nano/system_top.v@133:143
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11:4] = gpio_bd_i[5:0];
+
+  assign gpio_bd_o[7:0] = gpio_o[7:0];
+  assign ltc2308_cs = gpio_o[41];
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_hdmi_i2c (
+    .dio_t ({i2c0_out_clk,i2c0_out_data}),
+    .dio_i (2'b0),
+
+Clone Blocks 3:
+hdl/projects/cn0506_rgmii/a10soc/system_top.v@226:236
+  assign gpio_i[32] = int_n_b;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[3:0];
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_mdio (
+
+Clone Blocks 4:
+hdl/projects/cn0506_mii/a10soc/system_top.v@203:213
+  assign gpio_i[32] = mii_crs_b;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[3:0];
+
+  ad_iobuf #(.DATA_WIDTH(2)) i_iobuf_mdio (
+
+Clone Blocks 5:
+hdl/projects/adv7513/de10nano/system_top.v@129:139
+  wire             i2c0_out_clk;
+  wire             i2c0_scl_in_clk;
+
+  // instantiations
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11:4] = gpio_bd_i[5:0];
+
+  assign gpio_bd_o[7:0] = gpio_o[7:0];
+  assign ltc2308_cs = gpio_o[41];
+
+Clone Blocks 6:
+hdl/projects/adv7513/de10nano/system_top.v@130:140
+  wire             i2c0_scl_in_clk;
+
+  // instantiations
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11:4] = gpio_bd_i[5:0];
+
+  assign gpio_bd_o[7:0] = gpio_o[7:0];
+  assign ltc2308_cs = gpio_o[41];
+
+

@@ -1,0 +1,46 @@
+Source Block: oh/elink/hdl/erx_remap.v@47:57@HdlStmAssign
+   //TODO:FIX!
+   parameter[5:0]  colid = ID[5:0];
+   
+   //parsing packet
+   assign addr_in[31:0]  =  emesh_packet_in[39:8];
+   assign write_in       =  emesh_packet_in[1];
+   
+   //simple static remap
+   assign static_remap[31:20] = (remap_sel[11:0] & remap_pattern[11:0]) |
+			        (~remap_sel[11:0] & addr_in[31:20]);
+
+
+Diff Content:
++ 52    assign read_in        =  ~emesh_packet_in[1];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_remap.v@46:56
+
+   //TODO:FIX!
+   parameter[5:0]  colid = ID[5:0];
+   
+   //parsing packet
+   assign addr_in[31:0]  =  emesh_packet_in[39:8];
+   assign write_in       =  emesh_packet_in[1];
+   
+   //simple static remap
+   assign static_remap[31:20] = (remap_sel[11:0] & remap_pattern[11:0]) |
+			        (~remap_sel[11:0] & addr_in[31:20]);
+
+Clone Blocks 2:
+oh/elink/hdl/erx_remap.v@50:61
+   //parsing packet
+   assign addr_in[31:0]  =  emesh_packet_in[39:8];
+   assign write_in       =  emesh_packet_in[1];
+   
+   //simple static remap
+   assign static_remap[31:20] = (remap_sel[11:0] & remap_pattern[11:0]) |
+			        (~remap_sel[11:0] & addr_in[31:20]);
+
+   assign static_remap[19:0]  = addr_in[19:0];
+    
+   //more complex compresssed map
+   assign dynamic_remap[31:0] = addr_in[31:0]      //input
+

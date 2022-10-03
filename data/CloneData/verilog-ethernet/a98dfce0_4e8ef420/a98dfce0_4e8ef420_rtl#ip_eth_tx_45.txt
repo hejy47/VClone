@@ -1,0 +1,319 @@
+Source Block: verilog-ethernet/rtl/ip_eth_tx.v@441:490@HdlStmProcess
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_axis_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_eth_payload_tdata_reg <= 0;
+        output_eth_payload_tvalid_reg <= 0;
+        output_eth_payload_tlast_reg <= 0;
+        output_eth_payload_tuser_reg <= 0;
+        output_eth_payload_tready_int <= 0;
+        temp_axis_tdata_reg <= 0;
+        temp_axis_tvalid_reg <= 0;
+        temp_axis_tlast_reg <= 0;
+        temp_axis_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_eth_payload_tready_int <= output_eth_payload_tready_int_early;
+
+        if (output_eth_payload_tready_int) begin
+            // input is ready
+            if (output_eth_payload_tready | ~output_eth_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+                output_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+                output_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+                output_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_axis_tdata_reg <= output_eth_payload_tdata_int;
+                temp_axis_tvalid_reg <= output_eth_payload_tvalid_int;
+                temp_axis_tlast_reg <= output_eth_payload_tlast_int;
+                temp_axis_tuser_reg <= output_eth_payload_tuser_int;
+            end
+        end else if (output_eth_payload_tready) begin
+            // input is not ready, but output is ready
+            output_eth_payload_tdata_reg <= temp_axis_tdata_reg;
+            output_eth_payload_tvalid_reg <= temp_axis_tvalid_reg;
+            output_eth_payload_tlast_reg <= temp_axis_tlast_reg;
+            output_eth_payload_tuser_reg <= temp_axis_tuser_reg;
+            temp_axis_tdata_reg <= 0;
+            temp_axis_tvalid_reg <= 0;
+            temp_axis_tlast_reg <= 0;
+            temp_axis_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 448         output_eth_payload_tdata_reg <= 0;
+- 449         output_eth_payload_tvalid_reg <= 0;
+- 450         output_eth_payload_tlast_reg <= 0;
+- 451         output_eth_payload_tuser_reg <= 0;
+- 452         output_eth_payload_tready_int <= 0;
+- 453         temp_axis_tdata_reg <= 0;
+- 454         temp_axis_tvalid_reg <= 0;
+- 455         temp_axis_tlast_reg <= 0;
+- 456         temp_axis_tuser_reg <= 0;
+- 459         output_eth_payload_tready_int <= output_eth_payload_tready_int_early;
+- 461         if (output_eth_payload_tready_int) begin
+- 463             if (output_eth_payload_tready | ~output_eth_payload_tvalid_reg) begin
+- 465                 output_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+- 466                 output_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+- 467                 output_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+- 468                 output_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+- 469             end else begin
+- 471                 temp_axis_tdata_reg <= output_eth_payload_tdata_int;
+- 472                 temp_axis_tvalid_reg <= output_eth_payload_tvalid_int;
+- 473                 temp_axis_tlast_reg <= output_eth_payload_tlast_int;
+- 474                 temp_axis_tuser_reg <= output_eth_payload_tuser_int;
+- 475             end
+- 476         end else if (output_eth_payload_tready) begin
+- 478             output_eth_payload_tdata_reg <= temp_axis_tdata_reg;
+- 479             output_eth_payload_tvalid_reg <= temp_axis_tvalid_reg;
+- 480             output_eth_payload_tlast_reg <= temp_axis_tlast_reg;
+- 481             output_eth_payload_tuser_reg <= temp_axis_tuser_reg;
+- 482             temp_axis_tdata_reg <= 0;
+- 483             temp_axis_tvalid_reg <= 0;
+- 484             temp_axis_tlast_reg <= 0;
+- 485             temp_axis_tuser_reg <= 0;
+- 486         end
++ 456         output_eth_payload_tvalid_reg <= 1'b0;
++ 456         output_eth_payload_tready_int_reg <= 1'b0;
++ 456         temp_eth_payload_tvalid_reg <= 1'b0;
++ 486         output_eth_payload_tvalid_reg <= output_eth_payload_tvalid_next;
++ 486         output_eth_payload_tready_int_reg <= output_eth_payload_tready_int_early;
++ 486         temp_eth_payload_tvalid_reg <= temp_eth_payload_tvalid_next;
++ 486     end
++ 486     if (store_eth_payload_int_to_output) begin
++ 486         output_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
++ 486         output_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
++ 486         output_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
++ 486     end else if (store_eth_payload_temp_to_output) begin
++ 486         output_eth_payload_tdata_reg <= temp_eth_payload_tdata_reg;
++ 486         output_eth_payload_tlast_reg <= temp_eth_payload_tlast_reg;
++ 486         output_eth_payload_tuser_reg <= temp_eth_payload_tuser_reg;
++ 486     end
++ 486     if (store_eth_payload_int_to_temp) begin
++ 486         temp_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
++ 486         temp_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
++ 486         temp_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/arp_eth_tx.v@281:330
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_axis_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_eth_payload_tdata_reg <= 0;
+        output_eth_payload_tvalid_reg <= 0;
+        output_eth_payload_tlast_reg <= 0;
+        output_eth_payload_tuser_reg <= 0;
+        output_eth_payload_tready_int <= 0;
+        temp_axis_tdata_reg <= 0;
+        temp_axis_tvalid_reg <= 0;
+        temp_axis_tlast_reg <= 0;
+        temp_axis_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_eth_payload_tready_int <= output_eth_payload_tready_int_early;
+
+        if (output_eth_payload_tready_int) begin
+            // input is ready
+            if (output_eth_payload_tready | ~output_eth_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+                output_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+                output_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+                output_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_axis_tdata_reg <= output_eth_payload_tdata_int;
+                temp_axis_tvalid_reg <= output_eth_payload_tvalid_int;
+                temp_axis_tlast_reg <= output_eth_payload_tlast_int;
+                temp_axis_tuser_reg <= output_eth_payload_tuser_int;
+            end
+        end else if (output_eth_payload_tready) begin
+            // input is not ready, but output is ready
+            output_eth_payload_tdata_reg <= temp_axis_tdata_reg;
+            output_eth_payload_tvalid_reg <= temp_axis_tvalid_reg;
+            output_eth_payload_tlast_reg <= temp_axis_tlast_reg;
+            output_eth_payload_tuser_reg <= temp_axis_tuser_reg;
+            temp_axis_tdata_reg <= 0;
+            temp_axis_tvalid_reg <= 0;
+            temp_axis_tlast_reg <= 0;
+            temp_axis_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_mux_4.v@324:373
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_eth_payload_tdata_reg <= 0;
+        output_eth_payload_tvalid_reg <= 0;
+        output_eth_payload_tlast_reg <= 0;
+        output_eth_payload_tuser_reg <= 0;
+        output_eth_payload_tready_int <= 0;
+        temp_eth_payload_tdata_reg <= 0;
+        temp_eth_payload_tvalid_reg <= 0;
+        temp_eth_payload_tlast_reg <= 0;
+        temp_eth_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_eth_payload_tready_int <= output_eth_payload_tready_int_early;
+
+        if (output_eth_payload_tready_int) begin
+            // input is ready
+            if (output_eth_payload_tready | ~output_eth_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+                output_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+                output_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+                output_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+            end else begin
+                // output is not ready, store input in temp
+                temp_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+                temp_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+                temp_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+                temp_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+            end
+        end else if (output_eth_payload_tready) begin
+            // input is not ready, but output is ready
+            output_eth_payload_tdata_reg <= temp_eth_payload_tdata_reg;
+            output_eth_payload_tvalid_reg <= temp_eth_payload_tvalid_reg;
+            output_eth_payload_tlast_reg <= temp_eth_payload_tlast_reg;
+            output_eth_payload_tuser_reg <= temp_eth_payload_tuser_reg;
+            temp_eth_payload_tdata_reg <= 0;
+            temp_eth_payload_tvalid_reg <= 0;
+            temp_eth_payload_tlast_reg <= 0;
+            temp_eth_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 3:
+verilog-ethernet/rtl/eth_mux_2.v@252:301
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_eth_payload_tdata_reg <= 0;
+        output_eth_payload_tvalid_reg <= 0;
+        output_eth_payload_tlast_reg <= 0;
+        output_eth_payload_tuser_reg <= 0;
+        output_eth_payload_tready_int <= 0;
+        temp_eth_payload_tdata_reg <= 0;
+        temp_eth_payload_tvalid_reg <= 0;
+        temp_eth_payload_tlast_reg <= 0;
+        temp_eth_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_eth_payload_tready_int <= output_eth_payload_tready_int_early;
+
+        if (output_eth_payload_tready_int) begin
+            // input is ready
+            if (output_eth_payload_tready | ~output_eth_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+                output_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+                output_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+                output_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+            end else begin
+                // output is not ready, store input in temp
+                temp_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+                temp_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+                temp_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+                temp_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+            end
+        end else if (output_eth_payload_tready) begin
+            // input is not ready, but output is ready
+            output_eth_payload_tdata_reg <= temp_eth_payload_tdata_reg;
+            output_eth_payload_tvalid_reg <= temp_eth_payload_tvalid_reg;
+            output_eth_payload_tlast_reg <= temp_eth_payload_tlast_reg;
+            output_eth_payload_tuser_reg <= temp_eth_payload_tuser_reg;
+            temp_eth_payload_tdata_reg <= 0;
+            temp_eth_payload_tvalid_reg <= 0;
+            temp_eth_payload_tlast_reg <= 0;
+            temp_eth_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 4:
+verilog-ethernet/rtl/eth_axis_rx.v@306:355
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_eth_payload_tdata_reg <= 0;
+        output_eth_payload_tvalid_reg <= 0;
+        output_eth_payload_tlast_reg <= 0;
+        output_eth_payload_tuser_reg <= 0;
+        output_eth_payload_tready_int <= 0;
+        temp_eth_payload_tdata_reg <= 0;
+        temp_eth_payload_tvalid_reg <= 0;
+        temp_eth_payload_tlast_reg <= 0;
+        temp_eth_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_eth_payload_tready_int <= output_eth_payload_tready_int_early;
+
+        if (output_eth_payload_tready_int) begin
+            // input is ready
+            if (output_eth_payload_tready | ~output_eth_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+                output_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+                output_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+                output_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_eth_payload_tdata_reg <= output_eth_payload_tdata_int;
+                temp_eth_payload_tvalid_reg <= output_eth_payload_tvalid_int;
+                temp_eth_payload_tlast_reg <= output_eth_payload_tlast_int;
+                temp_eth_payload_tuser_reg <= output_eth_payload_tuser_int;
+            end
+        end else if (output_eth_payload_tready) begin
+            // input is not ready, but output is ready
+            output_eth_payload_tdata_reg <= temp_eth_payload_tdata_reg;
+            output_eth_payload_tvalid_reg <= temp_eth_payload_tvalid_reg;
+            output_eth_payload_tlast_reg <= temp_eth_payload_tlast_reg;
+            output_eth_payload_tuser_reg <= temp_eth_payload_tuser_reg;
+            temp_eth_payload_tdata_reg <= 0;
+            temp_eth_payload_tvalid_reg <= 0;
+            temp_eth_payload_tlast_reg <= 0;
+            temp_eth_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+

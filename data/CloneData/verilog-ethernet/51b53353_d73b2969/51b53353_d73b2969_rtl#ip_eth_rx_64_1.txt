@@ -1,0 +1,227 @@
+Source Block: verilog-ethernet/rtl/ip_eth_rx_64.v@273:492@HdlStmProcess
+        shift_eth_payload_tuser = (input_eth_payload_tuser & (input_eth_payload_tkeep[7:4] == 0));
+        shift_eth_payload_input_tready = ~(input_eth_payload_tlast & input_eth_payload_tvalid & transfer_in_save);
+    end
+end
+
+always @* begin
+    state_next = 2'bz;
+
+    flush_save = 0;
+    transfer_in_save = 0;
+
+    input_eth_hdr_ready_next = 0;
+    input_eth_payload_tready_next = 0;
+
+    store_eth_hdr = 0;
+    store_hdr_word_0 = 0;
+    store_hdr_word_1 = 0;
+    store_hdr_word_2 = 0;
+
+    store_last_word = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    hdr_sum_temp = 0;
+    hdr_sum_next = hdr_sum_reg;
+    hdr_sum_temp_a_next = hdr_sum_temp_a_reg;
+    hdr_sum_temp_b_next = hdr_sum_temp_b_reg;
+
+    output_ip_hdr_valid_next = output_ip_hdr_valid_reg & ~output_ip_hdr_ready;
+
+    error_header_early_termination_next = 0;
+    error_payload_early_termination_next = 0;
+    error_invalid_header_next = 0;
+    error_invalid_checksum_next = 0;
+
+    output_ip_payload_tdata_int = 0;
+    output_ip_payload_tkeep_int = 0;
+    output_ip_payload_tvalid_int = 0;
+    output_ip_payload_tlast_int = 0;
+    output_ip_payload_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for header
+            frame_ptr_next = 0;
+            hdr_sum_next = 0;
+            flush_save = 1;
+            input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+
+            if (input_eth_hdr_ready & input_eth_hdr_valid) begin
+                input_eth_hdr_ready_next = 0;
+                input_eth_payload_tready_next = 1;
+                store_eth_hdr = 1;
+                state_next = STATE_READ_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header
+            input_eth_payload_tready_next = shift_eth_payload_input_tready;
+
+            if (input_eth_payload_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+8;
+                transfer_in_save = 1;
+                state_next = STATE_READ_HEADER;
+
+                case (frame_ptr_reg)
+                    8'h00: begin
+                        store_hdr_word_0 = 1;
+                        hdr_sum_temp = input_eth_payload_tdata[15:0] +
+                                       input_eth_payload_tdata[31:16] +
+                                       input_eth_payload_tdata[47:32] +
+                                       input_eth_payload_tdata[63:48];
+                        hdr_sum_temp = hdr_sum_temp[15:0] + hdr_sum_temp[31:16];
+                        hdr_sum_temp_a_next = hdr_sum_temp[15:0] + hdr_sum_temp[16];
+                    end
+                    8'h08: begin
+                        store_hdr_word_1 = 1;
+                        hdr_sum_temp = input_eth_payload_tdata[15:0] +
+                                       input_eth_payload_tdata[31:16] +
+                                       input_eth_payload_tdata[47:32] +
+                                       input_eth_payload_tdata[63:48];
+                        hdr_sum_temp = hdr_sum_temp[15:0] + hdr_sum_temp[31:16];
+                        hdr_sum_temp_b_next = hdr_sum_temp[15:0] + hdr_sum_temp[16];
+                    end
+                    8'h10: begin
+                        store_hdr_word_2 = 1;
+                        hdr_sum_temp = input_eth_payload_tdata[15:0] +
+                                       input_eth_payload_tdata[31:16] +
+                                       hdr_sum_temp_a_reg +
+                                       hdr_sum_temp_b_reg;
+                        hdr_sum_temp = hdr_sum_temp[15:0] + hdr_sum_temp[31:16];
+                        hdr_sum_next = hdr_sum_temp[15:0] + hdr_sum_temp[16];
+                        frame_ptr_next = frame_ptr_reg+4;
+                        if (output_ip_version_reg != 4 || output_ip_ihl_reg != 5) begin
+                            error_invalid_header_next = 1;
+                            input_eth_payload_tready_next = shift_eth_payload_input_tready;
+                            state_next = STATE_WAIT_LAST;
+                        end else if (hdr_sum_next != 16'hffff) begin
+                            error_invalid_checksum_next = 1;
+                            input_eth_payload_tready_next = shift_eth_payload_input_tready;
+                            state_next = STATE_WAIT_LAST;
+                        end else begin
+                            output_ip_hdr_valid_next = 1;
+                            input_eth_payload_tready_next = output_ip_payload_tready_int_early & shift_eth_payload_input_tready;
+                            state_next = STATE_READ_PAYLOAD;
+                        end
+                    end
+                endcase
+
+                if (shift_eth_payload_tlast) begin
+                    error_header_early_termination_next = 1;
+                    error_invalid_header_next = 0;
+                    error_invalid_checksum_next = 0;
+                    output_ip_hdr_valid_next = 0;
+                    input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                    input_eth_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end
+
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_READ_PAYLOAD: begin
+            // read payload
+            input_eth_payload_tready_next = output_ip_payload_tready_int_early & shift_eth_payload_input_tready;
+
+            output_ip_payload_tdata_int = shift_eth_payload_tdata;
+            output_ip_payload_tkeep_int = shift_eth_payload_tkeep;
+            output_ip_payload_tvalid_int = shift_eth_payload_tvalid;
+            output_ip_payload_tlast_int = shift_eth_payload_tlast;
+            output_ip_payload_tuser_int = shift_eth_payload_tuser;
+
+            if (output_ip_payload_tready_int & shift_eth_payload_tvalid) begin
+                // word transfer through
+                frame_ptr_next = frame_ptr_reg+keep2count(shift_eth_payload_tkeep);
+                transfer_in_save = 1;
+                if (frame_ptr_next >= output_ip_length_reg) begin
+                    // have entire payload
+                    frame_ptr_next = output_ip_length_reg;
+                    output_ip_payload_tkeep_int = shift_eth_payload_tkeep & count2keep(output_ip_length_reg - frame_ptr_reg);
+                    if (shift_eth_payload_tlast) begin
+                        input_eth_payload_tready_next = 0;
+                        flush_save = 1;
+                        input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        store_last_word = 1;
+                        output_ip_payload_tvalid_int = 0;
+                        state_next = STATE_READ_PAYLOAD_LAST;
+                    end
+                end else begin
+                    if (shift_eth_payload_tlast) begin
+                        // end of frame, but length does not match
+                        error_payload_early_termination_next = 1;
+                        output_ip_payload_tuser_int = 1;
+                        input_eth_payload_tready_next = 0;
+                        flush_save = 1;
+                        input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        state_next = STATE_READ_PAYLOAD;
+                    end
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD;
+            end
+        end
+        STATE_READ_PAYLOAD_LAST: begin
+            // read and discard until end of frame
+            input_eth_payload_tready_next = output_ip_payload_tready_int_early & shift_eth_payload_input_tready;
+
+            output_ip_payload_tdata_int = last_word_data_reg;
+            output_ip_payload_tkeep_int = last_word_keep_reg;
+            output_ip_payload_tvalid_int = shift_eth_payload_tvalid & shift_eth_payload_tlast;
+            output_ip_payload_tlast_int = shift_eth_payload_tlast;
+            output_ip_payload_tuser_int = shift_eth_payload_tuser;
+
+            if (output_ip_payload_tready_int & shift_eth_payload_tvalid) begin
+                transfer_in_save = 1;
+                if (shift_eth_payload_tlast) begin
+                    input_eth_payload_tready_next = 0;
+                    flush_save = 1;
+                    input_eth_hdr_ready_next = 1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_LAST;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_LAST;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // read and discard until end of frame
+            input_eth_payload_tready_next = shift_eth_payload_input_tready;
+
+            if (shift_eth_payload_tvalid) begin
+                transfer_in_save = 1;
+                if (shift_eth_payload_tlast) begin
+                    input_eth_payload_tready_next = 0;
+                    flush_save = 1;
+                    input_eth_hdr_ready_next = 1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT_LAST;
+                end
+            end else begin
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 279     state_next = 2'bz;
++ 279     state_next = STATE_IDLE;
+
+Clone Blocks:

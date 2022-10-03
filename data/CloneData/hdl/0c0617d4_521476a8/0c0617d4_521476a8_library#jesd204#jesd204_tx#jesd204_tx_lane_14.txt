@@ -1,0 +1,139 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_lane.v@138:172@HdlStmFor
+);
+
+generate
+genvar i;
+
+for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
+  assign scrambled_char[i] = scrambled_data_d[i*8+7:i*8];
+
+  always @(*) begin
+    if (eomf_d[i]) begin
+      char_align[i] = 8'h7c; // /A/
+    end else begin
+      char_align[i] = 8'hfc; // /F/
+    end
+  end
+
+  always @(posedge clk) begin
+    if (cgs_enable_d) begin
+      phy_charisk[i] <= 1'b1;
+    end else if (tx_ready_d) begin
+      if(!cfg_disable_scrambler) begin
+        phy_charisk[i] <= eof_d[i] && (scrambled_char[i] == char_align[i]);
+      end else begin
+        phy_charisk[i] <= charisk_replaced[i];
+      end
+    end else begin
+      phy_charisk[i] <= ilas_charisk_d[i];
+    end
+  end
+end
+
+endgenerate
+
+always @(posedge clk) begin
+  if (cgs_enable_d) begin
+
+Diff Content:
+- 143 for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
+- 144   assign scrambled_char[i] = scrambled_data_d[i*8+7:i*8];
+- 146   always @(*) begin
+- 147     if (eomf_d[i]) begin
+- 148       char_align[i] = 8'h7c; // /A/
+- 149     end else begin
+- 150       char_align[i] = 8'hfc; // /F/
+- 152   end
+- 154   always @(posedge clk) begin
+- 155     if (cgs_enable_d) begin
+- 156       phy_charisk[i] <= 1'b1;
+- 157     end else if (tx_ready_d) begin
+- 158       if(!cfg_disable_scrambler) begin
+- 159         phy_charisk[i] <= eof_d[i] && (scrambled_char[i] == char_align[i]);
+- 161         phy_charisk[i] <= charisk_replaced[i];
+- 163     end else begin
+- 164       phy_charisk[i] <= ilas_charisk_d[i];
+- 167 end
++ 150   wire [DATA_PATH_WIDTH*8-1:0] scrambled_data;
++ 150   wire [DATA_PATH_WIDTH*8-1:0] scrambled_data_d;
++ 150   wire                         cgs_enable_d;
++ 150   wire                         tx_ready_d;
++ 150   wire [DATA_PATH_WIDTH-1:0]   eof_d;
++ 150   wire [DATA_PATH_WIDTH-1:0]   eomf_d;
++ 150   wire [DATA_PATH_WIDTH*8-1:0] ilas_data_d;
++ 150   wire [DATA_PATH_WIDTH-1:0]   ilas_charisk_d;
++ 150   wire [DATA_PATH_WIDTH*8-1:0] data_replaced;
++ 150   wire [DATA_PATH_WIDTH-1:0]   charisk_replaced;
++ 150   wire [7:0]                   scrambled_char[0:DATA_PATH_WIDTH-1];
++ 150   reg  [7:0]                   char_align[0:DATA_PATH_WIDTH-1];
++ 150   jesd204_scrambler #(
++ 150     .WIDTH (DATA_PATH_WIDTH*8),
++ 150     .DESCRAMBLE (0)
++ 150   ) i_scrambler (
++ 150     .clk (clk),
++ 150     .reset (~tx_ready),
++ 150     .enable (~cfg_disable_scrambler),
++ 150     .data_in (tx_data),
++ 150     .data_out (scrambled_data));
++ 150   pipeline_stage #(
++ 150     .WIDTH ((DATA_PATH_WIDTH*19) + 2),
++ 150     .REGISTERED (1)
++ 150   ) i_lane_pipeline_stage (
++ 150     .clk(clk),
++ 150     .in({
++ 150       cgs_enable,
++ 150       tx_ready,
++ 150       eof,
++ 150       eomf,
++ 150       scrambled_data,
++ 150       ilas_data,
++ 150       ilas_charisk
++ 150     }),
++ 150     .out({
++ 150       cgs_enable_d,
++ 150       tx_ready_d,
++ 150       eof_d,
++ 150       eomf_d,
++ 150       scrambled_data_d,
++ 150       ilas_data_d,
++ 150       ilas_charisk_d
++ 150     }));
++ 150   jesd204_frame_align_replace #(
++ 150     .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
++ 150     .IS_RX (1'b0),
++ 150     .ENABLED (ENABLE_CHAR_REPLACE)
++ 150   ) i_align_replace (
++ 150     .clk (clk),
++ 150     .reset (~tx_ready_d),
++ 150     .cfg_octets_per_frame (cfg_octets_per_frame),
++ 150     .cfg_disable_char_replacement (cfg_disable_char_replacement),
++ 150     .cfg_disable_scrambler (cfg_disable_scrambler),
++ 150     .data (scrambled_data_d),
++ 150     .eof (eof_d),
++ 150     .rx_char_is_a ({DATA_PATH_WIDTH{1'b0}}),
++ 150     .rx_char_is_f ({DATA_PATH_WIDTH{1'b0}}),
++ 150     .tx_eomf (eomf_d),
++ 150     .data_out (data_replaced),
++ 150     .charisk_out (charisk_replaced));
++ 150   generate
++ 150   genvar i;
++ 150   for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
++ 150     assign scrambled_char[i] = scrambled_data_d[i*8+7:i*8];
++ 150     always @(*) begin
++ 150       if (eomf_d[i]) begin
++ 150         char_align[i] = 8'h7c; // /A/
++ 150       end else begin
++ 150         char_align[i] = 8'hfc; // /F/
++ 150       end
++ 159     always @(posedge clk) begin
++ 159       if (cgs_enable_d) begin
++ 159         phy_charisk[i] <= 1'b1;
++ 159       end else if (tx_ready_d) begin
++ 159         if(!cfg_disable_scrambler) begin
++ 159           phy_charisk[i] <= eof_d[i] && (scrambled_char[i] == char_align[i]);
++ 159         end else begin
++ 159           phy_charisk[i] <= charisk_replaced[i];
++ 159         end
++ 161         phy_charisk[i] <= ilas_charisk_d[i];
+
+Clone Blocks:

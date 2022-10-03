@@ -1,0 +1,48 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@177:187@HdlIdDef
+// Bytes per burst is the same for both dest and src, but bytes per beat may
+// differ, so beats per burst may also differ
+
+parameter BYTES_PER_BURST_WIDTH = $clog2(C_MAX_BYTES_PER_BURST);
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
+
+localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+reg [0:2**C_ID_WIDTH-1] eot_mem;
+wire request_eot;
+
+Diff Content:
+- 182 localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
++ 182 parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST);
++ 182 localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
++ 182 localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_arb.v@176:186
+
+// Bytes per burst is the same for both dest and src, but bytes per beat may
+// differ, so beats per burst may also differ
+
+parameter BYTES_PER_BURST_WIDTH = $clog2(C_MAX_BYTES_PER_BURST);
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
+
+localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+reg [0:2**C_ID_WIDTH-1] eot_mem;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/request_arb.v@179:189
+
+parameter BYTES_PER_BURST_WIDTH = $clog2(C_MAX_BYTES_PER_BURST);
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
+
+localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+reg [0:2**C_ID_WIDTH-1] eot_mem;
+wire request_eot;
+
+wire [C_ID_WIDTH-1:0] request_id;
+

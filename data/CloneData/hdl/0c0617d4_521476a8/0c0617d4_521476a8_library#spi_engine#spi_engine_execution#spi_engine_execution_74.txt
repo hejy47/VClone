@@ -1,0 +1,59 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@238:248@HdlStmAssign
+end
+
+assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (idle == 1'b1) begin
+    counter <= 'h00;
+
+Diff Content:
+- 243 assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@236:246
+    trigger <= 1'b0;
+  end
+end
+
+assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@235:245
+    clk_div_counter <= clk_div_counter - 1'b1;
+    trigger <= 1'b0;
+  end
+end
+
+assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+
+
+Clone Blocks 3:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@239:249
+
+assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (idle == 1'b1) begin
+    counter <= 'h00;
+  end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
+

@@ -1,0 +1,508 @@
+Source Block: verilog-ethernet/rtl/axis_frame_fifo_64.v@69:79@HdlIdDef
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+Diff Content:
++ 74 reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem_read_data_reg = {DATA_WIDTH+2{1'b0}};
++ 74 wire [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem_write_data;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_fifo.v@61:71
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+reg output_axis_tuser_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@73:83
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+             (wr_ptr_reg[ADDR_WIDTH-1:0] == rd_ptr_reg[ADDR_WIDTH-1:0]));
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_register_64.v@64:74
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg                  output_axis_tlast_reg = 1'b0;
+reg                  output_axis_tuser_reg = 1'b0;
+
+reg [DATA_WIDTH-1:0] temp_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] temp_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  temp_axis_tvalid_reg = 1'b0, temp_axis_tvalid_next;
+reg                  temp_axis_tlast_reg = 1'b0;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_fifo_64.v@59:69
+    output wire                   output_axis_tlast,
+    output wire                   output_axis_tuser
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_tap_64.v@179:189
+// output datapath logic
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg                  output_axis_tlast_reg = 1'b0;
+reg                  output_axis_tuser_reg = 1'b0;
+
+reg [DATA_WIDTH-1:0] temp_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] temp_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  temp_axis_tvalid_reg = 1'b0, temp_axis_tvalid_next;
+reg                  temp_axis_tlast_reg = 1'b0;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@72:82
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@67:77
+    output wire                   good_frame
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_fifo_64.v@63:73
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+reg output_axis_tuser_reg = 1'b0;
+
+
+Clone Blocks 9:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@67:77
+    output wire                   good_frame
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@66:76
+    output wire                   bad_frame,
+    output wire                   good_frame
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@474:484
+// output datapath logic
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg                  output_axis_tlast_reg = 1'b0;
+reg                  output_axis_tuser_reg = 1'b0;
+
+reg [DATA_WIDTH-1:0] temp_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] temp_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  temp_axis_tvalid_reg = 1'b0, temp_axis_tvalid_next;
+reg                  temp_axis_tlast_reg = 1'b0;
+
+Clone Blocks 12:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@71:81
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first MSB different but rest same
+
+Clone Blocks 13:
+verilog-ethernet/rtl/axis_frame_fifo.v@68:78
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+
+Clone Blocks 14:
+verilog-ethernet/rtl/axis_fifo.v@58:68
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+reg output_axis_tuser_reg = 1'b0;
+
+Clone Blocks 15:
+verilog-ethernet/rtl/axis_fifo.v@61:71
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+reg output_axis_tuser_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+
+Clone Blocks 16:
+verilog-ethernet/rtl/axis_frame_fifo.v@64:74
+    output wire                   good_frame
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/axis_async_fifo_64.v@79:89
+reg input_rst_sync3_reg = 1'b1;
+reg output_rst_sync1_reg = 1'b1;
+reg output_rst_sync2_reg = 1'b1;
+reg output_rst_sync3_reg = 1'b1;
+
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+Clone Blocks 18:
+verilog-ethernet/rtl/axis_frame_fifo.v@69:79
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+             (wr_ptr_reg[ADDR_WIDTH-1:0] == rd_ptr_reg[ADDR_WIDTH-1:0]));
+
+Clone Blocks 19:
+verilog-ethernet/rtl/axis_fifo_64.v@64:74
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+reg output_axis_tuser_reg = 1'b0;
+
+// full when first MSB different but rest same
+
+Clone Blocks 20:
+verilog-ethernet/rtl/axis_rate_limit_64.v@130:140
+// output datapath logic
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg                  output_axis_tlast_reg = 1'b0;
+reg                  output_axis_tuser_reg = 1'b0;
+
+reg [DATA_WIDTH-1:0] temp_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] temp_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  temp_axis_tvalid_reg = 1'b0, temp_axis_tvalid_next;
+reg                  temp_axis_tlast_reg = 1'b0;
+
+Clone Blocks 21:
+verilog-ethernet/rtl/axis_frame_fifo.v@64:74
+    output wire                   good_frame
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+
+Clone Blocks 22:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@73:83
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+             (wr_ptr_reg[ADDR_WIDTH-1:0] == rd_ptr_reg[ADDR_WIDTH-1:0]));
+
+Clone Blocks 23:
+verilog-ethernet/rtl/axis_fifo_64.v@61:71
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+Clone Blocks 24:
+verilog-ethernet/rtl/axis_fifo.v@56:66
+    output wire                   output_axis_tlast,
+    output wire                   output_axis_tuser
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+
+Clone Blocks 25:
+verilog-ethernet/rtl/axis_fifo_64.v@59:69
+    output wire                   output_axis_tlast,
+    output wire                   output_axis_tuser
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+
+Clone Blocks 26:
+verilog-ethernet/rtl/axis_fifo.v@56:66
+    output wire                   output_axis_tlast,
+    output wire                   output_axis_tuser
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+
+Clone Blocks 27:
+verilog-ethernet/rtl/axis_fifo_64.v@66:76
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+reg output_axis_tuser_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+             (wr_ptr_reg[ADDR_WIDTH-1:0] == rd_ptr_reg[ADDR_WIDTH-1:0]));
+
+Clone Blocks 28:
+verilog-ethernet/rtl/axis_async_frame_fifo_64.v@90:100
+reg input_rst_sync3_reg = 1'b1;
+reg output_rst_sync1_reg = 1'b1;
+reg output_rst_sync2_reg = 1'b1;
+reg output_rst_sync3_reg = 1'b1;
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+Clone Blocks 29:
+verilog-ethernet/rtl/axis_frame_fifo.v@66:76
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+
+Clone Blocks 30:
+verilog-ethernet/rtl/axis_async_frame_fifo_64.v@95:105
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+wire full = ((wr_ptr_gray_reg[ADDR_WIDTH] != rd_ptr_gray_sync2_reg[ADDR_WIDTH]) &&
+             (wr_ptr_gray_reg[ADDR_WIDTH-1] != rd_ptr_gray_sync2_reg[ADDR_WIDTH-1]) &&
+
+Clone Blocks 31:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@66:76
+    output wire                   bad_frame,
+    output wire                   good_frame
+);
+
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] wr_ptr_cur_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_cur_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+
+Clone Blocks 32:
+verilog-ethernet/rtl/axis_fifo.v@60:70
+reg [ADDR_WIDTH:0] wr_ptr_reg = {ADDR_WIDTH+1{1'b0}}, wr_ptr_next;
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+reg output_axis_tuser_reg = 1'b0;
+
+// full when first MSB different but rest same
+
+Clone Blocks 33:
+verilog-ethernet/rtl/axis_frame_fifo.v@69:79
+reg [ADDR_WIDTH:0] rd_ptr_reg = {ADDR_WIDTH+1{1'b0}}, rd_ptr_next;
+
+reg [DATA_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+             (wr_ptr_reg[ADDR_WIDTH-1:0] == rd_ptr_reg[ADDR_WIDTH-1:0]));
+
+Clone Blocks 34:
+verilog-ethernet/rtl/axis_mux_64_4.v@229:239
+// output datapath logic
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg                  output_axis_tlast_reg = 1'b0;
+reg                  output_axis_tuser_reg = 1'b0;
+
+reg [DATA_WIDTH-1:0] temp_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] temp_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg                  temp_axis_tvalid_reg = 1'b0, temp_axis_tvalid_next;
+reg                  temp_axis_tlast_reg = 1'b0;
+
+Clone Blocks 35:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@74:84
+reg [DATA_WIDTH+KEEP_WIDTH+1-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = {DATA_WIDTH{1'b0}};
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = {KEEP_WIDTH{1'b0}};
+reg output_axis_tvalid_reg = 1'b0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 1'b0;
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr_reg[ADDR_WIDTH] != rd_ptr_reg[ADDR_WIDTH]) &&
+             (wr_ptr_reg[ADDR_WIDTH-1:0] == rd_ptr_reg[ADDR_WIDTH-1:0]));
+// empty when pointers match exactly
+

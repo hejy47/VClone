@@ -1,0 +1,17 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@171:181@HdlStmAssign
+      spi_sync_id_counter <= spi_sync_id_counter + 1'b1;
+    end
+  end
+end
+
+assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
+
+/*
+ * Forwarded SYNC interface, this can be used to monitor the state of the
+ * offload command sequence through SPI Engine regmap
+ */
+
+Diff Content:
+- 176 assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
+
+Clone Blocks:

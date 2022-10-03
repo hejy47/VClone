@@ -1,0 +1,57 @@
+Source Block: oh/mio/hdl/mio_regs.v@153:165@HdlStmProcess
+   assign clkdiv[7:0] = clkdiv_reg[7:0];
+
+   //###############################
+   //# CLKPHASE
+   //################################ 
+   always @ (posedge clk)
+     if(clkdiv_write)
+       clkphase_reg[31:0] <= data_in[31:0];
+
+   assign clkphase0[15:0]  = clkphase_reg[15:0];
+   assign clkphase1[15:0] = clkphase_reg[31:16];
+     
+   //###############################
+
+Diff Content:
+- 158    always @ (posedge clk)
+- 159      if(clkdiv_write)
++ 159    always @ (posedge clk or negedge nreset)
++ 159      if(!nreset)
++ 159        begin
++ 159 	  clkphase_reg[7:0]   <= DEF_RISE0;
++ 159 	  clkphase_reg[15:8]  <= DEF_FALL0;
++ 159 	  clkphase_reg[23:16] <= DEF_RISE1;
++ 159 	  clkphase_reg[31:24] <= DEF_FALL1;	  
++ 159        end
++ 159      else if(clkdiv_write)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/mio/hdl/mio_regs.v@158:168
+   always @ (posedge clk)
+     if(clkdiv_write)
+       clkphase_reg[31:0] <= data_in[31:0];
+
+   assign clkphase0[15:0]  = clkphase_reg[15:0];
+   assign clkphase1[15:0] = clkphase_reg[31:16];
+     
+   //###############################
+   //# RX DESTINATION ADDR (DMODE)
+   //################################ 
+   always @ (posedge clk)
+
+Clone Blocks 2:
+oh/mio/hdl/mio_regs.v@157:167
+   //################################ 
+   always @ (posedge clk)
+     if(clkdiv_write)
+       clkphase_reg[31:0] <= data_in[31:0];
+
+   assign clkphase0[15:0]  = clkphase_reg[15:0];
+   assign clkphase1[15:0] = clkphase_reg[31:16];
+     
+   //###############################
+   //# RX DESTINATION ADDR (DMODE)
+   //################################ 
+

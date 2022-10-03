@@ -1,0 +1,137 @@
+Source Block: verilog-ethernet/rtl/arp_eth_rx.v@175:302@HdlStmProcess
+assign output_arp_tpa = output_arp_tpa_reg;
+
+assign busy = busy_reg;
+assign frame_error = frame_error_reg;
+
+always @* begin
+    state_next = 2'bz;
+
+    store_eth_hdr = 0;
+    store_arp_htype_0 = 0;
+    store_arp_htype_1 = 0;
+    store_arp_ptype_0 = 0;
+    store_arp_ptype_1 = 0;
+    store_arp_hlen = 0;
+    store_arp_plen = 0;
+    store_arp_oper_0 = 0;
+    store_arp_oper_1 = 0;
+    store_arp_sha_0 = 0;
+    store_arp_sha_1 = 0;
+    store_arp_sha_2 = 0;
+    store_arp_sha_3 = 0;
+    store_arp_sha_4 = 0;
+    store_arp_sha_5 = 0;
+    store_arp_spa_0 = 0;
+    store_arp_spa_1 = 0;
+    store_arp_spa_2 = 0;
+    store_arp_spa_3 = 0;
+    store_arp_tha_0 = 0;
+    store_arp_tha_1 = 0;
+    store_arp_tha_2 = 0;
+    store_arp_tha_3 = 0;
+    store_arp_tha_4 = 0;
+    store_arp_tha_5 = 0;
+    store_arp_tpa_0 = 0;
+    store_arp_tpa_1 = 0;
+    store_arp_tpa_2 = 0;
+    store_arp_tpa_3 = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_frame_valid_next = output_frame_valid_reg & ~output_frame_ready;
+
+    frame_error_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+
+            if (input_eth_hdr_ready & input_eth_hdr_valid) begin
+                frame_ptr_next = 0;
+                store_eth_hdr = 1;
+                state_next = STATE_READ_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header state
+            if (input_eth_payload_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+1;
+                state_next = STATE_READ_HEADER;
+                case (frame_ptr_reg)
+                    8'h00: store_arp_htype_1 = 1;
+                    8'h01: store_arp_htype_0 = 1;
+                    8'h02: store_arp_ptype_1 = 1;
+                    8'h03: store_arp_ptype_0 = 1;
+                    8'h04: store_arp_hlen = 1;
+                    8'h05: store_arp_plen = 1;
+                    8'h06: store_arp_oper_1 = 1;
+                    8'h07: store_arp_oper_0 = 1;
+                    8'h08: store_arp_sha_5 = 1;
+                    8'h09: store_arp_sha_4 = 1;
+                    8'h0A: store_arp_sha_3 = 1;
+                    8'h0B: store_arp_sha_2 = 1;
+                    8'h0C: store_arp_sha_1 = 1;
+                    8'h0D: store_arp_sha_0 = 1;
+                    8'h0E: store_arp_spa_3 = 1;
+                    8'h0F: store_arp_spa_2 = 1;
+                    8'h10: store_arp_spa_1 = 1;
+                    8'h11: store_arp_spa_0 = 1;
+                    8'h12: store_arp_tha_5 = 1;
+                    8'h13: store_arp_tha_4 = 1;
+                    8'h14: store_arp_tha_3 = 1;
+                    8'h15: store_arp_tha_2 = 1;
+                    8'h16: store_arp_tha_1 = 1;
+                    8'h17: store_arp_tha_0 = 1;
+                    8'h18: store_arp_tpa_3 = 1;
+                    8'h19: store_arp_tpa_2 = 1;
+                    8'h1A: store_arp_tpa_1 = 1;
+                    8'h1B: begin
+                        store_arp_tpa_0 = 1;
+                        output_frame_valid_next = 1;
+                        state_next = STATE_WAIT_LAST;
+                    end
+                endcase
+                if (input_eth_payload_tlast) begin
+                    state_next = STATE_IDLE;
+                    if (frame_ptr_reg != 8'h1B) begin
+                        frame_error_next = 1;
+                    end
+                end
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // read last payload word; data in output register; do not accept new data
+            if (input_eth_payload_tvalid) begin
+                // word transfer out - done
+                if (input_eth_payload_tlast) begin
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT_LAST;
+                end
+            end else begin
+                // wait for end of frame; read and discard
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 217     frame_error_next = 0;
+- 275                         frame_error_next = 1;
++ 217     error_header_early_termination_next = 0;
++ 275                         error_header_early_termination_next = 1;
+
+Clone Blocks:

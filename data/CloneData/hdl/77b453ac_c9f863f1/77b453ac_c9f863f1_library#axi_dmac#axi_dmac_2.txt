@@ -1,0 +1,66 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@360:415@HdlStmProcess
+  end
+end
+
+// Register Interface
+
+always @(posedge s_axi_aclk)
+begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_enable <= 'h00;
+    up_pause <= 'h00;
+    up_dma_src_address <= 'h00;
+    up_dma_dest_address <= 'h00;
+    up_dma_y_length <= 'h00;
+    up_dma_x_length <= 'h00;
+    up_dma_dest_stride <= 'h00;
+    up_dma_src_stride <= 'h00;
+    up_irq_mask <= 3'b11;
+    up_dma_req_valid <= 1'b0;
+    up_scratch <= 'h00;
+    up_wack <= 1'b0;
+  end else begin
+    up_wack <= up_wreq;
+    if (up_enable == 1'b1) begin
+      if (up_wreq && up_waddr == 12'h102) begin
+        up_dma_req_valid <= up_dma_req_valid | up_wdata[0];
+      end else if (up_sot) begin
+        up_dma_req_valid <= 1'b0;
+      end
+    end else begin
+      up_dma_req_valid <= 1'b0;
+    end
+
+    if (up_wreq) begin
+      case (up_waddr)
+      12'h002: up_scratch <= up_wdata;
+      12'h020: up_irq_mask <= up_wdata;
+      12'h100: {up_pause, up_enable} <= up_wdata[1:0];
+                        12'h103: begin
+                          if (CYCLIC) up_dma_cyclic <= up_wdata[0];
+                          up_axis_xlast <= up_wdata[1];
+                        end
+      12'h104: up_dma_dest_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_DEST];
+      12'h105: up_dma_src_address <= up_wdata[31:BYTES_PER_BEAT_WIDTH_SRC];
+      12'h106: up_dma_x_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      12'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      12'h108: up_dma_dest_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      12'h109: up_dma_src_stride <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      endcase
+    end
+  end
+end
+
+always @(posedge s_axi_aclk)
+begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+
+Diff Content:
++ 410 assign dbg_ids = {
++ 410   src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0,
++ 410   src_request_id, 1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0,
++ 410   dest_address_id, 1'b0, dest_request_id
++ 410 };
+
+Clone Blocks:

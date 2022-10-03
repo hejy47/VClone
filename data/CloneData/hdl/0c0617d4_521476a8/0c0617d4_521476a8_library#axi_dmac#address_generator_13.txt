@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@97:107@HdlIdDef
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
+
+reg addr_valid_d1;
+reg last = 1'b0;
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+// we can disable the address generator.
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+
+Diff Content:
+- 102 reg last = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@96:106
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
+
+reg addr_valid_d1;
+reg last = 1'b0;
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+// we can disable the address generator.
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/address_generator.v@94:104
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
+
+reg addr_valid_d1;
+reg last = 1'b0;
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+

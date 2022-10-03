@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tx_channel.v@273:283@HdlStmAssign
+    end
+  end
+
+  // dac iq correction
+
+  assign dac_data_i_s = (IQSEL == 1) ? dac_data_in  : dac_data_out;
+  assign dac_data_q_s = (IQSEL == 1) ? dac_data_out : dac_data_in;
+
+  always @(posedge dac_clk) begin
+    dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+    if (dac_iqcor_valid_s == 1'b1) begin
+
+Diff Content:
+- 278   assign dac_data_i_s = (IQSEL == 1) ? dac_data_in  : dac_data_out;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_tx_channel.v@274:284
+  end
+
+  // dac iq correction
+
+  assign dac_data_i_s = (IQSEL == 1) ? dac_data_in  : dac_data_out;
+  assign dac_data_q_s = (IQSEL == 1) ? dac_data_out : dac_data_in;
+
+  always @(posedge dac_clk) begin
+    dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+    if (dac_iqcor_valid_s == 1'b1) begin
+      dac_data <= dac_iqcor_data_s[15:4];
+

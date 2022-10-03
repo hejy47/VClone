@@ -1,0 +1,49 @@
+Source Block: hdl/library/util_gmii_to_rgmii/util_gmii_to_rgmii.v@255:296@HdlStmFor
+    .LDPIPEEN(0),
+    .CNTVALUEIN(0),
+    .REGRST(0));
+
+  generate
+  for (i = 0; i < 4; i = i + 1) begin
+    IDELAYE2 #(
+      .IDELAY_TYPE("FIXED"),
+      .HIGH_PERFORMANCE_MODE("TRUE"),
+      .REFCLK_FREQUENCY(200.0),
+      .SIGNAL_PATTERN("DATA"),
+      .DELAY_SRC("IDATAIN")
+    ) delay_rgmii_rd (
+      .IDATAIN(rgmii_rd[i]),
+      .DATAOUT(rgmii_rd_delay[i]),
+      .DATAIN(0),
+      .C(0),
+      .CE(0),
+      .INC(0),
+      .CINVCTRL(0),
+      .CNTVALUEOUT(),
+      .LD(0),
+      .LDPIPEEN(0),
+      .CNTVALUEIN(0),
+      .REGRST(0));
+
+    IDDR #(
+      .DDR_CLK_EDGE("SAME_EDGE_PIPELINED")
+    ) rgmii_rx_iddr (
+      .Q1(gmii_rxd_s[i]),
+      .Q2(gmii_rxd_s[i+4]),
+      .C(gmii_rx_clk),
+      .CE(1),
+      .D(rgmii_rd_delay[i]),
+      .R(0),
+      .S(0));
+  end
+  endgenerate
+
+  IDDR #(
+    .DDR_CLK_EDGE("SAME_EDGE_PIPELINED")
+  ) rgmii_rx_ctl_iddr (
+
+Diff Content:
++ 260   (* IODELAY_GROUP = IODELAY_GROUP *)
++ 265       .IDELAY_VALUE (IDELAY_VALUE),
+
+Clone Blocks:

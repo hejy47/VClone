@@ -1,0 +1,20 @@
+Source Block: hdl/library/util_dac_unpack/util_dac_unpack.v@208:220@HdlStmFor
+     dac_enable_d1 <= dac_enable;
+  end
+
+  generate
+    genvar i;
+    for (i = 0; i < CHANNELS; i = i + 1) begin : gen_data_array
+      assign data_array[i] = buffer[DATA_WIDTH+i*DATA_WIDTH-1:i*DATA_WIDTH];
+    end
+  endgenerate
+
+  generate
+    genvar j;
+    for (j = 0; j < CHANNELS; j = j + 1) begin : gen_dac_data
+
+Diff Content:
+- 213     for (i = 0; i < CHANNELS; i = i + 1) begin : gen_data_array
++ 213     for (i = 0; i < NUM_OF_CHANNELS; i = i + 1) begin : gen_data_array
+
+Clone Blocks:

@@ -1,0 +1,36 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@153:167@HdlStmProcess
+		   .clk  (core_clk),
+		   .din  (packet_done)
+		   );
+
+   //posedge detect and pipeline to line up with data
+   always @ (posedge core_clk)
+     begin
+	packet_done_reg <= packet_done_sync;	
+	spi_access      <= spi_access_pulse;	
+     end
+
+   assign spi_access_pulse = packet_done_sync & ~packet_done_reg;	
+   
+   //spi read
+   always @ (posedge core_clk)
+
+Diff Content:
+- 158    always @ (posedge core_clk)
++ 158    always @ (posedge clk)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_slave_io.v@159:169
+     begin
+	packet_done_reg <= packet_done_sync;	
+	spi_access      <= spi_access_pulse;	
+     end
+
+   assign spi_access_pulse = packet_done_sync & ~packet_done_reg;	
+   
+   //spi read
+   always @ (posedge core_clk)
+     if(spi_access_pulse)
+       core_spi_read <= spi_read;
+

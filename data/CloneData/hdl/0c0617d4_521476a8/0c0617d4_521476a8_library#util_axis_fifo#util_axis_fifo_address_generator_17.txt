@@ -1,0 +1,68 @@
+Source Block: hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@129:166@HdlStmIf
+
+//------------------------------------------------------------------------------
+// CDC circuits for double clock configuration
+//------------------------------------------------------------------------------
+
+generate if (ASYNC_CLK == 1) begin : g_async_clock
+  // CDC transfer of the write pointer to the read clock domain
+  sync_gray #(
+    .DATA_WIDTH(ADDRESS_WIDTH + 1)
+  ) i_waddr_sync_gray (
+    .in_clk(s_axis_aclk),
+    .in_resetn(s_axis_aresetn),
+    .out_clk(m_axis_aclk),
+    .out_resetn(m_axis_aresetn),
+    .in_count(s_axis_waddr_reg),
+    .out_count(m_axis_waddr_reg)
+  );
+
+  // CDC transfer of the read pointer to the write clock domain
+  sync_gray #(
+    .DATA_WIDTH(ADDRESS_WIDTH + 1)
+  ) i_raddr_sync_gray (
+    .in_clk(m_axis_aclk),
+    .in_resetn(m_axis_aresetn),
+    .out_clk(s_axis_aclk),
+    .out_resetn(s_axis_aresetn),
+    .in_count(m_axis_raddr_reg),
+    .out_count(s_axis_raddr_reg)
+  );
+end else begin
+  assign m_axis_waddr_reg = s_axis_waddr_reg;
+  assign s_axis_raddr_reg = m_axis_raddr_reg;
+end
+endgenerate
+
+//------------------------------------------------------------------------------
+// FIFO write logic - upstream
+//
+
+Diff Content:
+- 134 generate if (ASYNC_CLK == 1) begin : g_async_clock
+- 136   sync_gray #(
+- 137     .DATA_WIDTH(ADDRESS_WIDTH + 1)
+- 138   ) i_waddr_sync_gray (
+- 139     .in_clk(s_axis_aclk),
+- 140     .in_resetn(s_axis_aresetn),
+- 141     .out_clk(m_axis_aclk),
+- 142     .out_resetn(m_axis_aresetn),
+- 143     .in_count(s_axis_waddr_reg),
+- 144     .out_count(m_axis_waddr_reg)
+- 145   );
+- 148   sync_gray #(
+- 149     .DATA_WIDTH(ADDRESS_WIDTH + 1)
+- 150   ) i_raddr_sync_gray (
+- 151     .in_clk(m_axis_aclk),
+- 152     .in_resetn(m_axis_aresetn),
+- 153     .out_clk(s_axis_aclk),
+- 154     .out_resetn(s_axis_aresetn),
+- 155     .in_count(m_axis_raddr_reg),
+- 156     .out_count(s_axis_raddr_reg)
+- 157   );
+- 158 end else begin
+- 159   assign m_axis_waddr_reg = s_axis_waddr_reg;
+- 160   assign s_axis_raddr_reg = m_axis_raddr_reg;
+- 161 end
+
+Clone Blocks:

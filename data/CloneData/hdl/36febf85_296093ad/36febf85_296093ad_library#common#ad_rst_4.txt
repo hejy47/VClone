@@ -1,0 +1,58 @@
+Source Block: hdl/library/common/ad_rst.v@58:76@HdlStmProcess
+  reg             rst_p = 'd0;
+  reg             rst = 'd0;
+
+  // simple reset gen
+
+  always @(posedge clk or posedge preset) begin
+    if (preset == 1'b1) begin
+      rst_p <= 1'd1;
+      rst <= 1'd1;
+    end else begin
+      rst_p <= 1'b0;
+      rst <= rst_p;
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 63   always @(posedge clk or posedge preset) begin
+- 64     if (preset == 1'b1) begin
+- 65       rst_p <= 1'd1;
+- 66       rst <= 1'd1;
+- 67     end else begin
+- 68       rst_p <= 1'b0;
+- 69       rst <= rst_p;
+- 70     end
++ 70   always @(posedge clk) begin
++ 70     ad_rst_sync_m1 <= preset;
++ 70     ad_rst_sync <= ad_rst_sync_m1;
++ 70     rst <= ad_rst_sync;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_rst.v@58:76
+  reg             rst_p = 'd0;
+  reg             rst = 'd0;
+
+  // simple reset gen
+
+  always @(posedge clk or posedge preset) begin
+    if (preset == 1'b1) begin
+      rst_p <= 1'd1;
+      rst <= 1'd1;
+    end else begin
+      rst_p <= 1'b0;
+      rst <= rst_p;
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+

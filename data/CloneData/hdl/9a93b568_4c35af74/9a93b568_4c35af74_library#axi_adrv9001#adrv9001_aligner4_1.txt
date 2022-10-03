@@ -1,0 +1,44 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_aligner4.v@45:60@HdlStmProcess
+);
+
+  reg [3:0] idata_d = 'b0;
+  reg       ivalid_d = 'b0;
+
+  always @(posedge clk) begin
+    if (ivalid) begin
+      idata_d <= idata;
+    end
+    ivalid_d <= ivalid;
+  end
+
+  reg [1:0] phase = 'h0;
+  always @(posedge clk) begin
+    if (ivalid) begin
+      if ((strobe != 'b1111) && (strobe != 'b0000)) begin
+
+Diff Content:
+- 51     if (ivalid) begin
++ 51     if (rst) begin
++ 51       idata_d <= 'h0;
++ 51     end else if (ivalid) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adrv9001/adrv9001_aligner8.v@45:60
+);
+
+  reg [7:0] idata_d = 'b0;
+  reg       ivalid_d = 'b0;
+
+  always @(posedge clk) begin
+    if (ivalid) begin
+      idata_d <= idata;
+    end
+    ivalid_d <= ivalid;
+  end
+
+  reg [2:0] phase = 'h0;
+  always @(posedge clk) begin
+    if (ivalid) begin
+      if ((strobe != 'b1111_1111) && (strobe != 'b0000_0000)) begin
+

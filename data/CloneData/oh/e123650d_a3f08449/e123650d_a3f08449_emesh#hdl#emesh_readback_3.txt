@@ -1,0 +1,48 @@
+Source Block: oh/emesh/hdl/emesh_readback.v@68:84@HdlStmProcess
+       access_out <= 1'b0;
+     else if(~wait_in)
+       access_out <= access_in & ~write_in;
+
+   //packet
+   always @ (posedge clk)
+     if(~wait_in & access_in & ~write_in)
+       begin	  
+	  datamode_out[1:0]   <= datamode_in[1:0];
+	  ctrlmode_out[4:0]   <= ctrlmode_in[4:0];
+	  dstaddr_out[AW-1:0] <= srcaddr_in[AW-1:0]; 
+       end
+
+   assign data_out[AW-1:0]    = read_data[31:0];
+   assign srcaddr_out[AW-1:0] = read_data[63:32];
+   
+   //wait signal
+
+Diff Content:
+- 74      if(~wait_in & access_in & ~write_in)
++ 74      if(ready_in & access_in & ~write_in)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@469:489
+       access_out <= 1'b0;
+     else if(clk_en)
+       if(!wait_in)
+	 access_out <= access;
+
+   always @ (posedge clk)
+     if (clk_en)
+       if(!wait_in & access)
+	 begin
+	    srcaddr_out[AW-1:0] <= srcaddr[AW-1:0];
+	    data_out[DW-1:0]    <= data[DW-1:0];
+	    write_out           <= write;
+	    datamode_out[1:0]   <= datamode[1:0]; 
+	    dstaddr_out[AW-1:0] <= dstaddr[AW-1:0];
+	    ctrlmode_out[3:0]   <= ctrlmode[3:0];
+	 end
+ 
+   //#####################
+   //# Wait out control
+   //#####################
+   always @ (posedge clk or posedge reset)
+

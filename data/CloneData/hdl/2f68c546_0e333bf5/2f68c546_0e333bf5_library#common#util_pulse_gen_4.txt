@@ -1,0 +1,41 @@
+Source Block: hdl/library/common/util_pulse_gen.v@62:78@HdlStmProcess
+    pulse_period_d <= (pulse_period_en) ? pulse_period : PULSE_PERIOD;
+  end
+
+  // a free running pulse generator
+
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      pulse_period_cnt <= 32'h0;
+    end else begin
+      pulse_period_cnt <= (pulse_period_cnt == pulse_period_d) ? 32'b0 : (pulse_period_cnt + 1);
+    end
+  end
+
+  assign  end_of_period_s = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
+
+  // generate pulse with a specified width
+
+
+Diff Content:
+- 69       pulse_period_cnt <= 32'h0;
+- 71       pulse_period_cnt <= (pulse_period_cnt == pulse_period_d) ? 32'b0 : (pulse_period_cnt + 1);
++ 69       pulse_period_cnt <= PULSE_PERIOD;
++ 71       pulse_period_cnt <= (end_of_period_s) ? pulse_period_d : (pulse_period_cnt - 1'b1);
++ 73   assign end_of_period_s = (pulse_period_cnt == 32'b0) ? 1'b1 : 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/util_pulse_gen.v@70:80
+    end else begin
+      pulse_period_cnt <= (pulse_period_cnt == pulse_period_d) ? 32'b0 : (pulse_period_cnt + 1);
+    end
+  end
+
+  assign  end_of_period_s = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
+
+  // generate pulse with a specified width
+
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+

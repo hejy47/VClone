@@ -1,0 +1,32 @@
+Source Block: oh/src/common/hdl/oh_standby.v@14:24@HdlIdDef
+    output clkout //clock output
+    );
+      
+   //Wire declarations
+   reg [PD-1:0]	wakeup_pipe;
+   reg          idle_reg;
+   
+   // detect an idle state change (wake up on any)
+   always @ (posedge clk )     
+     idle_reg <= idle;   
+   assign state_change = (idle ^ idle_reg);
+
+Diff Content:
++ 19    wire 	state_change;
++ 19    wire 	clk_en;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_standby.v@13:23
+    input  idle, //core is in idle
+    output clkout //clock output
+    );
+      
+   //Wire declarations
+   reg [PD-1:0]	wakeup_pipe;
+   reg          idle_reg;
+   
+   // detect an idle state change (wake up on any)
+   always @ (posedge clk )     
+     idle_reg <= idle;   
+

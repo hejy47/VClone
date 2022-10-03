@@ -1,0 +1,54 @@
+Source Block: verilog-ethernet/rtl/eth_mac_1g_tx.v@245:283@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+        frame_ptr_reg <= 0;
+
+        input_axis_tready_reg <= 0;
+
+        gmii_txd_reg <= 0;
+        gmii_tx_en_reg <= 0;
+        gmii_tx_er_reg <= 0;
+
+        crc_state <= 32'hFFFFFFFF;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_axis_tready_reg <= input_axis_tready_next;
+
+        gmii_txd_reg <= gmii_txd_next;
+        gmii_tx_en_reg <= gmii_tx_en_next;
+        gmii_tx_er_reg <= gmii_tx_er_next;
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+        end else if (update_crc) begin
+            crc_state <= crc_next;
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 254         frame_ptr_reg <= 0;
+- 256         input_axis_tready_reg <= 0;
+- 258         gmii_txd_reg <= 0;
+- 259         gmii_tx_en_reg <= 0;
+- 260         gmii_tx_er_reg <= 0;
++ 254         frame_ptr_reg <= 16'd0;
++ 256         input_axis_tready_reg <= 1'b0;
++ 260         gmii_txd_reg <= 8'd0;
++ 260         gmii_tx_en_reg <= 1'b0;
++ 260         gmii_tx_er_reg <= 1'b0;
+
+Clone Blocks:

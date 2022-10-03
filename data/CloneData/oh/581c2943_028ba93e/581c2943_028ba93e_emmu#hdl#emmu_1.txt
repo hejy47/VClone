@@ -1,0 +1,32 @@
+Source Block: oh/emmu/hdl/emmu.v@98:108@HdlStmAssign
+   /*****************************/
+   /*MMU READ  LOGIC            */
+   /*****************************/
+   //TODO: could we do with less entries?
+   
+   assign write_in              = emesh_packet_in[1];
+   assign emmu_rd_addr[MAW-1:0] = emesh_packet_in[39:28];
+   
+   memory_dp #(.DW(MW),.AW(MAW)) memory_dp (
+					   // Outputs
+					   .rd_data		(emmu_lookup_data[MW-1:0]),
+
+Diff Content:
+- 103    assign write_in              = emesh_packet_in[1];
++ 103    assign write_in              = emesh_packet_in[1];     //TODO:  
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/hdl/emmu.v@99:109
+   /*MMU READ  LOGIC            */
+   /*****************************/
+   //TODO: could we do with less entries?
+   
+   assign write_in              = emesh_packet_in[1];
+   assign emmu_rd_addr[MAW-1:0] = emesh_packet_in[39:28];
+   
+   memory_dp #(.DW(MW),.AW(MAW)) memory_dp (
+					   // Outputs
+					   .rd_data		(emmu_lookup_data[MW-1:0]),
+					   // Inputs
+

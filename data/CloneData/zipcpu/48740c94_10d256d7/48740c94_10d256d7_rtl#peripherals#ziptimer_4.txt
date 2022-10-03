@@ -1,0 +1,64 @@
+Source Block: zipcpu/rtl/peripherals/ziptimer.v@130:146@HdlStmProcess
+	end endgenerate
+
+
+	reg	[(VW-1):0]	r_value;
+	initial	r_value = 0;
+	always @(posedge i_clk)
+		if (wb_write)
+			r_value <= i_wb_data[(VW-1):0];
+		else if ((r_running)&&(i_ce)&&(~o_int))
+			r_value <= r_value + {(VW){1'b1}}; // r_value - 1;
+		else if ((r_running)&&(auto_reload)&&(o_int))
+			r_value <= reload_value;
+
+	// Set the interrupt on our last tick, as we transition from one to
+	// zero.
+	initial	o_int   = 1'b0;
+	always @(posedge i_clk)
+
+Diff Content:
+- 136 		if (wb_write)
+- 138 		else if ((r_running)&&(i_ce)&&(~o_int))
+- 139 			r_value <= r_value + {(VW){1'b1}}; // r_value - 1;
+- 140 		else if ((r_running)&&(auto_reload)&&(o_int))
+- 141 			r_value <= reload_value;
++ 136 		if (i_reset)
++ 136 			r_value <= 0;
++ 136 		else if (wb_write)
++ 141 		else if ((i_ce)&&(r_running))
++ 141 		begin
++ 141 			if (!r_zero)
++ 141 				r_value <= r_value + {(VW){1'b1}};
++ 141 			else if ((auto_reload)&&(r_zero))
++ 141 				r_value <= reload_value;
++ 141 		end
++ 141 	reg	r_zero  = 1'b1;
++ 141 	always @(posedge i_clk)
++ 141 		if (i_reset)
++ 141 			r_zero = 1'b1;
++ 141 		else if (wb_write)
++ 141 			r_zero <= (i_wb_data[(VW-1):0] == 0);
++ 141 		else if ((r_running)&&(i_ce))
++ 141 		begin
++ 141 			if (r_value == {{(VW-1){1'b0}}, 1'b1 })
++ 141 				r_zero <= 1'b1;
++ 141 			else if ((r_zero)&&(auto_reload))
++ 141 				r_zero <= 1'b0;
++ 141 		end
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/ziptimer.v@129:139
+		assign	reload_value = 0;
+	end endgenerate
+
+
+	reg	[(VW-1):0]	r_value;
+	initial	r_value = 0;
+	always @(posedge i_clk)
+		if (wb_write)
+			r_value <= i_wb_data[(VW-1):0];
+		else if ((r_running)&&(i_ce)&&(~o_int))
+			r_value <= r_value + {(VW){1'b1}}; // r_value - 1;
+

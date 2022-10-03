@@ -1,0 +1,101 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4937:4947@HdlStmAssign
+   assign ext_ydiff[4:0] = addr_y[3:0] + ycoord_k_n[3:0] + 1'b1 ; 
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+   //# NON-MULTICAST ROUTING
+   assign route_east_normal   =  ext_xgt;   
+
+Diff Content:
+- 4942    assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4934:4944
+   //# External address comparison 
+   assign ext_yzero      = addr_y[3:0]==ext_yid_k[3:0];
+   assign ext_xzero      = addr_x[3:0]==ext_xid_k[3:0];   
+   assign ext_ydiff[4:0] = addr_y[3:0] + ycoord_k_n[3:0] + 1'b1 ; 
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4935:4945
+   assign ext_yzero      = addr_y[3:0]==ext_yid_k[3:0];
+   assign ext_xzero      = addr_x[3:0]==ext_xid_k[3:0];   
+   assign ext_ydiff[4:0] = addr_y[3:0] + ycoord_k_n[3:0] + 1'b1 ; 
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@4933:4943
+
+   //# External address comparison 
+   assign ext_yzero      = addr_y[3:0]==ext_yid_k[3:0];
+   assign ext_xzero      = addr_x[3:0]==ext_xid_k[3:0];   
+   assign ext_ydiff[4:0] = addr_y[3:0] + ycoord_k_n[3:0] + 1'b1 ; 
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@4938:4948
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+   //# NON-MULTICAST ROUTING
+   assign route_east_normal   =  ext_xgt;   
+   assign route_west_normal   =  ext_xlt;
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@4932:4942
+   assign xcoord_k_n[3:0] = ~ext_xid_k[3:0];
+
+   //# External address comparison 
+   assign ext_yzero      = addr_y[3:0]==ext_yid_k[3:0];
+   assign ext_xzero      = addr_x[3:0]==ext_xid_k[3:0];   
+   assign ext_ydiff[4:0] = addr_y[3:0] + ycoord_k_n[3:0] + 1'b1 ; 
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+
+Clone Blocks 6:
+oh/elink/dv/elink_e16_model.v@4936:4946
+   assign ext_xzero      = addr_x[3:0]==ext_xid_k[3:0];   
+   assign ext_ydiff[4:0] = addr_y[3:0] + ycoord_k_n[3:0] + 1'b1 ; 
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+   //# NON-MULTICAST ROUTING
+

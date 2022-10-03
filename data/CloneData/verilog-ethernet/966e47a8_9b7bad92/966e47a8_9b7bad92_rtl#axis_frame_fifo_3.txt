@@ -1,0 +1,214 @@
+Source Block: verilog-ethernet/rtl/axis_frame_fifo.v@70:80@HdlIdDef
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tdata};
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr[ADDR_WIDTH] != rd_ptr[ADDR_WIDTH]) &&
+             (wr_ptr[ADDR_WIDTH-1:0] == rd_ptr[ADDR_WIDTH-1:0]));
+// empty when pointers match exactly
+
+Diff Content:
+- 75 wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tdata};
++ 75 wire [DATA_WIDTH+1-1:0] data_in = {input_axis_tlast, input_axis_tdata};
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@71:81
+//(* RAM_STYLE="BLOCK" *)
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+KEEP_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tkeep, input_axis_tdata};
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr[ADDR_WIDTH] != rd_ptr[ADDR_WIDTH]) &&
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_frame_fifo.v@68:78
+//(* RAM_STYLE="BLOCK" *)
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tdata};
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr[ADDR_WIDTH] != rd_ptr[ADDR_WIDTH]) &&
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_async_fifo.v@75:85
+//(* RAM_STYLE="BLOCK" *)
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tuser, input_axis_tdata};
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_fifo_64.v@70:80
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+KEEP_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tuser, input_axis_tkeep, input_axis_tdata};
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr[ADDR_WIDTH] != rd_ptr[ADDR_WIDTH]) &&
+             (wr_ptr[ADDR_WIDTH-1:0] == rd_ptr[ADDR_WIDTH-1:0]));
+// empty when pointers match exactly
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_async_fifo_64.v@78:88
+//(* RAM_STYLE="BLOCK" *)
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+KEEP_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tuser, input_axis_tkeep, input_axis_tdata};
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@73:83
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+KEEP_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tkeep, input_axis_tdata};
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr[ADDR_WIDTH] != rd_ptr[ADDR_WIDTH]) &&
+             (wr_ptr[ADDR_WIDTH-1:0] == rd_ptr[ADDR_WIDTH-1:0]));
+// empty when pointers match exactly
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_async_fifo.v@77:87
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tuser, input_axis_tdata};
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+wire full = ((wr_ptr_gray[ADDR_WIDTH] != rd_ptr_gray_sync3[ADDR_WIDTH]) &&
+             (wr_ptr_gray[ADDR_WIDTH-1] != rd_ptr_gray_sync3[ADDR_WIDTH-1]) &&
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_fifo.v@65:75
+//(* RAM_STYLE="BLOCK" *)
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tuser, input_axis_tdata};
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr[ADDR_WIDTH] != rd_ptr[ADDR_WIDTH]) &&
+
+Clone Blocks 9:
+verilog-ethernet/rtl/axis_fifo.v@67:77
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tuser, input_axis_tdata};
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr[ADDR_WIDTH] != rd_ptr[ADDR_WIDTH]) &&
+             (wr_ptr[ADDR_WIDTH-1:0] == rd_ptr[ADDR_WIDTH-1:0]));
+// empty when pointers match exactly
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_async_frame_fifo_64.v@81:91
+//(* RAM_STYLE="BLOCK" *)
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+KEEP_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tkeep, input_axis_tdata};
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_async_frame_fifo_64.v@83:93
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+KEEP_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tkeep, input_axis_tdata};
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+wire full = ((wr_ptr_gray[ADDR_WIDTH] != rd_ptr_gray_sync3[ADDR_WIDTH]) &&
+             (wr_ptr_gray[ADDR_WIDTH-1] != rd_ptr_gray_sync3[ADDR_WIDTH-1]) &&
+
+Clone Blocks 12:
+verilog-ethernet/rtl/axis_async_frame_fifo.v@78:88
+//(* RAM_STYLE="BLOCK" *)
+reg [DATA_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tdata};
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+
+Clone Blocks 13:
+verilog-ethernet/rtl/axis_async_frame_fifo.v@80:90
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tdata};
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+wire full = ((wr_ptr_gray[ADDR_WIDTH] != rd_ptr_gray_sync3[ADDR_WIDTH]) &&
+             (wr_ptr_gray[ADDR_WIDTH-1] != rd_ptr_gray_sync3[ADDR_WIDTH-1]) &&
+
+Clone Blocks 14:
+verilog-ethernet/rtl/axis_fifo_64.v@68:78
+//(* RAM_STYLE="BLOCK" *)
+reg [DATA_WIDTH+KEEP_WIDTH+2-1:0] mem[(2**ADDR_WIDTH)-1:0];
+
+reg output_read = 1'b0;
+
+reg output_axis_tvalid_reg = 1'b0;
+
+wire [DATA_WIDTH+KEEP_WIDTH+2-1:0] data_in = {input_axis_tlast, input_axis_tuser, input_axis_tkeep, input_axis_tdata};
+
+// full when first MSB different but rest same
+wire full = ((wr_ptr[ADDR_WIDTH] != rd_ptr[ADDR_WIDTH]) &&
+

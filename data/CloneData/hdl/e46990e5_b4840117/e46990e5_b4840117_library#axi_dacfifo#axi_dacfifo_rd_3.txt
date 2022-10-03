@@ -1,0 +1,47 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_rd.v@147:174@HdlStmProcess
+  wire                            axi_xfer_req_init;
+  wire                            axi_dvalid_s;
+
+  assign axi_ready_s = (~axi_arvalid | axi_arready) & axi_dready;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_rd <= 1'b0;
+      axi_rd_active <= 1'b0;
+      axi_xfer_req_m <= 2'b0;
+    end else begin
+      if (axi_rd_active == 1'b1) begin
+        axi_rd <= 1'b0;
+        if ((axi_rvalid == 1'b1) && (axi_rlast == 1'b1)) begin
+          axi_rd_active <= 1'b0;
+        end
+      end else if ((axi_ready_s == 1'b1)) begin
+        axi_rd <= axi_xfer_req;
+        axi_rd_active <= axi_xfer_req;
+      end
+    axi_xfer_req_m <= {axi_xfer_req_m[0], axi_xfer_req};
+    end
+  end
+
+  assign axi_xfer_req_init = axi_xfer_req_m[0] & ~axi_xfer_req_m[1];
+
+  // address channel
+
+
+Diff Content:
+- 154       axi_rd <= 1'b0;
+- 155       axi_rd_active <= 1'b0;
+- 158       if (axi_rd_active == 1'b1) begin
+- 159         axi_rd <= 1'b0;
+- 161           axi_rd_active <= 1'b0;
+- 164         axi_rd <= axi_xfer_req;
+- 165         axi_rd_active <= axi_xfer_req;
++ 155       axi_rnext <= 1'b0;
++ 155       axi_ractive <= 1'b0;
++ 159       if (axi_ractive == 1'b1) begin
++ 159         axi_rnext <= 1'b0;
++ 161           axi_ractive <= 1'b0;
++ 165         axi_rnext <= axi_xfer_req;
++ 165         axi_ractive <= axi_xfer_req;
+
+Clone Blocks:

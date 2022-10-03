@@ -1,0 +1,15 @@
+Source Block: hdl/library/common/sync_gray.v@104:111@HdlStmAssign
+		cdc_sync_stage2 <= cdc_sync_stage1;
+		out_count_m <= g2b(cdc_sync_stage2);
+	end
+end
+
+assign out_count = CLK_ASYNC ? out_count_m : in_count;
+
+endmodule
+
+Diff Content:
+- 109 assign out_count = CLK_ASYNC ? out_count_m : in_count;
++ 109 assign out_count = ASYNC_CLK ? out_count_m : in_count;
+
+Clone Blocks:

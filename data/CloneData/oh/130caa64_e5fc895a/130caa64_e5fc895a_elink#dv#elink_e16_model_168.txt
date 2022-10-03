@@ -1,0 +1,67 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1616:1630@HdlStmProcess
+ 
+   always @ (posedge rxi_lclk)
+     if(fifo_read)
+       fifo_data_reg[2*LW-1:0] <= fifo_data_out[2*LW-1:0];
+
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       fifo_data_val <= 1'b0;
+     else
+       fifo_data_val <= fifo_read;
+
+   //#####################################################################
+   //#                  FIFO Write State Machine
+   //# !!!
+   //# This FIFO will write the data in every time the FRAME IS HIGH and
+
+Diff Content:
+- 1621    always @ (posedge rxi_lclk or posedge reset)
+- 1622      if(reset)
+- 1623        fifo_data_val <= 1'b0;
+- 1624      else
+- 1625        fifo_data_val <= fifo_read;
++ 1625    input             c0_emesh_wait_in;  // wait
++ 1625    input             c3_emesh_wait_in;  // wait
++ 1625    input 	     c0_mesh_wait_in;   // wait
++ 1625    input 	     c3_mesh_wait_in;   // wait
++ 1625    input             c0_rdmesh_wait_in; // wait
++ 1625    input             c1_rdmesh_wait_in; // wait
++ 1625    input             c2_rdmesh_wait_in; // wait
++ 1625    input             c3_rdmesh_wait_in; // wait
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1606:1620
+
+   //# Since the size of the FIFO is parametrized I prefer to sample the output
+   //# data to prevent timing issues for the big number of entries (big mux on read)
+   //# This shouldn't add any performance loss just latency increase
+
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       start_tran  <= 1'b0;
+     else if(fifo_read)
+       start_tran  <= fifo_data_out[2*LW];
+ 
+   always @ (posedge rxi_lclk)
+     if(fifo_read)
+       fifo_data_reg[2*LW-1:0] <= fifo_data_out[2*LW-1:0];
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1612:1624
+     if(reset)
+       start_tran  <= 1'b0;
+     else if(fifo_read)
+       start_tran  <= fifo_data_out[2*LW];
+ 
+   always @ (posedge rxi_lclk)
+     if(fifo_read)
+       fifo_data_reg[2*LW-1:0] <= fifo_data_out[2*LW-1:0];
+
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       fifo_data_val <= 1'b0;
+     else
+

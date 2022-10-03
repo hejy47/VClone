@@ -1,0 +1,37 @@
+Source Block: zipcpu/rtl/core/memops.v@141:158@HdlStmProcess
+		begin // Grab the wishbone
+			r_wb_cyc_lcl <= lcl_stb;
+			r_wb_cyc_gbl <= gbl_stb;
+		end
+	initial	o_wb_stb_gbl = 1'b0;
+	always @(posedge i_clk)
+		if ((i_reset)||((i_wb_err)&&(r_wb_cyc_gbl)))
+			o_wb_stb_gbl <= 1'b0;
+		else if (o_wb_cyc_gbl)
+			o_wb_stb_gbl <= (o_wb_stb_gbl)&&(i_wb_stall);
+		else
+			// Grab wishbone on any new transaction to the gbl bus
+			o_wb_stb_gbl <= gbl_stb;
+
+	initial	o_wb_stb_lcl = 1'b0;
+	always @(posedge i_clk)
+		if ((i_reset)||((i_wb_err)&&(r_wb_cyc_lcl)))
+			o_wb_stb_lcl <= 1'b0;
+
+Diff Content:
+- 147 		if ((i_reset)||((i_wb_err)&&(r_wb_cyc_gbl)))
+- 148 			o_wb_stb_gbl <= 1'b0;
+- 149 		else if (o_wb_cyc_gbl)
+- 150 			o_wb_stb_gbl <= (o_wb_stb_gbl)&&(i_wb_stall);
+- 151 		else
+- 153 			o_wb_stb_gbl <= gbl_stb;
++ 153 	if (i_reset)
++ 153 		o_wb_stb_gbl <= 1'b0;
++ 153 	else if ((i_wb_err)&&(r_wb_cyc_gbl))
++ 153 		o_wb_stb_gbl <= 1'b0;
++ 153 	else if (o_wb_cyc_gbl)
++ 153 		o_wb_stb_gbl <= (o_wb_stb_gbl)&&(i_wb_stall);
++ 153 	else
++ 153 		o_wb_stb_gbl <= (gbl_stb)&&(!misaligned);
+
+Clone Blocks:

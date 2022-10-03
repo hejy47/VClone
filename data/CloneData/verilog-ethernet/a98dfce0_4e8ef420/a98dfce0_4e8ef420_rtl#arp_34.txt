@@ -1,0 +1,135 @@
+Source Block: verilog-ethernet/rtl/arp.v@384:427@HdlStmProcess
+            end
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        outgoing_frame_valid_reg <= 0;
+        outgoing_eth_dest_mac_reg <= 0;
+        outgoing_arp_oper_reg <= 0;
+        outgoing_arp_tha_reg <= 0;
+        outgoing_arp_tpa_reg <= 0;
+        cache_write_request_valid_reg <= 0;
+        cache_write_request_mac_reg <= 0;
+        cache_write_request_ip_reg <= 0;
+        arp_request_valid_reg <= 0;
+        arp_request_ip_reg <= 0;
+        arp_request_operation_reg <= 0;
+        arp_request_retry_cnt_reg <= 0;
+        arp_request_timer_reg <= 0;
+        arp_response_error_reg <= 0;
+        arp_response_broadcast_reg <= 0;
+        drop_incoming_frame_reg <= 0;
+    end else begin
+        outgoing_frame_valid_reg <= outgoing_frame_valid_next;
+        outgoing_eth_dest_mac_reg <= outgoing_eth_dest_mac_next;
+        outgoing_arp_oper_reg <= outgoing_arp_oper_next;
+        outgoing_arp_tha_reg <= outgoing_arp_tha_next;
+        outgoing_arp_tpa_reg <= outgoing_arp_tpa_next;
+        cache_write_request_valid_reg <= cache_write_request_valid_next;
+        cache_write_request_mac_reg <= cache_write_request_mac_next;
+        cache_write_request_ip_reg <= cache_write_request_ip_next;
+        arp_request_valid_reg <= arp_request_valid_next;
+        arp_request_ip_reg <= arp_request_ip_next;
+        arp_request_operation_reg <= arp_request_operation_next;
+        arp_request_retry_cnt_reg <= arp_request_retry_cnt_next;
+        arp_request_timer_reg <= arp_request_timer_next;
+        arp_response_error_reg <= arp_response_error_next;
+        arp_response_broadcast_reg <= arp_response_broadcast_next;
+        drop_incoming_frame_reg <= drop_incoming_frame_next;
+    end
+end
+
+endmodule
+
+Diff Content:
+- 391         outgoing_frame_valid_reg <= 0;
+- 392         outgoing_eth_dest_mac_reg <= 0;
+- 393         outgoing_arp_oper_reg <= 0;
+- 394         outgoing_arp_tha_reg <= 0;
+- 395         outgoing_arp_tpa_reg <= 0;
+- 396         cache_write_request_valid_reg <= 0;
+- 397         cache_write_request_mac_reg <= 0;
+- 398         cache_write_request_ip_reg <= 0;
+- 399         arp_request_valid_reg <= 0;
+- 400         arp_request_ip_reg <= 0;
+- 401         arp_request_operation_reg <= 0;
+- 402         arp_request_retry_cnt_reg <= 0;
+- 403         arp_request_timer_reg <= 0;
+- 404         arp_response_error_reg <= 0;
+- 405         arp_response_broadcast_reg <= 0;
+- 406         drop_incoming_frame_reg <= 0;
+- 409         outgoing_eth_dest_mac_reg <= outgoing_eth_dest_mac_next;
+- 410         outgoing_arp_oper_reg <= outgoing_arp_oper_next;
+- 411         outgoing_arp_tha_reg <= outgoing_arp_tha_next;
+- 412         outgoing_arp_tpa_reg <= outgoing_arp_tpa_next;
+- 414         cache_write_request_mac_reg <= cache_write_request_mac_next;
+- 415         cache_write_request_ip_reg <= cache_write_request_ip_next;
+- 417         arp_request_ip_reg <= arp_request_ip_next;
++ 406         outgoing_frame_valid_reg <= 1'b0;
++ 406         cache_write_request_valid_reg <= 1'b0;
++ 406         arp_request_valid_reg <= 1'b0;
++ 406         arp_request_operation_reg <= 1'b0;
++ 406         arp_request_retry_cnt_reg <= 6'd0;
++ 406         arp_request_timer_reg <= 36'd0;
++ 406         arp_response_error_reg <= 1'b0;
++ 406         arp_response_broadcast_reg <= 1'b0;
++ 406         drop_incoming_frame_reg <= 1'b0;
++ 424     outgoing_eth_dest_mac_reg <= outgoing_eth_dest_mac_next;
++ 424     outgoing_arp_oper_reg <= outgoing_arp_oper_next;
++ 424     outgoing_arp_tha_reg <= outgoing_arp_tha_next;
++ 424     outgoing_arp_tpa_reg <= outgoing_arp_tpa_next;
++ 424     cache_write_request_mac_reg <= cache_write_request_mac_next;
++ 424     cache_write_request_ip_reg <= cache_write_request_ip_next;
++ 424     arp_request_ip_reg <= arp_request_ip_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/arp_64.v@388:431
+            end
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        outgoing_frame_valid_reg <= 0;
+        outgoing_eth_dest_mac_reg <= 0;
+        outgoing_arp_oper_reg <= 0;
+        outgoing_arp_tha_reg <= 0;
+        outgoing_arp_tpa_reg <= 0;
+        cache_write_request_valid_reg <= 0;
+        cache_write_request_mac_reg <= 0;
+        cache_write_request_ip_reg <= 0;
+        arp_request_valid_reg <= 0;
+        arp_request_ip_reg <= 0;
+        arp_request_operation_reg <= 0;
+        arp_request_retry_cnt_reg <= 0;
+        arp_request_timer_reg <= 0;
+        arp_response_error_reg <= 0;
+        arp_response_broadcast_reg <= 0;
+        drop_incoming_frame_reg <= 0;
+    end else begin
+        outgoing_frame_valid_reg <= outgoing_frame_valid_next;
+        outgoing_eth_dest_mac_reg <= outgoing_eth_dest_mac_next;
+        outgoing_arp_oper_reg <= outgoing_arp_oper_next;
+        outgoing_arp_tha_reg <= outgoing_arp_tha_next;
+        outgoing_arp_tpa_reg <= outgoing_arp_tpa_next;
+        cache_write_request_valid_reg <= cache_write_request_valid_next;
+        cache_write_request_mac_reg <= cache_write_request_mac_next;
+        cache_write_request_ip_reg <= cache_write_request_ip_next;
+        arp_request_valid_reg <= arp_request_valid_next;
+        arp_request_ip_reg <= arp_request_ip_next;
+        arp_request_operation_reg <= arp_request_operation_next;
+        arp_request_retry_cnt_reg <= arp_request_retry_cnt_next;
+        arp_request_timer_reg <= arp_request_timer_next;
+        arp_response_error_reg <= arp_response_error_next;
+        arp_response_broadcast_reg <= arp_response_broadcast_next;
+        drop_incoming_frame_reg <= drop_incoming_frame_next;
+    end
+end
+
+endmodule
+

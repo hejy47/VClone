@@ -1,0 +1,49 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_gearbox.v@117:144@HdlStmFor
+    out_addr <= out_addr + 1;
+  end
+end
+
+genvar i;
+generate for (i = 0; i < NUM_LANES; i=i+1) begin: unpacker
+
+ad_upack #(
+  .I_W(IN_DATA_PATH_WIDTH),
+  .O_W(OUT_DATA_PATH_WIDTH),
+  .UNIT_W(8),
+  .O_REG(0)
+) i_ad_upack (
+  .clk(link_clk),
+  .reset(reset),
+  .idata(mem_rd_data[i*IN_DATA_PATH_WIDTH*8+:IN_DATA_PATH_WIDTH*8]),
+  .ivalid(mem_rd_valid),
+  .iready(unpacker_ready[i]),
+
+  .odata(link_data[i*OUT_DATA_PATH_WIDTH*8+:OUT_DATA_PATH_WIDTH*8]),
+  .ovalid()
+);
+
+end
+endgenerate
+
+endmodule
+
+
+Diff Content:
+- 122 generate for (i = 0; i < NUM_LANES; i=i+1) begin: unpacker
+- 124 ad_upack #(
+- 125   .I_W(IN_DATA_PATH_WIDTH),
+- 126   .O_W(OUT_DATA_PATH_WIDTH),
+- 127   .UNIT_W(8),
+- 128   .O_REG(0)
+- 129 ) i_ad_upack (
+- 130   .clk(link_clk),
+- 131   .reset(reset),
+- 132   .idata(mem_rd_data[i*IN_DATA_PATH_WIDTH*8+:IN_DATA_PATH_WIDTH*8]),
+- 133   .ivalid(mem_rd_valid),
+- 134   .iready(unpacker_ready[i]),
+- 136   .odata(link_data[i*OUT_DATA_PATH_WIDTH*8+:OUT_DATA_PATH_WIDTH*8]),
+- 137   .ovalid()
+- 138 );
+- 140 end
+
+Clone Blocks:

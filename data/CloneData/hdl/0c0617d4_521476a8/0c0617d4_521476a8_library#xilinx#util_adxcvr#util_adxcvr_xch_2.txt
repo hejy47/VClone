@@ -1,0 +1,27 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@517:530@HdlStmIf
+  endgenerate
+
+  // instantiations
+
+  generate
+  if (XCVR_TYPE == GTXE2_TRANSCEIVERS) begin
+  BUFG i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
+  BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == GTXE2_TRANSCEIVERS) begin
+  assign rx_sys_clk_sel_s = up_rx_sys_clk_sel;
+
+Diff Content:
+- 523   BUFG i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
+- 524   BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
++ 524     BUFG i_rx_bufg (
++ 524       .I (rx_out_clk_s),
++ 524       .O (rx_out_clk));
++ 524     BUFG i_tx_bufg (
++ 524       .I (tx_out_clk_s),
++ 524       .O (tx_out_clk));
+
+Clone Blocks:

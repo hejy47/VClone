@@ -1,0 +1,51 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@122:150@HdlStmProcess
+        adc_xfer_enable <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge adc_clk) begin
+    if (adc_rst_s == 1'b1) begin
+      adc_wr_int <= 'd0;
+      adc_wdata_int <= 'd0;
+      adc_waddr_int <= 'd0;
+    end else begin
+      if (adc_xfer_init == 1'b1) begin
+        adc_wr_int <= 'd0;
+        adc_wdata_int <= 'd0;
+        adc_waddr_int <= 'd0;
+      end else begin
+        adc_wr_int <= adc_wr & adc_xfer_enable;
+        adc_wdata_int <= adc_wdata;
+        if (adc_wr_int == 1'b1) begin
+          adc_waddr_int <= adc_waddr_int + 1'b1;
+        end
+      end
+    end
+  end
+
+  always @(posedge adc_clk) begin
+    if (adc_rst_s == 1'b1) begin
+      adc_waddr_rel_t <= 'd0;
+      adc_waddr_rel <= 'd0;
+
+Diff Content:
+- 129       adc_wr_int <= 'd0;
+- 130       adc_wdata_int <= 'd0;
+- 131       adc_waddr_int <= 'd0;
+- 134         adc_wr_int <= 'd0;
+- 135         adc_wdata_int <= 'd0;
+- 136         adc_waddr_int <= 'd0;
+- 137       end else begin
+- 138         adc_wr_int <= adc_wr & adc_xfer_enable;
+- 139         adc_wdata_int <= adc_wdata;
+- 140         if (adc_wr_int == 1'b1) begin
+- 141           adc_waddr_int <= adc_waddr_int + 1'b1;
+- 142         end
++ 131       adc_xfer_enable <= 'd0;
++ 142         adc_xfer_enable <= 1'b1;
++ 142       end else if (adc_end_of_capture_s == 1'b1) begin
++ 142         adc_xfer_enable <= 1'b0;
++ 145   assign adc_waddr_int_s = (adc_waddr_int == ADC_ADDR_LIMIT) ? adc_waddr_int : adc_waddr_int + 1'b1;
+
+Clone Blocks:

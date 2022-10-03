@@ -1,0 +1,45 @@
+Source Block: oh/elink/hdl/esaxi.v@466:476@HdlStmAssign
+   // -- are to be avoided for speed anyway.
+   // ------------------------------------------
+
+   // since we're only sending one req at a time we can ignore the fifo flags
+   // always read response data immediately
+   assign emrr_rd_en = emrr_access & ~mi_rd_reg;   //TODO: Verify this assumption!!!
+   
+   assign emrq_write         = 1'b0;
+   assign emrq_data[31:0]    = 32'b0;
+   
+   always @( posedge s_axi_aclk )
+
+Diff Content:
+- 471    assign emrr_rd_en = emrr_access & ~mi_rd_reg;   //TODO: Verify this assumption!!!
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/esaxi.v@468:478
+
+   // since we're only sending one req at a time we can ignore the fifo flags
+   // always read response data immediately
+   assign emrr_rd_en = emrr_access & ~mi_rd_reg;   //TODO: Verify this assumption!!!
+   
+   assign emrq_write         = 1'b0;
+   assign emrq_data[31:0]    = 32'b0;
+   
+   always @( posedge s_axi_aclk )
+     if (~s_axi_aresetn) 
+       begin
+
+Clone Blocks 2:
+oh/elink/hdl/esaxi.v@469:479
+   // since we're only sending one req at a time we can ignore the fifo flags
+   // always read response data immediately
+   assign emrr_rd_en = emrr_access & ~mi_rd_reg;   //TODO: Verify this assumption!!!
+   
+   assign emrq_write         = 1'b0;
+   assign emrq_data[31:0]    = 32'b0;
+   
+   always @( posedge s_axi_aclk )
+     if (~s_axi_aresetn) 
+       begin
+	  emrq_access_all     <= 1'b0;      
+

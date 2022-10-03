@@ -1,0 +1,28 @@
+Source Block: hdl/library/common/ad_tdd_control.v@222:240@HdlStmProcess
+      tdd_sync_d2 <= tdd_sync_d1;
+    end
+  end
+
+  // edge detection circuit
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      tdd_sync_d3 <= 1'b0;
+      tdd_sync_pulse <= 1'b0;
+    end else begin
+      tdd_sync_d3 <= tdd_sync_d2;
+      tdd_sync_pulse <= (~tdd_sync_d3 & tdd_sync_d2) ? 1'b1 : 1'b0;
+    end
+  end
+
+
+  // ***************************************************************************
+  // tdd counter (state machine)
+  // ***************************************************************************
+
+Diff Content:
++ 230       tdd_enable_d1 <= 0;
++ 230       tdd_enable_d2 <= 0;
++ 233       tdd_enable_d1 <= (~tdd_sync_d3 & tdd_sync_d2) ? tdd_enable : tdd_enable_d1;
++ 233       tdd_enable_d2 <= tdd_enable_d1;
+
+Clone Blocks:

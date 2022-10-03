@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/erx_cfg.v@115:129@HdlStmProcess
+     rx_gpio_reg[8:0] <= gpio_datain[8:0];
+   
+   //###########################1
+   //# DEBUG
+   //###########################   
+   always @ (posedge clk)
+     if (rx_status_write)
+       rx_status_reg[15:0] <= mi_din[15:0];
+     else
+       rx_status_reg[15:0] <= rx_status_reg[15:0] | rx_status[15:0];
+
+   //###########################1
+   //# DYNAMIC REMAP BASE
+   //###########################
+   always @ (posedge clk)   
+
+Diff Content:
+- 120    always @ (posedge clk)
++ 120    always @ (posedge clk)     
++ 124    always @ (posedge clk)
++ 124      rx_gpio_reg[8:0] <= gpio_datain[8:0];
+
+Clone Blocks:

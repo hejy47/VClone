@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/etx_protocol.v@117:130@HdlStmAssign
+   assign next_match       =  etx_access &
+			      etx_write &
+		              (etx_datamode[1:0]==2'b11) &		       
+			      (etx_ctrlmode[3:0]==4'b0000);
+     
+   assign tx_burst        =  ~tx_wait         &
+		   	      current_match    &
+			      next_match       &
+			      burst_addr_match;
+   
+   reg 		  tx_burst_reg;   
+   always @ (posedge clk)
+     tx_burst_reg <=tx_burst;
+
+
+Diff Content:
+- 122    assign tx_burst        =  ~tx_wait         &
++ 122    assign tx_burst        =   burst_enable     &
++ 122                               ~tx_wait         &
+
+Clone Blocks:

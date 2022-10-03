@@ -1,0 +1,48 @@
+Source Block: hdl/library/common/up_delay_cntrl.v@124:134@HdlStmAssign
+
+  // processor interface
+
+  assign up_wack = (DISABLE == 1) ? 1'd0 : up_wack_int;
+  assign up_rack = (DISABLE == 1) ? 1'd0 : up_rack_int;
+  assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_int;
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_preset <= 1'd1;
+      up_wack_int <= 'd0;
+
+Diff Content:
+- 129   assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_int;
++ 129   assign up_wack = up_wack_int;
++ 129   assign up_rack = up_rack_int;
++ 129   assign up_rdata = up_rdata_int;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_delay_cntrl.v@123:133
+  endgenerate
+
+  // processor interface
+
+  assign up_wack = (DISABLE == 1) ? 1'd0 : up_wack_int;
+  assign up_rack = (DISABLE == 1) ? 1'd0 : up_rack_int;
+  assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_int;
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_preset <= 1'd1;
+
+Clone Blocks 2:
+hdl/library/common/up_delay_cntrl.v@122:132
+  end
+  endgenerate
+
+  // processor interface
+
+  assign up_wack = (DISABLE == 1) ? 1'd0 : up_wack_int;
+  assign up_rack = (DISABLE == 1) ? 1'd0 : up_rack_int;
+  assign up_rdata = (DISABLE == 1) ? 32'd0 : up_rdata_int;
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+

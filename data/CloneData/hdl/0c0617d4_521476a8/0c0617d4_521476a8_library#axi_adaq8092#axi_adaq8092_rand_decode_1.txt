@@ -1,0 +1,27 @@
+Source Block: hdl/library/axi_adaq8092/axi_adaq8092_rand_decode.v@53:70@HdlStmProcess
+
+  assign adc_data_decoded = adc_rand_enb ? adc_data_decoded_s : adc_data ;
+
+  // DATA DECODING
+
+  always @(posedge adc_clk) begin 
+    for (i = 1; i <= 13; i = i + 1) begin
+      adc_data_decoded_s[i] = adc_data[i] ^ adc_data[0];
+    end
+    for (i = 15; i <= 27; i = i + 1) begin
+      adc_data_decoded_s[i] = adc_data[i] ^ adc_data[14];
+    end
+
+    adc_data_decoded_s[0] = adc_data[0];  
+    adc_data_decoded_s[14] = adc_data[14];
+  end
+    
+endmodule
+
+Diff Content:
+- 58   always @(posedge adc_clk) begin 
+- 66     adc_data_decoded_s[0] = adc_data[0];  
++ 58   always @(posedge adc_clk) begin
++ 66     adc_data_decoded_s[0] = adc_data[0];
+
+Clone Blocks:

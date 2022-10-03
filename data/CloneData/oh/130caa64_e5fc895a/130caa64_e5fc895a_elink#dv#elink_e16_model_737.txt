@@ -1,0 +1,68 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5437:5447@HdlStmAssign
+   // #####################################
+
+   assign c0_txo_cid[1:0] = 2'b00;
+   assign c1_txo_cid[1:0] = 2'b01;
+   assign c2_txo_cid[1:0] = 2'b10;
+   assign c3_txo_cid[1:0] = 2'b11;
+
+   // ################################
+   // # Transmit buffer instantiation
+   // ################################
+
+
+Diff Content:
+- 5442    assign c3_txo_cid[1:0] = 2'b11;
++ 5442    assign mesh_last_tran = mesh_pointer[2] & mesh_pointer[1] & ~mesh_pointer[0];
++ 5442    assign mesh_pointer_incr[2:0] = mesh_last_tran ? 3'b000 :
++ 5442 				   (mesh_pointer[2:0] + 3'b001);
++ 5442    always @ (posedge cclk or posedge reset)
++ 5442      if(reset)
++ 5442        mesh_pointer[2:0] <= 3'b000;
++ 5442      else if(cclk_en)
++ 5442        if (mesh_ack)
++ 5442 	 mesh_pointer[2:0] <= mesh_pointer_incr[2:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@5436:5446
+   // # Transmitter channels instantiation
+   // #####################################
+
+   assign c0_txo_cid[1:0] = 2'b00;
+   assign c1_txo_cid[1:0] = 2'b01;
+   assign c2_txo_cid[1:0] = 2'b10;
+   assign c3_txo_cid[1:0] = 2'b11;
+
+   // ################################
+   // # Transmit buffer instantiation
+   // ################################
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@5435:5445
+   // #####################################
+   // # Transmitter channels instantiation
+   // #####################################
+
+   assign c0_txo_cid[1:0] = 2'b00;
+   assign c1_txo_cid[1:0] = 2'b01;
+   assign c2_txo_cid[1:0] = 2'b10;
+   assign c3_txo_cid[1:0] = 2'b11;
+
+   // ################################
+   // # Transmit buffer instantiation
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@5434:5444
+
+   // #####################################
+   // # Transmitter channels instantiation
+   // #####################################
+
+   assign c0_txo_cid[1:0] = 2'b00;
+   assign c1_txo_cid[1:0] = 2'b01;
+   assign c2_txo_cid[1:0] = 2'b10;
+   assign c3_txo_cid[1:0] = 2'b11;
+
+   // ################################
+

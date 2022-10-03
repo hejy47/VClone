@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/erx_arbiter.v@85:97@HdlStmAssign
+   
+   //####################################
+   //Write Path (from IO through MMU)
+   //####################################
+
+   assign rxwr_access         = emmu_access    & 
+				emmu_write    &
+				~(emmu_dstaddr[31:20]==ID);
+   
+   assign rxwr_packet[PW-1:0] = emmu_packet[PW-1:0];
+         
+   //########################################
+   //Read Request Path (from IO through MMU) 
+
+Diff Content:
+- 90    assign rxwr_access         = emmu_access    & 
++ 90    assign rxwr_access         = emmu_access   & 
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_arbiter.v@89:99
+
+   assign rxwr_access         = emmu_access    & 
+				emmu_write    &
+				~(emmu_dstaddr[31:20]==ID);
+   
+   assign rxwr_packet[PW-1:0] = emmu_packet[PW-1:0];
+         
+   //########################################
+   //Read Request Path (from IO through MMU) 
+   //########################################
+
+

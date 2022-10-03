@@ -1,0 +1,24 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@278:294@HdlStmProcess
+    .doutb (dac_data_fifo_s));
+
+  // define underflow
+  // underflow make sense just if bypass is enabled
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_dunf <= 1'b0;
+    end else begin
+      dac_dunf <= (dac_bypass == 1'b1) ? (dac_valid & dac_xfer_req & ~dac_mem_ren_s) : 1'b0;
+    end
+  end
+
+  // bypass logic
+
+  util_dacfifo_bypass #(
+    .DAC_DATA_WIDTH (DATA_WIDTH),
+
+Diff Content:
+- 284     if (dac_rst == 1'b1) begin
++ 284     if (dac_rst_int_s == 1'b1) begin
+
+Clone Blocks:

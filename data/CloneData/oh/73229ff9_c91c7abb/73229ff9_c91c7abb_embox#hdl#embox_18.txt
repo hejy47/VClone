@@ -1,0 +1,61 @@
+Source Block: oh/embox/hdl/embox.v@98:108@HdlStmAssign
+   assign embox_w1_access     = (mi_addr[RFAW-1:2]==`EMBOX1); //upper 32 bit word
+
+   //fifo read/write logic
+   assign  embox_write       = mi_en &  mi_we[0];
+   assign  embox_w0_write    = embox_w0_access & embox_write;
+   assign  embox_w1_write    = embox_w1_access & embox_write;      //causes FIFO write
+
+   //read logic
+   assign embox_read         = mi_en & ~mi_we[0];
+   assign embox_w1_read      = embox_w1_access & embox_read;       //causes FIFO read		      
+
+
+Diff Content:
+- 103    assign  embox_w1_write    = embox_w1_access & embox_write;      //causes FIFO write
++ 103    assign embox_write       = mi_en & mi_we;
++ 103    assign embox_read        = mi_en & ~mi_we;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/embox/hdl/embox.v@97:107
+   assign embox_w0_access     = (mi_addr[RFAW-1:2]==`EMBOX0); //lower 32 bit word
+   assign embox_w1_access     = (mi_addr[RFAW-1:2]==`EMBOX1); //upper 32 bit word
+
+   //fifo read/write logic
+   assign  embox_write       = mi_en &  mi_we[0];
+   assign  embox_w0_write    = embox_w0_access & embox_write;
+   assign  embox_w1_write    = embox_w1_access & embox_write;      //causes FIFO write
+
+   //read logic
+   assign embox_read         = mi_en & ~mi_we[0];
+   assign embox_w1_read      = embox_w1_access & embox_read;       //causes FIFO read		      
+
+Clone Blocks 2:
+oh/embox/hdl/embox.v@101:111
+   assign  embox_write       = mi_en &  mi_we[0];
+   assign  embox_w0_write    = embox_w0_access & embox_write;
+   assign  embox_w1_write    = embox_w1_access & embox_write;      //causes FIFO write
+
+   //read logic
+   assign embox_read         = mi_en & ~mi_we[0];
+   assign embox_w1_read      = embox_w1_access & embox_read;       //causes FIFO read		      
+
+   /*****************************/
+   /*WRITE ACTION               */
+   /*****************************/
+
+Clone Blocks 3:
+oh/embox/hdl/embox.v@96:106
+   //access decode
+   assign embox_w0_access     = (mi_addr[RFAW-1:2]==`EMBOX0); //lower 32 bit word
+   assign embox_w1_access     = (mi_addr[RFAW-1:2]==`EMBOX1); //upper 32 bit word
+
+   //fifo read/write logic
+   assign  embox_write       = mi_en &  mi_we[0];
+   assign  embox_w0_write    = embox_w0_access & embox_write;
+   assign  embox_w1_write    = embox_w1_access & embox_write;      //causes FIFO write
+
+   //read logic
+   assign embox_read         = mi_en & ~mi_we[0];
+

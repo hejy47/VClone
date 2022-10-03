@@ -1,0 +1,48 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl_64b.v@85:95@HdlStmAssign
+always @(posedge clk) begin
+  emb_lock_d <= emb_lock;
+  buffer_release_d_n <= buffer_release_n;
+end
+
+assign phy_block_sync_masked = phy_block_sync | cfg_lanes_disable;
+assign emb_lock_masked = emb_lock_d | cfg_lanes_disable;
+
+assign all_block_sync = &phy_block_sync_masked;
+assign all_emb_lock = &emb_lock_masked;
+
+
+Diff Content:
+- 90 assign phy_block_sync_masked = phy_block_sync | cfg_lanes_disable;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl_64b.v@80:93
+wire all_block_sync;
+
+reg [NUM_LANES-1:0] emb_lock_d = {NUM_LANES{1'b0}};
+reg buffer_release_d_n = 1'b1;
+
+always @(posedge clk) begin
+  emb_lock_d <= emb_lock;
+  buffer_release_d_n <= buffer_release_n;
+end
+
+assign phy_block_sync_masked = phy_block_sync | cfg_lanes_disable;
+assign emb_lock_masked = emb_lock_d | cfg_lanes_disable;
+
+assign all_block_sync = &phy_block_sync_masked;
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl_64b.v@86:96
+  emb_lock_d <= emb_lock;
+  buffer_release_d_n <= buffer_release_n;
+end
+
+assign phy_block_sync_masked = phy_block_sync | cfg_lanes_disable;
+assign emb_lock_masked = emb_lock_d | cfg_lanes_disable;
+
+assign all_block_sync = &phy_block_sync_masked;
+assign all_emb_lock = &emb_lock_masked;
+
+always @(*) begin
+

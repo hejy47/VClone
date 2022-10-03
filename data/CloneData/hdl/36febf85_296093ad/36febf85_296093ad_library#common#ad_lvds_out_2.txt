@@ -1,0 +1,86 @@
+Source Block: hdl/library/common/ad_lvds_out.v@125:162@HdlStmIf
+    .D1 (tx_data_p),
+    .D2 (tx_data_n),
+    .Q (tx_data_oddr_s));
+
+  generate
+  if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7)) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  ODELAYE2 #(
+    .CINVCTRL_SEL ("FALSE"),
+    .DELAY_SRC ("ODATAIN"),
+    .HIGH_PERFORMANCE_MODE ("FALSE"),
+    .ODELAY_TYPE ("VAR_LOAD"),
+    .ODELAY_VALUE (0),
+    .REFCLK_FREQUENCY (200.0),
+    .PIPE_SEL ("FALSE"),
+    .SIGNAL_PATTERN ("DATA"))
+  i_tx_data_odelay (
+    .CE (1'b0),
+    .CLKIN (1'b0),
+    .INC (1'b0),
+    .LDPIPEEN (1'b0),
+    .CINVCTRL (1'b0),
+    .REGRST (1'b0),
+    .C (up_clk),
+    .ODATAIN (tx_data_oddr_s),
+    .DATAOUT (tx_data_odelay_s),
+    .LD (up_dld),
+    .CNTVALUEIN (up_dwdata),
+    .CNTVALUEOUT (up_drdata));
+  end else begin
+  assign up_drdata = 5'd0;
+  assign tx_data_odelay_s = tx_data_oddr_s;
+  end
+  endgenerate
+
+  OBUFDS i_tx_data_obuf (
+    .I (tx_data_odelay_s),
+    .O (tx_data_out_p),
+
+Diff Content:
+- 130   if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7)) begin
++ 130   if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == SERIES7)) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_lvds_out.v@125:162
+    .D1 (tx_data_p),
+    .D2 (tx_data_n),
+    .Q (tx_data_oddr_s));
+
+  generate
+  if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7)) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  ODELAYE2 #(
+    .CINVCTRL_SEL ("FALSE"),
+    .DELAY_SRC ("ODATAIN"),
+    .HIGH_PERFORMANCE_MODE ("FALSE"),
+    .ODELAY_TYPE ("VAR_LOAD"),
+    .ODELAY_VALUE (0),
+    .REFCLK_FREQUENCY (200.0),
+    .PIPE_SEL ("FALSE"),
+    .SIGNAL_PATTERN ("DATA"))
+  i_tx_data_odelay (
+    .CE (1'b0),
+    .CLKIN (1'b0),
+    .INC (1'b0),
+    .LDPIPEEN (1'b0),
+    .CINVCTRL (1'b0),
+    .REGRST (1'b0),
+    .C (up_clk),
+    .ODATAIN (tx_data_oddr_s),
+    .DATAOUT (tx_data_odelay_s),
+    .LD (up_dld),
+    .CNTVALUEIN (up_dwdata),
+    .CNTVALUEOUT (up_drdata));
+  end else begin
+  assign up_drdata = 5'd0;
+  assign tx_data_odelay_s = tx_data_oddr_s;
+  end
+  endgenerate
+
+  OBUFDS i_tx_data_obuf (
+    .I (tx_data_odelay_s),
+    .O (tx_data_out_p),
+

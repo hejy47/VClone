@@ -1,0 +1,72 @@
+Source Block: hdl/library/axi_adaq8092/axi_adaq8092_if.v@168:224@HdlStmIf
+  end
+
+  // data interface
+
+  generate
+    if (OUTPUT_MODE == LVDS) begin
+      for (l_inst = 0; l_inst <= 13; l_inst = l_inst + 1) begin : lvds_adc_if  // DDR LVDS INTERFACE 
+        ad_data_in #(
+          .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+          .IODELAY_CTRL (0),
+          .IODELAY_GROUP (IO_DELAY_GROUP),
+          .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
+          .IDDR_CLK_EDGE("OPPOSITE_EDGE")
+        ) i_adc_data (
+          .rx_clk (adc_clk),
+          .rx_data_in_p (lvds_adc_data_p[l_inst]),
+          .rx_data_in_n (lvds_adc_data_n[l_inst]),
+          .rx_data_p (lvds_adc_data_p_s[l_inst]),
+          .rx_data_n (lvds_adc_data_n_s[l_inst]),
+          .up_clk (up_clk),
+          .up_dld (up_dld[l_inst]),
+          .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+          .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
+          .delay_clk (delay_clk),
+          .delay_rst (delay_rst),
+          .delay_locked ());
+      end          
+    end else if (OUTPUT_MODE == CMOS) begin
+
+       for (l_inst = 0; l_inst <= 27; l_inst = l_inst + 1) begin : cmos_adc_if  //  CMOS INTERFACE 
+        ad_data_in #(
+          .SINGLE_ENDED(1),
+          .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+          .IODELAY_CTRL (0),
+          .IODELAY_GROUP (IO_DELAY_GROUP),
+          .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
+          .IDDR_CLK_EDGE("OPPOSITE_EDGE")
+        ) i_adc_data (
+          .rx_clk (adc_clk),
+          .rx_data_in_p (cmos_adc_data[l_inst]),
+          .rx_data_in_n (),
+          .rx_data_p (cmos_adc_data_p_s[l_inst]),
+          .rx_data_n (cmos_adc_data_n_s[l_inst]),
+          .up_clk (up_clk),
+          .up_dld (up_dld[l_inst]),
+          .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+          .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
+          .delay_clk (delay_clk),
+          .delay_rst (delay_rst),
+          .delay_locked ());
+      end 
+    end       
+  endgenerate
+
+  // over-range interface
+
+  if (OUTPUT_MODE == LVDS) begin
+
+Diff Content:
+- 174       for (l_inst = 0; l_inst <= 13; l_inst = l_inst + 1) begin : lvds_adc_if  // DDR LVDS INTERFACE 
+- 194       end          
+- 197        for (l_inst = 0; l_inst <= 27; l_inst = l_inst + 1) begin : cmos_adc_if  //  CMOS INTERFACE 
+- 218       end 
+- 219     end       
++ 174       for (l_inst = 0; l_inst <= 13; l_inst = l_inst + 1) begin : lvds_adc_if  // DDR LVDS INTERFACE
++ 194       end
++ 197        for (l_inst = 0; l_inst <= 27; l_inst = l_inst + 1) begin : cmos_adc_if  //  CMOS INTERFACE
++ 219       end
++ 219     end
+
+Clone Blocks:

@@ -1,0 +1,182 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer_reg.v@96:182@HdlStmProcess
+  reg             up_triggered = 0;
+
+  wire    [15:0]  up_input_data;
+  wire            adc_triggered;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_divider_counter_la <= 'd0;
+      up_divider_counter_pg <= 'd0;
+      up_edge_detect_enable <= 'd0;
+      up_rise_edge_enable <= 'd0;
+      up_fall_edge_enable <= 'd0;
+      up_low_level_enable <= 'd0;
+      up_high_level_enable <= 'd0;
+      up_fifo_depth <= 'd0;
+      up_trigger_delay <= 'd0;
+      up_trigger_logic <= 'd0;
+      up_clock_select <= 'd0;
+      up_overwrite_enable <= 'd0;
+      up_overwrite_data <= 'd0;
+      up_io_selection <= 16'h0;
+      up_od_pp_n <= 16'h0;
+      up_triggered <= 1'd0;
+    end else begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
+        up_divider_counter_la <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h3)) begin
+        up_divider_counter_pg <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h4)) begin
+        up_io_selection <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h5)) begin
+        up_edge_detect_enable <= up_wdata[17:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h6)) begin
+        up_rise_edge_enable <= up_wdata[17:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h7)) begin
+        up_fall_edge_enable <= up_wdata[17:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h8)) begin
+        up_low_level_enable <= up_wdata[17:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h9)) begin
+        up_high_level_enable <= up_wdata[17:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'ha)) begin
+        up_fifo_depth <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hb)) begin
+        up_trigger_logic <= up_wdata[0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hc)) begin
+        up_clock_select <= up_wdata[0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hd)) begin
+        up_overwrite_enable <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'he)) begin
+        up_overwrite_data <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
+        up_od_pp_n <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
+        up_trigger_delay <= up_wdata;
+      end
+      if (adc_triggered == 1'b1) begin
+        up_triggered <= 1'b1;
+      end else if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
+        up_triggered <= up_wdata[0];
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 171       if (adc_triggered == 1'b1) begin
+- 174         up_triggered <= up_wdata[0];
++ 171       if (triggered == 1'b1) begin
++ 174         up_triggered <= up_triggered & ~up_wdata[0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adc_trigger/axi_adc_trigger_reg.v@103:185
+  assign high_level = config_trigger[3:2];
+  assign any_edge   = config_trigger[5:4];
+  assign rise_edge  = config_trigger[7:6];
+  assign fall_edge  = config_trigger[9:8];
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      io_selection <= 'd3;
+      trigger_o <= 'd0;
+      up_config_trigger <= 'd0;
+      up_limit_a <= 'd0;
+      up_function_a <= 'd0;
+      up_hysteresis_a <= 'd0;
+      up_limit_b <= 'd0;
+      up_function_b <= 'd0;
+      up_hysteresis_b <= 'd0;
+      up_fifo_depth <= 'd0;
+      up_trigger_delay <= 'd0;
+      up_trigger_l_mix_a <= 'd0;
+      up_trigger_l_mix_b <= 'd0;
+      up_trigger_out_mix <= 'd0;
+      up_triggered <= 1'd0;
+    end else begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h2)) begin
+        trigger_o <= up_wdata[1:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h3)) begin
+        io_selection <= up_wdata[1:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h4)) begin
+        up_config_trigger <= up_wdata[9:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h5)) begin
+        up_limit_a <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h6)) begin
+        up_function_a <= up_wdata[1:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h7)) begin
+        up_hysteresis_a <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h8)) begin
+        up_trigger_l_mix_a <= up_wdata[3:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h9)) begin
+        up_limit_b <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'ha)) begin
+        up_function_b <= up_wdata[1:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hb)) begin
+        up_hysteresis_b <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hc)) begin
+        up_trigger_l_mix_b <= up_wdata[3:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hd)) begin
+        up_trigger_out_mix <= up_wdata[2:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'he)) begin
+        up_fifo_depth <= up_wdata;
+      end
+      if (adc_triggered == 1'b1) begin
+        up_triggered <= 1'b1;
+      end else if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'hf)) begin
+        up_triggered <= up_wdata[0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
+        up_trigger_delay <= up_wdata;
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+

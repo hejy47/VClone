@@ -1,0 +1,66 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx.v@609:625@HdlStmAssign
+assign status_synth_params0 = {NUM_LANES};
+assign status_synth_params1 = {
+                 /*31:16 */  16'b0,
+                 /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
+                 /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
+assign status_synth_params2 = {
+                 /*31:19 */  13'b0,
+                 /*   18 */  ENABLE_CHAR_REPLACE[0],
+                 /*   17 */  ENABLE_FRAME_ALIGN_ERR_RESET[0],
+                 /*   16 */  ENABLE_FRAME_ALIGN_CHECK[0],
+                 /*15:13 */  3'b0,
+                 /*   12 */  ASYNC_CLK[0],
+                 /*11:10 */  2'b0,
+                 /* 9: 8 */  LINK_MODE[1:0],
+                 /* 7: 0 */  NUM_LINKS[7:0]};
+
+endmodule
+
+Diff Content:
+- 614 assign status_synth_params2 = {
+- 615                  /*31:19 */  13'b0,
+- 616                  /*   18 */  ENABLE_CHAR_REPLACE[0],
+- 617                  /*   17 */  ENABLE_FRAME_ALIGN_ERR_RESET[0],
+- 618                  /*   16 */  ENABLE_FRAME_ALIGN_CHECK[0],
+- 619                  /*15:13 */  3'b0,
+- 620                  /*   12 */  ASYNC_CLK[0],
+- 621                  /*11:10 */  2'b0,
+- 622                  /* 9: 8 */  LINK_MODE[1:0],
+- 623                  /* 7: 0 */  NUM_LINKS[7:0]};
++ 623   endgenerate
++ 623   assign status_synth_params0 = {NUM_LANES};
++ 623   assign status_synth_params1 = {
++ 623                    /*31:16 */  16'b0,
++ 623                    /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
++ 623                    /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
++ 623   assign status_synth_params2 = {
++ 623                    /*31:19 */  13'b0,
++ 623                    /*   18 */  ENABLE_CHAR_REPLACE[0],
++ 623                    /*   17 */  ENABLE_FRAME_ALIGN_ERR_RESET[0],
++ 623                    /*   16 */  ENABLE_FRAME_ALIGN_CHECK[0],
++ 623                    /*15:13 */  3'b0,
++ 623                    /*   12 */  ASYNC_CLK[0],
++ 623                    /*11:10 */  2'b0,
++ 623                    /* 9: 8 */  LINK_MODE[1:0],
++ 623                    /* 7: 0 */  NUM_LINKS[7:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx.v@539:553
+assign status_synth_params0 = {NUM_LANES};
+assign status_synth_params1 = {
+                 /*31:16 */  16'b0,
+                 /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
+                 /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
+assign status_synth_params2 = {
+                 /*31:19 */  13'b0,
+                 /*   18 */  ENABLE_CHAR_REPLACE[0],
+                 /*17:13 */  5'b0,
+                 /*   12 */  ASYNC_CLK[0],
+                 /*11:10 */  2'b0,
+                 /* 9: 8 */  LINK_MODE[1:0],
+                 /* 7: 0 */  NUM_LINKS[7:0]};
+
+endmodule
+

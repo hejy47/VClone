@@ -1,0 +1,399 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_insert_64.v@581:636@HdlStmProcess
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tkeep_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+        output_axis_tlast_reg <= 0;
+        output_axis_tuser_reg <= 0;
+        output_axis_tready_int <= 0;
+        temp_axis_tdata_reg <= 0;
+        temp_axis_tkeep_reg <= 0;
+        temp_axis_tvalid_reg <= 0;
+        temp_axis_tlast_reg <= 0;
+        temp_axis_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_axis_tready_int <= output_axis_tready_int_early;
+
+        if (output_axis_tready_int) begin
+            // input is ready
+            if (output_axis_tready | ~output_axis_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_axis_tdata_reg <= output_axis_tdata_int;
+                output_axis_tkeep_reg <= output_axis_tkeep_int;
+                output_axis_tvalid_reg <= output_axis_tvalid_int;
+                output_axis_tlast_reg <= output_axis_tlast_int;
+                output_axis_tuser_reg <= output_axis_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_axis_tdata_reg <= output_axis_tdata_int;
+                temp_axis_tkeep_reg <= output_axis_tkeep_int;
+                temp_axis_tvalid_reg <= output_axis_tvalid_int;
+                temp_axis_tlast_reg <= output_axis_tlast_int;
+                temp_axis_tuser_reg <= output_axis_tuser_int;
+            end
+        end else if (output_axis_tready) begin
+            // input is not ready, but output is ready
+            output_axis_tdata_reg <= temp_axis_tdata_reg;
+            output_axis_tkeep_reg <= temp_axis_tkeep_reg;
+            output_axis_tvalid_reg <= temp_axis_tvalid_reg;
+            output_axis_tlast_reg <= temp_axis_tlast_reg;
+            output_axis_tuser_reg <= temp_axis_tuser_reg;
+            temp_axis_tdata_reg <= 0;
+            temp_axis_tkeep_reg <= 0;
+            temp_axis_tvalid_reg <= 0;
+            temp_axis_tlast_reg <= 0;
+            temp_axis_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 588         output_axis_tdata_reg <= 0;
+- 589         output_axis_tkeep_reg <= 0;
+- 590         output_axis_tvalid_reg <= 0;
+- 591         output_axis_tlast_reg <= 0;
+- 592         output_axis_tuser_reg <= 0;
+- 593         output_axis_tready_int <= 0;
+- 594         temp_axis_tdata_reg <= 0;
+- 595         temp_axis_tkeep_reg <= 0;
+- 596         temp_axis_tvalid_reg <= 0;
+- 597         temp_axis_tlast_reg <= 0;
+- 598         temp_axis_tuser_reg <= 0;
+- 601         output_axis_tready_int <= output_axis_tready_int_early;
+- 603         if (output_axis_tready_int) begin
+- 605             if (output_axis_tready | ~output_axis_tvalid_reg) begin
+- 607                 output_axis_tdata_reg <= output_axis_tdata_int;
+- 608                 output_axis_tkeep_reg <= output_axis_tkeep_int;
+- 609                 output_axis_tvalid_reg <= output_axis_tvalid_int;
+- 610                 output_axis_tlast_reg <= output_axis_tlast_int;
+- 611                 output_axis_tuser_reg <= output_axis_tuser_int;
+- 612             end else begin
+- 614                 temp_axis_tdata_reg <= output_axis_tdata_int;
+- 615                 temp_axis_tkeep_reg <= output_axis_tkeep_int;
+- 616                 temp_axis_tvalid_reg <= output_axis_tvalid_int;
+- 617                 temp_axis_tlast_reg <= output_axis_tlast_int;
+- 618                 temp_axis_tuser_reg <= output_axis_tuser_int;
+- 619             end
+- 620         end else if (output_axis_tready) begin
+- 622             output_axis_tdata_reg <= temp_axis_tdata_reg;
+- 623             output_axis_tkeep_reg <= temp_axis_tkeep_reg;
+- 624             output_axis_tvalid_reg <= temp_axis_tvalid_reg;
+- 625             output_axis_tlast_reg <= temp_axis_tlast_reg;
+- 626             output_axis_tuser_reg <= temp_axis_tuser_reg;
+- 627             temp_axis_tdata_reg <= 0;
+- 628             temp_axis_tkeep_reg <= 0;
+- 629             temp_axis_tvalid_reg <= 0;
+- 630             temp_axis_tlast_reg <= 0;
+- 631             temp_axis_tuser_reg <= 0;
+- 632         end
++ 598         output_axis_tvalid_reg <= 1'b0;
++ 598         output_axis_tready_int_reg <= 1'b0;
++ 598         temp_axis_tvalid_reg <= 1'b0;
++ 632         output_axis_tvalid_reg <= output_axis_tvalid_next;
++ 632         output_axis_tready_int_reg <= output_axis_tready_int_early;
++ 632         temp_axis_tvalid_reg <= temp_axis_tvalid_next;
++ 632     end
++ 632     if (store_axis_int_to_output) begin
++ 632         output_axis_tdata_reg <= output_axis_tdata_int;
++ 632         output_axis_tkeep_reg <= output_axis_tkeep_int;
++ 632         output_axis_tlast_reg <= output_axis_tlast_int;
++ 632         output_axis_tuser_reg <= output_axis_tuser_int;
++ 632     end else if (store_axis_temp_to_output) begin
++ 632         output_axis_tdata_reg <= temp_axis_tdata_reg;
++ 632         output_axis_tkeep_reg <= temp_axis_tkeep_reg;
++ 632         output_axis_tlast_reg <= temp_axis_tlast_reg;
++ 632         output_axis_tuser_reg <= temp_axis_tuser_reg;
++ 632     end
++ 632     if (store_axis_int_to_temp) begin
++ 632         temp_axis_tdata_reg <= output_axis_tdata_int;
++ 632         temp_axis_tkeep_reg <= output_axis_tkeep_int;
++ 632         temp_axis_tlast_reg <= output_axis_tlast_int;
++ 632         temp_axis_tuser_reg <= output_axis_tuser_int;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_eth_fcs_insert.v@292:341
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+        output_axis_tlast_reg <= 0;
+        output_axis_tuser_reg <= 0;
+        output_axis_tready_int <= 0;
+        temp_axis_tdata_reg <= 0;
+        temp_axis_tvalid_reg <= 0;
+        temp_axis_tlast_reg <= 0;
+        temp_axis_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_axis_tready_int <= output_axis_tready_int_early;
+
+        if (output_axis_tready_int) begin
+            // input is ready
+            if (output_axis_tready | ~output_axis_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_axis_tdata_reg <= output_axis_tdata_int;
+                output_axis_tvalid_reg <= output_axis_tvalid_int;
+                output_axis_tlast_reg <= output_axis_tlast_int;
+                output_axis_tuser_reg <= output_axis_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_axis_tdata_reg <= output_axis_tdata_int;
+                temp_axis_tvalid_reg <= output_axis_tvalid_int;
+                temp_axis_tlast_reg <= output_axis_tlast_int;
+                temp_axis_tuser_reg <= output_axis_tuser_int;
+            end
+        end else if (output_axis_tready) begin
+            // input is not ready, but output is ready
+            output_axis_tdata_reg <= temp_axis_tdata_reg;
+            output_axis_tvalid_reg <= temp_axis_tvalid_reg;
+            output_axis_tlast_reg <= temp_axis_tlast_reg;
+            output_axis_tuser_reg <= temp_axis_tuser_reg;
+            temp_axis_tdata_reg <= 0;
+            temp_axis_tvalid_reg <= 0;
+            temp_axis_tlast_reg <= 0;
+            temp_axis_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_axis_tx.v@248:297
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+        output_axis_tlast_reg <= 0;
+        output_axis_tuser_reg <= 0;
+        output_axis_tready_int <= 0;
+        temp_axis_tdata_reg <= 0;
+        temp_axis_tvalid_reg <= 0;
+        temp_axis_tlast_reg <= 0;
+        temp_axis_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_axis_tready_int <= output_axis_tready_int_early;
+
+        if (output_axis_tready_int) begin
+            // input is ready
+            if (output_axis_tready | ~output_axis_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_axis_tdata_reg <= output_axis_tdata_int;
+                output_axis_tvalid_reg <= output_axis_tvalid_int;
+                output_axis_tlast_reg <= output_axis_tlast_int;
+                output_axis_tuser_reg <= output_axis_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_axis_tdata_reg <= output_axis_tdata_int;
+                temp_axis_tvalid_reg <= output_axis_tvalid_int;
+                temp_axis_tlast_reg <= output_axis_tlast_int;
+                temp_axis_tuser_reg <= output_axis_tuser_int;
+            end
+        end else if (output_axis_tready) begin
+            // input is not ready, but output is ready
+            output_axis_tdata_reg <= temp_axis_tdata_reg;
+            output_axis_tvalid_reg <= temp_axis_tvalid_reg;
+            output_axis_tlast_reg <= temp_axis_tlast_reg;
+            output_axis_tuser_reg <= temp_axis_tuser_reg;
+            temp_axis_tdata_reg <= 0;
+            temp_axis_tvalid_reg <= 0;
+            temp_axis_tlast_reg <= 0;
+            temp_axis_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_eth_fcs_check.v@269:318
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+        output_axis_tlast_reg <= 0;
+        output_axis_tuser_reg <= 0;
+        output_axis_tready_int <= 0;
+        temp_axis_tdata_reg <= 0;
+        temp_axis_tvalid_reg <= 0;
+        temp_axis_tlast_reg <= 0;
+        temp_axis_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_axis_tready_int <= output_axis_tready_int_early;
+
+        if (output_axis_tready_int) begin
+            // input is ready
+            if (output_axis_tready | ~output_axis_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_axis_tdata_reg <= output_axis_tdata_int;
+                output_axis_tvalid_reg <= output_axis_tvalid_int;
+                output_axis_tlast_reg <= output_axis_tlast_int;
+                output_axis_tuser_reg <= output_axis_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_axis_tdata_reg <= output_axis_tdata_int;
+                temp_axis_tvalid_reg <= output_axis_tvalid_int;
+                temp_axis_tlast_reg <= output_axis_tlast_int;
+                temp_axis_tuser_reg <= output_axis_tuser_int;
+            end
+        end else if (output_axis_tready) begin
+            // input is not ready, but output is ready
+            output_axis_tdata_reg <= temp_axis_tdata_reg;
+            output_axis_tvalid_reg <= temp_axis_tvalid_reg;
+            output_axis_tlast_reg <= temp_axis_tlast_reg;
+            output_axis_tuser_reg <= temp_axis_tuser_reg;
+            temp_axis_tdata_reg <= 0;
+            temp_axis_tvalid_reg <= 0;
+            temp_axis_tlast_reg <= 0;
+            temp_axis_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 4:
+verilog-ethernet/rtl/eth_axis_tx_64.v@355:410
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tkeep_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+        output_axis_tlast_reg <= 0;
+        output_axis_tuser_reg <= 0;
+        output_axis_tready_int <= 0;
+        temp_axis_tdata_reg <= 0;
+        temp_axis_tkeep_reg <= 0;
+        temp_axis_tvalid_reg <= 0;
+        temp_axis_tlast_reg <= 0;
+        temp_axis_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_axis_tready_int <= output_axis_tready_int_early;
+
+        if (output_axis_tready_int) begin
+            // input is ready
+            if (output_axis_tready | ~output_axis_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_axis_tdata_reg <= output_axis_tdata_int;
+                output_axis_tkeep_reg <= output_axis_tkeep_int;
+                output_axis_tvalid_reg <= output_axis_tvalid_int;
+                output_axis_tlast_reg <= output_axis_tlast_int;
+                output_axis_tuser_reg <= output_axis_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_axis_tdata_reg <= output_axis_tdata_int;
+                temp_axis_tkeep_reg <= output_axis_tkeep_int;
+                temp_axis_tvalid_reg <= output_axis_tvalid_int;
+                temp_axis_tlast_reg <= output_axis_tlast_int;
+                temp_axis_tuser_reg <= output_axis_tuser_int;
+            end
+        end else if (output_axis_tready) begin
+            // input is not ready, but output is ready
+            output_axis_tdata_reg <= temp_axis_tdata_reg;
+            output_axis_tkeep_reg <= temp_axis_tkeep_reg;
+            output_axis_tvalid_reg <= temp_axis_tvalid_reg;
+            output_axis_tlast_reg <= temp_axis_tlast_reg;
+            output_axis_tuser_reg <= temp_axis_tuser_reg;
+            temp_axis_tdata_reg <= 0;
+            temp_axis_tkeep_reg <= 0;
+            temp_axis_tvalid_reg <= 0;
+            temp_axis_tlast_reg <= 0;
+            temp_axis_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_eth_fcs_check_64.v@363:418
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tkeep_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+        output_axis_tlast_reg <= 0;
+        output_axis_tuser_reg <= 0;
+        output_axis_tready_int <= 0;
+        temp_axis_tdata_reg <= 0;
+        temp_axis_tkeep_reg <= 0;
+        temp_axis_tvalid_reg <= 0;
+        temp_axis_tlast_reg <= 0;
+        temp_axis_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_axis_tready_int <= output_axis_tready_int_early;
+
+        if (output_axis_tready_int) begin
+            // input is ready
+            if (output_axis_tready | ~output_axis_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_axis_tdata_reg <= output_axis_tdata_int;
+                output_axis_tkeep_reg <= output_axis_tkeep_int;
+                output_axis_tvalid_reg <= output_axis_tvalid_int;
+                output_axis_tlast_reg <= output_axis_tlast_int;
+                output_axis_tuser_reg <= output_axis_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_axis_tdata_reg <= output_axis_tdata_int;
+                temp_axis_tkeep_reg <= output_axis_tkeep_int;
+                temp_axis_tvalid_reg <= output_axis_tvalid_int;
+                temp_axis_tlast_reg <= output_axis_tlast_int;
+                temp_axis_tuser_reg <= output_axis_tuser_int;
+            end
+        end else if (output_axis_tready) begin
+            // input is not ready, but output is ready
+            output_axis_tdata_reg <= temp_axis_tdata_reg;
+            output_axis_tkeep_reg <= temp_axis_tkeep_reg;
+            output_axis_tvalid_reg <= temp_axis_tvalid_reg;
+            output_axis_tlast_reg <= temp_axis_tlast_reg;
+            output_axis_tuser_reg <= temp_axis_tuser_reg;
+            temp_axis_tdata_reg <= 0;
+            temp_axis_tkeep_reg <= 0;
+            temp_axis_tvalid_reg <= 0;
+            temp_axis_tlast_reg <= 0;
+            temp_axis_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+

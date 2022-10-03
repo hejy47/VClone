@@ -1,0 +1,73 @@
+Source Block: hdl/library/axi_ad9361/xilinx/axi_ad9361_lvds_if.v@447:476@HdlStmFor
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  genvar i;
+  generate
+  for (i = 0; i < 6; i = i + 1) begin: g_rx_data
+  ad_data_in #(
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_rx_data (
+    .rx_clk (l_clk),
+    .rx_data_in_p (rx_data_in_p[i]),
+    .rx_data_in_n (rx_data_in_n[i]),
+    .rx_data_p (rx_data_1_s[i]),
+    .rx_data_n (rx_data_0_s[i]),
+    .up_clk (up_clk),
+    .up_dld (up_adc_dld[i]),
+    .up_dwdata (up_adc_dwdata[((i*5)+4):(i*5)]),
+    .up_drdata (up_adc_drdata[((i*5)+4):(i*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // receive frame interface, ibuf -> idelay -> iddr
+
+  ad_data_in #(
+
+Diff Content:
+- 457     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+- 458   i_rx_data (
++ 458     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
++ 458   ) i_rx_data (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/xilinx/axi_ad9361_cmos_if.v@431:461
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  genvar i;
+  generate
+  for (i = 0; i < 12; i = i + 1) begin: g_rx_data
+  ad_data_in #(
+    .SINGLE_ENDED (1),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_rx_data (
+    .rx_clk (l_clk),
+    .rx_data_in_p (rx_data_in[i]),
+    .rx_data_in_n (1'd0),
+    .rx_data_p (rx_data_1_s[i]),
+    .rx_data_n (rx_data_0_s[i]),
+    .up_clk (up_clk),
+    .up_dld (up_adc_dld[i]),
+    .up_dwdata (up_adc_dwdata[((i*5)+4):(i*5)]),
+    .up_drdata (up_adc_drdata[((i*5)+4):(i*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // receive frame interface, ibuf -> idelay -> iddr
+
+  ad_data_in #(
+

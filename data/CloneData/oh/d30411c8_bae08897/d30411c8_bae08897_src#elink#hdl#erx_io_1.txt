@@ -1,0 +1,89 @@
+Source Block: oh/src/elink/hdl/erx_io.v@309:345@HdlStmFor
+   //###################################
+
+   assign  rxi_delay_in[8:0] ={rxi_frame,rxi_data[7:0]};
+   
+   genvar        j;
+   generate for(j=0; j<9; j=j+1)
+     begin : gen_idelay
+	(* IODELAY_GROUP = "IDELAY_GROUP" *) // Group name for IDELAYCTRL
+	
+	IDELAYE2 #(.CINVCTRL_SEL("FALSE"),
+		   .DELAY_SRC("IDATAIN"), 
+		   .HIGH_PERFORMANCE_MODE("FALSE"),
+		   .IDELAY_TYPE("VAR_LOAD"),
+		   .IDELAY_VALUE(5'b0),
+		   .PIPE_SEL("FALSE"),
+		   .REFCLK_FREQUENCY(200.0),
+		   .SIGNAL_PATTERN("DATA"))
+
+	idelay_inst (.CNTVALUEOUT(),             // monitoring value       
+		     .DATAOUT(rxi_delay_out[j]), // delayed data
+		     .C(rx_lclk_div4),           // variable tap delay clock 
+		     .CE(1'b0),                  // inc/dec tap value
+		     .CINVCTRL(1'b0),            // inverts clock polarity 
+		     .CNTVALUEIN(idelay_value[(j+1)*5-1:j*5]), //variable tap
+		     .DATAIN(1'b0),              // data from FPGA
+		     .IDATAIN(rxi_delay_in[j]),  // data from ibuf
+		     .INC(1'b0),                 // increment tap
+		     .LD(load_taps),             // load new  
+		     .LDPIPEEN(1'b0),            // only for pipeline mode
+		     .REGRST(1'b0)               // only for pipeline mode
+		     );
+     end // block: gen_idelay
+   endgenerate
+   
+   //#############################
+   //# IDDR SAMPLERS
+   //#############################  
+
+Diff Content:
+- 318 	IDELAYE2 #(.CINVCTRL_SEL("FALSE"),
+- 319 		   .DELAY_SRC("IDATAIN"), 
+- 320 		   .HIGH_PERFORMANCE_MODE("FALSE"),
+- 321 		   .IDELAY_TYPE("VAR_LOAD"),
+- 322 		   .IDELAY_VALUE(5'b0),
+- 323 		   .PIPE_SEL("FALSE"),
+- 325 		   .SIGNAL_PATTERN("DATA"))
+- 329 		     .C(rx_lclk_div4),           // variable tap delay clock 
+- 331 		     .CINVCTRL(1'b0),            // inverts clock polarity 
+- 332 		     .CNTVALUEIN(idelay_value[(j+1)*5-1:j*5]), //variable tap
+- 336 		     .LD(load_taps),             // load new  
+- 337 		     .LDPIPEEN(1'b0),            // only for pipeline mode
+- 338 		     .REGRST(1'b0)               // only for pipeline mode
+- 339 		     );
++ 315 `define IDELAYCTRL_WONT_SYNTHESIZE
++ 315 `ifdef IDELAYCTRL_WONT_SYNTHESIZE
++ 315 	IDELAYE3 #(.DELAY_SRC("IDATAIN"),
++ 315 		   .DELAY_TYPE("VAR_LOAD"),
++ 315 		   .DELAY_VALUE(9'b0),
++ 315 		   .REFCLK_FREQUENCY(200.0),
++ 315 		   .DELAY_FORMAT("COUNT"), // Ultrascale w/ COUNT can remove IDELAYCTRL (but then not stable over temp / voltage variations)
++ 315 		   .SIM_DEVICE("ULTRASCALE_PLUS_ES2"))
++ 315 	idelay_inst (.CNTVALUEOUT(),             // monitoring value       
++ 315 		     .DATAOUT(rxi_delay_out[j]), // delayed data
++ 315 		     .CLK(rx_lclk_div4),         // variable tap delay clock
++ 315 		     .CE(1'b0),                  // inc/dec tap value
++ 315 		     .CNTVALUEIN({4'b0, idelay_value[(j+1)*5-1:j*5]}), //variable tap (BROKEN!!! for Ultrascale, 9 bits / counter
++ 315 		     .DATAIN(1'b0),              // data from FPGA
++ 315 		     .IDATAIN(rxi_delay_in[j]),  // data from ibuf
++ 315 		     .INC(1'b0),                 // increment tap
++ 315 		     .LOAD(load_taps),           // load new
++ 315 		     .EN_VTC(~load_taps),        // Enables IDELAYCTRL
++ 315 		     .RST(1'b0)                  //
++ 315 		   );
++ 315 `else
++ 323 	IDELAYE3 #(.DELAY_SRC("IDATAIN"),
++ 323 		   .DELAY_TYPE("VAR_LOAD"),
++ 323 		   .DELAY_VALUE(9'b0),
++ 325 		   .DELAY_FORMAT("TIME"), // Ultrascale w/ COUNT can remove IDELAYCTRL (but then not stable over temp / voltage variations)
++ 325 		   .SIM_DEVICE("ULTRASCALE_PLUS_ES2"))
++ 329 		     .CLK(rx_lclk_div4),         // variable tap delay clock
++ 332 		     .CNTVALUEIN({4'b0, idelay_value[(j+1)*5-1:j*5]}), //variable tap (BROKEN!!! for Ultrascale, 9 bits / counter
++ 339 		     .LOAD(load_taps),           // load new
++ 339 		     .EN_VTC(~load_taps),        // Enables IDELAYCTRL
++ 339 		     .RST(1'b0)                  //
++ 339 		   );
++ 339 `endif
+
+Clone Blocks:

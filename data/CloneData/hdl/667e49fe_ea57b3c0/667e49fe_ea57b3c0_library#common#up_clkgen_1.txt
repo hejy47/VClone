@@ -1,0 +1,521 @@
+Source Block: hdl/library/common/up_clkgen.v@122:132@HdlStmAssign
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
++ 127   assign clk_sel = ~up_clk_sel;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_gt_channel.v@361:371
+  reg     [31:0]  up_scratch = 'd0;
+
+  // internal signals
+
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == ID) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == ID) ? up_rreq : 1'b0;
+
+Clone Blocks 2:
+hdl/library/common/up_clkgen.v@117:127
+  reg     [31:0]  up_rdata = 'd0;
+
+  // internal signals
+
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+Clone Blocks 3:
+hdl/library/axi_gpreg/axi_gpreg_clock_mon.v@95:105
+  wire            d_clk_g;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:4] == ID) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:4] == ID) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 4:
+hdl/library/axi_gpreg/axi_gpreg.v@214:224
+  assign up_rdata_s[16] = up_rdata;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 5:
+hdl/library/common/up_gt.v@125:135
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 6:
+hdl/library/common/up_tdd_cntrl.v@195:205
+
+  wire    [ 7:0]  up_tdd_status_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h20) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h20) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 7:
+hdl/library/common/up_gt.v@124:134
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 8:
+hdl/library/common/up_pmod.v@96:106
+
+  // decode block select
+
+  assign up_wreq_s   = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s   = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+  assign up_preset_s = ~up_resetn;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 9:
+hdl/library/common/up_gt.v@120:130
+  reg     [31:0]  up_rdata = 'd0;
+
+  // internal signals
+
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
+
+Clone Blocks 10:
+hdl/library/common/up_adc_common.v@193:203
+  wire    [31:0]  up_adc_clk_count_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 11:
+hdl/library/common/up_xcvr.v@168:178
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 12:
+hdl/library/common/up_hdmi_tx.v@172:182
+  wire            up_vdma_tpm_oos_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:12] == 2'd0) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 13:
+hdl/library/common/up_pmod.v@90:100
+
+  // internal signals
+
+  wire    [31:0]  up_pmod_signal_freq_s;
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s   = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s   = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+Clone Blocks 14:
+hdl/library/common/up_xcvr.v@163:173
+  // internal signals
+
+  wire            rx_rst;
+  wire            tx_rst;
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+Clone Blocks 15:
+hdl/library/axi_gpreg/axi_gpreg_io.v@95:105
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:4] == ID) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:4] == ID) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 16:
+hdl/library/common/up_adc_common.v@192:202
+  wire            up_cntrl_xfer_done;
+  wire    [31:0]  up_adc_clk_count_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 17:
+hdl/library/common/up_clkgen.v@121:131
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 18:
+hdl/library/common/up_axis_dma_rx.v@132:142
+  wire            up_dma_status_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_waddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 19:
+hdl/library/common/up_axis_dma_tx.v@117:127
+  wire            up_dma_ovf_s;
+  wire            up_dma_unf_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 20:
+hdl/library/common/up_dac_channel.v@192:202
+  endfunction
+
+  // decode block select
+
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h11) && (up_waddr[7:4] == DAC_CHANNEL_ID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h11) && (up_raddr[7:4] == DAC_CHANNEL_ID)) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 21:
+hdl/library/common/up_axis_dma_tx.v@118:128
+  wire            up_dma_unf_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 22:
+hdl/library/common/up_dac_common.v@192:202
+  wire            dac_frame_s;
+  wire    [31:0]  up_dac_clk_count_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 23:
+hdl/library/axi_gpreg/axi_gpreg_clock_mon.v@94:104
+  wire            d_rst;
+  wire            d_clk_g;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:4] == ID) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:4] == ID) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 24:
+hdl/library/common/up_dac_common.v@193:203
+  wire    [31:0]  up_dac_clk_count_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 25:
+hdl/library/common/up_axis_dma_rx.v@131:141
+  wire            up_dma_unf_s;
+  wire            up_dma_status_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_waddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 26:
+hdl/library/common/up_tdd_cntrl.v@191:201
+  // internal signals
+
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  wire    [ 7:0]  up_tdd_status_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h20) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h20) ? up_rreq : 1'b0;
+
+Clone Blocks 27:
+hdl/library/common/up_pmod.v@95:105
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s   = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s   = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+  assign up_preset_s = ~up_resetn;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 28:
+hdl/library/axi_gpreg/axi_gpreg.v@213:223
+  assign up_rack_s[16] = up_rack;
+  assign up_rdata_s[16] = up_rdata;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 29:
+hdl/library/common/up_adc_channel.v@210:220
+  endfunction
+
+  // decode block select
+
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h01) && (up_waddr[7:4] == ADC_CHANNEL_ID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h01) && (up_raddr[7:4] == ADC_CHANNEL_ID)) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 30:
+hdl/library/axi_gpreg/axi_gpreg_io.v@94:104
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:4] == ID) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:4] == ID) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 31:
+hdl/library/common/up_tdd_cntrl.v@196:206
+  wire    [ 7:0]  up_tdd_status_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h20) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h20) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 32:
+hdl/library/common/up_pmod.v@94:104
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s   = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s   = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+  assign up_preset_s = ~up_resetn;
+
+  // processor write interface
+
+
+Clone Blocks 33:
+hdl/library/common/up_xcvr.v@167:177
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 34:
+hdl/library/common/up_gt_channel.v@366:376
+  wire            up_rreq_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == ID) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == ID) ? up_rreq : 1'b0;
+
+  // user ready & ip reset done
+
+  assign lpm_dfe_n = up_lpm_dfe_n;
+  assign cpll_pd = up_cpll_pd;
+
+Clone Blocks 35:
+hdl/library/common/up_hdmi_rx.v@147:157
+  wire    [31:0]  up_clk_count_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:12] == 2'd0) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 36:
+hdl/library/common/up_hdmi_tx.v@171:181
+  wire            up_vdma_unf_s;
+  wire            up_vdma_tpm_oos_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:12] == 2'd0) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+

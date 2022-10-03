@@ -1,0 +1,111 @@
+Source Block: hdl/library/axi_ad9265/axi_ad9265_channel.v@92:114@HdlStmIf
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pnseq_sel (adc_pnseq_sel_s));
+
+  generate
+  if (DATAPATH_DISABLE == 1) begin
+  assign adc_dfmt_data_s = adc_data;
+  end else begin
+  ad_datafmt #(.DATA_WIDTH(16)) i_ad_datafmt (
+    .clk (adc_clk),
+    .valid (1'b1),
+    .data (adc_data),
+    .valid_out (),
+    .data_out (adc_dfmt_data_s),
+    .dfmt_enable (adc_dfmt_enable_s),
+    .dfmt_type (adc_dfmt_type_s),
+    .dfmt_se (adc_dfmt_se_s));
+  end
+  endgenerate
+
+  generate
+  if (DATAPATH_DISABLE == 1) begin
+  assign adc_dcfilter_data_out = adc_dfmt_data_s;
+
+Diff Content:
+- 100   ad_datafmt #(.DATA_WIDTH(16)) i_ad_datafmt (
++ 100   ad_datafmt #(
++ 100     .DATA_WIDTH(16)
++ 100   ) i_ad_datafmt (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9963/axi_ad9963_rx_channel.v@110:133
+    .adc_pnseq_sel (adc_pnseq_sel_s),
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_pn_err (adc_pn_err_s));
+
+  generate
+  if (DATAFORMAT_DISABLE == 1) begin
+  assign adc_dfmt_valid_s = adc_valid;
+  assign adc_dfmt_data_s = {{4{adc_data[11]}}, adc_data};
+  end else begin
+  ad_datafmt #(.DATA_WIDTH (12)) i_ad_datafmt (
+    .clk (adc_clk),
+    .valid (adc_valid),
+    .data (adc_data),
+    .valid_out (adc_dfmt_valid_s),
+    .data_out (adc_dfmt_data_s),
+    .dfmt_enable (adc_dfmt_enable_s),
+    .dfmt_type (adc_dfmt_type_s),
+    .dfmt_se (adc_dfmt_se_s));
+  end
+  endgenerate
+
+  generate
+  if (DCFILTER_DISABLE == 1) begin
+  assign adc_dcfilter_valid_s = adc_dfmt_valid_s;
+
+Clone Blocks 2:
+hdl/library/axi_adaq8092/axi_adaq8092_channel.v@77:101
+  wire            adc_dfmt_enable_s;
+  wire    [15:0]  adc_dcfilt_offset_s;
+  wire    [15:0]  adc_dcfilt_coeff_s;
+      
+  generate
+    if (DATAPATH_DISABLE == 1) begin
+      assign adc_dfmt_data_s = {2'b0 , adc_data};
+    end else begin
+      ad_datafmt #(
+        .DATA_WIDTH(14)
+      ) i_ad_datafmt (
+        .clk (adc_clk),
+        .valid (1'b1),
+        .data (adc_data),
+        .valid_out (),
+        .data_out (adc_dfmt_data_s),
+        .dfmt_enable (adc_dfmt_enable_s),
+        .dfmt_type (adc_dfmt_type_s),
+        .dfmt_se (adc_dfmt_se_s));
+    end
+  endgenerate
+
+  generate
+    if (DATAPATH_DISABLE == 1) begin
+      assign adc_dcfilter_data_out = adc_dfmt_data_s;
+
+Clone Blocks 3:
+hdl/library/axi_ad9684/axi_ad9684_channel.v@91:111
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pnseq_sel (adc_pnseq_sel_s));
+
+  genvar n;
+  generate
+  for (n = 0; n < 2; n = n + 1) begin: g_ad_datafmt_1
+  ad_datafmt #(.DATA_WIDTH(14)) i_ad_datafmt (
+    .clk (adc_clk),
+    .valid (1'b1),
+    .data (adc_data[n*14+13:n*14]),
+    .valid_out (adc_dfmt_valid_s[n]),
+    .data_out (adc_dfmt_data[n*16+15:n*16]),
+    .dfmt_enable (adc_dfmt_enable_s),
+    .dfmt_type (adc_dfmt_type_s),
+    .dfmt_se (adc_dfmt_se_s));
+  end
+  endgenerate
+
+  assign adc_valid = adc_dfmt_valid_s[0] | adc_dfmt_valid_s[1];
+
+  up_adc_channel #(
+

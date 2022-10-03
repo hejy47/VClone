@@ -1,0 +1,65 @@
+Source Block: hdl/library/axi_gpreg/axi_gpreg.v@269:294@HdlStmFor
+  assign up_rdata_s[n] = 32'd0;
+  assign up_rack_s[n] = 1'd0;
+  end
+  end
+
+  for (n = 0; n < NUM_OF_IO; n = n + 1) begin: g_io
+  axi_gpreg_io #(.ID (16+n)) i_gpreg_io (
+    .up_gp_ioenb (up_gp_ioenb_s[n]),
+    .up_gp_out (up_gp_out_s[n]),
+    .up_gp_in (up_gp_in_s[n]),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[n]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[n]),
+    .up_rack (up_rack_s[n]));
+  end
+
+  // clock monitors
+
+  if (NUM_OF_CLK_MONS < 8) begin
+  for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
+
+Diff Content:
+- 274   for (n = 0; n < NUM_OF_IO; n = n + 1) begin: g_io
+- 275   axi_gpreg_io #(.ID (16+n)) i_gpreg_io (
+- 276     .up_gp_ioenb (up_gp_ioenb_s[n]),
+- 277     .up_gp_out (up_gp_out_s[n]),
+- 278     .up_gp_in (up_gp_in_s[n]),
+- 279     .up_rstn (up_rstn),
+- 280     .up_clk (up_clk),
+- 281     .up_wreq (up_wreq),
+- 282     .up_waddr (up_waddr),
+- 283     .up_wdata (up_wdata),
+- 284     .up_wack (up_wack_s[n]),
+- 285     .up_rreq (up_rreq),
+- 286     .up_raddr (up_raddr),
+- 287     .up_rdata (up_rdata_s[n]),
+- 288     .up_rack (up_rack_s[n]));
+- 289   end
++ 289     for (n = 0; n < NUM_OF_IO; n = n + 1) begin: g_io
++ 289       axi_gpreg_io #(
++ 289         .ID (16+n)
++ 289       ) i_gpreg_io (
++ 289         .up_gp_ioenb (up_gp_ioenb_s[n]),
++ 289         .up_gp_out (up_gp_out_s[n]),
++ 289         .up_gp_in (up_gp_in_s[n]),
++ 289         .up_rstn (up_rstn),
++ 289         .up_clk (up_clk),
++ 289         .up_wreq (up_wreq),
++ 289         .up_waddr (up_waddr),
++ 289         .up_wdata (up_wdata),
++ 289         .up_wack (up_wack_s[n]),
++ 289         .up_rreq (up_rreq),
++ 289         .up_raddr (up_raddr),
++ 289         .up_rdata (up_rdata_s[n]),
++ 289         .up_rack (up_rack_s[n]));
++ 289     end
+
+Clone Blocks:

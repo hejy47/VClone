@@ -1,0 +1,61 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_ilas_monitor.v@75:92@HdlStmProcess
+reg [1:0] ilas_config_addr_i;
+reg [DATA_PATH_WIDTH*8-1:0] ilas_config_data_i;
+
+assign data_ready_n = next_state;
+
+always @(*) begin
+  next_state = state;
+  if (reset == 1'b0 && prev_was_last == 1'b1) begin
+    if (charisk28[0] != 1'b1 || data[7:5] != 3'h0) begin
+      next_state = STATE_DATA;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    state <= STATE_ILAS;
+  end else begin
+
+Diff Content:
+- 80 always @(*) begin
+- 81   next_state = state;
+- 82   if (reset == 1'b0 && prev_was_last == 1'b1) begin
+- 83     if (charisk28[0] != 1'b1 || data[7:5] != 3'h0) begin
+- 84       next_state = STATE_DATA;
+- 87 end
++ 84   localparam STATE_ILAS = 1'b1;
++ 84   localparam STATE_DATA = 1'b0;
++ 84   localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
++ 84   wire octets_per_mf_4_mod_8 = (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2];
++ 84   reg state = STATE_ILAS;
++ 84   reg next_state;
++ 84   reg prev_was_last = 1'b0;
++ 84   wire ilas_config_start;
++ 84   reg ilas_config_valid_i;
++ 84   reg [1:0] ilas_config_addr_i;
++ 84   reg [DATA_PATH_WIDTH*8-1:0] ilas_config_data_i;
++ 84   assign data_ready_n = next_state;
++ 84   always @(*) begin
++ 84     next_state = state;
++ 84     if (reset == 1'b0 && prev_was_last == 1'b1) begin
++ 84       if (charisk28[0] != 1'b1 || data[7:5] != 3'h0) begin
++ 84         next_state = STATE_DATA;
++ 84       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_ilas_monitor.v@73:83
+wire ilas_config_start;
+reg ilas_config_valid_i;
+reg [1:0] ilas_config_addr_i;
+reg [DATA_PATH_WIDTH*8-1:0] ilas_config_data_i;
+
+assign data_ready_n = next_state;
+
+always @(*) begin
+  next_state = state;
+  if (reset == 1'b0 && prev_was_last == 1'b1) begin
+    if (charisk28[0] != 1'b1 || data[7:5] != 3'h0) begin
+

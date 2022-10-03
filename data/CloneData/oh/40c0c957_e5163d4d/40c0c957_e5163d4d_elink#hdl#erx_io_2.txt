@@ -1,0 +1,43 @@
+Source Block: oh/elink/hdl/erx_io.v@124:138@HdlStmProcess
+     end // if (rx_frame)
+   
+   //#####################  
+   //#DATA VALID SIGNAL 
+   //####################
+   always @ (posedge rx_lclk)
+     begin     
+	access       <= rx_pointer[6];
+	valid_packet <= access;//data pipeline
+     end
+ 
+   always @ (posedge rx_lclk or negedge erx_io_nreset)
+     if(!erx_io_nreset)
+       burst_detect <= 1'b0;   
+     else if(access & rx_frame)
+
+Diff Content:
+- 130      begin     
+- 132 	valid_packet <= access;//data pipeline
+- 133      end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_io.v@130:146
+     begin     
+	access       <= rx_pointer[6];
+	valid_packet <= access;//data pipeline
+     end
+ 
+   always @ (posedge rx_lclk or negedge erx_io_nreset)
+     if(!erx_io_nreset)
+       burst_detect <= 1'b0;   
+     else if(access & rx_frame)
+       burst_detect <= 1'b1;
+     else if(~rx_frame)
+       burst_detect <= 1'b0;
+      
+   //###################################
+   //#SAMPLE AND HOLD DATA
+   //###################################
+
+

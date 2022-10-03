@@ -1,0 +1,948 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_check_64.v@361:371@HdlStmAssign
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tkeep_reg <= 0;
+
+Diff Content:
+- 366 assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
++ 366 assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
++ 366 always @* begin
++ 366     output_axis_tvalid_next = output_axis_tvalid_reg;
++ 366     temp_axis_tvalid_next = temp_axis_tvalid_reg;
++ 366     store_axis_int_to_output = 1'b0;
++ 366     store_axis_int_to_temp = 1'b0;
++ 366     store_axis_temp_to_output = 1'b0;
++ 366     if (output_axis_tready_int_reg) begin
++ 366         if (output_axis_tready | ~output_axis_tvalid_reg) begin
++ 366             output_axis_tvalid_next = output_axis_tvalid_int;
++ 366             store_axis_int_to_output = 1'b1;
++ 366         end else begin
++ 366             temp_axis_tvalid_next = output_axis_tvalid_int;
++ 366             store_axis_int_to_temp = 1'b1;
++ 366         end
++ 366     end else if (output_axis_tready) begin
++ 366         output_axis_tvalid_next = temp_axis_tvalid_reg;
++ 366         temp_axis_tvalid_next = 1'b0;
++ 366         store_axis_temp_to_output = 1'b1;
++ 366     end
++ 366 end
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_eth_fcs_check.v@262:272
+reg        temp_axis_tvalid_reg = 0;
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_axis_tx_64.v@349:359
+reg        temp_axis_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+
+Clone Blocks 3:
+verilog-ethernet/lib/axis/rtl/axis_register_64.v@81:91
+
+assign input_axis_tready = input_axis_tready_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+wire input_axis_tready_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~input_axis_tvalid));
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_eth_fcs_insert_64.v@576:586
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+
+Clone Blocks 5:
+verilog-ethernet/lib/axis/rtl/axis_frame_length_adjust.v@489:499
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+Clone Blocks 6:
+verilog-ethernet/rtl/eth_axis_tx.v@246:256
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+
+Clone Blocks 7:
+verilog-ethernet/lib/axis/rtl/axis_mux_4.v@228:238
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 8:
+verilog-ethernet/lib/axis/rtl/axis_adapter.v@407:417
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 9:
+verilog-ethernet/lib/axis/rtl/axis_frame_join_4.v@337:347
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_eth_fcs_check_64.v@357:367
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_eth_fcs_insert_64.v@574:584
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+Clone Blocks 12:
+verilog-ethernet/lib/axis/rtl/axis_frame_join_4.v@340:350
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 13:
+verilog-ethernet/lib/axis/rtl/axis_mux_4.v@232:242
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 14:
+verilog-ethernet/rtl/axis_eth_fcs_insert.v@290:300
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+
+Clone Blocks 15:
+verilog-ethernet/rtl/axis_eth_fcs_insert_64.v@575:585
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+
+Clone Blocks 16:
+verilog-ethernet/rtl/eth_axis_tx_64.v@351:361
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+
+Clone Blocks 17:
+verilog-ethernet/lib/axis/rtl/axis_adapter.v@406:416
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+Clone Blocks 18:
+verilog-ethernet/lib/axis/rtl/axis_stat_counter.v@282:292
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 19:
+verilog-ethernet/lib/axis/rtl/axis_tap_64.v@199:209
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 20:
+verilog-ethernet/lib/axis/rtl/axis_rate_limit.v@142:152
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 21:
+verilog-ethernet/rtl/axis_eth_fcs_check.v@263:273
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+
+Clone Blocks 22:
+verilog-ethernet/lib/axis/rtl/axis_register.v@80:90
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+wire input_axis_tready_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~input_axis_tvalid));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 23:
+verilog-ethernet/lib/axis/rtl/axis_stat_counter.v@283:293
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 24:
+verilog-ethernet/rtl/axis_eth_fcs_insert_64.v@579:589
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tkeep_reg <= 0;
+
+Clone Blocks 25:
+verilog-ethernet/lib/axis/rtl/axis_tap_64.v@195:205
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 26:
+verilog-ethernet/rtl/eth_axis_tx.v@241:251
+reg        temp_axis_tvalid_reg = 0;
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+Clone Blocks 27:
+verilog-ethernet/lib/axis/rtl/axis_frame_join_4.v@336:346
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 28:
+verilog-ethernet/rtl/eth_axis_tx.v@243:253
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+
+Clone Blocks 29:
+verilog-ethernet/lib/axis/rtl/axis_register.v@77:87
+assign input_axis_tready = input_axis_tready_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+wire input_axis_tready_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~input_axis_tvalid));
+
+always @* begin
+
+Clone Blocks 30:
+verilog-ethernet/rtl/axis_eth_fcs_insert.v@285:295
+reg        temp_axis_tvalid_reg = 0;
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+Clone Blocks 31:
+verilog-ethernet/lib/axis/rtl/axis_mux_64_4.v@249:259
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 32:
+verilog-ethernet/rtl/axis_eth_fcs_check.v@264:274
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+
+Clone Blocks 33:
+verilog-ethernet/rtl/axis_eth_fcs_check.v@267:277
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+
+Clone Blocks 34:
+verilog-ethernet/lib/axis/rtl/axis_rate_limit_64.v@146:156
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 35:
+verilog-ethernet/lib/axis/rtl/axis_rate_limit_64.v@150:160
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 36:
+verilog-ethernet/rtl/axis_eth_fcs_check_64.v@356:366
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+Clone Blocks 37:
+verilog-ethernet/lib/axis/rtl/axis_tap_64.v@196:206
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 38:
+verilog-ethernet/lib/axis/rtl/axis_frame_length_adjust.v@494:504
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 39:
+verilog-ethernet/lib/axis/rtl/axis_frame_length_adjust.v@490:500
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 40:
+verilog-ethernet/rtl/axis_eth_fcs_insert.v@286:296
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+
+Clone Blocks 41:
+verilog-ethernet/lib/axis/rtl/axis_rate_limit_64.v@145:155
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+Clone Blocks 42:
+verilog-ethernet/lib/axis/rtl/axis_tap.v@188:198
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 43:
+verilog-ethernet/lib/axis/rtl/axis_mux_64_4.v@244:254
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+Clone Blocks 44:
+verilog-ethernet/lib/axis/rtl/axis_register_64.v@83:93
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+wire input_axis_tready_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~input_axis_tvalid));
+
+always @* begin
+
+Clone Blocks 45:
+verilog-ethernet/lib/axis/rtl/axis_tap.v@184:194
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 46:
+verilog-ethernet/rtl/eth_axis_tx_64.v@347:357
+reg        temp_axis_tvalid_reg = 0;
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+
+Clone Blocks 47:
+verilog-ethernet/lib/axis/rtl/axis_frame_length_adjust.v@491:501
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 48:
+verilog-ethernet/rtl/eth_axis_tx_64.v@350:360
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+always @(posedge clk) begin
+
+Clone Blocks 49:
+verilog-ethernet/lib/axis/rtl/axis_mux_64_4.v@246:256
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 50:
+verilog-ethernet/lib/axis/rtl/axis_stat_counter.v@286:296
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 51:
+verilog-ethernet/rtl/axis_eth_fcs_insert.v@287:297
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+
+Clone Blocks 52:
+verilog-ethernet/lib/axis/rtl/axis_adapter.v@408:418
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 53:
+verilog-ethernet/lib/axis/rtl/axis_register_64.v@82:92
+assign input_axis_tready = input_axis_tready_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+wire input_axis_tready_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~input_axis_tvalid));
+
+
+Clone Blocks 54:
+verilog-ethernet/lib/axis/rtl/axis_tap_64.v@194:204
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+Clone Blocks 55:
+verilog-ethernet/lib/axis/rtl/axis_rate_limit.v@138:148
+reg store_axis_int_to_temp;
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 56:
+verilog-ethernet/lib/axis/rtl/axis_adapter.v@411:421
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 57:
+verilog-ethernet/lib/axis/rtl/axis_rate_limit_64.v@147:157
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 58:
+verilog-ethernet/lib/axis/rtl/axis_tap.v@185:195
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 59:
+verilog-ethernet/lib/axis/rtl/axis_rate_limit.v@139:149
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 60:
+verilog-ethernet/lib/axis/rtl/axis_mux_4.v@229:239
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+always @* begin
+
+Clone Blocks 61:
+verilog-ethernet/lib/axis/rtl/axis_register_64.v@86:96
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+wire input_axis_tready_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~input_axis_tvalid));
+
+always @* begin
+    // transfer sink ready state to source
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+    temp_axis_tvalid_next = temp_axis_tvalid_reg;
+
+Clone Blocks 62:
+verilog-ethernet/rtl/eth_axis_tx.v@242:252
+reg        temp_axis_tlast_reg = 0;
+reg        temp_axis_tuser_reg = 0;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+
+Clone Blocks 63:
+verilog-ethernet/rtl/axis_eth_fcs_check_64.v@358:368
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+always @(posedge clk) begin
+
+Clone Blocks 64:
+verilog-ethernet/lib/axis/rtl/axis_mux_64_4.v@245:255
+reg store_axis_temp_to_output;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & (~output_axis_tvalid_reg | ~output_axis_tvalid_int));
+
+
+Clone Blocks 65:
+verilog-ethernet/rtl/eth_axis_tx_64.v@352:362
+assign output_axis_tready_int_early = output_axis_tready | (~temp_axis_tvalid_reg & ~output_axis_tvalid_reg) | (~temp_axis_tvalid_reg & ~output_axis_tvalid_int);
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_axis_tdata_reg <= 0;
+

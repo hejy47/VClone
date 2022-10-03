@@ -1,0 +1,60 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@50:60@HdlIdDef
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+assign sdo_data_valid = spi_active;
+assign sync_ready = 1'b1;
+
+Diff Content:
+- 55 wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
++ 55 wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@53:63
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+assign sdo_data_valid = spi_active;
+assign sync_ready = 1'b1;
+
+assign offload_sdi_valid = sdi_data_valid;
+assign sdi_data_ready = offload_sdi_ready;
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@51:61
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+assign sdo_data_valid = spi_active;
+assign sync_ready = 1'b1;
+
+
+Clone Blocks 3:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@48:58
+reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+

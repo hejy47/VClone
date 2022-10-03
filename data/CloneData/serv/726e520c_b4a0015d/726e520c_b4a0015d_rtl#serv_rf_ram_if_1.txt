@@ -1,0 +1,65 @@
+Source Block: serv/rtl/serv_rf_ram_if.v@61:71@HdlIdDef
+
+   assign 	     o_wdata = wtrig1 ?
+			       wdata1_r :
+			       {i_wdata0, wdata0_r};
+
+   wire [5:0] wreg  = wtrig1 ? i_wreg1 : i_wreg0;
+   generate if (width == 32)
+     assign o_waddr = wreg;
+   else
+     assign o_waddr = {wreg, wcnt[4:l2w]};
+   endgenerate
+
+Diff Content:
+- 66    wire [5:0] wreg  = wtrig1 ? i_wreg1 : i_wreg0;
++ 66    wire [$clog2(32+csr_regs)-1:0] wreg  = wtrig1 ? i_wreg1 : i_wreg0;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_rf_ram_if.v@62:75
+   assign 	     o_wdata = wtrig1 ?
+			       wdata1_r :
+			       {i_wdata0, wdata0_r};
+
+   wire [5:0] wreg  = wtrig1 ? i_wreg1 : i_wreg0;
+   generate if (width == 32)
+     assign o_waddr = wreg;
+   else
+     assign o_waddr = {wreg, wcnt[4:l2w]};
+   endgenerate
+
+   assign o_wen = wgo & ((wtrig0 & wen0_r) | (wtrig1 & wen1_r));
+
+   reg 	      wreq_r;
+
+Clone Blocks 2:
+serv/rtl/serv_rf_ram_if.v@57:69
+      assign wtrig0 = (wcnt[l2w-1:0] == {{l2w-1{1'b1}},1'b0});
+      assign wtrig1 = wtrig0_r;
+   end
+   endgenerate
+
+   assign 	     o_wdata = wtrig1 ?
+			       wdata1_r :
+			       {i_wdata0, wdata0_r};
+
+   wire [5:0] wreg  = wtrig1 ? i_wreg1 : i_wreg0;
+   generate if (width == 32)
+     assign o_waddr = wreg;
+   else
+
+Clone Blocks 3:
+serv/rtl/serv_rf_ram_if.v@68:78
+     assign o_waddr = wreg;
+   else
+     assign o_waddr = {wreg, wcnt[4:l2w]};
+   endgenerate
+
+   assign o_wen = wgo & ((wtrig0 & wen0_r) | (wtrig1 & wen1_r));
+
+   reg 	      wreq_r;
+
+   generate if (width > 2)
+     always @(posedge i_clk) wdata0_r  <= {i_wdata0, wdata0_r[width-2:1]};
+

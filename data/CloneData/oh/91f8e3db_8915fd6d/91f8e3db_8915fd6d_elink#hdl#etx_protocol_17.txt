@@ -1,0 +1,19 @@
+Source Block: oh/elink/hdl/etx_protocol.v@83:94@HdlStmAssign
+	  tx_access_reg     <= tx_enable & etx_access;
+       end
+  
+   //Clear out the access while in wait state
+   //the IO pipeline flushes out
+   assign tx_access = tx_access_reg  &
+		      ~(tx_wr_wait | tx_rd_wait);
+
+   packet2emesh p2m1 (
+		     .write_out		(tx_write),
+		     .datamode_out	(tx_datamode[1:0]),
+		     .ctrlmode_out	(tx_ctrlmode[3:0]),
+
+Diff Content:
+- 88    assign tx_access = tx_access_reg  &
+- 89 		      ~(tx_wr_wait | tx_rd_wait);
+
+Clone Blocks:

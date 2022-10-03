@@ -1,0 +1,81 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@623:645@HdlStmProcess
+    end
+  end
+end
+
+//writing reset
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_wack <= 'd0;
+    up_resetn <= 1'd0;
+  end else begin
+    up_wack <= up_wreq_s;
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
+      up_resetn <= up_wdata_s[0];
+    end else begin
+      up_resetn <= 1'd1;
+    end
+  end
+end
+
+//axi registers read
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+
+Diff Content:
+- 628 always @(posedge up_clk) begin
+- 629   if (s_axi_aresetn == 1'b0) begin
+- 630     up_wack <= 'd0;
+- 631     up_resetn <= 1'd0;
+- 632   end else begin
+- 633     up_wack <= up_wreq_s;
+- 634     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
+- 635       up_resetn <= up_wdata_s[0];
+- 637       up_resetn <= 1'd1;
+- 640 end
++ 635   always @(posedge up_clk) begin
++ 635     if (s_axi_aresetn == 1'b0) begin
++ 635       up_rack <= 'd0;
++ 635       up_rdata <= 'd0;
++ 637       up_rack <= up_rreq_s;
++ 637       if (up_rreq_s == 1'b1) begin
++ 637         case (up_raddr_s)
++ 637           8'h00: up_rdata <= CORE_VERSION;
++ 637           8'h01: up_rdata <= ID;
++ 637           8'h02: up_rdata <= up_scratch;
++ 637           8'h03: up_rdata <= CORE_MAGIC;
++ 637           8'h10: up_rdata <= up_irq_mask;
++ 637           8'h11: up_rdata <= up_irq_pending;
++ 637           8'h12: up_rdata <= up_irq_source;
++ 637           8'h20: up_rdata <= up_resetn;
++ 637           8'h21: up_rdata <= pwm_width;
++ 637           8'h22: up_rdata <= up_tacho_val;
++ 637           8'h23: up_rdata <= up_tacho_tol;
++ 637           8'h24: up_rdata <= INTERNAL_SYSMONE;
++ 637           8'h30: up_rdata <= PWM_PERIOD;
++ 637           8'h31: up_rdata <= up_tacho_avg_sum;
++ 637           8'h32: up_rdata <= sysmone_temp;
++ 637           8'h40: up_rdata <= up_temp_00_h;
++ 637           8'h41: up_rdata <= up_temp_25_l;
++ 637           8'h42: up_rdata <= up_temp_25_h;
++ 637           8'h43: up_rdata <= up_temp_50_l;
++ 637           8'h44: up_rdata <= up_temp_50_h;
++ 637           8'h45: up_rdata <= up_temp_75_l;
++ 637           8'h46: up_rdata <= up_temp_75_h;
++ 637           8'h47: up_rdata <= up_temp_100_l;
++ 637           8'h50: up_rdata <= up_tacho_25;
++ 637           8'h51: up_rdata <= up_tacho_50;
++ 637           8'h52: up_rdata <= up_tacho_75;
++ 637           8'h53: up_rdata <= up_tacho_100;
++ 637           8'h54: up_rdata <= up_tacho_25_tol;
++ 637           8'h55: up_rdata <= up_tacho_50_tol;
++ 637           8'h56: up_rdata <= up_tacho_75_tol;
++ 637           8'h57: up_rdata <= up_tacho_100_tol;
++ 637           default: up_rdata <= 0;
++ 637         endcase
++ 637       end else begin
++ 637         up_rdata <= 32'd0;
++ 637       end
+
+Clone Blocks:

@@ -1,0 +1,51 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@379:410@HdlStmProcess
+	// Step one -- handle the control bus--i_wbs_cyc_stb
+	//
+	//
+	//////////////////////////////////////////
+	initial	tlb_accessed = -1;
+	always @(posedge i_clk)
+	begin
+		// Write to the Translation lookaside buffer
+		if (wr_vtable)
+			tlb_vdata[wr_tlb_addr]<=i_wbs_data[(DW-1):LGPGSZB];
+		if (wr_ptable)
+			tlb_pdata[wr_tlb_addr]<=i_wbs_data[(AW+1):LGPGSZB];
+		// Set the context register for the page
+		if (wr_vtable)
+			tlb_flags[wr_tlb_addr] <= i_wbs_data[3:1];
+		if (wr_vtable)
+			tlb_accessed[wr_tlb_addr] <= 1'b0;
+		// Otherwise, keep track of the accessed bit if we
+		// ever access this page
+		else if ((!kernel_context)&&(pending_page_valid))
+			tlb_accessed[s_tlb_addr] <= 1'b1;
+		else if ((!kernel_context)&&(this_page_valid))
+			tlb_accessed[s_tlb_addr] <= 1'b1;
+		if (wr_vtable)
+			tlb_cdata[wr_tlb_addr][(LGLCTX-1):0]
+				<= i_wbs_data[(LGLCTX+4-1):4];
+	end
+	generate if (LGHCTX > 0)
+	begin : HCTX
+		always @(posedge i_clk)
+		if (wr_ptable)
+			tlb_cdata[wr_tlb_addr][(LGCTXT-1):LGLCTX]
+
+Diff Content:
+- 401 			tlb_accessed[s_tlb_addr] <= 1'b1;
+- 402 		if (wr_vtable)
+- 403 			tlb_cdata[wr_tlb_addr][(LGLCTX-1):0]
+- 404 				<= i_wbs_data[(LGLCTX+4-1):4];
++ 393 		if (wr_vtable)
++ 393 			tlb_cdata[wr_tlb_addr][(LGLCTX-1):0]
++ 393 				<= i_wbs_data[(LGLCTX+4-1):4];
++ 393 	end
++ 393 	initial	tlb_accessed = 0;
++ 393 	always @(posedge i_clk)
++ 393 	if (i_reset)
++ 393 		tlb_accessed <= 0;
++ 393 	else begin
++ 404 			tlb_accessed[last_tlb] <= 1'b1;
+
+Clone Blocks:

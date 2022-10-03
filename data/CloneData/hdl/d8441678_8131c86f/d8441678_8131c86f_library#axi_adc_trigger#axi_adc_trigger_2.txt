@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@292:302@HdlStmAssign
+
+    trigger_out_ack <= trigger_out_hold & (data_valid_a | data_valid_b);
+  end
+
+  assign trigger_out_la = trigger_out_mixed;
+  assign trigger_out = trigger_out_hold | trigger_out_m2;
+
+  always @(posedge clk) begin
+    data_a_trig <= (embedded_trigger == 1'h0) ? {data_a[14],data_a[14:0]} : {trigger_out_s,data_a[14:0]};
+    data_b_trig <= (embedded_trigger == 1'h0) ? {data_b[14],data_b[14:0]} : {trigger_out_s,data_b[14:0]};
+
+
+Diff Content:
+- 297   assign trigger_out = trigger_out_hold | trigger_out_m2;
++ 297   assign trigger_out = trigger_out_m2;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@291:301
+    end
+
+    trigger_out_ack <= trigger_out_hold & (data_valid_a | data_valid_b);
+  end
+
+  assign trigger_out_la = trigger_out_mixed;
+  assign trigger_out = trigger_out_hold | trigger_out_m2;
+
+  always @(posedge clk) begin
+    data_a_trig <= (embedded_trigger == 1'h0) ? {data_a[14],data_a[14:0]} : {trigger_out_s,data_a[14:0]};
+    data_b_trig <= (embedded_trigger == 1'h0) ? {data_b[14],data_b[14:0]} : {trigger_out_s,data_b[14:0]};
+

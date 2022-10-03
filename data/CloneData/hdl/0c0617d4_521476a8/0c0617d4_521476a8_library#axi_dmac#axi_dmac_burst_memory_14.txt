@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@113:123@HdlIdDef
+
+localparam ADDRESS_WIDTH_SRC = BURST_LEN_WIDTH_SRC + ID_WIDTH - 1;
+localparam ADDRESS_WIDTH_DEST = BURST_LEN_WIDTH_DEST + ID_WIDTH - 1;
+
+localparam BYTES_PER_BEAT_WIDTH_MEM_SRC = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_SRC;
+localparam BYTES_PER_BEAT_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_DEST;
+
+/*
+ * The burst memory is separated into 2**(ID_WIDTH-1) segments. Each segment can
+ * hold up to BURST_LEN beats. The addresses that are used to access the memory
+ * are split into two parts. The MSBs index the segment and the LSBs index a
+
+Diff Content:
+- 118 localparam BYTES_PER_BEAT_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_DEST;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@112:122
+  (DATA_WIDTH_DEST < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+
+localparam ADDRESS_WIDTH_SRC = BURST_LEN_WIDTH_SRC + ID_WIDTH - 1;
+localparam ADDRESS_WIDTH_DEST = BURST_LEN_WIDTH_DEST + ID_WIDTH - 1;
+
+localparam BYTES_PER_BEAT_WIDTH_MEM_SRC = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_SRC;
+localparam BYTES_PER_BEAT_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_DEST;
+
+/*
+ * The burst memory is separated into 2**(ID_WIDTH-1) segments. Each segment can
+ * hold up to BURST_LEN beats. The addresses that are used to access the memory
+

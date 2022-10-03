@@ -1,0 +1,31 @@
+Source Block: hdl/library/common/ad_dcfilter.v@82:92@HdlIdDef
+  reg             valid_out = 'd0;
+  reg     [15:0]  data_out = 'd0;
+
+  // internal signals
+
+  wire    [14:0]  dc_offset_15_s;
+  wire    [32:0]  dc_offset_33_s;
+
+  // cancelling the dc offset
+
+  always @(posedge clk) begin
+
+Diff Content:
+- 87   wire    [14:0]  dc_offset_15_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_dcfilter.v@83:93
+  reg     [15:0]  data_out = 'd0;
+
+  // internal signals
+
+  wire    [14:0]  dc_offset_15_s;
+  wire    [32:0]  dc_offset_33_s;
+
+  // cancelling the dc offset
+
+  always @(posedge clk) begin
+    dc_offset <= dc_offset_33_s[32:17];
+

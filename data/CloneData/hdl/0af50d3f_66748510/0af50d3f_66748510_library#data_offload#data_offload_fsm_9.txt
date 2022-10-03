@@ -1,0 +1,17 @@
+Source Block: hdl/library/data_offload/data_offload_fsm.v@352:362@HdlStmAssign
+      rd_resetn_out <= 1'b1;
+    end
+  end
+
+  // read address generation
+  assign rd_reading_s = (rd_fsm_state == RD_READ_FROM_MEM) ? 1'b1 : 1'b0;
+  always @(posedge rd_clk) begin
+    if (rd_fsm_state != RD_READ_FROM_MEM) begin
+      rd_addr <= 'b0;
+    end else begin
+      if (rd_ready && rd_valid) begin
+
+Diff Content:
+- 357   assign rd_reading_s = (rd_fsm_state == RD_READ_FROM_MEM) ? 1'b1 : 1'b0;
+
+Clone Blocks:

@@ -1,0 +1,57 @@
+Source Block: zipcpu/rtl/zipbones.v@198:205@HdlStmAssign
+	initial o_dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		o_dbg_ack <= (i_dbg_cyc)&&((~i_dbg_addr)||(~o_dbg_stall));
+	assign	o_dbg_stall=(i_dbg_cyc)&&(cpu_dbg_stall)&&(i_dbg_addr);
+
+	assign	o_ext_int = (cmd_halt) && (~i_wb_stall);
+
+endmodule
+
+Diff Content:
+- 203 	assign	o_ext_int = (cmd_halt) && (~i_wb_stall);
++ 203 	assign	o_ext_int = (cmd_halt) && (!i_wb_stall);
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipbones.v@196:205
+	// Return debug response values
+	assign	o_dbg_data = (~i_dbg_addr)?cmd_data :cpu_dbg_data;
+	initial o_dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		o_dbg_ack <= (i_dbg_cyc)&&((~i_dbg_addr)||(~o_dbg_stall));
+	assign	o_dbg_stall=(i_dbg_cyc)&&(cpu_dbg_stall)&&(i_dbg_addr);
+
+	assign	o_ext_int = (cmd_halt) && (~i_wb_stall);
+
+endmodule
+
+Clone Blocks 2:
+zipcpu/rtl/zipbones.v@194:205
+			);
+
+	// Return debug response values
+	assign	o_dbg_data = (~i_dbg_addr)?cmd_data :cpu_dbg_data;
+	initial o_dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		o_dbg_ack <= (i_dbg_cyc)&&((~i_dbg_addr)||(~o_dbg_stall));
+	assign	o_dbg_stall=(i_dbg_cyc)&&(cpu_dbg_stall)&&(i_dbg_addr);
+
+	assign	o_ext_int = (cmd_halt) && (~i_wb_stall);
+
+endmodule
+
+Clone Blocks 3:
+zipcpu/rtl/zipbones.v@193:203
+`endif
+			);
+
+	// Return debug response values
+	assign	o_dbg_data = (~i_dbg_addr)?cmd_data :cpu_dbg_data;
+	initial o_dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		o_dbg_ack <= (i_dbg_cyc)&&((~i_dbg_addr)||(~o_dbg_stall));
+	assign	o_dbg_stall=(i_dbg_cyc)&&(cpu_dbg_stall)&&(i_dbg_addr);
+
+	assign	o_ext_int = (cmd_halt) && (~i_wb_stall);
+

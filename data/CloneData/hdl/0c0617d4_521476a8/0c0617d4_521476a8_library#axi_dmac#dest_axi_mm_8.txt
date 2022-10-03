@@ -1,0 +1,50 @@
+Source Block: hdl/library/axi_dmac/dest_axi_mm.v@177:188@HdlStmAssign
+  .resp_eot(response_resp_eot)
+);
+
+reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
+
+assign {response_resp_partial,
+        response_data_burst_length} = bl_mem[response_id];
+
+always @(posedge m_axi_aclk) begin
+  if (dest_burst_info_write) begin
+    bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
+                                   dest_burst_info_length};
+
+Diff Content:
+- 182 assign {response_resp_partial,
+- 183         response_data_burst_length} = bl_mem[response_id];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/dest_axi_mm.v@175:185
+  .resp_ready(response_ready),
+  .resp_resp(response_resp),
+  .resp_eot(response_resp_eot)
+);
+
+reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
+
+assign {response_resp_partial,
+        response_data_burst_length} = bl_mem[response_id];
+
+always @(posedge m_axi_aclk) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/dest_axi_mm.v@180:193
+reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
+
+assign {response_resp_partial,
+        response_data_burst_length} = bl_mem[response_id];
+
+always @(posedge m_axi_aclk) begin
+  if (dest_burst_info_write) begin
+    bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
+                                   dest_burst_info_length};
+  end
+end
+
+
+endmodule
+

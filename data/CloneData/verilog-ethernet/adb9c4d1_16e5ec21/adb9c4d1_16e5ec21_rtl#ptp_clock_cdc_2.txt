@@ -1,0 +1,129 @@
+Source Block: verilog-ethernet/rtl/ptp_clock_cdc.v@333:454@HdlStmProcess
+reg [TS_NS_WIDTH+1-1:0] ts_ns_diff_reg = 31'd0;
+reg [FNS_WIDTH-1:0] ts_fns_diff_reg = 16'd0;
+
+reg [48:0] time_err_int_reg = 32'd0;
+
+always @(posedge output_clk) begin
+    ts_step_reg <= 0;
+
+    diff_valid_reg <= 1'b0;
+    diff_offset_valid_reg <= 1'b0;
+
+    // 96 bit timestamp
+    if (TS_WIDTH == 96) begin
+        if (!ts_ns_ovf_reg[30]) begin
+            // if the overflow lookahead did not borrow, one second has elapsed
+            // increment seconds field, pre-compute both normal increment and overflow values
+            {ts_ns_inc_reg, ts_fns_inc_reg} <= {ts_ns_ovf_reg, ts_fns_ovf_reg} + {period_ns_reg, period_fns_reg};
+            {ts_ns_ovf_reg, ts_fns_ovf_reg} <= {ts_ns_ovf_reg, ts_fns_ovf_reg} + {period_ns_reg, period_fns_reg} - {31'd1_000_000_000, {FNS_WIDTH{1'b0}}};
+            {ts_ns_reg, ts_fns_reg} <= {ts_ns_ovf_reg, ts_fns_ovf_reg};
+            ts_s_reg <= ts_s_reg + 1;
+        end else begin
+            // no increment seconds field, pre-compute both normal increment and overflow values
+            {ts_ns_inc_reg, ts_fns_inc_reg} <= {ts_ns_inc_reg, ts_fns_inc_reg} + {period_ns_reg, period_fns_reg};
+            {ts_ns_ovf_reg, ts_fns_ovf_reg} <= {ts_ns_inc_reg, ts_fns_inc_reg} + {period_ns_reg, period_fns_reg} - {31'd1_000_000_000, {FNS_WIDTH{1'b0}}};
+            {ts_ns_reg, ts_fns_reg} <= {ts_ns_inc_reg, ts_fns_inc_reg};
+            ts_s_reg <= ts_s_reg;
+        end
+    end else if (TS_WIDTH == 64) begin
+        {ts_ns_reg, ts_fns_reg} <= {ts_ns_reg, ts_fns_reg} + {period_ns_reg, period_fns_reg};
+    end
+
+    // FIFO dequeue
+    if (read) begin
+        // dequeue from FIFO
+        if (TS_WIDTH == 96) begin
+            if (mem_read_data_reg[95:48] != ts_s_reg) begin
+                // seconds field doesn't match
+                if (!sec_mismatch_reg) begin
+                    // ignore the first time
+                    sec_mismatch_reg <= 1'b1;
+                end else begin
+                    // two seconds mismatches in a row; step the clock
+                    sec_mismatch_reg <= 1'b0;
+
+                    {ts_ns_inc_reg, ts_fns_inc_reg} <= (FNS_WIDTH > 16 ? mem_read_data_reg[45:0] << (FNS_WIDTH-16) : mem_read_data_reg[45:0] >> (16-FNS_WIDTH)) + {period_ns_reg, period_fns_reg};
+                    {ts_ns_ovf_reg, ts_fns_ovf_reg} <= (FNS_WIDTH > 16 ? mem_read_data_reg[45:0] << (FNS_WIDTH-16) : mem_read_data_reg[45:0] >> (16-FNS_WIDTH)) + {period_ns_reg, period_fns_reg} - {31'd1_000_000_000, {FNS_WIDTH{1'b0}}};
+                    ts_s_reg <= mem_read_data_reg[95:48];
+                    ts_ns_reg <= mem_read_data_reg[45:16];
+                    ts_fns_reg <= FNS_WIDTH > 16 ? mem_read_data_reg[15:0] << (FNS_WIDTH-16) : mem_read_data_reg[15:0] >> (16-FNS_WIDTH);
+                    ts_step_reg <= 1;
+                end
+            end else begin
+                // compute difference
+                sec_mismatch_reg <= 1'b0;
+                diff_valid_reg <= 1'b1;
+                {ts_ns_diff_reg, ts_fns_diff_reg} <= {ts_ns_reg, ts_fns_reg} - (FNS_WIDTH > 16 ? mem_read_data_reg[45:0] << (FNS_WIDTH-16) : mem_read_data_reg[45:0] >> (16-FNS_WIDTH));
+            end
+        end else if (TS_WIDTH == 64) begin
+            if (mem_read_data_reg[63:48] != ts_ns_reg[47:32]) begin
+                // high-order bits don't match
+                if (!sec_mismatch_reg) begin
+                    // ignore the first time
+                    sec_mismatch_reg <= 1'b1;
+                end else begin
+                    // two seconds mismatches in a row; step the clock
+                    sec_mismatch_reg <= 1'b0;
+
+                    ts_ns_reg <= mem_read_data_reg[63:16];
+                    ts_fns_reg <= FNS_WIDTH > 16 ? mem_read_data_reg[15:0] << (FNS_WIDTH-16) : mem_read_data_reg[15:0] >> (16-FNS_WIDTH);
+                    ts_step_reg <= 1;
+                end
+            end else begin
+                // compute difference
+                sec_mismatch_reg <= 1'b0;
+                diff_valid_reg <= 1'b1;
+                {ts_ns_diff_reg, ts_fns_diff_reg} <= {ts_ns_reg, ts_fns_reg} - (FNS_WIDTH > 16 ? mem_read_data_reg[63:0] << (FNS_WIDTH-16) : mem_read_data_reg[63:0] >> (16-FNS_WIDTH));
+            end
+        end
+    end else if (diff_valid_reg) begin
+        // offset difference by FIFO delay
+        diff_offset_valid_reg <= 1'b1;
+        diff_valid_reg <= 1'b0;
+        {ts_ns_diff_reg, ts_fns_diff_reg} <= {ts_ns_diff_reg, ts_fns_diff_reg} - ({period_ns_reg, period_fns_reg} * 2**(LOG_RATE + LOG_FIFO_DEPTH));
+    end else if (diff_offset_valid_reg) begin
+        // PI control
+        diff_offset_valid_reg <= 1'b0;
+        if (($signed({ts_ns_diff_reg, ts_fns_diff_reg}) / 2**10) + ($signed(time_err_int_reg) / 2**16) > 4*2**16) begin
+            // limit positive adjustment
+            time_err_int_reg <= 0;
+            {period_ns_reg, period_fns_reg} <= $signed(OUTPUT_PERIOD_NS*2**16 + OUTPUT_PERIOD_FNS) - ({4'd4, {FNS_WIDTH{1'b0}}});
+        end else if (($signed({ts_ns_diff_reg, ts_fns_diff_reg}) / 2**10) + ($signed(time_err_int_reg) / 2**16) < -8*2**16) begin
+            // limit negative adjustment
+            time_err_int_reg <= 0;
+            {period_ns_reg, period_fns_reg} <= $signed(OUTPUT_PERIOD_NS*2**16 + OUTPUT_PERIOD_FNS) + ({4'd8, {FNS_WIDTH{1'b0}}});
+        end else begin
+            time_err_int_reg <= $signed(time_err_int_reg) + $signed({ts_ns_diff_reg, ts_fns_diff_reg});
+            {period_ns_reg, period_fns_reg} <= $signed(OUTPUT_PERIOD_NS*2**16 + OUTPUT_PERIOD_FNS) - ($signed({ts_ns_diff_reg, ts_fns_diff_reg}) / 2**10) - ($signed(time_err_int_reg) / 2**16);
+        end
+    end
+
+    if (TS_WIDTH == 96) begin
+        pps_reg <= !ts_ns_ovf_reg[30];
+    end else if (TS_WIDTH == 64) begin
+        pps_reg <= 1'b0; // not currently implemented for 64 bit timestamp format
+    end
+
+    if (output_rst) begin
+        period_ns_reg <= OUTPUT_PERIOD_NS;
+        period_fns_reg <= OUTPUT_PERIOD_FNS;
+        ts_s_reg <= 0;
+        ts_ns_reg <= 0;
+        ts_fns_reg <= 0;
+        ts_ns_inc_reg <= 0;
+        ts_fns_inc_reg <= 0;
+        ts_ns_ovf_reg <= {TS_NS_WIDTH{1'b1}};
+        ts_fns_ovf_reg <= {FNS_WIDTH{1'b1}};
+        ts_step_reg <= 0;
+        pps_reg <= 0;
+    end
+end
+
+endmodule
+
+Diff Content:
+- 447         ts_ns_ovf_reg <= {TS_NS_WIDTH{1'b1}};
++ 447         ts_ns_ovf_reg <= {TS_NS_WIDTH+1{1'b1}};
+
+Clone Blocks:

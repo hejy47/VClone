@@ -1,0 +1,26 @@
+Source Block: oh/elink/hdl/etx_protocol.v@146:163@HdlStmProcess
+   reg tx_rd_wait_reg;   
+   reg tx_io_wait_reg; 
+   reg tx_burst_reg;
+   reg tx_burst;   
+   //sample to align up witth tx_access   
+   always @ (posedge clk) 
+     begin
+	tx_burst          <= tx_burst_in;
+	tx_burst_reg      <= tx_burst;
+	tx_rd_wait_reg    <= tx_rd_wait;
+	tx_wr_wait_reg    <= tx_wr_wait;
+	tx_io_wait_reg    <= tx_io_wait;
+     end
+        
+   assign special_sample = tx_io_wait_reg                   & 
+		           (tx_wr_wait     | tx_rd_wait)    &
+   			   ~(tx_wr_wait_reg | tx_rd_wait_reg) 
+			    ;
+
+Diff Content:
+- 153 	tx_burst          <= tx_burst_in;
+- 154 	tx_burst_reg      <= tx_burst;
++ 154 	tx_burst_reg      <= tx_burst_in & tx_access_reg;
+
+Clone Blocks:

@@ -1,0 +1,32 @@
+Source Block: hdl/projects/daq1/cpld/daq1_cpld.v@177:201@HdlStmProcess
+  assign fmc_spi_sdio = fpga_to_cpld ? 1'bZ : cpld_rdata_s;
+  assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
+
+  assign rdnwr = ~fmc_cpld_addr[7];
+
+  always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
+    if (fmc_spi_csn == 1'b1) begin
+      fmc_spi_counter <= 6'h0;
+      fpga_to_cpld <= 1'b1;
+      fmc_spi_csn_enb <= 1'b1;
+    end else begin
+      fmc_spi_counter <= fmc_spi_counter + 1;
+      fmc_spi_csn_enb <= (fmc_spi_counter <= 7) ? 1'b1 : 1'b0;
+      if (adc_spicsn & clk_spicsn) begin
+        fpga_to_cpld <= (fmc_spi_counter >= 15) ? rdnwr : 1'b1;
+      end else begin
+        fpga_to_cpld <= (fmc_spi_counter >= 23) ? rdnwr : 1'b1;
+      end
+    end
+  end
+
+  // Internal register read access
+
+  always @(fmc_cpld_addr) begin
+    case (fmc_cpld_addr[6:0])
+
+Diff Content:
+- 189       fmc_spi_csn_enb <= (fmc_spi_counter <= 7) ? 1'b1 : 1'b0;
++ 189       fmc_spi_csn_enb <= (fmc_spi_counter < 7) ? 1'b1 : 1'b0;
+
+Clone Blocks:

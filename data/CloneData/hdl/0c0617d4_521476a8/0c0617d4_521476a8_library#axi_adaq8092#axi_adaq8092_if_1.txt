@@ -1,0 +1,163 @@
+Source Block: hdl/library/axi_adaq8092/axi_adaq8092_if.v@104:173@HdlStmProcess
+  // LOCAL parameters
+
+  localparam LVDS =  0;
+  localparam CMOS =  1;
+  
+  always @(posedge adc_clk) begin
+
+    adc_status <= 1'b1;
+    
+    if (OUTPUT_MODE == LVDS) begin         
+    
+      adc_or <= adc_or_s_1 | adc_or_s_2;
+      adc_data <= POLARITY_MASK ^ adc_data_s; 
+      adc_data_s <= { lvds_adc_data_n_s[13], lvds_adc_data_p_s[13], 
+                      lvds_adc_data_n_s[12], lvds_adc_data_p_s[12], 
+                      lvds_adc_data_n_s[11], lvds_adc_data_p_s[11], 
+                      lvds_adc_data_n_s[10], lvds_adc_data_p_s[10], 
+                      lvds_adc_data_n_s[9],  lvds_adc_data_p_s[9], 
+                      lvds_adc_data_n_s[8],  lvds_adc_data_p_s[8], 
+                      lvds_adc_data_n_s[7],  lvds_adc_data_p_s[7], 
+                      lvds_adc_data_n_s[6],  lvds_adc_data_p_s[6], 
+                      lvds_adc_data_n_s[5],  lvds_adc_data_p_s[5], 
+                      lvds_adc_data_n_s[4],  lvds_adc_data_p_s[4], 
+                      lvds_adc_data_n_s[3],  lvds_adc_data_p_s[3], 
+                      lvds_adc_data_n_s[2],  lvds_adc_data_p_s[2], 
+                      lvds_adc_data_n_s[1],  lvds_adc_data_p_s[1], 
+                      lvds_adc_data_n_s[0],  lvds_adc_data_p_s[0]};
+    
+    end else if (OUTPUT_MODE == CMOS) begin  
+      adc_data <= adc_data_s;
+      if (sdr_or_ddr == 0) begin            //DDR_CMOS
+        adc_or <= adc_or_s_1_p | adc_or_s_1_n;
+        adc_data_s <= { cmos_adc_data_n_s[27], cmos_adc_data_p_s[27], 
+                        cmos_adc_data_n_s[25], cmos_adc_data_p_s[25], 
+                        cmos_adc_data_n_s[23], cmos_adc_data_p_s[23], 
+                        cmos_adc_data_n_s[21], cmos_adc_data_p_s[21], 
+                        cmos_adc_data_n_s[19], cmos_adc_data_p_s[19], 
+                        cmos_adc_data_n_s[17], cmos_adc_data_p_s[17], 
+                        cmos_adc_data_n_s[15], cmos_adc_data_p_s[15], 
+                        cmos_adc_data_n_s[13], cmos_adc_data_p_s[13], 
+                        cmos_adc_data_n_s[11], cmos_adc_data_p_s[11], 
+                        cmos_adc_data_n_s[9],  cmos_adc_data_p_s[9], 
+                        cmos_adc_data_n_s[7],  cmos_adc_data_p_s[7], 
+                        cmos_adc_data_n_s[5],  cmos_adc_data_p_s[5], 
+                        cmos_adc_data_n_s[3],  cmos_adc_data_p_s[3], 
+                        cmos_adc_data_n_s[1],  cmos_adc_data_p_s[1]};
+      end else if (sdr_or_ddr == 1) begin    //SDR_CMOS
+        adc_or <= adc_or_s_1_p | adc_or_s_2_p;
+        adc_data_s <= { cmos_adc_data_p_s[27], cmos_adc_data_p_s[26], 
+                        cmos_adc_data_p_s[25], cmos_adc_data_p_s[24], 
+                        cmos_adc_data_p_s[23], cmos_adc_data_p_s[22], 
+                        cmos_adc_data_p_s[21], cmos_adc_data_p_s[20], 
+                        cmos_adc_data_p_s[19], cmos_adc_data_p_s[18], 
+                        cmos_adc_data_p_s[17], cmos_adc_data_p_s[16], 
+                        cmos_adc_data_p_s[15], cmos_adc_data_p_s[14], 
+                        cmos_adc_data_p_s[13], cmos_adc_data_p_s[12], 
+                        cmos_adc_data_p_s[11], cmos_adc_data_p_s[10], 
+                        cmos_adc_data_p_s[9],  cmos_adc_data_p_s[8], 
+                        cmos_adc_data_p_s[7],  cmos_adc_data_p_s[6], 
+                        cmos_adc_data_p_s[5],  cmos_adc_data_p_s[4], 
+                        cmos_adc_data_p_s[3],  cmos_adc_data_p_s[2], 
+                        cmos_adc_data_p_s[1],  cmos_adc_data_p_s[0]}; 
+      end
+    end 
+  end
+
+  // data interface
+
+  generate
+    if (OUTPUT_MODE == LVDS) begin
+
+Diff Content:
+- 113     if (OUTPUT_MODE == LVDS) begin         
+- 116       adc_data <= POLARITY_MASK ^ adc_data_s; 
+- 117       adc_data_s <= { lvds_adc_data_n_s[13], lvds_adc_data_p_s[13], 
+- 118                       lvds_adc_data_n_s[12], lvds_adc_data_p_s[12], 
+- 119                       lvds_adc_data_n_s[11], lvds_adc_data_p_s[11], 
+- 120                       lvds_adc_data_n_s[10], lvds_adc_data_p_s[10], 
+- 121                       lvds_adc_data_n_s[9],  lvds_adc_data_p_s[9], 
+- 122                       lvds_adc_data_n_s[8],  lvds_adc_data_p_s[8], 
+- 123                       lvds_adc_data_n_s[7],  lvds_adc_data_p_s[7], 
+- 124                       lvds_adc_data_n_s[6],  lvds_adc_data_p_s[6], 
+- 125                       lvds_adc_data_n_s[5],  lvds_adc_data_p_s[5], 
+- 126                       lvds_adc_data_n_s[4],  lvds_adc_data_p_s[4], 
+- 127                       lvds_adc_data_n_s[3],  lvds_adc_data_p_s[3], 
+- 128                       lvds_adc_data_n_s[2],  lvds_adc_data_p_s[2], 
+- 129                       lvds_adc_data_n_s[1],  lvds_adc_data_p_s[1], 
+- 132     end else if (OUTPUT_MODE == CMOS) begin  
+- 136         adc_data_s <= { cmos_adc_data_n_s[27], cmos_adc_data_p_s[27], 
+- 137                         cmos_adc_data_n_s[25], cmos_adc_data_p_s[25], 
+- 138                         cmos_adc_data_n_s[23], cmos_adc_data_p_s[23], 
+- 139                         cmos_adc_data_n_s[21], cmos_adc_data_p_s[21], 
+- 140                         cmos_adc_data_n_s[19], cmos_adc_data_p_s[19], 
+- 141                         cmos_adc_data_n_s[17], cmos_adc_data_p_s[17], 
+- 142                         cmos_adc_data_n_s[15], cmos_adc_data_p_s[15], 
+- 143                         cmos_adc_data_n_s[13], cmos_adc_data_p_s[13], 
+- 144                         cmos_adc_data_n_s[11], cmos_adc_data_p_s[11], 
+- 145                         cmos_adc_data_n_s[9],  cmos_adc_data_p_s[9], 
+- 146                         cmos_adc_data_n_s[7],  cmos_adc_data_p_s[7], 
+- 147                         cmos_adc_data_n_s[5],  cmos_adc_data_p_s[5], 
+- 148                         cmos_adc_data_n_s[3],  cmos_adc_data_p_s[3], 
+- 152         adc_data_s <= { cmos_adc_data_p_s[27], cmos_adc_data_p_s[26], 
+- 153                         cmos_adc_data_p_s[25], cmos_adc_data_p_s[24], 
+- 154                         cmos_adc_data_p_s[23], cmos_adc_data_p_s[22], 
+- 155                         cmos_adc_data_p_s[21], cmos_adc_data_p_s[20], 
+- 156                         cmos_adc_data_p_s[19], cmos_adc_data_p_s[18], 
+- 157                         cmos_adc_data_p_s[17], cmos_adc_data_p_s[16], 
+- 158                         cmos_adc_data_p_s[15], cmos_adc_data_p_s[14], 
+- 159                         cmos_adc_data_p_s[13], cmos_adc_data_p_s[12], 
+- 160                         cmos_adc_data_p_s[11], cmos_adc_data_p_s[10], 
+- 161                         cmos_adc_data_p_s[9],  cmos_adc_data_p_s[8], 
+- 162                         cmos_adc_data_p_s[7],  cmos_adc_data_p_s[6], 
+- 163                         cmos_adc_data_p_s[5],  cmos_adc_data_p_s[4], 
+- 164                         cmos_adc_data_p_s[3],  cmos_adc_data_p_s[2], 
+- 165                         cmos_adc_data_p_s[1],  cmos_adc_data_p_s[0]}; 
+- 167     end 
++ 113     if (OUTPUT_MODE == LVDS) begin
++ 129       adc_data <= POLARITY_MASK ^ adc_data_s;
++ 129       adc_data_s <= { lvds_adc_data_n_s[13], lvds_adc_data_p_s[13],
++ 129                       lvds_adc_data_n_s[12], lvds_adc_data_p_s[12],
++ 129                       lvds_adc_data_n_s[11], lvds_adc_data_p_s[11],
++ 129                       lvds_adc_data_n_s[10], lvds_adc_data_p_s[10],
++ 129                       lvds_adc_data_n_s[9],  lvds_adc_data_p_s[9],
++ 129                       lvds_adc_data_n_s[8],  lvds_adc_data_p_s[8],
++ 129                       lvds_adc_data_n_s[7],  lvds_adc_data_p_s[7],
++ 129                       lvds_adc_data_n_s[6],  lvds_adc_data_p_s[6],
++ 129                       lvds_adc_data_n_s[5],  lvds_adc_data_p_s[5],
++ 129                       lvds_adc_data_n_s[4],  lvds_adc_data_p_s[4],
++ 129                       lvds_adc_data_n_s[3],  lvds_adc_data_p_s[3],
++ 129                       lvds_adc_data_n_s[2],  lvds_adc_data_p_s[2],
++ 129                       lvds_adc_data_n_s[1],  lvds_adc_data_p_s[1],
++ 132     end else if (OUTPUT_MODE == CMOS) begin
++ 148         adc_data_s <= { cmos_adc_data_n_s[27], cmos_adc_data_p_s[27],
++ 148                         cmos_adc_data_n_s[25], cmos_adc_data_p_s[25],
++ 148                         cmos_adc_data_n_s[23], cmos_adc_data_p_s[23],
++ 148                         cmos_adc_data_n_s[21], cmos_adc_data_p_s[21],
++ 148                         cmos_adc_data_n_s[19], cmos_adc_data_p_s[19],
++ 148                         cmos_adc_data_n_s[17], cmos_adc_data_p_s[17],
++ 148                         cmos_adc_data_n_s[15], cmos_adc_data_p_s[15],
++ 148                         cmos_adc_data_n_s[13], cmos_adc_data_p_s[13],
++ 148                         cmos_adc_data_n_s[11], cmos_adc_data_p_s[11],
++ 148                         cmos_adc_data_n_s[9],  cmos_adc_data_p_s[9],
++ 148                         cmos_adc_data_n_s[7],  cmos_adc_data_p_s[7],
++ 148                         cmos_adc_data_n_s[5],  cmos_adc_data_p_s[5],
++ 148                         cmos_adc_data_n_s[3],  cmos_adc_data_p_s[3],
++ 165         adc_data_s <= { cmos_adc_data_p_s[27], cmos_adc_data_p_s[26],
++ 165                         cmos_adc_data_p_s[25], cmos_adc_data_p_s[24],
++ 165                         cmos_adc_data_p_s[23], cmos_adc_data_p_s[22],
++ 165                         cmos_adc_data_p_s[21], cmos_adc_data_p_s[20],
++ 165                         cmos_adc_data_p_s[19], cmos_adc_data_p_s[18],
++ 165                         cmos_adc_data_p_s[17], cmos_adc_data_p_s[16],
++ 165                         cmos_adc_data_p_s[15], cmos_adc_data_p_s[14],
++ 165                         cmos_adc_data_p_s[13], cmos_adc_data_p_s[12],
++ 165                         cmos_adc_data_p_s[11], cmos_adc_data_p_s[10],
++ 165                         cmos_adc_data_p_s[9],  cmos_adc_data_p_s[8],
++ 165                         cmos_adc_data_p_s[7],  cmos_adc_data_p_s[6],
++ 165                         cmos_adc_data_p_s[5],  cmos_adc_data_p_s[4],
++ 165                         cmos_adc_data_p_s[3],  cmos_adc_data_p_s[2],
++ 165                         cmos_adc_data_p_s[1],  cmos_adc_data_p_s[0]};
++ 167     end
+
+Clone Blocks:

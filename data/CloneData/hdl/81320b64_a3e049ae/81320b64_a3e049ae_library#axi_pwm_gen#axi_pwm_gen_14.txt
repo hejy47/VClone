@@ -1,0 +1,43 @@
+Source Block: hdl/library/axi_pwm_gen/axi_pwm_gen.v@192:215@HdlStmIf
+  generate
+
+    reg ext_sync_m0 = 1'b1;
+    reg ext_sync_m1 = 1'b1;
+
+    if (EXT_ASYNC_SYNC) begin
+      always @(posedge clk) begin
+        if (pwm_gen_resetn == 1'b0) begin
+          ext_sync_m0 <=  1'b1;
+          ext_sync_m1 <=  1'b1;
+        end else begin
+          ext_sync_m0 <= ext_sync;
+          ext_sync_m1 <= ext_sync_m0;
+        end
+      end
+      assign ext_sync_s = ext_sync_m1;
+    end else begin
+      assign ext_sync_s = ext_sync;
+    end
+
+    if (N_PWMS >= 2) begin
+      axi_pwm_gen_1  #(
+        .PULSE_WIDTH (PULSE_1_WIDTH),
+        .PULSE_PERIOD (PULSE_1_PERIOD))
+
+Diff Content:
+- 197     if (EXT_ASYNC_SYNC) begin
+- 198       always @(posedge clk) begin
+- 199         if (pwm_gen_resetn == 1'b0) begin
+- 200           ext_sync_m0 <=  1'b1;
+- 201           ext_sync_m1 <=  1'b1;
+- 202         end else begin
+- 203           ext_sync_m0 <= ext_sync;
+- 204           ext_sync_m1 <= ext_sync_m0;
+- 205         end
+- 206       end
+- 207       assign ext_sync_s = ext_sync_m1;
+- 208     end else begin
+- 209       assign ext_sync_s = ext_sync;
+- 210     end
+
+Clone Blocks:

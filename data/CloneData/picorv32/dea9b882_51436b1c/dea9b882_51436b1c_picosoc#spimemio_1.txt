@@ -1,0 +1,60 @@
+Source Block: picorv32/picosoc/spimemio.v@431:441@HdlStmAssign
+		xfer_tag_q <= xfer_tag;
+	end
+
+	assign din_ready = din_valid && resetn && next_fetch;
+
+	assign dout_valid = xfer_ddr_q ? fetch && !last_fetch : next_fetch && !fetch;
+	assign dout_data = ibuffer;
+	assign dout_tag = xfer_tag_q;
+
+	always @* begin
+		flash_io0_oe = 0;
+
+Diff Content:
+- 436 	assign dout_valid = xfer_ddr_q ? fetch && !last_fetch : next_fetch && !fetch;
++ 436 	assign dout_valid = (xfer_ddr_q ? fetch && !last_fetch : next_fetch && !fetch) && resetn;
+
+Clone Blocks:
+Clone Blocks 1:
+picorv32/picosoc/spimemio.v@432:442
+	end
+
+	assign din_ready = din_valid && resetn && next_fetch;
+
+	assign dout_valid = xfer_ddr_q ? fetch && !last_fetch : next_fetch && !fetch;
+	assign dout_data = ibuffer;
+	assign dout_tag = xfer_tag_q;
+
+	always @* begin
+		flash_io0_oe = 0;
+		flash_io1_oe = 0;
+
+Clone Blocks 2:
+picorv32/picosoc/spimemio.v@433:443
+
+	assign din_ready = din_valid && resetn && next_fetch;
+
+	assign dout_valid = xfer_ddr_q ? fetch && !last_fetch : next_fetch && !fetch;
+	assign dout_data = ibuffer;
+	assign dout_tag = xfer_tag_q;
+
+	always @* begin
+		flash_io0_oe = 0;
+		flash_io1_oe = 0;
+		flash_io2_oe = 0;
+
+Clone Blocks 3:
+picorv32/picosoc/spimemio.v@429:439
+	always @(posedge clk) begin
+		xfer_ddr_q <= xfer_ddr;
+		xfer_tag_q <= xfer_tag;
+	end
+
+	assign din_ready = din_valid && resetn && next_fetch;
+
+	assign dout_valid = xfer_ddr_q ? fetch && !last_fetch : next_fetch && !fetch;
+	assign dout_data = ibuffer;
+	assign dout_tag = xfer_tag_q;
+
+

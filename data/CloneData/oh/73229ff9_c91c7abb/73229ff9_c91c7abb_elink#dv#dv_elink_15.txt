@@ -1,0 +1,27 @@
+Source Block: oh/elink/dv/dv_elink.v@153:173@HdlStmBlock
+	  $finish;
+     end
+   
+   //Clock
+   always
+     begin
+       #10 
+	 begin
+	    clkin      = ~clkin;
+	    rx_lclk_p  = ~rx_lclk_p;
+	    rx_lclk_n  = ~rx_lclk_n;
+	    s_axi_aclk = ~s_axi_aclk;
+	    m_axi_aclk = ~m_axi_aclk;
+	    s_axicfg_aclk=~s_axicfg_aclk;	    
+	 end
+     end
+
+   //Driving differentials
+   assign rx_frame_n   = ~rx_frame_p;
+   assign rx_data_n    = ~rx_data_p;
+   assign tx_wr_wait_n = ~tx_wr_wait_p;
+
+Diff Content:
+- 166 	    s_axicfg_aclk=~s_axicfg_aclk;	    
+
+Clone Blocks:

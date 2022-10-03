@@ -1,0 +1,53 @@
+Source Block: hdl/library/common/up_gt.v@689:717@HdlStmProcess
+
+  // tx sysref & sync
+
+  assign tx_sysref_s = (up_tx_sysref_sel == 1'b1) ? tx_ext_sysref : up_tx_sysref;
+
+  always @(posedge tx_clk) begin
+    if (tx_rst == 1'b1) begin
+      tx_sysref_m1 <= 'd0;
+      tx_sysref_m2 <= 'd0;
+      tx_sysref_m3 <= 'd0;
+      tx_sysref <= 'd0;
+      tx_ip_sync_m1 <= 'd0;
+      tx_ip_sync_m2 <= 'd0;
+      tx_ip_sync <= 'd0;
+    end else begin
+      tx_sysref_m1 <= tx_sysref_s;
+      tx_sysref_m2 <= tx_sysref_m1;
+      tx_sysref_m3 <= tx_sysref_m2;
+      tx_sysref <= tx_sysref_m2 & ~tx_sysref_m3;
+      tx_ip_sync_m1 <= up_tx_sync & tx_sync;
+      tx_ip_sync_m2 <= tx_ip_sync_m1;
+      tx_ip_sync <= tx_ip_sync_m2;
+    end
+  end
+
+  // status
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 694   always @(posedge tx_clk) begin
+- 695     if (tx_rst == 1'b1) begin
+- 696       tx_sysref_m1 <= 'd0;
+- 697       tx_sysref_m2 <= 'd0;
+- 698       tx_sysref_m3 <= 'd0;
+- 699       tx_sysref <= 'd0;
+- 700       tx_ip_sync_m1 <= 'd0;
+- 701       tx_ip_sync_m2 <= 'd0;
+- 702       tx_ip_sync <= 'd0;
+- 703     end else begin
+- 704       tx_sysref_m1 <= tx_sysref_s;
+- 705       tx_sysref_m2 <= tx_sysref_m1;
+- 706       tx_sysref_m3 <= tx_sysref_m2;
+- 707       tx_sysref <= tx_sysref_m2 & ~tx_sysref_m3;
+- 708       tx_ip_sync_m1 <= up_tx_sync & tx_sync;
+- 709       tx_ip_sync_m2 <= tx_ip_sync_m1;
+- 710       tx_ip_sync <= tx_ip_sync_m2;
+- 711     end
+- 712   end
+
+Clone Blocks:

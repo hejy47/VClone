@@ -1,0 +1,81 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@82:92@HdlIdDef
+);
+`endif
+
+parameter screen_w = 800;
+
+wire sdram_reset;
+reg  ram_enable = 0;
+reg  [23:0] ram_addr = 0;
+wire [15:0] ram_data_out;
+wire data_out_ready;
+reg  [15:0] ram_data_in;
+
+Diff Content:
+- 87 wire sdram_reset;
++ 87 wire [15:0] sd_clkdiv;
++ 87 SdCardCtrl sdcard(
++ 87   .clk_i(sd_clk), //z_sample_clk),
++ 87   .reset_i(sd_reset),
++ 87   .rd_i(sd_read),
++ 87   .wr_i(sd_write),
++ 87   .continue_i(sd_continue),
++ 87   .addr_i(sd_addr_in),
++ 87   .data_i(sd_data_in),
++ 87   .data_o(sd_data_out),
++ 87   .busy_o(sd_busy),
++ 87   .error_o(sd_error),
++ 87   .cs_bo(SD_nCS),
++ 87   .mosi_o(SD_MOSI),
++ 87   .miso_i(SD_MISO),
++ 87   .sclk_o(SD_SCLK),
++ 87   .hndShk_i(sd_handshake_in),
++ 87   .hndShk_o(sd_handshake_out),
++ 87   .clkdiv_o(sd_clkdiv)
++ 87 );
++ 87 `endif
++ 87 reg  sdram_reset = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@83:93
+`endif
+
+parameter screen_w = 800;
+
+wire sdram_reset;
+reg  ram_enable = 0;
+reg  [23:0] ram_addr = 0;
+wire [15:0] ram_data_out;
+wire data_out_ready;
+reg  [15:0] ram_data_in;
+reg  ram_write = 0;
+
+Clone Blocks 2:
+amiga2000-gfxcard/attic/vgashader/vga.v@56:66
+
+assign aux1 = 1;
+assign aux2 = 1;
+assign aux3 = 1;
+
+wire sdram_reset;
+reg ram_enable;
+reg [18:0] ram_addr;
+wire [31:0] ram_data_out;
+wire data_out_ready;
+reg [31:0] ram_data_in;
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@84:94
+
+parameter screen_w = 800;
+
+wire sdram_reset;
+reg  ram_enable = 0;
+reg  [23:0] ram_addr = 0;
+wire [15:0] ram_data_out;
+wire data_out_ready;
+reg  [15:0] ram_data_in;
+reg  ram_write = 0;
+reg  [1:0]  ram_byte_enable;
+

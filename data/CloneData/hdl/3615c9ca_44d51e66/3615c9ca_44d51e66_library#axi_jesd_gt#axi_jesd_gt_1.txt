@@ -1,0 +1,62 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@1398:1448@HdlStmIf
+  // instantiations
+
+  genvar n;
+  generate
+
+  if (NUM_OF_LANES < 8) begin
+  for (n = (NUM_OF_LANES-1); n < 8; n = n + 1) begin: g_unused_1
+  assign pll_rst[n] = 1'd0;
+  assign rx_rst[n] = 1'd0;
+  assign rx_gt_rst[n] = 1'd0;
+  assign rx_pll_locked[n] = 1'd0;
+  assign rx_user_ready[n] = 1'd0;
+  assign rx_rst_done[n] = 1'd0;
+  assign rx_out_clk[n] = 1'd0;
+  assign rx_rst[n] = 1'd0;
+  assign rx_sync[n] = 1'd0;
+  assign rx_sof[n] = 1'd0;
+  assign rx_data[((32*n)+31):(32*n)] = 32'd0;
+  assign rx_gt_charisk[((4*n)+3):(4*n)] = 4'd0;
+  assign rx_gt_disperr[((4*n)+3):(4*n)] = 4'd0;
+  assign rx_gt_notintable[((4*n)+3):(4*n)] = 4'd0;
+  assign rx_gt_data[((32*n)+31):(32*n)] = 32'd0;
+  assign rx_gt_ilas_f[((4*n)+3):(4*n)] = 4'd0;
+  assign rx_gt_ilas_q[((4*n)+3):(4*n)] = 4'd0;
+  assign rx_gt_ilas_a[((4*n)+3):(4*n)] = 4'd0;
+  assign rx_gt_ilas_r[((4*n)+3):(4*n)] = 4'd0;
+  assign rx_gt_cgs_k[((4*n)+3):(4*n)] = 4'd0;
+  assign rx_ip_rst[n] = 1'd0;
+  assign rx_ip_sysref[n] = 1'd0;
+  assign rx_ip_rst_done[n] = 1'd0;
+  assign tx_0_p = 1'd0;
+  assign tx_0_n = 1'd1;
+  assign tx_rst[n] = 1'd0;
+  assign tx_gt_rst[n] = 1'd0;
+  assign tx_pll_locked[n] = 1'd0;
+  assign tx_user_ready[n] = 1'd0;
+  assign tx_rst_done[n] = 1'd0;
+  assign tx_out_clk[n] = 1'd0;
+  assign tx_rst[n] = 1'd0;
+  assign tx_ip_rst[n] = 1'd0;
+  assign tx_ip_data[((32*n)+31):(32*n)] = 32'd0;
+  assign tx_ip_sysref[n] = 1'd0;
+  assign tx_ip_sync[n] = 1'd0;
+  assign tx_ip_rst_done[n] = 1'd0;
+  end
+  end
+
+  for (n = 0; n < NUM_OF_LANES; n = n + 1) begin: g_lane_1
+  ad_gt_channel_1 #(
+    .ID (n),
+    .GTH_GTX_N (GTH_GTX_N),
+
+Diff Content:
+- 1404   for (n = (NUM_OF_LANES-1); n < 8; n = n + 1) begin: g_unused_1
+- 1428   assign tx_0_p = 1'd0;
+- 1429   assign tx_0_n = 1'd1;
++ 1404   for (n = NUM_OF_LANES; n < 8; n = n + 1) begin: g_unused_1
++ 1429   assign tx_p[n] = 1'd0;
++ 1429   assign tx_n[n] = 1'd1;
+
+Clone Blocks:

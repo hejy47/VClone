@@ -1,0 +1,31 @@
+Source Block: oh/elink/hdl/erx_cfg.v@163:173@HdlIdDef
+     load_taps <= rx_idelay1_write;
+   
+   //###############################
+   //# TESTMODE (ADD OR/LFSR)
+   //###############################  
+   wire 	testmode_add;
+   wire 	testmode_lfsr;
+   
+   always @ (posedge clk)
+     if(rx_testdata_write)
+       rx_testdata_reg[31:0] <= mi_din[31:0];
+
+Diff Content:
+- 168    wire 	testmode_add;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_cfg.v@164:174
+   
+   //###############################
+   //# TESTMODE (ADD OR/LFSR)
+   //###############################  
+   wire 	testmode_add;
+   wire 	testmode_lfsr;
+   
+   always @ (posedge clk)
+     if(rx_testdata_write)
+       rx_testdata_reg[31:0] <= mi_din[31:0];
+     else if(erx_access)   
+

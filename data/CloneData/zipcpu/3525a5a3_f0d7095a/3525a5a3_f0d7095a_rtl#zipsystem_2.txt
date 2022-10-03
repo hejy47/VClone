@@ -1,0 +1,35 @@
+Source Block: zipcpu/rtl/zipsystem.v@697:720@HdlStmIf
+	//
+	// The programmable interrupt controller peripheral
+	//
+	wire		pic_interrupt;
+	generate
+	if (EXTERNAL_INTERRUPTS < 9)
+	begin
+		icontrol #(6+EXTERNAL_INTERRUPTS)	pic(i_clk, cpu_reset,
+					(sys_cyc)&&(sys_stb)&&(sys_we)
+						&&(sel_pic),
+					sys_data, pic_data,
+					main_int_vector[(6+EXTERNAL_INTERRUPTS-1):0], pic_interrupt);
+	end else begin
+		icontrol #(15)	pic(i_clk, cpu_reset,
+					(sys_cyc)&&(sys_stb)&&(sys_we)
+						&&(sel_pic),
+					sys_data, pic_data,
+					main_int_vector[14:0], pic_interrupt);
+	end endgenerate
+
+	wire	pic_stall;
+	assign	pic_stall = 1'b0;
+	reg	pic_ack;
+	always @(posedge i_clk)
+
+Diff Content:
+- 702 	if (EXTERNAL_INTERRUPTS < 9)
+- 703 	begin
+- 709 	end else begin
++ 703 	generate if (EXTERNAL_INTERRUPTS < 9)
++ 703 	begin : MAIN_PIC
++ 709 	end else begin : MAIN_PIC
+
+Clone Blocks:

@@ -1,0 +1,38 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs.v@65:89@HdlStmProcess
+    .data_in(input_axis_tdata),
+    .crc_state(crc_state),
+    .crc_next(crc_next)
+);
+
+always @(posedge clk) begin
+    if (rst) begin
+        crc_state <= 32'hFFFFFFFF;
+        fcs_reg <= 0;
+        fcs_valid_reg <= 0;
+    end else begin
+        fcs_valid_reg <= 0;
+        if (input_axis_tvalid) begin
+            if (input_axis_tlast) begin
+                crc_state <= 32'hFFFFFFFF;
+                fcs_reg <= ~crc_next;
+                fcs_valid_reg <= 1;
+            end else begin
+                crc_state <= crc_next;
+            end
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 73         fcs_reg <= 0;
+- 74         fcs_valid_reg <= 0;
+- 76         fcs_valid_reg <= 0;
+- 81                 fcs_valid_reg <= 1;
++ 74         fcs_reg <= 32'h00000000;
++ 74         fcs_valid_reg <= 1'b0;
++ 76         fcs_valid_reg <= 1'b0;
++ 81                 fcs_valid_reg <= 1'b1;
+
+Clone Blocks:

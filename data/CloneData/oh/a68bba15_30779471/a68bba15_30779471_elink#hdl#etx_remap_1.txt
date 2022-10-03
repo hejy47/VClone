@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/etx_remap.v@44:58@HdlStmAssign
+	.dstaddr_in	(addr_in[31:0]),
+	.srcaddr_in	(),
+	// Inputs
+	.packet_in	(emesh_packet_in[PW-1:0]));
+         
+   assign addr_remap[31:0] = {addr_in[29:18],//ID
+			      addr_in[17:16],//SPECIAL GROUP
+                             {(2){(|addr_in[17:16])}},//ZERO IF NOT SPECIAL
+			     addr_in[15:0]
+			     };
+   			     
+
+   assign addr_out[31:0] = (remap_en & ~remap_bypass) ? addr_remap[31:0] :
+                	                                addr_in[31:0];
+        		
+
+Diff Content:
+- 49    assign addr_remap[31:0] = {addr_in[29:18],//ID
+- 50 			      addr_in[17:16],//SPECIAL GROUP
++ 50    assign addr_remap[31:0] = {addr_in[29:18],         //ID
++ 50 			      addr_in[17:16],         //SPECIAL GROUP
+
+Clone Blocks:

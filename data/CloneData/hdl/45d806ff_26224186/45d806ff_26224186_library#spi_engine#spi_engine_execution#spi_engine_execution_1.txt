@@ -1,0 +1,21 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@174:187@HdlStmProcess
+    sdo_enabled <= cmd[8];
+    sdi_enabled <= cmd[9];
+  end
+end
+
+always @(posedge clk) begin
+  if (cmd_ready)
+   cmd_d1 <= cmd;
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    active <= 1'b0;
+  end else begin
+
+Diff Content:
+- 180   if (cmd_ready)
++ 180   if (cmd_ready & cmd_valid)
+
+Clone Blocks:

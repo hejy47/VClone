@@ -1,0 +1,97 @@
+Source Block: verilog-ethernet/rtl/eth_axis_rx.v@245:295@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        input_axis_tready_reg <= 0;
+        output_eth_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        busy_reg <= 0;
+        error_header_early_termination_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_axis_tready_reg <= input_axis_tready_next;
+
+        output_eth_hdr_valid_reg <= output_eth_hdr_valid_next;
+
+        error_header_early_termination_reg <= error_header_early_termination_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // datapath
+        if (store_eth_dest_mac_0) output_eth_dest_mac_reg[ 7: 0] <= input_axis_tdata;
+        if (store_eth_dest_mac_1) output_eth_dest_mac_reg[15: 8] <= input_axis_tdata;
+        if (store_eth_dest_mac_2) output_eth_dest_mac_reg[23:16] <= input_axis_tdata;
+        if (store_eth_dest_mac_3) output_eth_dest_mac_reg[31:24] <= input_axis_tdata;
+        if (store_eth_dest_mac_4) output_eth_dest_mac_reg[39:32] <= input_axis_tdata;
+        if (store_eth_dest_mac_5) output_eth_dest_mac_reg[47:40] <= input_axis_tdata;
+        if (store_eth_src_mac_0) output_eth_src_mac_reg[ 7: 0] <= input_axis_tdata;
+        if (store_eth_src_mac_1) output_eth_src_mac_reg[15: 8] <= input_axis_tdata;
+        if (store_eth_src_mac_2) output_eth_src_mac_reg[23:16] <= input_axis_tdata;
+        if (store_eth_src_mac_3) output_eth_src_mac_reg[31:24] <= input_axis_tdata;
+        if (store_eth_src_mac_4) output_eth_src_mac_reg[39:32] <= input_axis_tdata;
+        if (store_eth_src_mac_5) output_eth_src_mac_reg[47:40] <= input_axis_tdata;
+        if (store_eth_type_0) output_eth_type_reg[ 7: 0] <= input_axis_tdata;
+        if (store_eth_type_1) output_eth_type_reg[15: 8] <= input_axis_tdata;
+    end
+end
+
+// output datapath logic
+reg [7:0] output_eth_payload_tdata_reg = 0;
+reg       output_eth_payload_tvalid_reg = 0;
+reg       output_eth_payload_tlast_reg = 0;
+
+Diff Content:
+- 253         frame_ptr_reg <= 0;
+- 254         input_axis_tready_reg <= 0;
+- 255         output_eth_hdr_valid_reg <= 0;
+- 256         output_eth_dest_mac_reg <= 0;
+- 257         output_eth_src_mac_reg <= 0;
+- 258         output_eth_type_reg <= 0;
+- 259         busy_reg <= 0;
+- 260         error_header_early_termination_reg <= 0;
+- 275         if (store_eth_dest_mac_0) output_eth_dest_mac_reg[ 7: 0] <= input_axis_tdata;
+- 276         if (store_eth_dest_mac_1) output_eth_dest_mac_reg[15: 8] <= input_axis_tdata;
+- 277         if (store_eth_dest_mac_2) output_eth_dest_mac_reg[23:16] <= input_axis_tdata;
+- 278         if (store_eth_dest_mac_3) output_eth_dest_mac_reg[31:24] <= input_axis_tdata;
+- 279         if (store_eth_dest_mac_4) output_eth_dest_mac_reg[39:32] <= input_axis_tdata;
+- 280         if (store_eth_dest_mac_5) output_eth_dest_mac_reg[47:40] <= input_axis_tdata;
+- 281         if (store_eth_src_mac_0) output_eth_src_mac_reg[ 7: 0] <= input_axis_tdata;
+- 282         if (store_eth_src_mac_1) output_eth_src_mac_reg[15: 8] <= input_axis_tdata;
+- 283         if (store_eth_src_mac_2) output_eth_src_mac_reg[23:16] <= input_axis_tdata;
+- 284         if (store_eth_src_mac_3) output_eth_src_mac_reg[31:24] <= input_axis_tdata;
+- 285         if (store_eth_src_mac_4) output_eth_src_mac_reg[39:32] <= input_axis_tdata;
+- 286         if (store_eth_src_mac_5) output_eth_src_mac_reg[47:40] <= input_axis_tdata;
+- 287         if (store_eth_type_0) output_eth_type_reg[ 7: 0] <= input_axis_tdata;
+- 288         if (store_eth_type_1) output_eth_type_reg[15: 8] <= input_axis_tdata;
++ 260         frame_ptr_reg <= 8'd0;
++ 260         input_axis_tready_reg <= 1'b0;
++ 260         output_eth_hdr_valid_reg <= 1'b0;
++ 260         busy_reg <= 1'b0;
++ 260         error_header_early_termination_reg <= 1'b0;
++ 289     if (store_eth_dest_mac_0) output_eth_dest_mac_reg[ 7: 0] <= input_axis_tdata;
++ 289     if (store_eth_dest_mac_1) output_eth_dest_mac_reg[15: 8] <= input_axis_tdata;
++ 289     if (store_eth_dest_mac_2) output_eth_dest_mac_reg[23:16] <= input_axis_tdata;
++ 289     if (store_eth_dest_mac_3) output_eth_dest_mac_reg[31:24] <= input_axis_tdata;
++ 289     if (store_eth_dest_mac_4) output_eth_dest_mac_reg[39:32] <= input_axis_tdata;
++ 289     if (store_eth_dest_mac_5) output_eth_dest_mac_reg[47:40] <= input_axis_tdata;
++ 289     if (store_eth_src_mac_0) output_eth_src_mac_reg[ 7: 0] <= input_axis_tdata;
++ 289     if (store_eth_src_mac_1) output_eth_src_mac_reg[15: 8] <= input_axis_tdata;
++ 289     if (store_eth_src_mac_2) output_eth_src_mac_reg[23:16] <= input_axis_tdata;
++ 289     if (store_eth_src_mac_3) output_eth_src_mac_reg[31:24] <= input_axis_tdata;
++ 289     if (store_eth_src_mac_4) output_eth_src_mac_reg[39:32] <= input_axis_tdata;
++ 289     if (store_eth_src_mac_5) output_eth_src_mac_reg[47:40] <= input_axis_tdata;
++ 289     if (store_eth_type_0) output_eth_type_reg[ 7: 0] <= input_axis_tdata;
++ 289     if (store_eth_type_1) output_eth_type_reg[15: 8] <= input_axis_tdata;
+
+Clone Blocks:

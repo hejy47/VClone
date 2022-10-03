@@ -1,0 +1,37 @@
+Source Block: hdl/library/axi_dmac/src_fifo_inf.v@76:93@HdlStmProcess
+
+assign enabled = enable;
+
+assign valid = en & ready;
+
+always @(posedge clk)
+begin
+  if (enable) begin
+    overflow <= en & ~ready;
+  end else begin
+    overflow <= en;
+  end
+end
+
+data_mover # (
+  .ID_WIDTH(ID_WIDTH),
+  .DATA_WIDTH(DATA_WIDTH),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH)
+
+Diff Content:
+- 81 always @(posedge clk)
+- 82 begin
+- 83   if (enable) begin
+- 84     overflow <= en & ~ready;
+- 85   end else begin
+- 86     overflow <= en;
+- 88 end
++ 86   always @(posedge clk)
++ 86   begin
++ 86     if (enable) begin
++ 86       overflow <= en & ~ready;
++ 86     end else begin
++ 86       overflow <= en;
++ 86     end
+
+Clone Blocks:

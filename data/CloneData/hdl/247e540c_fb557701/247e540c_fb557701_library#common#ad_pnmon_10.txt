@@ -1,0 +1,50 @@
+Source Block: hdl/library/common/ad_pnmon.v@65:75@HdlIdDef
+
+  wire            adc_pn_match_d_s;
+  wire            adc_pn_match_z_s;
+  wire            adc_pn_match_s;
+  wire            adc_pn_update_s;
+  wire            adc_pn_err_s;
+
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+
+Diff Content:
+- 70   wire            adc_pn_err_s;
++ 70   wire                        adc_pn_match_d_s;
++ 70   wire                        adc_pn_match_z_s;
++ 70   wire                        adc_pn_match_s;
++ 70   wire                        adc_pn_update_s;
++ 70   wire                        adc_pn_err_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_pnmon.v@71:81
+
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+
+Clone Blocks 2:
+hdl/library/common/ad_pnmon.v@64:74
+  // internal signals
+
+  wire            adc_pn_match_d_s;
+  wire            adc_pn_match_z_s;
+  wire            adc_pn_match_s;
+  wire            adc_pn_update_s;
+  wire            adc_pn_err_s;
+
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+

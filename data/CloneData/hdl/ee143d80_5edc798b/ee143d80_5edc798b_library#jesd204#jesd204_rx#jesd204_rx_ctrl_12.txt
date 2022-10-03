@@ -1,0 +1,32 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@154:170@HdlStmProcess
+  STATE_SYNCHRONIZED: state_good <= 1'b1;
+  default: state_good <= 1'b0;
+  endcase
+end
+
+always @(posedge clk) begin
+  if (state_good == 1'b1) begin
+    good_counter <= good_counter + 1'b1;
+  end else begin
+    good_counter <= 'h00;
+  end
+end
+
+always @(posedge clk) begin
+  case (state)
+  STATE_CGS: en_align <= 1'b1;
+  default: en_align <= 1'b0;
+
+Diff Content:
+- 160   if (state_good == 1'b1) begin
+- 161     good_counter <= good_counter + 1'b1;
++ 161   if (reset) begin
++ 161     good_counter <= 'h00;
++ 161   end else if (state_good == 1'b1) begin
++ 161     if (good_cnt_limit_reached_s) begin
++ 161       good_counter <= 'h00;
++ 161     end else begin
++ 161       good_counter <= good_counter + 1'b1;
++ 161     end
+
+Clone Blocks:

@@ -1,0 +1,35 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2751:2761@HdlIdDef
+   wire [MDW-1:0] mesh_data_cvre;
+   wire [AW-1:0]  mesh_src_addr_cvre;
+   wire [AW-1:0]  mesh_dst_addr_cvre;
+   wire [1:0]     compare_addr;
+   
+   wire           request_cvre;
+   
+   /********************************************/
+   /*Splitting Vector Into Components          */
+   /********************************************/
+   assign mesh_write_cvre           = fifo_data_out_cvre[0];
+
+Diff Content:
+- 2756    wire           request_cvre;
++ 2756    assign wr_write_rlc = fifo_access_rlc & ~fifo_full_rlc;
++ 2756    always @ (posedge rxi_lclk)
++ 2756      if (wr_write_rlc)
++ 2756        fifo_mem[wr_addr_rlc[FAD-1:0]] <= rxi_assembled_tran_rlc[14*LW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2749:2759
+   wire [3:0]     mesh_ctrlmode_cvre;
+   wire [7:0]     mesh_reserved_cvre;
+   wire [MDW-1:0] mesh_data_cvre;
+   wire [AW-1:0]  mesh_src_addr_cvre;
+   wire [AW-1:0]  mesh_dst_addr_cvre;
+   wire [1:0]     compare_addr;
+   
+   wire           request_cvre;
+   
+   /********************************************/
+   /*Splitting Vector Into Components          */
+

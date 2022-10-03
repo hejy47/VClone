@@ -1,0 +1,23 @@
+Source Block: serv/rtl/riscv_timer.v@11:26@HdlStmProcess
+   reg [15:0] 	     mtime;
+   reg [15:0] 	     mtimecmp;
+
+   assign o_wb_dat = mtime;
+
+   always @(posedge i_clk) begin
+      if (i_wb_cyc & i_wb_we)
+	mtimecmp <= i_wb_dat;
+      mtime <= mtime + 16'd1;
+      o_irq <= (mtime >= mtimecmp);
+      if (i_rst) begin
+	 mtime <= 16'd0;
+	 mtimecmp <= 16'd0;
+      end
+   end
+endmodule
+
+Diff Content:
+- 18 	mtimecmp <= i_wb_dat;
++ 18 	mtimecmp <= i_wb_dat[15:0];
+
+Clone Blocks:

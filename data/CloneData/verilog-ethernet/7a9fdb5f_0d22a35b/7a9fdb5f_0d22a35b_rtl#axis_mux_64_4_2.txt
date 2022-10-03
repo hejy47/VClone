@@ -1,0 +1,104 @@
+Source Block: verilog-ethernet/rtl/axis_mux_64_4.v@124:169@HdlStmProcess
+reg [KEEP_WIDTH-1:0] current_input_tkeep;
+reg current_input_tvalid;
+reg current_input_tready;
+reg current_input_tlast;
+reg current_input_tuser;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_input_tdata = input_0_axis_tdata;
+            current_input_tkeep = input_0_axis_tkeep;
+            current_input_tvalid = input_0_axis_tvalid;
+            current_input_tready = input_0_axis_tready;
+            current_input_tlast = input_0_axis_tlast;
+            current_input_tuser = input_0_axis_tuser;
+        end
+        2'd1: begin
+            current_input_tdata = input_1_axis_tdata;
+            current_input_tkeep = input_1_axis_tkeep;
+            current_input_tvalid = input_1_axis_tvalid;
+            current_input_tready = input_1_axis_tready;
+            current_input_tlast = input_1_axis_tlast;
+            current_input_tuser = input_1_axis_tuser;
+        end
+        2'd2: begin
+            current_input_tdata = input_2_axis_tdata;
+            current_input_tkeep = input_2_axis_tkeep;
+            current_input_tvalid = input_2_axis_tvalid;
+            current_input_tready = input_2_axis_tready;
+            current_input_tlast = input_2_axis_tlast;
+            current_input_tuser = input_2_axis_tuser;
+        end
+        2'd3: begin
+            current_input_tdata = input_3_axis_tdata;
+            current_input_tkeep = input_3_axis_tkeep;
+            current_input_tvalid = input_3_axis_tvalid;
+            current_input_tready = input_3_axis_tready;
+            current_input_tlast = input_3_axis_tlast;
+            current_input_tuser = input_3_axis_tuser;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+
+Diff Content:
++ 162         default: begin
++ 162             current_input_tdata = {DATA_WIDTH{1'b0}};
++ 162             current_input_tkeep = {KEEP_WIDTH{1'b0}};
++ 162             current_input_tvalid = 1'b0;
++ 162             current_input_tready = 1'b0;
++ 162             current_input_tlast = 1'b0;
++ 162             current_input_tuser = 1'b0;
++ 162         end
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_mux_4.v@116:157
+reg [DATA_WIDTH-1:0] current_input_tdata;
+reg current_input_tvalid;
+reg current_input_tready;
+reg current_input_tlast;
+reg current_input_tuser;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_input_tdata = input_0_axis_tdata;
+            current_input_tvalid = input_0_axis_tvalid;
+            current_input_tready = input_0_axis_tready;
+            current_input_tlast = input_0_axis_tlast;
+            current_input_tuser = input_0_axis_tuser;
+        end
+        2'd1: begin
+            current_input_tdata = input_1_axis_tdata;
+            current_input_tvalid = input_1_axis_tvalid;
+            current_input_tready = input_1_axis_tready;
+            current_input_tlast = input_1_axis_tlast;
+            current_input_tuser = input_1_axis_tuser;
+        end
+        2'd2: begin
+            current_input_tdata = input_2_axis_tdata;
+            current_input_tvalid = input_2_axis_tvalid;
+            current_input_tready = input_2_axis_tready;
+            current_input_tlast = input_2_axis_tlast;
+            current_input_tuser = input_2_axis_tuser;
+        end
+        2'd3: begin
+            current_input_tdata = input_3_axis_tdata;
+            current_input_tvalid = input_3_axis_tvalid;
+            current_input_tready = input_3_axis_tready;
+            current_input_tlast = input_3_axis_tlast;
+            current_input_tuser = input_3_axis_tuser;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+

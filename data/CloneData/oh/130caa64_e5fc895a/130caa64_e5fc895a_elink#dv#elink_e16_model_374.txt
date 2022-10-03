@@ -1,0 +1,39 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3337:3347@HdlStmAssign
+				 c1_txo_rotate_dis,
+				 c0_txo_rotate_dis};
+
+   assign en_rotate = ~(|(grants_reg[3:0] & txo_rotate_dis[3:0]));
+
+   assign en_arbitration = ~txo_wait_tlc | (|(txo_rotate_dis[3:0]));
+
+   assign requests_unmasked[3:0] = {c3_txo_launch_req_tlc,
+                                    c2_txo_launch_req_tlc,
+                                    c1_txo_launch_req_tlc,
+                                    c0_txo_launch_req_tlc};
+
+Diff Content:
+- 3342    assign en_arbitration = ~txo_wait_tlc | (|(txo_rotate_dis[3:0]));
++ 3342    output            c0_rdmesh_frame_out; // transaction frame
++ 3342    output [2*LW-1:0] c0_rdmesh_tran_out;  // serialized transaction
++ 3342    output            c1_rdmesh_frame_out; // transaction frame
++ 3342    output [2*LW-1:0] c1_rdmesh_tran_out;  // serialized transaction
++ 3342    output            c2_rdmesh_frame_out; // transaction frame
++ 3342    output [2*LW-1:0] c2_rdmesh_tran_out;  // serialized transaction
++ 3342    output            c3_rdmesh_frame_out; // transaction frame
++ 3342    output [2*LW-1:0] c3_rdmesh_tran_out;  // serialized transaction
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3335:3345
+   assign txo_rotate_dis[3:0] = {c3_txo_rotate_dis,
+				 c2_txo_rotate_dis,
+				 c1_txo_rotate_dis,
+				 c0_txo_rotate_dis};
+
+   assign en_rotate = ~(|(grants_reg[3:0] & txo_rotate_dis[3:0]));
+
+   assign en_arbitration = ~txo_wait_tlc | (|(txo_rotate_dis[3:0]));
+
+   assign requests_unmasked[3:0] = {c3_txo_launch_req_tlc,
+                                    c2_txo_launch_req_tlc,
+

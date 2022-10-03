@@ -1,0 +1,27 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@169:187@HdlStmProcess
+  STATE_CGS: en_align <= 1'b1;
+  default: en_align <= 1'b0;
+  endcase
+end
+
+always @(*) begin
+  case (state)
+  STATE_RESET: next_state <= STATE_WAIT_FOR_PHY;
+  STATE_WAIT_FOR_PHY: next_state <= STATE_CGS;
+  STATE_CGS: next_state <= STATE_DEGLITCH;
+  STATE_DEGLITCH: next_state <= STATE_SYNCHRONIZED;
+  default: next_state <= state_good ? state : STATE_RESET;
+  endcase
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    state <= STATE_RESET;
+  end else begin
+
+Diff Content:
+- 178   STATE_CGS: next_state <= STATE_DEGLITCH;
+- 179   STATE_DEGLITCH: next_state <= STATE_SYNCHRONIZED;
++ 179   STATE_CGS: next_state <= STATE_SYNCHRONIZED;
+
+Clone Blocks:

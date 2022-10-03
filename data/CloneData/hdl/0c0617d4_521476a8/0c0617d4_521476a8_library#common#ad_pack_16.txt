@@ -1,0 +1,28 @@
+Source Block: hdl/library/common/ad_pack.v@114:128@HdlStmProcess
+  end else if (ivalid_d) begin
+    in_use <= in_use_nx &(~out_mask);
+  end
+end
+
+always @(posedge clk) begin
+  if (ivalid_d) begin
+    idata_dd <= idata_dd_nx;
+  end
+end
+
+integer i;
+always @(*) begin
+  out_mask = 'b0;
+  idata_packed = 'bx;
+
+Diff Content:
+- 119 always @(posedge clk) begin
+- 120   if (ivalid_d) begin
+- 121     idata_dd <= idata_dd_nx;
+- 123 end
++ 121   always @(posedge clk) begin
++ 121     if (ivalid_d) begin
++ 121       idata_dd <= idata_dd_nx;
++ 121     end
+
+Clone Blocks:

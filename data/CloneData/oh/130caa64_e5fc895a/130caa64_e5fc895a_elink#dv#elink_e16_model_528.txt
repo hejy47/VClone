@@ -1,0 +1,24 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4278:4288@HdlStmAssign
+   //# When the acknowledge is received on the last cycle of the transaction
+   //# and if the next transaction is not a burst transaction then we should  
+   //# create an "artificial gap" in the frame signal.
+   //# If burst request was denied we should de-assert frame signal 
+   
+   assign make_gap = tran_read & ~burst_tran;
+
+   always @ (posedge txo_lclk or posedge reset)
+     if(reset)
+       begin
+	  txo_launch_ack_del1 <= 1'b0;
+
+Diff Content:
+- 4283    assign make_gap = tran_read & ~burst_tran;
++ 4283    wire [FAD-1:0] wr_addr;	
++ 4283    wire 	  wr_write;
++ 4283    wire 	  tran_written;
++ 4283    wire [FAD:0]   rd_gray_pointer;	
++ 4283    wire 	  wr_fifo_full_next;
++ 4283    wire [FAD:0]   wr_gray_next;
++ 4283    wire [FAD:0]   wr_binary_next;
+
+Clone Blocks:

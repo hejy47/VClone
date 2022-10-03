@@ -1,0 +1,38 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@137:151@HdlStmProcess
+
+  assign dma_wren = dma_valid & dma_xfer_req;
+
+  // sync lastaddr to dac clock domain
+
+  always @(posedge dac_clk) begin
+    dma_lastaddr_d <= dma_lastaddr;
+    dma_lastaddr_2d <= dma_lastaddr_d;
+    dac_xfer_out_m <= {dac_xfer_out_m[1:0], dma_xfer_out};
+  end
+
+  assign dac_xfer_out = dac_xfer_out_m[2];
+
+  // generate dac read address
+
+
+Diff Content:
+- 143     dma_lastaddr_d <= dma_lastaddr;
+- 144     dma_lastaddr_2d <= dma_lastaddr_d;
++ 144     dac_lastaddr_d <= dma_lastaddr;
++ 144     dac_lastaddr_2d <= dac_lastaddr_d;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_dacfifo/util_dacfifo.v@143:153
+    dma_lastaddr_d <= dma_lastaddr;
+    dma_lastaddr_2d <= dma_lastaddr_d;
+    dac_xfer_out_m <= {dac_xfer_out_m[1:0], dma_xfer_out};
+  end
+
+  assign dac_xfer_out = dac_xfer_out_m[2];
+
+  // generate dac read address
+
+  always @(posedge dac_clk) begin
+    if(dac_valid == 1'b1) begin
+

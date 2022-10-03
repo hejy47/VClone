@@ -1,0 +1,46 @@
+Source Block: oh/common/hdl/dsync.v@15:25@HdlIdDef
+   
+ 
+`ifdef TARGET_SIM
+   reg [PS-1:0]    sync_pipe[DW-1:0];
+`else   
+   (* ASYNC_REG = "TRUE"  *) (* DONT_TOUCH =  "TRUE" *) reg [PS-1:0]    sync_pipe[DW-1:0];   
+`endif
+   
+   
+   genvar 	i;
+   integer 	j;
+
+Diff Content:
+- 20    (* ASYNC_REG = "TRUE"  *) (* DONT_TOUCH =  "TRUE" *) reg [PS-1:0]    sync_pipe[DW-1:0];   
++ 20    (* ASYNC_REG = "TRUE"  *) (* DONT_TOUCH =  "TRUE" *) reg [DW-1:0]    sync_pipe[PS-1:0];   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/rsync.v@16:26
+   
+   //TOOD: Should only be one target
+`ifdef TARGET_SIM
+   reg [PS-1:0]    sync_pipe[DW-1:0];
+`else   
+   (* ASYNC_REG = "TRUE"  *) (* DONT_TOUCH =  "TRUE" *) reg [PS-1:0]    sync_pipe[DW-1:0];   
+`endif
+ 
+   genvar 	i;
+   integer 	j;
+   
+
+Clone Blocks 2:
+oh/common/hdl/rsync.v@19:29
+   reg [PS-1:0]    sync_pipe[DW-1:0];
+`else   
+   (* ASYNC_REG = "TRUE"  *) (* DONT_TOUCH =  "TRUE" *) reg [PS-1:0]    sync_pipe[DW-1:0];   
+`endif
+ 
+   genvar 	i;
+   integer 	j;
+   
+   generate    
+      for(i=0;i<DW;i=i+1)
+	begin
+

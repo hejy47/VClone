@@ -1,0 +1,59 @@
+Source Block: hdl/projects/fmcomms2/zed/system_top.v@214:224@HdlIdDef
+  wire            iic_mux_sda_t_s;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+
+Diff Content:
+- 219   wire            enable_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms2/zed/system_top.v@211:221
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+
+Clone Blocks 2:
+hdl/projects/fmcomms2/zed/system_top.v@215:225
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks 3:
+hdl/projects/fmcomms2/zed/system_top.v@212:222
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+

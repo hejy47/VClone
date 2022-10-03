@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/etx_io.v@62:72@HdlStmAssign
+   wire 	 txgpio;
+   integer 	 n;
+   //#############################
+   //# Serializer instantiations
+   //#############################  
+   assign         txenb = txenb_sync[0];   
+   assign         txgpio = txgpio_sync[0];
+
+   // Sync these control bits into our domain
+   always @ (posedge tx_lclk_div4) 
+     begin
+
+Diff Content:
+- 67    assign         txenb = txenb_sync[0];   
+
+Clone Blocks:

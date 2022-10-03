@@ -1,0 +1,438 @@
+Source Block: verilog-ethernet/rtl/axis_fifo_64.v@121:150@HdlStmProcess
+        mem[wr_addr_reg[ADDR_WIDTH-1:0]] <= mem_write_data;
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+    rd_ptr_next = rd_ptr_reg;
+
+    mem_read_data_valid_next = mem_read_data_valid_reg;
+
+    if (output_axis_tready | ~output_axis_tvalid) begin
+        // output data not valid OR currently being transferred
+        if (~empty) begin
+            // not empty, perform read
+            read = 1'b1;
+            mem_read_data_valid_next = 1'b1;
+            rd_ptr_next = rd_ptr_reg + 1;
+        end else begin
+            // empty, invalidate
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+
+Diff Content:
+- 133     if (output_axis_tready | ~output_axis_tvalid) begin
++ 133     if (store_output | ~mem_read_data_valid_reg) begin
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@204:228
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        mem_read_data_valid_reg <= mem_read_data_valid_next;
+    end
+
+    rd_addr_reg <= rd_ptr_next;
+
+    if (read) begin
+        mem_read_data_reg <= mem[rd_addr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+// Output register
+always @* begin
+    store_output = 1'b0;
+
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_async_fifo_64.v@214:240
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        rd_ptr_gray_reg <= rd_ptr_gray_next;
+        mem_read_data_valid_reg <= mem_read_data_valid_next;
+    end
+
+    rd_addr_reg <= rd_ptr_next;
+
+    if (read) begin
+        mem_read_data_reg <= mem[rd_addr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+// Output register
+always @* begin
+    store_output = 1'b0;
+
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_async_fifo.v@211:237
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        rd_ptr_gray_reg <= rd_ptr_gray_next;
+        mem_read_data_valid_reg <= mem_read_data_valid_next;
+    end
+
+    rd_addr_reg <= rd_ptr_next;
+
+    if (read) begin
+        mem_read_data_reg <= mem[rd_addr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+// Output register
+always @* begin
+    store_output = 1'b0;
+
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_frame_fifo.v@180:209
+        mem[wr_addr_reg[ADDR_WIDTH-1:0]] <= mem_write_data;
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+    rd_ptr_next = rd_ptr_reg;
+
+    mem_read_data_valid_next = mem_read_data_valid_reg;
+
+    if (output_axis_tready | ~output_axis_tvalid) begin
+        // output data not valid OR currently being transferred
+        if (~empty) begin
+            // not empty, perform read
+            read = 1'b1;
+            mem_read_data_valid_next = 1'b1;
+            rd_ptr_next = rd_ptr_reg + 1;
+        end else begin
+            // empty, invalidate
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_async_frame_fifo.v@327:353
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        rd_ptr_gray_reg <= rd_ptr_gray_next;
+        mem_read_data_valid_reg <= mem_read_data_valid_next;
+    end
+
+    rd_addr_reg <= rd_ptr_next;
+
+    if (read) begin
+        mem_read_data_reg <= mem[rd_addr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+// Output register
+always @* begin
+    store_output = 1'b0;
+
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_fifo.v@139:163
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        mem_read_data_valid_reg <= mem_read_data_valid_next;
+    end
+
+    rd_addr_reg <= rd_ptr_next;
+
+    if (read) begin
+        mem_read_data_reg <= mem[rd_addr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+// Output register
+always @* begin
+    store_output = 1'b0;
+
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_fifo.v@118:147
+        mem[wr_addr_reg[ADDR_WIDTH-1:0]] <= mem_write_data;
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+    rd_ptr_next = rd_ptr_reg;
+
+    mem_read_data_valid_next = mem_read_data_valid_reg;
+
+    if (output_axis_tready | ~output_axis_tvalid) begin
+        // output data not valid OR currently being transferred
+        if (~empty) begin
+            // not empty, perform read
+            read = 1'b1;
+            mem_read_data_valid_next = 1'b1;
+            rd_ptr_next = rd_ptr_reg + 1;
+        end else begin
+            // empty, invalidate
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@183:212
+        mem[wr_addr_reg[ADDR_WIDTH-1:0]] <= mem_write_data;
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+    rd_ptr_next = rd_ptr_reg;
+
+    mem_read_data_valid_next = mem_read_data_valid_reg;
+
+    if (output_axis_tready | ~output_axis_tvalid) begin
+        // output data not valid OR currently being transferred
+        if (~empty) begin
+            // not empty, perform read
+            read = 1'b1;
+            mem_read_data_valid_next = 1'b1;
+            rd_ptr_next = rd_ptr_reg + 1;
+        end else begin
+            // empty, invalidate
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/axis_fifo_64.v@142:166
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        mem_read_data_valid_reg <= mem_read_data_valid_next;
+    end
+
+    rd_addr_reg <= rd_ptr_next;
+
+    if (read) begin
+        mem_read_data_reg <= mem[rd_addr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+// Output register
+always @* begin
+    store_output = 1'b0;
+
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_async_fifo_64.v@191:222
+        wr_ptr_gray_sync2_reg <= wr_ptr_gray_sync1_reg;
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+    rd_ptr_next = rd_ptr_reg;
+    rd_ptr_gray_next = rd_ptr_gray_reg;
+
+    mem_read_data_valid_next = mem_read_data_valid_reg;
+
+    if (output_axis_tready | ~output_axis_tvalid) begin
+        // output data not valid OR currently being transferred
+        if (~empty) begin
+            // not empty, perform read
+            read = 1'b1;
+            mem_read_data_valid_next = 1'b1;
+            rd_ptr_next = rd_ptr_reg + 1;
+            rd_ptr_gray_next = rd_ptr_next ^ (rd_ptr_next >> 1);
+        end else begin
+            // empty, invalidate
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_async_frame_fifo_64.v@330:356
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        rd_ptr_gray_reg <= rd_ptr_gray_next;
+        mem_read_data_valid_reg <= mem_read_data_valid_next;
+    end
+
+    rd_addr_reg <= rd_ptr_next;
+
+    if (read) begin
+        mem_read_data_reg <= mem[rd_addr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+// Output register
+always @* begin
+    store_output = 1'b0;
+
+
+Clone Blocks 12:
+verilog-ethernet/rtl/axis_frame_fifo.v@201:225
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        mem_read_data_valid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        mem_read_data_valid_reg <= mem_read_data_valid_next;
+    end
+
+    rd_addr_reg <= rd_ptr_next;
+
+    if (read) begin
+        mem_read_data_reg <= mem[rd_addr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+// Output register
+always @* begin
+    store_output = 1'b0;
+
+
+Clone Blocks 13:
+verilog-ethernet/rtl/axis_async_fifo.v@188:219
+        wr_ptr_gray_sync2_reg <= wr_ptr_gray_sync1_reg;
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+    rd_ptr_next = rd_ptr_reg;
+    rd_ptr_gray_next = rd_ptr_gray_reg;
+
+    mem_read_data_valid_next = mem_read_data_valid_reg;
+
+    if (output_axis_tready | ~output_axis_tvalid) begin
+        // output data not valid OR currently being transferred
+        if (~empty) begin
+            // not empty, perform read
+            read = 1'b1;
+            mem_read_data_valid_next = 1'b1;
+            rd_ptr_next = rd_ptr_reg + 1;
+            rd_ptr_gray_next = rd_ptr_next ^ (rd_ptr_next >> 1);
+        end else begin
+            // empty, invalidate
+            mem_read_data_valid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+

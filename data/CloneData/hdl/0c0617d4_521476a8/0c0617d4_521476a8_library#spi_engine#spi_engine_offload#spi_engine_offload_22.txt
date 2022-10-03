@@ -1,0 +1,48 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@123:145@HdlStmProcess
+reg        ctrl_sync_id_load = 1'b0;
+reg [ 7:0] spi_sync_id_counter = 8'b0;
+
+wire [ 7:0] spi_sync_id_init_s;
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1) begin
+    ctrl_sync_id_init <= 8'b0;
+    ctrl_sync_id_load <= 1'b0;
+  end else begin
+    if (ctrl_cmd_wr_en && (ctrl_cmd_wr_data[15:8] == 8'h30)) begin
+      ctrl_sync_id_init <= ctrl_cmd_wr_data;
+      ctrl_sync_id_load <= 1'b1;
+    end else begin
+      ctrl_sync_id_load <= 1'b0;
+    end
+  end
+end
+
+wire spi_sync_id_load_s;
+
+sync_event # (
+    .NUM_OF_EVENTS(1),
+
+Diff Content:
+- 128 always @(posedge ctrl_clk) begin
+- 129   if (ctrl_mem_reset == 1'b1) begin
+- 130     ctrl_sync_id_init <= 8'b0;
+- 131     ctrl_sync_id_load <= 1'b0;
+- 132   end else begin
+- 133     if (ctrl_cmd_wr_en && (ctrl_cmd_wr_data[15:8] == 8'h30)) begin
+- 134       ctrl_sync_id_init <= ctrl_cmd_wr_data;
+- 135       ctrl_sync_id_load <= 1'b1;
+- 136     end else begin
+- 140 end
++ 136   always @(posedge ctrl_clk) begin
++ 136     if (ctrl_mem_reset == 1'b1) begin
++ 136       ctrl_sync_id_init <= 8'b0;
++ 137     end else begin
++ 137       if (ctrl_cmd_wr_en && (ctrl_cmd_wr_data[15:8] == 8'h30)) begin
++ 137         ctrl_sync_id_init <= ctrl_cmd_wr_data;
++ 137         ctrl_sync_id_load <= 1'b1;
++ 137       end else begin
++ 137         ctrl_sync_id_load <= 1'b0;
++ 137       end
+
+Clone Blocks:

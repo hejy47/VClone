@@ -1,0 +1,157 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@275:299@HdlStmProcess
+                end
+        end
+end
+
+// the software reset should reset all the registers
+always @(posedge clk) begin
+  if (up_sw_resetn == 1'b0) begin
+    up_irq_mask <= 'h00;
+    offload0_enable <= 1'b0;
+    offload0_mem_reset <= 1'b0;
+  end else begin
+    if (up_wreq_s) begin
+      case (up_waddr_s)
+        8'h20: up_irq_mask <= up_wdata_s;
+        8'h40: offload0_enable <= up_wdata_s[0];
+        8'h42: offload0_mem_reset <= up_wdata_s[0];
+      endcase
+    end
+  end
+end
+
+always @(posedge clk) begin
+        if (rstn == 1'b0) begin
+                up_rack_ff <= 'd0;
+        end else begin
+
+Diff Content:
+- 280 always @(posedge clk) begin
+- 281   if (up_sw_resetn == 1'b0) begin
+- 282     up_irq_mask <= 'h00;
+- 283     offload0_enable <= 1'b0;
+- 284     offload0_mem_reset <= 1'b0;
+- 285   end else begin
+- 286     if (up_wreq_s) begin
+- 287       case (up_waddr_s)
+- 288         8'h20: up_irq_mask <= up_wdata_s;
+- 289         8'h40: offload0_enable <= up_wdata_s[0];
+- 290         8'h42: offload0_mem_reset <= up_wdata_s[0];
+- 291       endcase
+- 294 end
++ 291   localparam PCORE_VERSION = 'h010071;
++ 291   localparam S_AXI = 0;
++ 291   localparam UP_FIFO = 1;
++ 291   wire clk;
++ 291   wire rstn;
++ 291   wire [CMD_FIFO_ADDRESS_WIDTH:0] cmd_fifo_room;
++ 291   wire cmd_fifo_almost_empty;
++ 291   wire [15:0] cmd_fifo_in_data;
++ 291   wire cmd_fifo_in_ready;
++ 291   wire cmd_fifo_in_valid;
++ 291   wire [SDO_FIFO_ADDRESS_WIDTH:0] sdo_fifo_room;
++ 291   wire sdo_fifo_almost_empty;
++ 291   wire [(DATA_WIDTH-1):0] sdo_fifo_in_data;
++ 291   wire sdo_fifo_in_ready;
++ 291   wire sdo_fifo_in_valid;
++ 291   wire [SDI_FIFO_ADDRESS_WIDTH:0] sdi_fifo_level;
++ 291   wire sdi_fifo_almost_full;
++ 291   wire [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_fifo_out_data;
++ 291   wire sdi_fifo_out_ready;
++ 291   wire sdi_fifo_out_valid;
++ 291   reg up_sw_reset = 1'b1;
++ 291   wire up_sw_resetn = ~up_sw_reset;
++ 291   reg  [31:0]                     up_rdata_ff = 'd0;
++ 291   reg                             up_wack_ff = 1'b0;
++ 291   reg                             up_rack_ff = 1'b0;
++ 291   wire                            up_wreq_s;
++ 291   wire                            up_rreq_s;
++ 291   wire [31:0]                     up_wdata_s;
++ 291   wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
++ 291   wire [(UP_ADDRESS_WIDTH-1):0]   up_raddr_s;
++ 291   reg [31:0] up_scratch = 'h00;
++ 291   reg  [7:0] sync_id = 'h00;
++ 291   reg        sync_id_pending = 1'b0;
++ 291   generate if (MM_IF_TYPE == S_AXI) begin
++ 291     assign clk = s_axi_aclk;
++ 291     assign rstn = s_axi_aresetn;
++ 291     up_axi #(
++ 291       .ADDRESS_WIDTH (UP_ADDRESS_WIDTH)
++ 291     ) i_up_axi (
++ 291       .up_rstn(rstn),
++ 291       .up_clk(clk),
++ 291       .up_axi_awvalid(s_axi_awvalid),
++ 291       .up_axi_awaddr(s_axi_awaddr),
++ 291       .up_axi_awready(s_axi_awready),
++ 291       .up_axi_wvalid(s_axi_wvalid),
++ 291       .up_axi_wdata(s_axi_wdata),
++ 291       .up_axi_wstrb(s_axi_wstrb),
++ 291       .up_axi_wready(s_axi_wready),
++ 291       .up_axi_bvalid(s_axi_bvalid),
++ 291       .up_axi_bresp(s_axi_bresp),
++ 291       .up_axi_bready(s_axi_bready),
++ 291       .up_axi_arvalid(s_axi_arvalid),
++ 291       .up_axi_araddr(s_axi_araddr),
++ 291       .up_axi_arready(s_axi_arready),
++ 291       .up_axi_rvalid(s_axi_rvalid),
++ 291       .up_axi_rresp(s_axi_rresp),
++ 291       .up_axi_rdata(s_axi_rdata),
++ 291       .up_axi_rready(s_axi_rready),
++ 291       .up_wreq(up_wreq_s),
++ 291       .up_waddr(up_waddr_s),
++ 291       .up_wdata(up_wdata_s),
++ 291       .up_wack(up_wack_ff),
++ 291       .up_rreq(up_rreq_s),
++ 291       .up_raddr(up_raddr_s),
++ 291       .up_rdata(up_rdata_ff),
++ 291       .up_rack(up_rack_ff)
++ 291     );
++ 291     assign up_rdata = 32'b0;
++ 291     assign up_rack = 1'b0;
++ 291     assign up_wack = 1'b0;
++ 291   end
++ 291   endgenerate
++ 291   generate if (MM_IF_TYPE == UP_FIFO) begin
++ 291     assign clk = up_clk;
++ 291     assign rstn = up_rstn;
++ 291     assign up_wreq_s = up_wreq;
++ 291     assign up_waddr_s = up_waddr;
++ 291     assign up_wdata_s = up_wdata;
++ 291     assign up_wack = up_wack_ff;
++ 291     assign up_rreq_s = up_rreq;
++ 291     assign up_raddr_s = up_raddr;
++ 291     assign up_rdata = up_rdata_ff;
++ 291     assign up_rack = up_rack_ff;
++ 291   end
++ 291   endgenerate
++ 291   reg [3:0] up_irq_mask = 'h0;
++ 291   wire [3:0] up_irq_source;
++ 291   wire [3:0] up_irq_pending;
++ 291   assign up_irq_source = {
++ 291     sync_id_pending,
++ 291     sdi_fifo_almost_full,
++ 291     sdo_fifo_almost_empty,
++ 291     cmd_fifo_almost_empty
++ 291   };
++ 291   assign up_irq_pending = up_irq_mask & up_irq_source;
++ 291   always @(posedge clk) begin
++ 291     if (rstn == 1'b0)
++ 291       irq <= 1'b0;
++ 291     else
++ 291       irq <= |up_irq_pending;
++ 291     end
++ 291   always @(posedge clk) begin
++ 291     if (rstn == 1'b0) begin
++ 291       up_wack_ff <= 1'b0;
++ 291       up_scratch <= 'h00;
++ 291       up_sw_reset <= 1'b1;
++ 291     end else begin
++ 291       up_wack_ff <= up_wreq_s;
++ 291       if (up_wreq_s) begin
++ 291         case (up_waddr_s)
++ 291           8'h02: up_scratch <= up_wdata_s;
++ 291           8'h10: up_sw_reset <= up_wdata_s;
++ 291         endcase
++ 291       end
+
+Clone Blocks:

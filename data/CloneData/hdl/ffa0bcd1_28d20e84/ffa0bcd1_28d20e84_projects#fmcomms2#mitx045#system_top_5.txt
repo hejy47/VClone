@@ -1,0 +1,87 @@
+Source Block: hdl/projects/fmcomms2/mitx045/system_top.v@185:195@HdlIdDef
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // assignments
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Diff Content:
+- 190   wire            txnrx_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms2/zed/system_top.v@219:229
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(51)) i_iobuf_gpio (
+
+Clone Blocks 2:
+hdl/projects/fmcomms2/mitx045/system_top.v@189:199
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // assignments
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+
+Clone Blocks 3:
+hdl/projects/fmcomms2/zed/system_top.v@215:225
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks 4:
+hdl/projects/fmcomms2/mitx045/system_top.v@184:194
+  wire    [63:0]  gpio_t;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // assignments
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+
+Clone Blocks 5:
+hdl/projects/fmcomms2/zed/system_top.v@214:224
+  wire            iic_mux_sda_t_s;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+

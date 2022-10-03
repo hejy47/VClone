@@ -1,0 +1,84 @@
+Source Block: hdl/library/axi_pwm_gen/axi_pwm_gen_regmap.v@97:173@HdlStmProcess
+  reg     [31:0]  up_pwm_offset_2 = PULSE_2_OFFSET;
+  reg     [31:0]  up_pwm_offset_3 = PULSE_3_OFFSET;
+  reg             up_load_config = 1'b0;
+  reg             up_reset;
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_pwm_width_0 <= PULSE_0_WIDTH;
+      up_pwm_width_1 <= PULSE_1_WIDTH;
+      up_pwm_width_2 <= PULSE_2_WIDTH;
+      up_pwm_width_3 <= PULSE_3_WIDTH;
+      up_pwm_period_0 <= PULSE_0_PERIOD;
+      up_pwm_period_1 <= PULSE_1_PERIOD;
+      up_pwm_period_2 <= PULSE_2_PERIOD;
+      up_pwm_period_3 <= PULSE_3_PERIOD;
+      up_pwm_offset_0 <= 32'd0;
+      up_pwm_offset_1 <= PULSE_1_OFFSET;
+      up_pwm_offset_2 <= PULSE_2_OFFSET;
+      up_pwm_offset_3 <= PULSE_3_OFFSET;
+      up_load_config <= 1'b0;
+      up_reset <= 1'b1;
+    end else begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h2)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h4)) begin
+        up_reset <= up_wdata[0];
+        up_load_config <= up_wdata[1];
+      end else begin
+        up_load_config <= 1'b0;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h10)) begin
+        up_pwm_period_0 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h11)) begin
+        up_pwm_width_0 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h12)) begin
+        up_pwm_offset_0 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h13)) begin
+        up_pwm_period_1 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h14)) begin
+        up_pwm_width_1 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h15)) begin
+        up_pwm_offset_1 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h16)) begin
+        up_pwm_period_2 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h17)) begin
+        up_pwm_width_2 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h18)) begin
+        up_pwm_offset_2 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h19)) begin
+        up_pwm_period_3 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h1a)) begin
+        up_pwm_width_3 <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h1b)) begin
+        up_pwm_offset_3 <= up_wdata;
+      end
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+
+Diff Content:
+- 114       up_pwm_offset_0 <= 32'd0;
++ 114       up_pwm_offset_0 <= PULSE_0_OFFSET;
+
+Clone Blocks:

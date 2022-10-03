@@ -1,0 +1,31 @@
+Source Block: hdl/library/util_sigma_delta_spi/util_sigma_delta_spi.v@70:80@HdlStmAssign
+ * the SPI transfer and the point where the converter starts to indicate the
+ * data ready signal. IDLE_TIMEOUT allows to specify the amount of clock cycles
+ * the bus needs to be idle before the data ready signal is detected.
+ */
+
+assign m_sclk = s_sclk;
+assign m_sdo = s_sdo;
+assign m_sdo_t = s_sdo_t;
+assign s_sdi = m_sdi;
+assign m_cs = s_cs;
+
+
+Diff Content:
+- 75 assign m_sclk = s_sclk;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_sigma_delta_spi/util_sigma_delta_spi.v@71:81
+ * data ready signal. IDLE_TIMEOUT allows to specify the amount of clock cycles
+ * the bus needs to be idle before the data ready signal is detected.
+ */
+
+assign m_sclk = s_sclk;
+assign m_sdo = s_sdo;
+assign m_sdo_t = s_sdo_t;
+assign s_sdi = m_sdi;
+assign m_cs = s_cs;
+
+reg [$clog2(IDLE_TIMEOUT)-1:0] counter = IDLE_TIMEOUT;
+

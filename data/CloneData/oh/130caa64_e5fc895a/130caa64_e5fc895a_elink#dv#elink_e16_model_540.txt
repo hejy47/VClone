@@ -1,0 +1,31 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4359:4369@HdlStmAssign
+	  ref_access          <= next_access;
+       end
+
+   //# transaction type (double write should be known in advance for burst determination)
+//   assign single_write = ref_access  & ref_write  & ~(&(ref_datamode[1:0]));
+   assign single_write = 1'b0; // No special treatment for single write
+   assign double_write = next_access & next_write &  (&(next_datamode[1:0]));
+
+   //# compare address
+   assign ref_dstaddr_inc8[AW-1:0] = ref_dstaddr[AW-1:0]+{{(AW-4){1'b0}},4'b1000};
+
+
+Diff Content:
+- 4364    assign single_write = 1'b0; // No special treatment for single write
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4360:4370
+       end
+
+   //# transaction type (double write should be known in advance for burst determination)
+//   assign single_write = ref_access  & ref_write  & ~(&(ref_datamode[1:0]));
+   assign single_write = 1'b0; // No special treatment for single write
+   assign double_write = next_access & next_write &  (&(next_datamode[1:0]));
+
+   //# compare address
+   assign ref_dstaddr_inc8[AW-1:0] = ref_dstaddr[AW-1:0]+{{(AW-4){1'b0}},4'b1000};
+
+   assign next_inc8_match = (ref_dstaddr_inc8[AW-1:0] == next_dstaddr[AW-1:0]);
+

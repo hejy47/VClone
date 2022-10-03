@@ -1,0 +1,38 @@
+Source Block: oh/spi/hdl/spi_slave_regs.v@140:166@HdlStmProcess
+   //#####################################
+
+   //TODO: parametrize to make the smaller config efficient
+   //user configs should get optimized away
+    
+   always @*
+     begin
+	//8 standard regs
+	spi_vector[7:0]     = spi_config[7:0];    //0
+	spi_vector[15:8]    = spi_status[7:0];    //1
+	spi_vector[23:16]   = spi_cmd[7:0];       //2
+	spi_vector[31:24]   = spi_psize[7:0];     //3
+	spi_vector[63:32]   = 32'b0;              //7:4
+	spi_vector[127:64]  = 64'b0;              //15:8	
+	//16 core data tx vector
+	spi_vector[255:128] = core_regs[63:0];
+	//16 core data rx vector
+	spi_vector[511:256] = 'b0;	
+	//32 user vector
+	for(i=0;i<SREGS-40;i=i+1)
+	  spi_vector[512+i*8 +:8] = user_regs[i];
+     end
+   
+
+   
+endmodule // spi_slave_regs
+
+
+Diff Content:
+- 150 	spi_vector[23:16]   = spi_cmd[7:0];       //2
+- 151 	spi_vector[31:24]   = spi_psize[7:0];     //3
+- 153 	spi_vector[127:64]  = 64'b0;              //15:8	
++ 151 	spi_vector[23:16]   = 8'b0;               //2
++ 151 	spi_vector[31:24]   = spi_cmd[7:0];       //3
++ 153 	spi_vector[127:64]  = 64'b0;              //15:8
+
+Clone Blocks:

@@ -1,0 +1,157 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4251:4261@HdlIdDef
+   wire [2:0] 	  jump_value;  // value of the jump for read pointer
+   wire 	  txo_op_ack;       // "operation" acknowledge
+   wire 	  txo_op_ack_first; // first "operation" acknowledge cycle
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+   wire 	  single_write; // single write transaction
+   wire 	  double_write; // double write transaction
+   wire 	  burst_req_denied; // request of burst transaction is not acknowledged
+
+Diff Content:
+- 4256    wire [LW-1:0]  byte_even;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4252:4262
+   wire 	  txo_op_ack;       // "operation" acknowledge
+   wire 	  txo_op_ack_first; // first "operation" acknowledge cycle
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+   wire 	  single_write; // single write transaction
+   wire 	  double_write; // double write transaction
+   wire 	  burst_req_denied; // request of burst transaction is not acknowledged
+   wire 	  burst_backup_inc; // burst transaction backup counter increment
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4247:4257
+   wire 	  jump_3entries;  // Jump forward three entries
+   wire 	  jump_3entries_write; // jump over srcaddr part of the tran on write
+   wire 	  jump_3entries_read;  // jump over data part of the transaction on read
+   wire 	  jump_1entry; // single entry "jump"
+   wire [2:0] 	  jump_value;  // value of the jump for read pointer
+   wire 	  txo_op_ack;       // "operation" acknowledge
+   wire 	  txo_op_ack_first; // first "operation" acknowledge cycle
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@4253:4263
+   wire 	  txo_op_ack_first; // first "operation" acknowledge cycle
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+   wire 	  single_write; // single write transaction
+   wire 	  double_write; // double write transaction
+   wire 	  burst_req_denied; // request of burst transaction is not acknowledged
+   wire 	  burst_backup_inc; // burst transaction backup counter increment
+   wire [1:0] 	  burst_backup_inc_cnt;  // Incremented burst backup counter
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@4254:4264
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+   wire 	  single_write; // single write transaction
+   wire 	  double_write; // double write transaction
+   wire 	  burst_req_denied; // request of burst transaction is not acknowledged
+   wire 	  burst_backup_inc; // burst transaction backup counter increment
+   wire [1:0] 	  burst_backup_inc_cnt;  // Incremented burst backup counter
+   wire [1:0] 	  burst_backup_next_cnt; // Next burst backup counter value
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@4255:4265
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+   wire 	  single_write; // single write transaction
+   wire 	  double_write; // double write transaction
+   wire 	  burst_req_denied; // request of burst transaction is not acknowledged
+   wire 	  burst_backup_inc; // burst transaction backup counter increment
+   wire [1:0] 	  burst_backup_inc_cnt;  // Incremented burst backup counter
+   wire [1:0] 	  burst_backup_next_cnt; // Next burst backup counter value
+   wire 	  freeze_fifo;           // FIFO and main counter advance should stoped
+
+Clone Blocks 6:
+oh/elink/dv/elink_e16_model.v@4246:4256
+   wire 	  jump_4entries;  // Jump forward four entries
+   wire 	  jump_3entries;  // Jump forward three entries
+   wire 	  jump_3entries_write; // jump over srcaddr part of the tran on write
+   wire 	  jump_3entries_read;  // jump over data part of the transaction on read
+   wire 	  jump_1entry; // single entry "jump"
+   wire [2:0] 	  jump_value;  // value of the jump for read pointer
+   wire 	  txo_op_ack;       // "operation" acknowledge
+   wire 	  txo_op_ack_first; // first "operation" acknowledge cycle
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+
+Clone Blocks 7:
+oh/elink/dv/elink_e16_model.v@4249:4259
+   wire 	  jump_3entries_read;  // jump over data part of the transaction on read
+   wire 	  jump_1entry; // single entry "jump"
+   wire [2:0] 	  jump_value;  // value of the jump for read pointer
+   wire 	  txo_op_ack;       // "operation" acknowledge
+   wire 	  txo_op_ack_first; // first "operation" acknowledge cycle
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+   wire 	  single_write; // single write transaction
+
+Clone Blocks 8:
+oh/elink/dv/elink_e16_model.v@4248:4258
+   wire 	  jump_3entries_write; // jump over srcaddr part of the tran on write
+   wire 	  jump_3entries_read;  // jump over data part of the transaction on read
+   wire 	  jump_1entry; // single entry "jump"
+   wire [2:0] 	  jump_value;  // value of the jump for read pointer
+   wire 	  txo_op_ack;       // "operation" acknowledge
+   wire 	  txo_op_ack_first; // first "operation" acknowledge cycle
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+
+Clone Blocks 9:
+oh/elink/dv/elink_e16_model.v@4250:4260
+   wire 	  jump_1entry; // single entry "jump"
+   wire [2:0] 	  jump_value;  // value of the jump for read pointer
+   wire 	  txo_op_ack;       // "operation" acknowledge
+   wire 	  txo_op_ack_first; // first "operation" acknowledge cycle
+   wire [LW-1:0]  byte_even_mux;
+   wire [LW-1:0]  byte_odd_mux;
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+   wire 	  single_write; // single write transaction
+   wire 	  double_write; // double write transaction
+
+Clone Blocks 10:
+oh/elink/dv/elink_e16_model.v@4256:4266
+   wire [LW-1:0]  byte_even;
+   wire [LW-1:0]  byte_odd;
+   wire 	  make_gap;     // make gap in the transaction frame
+   wire 	  single_write; // single write transaction
+   wire 	  double_write; // double write transaction
+   wire 	  burst_req_denied; // request of burst transaction is not acknowledged
+   wire 	  burst_backup_inc; // burst transaction backup counter increment
+   wire [1:0] 	  burst_backup_inc_cnt;  // Incremented burst backup counter
+   wire [1:0] 	  burst_backup_next_cnt; // Next burst backup counter value
+   wire 	  freeze_fifo;           // FIFO and main counter advance should stoped
+   wire sel_ref_byte0; // select byte0 from the reference information of the transaction 
+

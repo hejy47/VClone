@@ -1,0 +1,57 @@
+Source Block: serv/rtl/serv_csr.v@57:90@HdlStmProcess
+
+   assign o_csr_in = csr_in;
+
+   reg 		mtip_r;
+
+   always @(posedge i_clk) begin
+      if (i_mstatus_en & (i_cnt[4:2] == 3'd0) & i_cnt_r[3])
+	mstatus_mie <= csr_in;
+
+      if (i_mie_en & (i_cnt[4:2] == 3'd1) & i_cnt_r[3])
+	mie_mtie <= csr_in;
+
+      mstatus <= (i_cnt[4:2] == 0) & i_cnt_r[2] & mstatus_mie;
+
+      mtip_r <= i_mtip;
+      o_new_irq <= !mtip_r & timer_irq;
+
+      if (i_trap) begin
+	 mcause31  <= timer_irq;
+	 mcause3_0 <= timer_irq ? 4'd7 :
+		      i_e_op ? {!i_ebreak, 3'b011} :
+		      i_mem_misalign ? {2'b01, i_mem_cmd, 1'b0} :
+		      4'd0;
+      end
+
+      if (i_mcause_en & i_run) begin
+	 if (i_cnt[4:2] == 3'd0)
+	   mcause3_0 <= {csr_in, mcause3_0[3:1]};
+	 if ((i_cnt[4:2] == 3'd7) & i_cnt_r[3])
+	   mcause31 <= csr_in;
+      end
+   end
+
+endmodule
+
+Diff Content:
+- 71       mtip_r <= i_mtip;
+- 72       o_new_irq <= !mtip_r & timer_irq;
+- 74       if (i_trap) begin
+- 75 	 mcause31  <= timer_irq;
+- 76 	 mcause3_0 <= timer_irq ? 4'd7 :
++ 62       /*
++ 62        Note: To save resources mstatus_mpie (mstatus bit 7) is not
++ 62        readable or writable from sw
++ 62        */
++ 72       timer_irq_r <= timer_irq;
++ 72       if (i_mret) begin
++ 72 	 mstatus_mie <= mstatus_mpie;
++ 72       end
++ 76       if (i_trap_taken) begin
++ 76 	 mstatus_mpie <= mstatus_mie;
++ 76 	 mstatus_mie <= 1'b0;
++ 76 	 mcause31  <= i_pending_irq;
++ 76 	 mcause3_0 <= i_pending_irq ? 4'd7 :
+
+Clone Blocks:

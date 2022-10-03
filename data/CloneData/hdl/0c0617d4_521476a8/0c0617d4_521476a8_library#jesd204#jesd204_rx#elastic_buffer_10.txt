@@ -1,0 +1,34 @@
+Source Block: hdl/library/jesd204/jesd204_rx/elastic_buffer.v@108:122@HdlStmProcess
+    mem[wr_addr] <= mem_wr_data;
+    wr_addr <= wr_addr + 1'b1;
+  end
+end
+
+always @(posedge device_clk) begin
+  if (do_release_n == 1'b1) begin
+    rd_addr <= 'h00;
+  end else begin
+    rd_addr <= rd_addr + 1'b1;
+    rd_data <= mem[rd_addr];
+  end
+end
+
+endmodule
+
+Diff Content:
+- 113 always @(posedge device_clk) begin
+- 114   if (do_release_n == 1'b1) begin
+- 115     rd_addr <= 'h00;
+- 116   end else begin
+- 117     rd_addr <= rd_addr + 1'b1;
+- 118     rd_data <= mem[rd_addr];
+- 120 end
++ 118   always @(posedge device_clk) begin
++ 118     if (do_release_n == 1'b1) begin
++ 118       rd_addr <= 'h00;
++ 118     end else begin
++ 118       rd_addr <= rd_addr + 1'b1;
++ 118       rd_data <= mem[rd_addr];
++ 118     end
+
+Clone Blocks:

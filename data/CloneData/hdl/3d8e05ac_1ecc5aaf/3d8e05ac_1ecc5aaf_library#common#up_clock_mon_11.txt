@@ -1,0 +1,19 @@
+Source Block: hdl/library/common/up_clock_mon.v@49:59@HdlIdDef
+  reg     [32:0]  d_count = 'd0;
+
+  // internal signals
+
+  wire            up_count_capture_s;
+  wire            d_count_reset_s;
+
+  // processor reference
+
+  // Capture on the falling edge of running
+  assign up_count_capture_s = up_count_running_m3 == 1'b1 && up_count_running_m2 == 1'b0;
+
+Diff Content:
+- 54   wire            d_count_reset_s;
++ 54   wire                     up_count_capture_s;
++ 54   wire                     d_count_reset_s;
+
+Clone Blocks:

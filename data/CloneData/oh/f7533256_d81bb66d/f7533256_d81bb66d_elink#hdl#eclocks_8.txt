@@ -1,0 +1,30 @@
+Source Block: oh/elink/hdl/eclocks.v@90:108@HdlStmProcess
+	reset_counter[RCW-1:0] <= reset_counter[RCW-1:0]+1'b1;
+	heartbeat              <= ~(|reset_counter[RCW-1:0]);
+     end
+   
+   //two clock synchronizer
+   always @ (posedge sys_clk)
+     begin
+	cclk_locked_reg   <= cclk_locked;
+	cclk_locked_sync  <= cclk_locked_reg;	
+	pll_locked_sync   <= cclk_locked & lclk_locked;	
+	reset_sync        <= (reset | ~elink_en);
+	reset_in          <= reset_sync;
+	pll_locked        <= pll_locked_sync;	
+     end
+   
+`define RESET_ALL       3'b000
+`define START_PLL       3'b001
+`define STOP_PLL        3'b010
+`define START_EPIPHANY  3'b011
+
+Diff Content:
+- 97 	cclk_locked_reg   <= cclk_locked;
+- 98 	cclk_locked_sync  <= cclk_locked_reg;	
+- 99 	pll_locked_sync   <= cclk_locked & lclk_locked;	
+- 102 	pll_locked        <= pll_locked_sync;	
++ 99 	mmcm_locked_reg   <= mmcm_locked;
++ 99 	mmcm_locked_sync  <= mmcm_locked_reg;	
+
+Clone Blocks:

@@ -1,0 +1,39 @@
+Source Block: oh/common/hdl/oh_par2ser.v@72:88@HdlStmProcess
+   
+   //##########################
+   //# SHIFT REGISTER
+   //##########################
+   
+   always @ (posedge clk)
+     if(start_transfer)
+       shiftreg[PW-1:0] = din[PW-1:0];	   
+     else if(shift & lsbfirst)		 
+       shiftreg[PW-1:0] = {{(SW){fill}}, shiftreg[PW-1:SW]};
+     else if(shift)
+       shiftreg[PW-1:0] = {shiftreg[PW-SW-1:0],{(SW){fill}}};
+
+   assign dout[SW-1:0] = lsbfirst ? shiftreg[SW-1:0] : 
+			            shiftreg[PW-1:PW-SW];	
+
+endmodule // oh_par2ser
+
+Diff Content:
+- 79        shiftreg[PW-1:0] = din[PW-1:0];	   
++ 79        shiftreg[PW-1:0] = din[PW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_par2ser.v@80:91
+     else if(shift & lsbfirst)		 
+       shiftreg[PW-1:0] = {{(SW){fill}}, shiftreg[PW-1:SW]};
+     else if(shift)
+       shiftreg[PW-1:0] = {shiftreg[PW-SW-1:0],{(SW){fill}}};
+
+   assign dout[SW-1:0] = lsbfirst ? shiftreg[SW-1:0] : 
+			            shiftreg[PW-1:PW-SW];	
+
+endmodule // oh_par2ser
+
+///////////////////////////////////////////////////////////////////////////////
+// The MIT License (MIT)                                                     //
+

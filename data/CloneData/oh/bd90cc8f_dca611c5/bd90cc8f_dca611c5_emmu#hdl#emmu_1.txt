@@ -1,0 +1,19 @@
+Source Block: oh/emmu/hdl/emmu.v@127:138@HdlStmProcess
+   /*EMESH OUTPUT TRANSACTION   */
+   /*****************************/   
+   //pipeline to compensate for table lookup pipeline 
+   //assumes one cycle memory access!     
+
+   always @ (posedge clk)
+     emmu_access_out               <= emesh_access_in;
+   
+   always @ (posedge clk)
+     if(emesh_access_in)   
+       begin
+	  emmu_write_out           <= emesh_write_in;
+
+Diff Content:
+- 132    always @ (posedge clk)
++ 132    always @ (posedge  clk)
+
+Clone Blocks:

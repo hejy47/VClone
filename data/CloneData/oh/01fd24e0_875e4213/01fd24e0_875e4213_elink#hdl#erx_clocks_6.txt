@@ -1,0 +1,43 @@
+Source Block: oh/elink/hdl/erx_clocks.v@85:99@HdlStmProcess
+	reset_counter[RCW-1:0] <= reset_counter[RCW-1:0]+1'b1;
+	heartbeat              <= ~(|reset_counter[RCW-1:0]);
+     end
+   
+   //two clock synchronizer
+   always @ (posedge sys_clk)
+     begin
+        pll_locked_reg    <= pll_locked;	
+        pll_locked_sync   <= pll_locked_reg;	
+     end
+
+   
+`define RX_RESET_ALL        3'b000
+`define RX_START_PLL        3'b001
+`define RX_ACTIVE           3'b010
+
+Diff Content:
+- 90    always @ (posedge sys_clk)
+- 91      begin
+- 92         pll_locked_reg    <= pll_locked;	
+- 93         pll_locked_sync   <= pll_locked_reg;	
+- 94      end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_clocks.v@91:105
+	reset_counter[RCW-1:0] <= reset_counter[RCW-1:0]+1'b1;
+	heartbeat              <= ~(|reset_counter[RCW-1:0]);
+     end
+   
+   //two clock synchronizer
+   always @ (posedge sys_clk)
+     begin
+	mmcm_locked_reg   <= mmcm_locked;
+	mmcm_locked_sync  <= mmcm_locked_reg;	
+     end
+     
+`define TX_RESET_ALL        3'b000
+`define TX_START_CCLK       3'b001
+`define TX_STOP_CCLK        3'b010
+`define TX_DEASSERT_RESET   3'b011
+

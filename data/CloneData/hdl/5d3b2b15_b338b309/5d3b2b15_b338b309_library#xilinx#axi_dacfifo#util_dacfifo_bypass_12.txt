@@ -1,0 +1,54 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/util_dacfifo_bypass.v@253:273@HdlStmProcess
+    .din (dac_mem_waddr_m2),
+    .dout (dac_mem_waddr_m2_g2b_s));
+
+  // define underflow
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_xfer_out_m1 <= 1'b0;
+      dac_xfer_out <= 1'b0;
+      dac_dunf <= 1'b0;
+    end else begin
+      dac_xfer_out_m1 <= dma_xfer_req;
+      dac_xfer_out <= dac_xfer_out_m1;
+      dac_dunf <= (dac_valid == 1'b1) ? (dac_xfer_out & ~dac_mem_ready) : dac_dunf;
+    end
+  end
+
+  // DAC data output logic
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+
+Diff Content:
+- 266       dac_dunf <= (dac_valid == 1'b1) ? (dac_xfer_out & ~dac_mem_ready) : dac_dunf;
++ 266       if (dac_valid == 1'b1) begin
++ 266         dac_dunf <= dac_mem_empty_s;
++ 266       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/altera/avl_dacfifo/util_dacfifo_bypass.v@248:268
+    .din (dac_mem_waddr_m2),
+    .dout (dac_mem_waddr_m2_g2b_s));
+
+  // define underflow
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_xfer_out_m1 <= 1'b0;
+      dac_xfer_out <= 1'b0;
+      dac_dunf <= 1'b0;
+    end else begin
+      dac_xfer_out_m1 <= dma_xfer_req;
+      dac_xfer_out <= dac_xfer_out_m1;
+      dac_dunf <= (dac_valid == 1'b1) ? (dac_xfer_out & ~dac_mem_ready) : dac_dunf;
+    end
+  end
+
+  // DAC data output logic
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+

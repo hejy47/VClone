@@ -1,0 +1,59 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_rx.v@254:297@HdlStmProcess
+end
+
+// mask errors to within packet
+reg [7:0] detect_error_masked;
+
+always @* begin
+    case (detect_term)
+    8'b00000000: begin
+        detect_error_masked = detect_error;
+    end
+    8'b00000001: begin
+        detect_error_masked = 0;
+    end
+    8'b00000010: begin
+        detect_error_masked = detect_error[0];
+    end
+    8'b00000100: begin
+        detect_error_masked = detect_error[1:0];
+    end
+    8'b00001000: begin
+        detect_error_masked = detect_error[2:0];
+    end
+    8'b00010000: begin
+        detect_error_masked = detect_error[3:0];
+    end
+    8'b00100000: begin
+        detect_error_masked = detect_error[4:0];
+    end
+    8'b01000000: begin
+        detect_error_masked = detect_error[5:0];
+    end
+    8'b10000000: begin
+        detect_error_masked = detect_error[6:0];
+    end
+    default: begin
+        detect_error_masked = detect_error;
+    end
+    endcase
+end
+
+// Mask input data
+integer j;
+
+always @* begin
+
+Diff Content:
++ 262         control_masked = xgmii_rxc_d0;
++ 265         control_masked = 0;
++ 268         control_masked = xgmii_rxc_d0[0];
++ 271         control_masked = xgmii_rxc_d0[1:0];
++ 274         control_masked = xgmii_rxc_d0[2:0];
++ 277         control_masked = xgmii_rxc_d0[3:0];
++ 280         control_masked = xgmii_rxc_d0[4:0];
++ 283         control_masked = xgmii_rxc_d0[5:0];
++ 286         control_masked = xgmii_rxc_d0[6:0];
++ 289         control_masked = xgmii_rxc_d0;
+
+Clone Blocks:

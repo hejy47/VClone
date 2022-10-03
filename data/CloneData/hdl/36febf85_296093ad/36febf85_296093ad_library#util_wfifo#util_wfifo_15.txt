@@ -1,0 +1,45 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@171:191@HdlStmProcess
+  end
+  endgenerate
+
+  // reset & resetn
+
+  always @(posedge dma_clk or posedge adc_rst) begin
+    if (adc_rst == 1'b1) begin
+      fifo_rst_p <= 1'd1;
+      fifo_rst <= 1'd1;
+      fifo_rstn <= 1'd0;
+    end else begin
+      fifo_rst_p <= 1'b0;
+      fifo_rst <= fifo_rst_p;
+      fifo_rstn <= ~fifo_rst_p;
+    end
+  end
+
+  // axis
+
+  ad_axis_inf_rx #(.DATA_WIDTH(DMA_DATA_WIDTH)) i_axis_inf (
+    .clk (dma_clk),
+
+Diff Content:
+- 176   always @(posedge dma_clk or posedge adc_rst) begin
+- 177     if (adc_rst == 1'b1) begin
+- 178       fifo_rst_p <= 1'd1;
+- 179       fifo_rst <= 1'd1;
+- 180       fifo_rstn <= 1'd0;
+- 182       fifo_rst_p <= 1'b0;
+- 183       fifo_rst <= fifo_rst_p;
+- 184       fifo_rstn <= ~fifo_rst_p;
++ 180   always @(posedge dout_clk) begin
++ 180     dout_rdata_d <= dout_rdata_s;
++ 180     if (dout_rstn == 1'b0) begin
++ 180       dout_rd <= 'd0;
++ 180       dout_rd_d <= 'd0;
++ 180       dout_raddr <= 'd0;
++ 184       dout_rd <= dout_rd_s;
++ 184       dout_rd_d <= dout_rd;
++ 184       if (dout_rd_s == 1'b1) begin
++ 184         dout_raddr <= dout_raddr + 1'b1;
++ 184       end
+
+Clone Blocks:

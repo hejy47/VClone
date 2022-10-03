@@ -1,0 +1,18 @@
+Source Block: oh/common/hdl/oh_mux4.v@28:39@HdlStmAssign
+			 {(DW){sel1}} & in1[DW-1:0] |
+			 {(DW){sel2}} & in2[DW-1:0] |
+			 {(DW){sel3}} & in3[DW-1:0]);
+   
+
+   assign error = (sel0 | sel1 | sel2 | sel3) &
+   		  ~(sel0 ^ sel1 ^ sel2 ^ sel3);
+
+   always @ (posedge error)
+     $display ("ERROR at in oh_mux4 %m at ",$time);
+   			
+endmodule // oh_mux4
+
+Diff Content:
++ 34 `ifdef TARGET_SIM
+
+Clone Blocks:

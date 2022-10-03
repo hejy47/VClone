@@ -1,0 +1,48 @@
+Source Block: zipcpu/rtl/zipsystem.v@347:358@HdlStmProcess
+	always @(posedge i_clk)
+		cmd_clear_pf_cache <= (~i_rst)&&(dbg_cmd_write)
+					&&((dbg_idata[11])||(dbg_idata[6]));
+	//
+	initial	cmd_step  = 1'b0;
+	always @(posedge i_clk)
+		cmd_step <= (dbg_cmd_write)&&(dbg_idata[8]);
+	//
+	always @(posedge i_clk)
+		if (dbg_cmd_write)
+			cmd_addr <= dbg_idata[5:0];
+
+
+Diff Content:
+- 353 		cmd_step <= (dbg_cmd_write)&&(dbg_idata[8]);
++ 353 		cmd_step <= (dbg_cmd_write)&&(dbg_idata[`STEP_BIT]);
++ 353 	initial	cmd_addr = 6'h0;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipbones.v@164:174
+
+	initial	cmd_clear_pf_cache = 1'b1;
+	always @(posedge i_clk)
+		cmd_clear_pf_cache <= (dbg_cmd_write)&&(dbg_idata[`CLEAR_CACHE_BIT]);
+	//
+	initial	cmd_step  = 1'b0;
+	always @(posedge i_clk)
+		cmd_step <= (dbg_cmd_write)&&(dbg_idata[`STEP_BIT]);
+	//
+	initial	cmd_addr = 5'h0;
+	always @(posedge i_clk)
+
+Clone Blocks 2:
+zipcpu/rtl/zipsystem.v@346:356
+	initial	cmd_clear_pf_cache = 1'b1;
+	always @(posedge i_clk)
+		cmd_clear_pf_cache <= (~i_rst)&&(dbg_cmd_write)
+					&&((dbg_idata[11])||(dbg_idata[6]));
+	//
+	initial	cmd_step  = 1'b0;
+	always @(posedge i_clk)
+		cmd_step <= (dbg_cmd_write)&&(dbg_idata[8]);
+	//
+	always @(posedge i_clk)
+		if (dbg_cmd_write)
+

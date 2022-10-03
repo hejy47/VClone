@@ -1,0 +1,22 @@
+Source Block: oh/accelerator/hdl/accelerator.v@140:154@HdlStmProcess
+   
+   //#########################
+   //#READBACK WITH PIPELINE
+   //#########################
+   
+   always @ (posedge clk)
+     if(~nreset)
+       s_rr_access    <= 'b0;   
+     else
+       s_rr_access  <= output0_read;
+   
+   always @ (posedge clk)
+     data_out[31:0] <= result[31:0];	
+
+   emesh2packet #(.AW(32))
+
+Diff Content:
+- 149        s_rr_access  <= output0_read;
++ 149        s_rr_access  <= output_read;
+
+Clone Blocks:

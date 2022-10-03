@@ -1,0 +1,38 @@
+Source Block: hdl/library/sysid_rom/sysid_rom.v@9:21@HdlStmProcess
+  input        [ROM_ADDR_BITS-1:0]  rom_addr,
+  output  reg  [ROM_WIDTH-1:0]      rom_data);
+
+reg [ROM_WIDTH-1:0] lut_rom [(2**ROM_ADDR_BITS)-1:0];
+
+initial begin
+  $readmemh(PATH_TO_FILE, lut_rom, 0, (2**ROM_ADDR_BITS)-1);
+end
+
+always @(posedge clk) begin
+  rom_data = lut_rom[rom_addr];
+end
+
+
+Diff Content:
+- 14 initial begin
+- 15   $readmemh(PATH_TO_FILE, lut_rom, 0, (2**ROM_ADDR_BITS)-1);
+- 16 end
++ 16   initial begin
++ 16     $readmemh(PATH_TO_FILE, lut_rom, 0, (2**ROM_ADDR_BITS)-1);
++ 16   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/sysid_rom/sysid_rom.v@7:17
+
+  input                             clk,
+  input        [ROM_ADDR_BITS-1:0]  rom_addr,
+  output  reg  [ROM_WIDTH-1:0]      rom_data);
+
+reg [ROM_WIDTH-1:0] lut_rom [(2**ROM_ADDR_BITS)-1:0];
+
+initial begin
+  $readmemh(PATH_TO_FILE, lut_rom, 0, (2**ROM_ADDR_BITS)-1);
+end
+
+

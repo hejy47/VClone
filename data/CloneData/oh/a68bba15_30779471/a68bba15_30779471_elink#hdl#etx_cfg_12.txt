@@ -1,0 +1,50 @@
+Source Block: oh/elink/hdl/etx_cfg.v@93:107@HdlStmProcess
+   assign tx_monitor_write  = ecfg_write & (mi_addr[RFAW+1:2]==`ETX_MONITOR);
+  
+   //###########################
+   //# TX CONFIG
+   //###########################
+   always @ (posedge clk)
+     if(!nreset)
+       tx_cfg_reg[11:0] <= 'b0;
+     else if (tx_cfg_write)
+       tx_cfg_reg[11:0] <= mi_din[11:0];
+
+   assign tx_enable       = 1'b1;//TODO: fix! ecfg_tx_config_reg[0];
+   assign mmu_enable      = tx_cfg_reg[1];   
+   assign remap_enable    = (tx_cfg_reg[3:2]==2'b01);
+   assign ctrlmode[3:0]   = tx_cfg_reg[7:4];
+
+Diff Content:
+- 102        tx_cfg_reg[11:0] <= mi_din[11:0];
++ 102        tx_cfg_reg[11:0] <= data_in[11:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_cfg.v@101:111
+     else if (tx_cfg_write)
+       tx_cfg_reg[11:0] <= mi_din[11:0];
+
+   assign tx_enable       = 1'b1;//TODO: fix! ecfg_tx_config_reg[0];
+   assign mmu_enable      = tx_cfg_reg[1];   
+   assign remap_enable    = (tx_cfg_reg[3:2]==2'b01);
+   assign ctrlmode[3:0]   = tx_cfg_reg[7:4];
+   assign ctrlmode_bypass = tx_cfg_reg[8];
+   assign gpio_enable     = (tx_cfg_reg[10:9]==2'b01);
+   assign burst_enable    = tx_cfg_reg[11];
+   
+
+Clone Blocks 2:
+oh/elink/hdl/etx_cfg.v@99:109
+     if(!nreset)
+       tx_cfg_reg[11:0] <= 'b0;
+     else if (tx_cfg_write)
+       tx_cfg_reg[11:0] <= mi_din[11:0];
+
+   assign tx_enable       = 1'b1;//TODO: fix! ecfg_tx_config_reg[0];
+   assign mmu_enable      = tx_cfg_reg[1];   
+   assign remap_enable    = (tx_cfg_reg[3:2]==2'b01);
+   assign ctrlmode[3:0]   = tx_cfg_reg[7:4];
+   assign ctrlmode_bypass = tx_cfg_reg[8];
+   assign gpio_enable     = (tx_cfg_reg[10:9]==2'b01);
+

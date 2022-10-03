@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@280:291@HdlIdDef
+    BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+localparam BEATS_PER_BURST_LIMIT_SRC =
+  (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_SRC =
+    BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
+
+/* The smaller bus limits the maximum bytes per burst. */
+localparam BYTES_PER_BURST_LIMIT =
+  (BYTES_PER_BURST_LIMIT_DEST < BYTES_PER_BURST_LIMIT_SRC) ?
+  BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
+
+Diff Content:
+- 285 localparam BYTES_PER_BURST_LIMIT_SRC =
+- 286     BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac.v@276:289
+  (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_DEST =
+    BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+localparam BEATS_PER_BURST_LIMIT_SRC =
+  (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_SRC =
+    BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
+
+/* The smaller bus limits the maximum bytes per burst. */
+localparam BYTES_PER_BURST_LIMIT =
+

@@ -1,0 +1,52 @@
+Source Block: hdl/library/common/ad_pack.v@86:110@HdlStmIf
+wire [SH_W*UNIT_W-1:0] idata_dd_nx;
+wire [SH_W-1:0] in_use_nx;
+wire pack_wr;
+
+generate
+  if (I_REG) begin : i_reg
+
+    always @(posedge clk) begin
+      ivalid_d <= ivalid;
+      idata_d <= idata;
+    end
+
+  end else begin
+
+    always @(*) begin
+      ivalid_d = ivalid;
+      idata_d = idata;
+    end
+
+  end
+endgenerate
+
+assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
+assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
+
+
+Diff Content:
+- 91   if (I_REG) begin : i_reg
+- 93     always @(posedge clk) begin
+- 94       ivalid_d <= ivalid;
+- 95       idata_d <= idata;
+- 96     end
+- 98   end else begin
+- 100     always @(*) begin
+- 101       ivalid_d = ivalid;
+- 102       idata_d = idata;
+- 103     end
+- 105   end
++ 91   generate
++ 91     if (I_REG) begin : i_reg
++ 96       always @(posedge clk) begin
++ 96         ivalid_d <= ivalid;
++ 96         idata_d <= idata;
++ 96       end
++ 98     end else begin
++ 103       always @(*) begin
++ 103         ivalid_d = ivalid;
++ 103         idata_d = idata;
++ 103       end
+
+Clone Blocks:

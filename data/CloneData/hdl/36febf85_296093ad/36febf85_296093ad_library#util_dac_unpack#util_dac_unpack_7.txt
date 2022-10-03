@@ -1,0 +1,75 @@
+Source Block: hdl/library/util_dac_unpack/util_dac_unpack.v@130:140@HdlIdDef
+
+  wire [$clog2(CHANNELS)-1:0]    offset [0:CHANNELS-1];
+  wire                           dac_chan_valid;
+
+  reg [DATA_WIDTH*CHANNELS-1:0]  dac_data = 'h00;
+  reg [DMA_WIDTH-1:0]            buffer = 'h00;
+  reg                            dma_rd = 1'b0;
+  reg [$clog2(CHANNELS)-1:0]     rd_counter = 'h00;
+  reg [$clog2(CHANNELS)-1:0]     req_counter = 'h00;
+  reg [CHANNELS-1:0]             dac_enable_d1 = 'h00;
+
+
+Diff Content:
+- 135   reg [DMA_WIDTH-1:0]            buffer = 'h00;
++ 135   reg [DATA_WIDTH*NUM_OF_CHANNELS-1:0]  dac_data = 'h00;
++ 135   reg [DMA_DATA_WIDTH-1:0]            buffer = 'h00;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_dac_unpack/util_dac_unpack.v@129:139
+  wire [DATA_WIDTH-1:0]          data_array[0:CHANNELS-1];
+
+  wire [$clog2(CHANNELS)-1:0]    offset [0:CHANNELS-1];
+  wire                           dac_chan_valid;
+
+  reg [DATA_WIDTH*CHANNELS-1:0]  dac_data = 'h00;
+  reg [DMA_WIDTH-1:0]            buffer = 'h00;
+  reg                            dma_rd = 1'b0;
+  reg [$clog2(CHANNELS)-1:0]     rd_counter = 'h00;
+  reg [$clog2(CHANNELS)-1:0]     req_counter = 'h00;
+  reg [CHANNELS-1:0]             dac_enable_d1 = 'h00;
+
+Clone Blocks 2:
+hdl/library/util_dac_unpack/util_dac_unpack.v@132:142
+  wire                           dac_chan_valid;
+
+  reg [DATA_WIDTH*CHANNELS-1:0]  dac_data = 'h00;
+  reg [DMA_WIDTH-1:0]            buffer = 'h00;
+  reg                            dma_rd = 1'b0;
+  reg [$clog2(CHANNELS)-1:0]     rd_counter = 'h00;
+  reg [$clog2(CHANNELS)-1:0]     req_counter = 'h00;
+  reg [CHANNELS-1:0]             dac_enable_d1 = 'h00;
+
+  assign dac_enable[0] = dac_enable_00;
+  assign dac_enable[1] = dac_enable_01;
+
+Clone Blocks 3:
+hdl/library/util_dac_unpack/util_dac_unpack.v@127:137
+  wire [CHANNELS-1:0]            dac_valid;
+
+  wire [DATA_WIDTH-1:0]          data_array[0:CHANNELS-1];
+
+  wire [$clog2(CHANNELS)-1:0]    offset [0:CHANNELS-1];
+  wire                           dac_chan_valid;
+
+  reg [DATA_WIDTH*CHANNELS-1:0]  dac_data = 'h00;
+  reg [DMA_WIDTH-1:0]            buffer = 'h00;
+  reg                            dma_rd = 1'b0;
+  reg [$clog2(CHANNELS)-1:0]     rd_counter = 'h00;
+
+Clone Blocks 4:
+hdl/library/util_dac_unpack/util_dac_unpack.v@126:136
+  wire [CHANNELS-1:0]            dac_enable;
+  wire [CHANNELS-1:0]            dac_valid;
+
+  wire [DATA_WIDTH-1:0]          data_array[0:CHANNELS-1];
+
+  wire [$clog2(CHANNELS)-1:0]    offset [0:CHANNELS-1];
+  wire                           dac_chan_valid;
+
+  reg [DATA_WIDTH*CHANNELS-1:0]  dac_data = 'h00;
+  reg [DMA_WIDTH-1:0]            buffer = 'h00;
+  reg                            dma_rd = 1'b0;
+

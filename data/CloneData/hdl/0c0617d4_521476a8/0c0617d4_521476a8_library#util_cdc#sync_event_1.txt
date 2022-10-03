@@ -1,0 +1,179 @@
+Source Block: hdl/library/util_cdc/sync_event.v@44:120@HdlStmIf
+  input out_clk,
+  output reg [NUM_OF_EVENTS-1:0] out_event
+);
+
+generate
+if (ASYNC_CLK == 1) begin
+
+wire out_toggle;
+wire in_toggle;
+
+reg out_toggle_d1 = 1'b0;
+reg in_toggle_d1 = 1'b0;
+
+sync_bits i_sync_out (
+  .in_bits(in_toggle_d1),
+  .out_clk(out_clk),
+  .out_resetn(1'b1),
+  .out_bits(out_toggle)
+);
+
+sync_bits i_sync_in (
+  .in_bits(out_toggle_d1),
+  .out_clk(in_clk),
+  .out_resetn(1'b1),
+  .out_bits(in_toggle)
+);
+
+wire in_ready = in_toggle == in_toggle_d1;
+wire load_out = out_toggle ^ out_toggle_d1;
+
+reg [NUM_OF_EVENTS-1:0] in_event_sticky = 'h00;
+wire [NUM_OF_EVENTS-1:0] pending_events = in_event_sticky | in_event;
+wire [NUM_OF_EVENTS-1:0] out_event_s;
+
+always @(posedge in_clk) begin
+  if (in_ready == 1'b1) begin
+    in_event_sticky <= {NUM_OF_EVENTS{1'b0}};
+    if (|pending_events == 1'b1) begin
+      in_toggle_d1 <= ~in_toggle_d1;
+    end
+  end else begin
+    in_event_sticky <= pending_events;
+  end
+end
+
+if (NUM_OF_EVENTS > 1) begin
+  reg [NUM_OF_EVENTS-1:0] cdc_hold = 'h00;
+
+  always @(posedge in_clk) begin
+    if (in_ready == 1'b1) begin
+      cdc_hold <= pending_events;
+    end
+  end
+
+  assign out_event_s = cdc_hold;
+end else begin
+  // When there is only one event, we know that it is set.
+  assign out_event_s = 1'b1;
+end
+
+always @(posedge out_clk) begin
+  if (load_out == 1'b1) begin
+    out_event <= out_event_s;
+  end else begin
+    out_event <= {NUM_OF_EVENTS{1'b0}};
+  end
+  out_toggle_d1 <= out_toggle;
+end
+
+end else begin
+  always @(*) begin
+    out_event <= in_event;
+  end
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 49 if (ASYNC_CLK == 1) begin
+- 51 wire out_toggle;
+- 52 wire in_toggle;
+- 54 reg out_toggle_d1 = 1'b0;
+- 55 reg in_toggle_d1 = 1'b0;
+- 57 sync_bits i_sync_out (
+- 58   .in_bits(in_toggle_d1),
+- 59   .out_clk(out_clk),
+- 60   .out_resetn(1'b1),
+- 61   .out_bits(out_toggle)
+- 62 );
+- 64 sync_bits i_sync_in (
+- 65   .in_bits(out_toggle_d1),
+- 66   .out_clk(in_clk),
+- 67   .out_resetn(1'b1),
+- 68   .out_bits(in_toggle)
+- 69 );
+- 71 wire in_ready = in_toggle == in_toggle_d1;
+- 72 wire load_out = out_toggle ^ out_toggle_d1;
+- 74 reg [NUM_OF_EVENTS-1:0] in_event_sticky = 'h00;
+- 75 wire [NUM_OF_EVENTS-1:0] pending_events = in_event_sticky | in_event;
+- 76 wire [NUM_OF_EVENTS-1:0] out_event_s;
+- 78 always @(posedge in_clk) begin
+- 79   if (in_ready == 1'b1) begin
+- 80     in_event_sticky <= {NUM_OF_EVENTS{1'b0}};
+- 81     if (|pending_events == 1'b1) begin
+- 82       in_toggle_d1 <= ~in_toggle_d1;
+- 83     end
+- 84   end else begin
+- 85     in_event_sticky <= pending_events;
+- 86   end
+- 87 end
+- 89 if (NUM_OF_EVENTS > 1) begin
+- 90   reg [NUM_OF_EVENTS-1:0] cdc_hold = 'h00;
+- 94       cdc_hold <= pending_events;
+- 98   assign out_event_s = cdc_hold;
+- 99 end else begin
+- 101   assign out_event_s = 1'b1;
+- 102 end
+- 104 always @(posedge out_clk) begin
+- 105   if (load_out == 1'b1) begin
+- 106     out_event <= out_event_s;
+- 108     out_event <= {NUM_OF_EVENTS{1'b0}};
+- 110   out_toggle_d1 <= out_toggle;
+- 111 end
+- 113 end else begin
+- 114   always @(*) begin
+- 115     out_event <= in_event;
+- 117 end
++ 49   generate
++ 49   if (ASYNC_CLK == 1) begin
++ 52   wire out_toggle;
++ 52   wire in_toggle;
++ 55   reg out_toggle_d1 = 1'b0;
++ 55   reg in_toggle_d1 = 1'b0;
++ 72   sync_bits i_sync_out (
++ 72     .in_bits(in_toggle_d1),
++ 72     .out_clk(out_clk),
++ 72     .out_resetn(1'b1),
++ 72     .out_bits(out_toggle));
++ 76   sync_bits i_sync_in (
++ 76     .in_bits(out_toggle_d1),
++ 76     .out_clk(in_clk),
++ 76     .out_resetn(1'b1),
++ 76     .out_bits(in_toggle));
++ 87   wire in_ready = in_toggle == in_toggle_d1;
++ 87   wire load_out = out_toggle ^ out_toggle_d1;
++ 90   reg [NUM_OF_EVENTS-1:0] in_event_sticky = 'h00;
++ 90   wire [NUM_OF_EVENTS-1:0] pending_events = in_event_sticky | in_event;
++ 90   wire [NUM_OF_EVENTS-1:0] out_event_s;
++ 94       in_event_sticky <= {NUM_OF_EVENTS{1'b0}};
++ 94       if (|pending_events == 1'b1) begin
++ 94         in_toggle_d1 <= ~in_toggle_d1;
++ 94       end
++ 94     end else begin
++ 94       in_event_sticky <= pending_events;
++ 102   if (NUM_OF_EVENTS > 1) begin
++ 102     reg [NUM_OF_EVENTS-1:0] cdc_hold = 'h00;
++ 106     always @(posedge in_clk) begin
++ 106       if (in_ready == 1'b1) begin
++ 106         cdc_hold <= pending_events;
++ 106       end
++ 106     end
++ 106     assign out_event_s = cdc_hold;
++ 108     assign out_event_s = 1'b1;
++ 115   always @(posedge out_clk) begin
++ 115     if (load_out == 1'b1) begin
++ 115       out_event <= out_event_s;
++ 115     end else begin
++ 115       out_event <= {NUM_OF_EVENTS{1'b0}};
++ 115     end
++ 115     out_toggle_d1 <= out_toggle;
++ 115   end
++ 115   end else begin
++ 115     always @(*) begin
++ 115       out_event <= in_event;
++ 115     end
+
+Clone Blocks:

@@ -1,0 +1,28 @@
+Source Block: hdl/library/common/ad_tdd_sync.v@81:99@HdlStmProcess
+    end
+  end
+
+  // a free running sync pulse generator
+
+  always @(posedge clk) begin
+    if (rst == 1) begin
+      sync_counter <= 32'h0;
+      sync_period_eof <= 1'b0;
+    end else begin
+      sync_counter <= (sync_counter < TDD_SYNC_PERIOD) ? (sync_counter + 1) : 32'b0;
+      sync_period_eof <= (sync_counter == TDD_SYNC_PERIOD) ? 1'b1 : 1'b0;
+    end
+  end
+
+  // generate pulse with a specified width
+
+  always @(posedge clk) begin
+    if (rst == 1) begin
+
+Diff Content:
+- 87     if (rst == 1) begin
+- 92       sync_period_eof <= (sync_counter == TDD_SYNC_PERIOD) ? 1'b1 : 1'b0;
++ 87     if (rstn == 1'b0) begin
++ 92       sync_period_eof <= (sync_counter == (TDD_SYNC_PERIOD - 1)) ? 1'b1 : 1'b0;
+
+Clone Blocks:

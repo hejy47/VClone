@@ -1,0 +1,61 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@110:120@HdlStmAssign
+assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
+
+assign offload_sdi_data = sdi_data;
+
+assign cmd_int_s = cmd_mem[spi_cmd_rd_addr];
+assign sdo_data = sdo_mem[spi_sdo_rd_addr];
+
+/* SYNC ID counter. The offload module increments the sync_id on each
+ * transaction. The initial value of the sync_id is the value of the last
+ * sync_id command loaded into the command buffer.
+ */
+
+Diff Content:
+- 115 assign sdo_data = sdo_mem[spi_sdo_rd_addr];
++ 115   assign cmd_int_s = cmd_mem[spi_cmd_rd_addr];
++ 115   assign sdo_data = sdo_mem[spi_sdo_rd_addr];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@105:115
+
+assign offload_sdi_valid = sdi_data_valid;
+
+// we don't want to block the SDI interface after disabling the module
+// so just assert the SDI_READY if the sink module (DMA) is disabled
+assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
+
+assign offload_sdi_data = sdi_data;
+
+assign cmd_int_s = cmd_mem[spi_cmd_rd_addr];
+assign sdo_data = sdo_mem[spi_sdo_rd_addr];
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@107:117
+
+// we don't want to block the SDI interface after disabling the module
+// so just assert the SDI_READY if the sink module (DMA) is disabled
+assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
+
+assign offload_sdi_data = sdi_data;
+
+assign cmd_int_s = cmd_mem[spi_cmd_rd_addr];
+assign sdo_data = sdo_mem[spi_sdo_rd_addr];
+
+/* SYNC ID counter. The offload module increments the sync_id on each
+
+Clone Blocks 3:
+hdl/library/axi_ad5766/axi_ad5766.v@155:165
+
+  // command and SDO data offload
+
+  assign cmd_valid = spi_active;
+  assign cmd_data = cmd_mem[spi_cmd_rd_addr];
+  assign sdo_data_valid = spi_active;
+  assign sdo_data = sdo_mem[spi_sdo_rd_addr];
+  assign sync_ready = 1'b1;
+
+  assign sdi_data_ready = 1'b0;
+
+

@@ -1,0 +1,52 @@
+Source Block: hdl/library/jesd204/jesd204_tx_static_config/jesd204_tx_static_config.v@101:111@HdlStmAssign
+assign device_cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
+assign device_cfg_beats_per_multiframe = ((FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) /
+                                          TPL_DATA_PATH_WIDTH) - 1;
+assign device_cfg_lmfc_offset = 1;
+assign device_cfg_sysref_oneshot = SYSREF_ONE_SHOT;
+assign device_cfg_sysref_disable = SYSREF_DISABLE;
+
+jesd204_ilas_cfg_static #(
+  .DID(8'h00),
+  .BID(5'h00),
+  .L(NUM_LANES - 1),
+
+Diff Content:
+- 106 assign device_cfg_sysref_disable = SYSREF_DISABLE;
++ 106   assign device_cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
++ 106   assign device_cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
++ 106   assign device_cfg_beats_per_multiframe = ((FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) /
++ 106                                             TPL_DATA_PATH_WIDTH) - 1;
++ 106   assign device_cfg_lmfc_offset = 1;
++ 106   assign device_cfg_sysref_oneshot = SYSREF_ONE_SHOT;
++ 106   assign device_cfg_sysref_disable = SYSREF_DISABLE;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx_static_config/jesd204_tx_static_config.v@99:109
+
+assign device_cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
+assign device_cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
+assign device_cfg_beats_per_multiframe = ((FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) /
+                                          TPL_DATA_PATH_WIDTH) - 1;
+assign device_cfg_lmfc_offset = 1;
+assign device_cfg_sysref_oneshot = SYSREF_ONE_SHOT;
+assign device_cfg_sysref_disable = SYSREF_DISABLE;
+
+jesd204_ilas_cfg_static #(
+  .DID(8'h00),
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_tx_static_config/jesd204_tx_static_config.v@100:110
+assign device_cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
+assign device_cfg_octets_per_frame = OCTETS_PER_FRAME - 1;
+assign device_cfg_beats_per_multiframe = ((FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) /
+                                          TPL_DATA_PATH_WIDTH) - 1;
+assign device_cfg_lmfc_offset = 1;
+assign device_cfg_sysref_oneshot = SYSREF_ONE_SHOT;
+assign device_cfg_sysref_disable = SYSREF_DISABLE;
+
+jesd204_ilas_cfg_static #(
+  .DID(8'h00),
+  .BID(5'h00),
+

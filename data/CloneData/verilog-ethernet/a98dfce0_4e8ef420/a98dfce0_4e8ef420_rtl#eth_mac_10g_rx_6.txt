@@ -1,0 +1,171 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_rx.v@77:87@HdlIdDef
+reg [63:0] xgmii_rxd_d1 = 64'h0707070707070707;
+
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+
+Diff Content:
+- 82 reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@81:91
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@80:90
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+
+Clone Blocks 3:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@81:91
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@75:85
+
+reg [63:0] xgmii_rxd_d0 = 64'h0707070707070707;
+reg [63:0] xgmii_rxd_d1 = 64'h0707070707070707;
+
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@77:87
+reg [63:0] xgmii_rxd_d1 = 64'h0707070707070707;
+
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+
+Clone Blocks 6:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@79:89
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@80:90
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+
+Clone Blocks 8:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@74:84
+reg [3:0] swap_rxc = 0;
+
+reg [63:0] xgmii_rxd_d0 = 64'h0707070707070707;
+reg [63:0] xgmii_rxd_d1 = 64'h0707070707070707;
+
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@78:88
+
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@79:89
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@78:88
+
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+

@@ -1,0 +1,98 @@
+Source Block: hdl/library/common/ad_gt_es.v@174:184@HdlIdDef
+  localparam  ES_FSM_SCNT_RRDY        = 6'h2e;
+  localparam  ES_FSM_ECNT_READ        = 6'h2f;
+  localparam  ES_FSM_ECNT_RRDY        = 6'h30;
+  localparam  ES_FSM_DMA_WRITE        = 6'h31;
+  localparam  ES_FSM_DMA_READY        = 6'h32;
+  localparam  ES_FSM_UPDATE           = 6'h33;
+
+  // drp interface
+
+  input           up_rstn;
+  input           up_clk;
+
+Diff Content:
+- 179   localparam  ES_FSM_UPDATE           = 6'h33;
++ 179   localparam  [ 5:0]  ES_FSM_IDLE             = 6'h00;
++ 179   localparam  [ 5:0]  ES_FSM_STATUS           = 6'h01;
++ 179   localparam  [ 5:0]  ES_FSM_INIT             = 6'h02;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLINIT_READ    = 6'h03;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLINIT_RRDY    = 6'h04;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLINIT_WRITE   = 6'h05;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLINIT_WRDY    = 6'h06;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA0_WRITE     = 6'h07;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA0_WRDY      = 6'h08;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA1_WRITE     = 6'h09;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA1_WRDY      = 6'h0a;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA2_WRITE     = 6'h0b;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA2_WRDY      = 6'h0c;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA3_WRITE     = 6'h0d;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA3_WRDY      = 6'h0e;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA4_WRITE     = 6'h0f;
++ 179   localparam  [ 5:0]  ES_FSM_SDATA4_WRDY      = 6'h10;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA0_WRITE     = 6'h11;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA0_WRDY      = 6'h12;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA1_WRITE     = 6'h13;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA1_WRDY      = 6'h14;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA2_WRITE     = 6'h15;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA2_WRDY      = 6'h16;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA3_WRITE     = 6'h17;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA3_WRDY      = 6'h18;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA4_WRITE     = 6'h19;
++ 179   localparam  [ 5:0]  ES_FSM_QDATA4_WRDY      = 6'h1a;
++ 179   localparam  [ 5:0]  ES_FSM_HOFFSET_READ     = 6'h1b;
++ 179   localparam  [ 5:0]  ES_FSM_HOFFSET_RRDY     = 6'h1c;
++ 179   localparam  [ 5:0]  ES_FSM_HOFFSET_WRITE    = 6'h1d;
++ 179   localparam  [ 5:0]  ES_FSM_HOFFSET_WRDY     = 6'h1e;
++ 179   localparam  [ 5:0]  ES_FSM_VOFFSET_READ     = 6'h1f;
++ 179   localparam  [ 5:0]  ES_FSM_VOFFSET_RRDY     = 6'h20;
++ 179   localparam  [ 5:0]  ES_FSM_VOFFSET_WRITE    = 6'h21;
++ 179   localparam  [ 5:0]  ES_FSM_VOFFSET_WRDY     = 6'h22;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLSTART_READ   = 6'h23;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLSTART_RRDY   = 6'h24;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLSTART_WRITE  = 6'h25;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLSTART_WRDY   = 6'h26;
++ 179   localparam  [ 5:0]  ES_FSM_STATUS_READ      = 6'h27;
++ 179   localparam  [ 5:0]  ES_FSM_STATUS_RRDY      = 6'h28;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLSTOP_READ    = 6'h29;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLSTOP_RRDY    = 6'h2a;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLSTOP_WRITE   = 6'h2b;
++ 179   localparam  [ 5:0]  ES_FSM_CTRLSTOP_WRDY    = 6'h2c;
++ 179   localparam  [ 5:0]  ES_FSM_SCNT_READ        = 6'h2d;
++ 179   localparam  [ 5:0]  ES_FSM_SCNT_RRDY        = 6'h2e;
++ 179   localparam  [ 5:0]  ES_FSM_ECNT_READ        = 6'h2f;
++ 179   localparam  [ 5:0]  ES_FSM_ECNT_RRDY        = 6'h30;
++ 179   localparam  [ 5:0]  ES_FSM_DMA_WRITE        = 6'h31;
++ 179   localparam  [ 5:0]  ES_FSM_DMA_READY        = 6'h32;
++ 179   localparam  [ 5:0]  ES_FSM_UPDATE           = 6'h33;
++ 179   input           lpm_dfe_n;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_gt_es.v@173:183
+  localparam  ES_FSM_SCNT_READ        = 6'h2d;
+  localparam  ES_FSM_SCNT_RRDY        = 6'h2e;
+  localparam  ES_FSM_ECNT_READ        = 6'h2f;
+  localparam  ES_FSM_ECNT_RRDY        = 6'h30;
+  localparam  ES_FSM_DMA_WRITE        = 6'h31;
+  localparam  ES_FSM_DMA_READY        = 6'h32;
+  localparam  ES_FSM_UPDATE           = 6'h33;
+
+  // drp interface
+
+  input           up_rstn;
+
+Clone Blocks 2:
+hdl/library/common/ad_gt_es.v@172:182
+  localparam  ES_FSM_CTRLSTOP_WRDY    = 6'h2c;
+  localparam  ES_FSM_SCNT_READ        = 6'h2d;
+  localparam  ES_FSM_SCNT_RRDY        = 6'h2e;
+  localparam  ES_FSM_ECNT_READ        = 6'h2f;
+  localparam  ES_FSM_ECNT_RRDY        = 6'h30;
+  localparam  ES_FSM_DMA_WRITE        = 6'h31;
+  localparam  ES_FSM_DMA_READY        = 6'h32;
+  localparam  ES_FSM_UPDATE           = 6'h33;
+
+  // drp interface
+
+

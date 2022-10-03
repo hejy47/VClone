@@ -1,0 +1,17 @@
+Source Block: hdl/projects/fmcjesdadc1/a5gt/system_top.v@231:241@HdlIdDef
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  genvar n;
+  generate
+  for (n = 0; n < 4; n = n + 1) begin: g_align_1
+  ad_jesd_align i_jesd_align (
+    .rx_clk (rx_clk),
+    .rx_ip_sof (rx_ip_sof_s),
+
+Diff Content:
+- 236   genvar n;
+
+Clone Blocks:

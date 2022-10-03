@@ -1,0 +1,53 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@107:123@HdlStmProcess
+  sysref_d1 <= sysref_r;
+  sysref_d2 <= sysref_d1;
+  sysref_d3 <= sysref_d2;
+end
+
+always @(posedge clk) begin
+  if (sysref_d3 == 1'b0 && sysref_d2 == 1'b1 && cfg_sysref_disable == 1'b0) begin
+    sysref_edge <= 1'b1;
+  end else begin
+    sysref_edge <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sysref_captured <= 1'b0;
+  end else if (sysref_edge == 1'b1) begin
+
+Diff Content:
+- 112 always @(posedge clk) begin
+- 113   if (sysref_d3 == 1'b0 && sysref_d2 == 1'b1 && cfg_sysref_disable == 1'b0) begin
+- 114     sysref_edge <= 1'b1;
+- 115   end else begin
+- 116     sysref_edge <= 1'b0;
+- 118 end
++ 116   localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
++ 116   localparam BEATS_PER_MF_WIDTH = 10-DPW_LOG2;
++ 116   reg  [BEATS_PER_MF_WIDTH:0]       cfg_whole_beats_per_multiframe;
++ 116   reg sysref_r = 1'b0;
++ 116   reg sysref_d1 = 1'b0;
++ 116   reg sysref_d2 = 1'b0;
++ 116   reg sysref_d3 = 1'b0;
++ 116   reg sysref_captured;
++ 116   /* lmfc_octet_counter = lmfc_counter * (char_clock_rate / device_clock_rate) */
++ 116   reg [7:0] lmfc_counter_next = 'h00;
++ 116   reg lmfc_clk_p1 = 1'b1;
++ 116   reg lmfc_active = 1'b0;
++ 116   always @(posedge clk) begin
++ 116     sysref_r <= sysref;
++ 116   end
++ 116   /*
++ 116    * Unfortunately setup and hold are often ignored on the sysref signal relative
++ 116    * to the device clock. The device will often still work fine, just not
++ 116    * deterministic. Reduce the probability that the meta-stability creeps into the
++ 116    * reset of the system and causes non-reproducible issues.
++ 116    */
++ 116   always @(posedge clk) begin
++ 116     sysref_d1 <= sysref_r;
++ 116     sysref_d2 <= sysref_d1;
++ 116     sysref_d3 <= sysref_d2;
+
+Clone Blocks:

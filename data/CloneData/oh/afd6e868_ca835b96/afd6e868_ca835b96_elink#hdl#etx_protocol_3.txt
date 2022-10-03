@@ -1,0 +1,21 @@
+Source Block: oh/elink/hdl/etx_protocol.v@114:125@HdlStmAssign
+	  end // else: !if(reset)	
+     end // always @ ( posedge txlclk_p or posedge reset )
+
+
+   //First/second cycle select
+   assign tx_data_par[63:0] = etx_cycle ? tx_data_reg[127:64]:
+			                  tx_data_reg[63:0];
+      
+   //#############################
+   //# Wait signals (async)
+   //#############################
+
+
+Diff Content:
+- 119    assign tx_data_par[63:0] = etx_cycle ? tx_data_reg[127:64]:
+- 120 			                  tx_data_reg[63:0];
++ 120    assign tx_data_par[63:0] = ~etx_sample ? tx_data_reg[63:0] : //first cycle
++ 120                                             tx_data_reg[127:64];//all others, 0 or upper
+
+Clone Blocks:

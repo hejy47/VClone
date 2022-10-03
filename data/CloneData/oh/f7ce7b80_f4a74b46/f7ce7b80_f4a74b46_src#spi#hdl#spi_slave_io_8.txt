@@ -1,0 +1,19 @@
+Source Block: oh/src/spi/hdl/spi_slave_io.v@156:166@HdlStmAssign
+			  byte_done &
+			  ~ss       &
+			  (command_reg[7:6]==`SPI_WR) & 
+			  (spi_state[1:0]==`SPI_DATA_STATE);
+    
+   assign spi_wdata[7:0] = rx_data[7:0];
+
+   //###################################
+   //# REMOTE FETCH LOGIC
+   //###################################
+   
+
+Diff Content:
+- 161    assign spi_wdata[7:0] = rx_data[7:0];
++ 161    assign spi_wdata[7:0] = lsbfirst ? {mosi, rx_data[7:1]}
++ 161 				    : {rx_data[6:0], mosi};
+
+Clone Blocks:

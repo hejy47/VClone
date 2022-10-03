@@ -1,0 +1,129 @@
+Source Block: oh/emmu/hdl/emmu.v@88:98@HdlIdDef
+   reg 		      emesh_write_out;
+   reg [1:0] 	      emesh_datamode_out;
+   reg [3:0] 	      emesh_ctrlmode_out;
+   reg [AW-1:0]       emesh_srcaddr_out;
+   reg [DW-1:0]	      emesh_data_out; 
+   reg [AW-1:0]       emesh_dstaddr_reg;
+   
+   /*****************************/
+   /*EMESH OUTPUT TRANSACTION   */
+   /*****************************/   
+
+
+Diff Content:
+- 93    reg [AW-1:0]       emesh_dstaddr_reg;
++ 93    reg 		      emmu_access_out;
++ 93    reg 		      emmu_write_out;
++ 93    reg [1:0] 	      emmu_datamode_out;
++ 93    reg [3:0] 	      emmu_ctrlmode_out;
++ 93    reg [AW-1:0]       emmu_srcaddr_out;
++ 93    reg [DW-1:0]	      emmu_data_out; 
++ 93    reg [AW-1:0]       emmu_dstaddr_reg;
++ 93    wire [63:0] 	      emmu_lookup_data;
++ 93    wire [63:0] 	      mi_wr_data;
++ 93    wire [7:0] 	      mi_wr_en;
++ 93    /*****************************/
++ 93    /*MMU WRITE LOGIC            */
++ 93    /*****************************/
++ 93    assign mi_wr_data[63:0] = {mi_din[31:0], mi_din[31:0]};
++ 93    assign mi_wr_en[7:0] = (mi_en & mi_we & mi_addr[0]) ? 8'b11110000 :
++ 93 	                  (mi_en & mi_we & ~mi_addr[0])? 8'b00001111 :
++ 93 			                                 8'b00000000 ;
++ 93    memory_dp #(.DW(PAW),.AW(IDW+1)) 
++ 93    memory_dp (
++ 93 	      .rd_data	(emmu_lookup_data[63:0]),
++ 93 	      .wr_clk	(mi_clk),
++ 93 	      .wr_en	(mi_wr_en[7:0]),
++ 93 	      .wr_addr	(mi_addr[IDW:0]),        //note the extra bit
++ 93 	      .wr_data	(mi_wr_data[63:0]),
++ 93 	      .rd_clk	(clk),
++ 93 	      .rd_en	(emesh_access_in),
++ 93 	      .rd_addr	({emesh_dstaddr_in[AW-1:20],1'b0})
++ 93 	      );
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/dv/dv_emmu.v@117:127
+   wire [3:0]		emesh_ctrlmode_out;	// From emmu of emmu.v
+   wire [DW-1:0]	emesh_data_out;		// From emmu of emmu.v
+   wire [1:0]		emesh_datamode_out;	// From emmu of emmu.v
+   wire [PAW-1:0]	emesh_dstaddr_out;	// From emmu of emmu.v
+   wire [AW-1:0]	emesh_srcaddr_out;	// From emmu of emmu.v
+   wire			emesh_write_out;	// From emmu of emmu.v
+   wire [DW-1:0]	mi_data_out;		// From emmu of emmu.v
+   // End of automatics
+   /*AUTOWIRE*/
+   
+   //DUT
+
+Clone Blocks 2:
+oh/emmu/dv/dv_emmu.v@112:122
+  
+   
+   /*AUTOWIRE*/
+   // Beginning of automatic wires (for undeclared instantiated-module outputs)
+   wire			emesh_access_out;	// From emmu of emmu.v
+   wire [3:0]		emesh_ctrlmode_out;	// From emmu of emmu.v
+   wire [DW-1:0]	emesh_data_out;		// From emmu of emmu.v
+   wire [1:0]		emesh_datamode_out;	// From emmu of emmu.v
+   wire [PAW-1:0]	emesh_dstaddr_out;	// From emmu of emmu.v
+   wire [AW-1:0]	emesh_srcaddr_out;	// From emmu of emmu.v
+   wire			emesh_write_out;	// From emmu of emmu.v
+
+Clone Blocks 3:
+oh/emmu/dv/dv_emmu.v@118:128
+   wire [DW-1:0]	emesh_data_out;		// From emmu of emmu.v
+   wire [1:0]		emesh_datamode_out;	// From emmu of emmu.v
+   wire [PAW-1:0]	emesh_dstaddr_out;	// From emmu of emmu.v
+   wire [AW-1:0]	emesh_srcaddr_out;	// From emmu of emmu.v
+   wire			emesh_write_out;	// From emmu of emmu.v
+   wire [DW-1:0]	mi_data_out;		// From emmu of emmu.v
+   // End of automatics
+   /*AUTOWIRE*/
+   
+   //DUT
+   emmu emmu(
+
+Clone Blocks 4:
+oh/emmu/dv/dv_emmu.v@20:30
+   reg 	      mi_write;
+
+   //emesh interface
+   reg              emesh_access_in;
+   reg              emesh_write_in;
+   reg [1:0]        emesh_datamode_in;
+   reg [3:0]        emesh_ctrlmode_in;
+   reg [AW-1:0]     emesh_dstaddr_in;
+   reg [AW-1:0]     emesh_srcaddr_in;
+   reg [DW-1:0]     emesh_data_in;
+   
+
+Clone Blocks 5:
+oh/emmu/dv/dv_emmu.v@24:34
+   reg              emesh_write_in;
+   reg [1:0]        emesh_datamode_in;
+   reg [3:0]        emesh_ctrlmode_in;
+   reg [AW-1:0]     emesh_dstaddr_in;
+   reg [AW-1:0]     emesh_srcaddr_in;
+   reg [DW-1:0]     emesh_data_in;
+   
+   //Test junk
+   reg [1:0]  test_state;
+   reg 	      go;
+  
+
+Clone Blocks 6:
+oh/emmu/dv/dv_emmu.v@21:31
+
+   //emesh interface
+   reg              emesh_access_in;
+   reg              emesh_write_in;
+   reg [1:0]        emesh_datamode_in;
+   reg [3:0]        emesh_ctrlmode_in;
+   reg [AW-1:0]     emesh_dstaddr_in;
+   reg [AW-1:0]     emesh_srcaddr_in;
+   reg [DW-1:0]     emesh_data_in;
+   
+   //Test junk
+

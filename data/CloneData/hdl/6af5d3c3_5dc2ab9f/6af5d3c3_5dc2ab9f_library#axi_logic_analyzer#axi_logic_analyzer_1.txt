@@ -1,0 +1,37 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@252:262@HdlStmAssign
+        adc_data_mn <= data_m[ADC_PATH_DELAY-2];
+      end
+    end
+  endgenerate
+
+  assign adc_valid = sample_valid_la;
+
+  // downsampler logic analyzer
+
+  always @(posedge clk_out) begin
+    if (reset == 1'b1) begin
+
+Diff Content:
++ 257   always @(posedge clk_out) begin
++ 257     trigger_m1 <= trigger_i;
++ 257   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@245:259
+          data_m[j+1] <= data_m[j];
+        end
+      end
+    end
+
+    always @(posedge clk_out) begin
+      if (sample_valid_la == 1'b1) begin
+        adc_data_mn <= data_m[ADC_PATH_DELAY-2];
+      end
+    end
+  endgenerate
+
+  assign adc_valid = sample_valid_la;
+
+  // downsampler logic analyzer
+

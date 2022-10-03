@@ -1,0 +1,18 @@
+Source Block: hdl/library/common/ad_mux_core.v@44:54@HdlIdDef
+  input [CH_W*CH_CNT-1:0] data_in,
+  input [$clog2(CH_CNT)-1:0] ch_sel,
+  output [CH_W-1:0] data_out
+);
+
+wire [CH_W-1:0] data_out_loc;
+
+assign data_out_loc = data_in >> CH_W*ch_sel;
+
+generate if (EN_REG) begin
+  reg [CH_W-1:0] data_out_reg;
+
+Diff Content:
+- 49 wire [CH_W-1:0] data_out_loc;
++ 49   wire [CH_W-1:0] data_out_loc;
+
+Clone Blocks:

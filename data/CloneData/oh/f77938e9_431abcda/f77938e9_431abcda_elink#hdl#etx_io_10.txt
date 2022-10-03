@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/etx_io.v@170:180@HdlStmAssign
+       end
+   //Wait signal (align with end of transfer)
+
+   wire tx_wait_in = tx_rd_wait_sync | tx_wr_wait_sync;
+       
+   assign tx_wait = tx_wait_in & ~(|counter[2:1]);
+   
+		         
+   //#############################
+   //# 2 CYCLE PACKET PIPELINE
+   //#############################  
+
+Diff Content:
+- 175    assign tx_wait = tx_wait_in & ~(|counter[2:1]);
+
+Clone Blocks:

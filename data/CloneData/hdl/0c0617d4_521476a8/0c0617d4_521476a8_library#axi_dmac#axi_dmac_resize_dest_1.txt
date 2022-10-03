@@ -1,0 +1,204 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_resize_dest.v@58:138@HdlStmIf
+/*
+ * Resize the data width between the burst memory and the destination interface
+ * if necessary.
+ */
+
+generate if (DATA_WIDTH_DEST == DATA_WIDTH_MEM)  begin
+  assign dest_data_valid = mem_data_valid;
+  assign dest_data = mem_data;
+  assign dest_data_last = mem_data_last;
+  assign dest_data_strb = mem_data_strb;
+  assign mem_data_ready = dest_data_ready;
+end else begin
+
+  localparam RATIO = DATA_WIDTH_MEM / DATA_WIDTH_DEST;
+
+  reg [$clog2(RATIO)-1:0] count = 'h0;
+  reg valid = 1'b0;
+  reg [RATIO-1:0] last = 'h0;
+  reg [DATA_WIDTH_MEM-1:0] data = 'h0;
+  reg [DATA_WIDTH_MEM/8-1:0] strb = {DATA_WIDTH_MEM/8{1'b1}};
+
+  wire last_beat;
+
+  assign last_beat = (count == RATIO - 1) | last[0];
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      valid <= 1'b0;
+    end else if (mem_data_valid == 1'b1) begin
+      valid <= 1'b1;
+    end else if (last_beat == 1'b1 && dest_data_ready == 1'b1) begin
+      valid <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      count <= 'h0;
+    end else if (dest_data_ready == 1'b1 && dest_data_valid == 1'b1) begin
+      if (last_beat == 1'b1) begin
+        count <= 'h0;
+      end else begin
+        count <= count + 1;
+      end
+    end
+  end
+
+  assign mem_data_ready = ~valid | (dest_data_ready & last_beat);
+
+  integer i;
+  always @(posedge clk) begin
+    if (mem_data_ready == 1'b1) begin
+      data <= mem_data;
+
+      /*
+       * Skip those words where strb would be completely zero for the output
+       * word. We assume that strb is thermometer encoded (i.e. a certain number
+       * of LSBs are 1'b1 followed by all 1'b0 in the MSBs) and by extension
+       * that if the first strb bit for a word is zero that means that all strb
+       * bits for a word will be zero.
+       */
+      for (i = 0; i < RATIO-1; i = i + 1) begin
+        last[i] <= mem_data_last & ~mem_data_strb[(i+1)*(DATA_WIDTH_MEM/8/RATIO)];
+      end
+      last[RATIO-1] <= mem_data_last;
+      strb <= mem_data_strb;
+    end else if (dest_data_ready == 1'b1) begin
+      data[DATA_WIDTH_MEM-DATA_WIDTH_DEST-1:0] <= data[DATA_WIDTH_MEM-1:DATA_WIDTH_DEST];
+      strb[(DATA_WIDTH_MEM-DATA_WIDTH_DEST)/8-1:0] <= strb[DATA_WIDTH_MEM/8-1:DATA_WIDTH_DEST/8];
+      last[RATIO-2:0] <= last[RATIO-1:1];
+    end
+  end
+
+  assign dest_data_valid = valid;
+  assign dest_data = data[DATA_WIDTH_DEST-1:0];
+  assign dest_data_strb = strb[DATA_WIDTH_DEST/8-1:0];
+  assign dest_data_last = last[0];
+
+end endgenerate
+
+endmodule
+
+Diff Content:
+- 63 generate if (DATA_WIDTH_DEST == DATA_WIDTH_MEM)  begin
+- 64   assign dest_data_valid = mem_data_valid;
+- 65   assign dest_data = mem_data;
+- 66   assign dest_data_last = mem_data_last;
+- 67   assign dest_data_strb = mem_data_strb;
+- 68   assign mem_data_ready = dest_data_ready;
+- 69 end else begin
+- 71   localparam RATIO = DATA_WIDTH_MEM / DATA_WIDTH_DEST;
+- 73   reg [$clog2(RATIO)-1:0] count = 'h0;
+- 74   reg valid = 1'b0;
+- 75   reg [RATIO-1:0] last = 'h0;
+- 76   reg [DATA_WIDTH_MEM-1:0] data = 'h0;
+- 77   reg [DATA_WIDTH_MEM/8-1:0] strb = {DATA_WIDTH_MEM/8{1'b1}};
+- 79   wire last_beat;
+- 81   assign last_beat = (count == RATIO - 1) | last[0];
+- 83   always @(posedge clk) begin
+- 84     if (reset == 1'b1) begin
+- 85       valid <= 1'b0;
+- 86     end else if (mem_data_valid == 1'b1) begin
+- 87       valid <= 1'b1;
+- 88     end else if (last_beat == 1'b1 && dest_data_ready == 1'b1) begin
+- 89       valid <= 1'b0;
+- 91   end
+- 93   always @(posedge clk) begin
+- 94     if (reset == 1'b1) begin
+- 95       count <= 'h0;
+- 96     end else if (dest_data_ready == 1'b1 && dest_data_valid == 1'b1) begin
+- 97       if (last_beat == 1'b1) begin
+- 99       end else begin
+- 100         count <= count + 1;
+- 103   end
+- 105   assign mem_data_ready = ~valid | (dest_data_ready & last_beat);
+- 107   integer i;
+- 108   always @(posedge clk) begin
+- 109     if (mem_data_ready == 1'b1) begin
+- 110       data <= mem_data;
+- 112       /*
+- 113        * Skip those words where strb would be completely zero for the output
+- 114        * word. We assume that strb is thermometer encoded (i.e. a certain number
+- 115        * of LSBs are 1'b1 followed by all 1'b0 in the MSBs) and by extension
+- 116        * that if the first strb bit for a word is zero that means that all strb
+- 117        * bits for a word will be zero.
+- 118        */
+- 119       for (i = 0; i < RATIO-1; i = i + 1) begin
+- 120         last[i] <= mem_data_last & ~mem_data_strb[(i+1)*(DATA_WIDTH_MEM/8/RATIO)];
+- 122       last[RATIO-1] <= mem_data_last;
+- 123       strb <= mem_data_strb;
+- 124     end else if (dest_data_ready == 1'b1) begin
+- 125       data[DATA_WIDTH_MEM-DATA_WIDTH_DEST-1:0] <= data[DATA_WIDTH_MEM-1:DATA_WIDTH_DEST];
+- 126       strb[(DATA_WIDTH_MEM-DATA_WIDTH_DEST)/8-1:0] <= strb[DATA_WIDTH_MEM/8-1:DATA_WIDTH_DEST/8];
+- 127       last[RATIO-2:0] <= last[RATIO-1:1];
+- 129   end
+- 131   assign dest_data_valid = valid;
+- 132   assign dest_data = data[DATA_WIDTH_DEST-1:0];
+- 133   assign dest_data_strb = strb[DATA_WIDTH_DEST/8-1:0];
+- 134   assign dest_data_last = last[0];
+- 136 end endgenerate
++ 89   /*
++ 89    * Resize the data width between the burst memory and the destination interface
++ 89    * if necessary.
++ 89    */
++ 89   generate if (DATA_WIDTH_DEST == DATA_WIDTH_MEM)  begin
++ 89     assign dest_data_valid = mem_data_valid;
++ 89     assign dest_data = mem_data;
++ 89     assign dest_data_last = mem_data_last;
++ 89     assign dest_data_strb = mem_data_strb;
++ 89     assign mem_data_ready = dest_data_ready;
++ 89   end else begin
++ 89     localparam RATIO = DATA_WIDTH_MEM / DATA_WIDTH_DEST;
++ 89     reg [$clog2(RATIO)-1:0] count = 'h0;
++ 89     reg valid = 1'b0;
++ 89     reg [RATIO-1:0] last = 'h0;
++ 89     reg [DATA_WIDTH_MEM-1:0] data = 'h0;
++ 89     reg [DATA_WIDTH_MEM/8-1:0] strb = {DATA_WIDTH_MEM/8{1'b1}};
++ 89     wire last_beat;
++ 89     assign last_beat = (count == RATIO - 1) | last[0];
++ 89     always @(posedge clk) begin
++ 89       if (reset == 1'b1) begin
++ 89         valid <= 1'b0;
++ 89       end else if (mem_data_valid == 1'b1) begin
++ 89         valid <= 1'b1;
++ 89       end else if (last_beat == 1'b1 && dest_data_ready == 1'b1) begin
++ 89         valid <= 1'b0;
++ 89       end
++ 97     always @(posedge clk) begin
++ 97       if (reset == 1'b1) begin
++ 100       end else if (dest_data_ready == 1'b1 && dest_data_valid == 1'b1) begin
++ 100         if (last_beat == 1'b1) begin
++ 100           count <= 'h0;
++ 100         end else begin
++ 100           count <= count + 1;
++ 100         end
++ 120     assign mem_data_ready = ~valid | (dest_data_ready & last_beat);
++ 120     integer i;
++ 120     always @(posedge clk) begin
++ 120       if (mem_data_ready == 1'b1) begin
++ 120         data <= mem_data;
++ 120         /*
++ 120          * Skip those words where strb would be completely zero for the output
++ 120          * word. We assume that strb is thermometer encoded (i.e. a certain number
++ 120          * of LSBs are 1'b1 followed by all 1'b0 in the MSBs) and by extension
++ 120          * that if the first strb bit for a word is zero that means that all strb
++ 120          * bits for a word will be zero.
++ 120          */
++ 120         for (i = 0; i < RATIO-1; i = i + 1) begin
++ 120           last[i] <= mem_data_last & ~mem_data_strb[(i+1)*(DATA_WIDTH_MEM/8/RATIO)];
++ 120         end
++ 120         last[RATIO-1] <= mem_data_last;
++ 120         strb <= mem_data_strb;
++ 120       end else if (dest_data_ready == 1'b1) begin
++ 120         data[DATA_WIDTH_MEM-DATA_WIDTH_DEST-1:0] <= data[DATA_WIDTH_MEM-1:DATA_WIDTH_DEST];
++ 120         strb[(DATA_WIDTH_MEM-DATA_WIDTH_DEST)/8-1:0] <= strb[DATA_WIDTH_MEM/8-1:DATA_WIDTH_DEST/8];
++ 120         last[RATIO-2:0] <= last[RATIO-1:1];
++ 134     assign dest_data_valid = valid;
++ 134     assign dest_data = data[DATA_WIDTH_DEST-1:0];
++ 134     assign dest_data_strb = strb[DATA_WIDTH_DEST/8-1:0];
++ 134     assign dest_data_last = last[0];
++ 136   end endgenerate
+
+Clone Blocks:

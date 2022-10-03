@@ -1,0 +1,131 @@
+Source Block: verilog-ethernet/rtl/ip_mux_64_2.v@198:249@HdlStmProcess
+reg [7:0]  selected_input_ip_ttl;
+reg [7:0]  selected_input_ip_protocol;
+reg [15:0] selected_input_ip_header_checksum;
+reg [31:0] selected_input_ip_source_ip;
+reg [31:0] selected_input_ip_dest_ip;
+always @* begin
+    case (select)
+        1'd0: begin
+            selected_input_ip_hdr_valid = input_0_ip_hdr_valid;
+            selected_input_eth_dest_mac = input_0_eth_dest_mac;
+            selected_input_eth_src_mac = input_0_eth_src_mac;
+            selected_input_eth_type = input_0_eth_type;
+            selected_input_ip_version = input_0_ip_version;
+            selected_input_ip_ihl = input_0_ip_ihl;
+            selected_input_ip_dscp = input_0_ip_dscp;
+            selected_input_ip_ecn = input_0_ip_ecn;
+            selected_input_ip_length = input_0_ip_length;
+            selected_input_ip_identification = input_0_ip_identification;
+            selected_input_ip_flags = input_0_ip_flags;
+            selected_input_ip_fragment_offset = input_0_ip_fragment_offset;
+            selected_input_ip_ttl = input_0_ip_ttl;
+            selected_input_ip_protocol = input_0_ip_protocol;
+            selected_input_ip_header_checksum = input_0_ip_header_checksum;
+            selected_input_ip_source_ip = input_0_ip_source_ip;
+            selected_input_ip_dest_ip = input_0_ip_dest_ip;
+        end
+        1'd1: begin
+            selected_input_ip_hdr_valid = input_1_ip_hdr_valid;
+            selected_input_eth_dest_mac = input_1_eth_dest_mac;
+            selected_input_eth_src_mac = input_1_eth_src_mac;
+            selected_input_eth_type = input_1_eth_type;
+            selected_input_ip_version = input_1_ip_version;
+            selected_input_ip_ihl = input_1_ip_ihl;
+            selected_input_ip_dscp = input_1_ip_dscp;
+            selected_input_ip_ecn = input_1_ip_ecn;
+            selected_input_ip_length = input_1_ip_length;
+            selected_input_ip_identification = input_1_ip_identification;
+            selected_input_ip_flags = input_1_ip_flags;
+            selected_input_ip_fragment_offset = input_1_ip_fragment_offset;
+            selected_input_ip_ttl = input_1_ip_ttl;
+            selected_input_ip_protocol = input_1_ip_protocol;
+            selected_input_ip_header_checksum = input_1_ip_header_checksum;
+            selected_input_ip_source_ip = input_1_ip_source_ip;
+            selected_input_ip_dest_ip = input_1_ip_dest_ip;
+        end
+    endcase
+end
+
+// mux for incoming packet
+reg [63:0] current_input_tdata;
+reg [7:0] current_input_tkeep;
+reg current_input_tvalid;
+
+Diff Content:
++ 242         default: begin
++ 242             selected_input_ip_hdr_valid = 1'b0;
++ 242             selected_input_eth_dest_mac = 48'd0;
++ 242             selected_input_eth_src_mac = 48'd0;
++ 242             selected_input_eth_type = 16'd0;
++ 242             selected_input_ip_version = 4'd0;
++ 242             selected_input_ip_ihl = 4'd0;
++ 242             selected_input_ip_dscp = 6'd0;
++ 242             selected_input_ip_ecn = 2'd0;
++ 242             selected_input_ip_length = 16'd0;
++ 242             selected_input_ip_identification = 16'd0;
++ 242             selected_input_ip_flags = 3'd0;
++ 242             selected_input_ip_fragment_offset = 13'd0;
++ 242             selected_input_ip_ttl = 8'd0;
++ 242             selected_input_ip_protocol = 8'd0;
++ 242             selected_input_ip_header_checksum = 16'd0;
++ 242             selected_input_ip_source_ip = 32'd0;
++ 242             selected_input_ip_dest_ip = 32'd0;
++ 242         end
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip_mux_2.v@194:245
+reg [7:0]  selected_input_ip_ttl;
+reg [7:0]  selected_input_ip_protocol;
+reg [15:0] selected_input_ip_header_checksum;
+reg [31:0] selected_input_ip_source_ip;
+reg [31:0] selected_input_ip_dest_ip;
+always @* begin
+    case (select)
+        1'd0: begin
+            selected_input_ip_hdr_valid = input_0_ip_hdr_valid;
+            selected_input_eth_dest_mac = input_0_eth_dest_mac;
+            selected_input_eth_src_mac = input_0_eth_src_mac;
+            selected_input_eth_type = input_0_eth_type;
+            selected_input_ip_version = input_0_ip_version;
+            selected_input_ip_ihl = input_0_ip_ihl;
+            selected_input_ip_dscp = input_0_ip_dscp;
+            selected_input_ip_ecn = input_0_ip_ecn;
+            selected_input_ip_length = input_0_ip_length;
+            selected_input_ip_identification = input_0_ip_identification;
+            selected_input_ip_flags = input_0_ip_flags;
+            selected_input_ip_fragment_offset = input_0_ip_fragment_offset;
+            selected_input_ip_ttl = input_0_ip_ttl;
+            selected_input_ip_protocol = input_0_ip_protocol;
+            selected_input_ip_header_checksum = input_0_ip_header_checksum;
+            selected_input_ip_source_ip = input_0_ip_source_ip;
+            selected_input_ip_dest_ip = input_0_ip_dest_ip;
+        end
+        1'd1: begin
+            selected_input_ip_hdr_valid = input_1_ip_hdr_valid;
+            selected_input_eth_dest_mac = input_1_eth_dest_mac;
+            selected_input_eth_src_mac = input_1_eth_src_mac;
+            selected_input_eth_type = input_1_eth_type;
+            selected_input_ip_version = input_1_ip_version;
+            selected_input_ip_ihl = input_1_ip_ihl;
+            selected_input_ip_dscp = input_1_ip_dscp;
+            selected_input_ip_ecn = input_1_ip_ecn;
+            selected_input_ip_length = input_1_ip_length;
+            selected_input_ip_identification = input_1_ip_identification;
+            selected_input_ip_flags = input_1_ip_flags;
+            selected_input_ip_fragment_offset = input_1_ip_fragment_offset;
+            selected_input_ip_ttl = input_1_ip_ttl;
+            selected_input_ip_protocol = input_1_ip_protocol;
+            selected_input_ip_header_checksum = input_1_ip_header_checksum;
+            selected_input_ip_source_ip = input_1_ip_source_ip;
+            selected_input_ip_dest_ip = input_1_ip_dest_ip;
+        end
+    endcase
+end
+
+// mux for incoming packet
+reg [7:0] current_input_tdata;
+reg current_input_tvalid;
+reg current_input_tready;
+

@@ -1,0 +1,88 @@
+Source Block: hdl/library/common/ad_gt_es.v@318:328@HdlStmAssign
+  // prescale, horizontal and vertical offsets
+
+  assign up_es_heos_s = (up_es_hoffset == up_es_hoffset_max) ? up_es_ut : 1'b0;
+  assign up_es_eos_s = (up_es_voffset == up_es_voffset_max) ? up_es_heos_s : 1'b0;
+
+  assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
+  assign up_es_voffset_2_s = ~up_es_voffset + 1'b1;
+  assign up_es_voffset_n_s = {1'b1, up_es_voffset_2_s[6:0]};
+  assign up_es_voffset_s = (up_es_voffset[7] == 1'b1) ? up_es_voffset_n_s : up_es_voffset;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Diff Content:
+- 323   assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
++ 323   assign up_es_ut_s = up_es_ut & ~lpm_dfe_n;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_gt_es.v@321:331
+  assign up_es_eos_s = (up_es_voffset == up_es_voffset_max) ? up_es_heos_s : 1'b0;
+
+  assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
+  assign up_es_voffset_2_s = ~up_es_voffset + 1'b1;
+  assign up_es_voffset_n_s = {1'b1, up_es_voffset_2_s[6:0]};
+  assign up_es_voffset_s = (up_es_voffset[7] == 1'b1) ? up_es_voffset_n_s : up_es_voffset;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_es_status <= 1'b0;
+      up_es_ut <= 'd0;
+
+Clone Blocks 2:
+hdl/library/common/ad_gt_es.v@319:329
+
+  assign up_es_heos_s = (up_es_hoffset == up_es_hoffset_max) ? up_es_ut : 1'b0;
+  assign up_es_eos_s = (up_es_voffset == up_es_voffset_max) ? up_es_heos_s : 1'b0;
+
+  assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
+  assign up_es_voffset_2_s = ~up_es_voffset + 1'b1;
+  assign up_es_voffset_n_s = {1'b1, up_es_voffset_2_s[6:0]};
+  assign up_es_voffset_s = (up_es_voffset[7] == 1'b1) ? up_es_voffset_n_s : up_es_voffset;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+
+Clone Blocks 3:
+hdl/library/common/ad_gt_es.v@315:325
+    end
+  end
+
+  // prescale, horizontal and vertical offsets
+
+  assign up_es_heos_s = (up_es_hoffset == up_es_hoffset_max) ? up_es_ut : 1'b0;
+  assign up_es_eos_s = (up_es_voffset == up_es_voffset_max) ? up_es_heos_s : 1'b0;
+
+  assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
+  assign up_es_voffset_2_s = ~up_es_voffset + 1'b1;
+  assign up_es_voffset_n_s = {1'b1, up_es_voffset_2_s[6:0]};
+
+Clone Blocks 4:
+hdl/library/common/ad_gt_es.v@320:330
+  assign up_es_heos_s = (up_es_hoffset == up_es_hoffset_max) ? up_es_ut : 1'b0;
+  assign up_es_eos_s = (up_es_voffset == up_es_voffset_max) ? up_es_heos_s : 1'b0;
+
+  assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
+  assign up_es_voffset_2_s = ~up_es_voffset + 1'b1;
+  assign up_es_voffset_n_s = {1'b1, up_es_voffset_2_s[6:0]};
+  assign up_es_voffset_s = (up_es_voffset[7] == 1'b1) ? up_es_voffset_n_s : up_es_voffset;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_es_status <= 1'b0;
+
+Clone Blocks 5:
+hdl/library/common/ad_gt_es.v@316:326
+  end
+
+  // prescale, horizontal and vertical offsets
+
+  assign up_es_heos_s = (up_es_hoffset == up_es_hoffset_max) ? up_es_ut : 1'b0;
+  assign up_es_eos_s = (up_es_voffset == up_es_voffset_max) ? up_es_heos_s : 1'b0;
+
+  assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
+  assign up_es_voffset_2_s = ~up_es_voffset + 1'b1;
+  assign up_es_voffset_n_s = {1'b1, up_es_voffset_2_s[6:0]};
+  assign up_es_voffset_s = (up_es_voffset[7] == 1'b1) ? up_es_voffset_n_s : up_es_voffset;
+

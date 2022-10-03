@@ -1,0 +1,22 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@144:156@HdlStmFor
+    s_wr_int <= fifo_rd;
+  end
+  
+  genvar s;
+  generate
+  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_rdata
+  assign s_wdata_s[s] = fifo_rdata[(S_DATA_WIDTH-1)-s];
+  end
+  endgenerate
+
+  ad_axis_inf_rx #(.DATA_WIDTH(S_DATA_WIDTH)) i_axis_inf (
+    .clk (s_clk),
+    .rst (fifo_rst),
+
+Diff Content:
+- 149   for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_rdata
+- 150   assign s_wdata_s[s] = fifo_rdata[(S_DATA_WIDTH-1)-s];
++ 150   for (s = 0; s < DMA_DATA_WIDTH; s = s + 1) begin: g_rdata
++ 150   assign dma_wdata_s[s] = fifo_rdata[(DMA_DATA_WIDTH-1)-s];
+
+Clone Blocks:

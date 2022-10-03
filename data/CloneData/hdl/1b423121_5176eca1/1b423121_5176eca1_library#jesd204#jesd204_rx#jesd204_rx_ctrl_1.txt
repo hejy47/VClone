@@ -1,0 +1,38 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@106:136@HdlStmProcess
+  STATE_SYNCHRONIZED: status_state <= STATUS_STATE_SYNCHRONIZED;
+  default: status_state <= STATUS_STATE_RESET;
+  endcase
+end
+
+always @(posedge clk) begin
+  case (state)
+  STATE_RESET: begin
+    cgs_rst <= {NUM_LANES{1'b1}};
+    ifs_rst <= {NUM_LANES{1'b1}};
+    sync_n <= {NUM_LINKS{1'b1}};
+    latency_monitor_reset <= 1'b1;
+  end
+  STATE_CGS: begin
+    sync_n <= {NUM_LINKS{1'b0}} ^ cfg_links_disable;
+    cgs_rst <= cfg_lanes_disable;
+  end
+  STATE_SYNCHRONIZED: begin
+    if (lmfc_edge == 1'b1) begin
+      sync_n <= {NUM_LINKS{1'b1}};
+      ifs_rst <= cfg_lanes_disable;
+      latency_monitor_reset <= 1'b0;
+    end
+  end
+  endcase
+end
+
+always @(posedge clk) begin
+  case (state)
+  STATE_DEGLITCH: begin
+    if (deglitch_counter != 'h00) begin
+
+Diff Content:
+- 120     sync_n <= {NUM_LINKS{1'b0}} ^ cfg_links_disable;
++ 120     sync_n <= cfg_links_disable;
+
+Clone Blocks:

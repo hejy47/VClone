@@ -1,0 +1,39 @@
+Source Block: hdl/library/xilinx/common/ad_data_in.v@104:123@HdlStmIf
+  endgenerate
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  generate
+  if (SINGLE_ENDED == 1) begin
+  IBUF i_rx_data_ibuf (
+    .I (rx_data_in_p),
+    .O (rx_data_ibuf_s));
+  end else begin
+  IBUFDS i_rx_data_ibuf (
+    .I (rx_data_in_p),
+    .IB (rx_data_in_n),
+    .O (rx_data_ibuf_s));
+  end
+  endgenerate
+
+  // idelay
+
+  generate
+
+Diff Content:
+- 110   IBUF i_rx_data_ibuf (
+- 111     .I (rx_data_in_p),
+- 112     .O (rx_data_ibuf_s));
+- 114   IBUFDS i_rx_data_ibuf (
+- 115     .I (rx_data_in_p),
+- 116     .IB (rx_data_in_n),
+- 117     .O (rx_data_ibuf_s));
++ 112     IBUF i_rx_data_ibuf (
++ 112       .I (rx_data_in_p),
++ 112       .O (rx_data_ibuf_s));
++ 117     IBUFDS i_rx_data_ibuf (
++ 117       .I (rx_data_in_p),
++ 117       .IB (rx_data_in_n),
++ 117       .O (rx_data_ibuf_s));
+
+Clone Blocks:

@@ -1,0 +1,955 @@
+Source Block: verilog-ethernet/rtl/eth_demux_64_4.v@272:282@HdlIdDef
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+
+Diff Content:
+- 277 reg        temp_eth_payload_tlast_reg = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mux_64_4.v@326:336
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_mux_64_4.v@331:341
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+
+Clone Blocks 3:
+verilog-ethernet/rtl/eth_demux_64_4.v@265:275
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_0_eth_payload_tvalid_reg = 0;
+reg        output_1_eth_payload_tvalid_reg = 0;
+reg        output_2_eth_payload_tvalid_reg = 0;
+reg        output_3_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/ip_eth_tx_64.v@571:581
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+
+Clone Blocks 5:
+verilog-ethernet/rtl/eth_mux_64_2.v@255:265
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+
+Clone Blocks 6:
+verilog-ethernet/rtl/arp_eth_tx_64.v@298:308
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+
+Clone Blocks 7:
+verilog-ethernet/rtl/eth_mux_64_4.v@330:340
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+
+Clone Blocks 8:
+verilog-ethernet/rtl/eth_mux_2.v@239:249
+reg [7:0] output_eth_payload_tdata_reg = 0;
+reg       output_eth_payload_tvalid_reg = 0;
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/eth_mux_64_2.v@246:256
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/ip_mux_64_2.v@407:417
+reg        output_ip_payload_tuser_reg = 0;
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+assign output_ip_payload_tvalid = output_ip_payload_tvalid_reg;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/eth_mux_4.v@313:323
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+
+Clone Blocks 12:
+verilog-ethernet/rtl/eth_axis_rx_64.v@337:347
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+
+Clone Blocks 13:
+verilog-ethernet/rtl/eth_axis_rx_64.v@336:346
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+
+Clone Blocks 14:
+verilog-ethernet/rtl/eth_demux_64_4.v@276:286
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+assign output_0_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_0_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+assign output_1_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 15:
+verilog-ethernet/rtl/eth_demux_64_4.v@275:285
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+assign output_0_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_0_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+
+Clone Blocks 16:
+verilog-ethernet/rtl/eth_mux_2.v@240:250
+reg       output_eth_payload_tvalid_reg = 0;
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/eth_demux_4.v@261:271
+reg       output_2_eth_payload_tvalid_reg = 0;
+reg       output_3_eth_payload_tvalid_reg = 0;
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 18:
+verilog-ethernet/rtl/eth_mux_64_4.v@327:337
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+
+Clone Blocks 19:
+verilog-ethernet/rtl/ip_eth_tx_64.v@572:582
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 20:
+verilog-ethernet/rtl/ip_demux_64_4.v@455:465
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_0_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_0_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+assign output_0_ip_payload_tvalid = output_0_ip_payload_tvalid_reg;
+assign output_0_ip_payload_tlast = output_ip_payload_tlast_reg;
+
+Clone Blocks 21:
+verilog-ethernet/rtl/ip_eth_tx_64.v@566:576
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+
+Clone Blocks 22:
+verilog-ethernet/rtl/eth_mux_64_4.v@325:335
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 23:
+verilog-ethernet/rtl/eth_demux_64_4.v@269:279
+reg        output_2_eth_payload_tvalid_reg = 0;
+reg        output_3_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+
+Clone Blocks 24:
+verilog-ethernet/rtl/ip_demux_64_4.v@453:463
+reg        output_ip_payload_tlast_reg = 0;
+reg        output_ip_payload_tuser_reg = 0;
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_0_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_0_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+
+Clone Blocks 25:
+verilog-ethernet/rtl/eth_mux_4.v@311:321
+reg [7:0] output_eth_payload_tdata_reg = 0;
+reg       output_eth_payload_tvalid_reg = 0;
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 26:
+verilog-ethernet/rtl/eth_demux_4.v@264:274
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+assign output_0_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_0_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+Clone Blocks 27:
+verilog-ethernet/rtl/eth_demux_64_4.v@270:280
+reg        output_3_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 28:
+verilog-ethernet/rtl/eth_mux_64_2.v@251:261
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+
+Clone Blocks 29:
+verilog-ethernet/rtl/eth_axis_rx_64.v@334:344
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+
+Clone Blocks 30:
+verilog-ethernet/rtl/arp_eth_tx_64.v@299:309
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 31:
+verilog-ethernet/rtl/eth_mux_64_4.v@328:338
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+
+Clone Blocks 32:
+verilog-ethernet/rtl/eth_demux_4.v@266:276
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+assign output_0_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_0_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+assign output_1_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 33:
+verilog-ethernet/rtl/eth_mux_4.v@316:326
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+
+Clone Blocks 34:
+verilog-ethernet/rtl/eth_demux_64_4.v@267:277
+reg        output_0_eth_payload_tvalid_reg = 0;
+reg        output_1_eth_payload_tvalid_reg = 0;
+reg        output_2_eth_payload_tvalid_reg = 0;
+reg        output_3_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+
+Clone Blocks 35:
+verilog-ethernet/rtl/eth_demux_64_4.v@271:281
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+
+Clone Blocks 36:
+verilog-ethernet/rtl/eth_mux_64_2.v@248:258
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+
+Clone Blocks 37:
+verilog-ethernet/rtl/eth_mux_64_2.v@252:262
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+
+Clone Blocks 38:
+verilog-ethernet/rtl/eth_mux_64_4.v@324:334
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+
+Clone Blocks 39:
+verilog-ethernet/rtl/eth_axis_rx.v@295:305
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+
+Clone Blocks 40:
+verilog-ethernet/rtl/eth_mux_2.v@241:251
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+
+Clone Blocks 41:
+verilog-ethernet/rtl/eth_axis_rx_64.v@339:349
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+
+Clone Blocks 42:
+verilog-ethernet/rtl/eth_mux_64_4.v@322:332
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+
+Clone Blocks 43:
+verilog-ethernet/rtl/eth_demux_4.v@263:273
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+assign output_0_eth_payload_tlast = output_eth_payload_tlast_reg;
+
+Clone Blocks 44:
+verilog-ethernet/rtl/eth_mux_4.v@314:324
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+Clone Blocks 45:
+verilog-ethernet/rtl/eth_mux_64_2.v@250:260
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+
+Clone Blocks 46:
+verilog-ethernet/rtl/ip_eth_tx_64.v@568:578
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+
+Clone Blocks 47:
+verilog-ethernet/rtl/ip_mux_64_4.v@535:545
+reg        output_ip_payload_tuser_reg = 0;
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+assign output_ip_payload_tvalid = output_ip_payload_tvalid_reg;
+
+Clone Blocks 48:
+verilog-ethernet/rtl/ip_eth_tx_64.v@569:579
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+
+Clone Blocks 49:
+verilog-ethernet/rtl/eth_mux_2.v@244:254
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+
+Clone Blocks 50:
+verilog-ethernet/rtl/eth_mux_64_2.v@254:264
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+
+Clone Blocks 51:
+verilog-ethernet/rtl/ip_mux_64_2.v@406:416
+reg        output_ip_payload_tlast_reg = 0;
+reg        output_ip_payload_tuser_reg = 0;
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+
+Clone Blocks 52:
+verilog-ethernet/rtl/eth_axis_rx_64.v@340:350
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 53:
+verilog-ethernet/rtl/eth_mux_2.v@242:252
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+assign output_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+Clone Blocks 54:
+verilog-ethernet/rtl/eth_demux_64_4.v@273:283
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tkeep = output_eth_payload_tkeep_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+assign output_0_eth_payload_tlast = output_eth_payload_tlast_reg;
+
+Clone Blocks 55:
+verilog-ethernet/rtl/arp_eth_tx_64.v@296:306
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+
+Clone Blocks 56:
+verilog-ethernet/rtl/eth_demux_4.v@262:272
+reg       output_3_eth_payload_tvalid_reg = 0;
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+
+Clone Blocks 57:
+verilog-ethernet/rtl/arp_eth_tx_64.v@293:303
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+
+Clone Blocks 58:
+verilog-ethernet/rtl/ip_mux_64_4.v@534:544
+reg        output_ip_payload_tlast_reg = 0;
+reg        output_ip_payload_tuser_reg = 0;
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+
+Clone Blocks 59:
+verilog-ethernet/rtl/ip_mux_64_4.v@536:546
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+assign output_ip_payload_tvalid = output_ip_payload_tvalid_reg;
+assign output_ip_payload_tlast = output_ip_payload_tlast_reg;
+
+Clone Blocks 60:
+verilog-ethernet/rtl/eth_demux_4.v@267:277
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_0_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_0_eth_payload_tvalid = output_0_eth_payload_tvalid_reg;
+assign output_0_eth_payload_tlast = output_eth_payload_tlast_reg;
+assign output_0_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+assign output_1_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_1_eth_payload_tvalid = output_1_eth_payload_tvalid_reg;
+
+Clone Blocks 61:
+verilog-ethernet/rtl/eth_mux_4.v@312:322
+reg       output_eth_payload_tvalid_reg = 0;
+reg       output_eth_payload_tlast_reg = 0;
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+assign output_eth_payload_tvalid = output_eth_payload_tvalid_reg;
+
+Clone Blocks 62:
+verilog-ethernet/rtl/eth_mux_64_2.v@249:259
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+
+Clone Blocks 63:
+verilog-ethernet/rtl/ip_demux_64_4.v@454:464
+reg        output_ip_payload_tuser_reg = 0;
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_0_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_0_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+assign output_0_ip_payload_tvalid = output_0_ip_payload_tvalid_reg;
+
+Clone Blocks 64:
+verilog-ethernet/rtl/ip_mux_64_2.v@408:418
+
+reg [63:0] temp_ip_payload_tdata_reg = 0;
+reg [7:0]  temp_ip_payload_tkeep_reg = 0;
+reg        temp_ip_payload_tvalid_reg = 0;
+reg        temp_ip_payload_tlast_reg = 0;
+reg        temp_ip_payload_tuser_reg = 0;
+
+assign output_ip_payload_tdata = output_ip_payload_tdata_reg;
+assign output_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+assign output_ip_payload_tvalid = output_ip_payload_tvalid_reg;
+assign output_ip_payload_tlast = output_ip_payload_tlast_reg;
+
+Clone Blocks 65:
+verilog-ethernet/rtl/eth_demux_64_4.v@266:276
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_0_eth_payload_tvalid_reg = 0;
+reg        output_1_eth_payload_tvalid_reg = 0;
+reg        output_2_eth_payload_tvalid_reg = 0;
+reg        output_3_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+
+Clone Blocks 66:
+verilog-ethernet/rtl/arp_eth_tx_64.v@295:305
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+reg        output_eth_payload_tuser_reg = 0;
+
+reg [63:0] temp_eth_payload_tdata_reg = 0;
+reg [7:0]  temp_eth_payload_tkeep_reg = 0;
+reg        temp_eth_payload_tvalid_reg = 0;
+reg        temp_eth_payload_tlast_reg = 0;
+reg        temp_eth_payload_tuser_reg = 0;
+
+
+Clone Blocks 67:
+verilog-ethernet/rtl/eth_axis_rx.v@296:306
+reg       output_eth_payload_tuser_reg = 0;
+
+reg [7:0] temp_eth_payload_tdata_reg = 0;
+reg       temp_eth_payload_tvalid_reg = 0;
+reg       temp_eth_payload_tlast_reg = 0;
+reg       temp_eth_payload_tuser_reg = 0;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_eth_payload_tready_int_early = output_eth_payload_tready | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_reg) | (~temp_eth_payload_tvalid_reg & ~output_eth_payload_tvalid_int);
+
+assign output_eth_payload_tdata = output_eth_payload_tdata_reg;
+

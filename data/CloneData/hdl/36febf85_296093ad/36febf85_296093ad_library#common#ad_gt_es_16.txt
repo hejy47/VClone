@@ -1,0 +1,61 @@
+Source Block: hdl/library/common/ad_gt_es.v@119:129@HdlIdDef
+  localparam  ES_DRP_QDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h048 : 12'h035; // GTH-7 12'h035 
+  localparam  ES_DRP_HOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h04f : 12'h03c; // GTH-7 12'h03c 
+  localparam  ES_DRP_VOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h097 : 12'h03b; // GTH-7 12'h03b 
+  localparam  ES_DRP_STATUS_ADDR  = (GTH_GTX_N == 1) ? 12'h153 : 12'h151; // GTH-7 12'h153 
+  localparam  ES_DRP_SCNT_ADDR    = (GTH_GTX_N == 1) ? 12'h152 : 12'h150; // GTH-7 12'h152 
+  localparam  ES_DRP_ECNT_ADDR    = (GTH_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
+
+  // state machine
+
+  localparam  ES_FSM_IDLE             = 6'h00;
+  localparam  ES_FSM_STATUS           = 6'h01;
+
+Diff Content:
+- 124   localparam  ES_DRP_ECNT_ADDR    = (GTH_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
++ 124   localparam  [11:0]  ES_DRP_CTRL_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h03c : 12'h03d; // GTH-7 12'h03d 
++ 124   localparam  [11:0]  ES_DRP_SDATA0_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h049 : 12'h036; // GTH-7 12'h036 
++ 124   localparam  [11:0]  ES_DRP_SDATA1_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h04a : 12'h037; // GTH-7 12'h037 
++ 124   localparam  [11:0]  ES_DRP_SDATA2_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h04b : 12'h038; // GTH-7 12'h038 
++ 124   localparam  [11:0]  ES_DRP_SDATA3_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h04c : 12'h039; // GTH-7 12'h039 
++ 124   localparam  [11:0]  ES_DRP_SDATA4_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h04d : 12'h03a; // GTH-7 12'h03a 
++ 124   localparam  [11:0]  ES_DRP_QDATA0_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h044 : 12'h031; // GTH-7 12'h031 
++ 124   localparam  [11:0]  ES_DRP_QDATA1_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h045 : 12'h032; // GTH-7 12'h032 
++ 124   localparam  [11:0]  ES_DRP_QDATA2_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h046 : 12'h033; // GTH-7 12'h033 
++ 124   localparam  [11:0]  ES_DRP_QDATA3_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h047 : 12'h034; // GTH-7 12'h034 
++ 124   localparam  [11:0]  ES_DRP_QDATA4_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h048 : 12'h035; // GTH-7 12'h035 
++ 124   localparam  [11:0]  ES_DRP_HOFFSET_ADDR = (GTH_OR_GTX_N == 1) ? 12'h04f : 12'h03c; // GTH-7 12'h03c 
++ 124   localparam  [11:0]  ES_DRP_VOFFSET_ADDR = (GTH_OR_GTX_N == 1) ? 12'h097 : 12'h03b; // GTH-7 12'h03b 
++ 124   localparam  [11:0]  ES_DRP_STATUS_ADDR  = (GTH_OR_GTX_N == 1) ? 12'h153 : 12'h151; // GTH-7 12'h153 
++ 124   localparam  [11:0]  ES_DRP_SCNT_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h152 : 12'h150; // GTH-7 12'h152 
++ 124   localparam  [11:0]  ES_DRP_ECNT_ADDR    = (GTH_OR_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_gt_es.v@118:128
+  localparam  ES_DRP_QDATA3_ADDR  = (GTH_GTX_N == 1) ? 12'h047 : 12'h034; // GTH-7 12'h034 
+  localparam  ES_DRP_QDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h048 : 12'h035; // GTH-7 12'h035 
+  localparam  ES_DRP_HOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h04f : 12'h03c; // GTH-7 12'h03c 
+  localparam  ES_DRP_VOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h097 : 12'h03b; // GTH-7 12'h03b 
+  localparam  ES_DRP_STATUS_ADDR  = (GTH_GTX_N == 1) ? 12'h153 : 12'h151; // GTH-7 12'h153 
+  localparam  ES_DRP_SCNT_ADDR    = (GTH_GTX_N == 1) ? 12'h152 : 12'h150; // GTH-7 12'h152 
+  localparam  ES_DRP_ECNT_ADDR    = (GTH_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
+
+  // state machine
+
+  localparam  ES_FSM_IDLE             = 6'h00;
+
+Clone Blocks 2:
+hdl/library/common/ad_gt_es.v@117:127
+  localparam  ES_DRP_QDATA2_ADDR  = (GTH_GTX_N == 1) ? 12'h046 : 12'h033; // GTH-7 12'h033 
+  localparam  ES_DRP_QDATA3_ADDR  = (GTH_GTX_N == 1) ? 12'h047 : 12'h034; // GTH-7 12'h034 
+  localparam  ES_DRP_QDATA4_ADDR  = (GTH_GTX_N == 1) ? 12'h048 : 12'h035; // GTH-7 12'h035 
+  localparam  ES_DRP_HOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h04f : 12'h03c; // GTH-7 12'h03c 
+  localparam  ES_DRP_VOFFSET_ADDR = (GTH_GTX_N == 1) ? 12'h097 : 12'h03b; // GTH-7 12'h03b 
+  localparam  ES_DRP_STATUS_ADDR  = (GTH_GTX_N == 1) ? 12'h153 : 12'h151; // GTH-7 12'h153 
+  localparam  ES_DRP_SCNT_ADDR    = (GTH_GTX_N == 1) ? 12'h152 : 12'h150; // GTH-7 12'h152 
+  localparam  ES_DRP_ECNT_ADDR    = (GTH_GTX_N == 1) ? 12'h151 : 12'h14f; // GTH-7 12'h151 
+
+  // state machine
+
+

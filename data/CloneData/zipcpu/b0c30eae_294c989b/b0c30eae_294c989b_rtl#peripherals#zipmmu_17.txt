@@ -1,0 +1,85 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@457:515@HdlStmProcess
+	assign	r_vpage = (r_addr[(DW-3):(DW-2-VAW)]);
+
+	initial	s_pending = 1'b0;
+	initial	r_pending = 1'b0;
+	initial	r_valid   = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		r_pending <= 1'b0;
+		r_valid   <= 1'b0;
+		o_addr    <= 0;
+		r_we      <= 0;
+		r_addr    <= 0;
+		r_data    <= 0;
+		r_sel     <= 0;
+		//
+		s_pending <= 1'b0;
+	end else
+	begin
+		if (!o_rtn_stall)
+		begin
+			r_pending <= (i_wbm_stb)&&(!kernel_context);
+			r_we      <= i_wbm_we;
+			o_addr    <= { { (kernel_context)?
+				i_wbm_addr[(AW-1):LGPGSZW] : last_ppage },
+				i_wbm_addr[(LGPGSZW-1):0] };
+			r_addr    <= i_wbm_addr;
+			r_data    <= i_wbm_data;
+			r_sel     <= i_wbm_sel;
+			r_valid   <= (i_wbm_stb)&&(
+				(kernel_context)
+				||((last_page_valid)
+					&&(i_wbm_addr[(DW-3):(DW-2-VAW)] == last_vpage)
+					&&((!last_ro)||(!i_wbm_we))));
+			s_pending <= 1'b0;
+		end else if (!r_valid) begin
+			r_valid <= (!miss_pending)&&((last_page_valid)
+					&&(r_vpage== last_vpage)
+					&&((!last_ro)||(!r_we)));
+			o_addr <= { last_ppage , r_addr[(LGPGSZW-1):0] };
+			r_pending<= (r_pending);
+			s_pending <=(r_pending)&&(!kernel_context);
+		end else begin
+			r_pending <= 1'b0;
+			s_pending <= 1'b0;
+		end
+
+		if ((!i_wbm_cyc)||(o_rtn_err)||((o_cyc)&&(i_err)))
+		begin
+			s_pending <= 1'b0;
+			r_pending <= 1'b0;
+			r_valid   <= 1'b0;
+		end
+	end
+
+`ifdef	FORMAL
+	always @(posedge i_clk)
+	if ((f_past_valid)&&($past(r_pending))&&(r_pending)&&($past(o_rtn_stall))&&(i_wbm_cyc)&&(!o_stb))
+		assert(s_pending);
+
+Diff Content:
+- 478 			r_pending <= (i_wbm_stb)&&(!kernel_context);
+- 486 			r_valid   <= (i_wbm_stb)&&(
+- 487 				(kernel_context)
+- 488 				||((last_page_valid)
+- 489 					&&(i_wbm_addr[(DW-3):(DW-2-VAW)] == last_vpage)
+- 490 					&&((!last_ro)||(!i_wbm_we))));
+- 493 			r_valid <= (!miss_pending)&&((last_page_valid)
+- 494 					&&(r_vpage== last_vpage)
+- 495 					&&((!last_ro)||(!r_we)));
+- 496 			o_addr <= { last_ppage , r_addr[(LGPGSZW-1):0] };
+- 497 			r_pending<= (r_pending);
+- 498 			s_pending <=(r_pending)&&(!kernel_context);
++ 468 		r_exe     <= 0;
++ 478 			r_pending <= (i_wbm_stb)&&(!kernel_context)
++ 478 						&&(!this_page_valid);
++ 479 			r_exe     <= i_wbm_exe;
++ 490 			r_valid   <= (i_wbm_stb)&&((kernel_context)||(this_page_valid));
++ 498 			r_valid <= (pending_page_valid);
++ 498 			o_addr <= { ppage , r_addr[(LGPGSZW-1):0] };
++ 498 			r_pending<= (r_pending)&&(!pending_page_valid);
++ 498 			s_pending <=(r_pending)&&(!pending_page_valid);
+
+Clone Blocks:

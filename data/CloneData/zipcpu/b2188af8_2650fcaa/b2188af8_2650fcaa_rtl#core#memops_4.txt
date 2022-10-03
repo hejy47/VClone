@@ -1,0 +1,63 @@
+Source Block: zipcpu/rtl/core/memops.v@234:260@HdlStmProcess
+	always @(posedge i_clk)
+	if (i_reset)
+		o_wreg <= 0;
+	else if (i_stb)
+			o_wreg    <= i_oreg;
+	always @(posedge i_clk)
+	if (i_reset)
+		o_result <= 0;
+	else if ((OPT_ZERO_ON_IDLE)&&(!i_wb_ack))
+		o_result <= 32'h0;
+	else begin
+		casez(r_op)
+		4'b01??: o_result <= i_wb_data;
+		4'b100?: o_result <= { 16'h00, i_wb_data[31:16] };
+		4'b101?: o_result <= { 16'h00, i_wb_data[15: 0] };
+		4'b1100: o_result <= { 24'h00, i_wb_data[31:24] };
+		4'b1101: o_result <= { 24'h00, i_wb_data[23:16] };
+		4'b1110: o_result <= { 24'h00, i_wb_data[15: 8] };
+		4'b1111: o_result <= { 24'h00, i_wb_data[ 7: 0] };
+		default: o_result <= i_wb_data;
+		endcase
+	end
+
+	reg	lock_gbl, lock_lcl;
+
+	generate
+	if (IMPLEMENT_LOCK != 0)
+
+Diff Content:
+- 240 	if (i_reset)
+- 241 		o_result <= 0;
+- 242 	else if ((OPT_ZERO_ON_IDLE)&&(!i_wb_ack))
++ 242 	if ((OPT_ZERO_ON_IDLE)&&(!i_wb_ack))
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/pipemem.v@258:281
+
+	wire	[8:0]	w_wreg;
+	assign	w_wreg = fifo_oreg[rdaddr];
+	always @(posedge i_clk)
+		o_wreg <= w_wreg[8:4];
+	always @(posedge i_clk)
+		if ((OPT_ZERO_ON_IDLE)&&((!cyc)||((!i_wb_ack)&&(!i_wb_err))))
+			o_result <= 0;
+		else begin
+			casez(w_wreg[3:0])
+			4'b1100: o_result <= { 24'h00, i_wb_data[31:24] };
+			4'b1101: o_result <= { 24'h00, i_wb_data[23:16] };
+			4'b1110: o_result <= { 24'h00, i_wb_data[15: 8] };
+			4'b1111: o_result <= { 24'h00, i_wb_data[ 7: 0] };
+			4'b100?: o_result <= { 16'h00, i_wb_data[31:16] };
+			4'b101?: o_result <= { 16'h00, i_wb_data[15: 0] };
+			default: o_result <= i_wb_data[31:0];
+			endcase
+		end
+
+	assign	o_pipe_stalled = ((cyc)&&(fifo_full))||((cyc)
+			&&((i_wb_stall)||((!o_wb_stb_lcl)&&(!o_wb_stb_gbl))));
+
+	generate
+

@@ -1,0 +1,78 @@
+Source Block: hdl/library/axi_ad9361/xilinx/axi_ad9361_lvds_if.v@498:530@HdlStmIf
+      enable_int <= enable_up;
+      txnrx_int <= txnrx_up;
+    end
+  end
+
+  generate if (CLK_DESKEW) begin
+
+    reg enable_int_n = 'd0;
+    reg txnrx_int_n = 'd0;
+
+    always @(negedge clk) begin
+      enable_int_n <= enable_int;
+      txnrx_int_n <= txnrx_int;
+    end
+
+    always @(posedge l_clk) begin
+      enable_int_p <= enable_int_n;
+      txnrx_int_p <= txnrx_int_n;
+    end
+
+  end else begin /* CLK_DESKEW == 0 */
+
+    always @(posedge l_clk) begin
+      enable_int_p <= enable_int_p;
+      txnrx_int_p <= txnrx_int_p;
+    end
+
+  end
+  endgenerate
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  genvar i;
+
+Diff Content:
+- 521       enable_int_p <= enable_int_p;
+- 522       txnrx_int_p <= txnrx_int_p;
++ 522       enable_int_p <= enable_int;
++ 522       txnrx_int_p <= txnrx_int;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/xilinx/axi_ad9361_cmos_if.v@401:433
+      enable_int <= enable_up;
+      txnrx_int <= txnrx_up;
+    end
+  end
+
+  generate if (CLK_DESKEW) begin
+
+    reg enable_int_n = 'd0;
+    reg txnrx_int_n = 'd0;
+
+    always @(negedge clk) begin
+      enable_int_n <= enable_int;
+      txnrx_int_n <= txnrx_int;
+    end
+
+    always @(posedge l_clk) begin
+      enable_int_p <= enable_int_n;
+      txnrx_int_p <= txnrx_int_n;
+    end
+
+  end else begin /* CLK_DESKEW == 0 */
+
+    always @(posedge l_clk) begin
+      enable_int_p <= enable_int_p;
+      txnrx_int_p <= txnrx_int_p;
+    end
+
+  end
+  endgenerate
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  genvar i;
+

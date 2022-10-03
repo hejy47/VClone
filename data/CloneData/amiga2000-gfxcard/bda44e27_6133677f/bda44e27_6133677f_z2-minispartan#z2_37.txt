@@ -1,0 +1,29 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@464:474@HdlIdDef
+    fetch_x <= 0;
+    fetch_y <= counter_y;
+  end
+end
+
+reg[15:0] rgb = 'h0000;
+
+always @(posedge vga_clk) begin
+  if (counter_x >= h_max) begin
+    counter_x <= 0;
+    if (counter_y == v_max)
+
+Diff Content:
+- 469 reg[15:0] rgb = 'h0000;
++ 469 reg[23:0] rgb = 'h000000;
++ 469 reg[31:0] rgb32 = 'h00000000;
++ 469 reg[11:0] counter_8x = 0;
++ 469 reg counter_x_hi = 0;
++ 469 reg scale_xc = 0;
++ 469 reg[7:0] pidx1;
++ 469 reg[7:0] pidx2;
++ 469 reg display_sprite = 0;
++ 469 reg [4:0] preheat_x = 0;
++ 469 reg preheat = 0;
++ 469 reg x_safe_area = 0;
++ 469 reg display_pixels = 0;
+
+Clone Blocks:

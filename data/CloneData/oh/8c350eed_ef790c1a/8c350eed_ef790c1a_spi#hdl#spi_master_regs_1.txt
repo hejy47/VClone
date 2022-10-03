@@ -1,0 +1,17 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@105:115@HdlStmAssign
+   assign clkdiv_write    = reg_write & (dstaddr_in[7:2]==`SPI_CLKDIV);
+   assign tx_write        = reg_write & (dstaddr_in[7:2]==`SPI_TX);   
+   assign tx_manualstart  = reg_write & (dstaddr_in[7:2]==`SPI_START);
+
+   //autostart on write to lowest tx register
+   assign tx_autostart    = tx_write &  (dstaddr_in[4:3]==2'b00);   
+
+   //####################################
+   //# CONFIG
+   //####################################
+   
+
+Diff Content:
+- 110    assign tx_autostart    = tx_write &  (dstaddr_in[4:3]==2'b00);   
+
+Clone Blocks:

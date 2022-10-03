@@ -1,0 +1,25 @@
+Source Block: oh/memory/hdl/fifo_async_emesh.v@48:65@HdlStmAssign
+   wire [103:0]  fifo_din;
+   wire [103:0]  fifo_dout;
+   wire 	 fifo_empty;
+   
+   //Inputs to FIFO
+   assign fifo_din[103:0]={emesh_srcaddr_in[31:0],
+			   emesh_data_in[31:0],
+			   emesh_dstaddr_in[31:0],
+			   emesh_ctrlmode_in[3:0],
+			   emesh_datemode_in[1:0],
+			   emesh_write_in,
+			   1'b0
+			   };
+   
+   //Outputs
+   assign emesh_access_out         = ~fifo_empty;
+   assign emesh_write_out          =  fifo_dout[1];
+   assign emesh_datamode_out[1:0]  =  fifo_dout[3:2];
+
+Diff Content:
+- 57 			   emesh_datemode_in[1:0],
++ 57 			   emesh_datamode_in[1:0],
+
+Clone Blocks:

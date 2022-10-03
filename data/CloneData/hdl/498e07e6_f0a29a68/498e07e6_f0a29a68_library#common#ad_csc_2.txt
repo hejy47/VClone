@@ -1,0 +1,25 @@
+Source Block: hdl/library/common/ad_csc.v@87:105@HdlStmProcess
+  wire signed [8:0]  color2;
+  wire signed [8:0]  color3;
+
+  // delay signals
+
+  always @(posedge clk) begin
+    data_d1 <= data;
+    data_d2 <= data_d1;
+    sync_1_m <= sync;
+    sync_2_m <= sync_1_m;
+    sync_3_m <= sync_2_m;
+    sync_4_m <= sync_3_m;
+    sync_5_m <= sync_4_m;
+  end
+
+  assign color1 = {1'd0,    data[23:16]};
+  assign color2 = {1'd0, data_d1[15: 8]};
+  assign color3 = {1'd0, data_d2[ 7: 0]};
+
+
+Diff Content:
+- 99     sync_5_m <= sync_4_m;
+
+Clone Blocks:

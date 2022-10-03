@@ -1,0 +1,66 @@
+Source Block: oh/elink/hdl/erx_io.v@90:117@HdlStmProcess
+       rx_pointer[6:0] <= 7'b0001000; //anticipate burst
+     else if(rx_frame)
+       rx_pointer[6:0] <= {rx_pointer[5:0],1'b0};//middle of frame
+      
+   //convert to 112 bit packet
+   always @ (posedge rx_lclk)
+     if(rx_frame)   
+       begin
+	  if(rx_pointer[0])
+	    rx_sample[15:0]    <= rx_word[15:0];
+	  if(rx_pointer[1])
+	    rx_sample[31:16]   <= rx_word[15:0];
+	  if(rx_pointer[2])
+	    rx_sample[47:32]   <= rx_word[15:0];
+	  if(rx_pointer[3])
+	    rx_sample[63:48]   <= rx_word[15:0];
+	  if(rx_pointer[4])
+	    rx_sample[79:64]   <= rx_word[15:0];
+	  if(rx_pointer[5])
+	    rx_sample[95:80]   <= rx_word[15:0];
+	  if(rx_pointer[6])
+	    rx_sample[111:96]  <= rx_word[15:0];	  
+       end // if (rx_frame)
+   
+   //#####################  
+   //#DATA VALID SIGNAL 
+   //####################
+   always @ (posedge rx_lclk)
+
+Diff Content:
+- 96      if(rx_frame)   
+- 97        begin
+- 98 	  if(rx_pointer[0])
+- 99 	    rx_sample[15:0]    <= rx_word[15:0];
+- 100 	  if(rx_pointer[1])
+- 101 	    rx_sample[31:16]   <= rx_word[15:0];
+- 102 	  if(rx_pointer[2])
+- 103 	    rx_sample[47:32]   <= rx_word[15:0];
+- 104 	  if(rx_pointer[3])
+- 105 	    rx_sample[63:48]   <= rx_word[15:0];
+- 106 	  if(rx_pointer[4])
+- 107 	    rx_sample[79:64]   <= rx_word[15:0];
+- 108 	  if(rx_pointer[5])
+- 109 	    rx_sample[95:80]   <= rx_word[15:0];
+- 110 	  if(rx_pointer[6])
+- 111 	    rx_sample[111:96]  <= rx_word[15:0];	  
+- 112        end // if (rx_frame)
++ 112      begin
++ 112 	if(rx_pointer[0])
++ 112 	  rx_sample[15:0]    <= rx_word[15:0];
++ 112 	if(rx_pointer[1])
++ 112 	  rx_sample[31:16]   <= rx_word[15:0];
++ 112 	if(rx_pointer[2])
++ 112 	  rx_sample[47:32]   <= rx_word[15:0];
++ 112 	if(rx_pointer[3])
++ 112 	  rx_sample[63:48]   <= rx_word[15:0];
++ 112 	if(rx_pointer[4])
++ 112 	  rx_sample[79:64]   <= rx_word[15:0];
++ 112 	if(rx_pointer[5])
++ 112 	  rx_sample[95:80]   <= rx_word[15:0];
++ 112 	if(rx_pointer[6])
++ 112 	  rx_sample[111:96]  <= rx_word[15:0];	  
++ 112      end // if (rx_frame)
+
+Clone Blocks:

@@ -1,0 +1,39 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@151:161@HdlIdDef
+
+localparam DMA_TYPE_MM_AXI = 0;
+localparam DMA_TYPE_STREAM_AXI = 1;
+localparam DMA_TYPE_FIFO = 2;
+
+localparam DMA_ADDR_WIDTH = 32 - C_ADDR_ALIGN_BITS;
+
+reg eot_mem_src[0:2**C_ID_WIDTH-1];
+reg eot_mem_dest[0:2**C_ID_WIDTH-1];
+wire request_eot;
+
+
+Diff Content:
++ 156 localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
++ 156 	C_DMA_DATA_WIDTH_DEST : C_DMA_DATA_WIDTH_SRC;
++ 156 localparam MAX_BYTES_PER_BURST = 128;
++ 156 parameter BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST);
++ 156 parameter BYTES_PER_BEAT_WIDTH_SRC = $clog2(C_DMA_DATA_WIDTH_SRC/8);
++ 156 parameter BYTES_PER_BEAT_WIDTH_DEST = $clog2(C_DMA_DATA_WIDTH_DEST/8);
++ 156 localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
++ 156 localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
++ 156 localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_arb.v@149:159
+parameter C_AXI_SLICE_DEST = 0;
+parameter C_AXI_SLICE_SRC = 0;
+
+localparam DMA_TYPE_MM_AXI = 0;
+localparam DMA_TYPE_STREAM_AXI = 1;
+localparam DMA_TYPE_FIFO = 2;
+
+localparam DMA_ADDR_WIDTH = 32 - C_ADDR_ALIGN_BITS;
+
+reg eot_mem_src[0:2**C_ID_WIDTH-1];
+reg eot_mem_dest[0:2**C_ID_WIDTH-1];
+

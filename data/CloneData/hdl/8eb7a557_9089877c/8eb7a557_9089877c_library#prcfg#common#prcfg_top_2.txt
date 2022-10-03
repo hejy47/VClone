@@ -1,0 +1,47 @@
+Source Block: hdl/library/prcfg/common/prcfg_top.v@102:112@HdlIdDef
+  input                             dma_adc_ovf;
+
+  reg     [31:0]                    gpio_output;
+
+  wire    [31:0]                    adc_status_s[(NUM_CHANNEL - 1):0];
+  wire    [31:0]                    dac_status_s[(NUM_CHANNEL - 1):0];
+
+  genvar l_inst;
+
+  generate
+    for(l_inst = 0; l_inst < NUM_CHANNEL; l_inst = l_inst + 1) begin: tx_rx_data_path
+
+Diff Content:
+- 107   wire    [31:0]                    dac_status_s[(NUM_CHANNEL - 1):0];
++ 107   wire    [31:0]                  adc_status_s[(NUM_CHANNEL - 1):0];
++ 107   wire    [31:0]                  dac_status_s[(NUM_CHANNEL - 1):0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/common/prcfg_top.v@101:111
+  output  [(DBUS_WIDTH - 1):0]      dma_adc_ddata;
+  input                             dma_adc_ovf;
+
+  reg     [31:0]                    gpio_output;
+
+  wire    [31:0]                    adc_status_s[(NUM_CHANNEL - 1):0];
+  wire    [31:0]                    dac_status_s[(NUM_CHANNEL - 1):0];
+
+  genvar l_inst;
+
+  generate
+
+Clone Blocks 2:
+hdl/library/prcfg/common/prcfg_top.v@104:114
+  reg     [31:0]                    gpio_output;
+
+  wire    [31:0]                    adc_status_s[(NUM_CHANNEL - 1):0];
+  wire    [31:0]                    dac_status_s[(NUM_CHANNEL - 1):0];
+
+  genvar l_inst;
+
+  generate
+    for(l_inst = 0; l_inst < NUM_CHANNEL; l_inst = l_inst + 1) begin: tx_rx_data_path
+      if(ADC_EN == ENABELED) begin
+        if(l_inst == 0) begin
+

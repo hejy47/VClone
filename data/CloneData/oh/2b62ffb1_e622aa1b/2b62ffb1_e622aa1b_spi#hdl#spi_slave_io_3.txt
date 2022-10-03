@@ -1,0 +1,32 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@115:125@HdlStmAssign
+   assign remote_cmd    = (spi_rx[7:6]==2'b11) &
+			  (spi_state[2:0]==`SPI_CMD);
+      
+   assign byte_done     = &bit_count[2:0];
+
+   assign packet_done   = (bit_count[7:0]==packetsize[7:0]);
+
+   //#################################
+   //# TX SHIFT REGISTER
+   //#################################
+
+
+Diff Content:
+- 120    assign packet_done   = (bit_count[7:0]==packetsize[7:0]);
++ 120    assign packet_done   = (bit_count[7:0]==psize[7:0]);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_slave_io.v@113:123
+			  (spi_state[2:0]==`SPI_CMD);
+   
+   assign remote_cmd    = (spi_rx[7:6]==2'b11) &
+			  (spi_state[2:0]==`SPI_CMD);
+      
+   assign byte_done     = &bit_count[2:0];
+
+   assign packet_done   = (bit_count[7:0]==packetsize[7:0]);
+
+   //#################################
+   //# TX SHIFT REGISTER
+

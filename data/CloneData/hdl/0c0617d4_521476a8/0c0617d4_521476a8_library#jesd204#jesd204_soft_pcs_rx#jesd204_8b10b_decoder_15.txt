@@ -1,0 +1,106 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v@384:400@HdlStmProcess
+    end
+    endcase
+  end
+end
+
+always @(*) begin
+  if (disparity3b == disparity5b && disparity3b != 2'b00) begin
+    notintable_disparity = 1'b1;
+  end else begin
+    notintable_disparity = 1'b0;
+  end
+end
+
+always @(*) begin
+  total_disparity = (ignore3b ? 2'b00 : disparity3b) ^ (ignore5b ? 2'b00 : disparity5b);
+
+  if (total_disparity[0] == 1'b0 || out_notintable == 1'b1) begin
+
+Diff Content:
+- 389 always @(*) begin
+- 390   if (disparity3b == disparity5b && disparity3b != 2'b00) begin
+- 391     notintable_disparity = 1'b1;
+- 392   end else begin
+- 393     notintable_disparity = 1'b0;
+- 395 end
++ 393   always @(*) begin
++ 393     notintable3b = 1'b0;
++ 393     if (charisk == 1'b1) begin
++ 393       case (in_char[9:6] ^ {4{in_char[5]}})
++ 393       4'b1101: begin
++ 393         data3b = 3'd0;
++ 393       end
++ 393       4'b0011: begin
++ 393         data3b = 3'd3;
++ 393       end
++ 393       4'b1011: begin
++ 393         data3b = 3'd4;
++ 393       end
++ 393       4'b1010: begin
++ 393         data3b = 3'd5;
++ 393       end
++ 393       4'b1110: begin
++ 393         data3b = 3'd7;
++ 393       end
++ 393       default: begin
++ 393         data3b = 3'd0;
++ 393         notintable3b = 1'b1;
++ 393       end
++ 393       endcase
++ 393     end else begin
++ 393       case (in_char[9:6])
++ 393       4'b0010: begin
++ 393         data3b = 3'd0;
++ 393       end
++ 393       4'b1101: begin
++ 393         data3b = 3'd0;
++ 393       end
++ 393       4'b1001: begin
++ 393         data3b = 3'd1;
++ 393       end
++ 393       4'b1010: begin
++ 393         data3b = 3'd2;
++ 393       end
++ 393       4'b1100: begin
++ 393         data3b = 3'd3;
++ 393       end
++ 393       4'b0011: begin
++ 393         data3b = 3'd3;
++ 393       end
++ 393       4'b0100: begin
++ 393         data3b = 3'd4;
++ 393       end
++ 393       4'b1011: begin
++ 393         data3b = 3'd4;
++ 393       end
++ 393       4'b0101: begin
++ 393         data3b = 3'd5;
++ 393       end
++ 393       4'b0110: begin
++ 393         data3b = 3'd6;
++ 393       end
++ 393       4'b1000: begin
++ 393         data3b = 3'd7;
++ 393         notintable3b = in_char[5:4] == 2'b00;
++ 393       end
++ 393       4'b0111: begin
++ 393         data3b = 3'd7;
++ 393         notintable3b = in_char[5:4] == 2'b11;
++ 393       end
++ 393       4'b0001: begin
++ 393         data3b = 3'd7;
++ 393         notintable3b = in_char[5:4] != 2'b00;
++ 393       end
++ 393       4'b1110: begin
++ 393         data3b = 3'd7;
++ 393         notintable3b = in_char[5:4] != 2'b11;
++ 393       end
++ 393       default: begin
++ 393         data3b = 3'd0;
++ 393         notintable3b = 1'b1;
++ 393       end
++ 393       endcase
++ 393     end
+
+Clone Blocks:

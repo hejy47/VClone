@@ -1,0 +1,20 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/axi_jesd204_rx.v@151:161@HdlStmAssign
+  .in_event(core_event_frame_alignment_error),
+  .out_clk(s_axi_aclk),
+  .out_event(up_event_frame_alignment_error)
+);
+
+assign up_irq_trigger = {4'b0,up_event_frame_alignment_error};
+
+up_axi #(
+  .AXI_ADDRESS_WIDTH (14)
+) i_up_axi (
+  .up_rstn(~up_reset),
+
+Diff Content:
+- 156 assign up_irq_trigger = {4'b0,up_event_frame_alignment_error};
++ 156 assign up_irq_trigger = {3'b0,
++ 156                          up_event_unexpected_lane_state_error,
++ 156                          up_event_frame_alignment_error};
+
+Clone Blocks:

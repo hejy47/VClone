@@ -1,0 +1,102 @@
+Source Block: hdl/library/axi_ad9162/axi_ad9162_core.v@94:114@HdlStmProcess
+    
+    assign dac_valid = 1'b1;
+    
+    // processor read interface
+    
+    always @(negedge up_rstn or posedge up_clk) begin
+      if (up_rstn == 0) begin
+        up_rdata <= 'd0;
+        up_rack <= 'd0;
+        up_wack <= 'd0;
+      end else begin
+        up_rdata <= up_rdata_s | up_rdata_0_s;
+        up_rack <= up_rack_s | up_rack_0_s;
+        up_wack <= up_wack_s | up_wack_0_s;
+      end
+    end
+    
+    // dac channel
+    
+    axi_ad9162_channel #(
+      .CHANNEL_ID (0),
+
+Diff Content:
+- 99     always @(negedge up_rstn or posedge up_clk) begin
+- 100       if (up_rstn == 0) begin
+- 101         up_rdata <= 'd0;
+- 102         up_rack <= 'd0;
+- 103         up_wack <= 'd0;
+- 104       end else begin
+- 105         up_rdata <= up_rdata_s | up_rdata_0_s;
+- 106         up_rack <= up_rack_s | up_rack_0_s;
+- 107         up_wack <= up_wack_s | up_wack_0_s;
+- 108       end
++ 108   wire                    dac_sync_s;
++ 108   wire                    dac_datafmt_s;
++ 108   wire    [ 31:0]         up_rdata_0_s;
++ 108   wire                    up_rack_0_s;
++ 108   wire                    up_wack_0_s;
++ 108   wire    [ 31:0]         up_rdata_s;
++ 108   wire                    up_rack_s;
++ 108   wire                    up_wack_s;
++ 108   assign dac_valid = 1'b1;
++ 108   always @(negedge up_rstn or posedge up_clk) begin
++ 108     if (up_rstn == 0) begin
++ 108       up_rdata <= 'd0;
++ 108       up_rack <= 'd0;
++ 108       up_wack <= 'd0;
++ 108     end else begin
++ 108       up_rdata <= up_rdata_s | up_rdata_0_s;
++ 108       up_rack <= up_rack_s | up_rack_0_s;
++ 108       up_wack <= up_wack_s | up_wack_0_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9122/axi_ad9122_core.v@132:152
+
+  assign dac_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
+    end else begin
+      up_rdata <= up_rdata_s | up_rdata_0_s | up_rdata_1_s;
+      up_rack <= up_rack_s | up_rack_0_s | up_rack_1_s;
+      up_wack <= up_wack_s | up_wack_0_s | up_wack_1_s;
+    end
+  end
+
+  // dac channel
+
+  axi_ad9122_channel #(
+    .CHANNEL_ID(0),
+
+Clone Blocks 2:
+hdl/library/axi_ad9739a/axi_ad9739a_core.v@101:121
+
+  assign dac_valid = 1'b1;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
+    end else begin
+      up_rdata <= up_rdata_s | up_rdata_0_s;
+      up_rack <= up_rack_s | up_rack_0_s;
+      up_wack <= up_wack_s | up_wack_0_s;
+    end
+  end
+
+  // dac channel
+  
+  axi_ad9739a_channel #(
+    .CHANNEL_ID(0),
+

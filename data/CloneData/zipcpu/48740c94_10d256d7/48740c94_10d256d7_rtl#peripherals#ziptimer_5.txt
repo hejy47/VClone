@@ -1,0 +1,42 @@
+Source Block: zipcpu/rtl/peripherals/ziptimer.v@141:157@HdlStmProcess
+			r_value <= reload_value;
+
+	// Set the interrupt on our last tick, as we transition from one to
+	// zero.
+	initial	o_int   = 1'b0;
+	always @(posedge i_clk)
+		if (i_rst)
+			o_int <= 1'b0;
+		else if (i_ce)
+		o_int <= (r_running)&&(r_value == { {(VW-1){1'b0}}, 1'b1 });
+		else
+			o_int <= 1'b0;
+
+	initial	o_wb_ack = 1'b0;
+	always @(posedge i_clk)
+		o_wb_ack <= (i_wb_cyc)&&(i_wb_stb);
+	assign	o_wb_stall = 1'b0;
+
+Diff Content:
+- 147 		if (i_rst)
+- 150 		o_int <= (r_running)&&(r_value == { {(VW-1){1'b0}}, 1'b1 });
++ 147 		if ((i_reset)||(wb_write))
++ 150 			o_int <= (!o_int)&&(r_running)
++ 150 				&&(r_value == { {(VW-1){1'b0}}, 1'b1 });
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/ziptimer.v@150:161
+		o_int <= (r_running)&&(r_value == { {(VW-1){1'b0}}, 1'b1 });
+		else
+			o_int <= 1'b0;
+
+	initial	o_wb_ack = 1'b0;
+	always @(posedge i_clk)
+		o_wb_ack <= (i_wb_cyc)&&(i_wb_stb);
+	assign	o_wb_stall = 1'b0;
+
+	generate
+	if (VW < BW-1)
+		assign	o_wb_data = { auto_reload, {(BW-1-VW){1'b0}}, r_value };
+

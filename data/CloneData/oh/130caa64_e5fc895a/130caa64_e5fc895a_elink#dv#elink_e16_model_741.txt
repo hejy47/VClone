@@ -1,0 +1,61 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5714:5734@HdlStmProcess
+       access_out <= 1'b0;
+     else if(clk_en)
+       if(!wait_in)
+	 access_out <= access;
+
+   always @ (posedge clk)
+     if (clk_en)
+       if(!wait_in & access)
+	 begin
+	    srcaddr_out[AW-1:0] <= srcaddr[AW-1:0];
+	    data_out[DW-1:0]    <= data[DW-1:0];
+	    write_out           <= write;
+	    datamode_out[1:0]   <= datamode[1:0]; 
+	    dstaddr_out[AW-1:0] <= dstaddr[AW-1:0];
+	    ctrlmode_out[3:0]   <= ctrlmode[3:0];
+	 end
+ 
+   //#####################
+   //# Wait out control
+   //#####################
+   always @ (posedge clk or posedge reset)
+
+Diff Content:
+- 5719    always @ (posedge clk)
+- 5720      if (clk_en)
+- 5721        if(!wait_in & access)
+- 5722 	 begin
+- 5723 	    srcaddr_out[AW-1:0] <= srcaddr[AW-1:0];
+- 5724 	    data_out[DW-1:0]    <= data[DW-1:0];
+- 5725 	    write_out           <= write;
+- 5726 	    datamode_out[1:0]   <= datamode[1:0]; 
+- 5727 	    dstaddr_out[AW-1:0] <= dstaddr[AW-1:0];
+- 5728 	    ctrlmode_out[3:0]   <= ctrlmode[3:0];
+- 5729 	 end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@5691:5711
+       access_reg <= 1'b0;
+     else if(clk_en)
+       if(~wait_int)
+	 access_reg <= access_in;
+      
+   always @ (posedge clk)
+     if(clk_en)
+       if(~wait_int & access_in)
+	 begin
+	    write_reg           <= write_in;
+	    datamode_reg[1:0]   <= datamode_in[1:0];
+	    ctrlmode_reg[3:0]   <= ctrlmode_in[3:0];
+	    data_reg[DW-1:0]    <= data_in[DW-1:0];
+	    dstaddr_reg[AW-1:0] <= dstaddr_in[AW-1:0];
+	    srcaddr_reg[AW-1:0] <= srcaddr_in[AW-1:0];
+	 end
+
+   //##########################
+   //# mesh output busses  
+   //##########################
+
+

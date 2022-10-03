@@ -1,0 +1,59 @@
+Source Block: oh/elink/hdl/emaxi.v@142:152@HdlIdDef
+   wire 		w_go;
+   wire 		readinfo_wren;
+   wire 		readinfo_rden;
+   wire 		readinfo_full;
+   wire [47:0] 		readinfo_out;
+   wire [47:0] 		readinfo_in;
+
+   //i/o connections. write address (aw)
+   assign m_axi_awburst[1:0]	= 2'b01;
+   assign m_axi_awcache[3:0]	= 4'b0010;//TODO??update value to 4'b0011 if coherent accesses to be used via the zynq acp port
+   assign m_axi_awprot[2:0]	= 3'h0;
+
+Diff Content:
+- 147    wire [47:0] 		readinfo_in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/emaxi.v@145:155
+   wire 		readinfo_full;
+   wire [47:0] 		readinfo_out;
+   wire [47:0] 		readinfo_in;
+
+   //i/o connections. write address (aw)
+   assign m_axi_awburst[1:0]	= 2'b01;
+   assign m_axi_awcache[3:0]	= 4'b0010;//TODO??update value to 4'b0011 if coherent accesses to be used via the zynq acp port
+   assign m_axi_awprot[2:0]	= 3'h0;
+   assign m_axi_awqos[3:0]	= 4'h0;
+   assign m_axi_bready    	= 1'b1;   //TODO? axi_bready, why constant
+   
+
+Clone Blocks 2:
+oh/elink/hdl/emaxi.v@141:151
+   wire 		aw_go;
+   wire 		w_go;
+   wire 		readinfo_wren;
+   wire 		readinfo_rden;
+   wire 		readinfo_full;
+   wire [47:0] 		readinfo_out;
+   wire [47:0] 		readinfo_in;
+
+   //i/o connections. write address (aw)
+   assign m_axi_awburst[1:0]	= 2'b01;
+   assign m_axi_awcache[3:0]	= 4'b0010;//TODO??update value to 4'b0011 if coherent accesses to be used via the zynq acp port
+
+Clone Blocks 3:
+oh/elink/hdl/emaxi.v@140:150
+   //wires
+   wire 		aw_go;
+   wire 		w_go;
+   wire 		readinfo_wren;
+   wire 		readinfo_rden;
+   wire 		readinfo_full;
+   wire [47:0] 		readinfo_out;
+   wire [47:0] 		readinfo_in;
+
+   //i/o connections. write address (aw)
+   assign m_axi_awburst[1:0]	= 2'b01;
+

@@ -1,0 +1,71 @@
+Source Block: hdl/library/axi_pulse_gen/axi_pulse_gen_regmap.v@127:180@HdlStmIf
+      end
+    end
+  end
+
+  generate
+  if (ASYNC_CLK_EN) begin : counter_external_clock
+
+    assign clk_out = ext_clk;
+
+    ad_rst i_d_rst_reg (
+      .rst_async (up_reset),
+      .clk (clk_out),
+      .rstn (pulse_gen_resetn),
+      .rst ());
+
+    sync_data #(
+      .NUM_OF_BITS (32),
+      .ASYNC_CLK (1))
+    i_pulse_period_sync (
+      .in_clk (up_clk),
+      .in_data (up_pulse_period),
+      .out_clk (clk_out),
+      .out_data (pulse_period));
+
+    sync_data #(
+      .NUM_OF_BITS (32),
+      .ASYNC_CLK (1))
+    i_pulse_width_sync (
+      .in_clk (up_clk),
+      .in_data (up_pulse_width),
+      .out_clk (clk_out),
+      .out_data (pulse_width));
+
+    sync_event #(
+      .NUM_OF_EVENTS (1),
+      .ASYNC_CLK (1))
+    i_load_config_sync (
+      .in_clk (up_clk),
+      .in_event (up_load_config),
+      .out_clk (clk_out),
+      .out_event (load_config));
+
+  end else begin : counter_sys_clock        // counter is running on system clk
+
+    assign clk_out = up_clk;
+    assign pulse_gen_resetn = ~up_reset;
+    assign pulse_period = up_pulse_period;
+    assign pulse_width = up_pulse_width;
+    assign load_config = up_load_config;
+
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 144       .ASYNC_CLK (1))
+- 145     i_pulse_period_sync (
+- 153       .ASYNC_CLK (1))
+- 154     i_pulse_width_sync (
+- 162       .ASYNC_CLK (1))
+- 163     i_load_config_sync (
++ 145       .ASYNC_CLK (1)
++ 145     ) i_pulse_period_sync (
++ 154       .ASYNC_CLK (1)
++ 154     ) i_pulse_width_sync (
++ 163       .ASYNC_CLK (1)
++ 163     ) i_load_config_sync (
+
+Clone Blocks:

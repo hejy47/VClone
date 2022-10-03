@@ -1,0 +1,57 @@
+Source Block: hdl/library/util_pack/util_cpack2/util_cpack2.v@185:200@HdlIdDef
+localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
+/*
+ * Round up to the next power of two and zero out the additional channels
+ * internally.
+ */
+localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
+   NUM_OF_CHANNELS > 16 ? 32 :
+   NUM_OF_CHANNELS > 8 ? 16 :
+   NUM_OF_CHANNELS > 4 ? 8 :
+   NUM_OF_CHANNELS > 2 ? 4 :
+   NUM_OF_CHANNELS > 1 ? 2 : 1;
+
+/* FIXME: Find out how to do this in the IP-XACT */
+
+wire [REAL_NUM_OF_CHANNELS-1:0] enable;
+wire [63:0] enable_s;
+
+Diff Content:
+- 190 localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
+- 191    NUM_OF_CHANNELS > 16 ? 32 :
+- 192    NUM_OF_CHANNELS > 8 ? 16 :
+- 193    NUM_OF_CHANNELS > 4 ? 8 :
+- 194    NUM_OF_CHANNELS > 2 ? 4 :
+- 195    NUM_OF_CHANNELS > 1 ? 2 : 1;
++ 195   localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
++ 195   /*
++ 195    * Round up to the next power of two and zero out the additional channels
++ 195    * internally.
++ 195    */
++ 195   localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
++ 195      NUM_OF_CHANNELS > 16 ? 32 :
++ 195      NUM_OF_CHANNELS > 8 ? 16 :
++ 195      NUM_OF_CHANNELS > 4 ? 8 :
++ 195      NUM_OF_CHANNELS > 2 ? 4 :
++ 195      NUM_OF_CHANNELS > 1 ? 2 : 1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_pack/util_upack2/util_upack2.v@186:201
+localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
+/*
+ * Round up to the next power of two and zero out the additional channels
+ * internally.
+ */
+localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
+   NUM_OF_CHANNELS > 16 ? 32 :
+   NUM_OF_CHANNELS > 8 ? 16 :
+   NUM_OF_CHANNELS > 4 ? 8 :
+   NUM_OF_CHANNELS > 2 ? 4 :
+   NUM_OF_CHANNELS > 1 ? 2 : 1;
+
+/* FIXME: Find out how to do this in the IP-XACT */
+
+wire [63:0] enable_s;
+wire [CHANNEL_DATA_WIDTH*REAL_NUM_OF_CHANNELS-1:0] fifo_rd_data;
+

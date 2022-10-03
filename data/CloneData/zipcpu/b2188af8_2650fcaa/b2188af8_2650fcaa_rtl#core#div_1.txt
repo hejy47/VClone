@@ -1,0 +1,43 @@
+Source Block: zipcpu/rtl/core/div.v@246:262@HdlStmProcess
+	//
+	// This is part of the state machine.  pre_sign indicates that we need
+	// a extra clock to take the absolute value of our inputs.  It need only
+	// be true for the one clock, and then it must clear itself.
+	initial	pre_sign = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		pre_sign <= 1'b0;
+	else if (i_wr)
+		pre_sign <= (i_signed)&&((i_numerator[BW-1])||(i_denominator[BW-1]));
+	else
+		pre_sign <= 1'b0;
+
+	// As a result of our operation, we need to set the flags.  The most
+	// difficult of these is the "Z" flag indicating that the result is
+	// zero.  Here, we'll use the same logic that sets the low-order
+	// bit to clear our zero flag, and leave the zero flag set in all
+
+Diff Content:
+- 252 	if (i_reset)
+- 253 		pre_sign <= 1'b0;
+- 254 	else if (i_wr)
+- 255 		pre_sign <= (i_signed)&&((i_numerator[BW-1])||(i_denominator[BW-1]));
+- 256 	else
+- 257 		pre_sign <= 1'b0;
++ 257 		pre_sign <= (i_wr)&&(i_signed)&&((i_numerator[BW-1])||(i_denominator[BW-1]));
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/div.v@245:255
+	// pre_sign
+	//
+	// This is part of the state machine.  pre_sign indicates that we need
+	// a extra clock to take the absolute value of our inputs.  It need only
+	// be true for the one clock, and then it must clear itself.
+	initial	pre_sign = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		pre_sign <= 1'b0;
+	else if (i_wr)
+		pre_sign <= (i_signed)&&((i_numerator[BW-1])||(i_denominator[BW-1]));
+

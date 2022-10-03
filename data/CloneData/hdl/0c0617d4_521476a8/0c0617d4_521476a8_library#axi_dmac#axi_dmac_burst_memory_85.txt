@@ -1,0 +1,21 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@370:382@HdlStmAssign
+  .mem_data_last (src_mem_data_last),
+  .mem_data_valid_bytes (src_mem_data_valid_bytes),
+  .mem_data_partial_burst (src_mem_data_partial_burst)
+);
+
+assign src_burst_len_data = {src_mem_data_partial_burst,
+                             src_beat_counter,
+                             src_mem_data_valid_bytes};
+
+ad_mem_asym #(
+  .A_ADDRESS_WIDTH (ADDRESS_WIDTH_SRC),
+  .A_DATA_WIDTH (DATA_WIDTH_MEM_SRC),
+  .B_ADDRESS_WIDTH (ADDRESS_WIDTH_DEST),
+
+Diff Content:
+- 375 assign src_burst_len_data = {src_mem_data_partial_burst,
+- 376                              src_beat_counter,
+- 377                              src_mem_data_valid_bytes};
+
+Clone Blocks:

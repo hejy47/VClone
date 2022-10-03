@@ -1,0 +1,79 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1292:1302@HdlStmAssign
+   //# while datamode, write, access and control mode are unchanged
+   assign dstaddr_inc[AW-1:0] = dstaddr[AW-1:0] + {{(AW-4){1'b0}},byte0_inc8,3'b000};
+
+   assign dstaddr_in[31:28] = burst_tran ? dstaddr_inc[31:28] : fifo_data_reg[3:0];
+   assign dstaddr_in[27:12] = burst_tran ? dstaddr_inc[27:12] : fifo_data_reg[2*LW-1:0];
+   assign dstaddr_in[11:0]  = burst_tran ? dstaddr_inc[11:0]  : fifo_data_reg[2*LW-1:4];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & (start_tran | burst_tran))
+       dstaddr_int[31:28] <= dstaddr_in[31:28];
+
+
+Diff Content:
+- 1297    assign dstaddr_in[11:0]  = burst_tran ? dstaddr_inc[11:0]  : fifo_data_reg[2*LW-1:4];
++ 1297 module e16_pulse2toggle(/*AUTOARG*/
++ 1297    out,
++ 1297    clk, in, reset
++ 1297    );
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1290:1300
+ 
+   //# destination address is updated on the beginning of burst transaction
+   //# while datamode, write, access and control mode are unchanged
+   assign dstaddr_inc[AW-1:0] = dstaddr[AW-1:0] + {{(AW-4){1'b0}},byte0_inc8,3'b000};
+
+   assign dstaddr_in[31:28] = burst_tran ? dstaddr_inc[31:28] : fifo_data_reg[3:0];
+   assign dstaddr_in[27:12] = burst_tran ? dstaddr_inc[27:12] : fifo_data_reg[2*LW-1:0];
+   assign dstaddr_in[11:0]  = burst_tran ? dstaddr_inc[11:0]  : fifo_data_reg[2*LW-1:4];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & (start_tran | burst_tran))
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1291:1301
+   //# destination address is updated on the beginning of burst transaction
+   //# while datamode, write, access and control mode are unchanged
+   assign dstaddr_inc[AW-1:0] = dstaddr[AW-1:0] + {{(AW-4){1'b0}},byte0_inc8,3'b000};
+
+   assign dstaddr_in[31:28] = burst_tran ? dstaddr_inc[31:28] : fifo_data_reg[3:0];
+   assign dstaddr_in[27:12] = burst_tran ? dstaddr_inc[27:12] : fifo_data_reg[2*LW-1:0];
+   assign dstaddr_in[11:0]  = burst_tran ? dstaddr_inc[11:0]  : fifo_data_reg[2*LW-1:4];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & (start_tran | burst_tran))
+       dstaddr_int[31:28] <= dstaddr_in[31:28];
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1288:1298
+
+//   assign chip_addr[2:0]   = vertical_k ?  ext_yid_k[2:0] : ext_xid_k[2:0];
+ 
+   //# destination address is updated on the beginning of burst transaction
+   //# while datamode, write, access and control mode are unchanged
+   assign dstaddr_inc[AW-1:0] = dstaddr[AW-1:0] + {{(AW-4){1'b0}},byte0_inc8,3'b000};
+
+   assign dstaddr_in[31:28] = burst_tran ? dstaddr_inc[31:28] : fifo_data_reg[3:0];
+   assign dstaddr_in[27:12] = burst_tran ? dstaddr_inc[27:12] : fifo_data_reg[2*LW-1:0];
+   assign dstaddr_in[11:0]  = burst_tran ? dstaddr_inc[11:0]  : fifo_data_reg[2*LW-1:4];
+
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@1294:1306
+
+   assign dstaddr_in[31:28] = burst_tran ? dstaddr_inc[31:28] : fifo_data_reg[3:0];
+   assign dstaddr_in[27:12] = burst_tran ? dstaddr_inc[27:12] : fifo_data_reg[2*LW-1:0];
+   assign dstaddr_in[11:0]  = burst_tran ? dstaddr_inc[11:0]  : fifo_data_reg[2*LW-1:4];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & (start_tran | burst_tran))
+       dstaddr_int[31:28] <= dstaddr_in[31:28];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & (dstaddr_2712_en | burst_tran))
+       dstaddr_int[27:12] <= dstaddr_in[27:12];
+
+

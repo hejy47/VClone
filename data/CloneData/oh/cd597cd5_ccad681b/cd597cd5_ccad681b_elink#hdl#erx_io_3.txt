@@ -1,0 +1,28 @@
+Source Block: oh/elink/hdl/erx_io.v@82:100@HdlStmProcess
+    //#####################
+   //#CREATE 112 BIT PACKET 
+   //#####################
+   
+   //write Pointer   
+   always @ (posedge rx_lclk or posedge reset)
+     if(reset)
+       rx_pointer[6:0] <= 7'b0;   
+     else if (~rx_frame)
+       rx_pointer[6:0] <= 7'b0000001; //new frame
+     else if (rx_pointer[6])
+       rx_pointer[6:0] <= 7'b0001000; //anticipate burst
+     else if(rx_frame)
+       rx_pointer[6:0] <= {rx_pointer[5:0],1'b0};//middle of frame
+      
+   //convert to 112 bit packet
+   always @ (posedge rx_lclk)
+     if(rx_frame)   
+       begin
+
+Diff Content:
+- 87    always @ (posedge rx_lclk or posedge reset)
+- 88      if(reset)
++ 88    always @ (posedge rx_lclk or posedge exr_io_reset)
++ 88      if(exr_io_reset)
+
+Clone Blocks:

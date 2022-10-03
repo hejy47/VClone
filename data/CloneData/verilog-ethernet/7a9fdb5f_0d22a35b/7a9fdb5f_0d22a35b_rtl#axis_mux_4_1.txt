@@ -1,0 +1,45 @@
+Source Block: verilog-ethernet/rtl/axis_mux_4.v@101:118@HdlStmProcess
+assign input_2_axis_tready = input_2_axis_tready_reg;
+assign input_3_axis_tready = input_3_axis_tready_reg;
+
+// mux for start of packet detection
+reg selected_input_tvalid;
+always @* begin
+    case (select)
+        2'd0: selected_input_tvalid = input_0_axis_tvalid;
+        2'd1: selected_input_tvalid = input_1_axis_tvalid;
+        2'd2: selected_input_tvalid = input_2_axis_tvalid;
+        2'd3: selected_input_tvalid = input_3_axis_tvalid;
+    endcase
+end
+
+// mux for incoming packet
+reg [DATA_WIDTH-1:0] current_input_tdata;
+reg current_input_tvalid;
+reg current_input_tready;
+
+Diff Content:
++ 111         default: selected_input_tvalid = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_mux_64_4.v@108:125
+assign input_2_axis_tready = input_2_axis_tready_reg;
+assign input_3_axis_tready = input_3_axis_tready_reg;
+
+// mux for start of packet detection
+reg selected_input_tvalid;
+always @* begin
+    case (select)
+        2'd0: selected_input_tvalid = input_0_axis_tvalid;
+        2'd1: selected_input_tvalid = input_1_axis_tvalid;
+        2'd2: selected_input_tvalid = input_2_axis_tvalid;
+        2'd3: selected_input_tvalid = input_3_axis_tvalid;
+    endcase
+end
+
+// mux for incoming packet
+reg [DATA_WIDTH-1:0] current_input_tdata;
+reg [KEEP_WIDTH-1:0] current_input_tkeep;
+reg current_input_tvalid;
+

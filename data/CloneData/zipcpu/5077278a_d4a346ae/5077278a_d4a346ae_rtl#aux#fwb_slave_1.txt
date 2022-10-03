@@ -1,0 +1,78 @@
+Source Block: zipcpu/rtl/aux/fwb_slave.v@157:178@HdlStmProcess
+		assert(!i_wb_ack);
+		assert(!i_wb_err);
+	end
+
+	// Things can only change on the positive edge of the clock
+	always @($global_clock)
+	if ((f_past_valid)&&(!$rose(i_clk)))
+	begin
+		assert($stable(i_reset));
+		assume($stable(i_wb_cyc));
+		assume($stable(f_request)); // The entire request should b stabl
+		//
+		assert($stable(i_wb_ack));
+		assert($stable(i_wb_stall));
+		assert($stable(i_wb_idata));
+		assert($stable(i_wb_err));
+	end
+
+	//
+	//
+	// Bus requests
+	//
+
+Diff Content:
+- 162 	always @($global_clock)
+- 163 	if ((f_past_valid)&&(!$rose(i_clk)))
+- 165 		assert($stable(i_reset));
+- 166 		assume($stable(i_wb_cyc));
+- 167 		assume($stable(f_request)); // The entire request should b stabl
+- 169 		assert($stable(i_wb_ack));
+- 170 		assert($stable(i_wb_stall));
+- 171 		assert($stable(i_wb_idata));
+- 172 		assert($stable(i_wb_err));
+- 173 	end
++ 163 	generate if (F_OPT_CLK2FFLOGIC)
++ 173 		always @($global_clock)
++ 173 		if ((f_past_valid)&&(!$rose(i_clk)))
++ 173 		begin
++ 173 			assert($stable(i_reset));
++ 173 			assume($stable(i_wb_cyc));
++ 173 			assume($stable(f_request)); // The entire request should b stabl
++ 173 			assert($stable(i_wb_ack));
++ 173 			assert($stable(i_wb_stall));
++ 173 			assert($stable(i_wb_idata));
++ 173 			assert($stable(i_wb_err));
++ 173 		end
++ 173 	end endgenerate
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/aux/fwb_master.v@164:188
+		assume(!i_wb_ack);
+		assume(!i_wb_err);
+	end
+
+	// Things can only change on the positive edge of the clock
+	always @($global_clock)
+	if ((f_past_valid)&&(!$rose(i_clk)))
+	begin
+		assert($stable(i_reset));
+		assert($stable(i_wb_cyc));
+		if (i_wb_we)
+			assert($stable(f_request)); // The entire request should b stabl
+		else
+			assert($stable(f_request[(2+AW-1):(DW+DW/8)]));
+		//
+		assume($stable(i_wb_ack));
+		assume($stable(i_wb_stall));
+		assume($stable(i_wb_idata));
+		assume($stable(i_wb_err));
+	end
+
+	//
+	//
+	// Bus requests
+	//
+

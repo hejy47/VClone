@@ -1,0 +1,26 @@
+Source Block: hdl/library/common/ad_serdes_clk.v@127:145@HdlStmIf
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked));
+  end
+
+  if ((MMCM == 0) && (SERDES == 0)) begin
+  BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_buf (
+    .CLR (1'b0),
+    .CE (1'b1),
+    .I (clk_in_s),
+    .O (clk));
+
+  assign div_clk = clk;
+  end
+
+  if ((MMCM == 0) && (SERDES == 1)) begin
+  BUFIO i_clk_buf (
+    .I (clk_in_s),
+    .O (clk));
+
+Diff Content:
+- 132   if ((MMCM == 0) && (SERDES == 0)) begin
++ 132   if ((MMCM_OR_BUFR_N == 0) && (SERDES_OR_DDR_N == 0)) begin
+
+Clone Blocks:

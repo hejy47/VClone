@@ -1,0 +1,22 @@
+Source Block: oh/src/spi/hdl/spi_slave_io.v@149:161@HdlStmAssign
+   assign spi_write     = spi_en &
+			  byte_done &
+			  (command_reg[7:6]==2'b00) &
+			  (spi_state[1:0]==`SPI_DATA);
+  
+   assign spi_remote    = spi_en &
+			  ss     &                 // wait until signal goes high
+			  command_reg[7:6]==2'b11; // send remote request
+
+   assign spi_wdata[7:0] = rx_data[7:0];
+ 
+   //###################################
+   //# SYNCHRONIZATION TO CORE
+
+Diff Content:
+- 155 			  ss     &                 // wait until signal goes high
+- 156 			  command_reg[7:6]==2'b11; // send remote request
++ 156 			  ss     &                      // wait until ss edge
++ 156 			  command_reg[7:6]==`SPI_FETCH; // send remote request
+
+Clone Blocks:

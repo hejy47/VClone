@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@197:207@HdlIdDef
+
+  reg        [31:0]     trigger_delay_counter;
+  reg                   triggered;
+  reg                   trigger_out_m1;
+
+  reg                   streaming_on;
+
+  // signal name changes
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+Diff Content:
++ 202   reg                   trigger_out_hold;
++ 202   reg                   trigger_out_ack;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@144:154
+  wire    [31:0]    trigger_delay;
+  wire              trigger_out_delayed;
+
+  wire              streaming;
+
+  genvar i;
+
+  // signal name changes
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+

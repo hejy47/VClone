@@ -1,0 +1,20 @@
+Source Block: hdl/library/util_rfifo/util_rfifo.v@104:114@HdlStmAssign
+
+  wire                            m_runf_s;
+
+  // defaults
+
+  assign fifo_rst = ~rstn;
+
+  // independent clocks and buswidths- simply expect
+  // user to set a reasonable threshold on the full signal
+
+  always @(posedge s_clk) begin
+
+Diff Content:
+- 109   assign fifo_rst = ~rstn;
++ 109   always @(posedge dma_clk) begin
++ 109     dma_rd <= ~fifo_wfull;
++ 109   end
+
+Clone Blocks:

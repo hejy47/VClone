@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/src_axi_mm.v@191:207@HdlStmProcess
+ * There is a requirement that data_id <= address_id (modulo 2**ID_WIDTH).  We
+ * know that we will never receive data before we have requested it so there is
+ * an implicit dependency between data_id and address_id and no need to
+ * explicitly track it.
+ */
+always @(posedge m_axi_aclk) begin
+  if (m_axi_aresetn == 1'b0) begin
+    id <= 'h00;
+  end else if (m_axi_rvalid == 1'b1 && m_axi_rlast == 1'b1) begin
+    id <= inc_id(id);
+  end
+end
+
+/*
+ * We won't be receiving data before we've requested it and we won't request
+ * data unless there is room in the store-and-forward memory.
+ */
+
+Diff Content:
+- 196 always @(posedge m_axi_aclk) begin
+- 197   if (m_axi_aresetn == 1'b0) begin
+- 198     id <= 'h00;
+- 199   end else if (m_axi_rvalid == 1'b1 && m_axi_rlast == 1'b1) begin
+- 200     id <= inc_id(id);
+- 202 end
++ 200   always @(posedge m_axi_aclk) begin
++ 200     last_beat_bytes_mem[address_id] <= address_eot ? last_beat_bytes :
++ 200                                                      {BYTES_PER_BEAT_WIDTH{1'b1}};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/src_axi_mm.v@183:193
+  .cache(m_axi_arcache)
+);
+
+assign fifo_valid = m_axi_rvalid;
+assign fifo_data = m_axi_rdata;
+assign fifo_last = m_axi_rlast;
+
+/*
+ * There is a requirement that data_id <= address_id (modulo 2**ID_WIDTH).  We
+ * know that we will never receive data before we have requested it so there is
+ * an implicit dependency between data_id and address_id and no need to
+

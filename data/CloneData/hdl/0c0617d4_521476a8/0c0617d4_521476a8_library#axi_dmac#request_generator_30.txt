@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_dmac/request_generator.v@143:159@HdlStmProcess
+  end
+end
+
+assign transfer_id_match = cur_transfer_id == rew_transfer_id[0];
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    cur_transfer_id <= 1'b0;
+  end else if (req_valid == 1'b1 && req_ready == 1'b1) begin
+    cur_transfer_id <= ~cur_transfer_id;
+  end
+end
+
+/*
+ * Once rewind request is received we need to stop incrementing the burst ID.
+ *
+ * If the current segment matches the segment that was interrupted and
+
+Diff Content:
+- 148 always @(posedge clk) begin
+- 149   if (resetn == 1'b0) begin
+- 150     cur_transfer_id <= 1'b0;
+- 151   end else if (req_valid == 1'b1 && req_ready == 1'b1) begin
+- 152     cur_transfer_id <= ~cur_transfer_id;
+- 153   end
+- 154 end
+
+Clone Blocks:

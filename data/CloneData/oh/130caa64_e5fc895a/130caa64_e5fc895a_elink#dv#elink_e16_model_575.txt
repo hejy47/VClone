@@ -1,0 +1,41 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4514:4527@HdlStmAssign
+
+   assign sel_ref_byte1 = (burst_backup_cnt[1:0] == 2'b01);
+   assign sel_ref_byte3 = (burst_backup_cnt[1:0] == 2'b10);
+   assign sel_ref_byte5 = (burst_backup_cnt[1:0] == 2'b11);
+
+   assign byte_even_mux[LW-1:0] = sel_ref_byte0 ? tran_byte0[7:0]    :
+				  sel_ref_byte2 ? ref_dstaddr[27:20] :
+				  sel_ref_byte4 ? ref_dstaddr[11:4]  :
+				                  fifo_out[2*LW-1:LW];
+
+   assign byte_odd_mux[LW-1:0] = sel_ref_byte1 ? {ref_ctrlmode[3:0],ref_dstaddr[31:28]} :
+				 sel_ref_byte3 ? ref_dstaddr[19:12] :
+	      sel_ref_byte5 ? {ref_dstaddr[3:0],ref_datamode[1:0],ref_write,ref_access} :
+				                 fifo_out[LW-1:0];
+
+Diff Content:
+- 4519    assign byte_even_mux[LW-1:0] = sel_ref_byte0 ? tran_byte0[7:0]    :
+- 4520 				  sel_ref_byte2 ? ref_dstaddr[27:20] :
+- 4521 				  sel_ref_byte4 ? ref_dstaddr[11:4]  :
+- 4522 				                  fifo_out[2*LW-1:LW];
++ 4522    assign txo_frame_in = txo_wr_frame | txo_rd_frame;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4519:4532
+   assign byte_even_mux[LW-1:0] = sel_ref_byte0 ? tran_byte0[7:0]    :
+				  sel_ref_byte2 ? ref_dstaddr[27:20] :
+				  sel_ref_byte4 ? ref_dstaddr[11:4]  :
+				                  fifo_out[2*LW-1:LW];
+
+   assign byte_odd_mux[LW-1:0] = sel_ref_byte1 ? {ref_ctrlmode[3:0],ref_dstaddr[31:28]} :
+				 sel_ref_byte3 ? ref_dstaddr[19:12] :
+	      sel_ref_byte5 ? {ref_dstaddr[3:0],ref_datamode[1:0],ref_write,ref_access} :
+				                 fifo_out[LW-1:0];
+
+   assign byte_even[LW-1:0] = {(LW){txo_op_ack}} & byte_even_mux[LW-1:0];
+   assign byte_odd[LW-1:0]  = {(LW){txo_op_ack}} & byte_odd_mux[LW-1:0];
+
+   always @ (posedge txo_lclk or posedge reset)
+

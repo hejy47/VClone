@@ -1,0 +1,63 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@121:131@HdlStmAssign
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable)
+    s_axis_ready <= 1'b0;
+  else if (wr_request_valid & wr_request_ready)
+
+Diff Content:
+- 126 assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
++ 126   always @(posedge s_axis_aclk) begin
++ 126     if (wr_request_valid & wr_request_ready)
++ 126       wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
++ 126     end
++ 126   wire wr_last_beat;
++ 126   assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
++ 126   always @(posedge s_axis_aclk) begin
++ 126     if (~wr_request_enable)
++ 126       s_axis_ready <= 1'b0;
++ 126     else if (wr_request_valid & wr_request_ready)
++ 126       s_axis_ready <= 1'b1;
++ 126     else if (wr_last_beat) begin
++ 126       s_axis_ready <= 1'b0;
++ 126     end
++ 126   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_do_ram/util_do_ram.v@120:130
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable)
+    s_axis_ready <= 1'b0;
+
+Clone Blocks 2:
+hdl/library/util_do_ram/util_do_ram.v@115:128
+    wr_request_ready <= 1'b0;
+  else if (wr_response_eot)
+    wr_request_ready <= 1'b1;
+end
+
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+

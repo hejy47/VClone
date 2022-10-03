@@ -1,0 +1,34 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@78:89@HdlIdDef
+
+  // Diagnostics interface
+  output  [7:0] dest_diag_level_bursts
+);
+
+localparam DATA_WIDTH_MEM = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
+  DATA_WIDTH_SRC : DATA_WIDTH_DEST;
+localparam MEM_RATIO = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
+  DATA_WIDTH_SRC / DATA_WIDTH_DEST : DATA_WIDTH_DEST / DATA_WIDTH_SRC;
+
+/* A burst can have up to 256 beats */
+localparam BURST_LEN = MAX_BYTES_PER_BURST / (DATA_WIDTH_MEM / 8);
+
+Diff Content:
+- 83 localparam DATA_WIDTH_MEM = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
+- 84   DATA_WIDTH_SRC : DATA_WIDTH_DEST;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@80:91
+  output  [7:0] dest_diag_level_bursts
+);
+
+localparam DATA_WIDTH_MEM = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
+  DATA_WIDTH_SRC : DATA_WIDTH_DEST;
+localparam MEM_RATIO = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
+  DATA_WIDTH_SRC / DATA_WIDTH_DEST : DATA_WIDTH_DEST / DATA_WIDTH_SRC;
+
+/* A burst can have up to 256 beats */
+localparam BURST_LEN = MAX_BYTES_PER_BURST / (DATA_WIDTH_MEM / 8);
+localparam BURST_LEN_WIDTH = BURST_LEN > 128 ? 8 :
+  BURST_LEN > 64 ? 7 :
+

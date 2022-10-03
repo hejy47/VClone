@@ -1,0 +1,36 @@
+Source Block: hdl/library/util_upack/util_upack.v@251:279@HdlStmFor
+  endgenerate
+
+  // demux
+
+  generate
+  for (n = 0; n < CH_SCNT; n = n + 1) begin: g_dmx
+  util_upack_dmx i_dmx (
+    .dac_clk (dac_clk),
+    .dac_enable ({dac_enable_7, dac_enable_6, dac_enable_5, dac_enable_4,
+                  dac_enable_3, dac_enable_2, dac_enable_1, dac_enable_0}),
+    .dac_data_0 (dac_data_0[((16*n)+15):(16*n)]),
+    .dac_data_1 (dac_data_1[((16*n)+15):(16*n)]),
+    .dac_data_2 (dac_data_2[((16*n)+15):(16*n)]),
+    .dac_data_3 (dac_data_3[((16*n)+15):(16*n)]),
+    .dac_data_4 (dac_data_4[((16*n)+15):(16*n)]),
+    .dac_data_5 (dac_data_5[((16*n)+15):(16*n)]),
+    .dac_data_6 (dac_data_6[((16*n)+15):(16*n)]),
+    .dac_data_7 (dac_data_7[((16*n)+15):(16*n)]),
+    .dac_dmx_enable ({dac_dmx_enable_7_s[n], dac_dmx_enable_6_s[n],
+                      dac_dmx_enable_5_s[n], dac_dmx_enable_4_s[n],
+                      dac_dmx_enable_3_s[n], dac_dmx_enable_2_s[n],
+                      dac_dmx_enable_1_s[n], dac_dmx_enable_0_s[n]}),
+    .dac_dsf_data (dac_dsf_data[((M_CNT*16*(n+1))-1):(M_CNT*16*n)]));
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 273     .dac_dsf_data (dac_dsf_data[((M_CNT*16*(n+1))-1):(M_CNT*16*n)]));
++ 273     .dac_dsf_data (dac_dsf_data[((NUM_OF_CHANNELS_M*16*(n+1))-1):(NUM_OF_CHANNELS_M*16*n)]));
+
+Clone Blocks:

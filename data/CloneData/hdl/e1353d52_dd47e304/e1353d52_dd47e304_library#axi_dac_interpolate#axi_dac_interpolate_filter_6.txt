@@ -1,0 +1,19 @@
+Source Block: hdl/library/axi_dac_interpolate/axi_dac_interpolate_filter.v@169:179@HdlStmAssign
+    end else begin
+      transmit_ready <= (dma_data_valid & dma_data_valid_adjacent) ? triggered : ~dma_data_valid;
+    end
+  end
+
+  assign dac_int_valid = transmit_ready ? dac_int_valid_d : 1'b0;
+
+  always @(posedge dac_clk) begin
+    case (filter_mask)
+      3'b000: filter_enable <= 1'b0;
+      default: filter_enable <= 1'b1;
+
+Diff Content:
+- 174   assign dac_int_valid = transmit_ready ? dac_int_valid_d : 1'b0;
++ 174   assign dma_ready = transmit_ready ? dac_int_ready : 1'b0;
++ 174   assign underflow = dac_enable & dma_ready & ~dma_valid;
+
+Clone Blocks:

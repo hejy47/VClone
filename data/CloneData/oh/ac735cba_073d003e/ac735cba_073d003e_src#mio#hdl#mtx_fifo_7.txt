@@ -1,0 +1,18 @@
+Source Block: oh/src/mio/hdl/mtx_fifo.v@98:108@HdlStmAssign
+   
+   // fifo access
+   assign fifo_access_in = access_in | (|emesh_cycle[1:0]);
+      
+   // pushback wait while emesh transaction is active or while fifo is half-full
+   assign wait_out = fifo_wait | (|emesh_cycle[1:0]);
+      
+   //########################################################
+   //# FIFO 
+   //#######################################################   
+
+
+Diff Content:
+- 103    assign wait_out = fifo_wait | (|emesh_cycle[1:0]);
++ 103    assign wait_out = fifo_wait  | (|emesh_cycle[1:0]);
+
+Clone Blocks:

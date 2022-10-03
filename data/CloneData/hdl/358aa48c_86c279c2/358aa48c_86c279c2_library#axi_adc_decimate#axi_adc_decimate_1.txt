@@ -1,0 +1,63 @@
+Source Block: hdl/library/axi_adc_decimate/axi_adc_decimate.v@146:201@HdlStmProcess
+    .reset(adc_rst),
+    .filter_in(adc_cic_data_b[11:0]),
+    .filter_out(adc_fir_data_b),
+    .ce_out(adc_fir_valid_b));
+
+  always @(*) begin
+    case (filter_mask)
+      16'h1: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
+      16'h2: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
+      16'h3: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
+      16'h6: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
+      16'h7: adc_dec_data_a = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
+      default: adc_dec_data_a = adc_data_a;
+    endcase
+
+    case (filter_mask)
+      16'h1: adc_dec_valid_a_filter = adc_fir_valid_a;
+      16'h2: adc_dec_valid_a_filter = adc_fir_valid_a;
+      16'h3: adc_dec_valid_a_filter = adc_fir_valid_a;
+      16'h6: adc_dec_valid_a_filter = adc_fir_valid_a;
+      16'h7: adc_dec_valid_a_filter = adc_fir_valid_a;
+      default: adc_dec_valid_a_filter = adc_valid_a;
+    endcase
+
+     case (filter_mask)
+      16'h1: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
+      16'h2: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
+      16'h3: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
+      16'h6: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
+      16'h7: adc_dec_data_b = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
+      default: adc_dec_data_b = adc_data_b;
+    endcase
+
+    case (filter_mask)
+      16'h1: adc_dec_valid_b_filter = adc_fir_valid_b;
+      16'h2: adc_dec_valid_b_filter = adc_fir_valid_b;
+      16'h3: adc_dec_valid_b_filter = adc_fir_valid_b;
+      16'h6: adc_dec_valid_b_filter = adc_fir_valid_b;
+      16'h7: adc_dec_valid_b_filter = adc_fir_valid_b;
+      default: adc_dec_valid_b_filter = adc_valid_b;
+    endcase
+
+    case (filter_mask)
+      16'h1: decim_rate_cic = 16'd5;
+      16'h2: decim_rate_cic = 16'd50;
+      16'h3: decim_rate_cic = 16'd500;
+      16'h6: decim_rate_cic = 16'd5000;
+      16'h7: decim_rate_cic = 16'd50000;
+      default: decim_rate_cic = 9'd1;
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    if (adc_rst == 1'b1) begin
+      decimation_counter <= 32'b0;
+      adc_dec_valid_a <= 1'b0;
+
+Diff Content:
+- 194       default: decim_rate_cic = 9'd1;
++ 194       default: decim_rate_cic = 16'd1;
+
+Clone Blocks:

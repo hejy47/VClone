@@ -1,0 +1,18 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@101:111@HdlStmAssign
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+assign sdo_data_valid = spi_active;
+
+assign offload_sdi_valid = sdi_data_valid;
+
+// we don't want to block the SDI interface after disabling the module
+// so just assert the SDI_READY if the sink module (DMA) is disabled
+assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
+
+
+Diff Content:
+- 106 assign offload_sdi_valid = sdi_data_valid;
++ 106   assign offload_sdi_valid = sdi_data_valid;
+
+Clone Blocks:

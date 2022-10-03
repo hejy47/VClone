@@ -1,0 +1,138 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@195:244@HdlStmProcess
+ * #3 {lane_,}cgs_enable, tx_ready update
+ *
+ * One multi-frame should at least be 3 clock cycles (TBD 64-bit data path)
+ */
+
+always @(posedge clk) begin
+  if (sync_request == 1'b1 || reset == 1'b1) begin
+    cgs_enable <= 1'b1;
+    lane_cgs_enable <= {NUM_LANES{1'b1}};
+    tx_ready <= 1'b0;
+    ilas_reset <= 1'b1;
+    ilas_data_reset <= 1'b1;
+
+    if (sync_request_received == 1'b0) begin
+      status_state <= STATE_WAIT;
+    end else begin
+      status_state <= STATE_CGS;
+    end
+  end else if (sync_request_received == 1'b1) begin
+    if (lmfc_edge == 1'b1 && last_ilas_mframe == 1'b1) begin
+      ilas_reset <= 1'b1;
+      status_state <= STATE_DATA;
+    end else if (lmfc_edge_d1 == 1'b1 && (cfg_continuous_ilas == 1'b1 ||
+      cgs_enable == 1'b1)) begin
+      ilas_reset <= 1'b0;
+      status_state <= STATE_ILAS;
+    end
+
+    if (lmfc_edge_d1 == 1'b1) begin
+      if (last_ilas_mframe == 1'b1 && cfg_continuous_ilas == 1'b0) begin
+        ilas_data_reset <= 1'b1;
+      end else if (cgs_enable == 1'b1) begin
+        ilas_data_reset <= 1'b0;
+      end
+    end
+
+    if (lmfc_edge_d2 == 1'b1) begin
+      lane_cgs_enable <= cfg_lanes_disable;
+      cgs_enable <= 1'b0;
+      if (last_ilas_mframe == 1'b1 && cfg_continuous_ilas == 1'b0) begin
+        tx_ready <= 1'b1;
+      end
+    end
+  end
+end
+
+assign tx_next_mf_ready = sync_request_received & last_ilas_mframe & ~cfg_continuous_ilas;
+assign tx_ready_nx = tx_ready | (tx_next_mf_ready & lmfc_edge_d2);
+
+always @(posedge clk) begin
+
+Diff Content:
+- 200 always @(posedge clk) begin
+- 201   if (sync_request == 1'b1 || reset == 1'b1) begin
+- 202     cgs_enable <= 1'b1;
+- 203     lane_cgs_enable <= {NUM_LANES{1'b1}};
+- 204     tx_ready <= 1'b0;
+- 205     ilas_reset <= 1'b1;
+- 206     ilas_data_reset <= 1'b1;
+- 208     if (sync_request_received == 1'b0) begin
+- 209       status_state <= STATE_WAIT;
+- 211       status_state <= STATE_CGS;
+- 213   end else if (sync_request_received == 1'b1) begin
+- 214     if (lmfc_edge == 1'b1 && last_ilas_mframe == 1'b1) begin
+- 216       status_state <= STATE_DATA;
+- 217     end else if (lmfc_edge_d1 == 1'b1 && (cfg_continuous_ilas == 1'b1 ||
+- 218       cgs_enable == 1'b1)) begin
+- 219       ilas_reset <= 1'b0;
+- 220       status_state <= STATE_ILAS;
+- 221     end
+- 223     if (lmfc_edge_d1 == 1'b1) begin
+- 224       if (last_ilas_mframe == 1'b1 && cfg_continuous_ilas == 1'b0) begin
+- 225         ilas_data_reset <= 1'b1;
+- 226       end else if (cgs_enable == 1'b1) begin
+- 227         ilas_data_reset <= 1'b0;
+- 229     end
+- 231     if (lmfc_edge_d2 == 1'b1) begin
+- 232       lane_cgs_enable <= cfg_lanes_disable;
+- 233       cgs_enable <= 1'b0;
+- 234       if (last_ilas_mframe == 1'b1 && cfg_continuous_ilas == 1'b0) begin
+- 235         tx_ready <= 1'b1;
+- 239 end
++ 209   always @(*) begin
++ 209     if (sync_request == 1'b1 || reset == 1'b1) begin
++ 209       eof_reset = 1'b1;
++ 209     end else if (lmfc_edge == 1'b1 && sync_request_received == 1'b1) begin
++ 209       eof_reset = 1'b0;
++ 211       eof_reset = eof_reset_d;
++ 214   end
++ 214   always @(posedge clk) begin
++ 214     eof_reset_d <= eof_reset;
++ 214   end
++ 214   localparam STATE_WAIT = 2'b00;
++ 214   localparam STATE_CGS = 2'b01;
++ 214   localparam STATE_ILAS = 2'b10;
++ 214   localparam STATE_DATA = 2'b11;
++ 214   /* Timeline
++ 214    *
++ 214    * #1 lmfc_edge == 1, ilas_reset update
++ 214    * #3 {lane_,}cgs_enable, tx_ready update
++ 214    *
++ 214    * One multi-frame should at least be 3 clock cycles (TBD 64-bit data path)
++ 214    */
++ 214   always @(posedge clk) begin
++ 214     if (sync_request == 1'b1 || reset == 1'b1) begin
++ 214       cgs_enable <= 1'b1;
++ 214       lane_cgs_enable <= {NUM_LANES{1'b1}};
++ 214       tx_ready <= 1'b0;
++ 221       ilas_data_reset <= 1'b1;
++ 227       if (sync_request_received == 1'b0) begin
++ 227         status_state <= STATE_WAIT;
++ 227       end else begin
++ 227         status_state <= STATE_CGS;
++ 227       end
++ 227     end else if (sync_request_received == 1'b1) begin
++ 227       if (lmfc_edge == 1'b1 && last_ilas_mframe == 1'b1) begin
++ 227         ilas_reset <= 1'b1;
++ 227         status_state <= STATE_DATA;
++ 227       end else if (lmfc_edge_d1 == 1'b1 && (cfg_continuous_ilas == 1'b1 ||
++ 227         cgs_enable == 1'b1)) begin
++ 227         ilas_reset <= 1'b0;
++ 227         status_state <= STATE_ILAS;
++ 227       end
++ 227       if (lmfc_edge_d1 == 1'b1) begin
++ 227         if (last_ilas_mframe == 1'b1 && cfg_continuous_ilas == 1'b0) begin
++ 227           ilas_data_reset <= 1'b1;
++ 227         end else if (cgs_enable == 1'b1) begin
++ 227           ilas_data_reset <= 1'b0;
++ 227         end
++ 235       if (lmfc_edge_d2 == 1'b1) begin
++ 235         lane_cgs_enable <= cfg_lanes_disable;
++ 235         cgs_enable <= 1'b0;
++ 235         if (last_ilas_mframe == 1'b1 && cfg_continuous_ilas == 1'b0) begin
++ 235           tx_ready <= 1'b1;
++ 235         end
+
+Clone Blocks:

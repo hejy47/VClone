@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@80:90@HdlStmAssign
+assign size = $clog2(C_DMA_DATA_WIDTH/8);
+
+reg [7:0] length = 'h0;
+reg [31-C_BYTES_PER_BEAT_WIDTH:0] address = 'h00;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {C_BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+// we can disable the address generator.
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+
+Diff Content:
++ 85 reg addr_valid_d1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@79:89
+assign len = length;
+assign size = $clog2(C_DMA_DATA_WIDTH/8);
+
+reg [7:0] length = 'h0;
+reg [31-C_BYTES_PER_BEAT_WIDTH:0] address = 'h00;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {C_BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+// we can disable the address generator.
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/address_generator.v@77:87
+assign prot = 3'b000;
+assign cache = 4'b0011;
+assign len = length;
+assign size = $clog2(C_DMA_DATA_WIDTH/8);
+
+reg [7:0] length = 'h0;
+reg [31-C_BYTES_PER_BEAT_WIDTH:0] address = 'h00;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {C_BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+
+Clone Blocks 3:
+hdl/library/axi_dmac/address_generator.v@78:88
+assign cache = 4'b0011;
+assign len = length;
+assign size = $clog2(C_DMA_DATA_WIDTH/8);
+
+reg [7:0] length = 'h0;
+reg [31-C_BYTES_PER_BEAT_WIDTH:0] address = 'h00;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {C_BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+// we can disable the address generator.
+

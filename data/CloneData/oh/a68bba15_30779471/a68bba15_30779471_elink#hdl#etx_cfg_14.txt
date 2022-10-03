@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/etx_cfg.v@121:135@HdlStmProcess
+	  // Inputs
+	  .clk		(clk),
+	  .din		(tx_status[15:0])
+	  );
+
+   always @ (posedge clk)
+     if (tx_status_write)
+       tx_status_reg[15:0] <= mi_din[15:0];   
+     else
+       tx_status_reg[15:0]<= tx_status_reg[15:0] | {tx_status_sync[15:0]};
+
+   //###########################
+   //# GPIO DATA
+   //###########################
+   always @ (posedge clk)
+
+Diff Content:
+- 128        tx_status_reg[15:0] <= mi_din[15:0];   
++ 128        tx_status_reg[15:0] <= data_in[15:0];   
+
+Clone Blocks:

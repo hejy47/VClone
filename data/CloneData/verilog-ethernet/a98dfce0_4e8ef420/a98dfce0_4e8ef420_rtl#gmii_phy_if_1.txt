@@ -1,0 +1,83 @@
+Source Block: verilog-ethernet/rtl/gmii_phy_if.v@68:135@HdlStmIf
+wire phy_gmii_rx_clk_io;
+wire phy_gmii_tx_clk_int;
+
+generate
+
+if (TARGET_XILINX) begin
+
+    // use Xilinx clocking primitives
+
+    // pass through RX clock to input buffers
+    BUFIO2
+    phy_gmii_rx_clk_bufio (
+        .I(phy_gmii_rx_clk),
+        .DIVCLK(phy_gmii_rx_clk_int),
+        .IOCLK(phy_gmii_rx_clk_io),
+        .SERDESSTROBE()
+    );
+
+    // pass through RX clock to MAC
+    BUFG
+    phy_gmii_rx_clk_bufg (
+        .I(phy_gmii_rx_clk_int),
+        .O(mac_gmii_rx_clk)
+    );
+
+    // pass through clock to MAC
+    assign mac_gmii_tx_clk = clk;
+
+    // pass through clock to PHY
+    assign phy_gmii_tx_clk_int = clk;
+    
+    // invert to center clock edge in valid window
+    ODDR2
+    phy_gmii_tx_clk_oddr (
+        .Q(phy_gmii_tx_clk),
+        .C0(phy_gmii_tx_clk_int),
+        .C1(~phy_gmii_tx_clk_int),
+        .CE(1),
+        .D0(0),
+        .D1(1),
+        .R(0),
+        .S(0)
+    );
+
+end else begin
+
+    // pass through RX clock to input buffers
+    assign phy_gmii_rx_clk_io = phy_gmii_rx_clk;
+
+    // pass through RX clock to MAC
+    assign phy_gmii_rx_clk_int = phy_gmii_rx_clk;
+    assign mac_gmii_rx_clk = phy_gmii_rx_clk_int;
+
+    // pass through clock to MAC
+    assign mac_gmii_tx_clk = clk;
+
+    // pass through clock to PHY
+    assign phy_gmii_tx_clk_int = clk;
+
+    // invert to center clock edge in valid window
+    assign phy_gmii_tx_clk = ~phy_gmii_tx_clk_int;
+
+end
+
+endgenerate
+
+// reset sync
+reg [3:0] tx_rst_reg = 4'hf;
+
+Diff Content:
+- 105         .CE(1),
+- 106         .D0(0),
+- 107         .D1(1),
+- 108         .R(0),
+- 109         .S(0)
++ 109         .CE(1'b1),
++ 109         .D0(1'b0),
++ 109         .D1(1'b1),
++ 109         .R(1'b0),
++ 109         .S(1'b0)
+
+Clone Blocks:

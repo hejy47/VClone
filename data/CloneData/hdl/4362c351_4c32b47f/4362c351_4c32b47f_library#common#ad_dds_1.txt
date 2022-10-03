@@ -1,0 +1,17 @@
+Source Block: hdl/library/common/ad_dds.v@63:73@HdlStmAssign
+  wire    [15:0]  dds_data_0_s;
+  wire    [15:0]  dds_data_1_s;
+
+  // disable
+
+  assign dds_data = (DISABLE == 1) ? 16'd0 : dds_data_out;
+
+  // dds channel output
+
+  always @(posedge clk) begin
+    dds_data_int <= dds_data_0_s + dds_data_1_s;
+
+Diff Content:
+- 68   assign dds_data = (DISABLE == 1) ? 16'd0 : dds_data_out;
+
+Clone Blocks:

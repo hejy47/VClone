@@ -1,0 +1,17 @@
+Source Block: oh/emailbox/hdl/emailbox.v@114:124@HdlStmAssign
+   assign mi_dout[63:32] = mailbox_data[63:32];
+   
+   /*****************************/
+   /*FIFO (64bit wide)          */
+   /*****************************/
+   assign mailbox_not_empty         = ~mailbox_empty;
+
+   defparam fifo.DW    = MW;
+   defparam fifo.DEPTH = DEPTH;
+   //TODO: fix the width and depth
+   fifo_async fifo(.rst       (~nreset),  
+
+Diff Content:
+- 119    assign mailbox_not_empty         = ~mailbox_empty;
+
+Clone Blocks:

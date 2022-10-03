@@ -1,0 +1,723 @@
+Source Block: hdl/projects/fmcomms2/zed/system_top.v@203:213@HdlIdDef
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(49)) i_iobuf_gpio (
+    .dio_t ({gpio_t[48:0]}),
+
+Diff Content:
++ 208   wire            tdd_enable_s;
++ 208   wire            gpio_enable;
++ 208   wire            gpio_txnrx;
++ 208   wire            enable_s;
++ 208   wire            txnrx_s;
++ 208   assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
++ 208   assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/motcon2_fmc/zed/system_top.v@266:276
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  wire            refclk;
+  wire            refclk_rst;
+
+
+Clone Blocks 2:
+hdl/projects/adv7511/zed/system_top.v@140:150
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+
+Clone Blocks 3:
+hdl/projects/adv7511/zed/system_top.v@139:149
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+Clone Blocks 4:
+hdl/projects/imageon/zed/system_top.v@165:175
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // base hdmi
+
+  assign hdmi_out_clk = 1'd0;
+
+Clone Blocks 5:
+hdl/projects/cftl_cip/zed/system_top.v@156:166
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+
+Clone Blocks 6:
+hdl/projects/imageon_loopback/zed/system_top.v@162:172
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 7:
+hdl/projects/cn0363/zed/system_top.v@151:161
+
+  // internal signals
+
+  wire    [34:0]  gpio_i;
+  wire    [34:0]  gpio_o;
+  wire    [34:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+
+Clone Blocks 8:
+hdl/projects/cftl_cip/zed/system_top.v@151:161
+  // internal signals
+
+  wire    [31:0]  gpio_i;
+  wire    [31:0]  gpio_o;
+  wire    [31:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 9:
+hdl/projects/ad9467_fmc/zed/system_top.v@164:174
+wire    [63:0]  gpio_i;
+wire    [63:0]  gpio_o;
+wire    [63:0]  gpio_t;
+wire    [ 1:0]  iic_mux_scl_i_s;
+wire    [ 1:0]  iic_mux_scl_o_s;
+wire            iic_mux_scl_t_s;
+wire    [ 1:0]  iic_mux_sda_i_s;
+wire    [ 1:0]  iic_mux_sda_o_s;
+wire            iic_mux_sda_t_s;
+
+// instantiations
+
+Clone Blocks 10:
+hdl/projects/cftl_std/zed/system_top.v@172:182
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  wire    [15:0]  ps_intrs;
+
+  // instantiations
+
+
+Clone Blocks 11:
+hdl/projects/cftl_cip/zed/system_top.v@150:160
+
+  // internal signals
+
+  wire    [31:0]  gpio_i;
+  wire    [31:0]  gpio_o;
+  wire    [31:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+
+Clone Blocks 12:
+hdl/projects/ad9467_fmc/zed/system_top.v@166:176
+wire    [63:0]  gpio_t;
+wire    [ 1:0]  iic_mux_scl_i_s;
+wire    [ 1:0]  iic_mux_scl_o_s;
+wire            iic_mux_scl_t_s;
+wire    [ 1:0]  iic_mux_sda_i_s;
+wire    [ 1:0]  iic_mux_sda_o_s;
+wire            iic_mux_sda_t_s;
+
+// instantiations
+
+  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_gpio (
+
+Clone Blocks 13:
+hdl/projects/adv7511/zed/system_top.v@141:151
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+  ad_iobuf #(
+
+Clone Blocks 14:
+hdl/projects/cftl_cip/zed/system_top.v@152:162
+
+  wire    [31:0]  gpio_i;
+  wire    [31:0]  gpio_o;
+  wire    [31:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+
+Clone Blocks 15:
+hdl/projects/motcon2_fmc/zed/system_top.v@263:273
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+
+Clone Blocks 16:
+hdl/projects/imageon/zed/system_top.v@162:172
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+
+Clone Blocks 17:
+hdl/projects/fmcomms2/zed/system_top.v@197:207
+
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+
+Clone Blocks 18:
+hdl/projects/imageon/zed/system_top.v@160:170
+
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+
+Clone Blocks 19:
+hdl/projects/adv7511/zed/system_top.v@136:146
+
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+
+Clone Blocks 20:
+hdl/projects/cftl_cip/zed/system_top.v@155:165
+  wire    [31:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+  ad_iobuf #(
+
+Clone Blocks 21:
+hdl/projects/adv7511/zed/system_top.v@138:148
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+
+Clone Blocks 22:
+hdl/projects/fmcomms2/zed/system_top.v@201:211
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+
+Clone Blocks 23:
+hdl/projects/fmcomms1/zed/system_top.v@210:220
+  wire            oddr_ref_clk;
+
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  wire    [15:0]  ps_intrs;
+
+  // instantiations
+
+Clone Blocks 24:
+hdl/projects/cftl_std/zed/system_top.v@171:181
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  wire    [15:0]  ps_intrs;
+
+  // instantiations
+
+Clone Blocks 25:
+hdl/projects/fmcomms2/zed/system_top.v@199:209
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+
+Clone Blocks 26:
+hdl/projects/imageon_loopback/zed/system_top.v@163:173
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+
+Clone Blocks 27:
+hdl/projects/ad9467_fmc/zed/system_top.v@165:175
+wire    [63:0]  gpio_o;
+wire    [63:0]  gpio_t;
+wire    [ 1:0]  iic_mux_scl_i_s;
+wire    [ 1:0]  iic_mux_scl_o_s;
+wire            iic_mux_scl_t_s;
+wire    [ 1:0]  iic_mux_sda_i_s;
+wire    [ 1:0]  iic_mux_sda_o_s;
+wire            iic_mux_sda_t_s;
+
+// instantiations
+
+
+Clone Blocks 28:
+hdl/projects/motcon2_fmc/zed/system_top.v@261:271
+
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+
+Clone Blocks 29:
+hdl/projects/pmods/xfest14_zed/system_top.v@211:221
+  wire    [48:0]  gpio_o;
+  wire    [48:0]  gpio_t;
+  wire            ref_clk;
+  wire            oddr_ref_clk;
+
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 30:
+hdl/projects/ad9467_fmc/zed/system_top.v@167:177
+wire    [ 1:0]  iic_mux_scl_i_s;
+wire    [ 1:0]  iic_mux_scl_o_s;
+wire            iic_mux_scl_t_s;
+wire    [ 1:0]  iic_mux_sda_i_s;
+wire    [ 1:0]  iic_mux_sda_o_s;
+wire            iic_mux_sda_t_s;
+
+// instantiations
+
+  ad_iobuf #(.DATA_WIDTH(32)) i_iobuf_gpio (
+    .dio_t ({gpio_t[31:0]}),
+
+Clone Blocks 31:
+hdl/projects/cftl_std/zed/system_top.v@167:177
+
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+
+Clone Blocks 32:
+hdl/projects/cftl_std/zed/system_top.v@168:178
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 33:
+hdl/projects/fmcomms2/zed/system_top.v@202:212
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(49)) i_iobuf_gpio (
+
+Clone Blocks 34:
+hdl/projects/imageon/zed/system_top.v@161:171
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 35:
+hdl/projects/imageon_loopback/zed/system_top.v@161:171
+
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+
+Clone Blocks 36:
+hdl/projects/imageon_loopback/zed/system_top.v@166:176
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  wire            hdmi_rx_clk;
+  wire            hdmi_tx_clk;
+
+
+Clone Blocks 37:
+hdl/projects/imageon/zed/system_top.v@163:173
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // base hdmi
+
+Clone Blocks 38:
+hdl/projects/fmcomms2/zed/system_top.v@198:208
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 39:
+hdl/projects/imageon/zed/system_top.v@164:174
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // base hdmi
+
+
+Clone Blocks 40:
+hdl/projects/cn0363/zed/system_top.v@152:162
+  // internal signals
+
+  wire    [34:0]  gpio_i;
+  wire    [34:0]  gpio_o;
+  wire    [34:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 41:
+hdl/projects/pmods/xfest14_zed/system_top.v@212:222
+  wire    [48:0]  gpio_t;
+  wire            ref_clk;
+  wire            oddr_ref_clk;
+
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+
+Clone Blocks 42:
+hdl/projects/fmcomms1/zed/system_top.v@209:219
+  wire            ref_clk;
+  wire            oddr_ref_clk;
+
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  wire    [15:0]  ps_intrs;
+
+
+Clone Blocks 43:
+hdl/projects/motcon2_fmc/zed/system_top.v@262:272
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 44:
+hdl/projects/cftl_std/zed/system_top.v@174:184
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  wire    [15:0]  ps_intrs;
+
+  // instantiations
+
+  ad_iobuf #(
+    .DATA_WIDTH(32))
+
+Clone Blocks 45:
+hdl/projects/adv7511/zed/system_top.v@142:152
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+
+Clone Blocks 46:
+hdl/projects/cftl_cip/zed/system_top.v@154:164
+  wire    [31:0]  gpio_o;
+  wire    [31:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+
+Clone Blocks 47:
+hdl/projects/fmcomms2/zed/system_top.v@200:210
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+
+Clone Blocks 48:
+hdl/projects/adv7511/zed/system_top.v@137:147
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+Clone Blocks 49:
+hdl/projects/cftl_std/zed/system_top.v@173:183
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  wire    [15:0]  ps_intrs;
+
+  // instantiations
+
+  ad_iobuf #(
+
+Clone Blocks 50:
+hdl/projects/cftl_cip/zed/system_top.v@153:163
+  wire    [31:0]  gpio_i;
+  wire    [31:0]  gpio_o;
+  wire    [31:0]  gpio_t;
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+  wire    [ 1:0]  iic_mux_sda_i_s;
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+
+  // instantiations
+

@@ -1,0 +1,55 @@
+Source Block: hdl/library/cn0363/cn0363_phase_data_sync/cn0363_phase_data_sync.v@119:141@HdlStmProcess
+ * are able to detect channel swaps and synchronize the first output sample to
+ * the first channel. If the STAT register is not included we only get 3 bytes
+ * per sample and rely on that the first sample will always be from the first
+ * channel */
+
+always @(posedge clk) begin
+  sample_hold_valid <= 1'b0;
+  if (sample_has_stat == 1'b0) begin
+    if (s_axis_sample_valid == 1'b1 && data_counter == 2'h2) begin
+      sample_hold_valid <= 1'b1;
+    end
+  end else begin
+    if (s_axis_sample_valid == 1'b1 && data_counter == 2'h3 &&
+      (sync == 1'b1 || synced == 1'b1)) begin
+      sample_hold_valid <= 1'b1;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (s_axis_sample_valid == 1'b1 && data_counter != 2'h3) begin
+    sample_hold <= {sample_hold[15:0],s_axis_sample_data};
+  end
+
+Diff Content:
+- 124 always @(posedge clk) begin
+- 125   sample_hold_valid <= 1'b0;
+- 126   if (sample_has_stat == 1'b0) begin
+- 127     if (s_axis_sample_valid == 1'b1 && data_counter == 2'h2) begin
+- 128       sample_hold_valid <= 1'b1;
+- 129     end
+- 130   end else begin
+- 131     if (s_axis_sample_valid == 1'b1 && data_counter == 2'h3 &&
+- 132       (sync == 1'b1 || synced == 1'b1)) begin
+- 133       sample_hold_valid <= 1'b1;
+- 136 end
++ 133   /* If the STAT register is included in the sample we get 4 bytes per sample and
++ 133    * are able to detect channel swaps and synchronize the first output sample to
++ 133    * the first channel. If the STAT register is not included we only get 3 bytes
++ 133    * per sample and rely on that the first sample will always be from the first
++ 133    * channel */
++ 133   always @(posedge clk) begin
++ 133     sample_hold_valid <= 1'b0;
++ 133     if (sample_has_stat == 1'b0) begin
++ 133       if (s_axis_sample_valid == 1'b1 && data_counter == 2'h2) begin
++ 133         sample_hold_valid <= 1'b1;
++ 133       end
++ 133     end else begin
++ 133       if (s_axis_sample_valid == 1'b1 && data_counter == 2'h3 &&
++ 133         (sync == 1'b1 || synced == 1'b1)) begin
++ 133         sample_hold_valid <= 1'b1;
++ 133       end
+
+Clone Blocks:

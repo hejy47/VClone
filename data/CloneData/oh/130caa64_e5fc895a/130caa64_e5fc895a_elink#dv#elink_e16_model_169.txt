@@ -1,0 +1,17 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1635:1645@HdlStmAssign
+   //# frame signal will be deasserted.
+   //# The number of entries in the FIFO sould be big enough to receive
+   //# all of the transactions sent by the transmitter in that case.
+   //######################################################################
+
+   assign fifo_write = my_tran & frame_reg;
+   
+   always @(posedge rxi_lclk or posedge reset)
+     if(reset)
+       wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
+     else if(fifo_write)
+
+Diff Content:
+- 1640    assign fifo_write = my_tran & frame_reg;
+
+Clone Blocks:

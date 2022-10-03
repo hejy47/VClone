@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_rx/error_monitor.v@77:90@HdlStmProcess
+  end else begin
+    err <= {EVENT_WIDTH{1'b0}};
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    status_err_cnt <= 'h0;
+  end else if (~&status_err_cnt[CNT_WIDTH-1:EVENT_WIDTH_LOG]) begin
+    status_err_cnt <= status_err_cnt + num_set_bits(err);
+  end
+end
+
+endmodule
+
+Diff Content:
+- 82 always @(posedge clk) begin
+- 83   if (reset == 1'b1) begin
+- 84     status_err_cnt <= 'h0;
+- 85   end else if (~&status_err_cnt[CNT_WIDTH-1:EVENT_WIDTH_LOG]) begin
+- 86     status_err_cnt <= status_err_cnt + num_set_bits(err);
+- 88 end
++ 86   always @(posedge clk) begin
++ 86     if (reset == 1'b1) begin
++ 86       status_err_cnt <= 'h0;
++ 86     end else if (~&status_err_cnt[CNT_WIDTH-1:EVENT_WIDTH_LOG]) begin
++ 86       status_err_cnt <= status_err_cnt + num_set_bits(err);
++ 86     end
+
+Clone Blocks:

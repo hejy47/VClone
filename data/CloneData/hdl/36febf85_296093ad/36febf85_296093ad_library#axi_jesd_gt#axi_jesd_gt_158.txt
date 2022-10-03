@@ -1,0 +1,25 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@504:518@HdlStmIf
+  BUFG_GT i_bufg_rx_clk (
+    .I (rx_out_clk[0]),
+    .O (rx_clk_g));
+  end
+
+  if (PCORE_DEVICE_TYPE == 1) begin
+  BUFG_GT i_bufg_tx_clk (
+    .I (tx_out_clk[0]),
+    .O (tx_clk_g));
+  end
+  endgenerate
+
+  // transceivers
+
+  assign qpll_clk = {{4{qpll_clk_1}}, {4{qpll_clk_0}}};
+
+Diff Content:
+- 509   if (PCORE_DEVICE_TYPE == 1) begin
+- 510   BUFG_GT i_bufg_tx_clk (
+- 511     .I (tx_out_clk[0]),
+- 512     .O (tx_clk_g));
+- 513   end
+
+Clone Blocks:

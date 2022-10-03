@@ -1,0 +1,29 @@
+Source Block: oh/src/common/hdl/oh_pwr_isolate.v@20:39@HdlStmIf
+`ifdef TARGET_SIM   
+   assign out[DW-1:0] = ((vdd===1'b1) && (vss===1'b0)) ? ({(DW){niso}} & in[DW-1:0]):
+		                                         {(DW){1'bX}};
+`else
+   generate
+      if(ASIC)	
+	begin
+	   asic_iso i_iso [DW-1:0] (.vdd(vdd),
+				    .vss(vss),
+				    .in(in[DW-1:0]),
+				    .out(out[DW-1:0]));
+	end
+      else
+	begin
+	   assign out[DW-1:0] = {(DW){niso}} & in[DW-1:0];
+	end
+   endgenerate
+`endif
+   
+endmodule // oh_buf
+
+Diff Content:
+- 26 	begin
+- 33 	begin
++ 26 	begin : asic
++ 33 	begin : generic
+
+Clone Blocks:

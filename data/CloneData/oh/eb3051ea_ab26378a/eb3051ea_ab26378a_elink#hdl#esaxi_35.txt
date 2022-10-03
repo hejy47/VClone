@@ -1,0 +1,45 @@
+Source Block: oh/elink/hdl/esaxi.v@497:528@HdlStmProcess
+
+   ///Only letting through proper read requests
+   assign emrq_access=emrq_access_all & ~(emrq_dstaddr[31:20]==elinkid[11:0]);
+  
+   //Read response AXI state machine
+   always @( posedge s_axi_aclk ) 
+      if (~s_axi_aresetn) 
+	begin
+           s_axi_rvalid       <= 1'b0;
+           s_axi_rdata[31:0]  <= 32'd0;
+           s_axi_rresp        <= 2'd0;	   
+	end 
+      else 
+	begin
+         if( emrr_access | mi_rd_reg ) 
+	   begin
+              s_axi_rvalid <= 1'b1;
+              s_axi_rresp  <= 2'd0;
+            case( axi_arsize[1:0] )
+              2'b00:   s_axi_rdata[31:0] <= {4{emrr_mux_data[7:0]}};  //8-bit
+              2'b01:   s_axi_rdata[31:0] <= {2{emrr_mux_data[15:0]}}; //16-bit
+              default: s_axi_rdata[31:0] <= emrr_mux_data[31:0];      //32-bit
+            endcase // case ( axi_arsize[1:0] )
+           end 
+	 else if( s_axi_rready ) 
+           s_axi_rvalid <= 1'b0;
+	end // else: !if( s_axi_aresetn == 1'b0 )
+  
+  
+
+endmodule // esaxi
+
+
+Diff Content:
+- 511          if( emrr_access | mi_rd_reg ) 
+- 516               2'b00:   s_axi_rdata[31:0] <= {4{emrr_mux_data[7:0]}};  //8-bit
+- 517               2'b01:   s_axi_rdata[31:0] <= {2{emrr_mux_data[15:0]}}; //16-bit
+- 518               default: s_axi_rdata[31:0] <= emrr_mux_data[31:0];      //32-bit
++ 511          if( rxrr_access ) 
++ 518               2'b00:   s_axi_rdata[31:0] <= {4{rxrr_data[7:0]}};  //8-bit
++ 518               2'b01:   s_axi_rdata[31:0] <= {2{rxrr_data[15:0]}}; //16-bit
++ 518               default: s_axi_rdata[31:0] <= rxrr_data[31:0];      //32-bit
+
+Clone Blocks:

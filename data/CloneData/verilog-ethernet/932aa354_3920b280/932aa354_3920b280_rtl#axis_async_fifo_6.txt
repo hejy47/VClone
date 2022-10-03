@@ -1,0 +1,96 @@
+Source Block: verilog-ethernet/rtl/axis_async_fifo.v@293:335@HdlStmProcess
+            end
+        end
+    end
+end
+
+always @(posedge s_clk) begin
+    if (s_rst_sync3_reg) begin
+        wr_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_cur_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_cur_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+
+        drop_frame_reg <= 1'b0;
+        overflow_reg <= 1'b0;
+        bad_frame_reg <= 1'b0;
+        good_frame_reg <= 1'b0;
+    end else begin
+        wr_ptr_reg <= wr_ptr_next;
+        wr_ptr_cur_reg <= wr_ptr_cur_next;
+        wr_ptr_gray_reg <= wr_ptr_gray_next;
+        wr_ptr_cur_gray_reg <= wr_ptr_cur_gray_next;
+
+        drop_frame_reg <= drop_frame_next;
+        overflow_reg <= overflow_next;
+        bad_frame_reg <= bad_frame_next;
+        good_frame_reg <= good_frame_next;
+    end
+
+    if (FRAME_FIFO) begin
+        wr_addr_reg <= wr_ptr_cur_next;
+    end else begin
+        wr_addr_reg <= wr_ptr_next;
+    end
+
+    if (write) begin
+        mem[wr_addr_reg[ADDR_WIDTH-1:0]] <= s_axis;
+    end
+end
+
+// pointer synchronization
+always @(posedge s_clk) begin
+    if (s_rst_sync3_reg) begin
+        rd_ptr_gray_sync1_reg <= {ADDR_WIDTH+1{1'b0}};
+
+Diff Content:
++ 302         wr_ptr_sync_gray_reg <= {ADDR_WIDTH+1{1'b0}};
++ 303         wr_ptr_update_valid_reg <= 1'b0;
++ 303         wr_ptr_update_reg <= 1'b0;
++ 312         wr_ptr_sync_gray_reg <= wr_ptr_sync_gray_next;
++ 313         wr_ptr_update_valid_reg <= wr_ptr_update_valid_next;
++ 313         wr_ptr_update_reg <= wr_ptr_update_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_fifo.v@219:257
+            end
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        wr_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_cur_reg <= {ADDR_WIDTH+1{1'b0}};
+
+        drop_frame_reg <= 1'b0;
+        overflow_reg <= 1'b0;
+        bad_frame_reg <= 1'b0;
+        good_frame_reg <= 1'b0;
+    end else begin
+        wr_ptr_reg <= wr_ptr_next;
+        wr_ptr_cur_reg <= wr_ptr_cur_next;
+
+        drop_frame_reg <= drop_frame_next;
+        overflow_reg <= overflow_next;
+        bad_frame_reg <= bad_frame_next;
+        good_frame_reg <= good_frame_next;
+    end
+
+    if (FRAME_FIFO) begin
+        wr_addr_reg <= wr_ptr_cur_next;
+    end else begin
+        wr_addr_reg <= wr_ptr_next;
+    end
+
+    if (write) begin
+        mem[wr_addr_reg[ADDR_WIDTH-1:0]] <= s_axis;
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+

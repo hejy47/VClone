@@ -1,0 +1,20 @@
+Source Block: oh/embox/hdl/embox.v@112:124@HdlStmProcess
+   /*****************************/
+   /*WRITE ACTION               */
+   /*****************************/
+   //hold lower data word until upper word arrives
+
+   always @ (posedge clk)
+     if(embox_w0_write)
+       embox_data_reg[DW-1:0] <=mi_data_in[DW-1:0];
+   
+   /*****************************/
+   /*READ BACK DATA             */
+   /*****************************/
+   assign embox_not_empty         = ~embox_empty;
+
+Diff Content:
+- 119        embox_data_reg[DW-1:0] <=mi_data_in[DW-1:0];
++ 119        embox_data_reg[DW-1:0] <=mi_din[DW-1:0];
+
+Clone Blocks:

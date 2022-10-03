@@ -1,0 +1,66 @@
+Source Block: oh/elink/hdl/emaxi.v@462:518@HdlStmProcess
+           m_axi_rdata_reg <= 'b0;
+       else
+           m_axi_rdata_reg <= m_axi_rdata;
+
+   
+   always @( posedge m_axi_aclk )
+     if( ~m_axi_aresetn ) 
+       begin      
+	  txrr_data[31:0]     <= 32'b0;
+	  txrr_srcaddr[31:0]  <= 32'b0;
+	  txrr_access_reg     <= 1'b0;
+	  txrr_access         <= 1'b0;         
+      end 
+     else 
+       begin
+          txrr_access_reg     <= m_axi_rready & m_axi_rvalid;
+	  txrr_access         <= txrr_access_reg;//added pipeline stage for data 
+	  // steer read data according to size & host address lsbs
+	  //all data needs to be right aligned
+	  //(this is due to the Epiphany right aligning all words)
+	  case(readinfo_out[1:0])//datamode
+            2'd0:  // byte read
+              case(readinfo_out[8:6])
+		3'd0:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[7:0]};
+		3'd1:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[15:8]};
+		3'd2:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[23:16]};
+		3'd3:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[31:24]};
+		3'd4:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[39:32]};
+		3'd5:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[47:40]};
+		3'd6:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[55:48]};
+		default:  txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[63:56]};
+              endcase	    
+            2'd1:  // 16b hword
+              case( readinfo_out[8:7] )
+		2'd0:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[15:0]};
+		2'd1:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[31:16]};
+		2'd2:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[47:32]};
+		default: txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[63:48]};
+              endcase
+            2'd2:  // 32b word
+              if( readinfo_out[8] )
+               txrr_data[31:0] <= m_axi_rdata_reg[63:32];
+             else
+               txrr_data[31:0] <= m_axi_rdata_reg[31:0];
+           // 64b word already defined by defaults above
+           2'd3: 
+	     begin // 64b dword
+		txrr_data[31:0]  <= m_axi_rdata_reg[31:0];
+		txrr_srcaddr[31:0]  <= m_axi_rdata_reg[63:32];
+             end
+         endcase         
+       end // else: !if( ~m_axi_aresetn )
+   
+endmodule // emaxi
+// Local Variables:
+// verilog-library-directories:("." "../../emesh/hdl" "../../memory/hdl" "../../common/hdl"  )
+// End:
+
+Diff Content:
+- 477           txrr_access_reg     <= m_axi_rready & m_axi_rvalid;
+- 478 	  txrr_access         <= txrr_access_reg;//added pipeline stage for data 
++ 478           txrr_access_reg     <= fifo_rd_en;	  
++ 478 	  txrr_access         <= txrr_access_reg;//added pipeline stage for data ???/
+
+Clone Blocks:

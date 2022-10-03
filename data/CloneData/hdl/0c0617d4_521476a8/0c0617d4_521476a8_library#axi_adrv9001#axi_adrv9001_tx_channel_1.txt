@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_adrv9001/axi_adrv9001_tx_channel.v@97:123@HdlStmIf
+  wire    [15:0]  pn7_data;
+  wire    [15:0]  pn15_data;
+  // dac iq correction
+
+  generate
+  if (DISABLE == 1 || IQCORRECTION_DISABLE == 1) begin
+
+  assign dac_data_out = dac_data_iq_out;
+  assign dac_data_in_req = dac_data_out_req;
+
+  end else begin
+  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor_0 (
+    .clk (dac_clk),
+    .valid (dac_data_out_req),
+    .data_in (dac_data_iq_out[15:0]),
+    .data_iq (dac_data_iq_in[15:0]),
+    .valid_out (dac_data_in_req),
+    .data_out (dac_data_out[15:0]),
+    .iqcor_enable (dac_iqcor_enb_s),
+    .iqcor_coeff_1 (dac_iqcor_coeff_1_s),
+    .iqcor_coeff_2 (dac_iqcor_coeff_2_s));
+  end
+
+  if (DISABLE == 1) begin
+    assign up_wack = 1'b0;
+    assign up_rdata =  32'b0;
+    assign up_rack = 1'b0;
+
+Diff Content:
+- 108   ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor_0 (
++ 108   ad_iqcor #(
++ 108     .Q_OR_I_N (Q_OR_I_N)
++ 108   ) i_ad_iqcor_0 (
+
+Clone Blocks:

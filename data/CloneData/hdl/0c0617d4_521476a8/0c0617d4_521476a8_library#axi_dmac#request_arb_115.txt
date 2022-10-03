@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@1105:1115@HdlStmAssign
+  end
+end
+
+// Forward the descriptor to the destination only after the source decided to
+// do so
+assign src_dest_valid_hs_masked = src_dest_valid_hs == 1'b1 && block_descr_to_dst == 1'b0;
+assign src_req_spltr_ready = src_req_ready && src_dest_ready_hs;
+assign src_req_valid = src_req_spltr_valid && src_req_spltr_ready;
+
+
+/* Unused for now
+
+Diff Content:
+- 1110 assign src_dest_valid_hs_masked = src_dest_valid_hs == 1'b1 && block_descr_to_dst == 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_arb.v@1106:1116
+end
+
+// Forward the descriptor to the destination only after the source decided to
+// do so
+assign src_dest_valid_hs_masked = src_dest_valid_hs == 1'b1 && block_descr_to_dst == 1'b0;
+assign src_req_spltr_ready = src_req_ready && src_dest_ready_hs;
+assign src_req_valid = src_req_spltr_valid && src_req_spltr_ready;
+
+
+/* Unused for now
+util_axis_fifo #(
+
+Clone Blocks 2:
+hdl/library/axi_dmac/request_arb.v@1107:1117
+
+// Forward the descriptor to the destination only after the source decided to
+// do so
+assign src_dest_valid_hs_masked = src_dest_valid_hs == 1'b1 && block_descr_to_dst == 1'b0;
+assign src_req_spltr_ready = src_req_ready && src_dest_ready_hs;
+assign src_req_valid = src_req_spltr_valid && src_req_spltr_ready;
+
+
+/* Unused for now
+util_axis_fifo #(
+  .DATA_WIDTH(2),
+

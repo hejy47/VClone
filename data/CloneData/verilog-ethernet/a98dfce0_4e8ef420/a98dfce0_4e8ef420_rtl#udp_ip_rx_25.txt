@@ -1,0 +1,521 @@
+Source Block: verilog-ethernet/rtl/udp_ip_rx.v@180:190@HdlIdDef
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg busy_reg = 0;
+
+Diff Content:
+- 185 reg [15:0] output_udp_checksum_reg = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/udp_ip_tx_64.v@158:168
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/ip_eth_tx.v@139:149
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/ip_eth_tx_64.v@142:152
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/ip_eth_tx.v@138:148
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/udp_ip_rx.v@177:187
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/ip_eth_tx_64.v@147:157
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/udp_ip_rx_64.v@174:184
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/ip_eth_tx.v@138:148
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/udp_ip_tx_64.v@157:167
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/udp_ip_tx.v@155:165
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/udp_ip_tx.v@150:160
+reg [15:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg [7:0] last_word_data_reg = 0;
+
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+Clone Blocks 12:
+verilog-ethernet/rtl/udp_ip_rx_64.v@176:186
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg busy_reg = 0;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/ip_eth_tx_64.v@147:157
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 14:
+verilog-ethernet/rtl/udp_ip_rx.v@178:188
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+Clone Blocks 15:
+verilog-ethernet/rtl/ip_eth_tx.v@135:145
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+
+Clone Blocks 16:
+verilog-ethernet/rtl/udp_ip_tx_64.v@153:163
+
+reg [63:0] last_word_data_reg = 0;
+reg [7:0] last_word_keep_reg = 0;
+
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/udp_ip_tx.v@154:164
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+
+Clone Blocks 18:
+verilog-ethernet/rtl/udp_ip_tx.v@154:164
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+
+Clone Blocks 19:
+verilog-ethernet/rtl/udp_ip_rx_64.v@175:185
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+
+Clone Blocks 20:
+verilog-ethernet/rtl/ip_eth_tx_64.v@144:154
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+
+Clone Blocks 21:
+verilog-ethernet/rtl/udp_ip_tx_64.v@157:167
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+
+Clone Blocks 22:
+verilog-ethernet/rtl/ip_eth_tx_64.v@146:156
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+
+Clone Blocks 23:
+verilog-ethernet/rtl/udp_ip_rx.v@176:186
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+
+Clone Blocks 24:
+verilog-ethernet/rtl/udp_ip_tx_64.v@154:164
+reg [63:0] last_word_data_reg = 0;
+reg [7:0] last_word_keep_reg = 0;
+
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+
+Clone Blocks 25:
+verilog-ethernet/rtl/udp_ip_rx_64.v@172:182
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+
+Clone Blocks 26:
+verilog-ethernet/rtl/ip_eth_tx_64.v@143:153
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+
+Clone Blocks 27:
+verilog-ethernet/rtl/udp_ip_tx.v@155:165
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 28:
+verilog-ethernet/rtl/ip_eth_tx.v@139:149
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 29:
+verilog-ethernet/rtl/udp_ip_tx.v@152:162
+reg [7:0] last_word_data_reg = 0;
+
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+
+Clone Blocks 30:
+verilog-ethernet/rtl/ip_eth_tx.v@134:144
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+Clone Blocks 31:
+verilog-ethernet/rtl/udp_ip_tx_64.v@155:165
+reg [7:0] last_word_keep_reg = 0;
+
+reg [15:0] udp_source_port_reg = 0;
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+
+Clone Blocks 32:
+verilog-ethernet/rtl/udp_ip_rx_64.v@173:183
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+
+Clone Blocks 33:
+verilog-ethernet/rtl/udp_ip_rx.v@179:189
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+
+Clone Blocks 34:
+verilog-ethernet/rtl/ip_eth_tx_64.v@146:156
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+
+Clone Blocks 35:
+verilog-ethernet/rtl/udp_ip_tx_64.v@158:168
+reg [15:0] udp_dest_port_reg = 0;
+reg [15:0] udp_length_reg = 0;
+reg [15:0] udp_checksum_reg = 0;
+
+reg input_udp_hdr_ready_reg = 0, input_udp_hdr_ready_next;
+reg input_udp_payload_tready_reg = 0, input_udp_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 36:
+verilog-ethernet/rtl/ip_eth_tx.v@136:146
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+

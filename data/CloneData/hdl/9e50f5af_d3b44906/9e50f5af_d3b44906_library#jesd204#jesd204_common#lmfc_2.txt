@@ -1,0 +1,26 @@
+Source Block: hdl/library/jesd204/jesd204_common/lmfc.v@97:115@HdlStmProcess
+  end else begin
+    sysref_edge <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sysref_captured <= 1'b0;
+  end else if (sysref_edge == 1'b1) begin
+    sysref_captured <= 1'b1;
+  end else if (clear_sysref_captured == 1'b1) begin
+    sysref_captured <= 1'b0;
+  end
+end
+
+/*
+ * The configuration must be static when the core is out of reset. Otherwise
+ * undefined behaviour might occur.
+ * E.g. lmfc_counter > beats_per_multiframe
+
+Diff Content:
+- 107   end else if (clear_sysref_captured == 1'b1) begin
+- 108     sysref_captured <= 1'b0;
+
+Clone Blocks:

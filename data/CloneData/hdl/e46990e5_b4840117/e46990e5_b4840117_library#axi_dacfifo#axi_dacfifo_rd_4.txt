@@ -1,0 +1,76 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_rd.v@180:214@HdlStmProcess
+  assign axi_arqos = 4'b0000;
+  assign axi_aruser = 4'b0001;
+  assign axi_arlen = AXI_LENGTH;
+  assign axi_arsize = AXI_SIZE;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_arvalid <= 'd0;
+      axi_araddr <= 'd0;
+      axi_rd_addr_h <= 'd0;
+    end else begin
+      if (axi_arvalid == 1'b1) begin
+        if (axi_arready == 1'b1) begin
+          axi_arvalid <= 1'b0;
+        end
+      end else begin
+        if (axi_rd == 1'b1) begin
+          axi_arvalid <= 1'b1;
+        end
+      end
+      if ((axi_xfer_req_init == 1'b1)) begin
+        axi_araddr <= AXI_ADDRESS;
+        axi_rd_addr_h <= axi_last_raddr;
+      end else if ((axi_xfer_req == 1'b1) &&
+                   (axi_arvalid == 1'b1) &&
+                   (axi_arready == 1'b1)) begin
+        axi_araddr <= (axi_araddr >= axi_rd_addr_h) ? AXI_ADDRESS : axi_araddr + AXI_AWINCR;
+      end
+    end
+  end
+
+  // read data channel
+
+  assign axi_dvalid_s = axi_rvalid & axi_rready;
+
+
+Diff Content:
+- 196         if (axi_rd == 1'b1) begin
++ 196         if (axi_rnext == 1'b1) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adcfifo/axi_adcfifo_rd.v@204:234
+  assign axi_arqos  = 4'b0000;
+  assign axi_aruser  = 4'b0001;
+  assign axi_arlen  = AXI_LENGTH - 1;
+  assign axi_arsize  = AXI_SIZE;
+
+  always @(posedge axi_clk or negedge axi_resetn) begin
+    if (axi_resetn == 1'b0) begin
+      axi_arvalid <= 'd0;
+      axi_araddr <= 'd0;
+    end else begin
+      if (axi_arvalid == 1'b1) begin
+        if (axi_arready == 1'b1) begin
+          axi_arvalid <= 1'b0;
+        end
+      end else begin
+        if (axi_rd == 1'b1) begin
+          axi_arvalid <= 1'b1;
+        end
+      end
+      if (axi_xfer_init == 1'b1) begin
+        axi_araddr <= AXI_ADDRESS;
+      end else if ((axi_arvalid == 1'b1) && (axi_arready == 1'b1)) begin
+        axi_araddr <= axi_araddr + AXI_AWINCR;
+      end
+    end
+  end
+
+  // read data channel
+
+  always @(posedge axi_clk or negedge axi_resetn) begin
+    if (axi_resetn == 1'b0) begin
+

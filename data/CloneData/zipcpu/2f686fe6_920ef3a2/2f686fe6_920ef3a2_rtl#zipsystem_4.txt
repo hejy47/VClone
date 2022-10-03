@@ -1,0 +1,49 @@
+Source Block: zipcpu/rtl/zipsystem.v@342:354@HdlStmProcess
+			cmd_halt <= ((dbg_idata[10])||(dbg_idata[8]));
+		else if ((cmd_step)||(cpu_break))
+			cmd_halt  <= 1'b1;
+
+	initial	cmd_clear_pf_cache = 1'b1;
+	always @(posedge i_clk)
+		cmd_clear_pf_cache <= (~i_rst)&&(dbg_cmd_write)
+					&&((dbg_idata[11])||(dbg_idata[6]));
+	//
+	initial	cmd_step  = 1'b0;
+	always @(posedge i_clk)
+		cmd_step <= (dbg_cmd_write)&&(dbg_idata[8]);
+	//
+
+Diff Content:
+- 348 		cmd_clear_pf_cache <= (~i_rst)&&(dbg_cmd_write)
+- 349 					&&((dbg_idata[11])||(dbg_idata[6]));
++ 349 		cmd_clear_pf_cache <= (dbg_cmd_write)&&(i_dbg_data[`CLEAR_CACHE_BIT]);
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipbones.v@160:170
+		else if (dbg_cmd_write)
+			cmd_halt <= ((dbg_idata[`HALT_BIT])&&(!dbg_idata[`STEP_BIT]));
+		else if ((cmd_step)||(cpu_break))
+			cmd_halt  <= 1'b1;
+
+	initial	cmd_clear_pf_cache = 1'b1;
+	always @(posedge i_clk)
+		cmd_clear_pf_cache <= (dbg_cmd_write)&&(dbg_idata[`CLEAR_CACHE_BIT]);
+	//
+	initial	cmd_step  = 1'b0;
+	always @(posedge i_clk)
+
+Clone Blocks 2:
+zipcpu/rtl/zipsystem.v@341:351
+		else if (dbg_cmd_write)
+			cmd_halt <= ((dbg_idata[10])||(dbg_idata[8]));
+		else if ((cmd_step)||(cpu_break))
+			cmd_halt  <= 1'b1;
+
+	initial	cmd_clear_pf_cache = 1'b1;
+	always @(posedge i_clk)
+		cmd_clear_pf_cache <= (~i_rst)&&(dbg_cmd_write)
+					&&((dbg_idata[11])||(dbg_idata[6]));
+	//
+	initial	cmd_step  = 1'b0;
+

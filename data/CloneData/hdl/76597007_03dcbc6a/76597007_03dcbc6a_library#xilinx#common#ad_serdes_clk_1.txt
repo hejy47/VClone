@@ -1,0 +1,76 @@
+Source Block: hdl/library/xilinx/common/ad_serdes_clk.v@89:129@HdlStmIf
+    .I (clk_in_p),
+    .IB (clk_in_n),
+    .O (clk_in_s));
+
+  generate
+  if (MMCM_OR_BUFR_N == 1) begin
+  ad_mmcm_drp #(
+    .MMCM_DEVICE_TYPE (DEVICE_TYPE),
+    .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
+    .MMCM_CLKIN2_PERIOD (MMCM_CLKIN_PERIOD),
+    .MMCM_VCO_DIV (MMCM_VCO_DIV),
+    .MMCM_VCO_MUL (MMCM_VCO_MUL),
+    .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
+    .MMCM_CLK0_PHASE (0.0),
+    .MMCM_CLK1_DIV (MMCM_CLK1_DIV),
+    .MMCM_CLK1_PHASE (0.0),
+    .MMCM_CLK2_DIV (MMCM_CLK0_DIV),
+    .MMCM_CLK2_PHASE (90.0))
+  i_mmcm_drp (
+    .clk (clk_in_s),
+    .clk2 (1'b0),
+    .clk_sel (1'b1),
+    .mmcm_rst (rst),
+    .mmcm_clk_0 (clk),
+    .mmcm_clk_1 (div_clk),
+    .mmcm_clk_2 (out_clk),
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata[15:0]),
+    .up_drp_rdata (up_drp_rdata[15:0]),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked));
+  end
+
+  if (MMCM_OR_BUFR_N == 0) begin
+  BUFIO i_clk_buf (
+    .I (clk_in_s),
+    .O (clk));
+
+Diff Content:
+- 95   ad_mmcm_drp #(
+- 96     .MMCM_DEVICE_TYPE (DEVICE_TYPE),
+- 97     .MMCM_CLKIN_PERIOD (MMCM_CLKIN_PERIOD),
+- 98     .MMCM_CLKIN2_PERIOD (MMCM_CLKIN_PERIOD),
+- 99     .MMCM_VCO_DIV (MMCM_VCO_DIV),
+- 100     .MMCM_VCO_MUL (MMCM_VCO_MUL),
+- 101     .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
+- 102     .MMCM_CLK0_PHASE (0.0),
+- 103     .MMCM_CLK1_DIV (MMCM_CLK1_DIV),
+- 104     .MMCM_CLK1_PHASE (0.0),
+- 105     .MMCM_CLK2_DIV (MMCM_CLK0_DIV),
+- 106     .MMCM_CLK2_PHASE (90.0))
+- 107   i_mmcm_drp (
+- 108     .clk (clk_in_s),
+- 109     .clk2 (1'b0),
+- 110     .clk_sel (1'b1),
+- 111     .mmcm_rst (rst),
+- 112     .mmcm_clk_0 (clk),
+- 113     .mmcm_clk_1 (div_clk),
+- 114     .mmcm_clk_2 (out_clk),
+- 115     .up_clk (up_clk),
+- 116     .up_rstn (up_rstn),
+- 117     .up_drp_sel (up_drp_sel),
+- 118     .up_drp_wr (up_drp_wr),
+- 119     .up_drp_addr (up_drp_addr),
+- 120     .up_drp_wdata (up_drp_wdata[15:0]),
+- 121     .up_drp_rdata (up_drp_rdata[15:0]),
+- 122     .up_drp_ready (up_drp_ready),
+- 123     .up_drp_locked (up_drp_locked));
+- 124   end
+
+Clone Blocks:

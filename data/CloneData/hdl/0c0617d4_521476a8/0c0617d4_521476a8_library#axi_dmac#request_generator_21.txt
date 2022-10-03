@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/request_generator.v@101:111@HdlStmAssign
+reg [ID_WIDTH-1:0] id;
+wire [ID_WIDTH-1:0] id_next = inc_id(id);
+wire incr_en;
+wire incr_id;
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+assign incr_en = (response_id != id_next) && (enable == 1'b1);
+assign incr_id = (state == STATE_GEN_ID) && (incr_en == 1'b1);
+
+
+Diff Content:
+- 106 assign eot = burst_count == 'h00;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_generator.v@99:109
+reg [BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
+reg [BURSTS_PER_TRANSFER_WIDTH-1:0] cur_burst_length = 'h00;
+reg [ID_WIDTH-1:0] id;
+wire [ID_WIDTH-1:0] id_next = inc_id(id);
+wire incr_en;
+wire incr_id;
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+assign incr_en = (response_id != id_next) && (enable == 1'b1);
+
+Clone Blocks 2:
+hdl/library/axi_dmac/request_generator.v@102:112
+wire [ID_WIDTH-1:0] id_next = inc_id(id);
+wire incr_en;
+wire incr_id;
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+assign incr_en = (response_id != id_next) && (enable == 1'b1);
+assign incr_id = (state == STATE_GEN_ID) && (incr_en == 1'b1);
+
+always @(posedge clk) begin
+

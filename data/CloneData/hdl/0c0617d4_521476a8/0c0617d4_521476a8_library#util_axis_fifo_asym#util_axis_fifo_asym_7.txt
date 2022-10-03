@@ -1,0 +1,31 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@79:89@HdlIdDef
+localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
+localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+
+// slave and master sequencers
+reg [$clog2(RATIO)-1:0] s_axis_counter;
+reg [$clog2(RATIO)-1:0] m_axis_counter;
+
+wire [RATIO-1:0] m_axis_ready_int_s;
+wire [RATIO-1:0] m_axis_valid_int_s;
+wire [RATIO*A_WIDTH-1:0] m_axis_data_int_s;
+
+Diff Content:
+- 84 reg [$clog2(RATIO)-1:0] s_axis_counter;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@80:90
+localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
+localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+
+// slave and master sequencers
+reg [$clog2(RATIO)-1:0] s_axis_counter;
+reg [$clog2(RATIO)-1:0] m_axis_counter;
+
+wire [RATIO-1:0] m_axis_ready_int_s;
+wire [RATIO-1:0] m_axis_valid_int_s;
+wire [RATIO*A_WIDTH-1:0] m_axis_data_int_s;
+wire [RATIO*A_WIDTH/8-1:0] m_axis_tkeep_int_s;
+

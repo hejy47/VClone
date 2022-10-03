@@ -1,0 +1,52 @@
+Source Block: hdl/library/xilinx/axi_adxcvr/axi_adxcvr_up.v@257:301@HdlStmProcess
+  assign up_ch_tx_precursor = up_tx_precursor;
+  assign up_ch_prbssel = up_prbssel;
+  assign up_ch_prbscntreset = up_prbscntreset;
+  assign up_ch_prbsforceerr = up_prbsforceerr;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_lpm_dfe_n <= LPM_OR_DFE_N;
+      up_rate <= RATE;
+      up_sys_clk_sel <= SYS_CLK_SEL;
+      up_out_clk_sel <= OUT_CLK_SEL;
+      up_tx_diffctrl <= TX_DIFFCTRL;
+      up_tx_postcursor <= TX_POSTCURSOR;
+      up_tx_precursor <= TX_PRECURSOR;
+      up_prbssel <= 4'b0;
+      up_prbscntreset <= 1'b1;
+      up_prbsforceerr <= 1'b0;
+    end else begin
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h008)) begin
+        up_lpm_dfe_n <= up_wdata[12];
+        up_rate <= up_wdata[10:8];
+        up_sys_clk_sel <= up_wdata[5:4];
+        up_out_clk_sel <= up_wdata[2:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h030)) begin
+        up_tx_diffctrl <= up_wdata[4:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h031)) begin
+        up_tx_postcursor <= up_wdata[4:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h032)) begin
+        up_tx_precursor <= up_wdata[4:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h060)) begin
+        up_prbssel <= up_wdata[3:0];
+        up_prbscntreset <= up_wdata[8];
+        up_prbsforceerr <= up_wdata[15];
+      end
+    end
+  end
+
+  // common access
+
+  assign up_cm_sel = up_icm_sel;
+  assign up_cm_enb = up_icm_enb;
+
+Diff Content:
+- 293         up_prbsforceerr <= up_wdata[15];
++ 293         up_prbsforceerr <= up_wdata[16];
+
+Clone Blocks:

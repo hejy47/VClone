@@ -1,0 +1,52 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx.v@201:211@HdlIdDef
+wire lmfc_edge_synced;
+
+reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
+reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
+
+reg buffer_release_opportunity = 1'b0;
+
+always @(posedge device_clk) begin
+  if (lmfc_counter == device_cfg_buffer_delay ||
+      device_cfg_buffer_early_release == 1'b1) begin
+    buffer_release_opportunity <= 1'b1;
+
+Diff Content:
+- 206 reg buffer_release_opportunity = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx.v@203:220
+reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
+reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
+
+reg buffer_release_opportunity = 1'b0;
+
+always @(posedge device_clk) begin
+  if (lmfc_counter == device_cfg_buffer_delay ||
+      device_cfg_buffer_early_release == 1'b1) begin
+    buffer_release_opportunity <= 1'b1;
+  end else begin
+    buffer_release_opportunity <= 1'b0;
+  end
+end
+
+assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
+
+sync_bits #(
+  .NUM_OF_BITS (1),
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_rx/jesd204_rx.v@199:209
+wire err_statistics_reset;
+
+wire lmfc_edge_synced;
+
+reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
+reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
+
+reg buffer_release_opportunity = 1'b0;
+
+always @(posedge device_clk) begin
+  if (lmfc_counter == device_cfg_buffer_delay ||
+

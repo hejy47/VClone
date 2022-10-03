@@ -1,0 +1,61 @@
+Source Block: verilog-ethernet/rtl/axis_stat_counter.v@236:274@HdlStmProcess
+            frame_next = 1;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        tick_count_reg <= 0;
+        byte_count_reg <= 0;
+        frame_count_reg <= 0;
+        frame_reg <= 0;
+        frame_ptr_reg <= 0;
+        busy_reg <= 0;
+        tick_count_output_reg <= 0;
+        byte_count_output_reg <= 0;
+        frame_count_output_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+        tick_count_reg <= tick_count_next;
+        byte_count_reg <= byte_count_next;
+        frame_count_reg <= frame_count_next;
+        frame_reg <= frame_next;
+        frame_ptr_reg <= frame_ptr_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        if (store_output) begin
+            tick_count_output_reg <= tick_count_reg;
+            byte_count_output_reg <= byte_count_reg;
+            frame_count_output_reg <= frame_count_reg;
+        end
+    end
+end
+
+// output datapath logic
+reg [7:0]  output_axis_tdata_reg = 0;
+reg        output_axis_tvalid_reg = 0;
+reg        output_axis_tlast_reg = 0;
+
+Diff Content:
+- 247         frame_reg <= 0;
+- 249         busy_reg <= 0;
+- 250         tick_count_output_reg <= 0;
+- 251         byte_count_output_reg <= 0;
+- 252         frame_count_output_reg <= 0;
+- 263         if (store_output) begin
+- 264             tick_count_output_reg <= tick_count_reg;
+- 265             byte_count_output_reg <= byte_count_reg;
+- 266             frame_count_output_reg <= frame_count_reg;
+- 267         end
++ 247         frame_reg <= 1'b0;
++ 252         busy_reg <= 1'b0;
++ 267     end
++ 267     if (store_output) begin
++ 267         tick_count_output_reg <= tick_count_reg;
++ 267         byte_count_output_reg <= byte_count_reg;
++ 267         frame_count_output_reg <= frame_count_reg;
+
+Clone Blocks:

@@ -1,0 +1,96 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v@261:311@HdlStmProcess
+    notintable5b = 1'b1;
+  end
+  endcase
+end
+
+always @(*) begin
+  ignore3b = 1'b0;
+
+  case (in_char[9:6])
+  4'b0010: begin
+    disparity3b = 2'b11;
+  end
+  4'b1101: begin
+    disparity3b = 2'b01;
+  end
+  4'b1100: begin
+    disparity3b = 2'b11;
+    ignore3b = 1'b1;
+  end
+  4'b0011: begin
+    disparity3b = 2'b01;
+    ignore3b = 1'b1;
+  end
+  4'b0100: begin
+    disparity3b = 2'b11;
+  end
+  4'b1011: begin
+    disparity3b = 2'b01;
+  end
+  4'b1000: begin
+    disparity3b = 2'b11;
+  end
+  4'b0111: begin
+    disparity3b = 2'b01;
+  end
+  4'b0001: begin
+    disparity3b = 2'b11;
+  end
+  4'b1110: begin
+    disparity3b = 2'b01;
+  end
+  default: begin
+    disparity3b = 2'b00;
+  end
+  endcase
+end
+
+always @(*) begin
+  notintable3b = 1'b0;
+
+  if (charisk == 1'b1) begin
+
+Diff Content:
+- 266 always @(*) begin
+- 267   ignore3b = 1'b0;
+- 269   case (in_char[9:6])
+- 270   4'b0010: begin
+- 271     disparity3b = 2'b11;
+- 272   end
+- 273   4'b1101: begin
+- 274     disparity3b = 2'b01;
+- 275   end
+- 276   4'b1100: begin
+- 277     disparity3b = 2'b11;
+- 278     ignore3b = 1'b1;
+- 279   end
+- 280   4'b0011: begin
+- 281     disparity3b = 2'b01;
+- 282     ignore3b = 1'b1;
+- 283   end
+- 284   4'b0100: begin
+- 285     disparity3b = 2'b11;
+- 286   end
+- 287   4'b1011: begin
+- 288     disparity3b = 2'b01;
+- 289   end
+- 290   4'b1000: begin
+- 291     disparity3b = 2'b11;
+- 292   end
+- 293   4'b0111: begin
+- 294     disparity3b = 2'b01;
+- 295   end
+- 296   4'b0001: begin
+- 297     disparity3b = 2'b11;
+- 298   end
+- 299   4'b1110: begin
+- 300     disparity3b = 2'b01;
+- 301   end
+- 302   default: begin
+- 303     disparity3b = 2'b00;
+- 304   end
+- 305   endcase
+- 306 end
+
+Clone Blocks:

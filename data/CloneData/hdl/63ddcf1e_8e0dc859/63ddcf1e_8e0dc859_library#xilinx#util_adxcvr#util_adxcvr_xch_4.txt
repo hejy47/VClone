@@ -1,0 +1,54 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@300:313@HdlStmIf
+  BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
+  end
+  endgenerate
+
+  generate
+  if (GTH_OR_GTX_N == 1) begin
+  BUFG_GT i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
+  BUFG_GT i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
+  end
+  endgenerate
+
+  generate
+  if (GTH_OR_GTX_N == 0) begin
+  assign rx_sys_clk_sel_s = up_rx_sys_clk_sel;
+
+Diff Content:
+- 306   BUFG_GT i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
+- 307   BUFG_GT i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
++ 307   BUFG_GT i_rx_bufg (
++ 307     .CE (1'b1),
++ 307     .CEMASK (1'b0),
++ 307     .CLR (1'b0),
++ 307     .CLRMASK (1'b0),
++ 307     .DIV (3'd0),
++ 307     .I (rx_out_clk_s),
++ 307     .O (rx_out_clk));
++ 307   BUFG_GT i_tx_bufg (
++ 307     .CE (1'b1),
++ 307     .CEMASK (1'b0),
++ 307     .CLR (1'b0),
++ 307     .CLRMASK (1'b0),
++ 307     .DIV (3'd0),
++ 307     .I (tx_out_clk_s),
++ 307     .O (tx_out_clk));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@293:306
+  end
+
+  // instantiations
+
+  generate
+  if (GTH_OR_GTX_N == 0) begin
+  BUFG i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
+  BUFG i_tx_bufg (.I (tx_out_clk_s), .O (tx_out_clk));
+  end
+  endgenerate
+
+  generate
+  if (GTH_OR_GTX_N == 1) begin
+  BUFG_GT i_rx_bufg (.I (rx_out_clk_s), .O (rx_out_clk));
+

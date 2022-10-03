@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v@308:318@HdlStmAssign
+  end
+  endcase
+end
+
+assign disparity4b_in = in_disparity ^ disparity6b;
+assign out_disparity = disparity4b_in ^ disparity4b;
+
+always @(*) begin
+  if (in_disparity == 1'b0 && may_invert6b == 1'b1) begin
+    out6b = ~data6b;
+  end else begin
+
+Diff Content:
+- 313 assign out_disparity = disparity4b_in ^ disparity4b;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v@307:317
+    disparity4b = 1'b1;
+  end
+  endcase
+end
+
+assign disparity4b_in = in_disparity ^ disparity6b;
+assign out_disparity = disparity4b_in ^ disparity4b;
+
+always @(*) begin
+  if (in_disparity == 1'b0 && may_invert6b == 1'b1) begin
+    out6b = ~data6b;
+

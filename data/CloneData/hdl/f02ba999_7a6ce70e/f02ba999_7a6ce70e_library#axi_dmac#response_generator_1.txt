@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_dmac/response_generator.v@64:83@HdlStmProcess
+assign resp_eot = eot;
+
+assign resp_valid = request_id != response_id;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		enabled <= 1'b0;
+	end else begin
+	if (enable)
+		enabled <= 1'b1;
+	else if (request_id == response_id)
+		enabled <= 1'b0;
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		response_id <= 'h0;
+	end else begin
+
+Diff Content:
+- 73 	if (enable)
+- 74 		enabled <= 1'b1;
+- 75 	else if (request_id == response_id)
+- 76 		enabled <= 1'b0;
++ 76 		if (enable)
++ 76 			enabled <= 1'b1;
++ 76 		else if (request_id == response_id)
++ 76 			enabled <= 1'b0;
+
+Clone Blocks:

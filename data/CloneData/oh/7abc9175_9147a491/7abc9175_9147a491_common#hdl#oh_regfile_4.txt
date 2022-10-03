@@ -1,0 +1,31 @@
+Source Block: oh/common/hdl/oh_regfile.v@32:45@HdlStmFor
+   //TODO: Make an array of cells
+   
+   //#########################################
+   // write ports
+   //#########################################	
+   for (i=0;i<WP;i=i+1)
+     always @ (posedge clk)
+       if (wr_valid[i])
+         mem[wr_addr[(i+1)*RAW-1:i*RAW]] <= wr_data[(i+1)*RW-1:i*RW];
+   
+   //#########################################
+   // read ports
+   //#########################################	
+   
+
+Diff Content:
+- 37    for (i=0;i<WP;i=i+1)
+- 38      always @ (posedge clk)
+- 39        if (wr_valid[i])
+- 40          mem[wr_addr[(i+1)*RAW-1:i*RAW]] <= wr_data[(i+1)*RW-1:i*RW];
++ 40    for(i=0;i<REGS;i=i+1)
++ 40      for(j=0;j<WP;j=j+1)
++ 40        assign write_en[i][j] = wr_valid[j] & (wr_addr[j*RAW+:RAW] == i);
++ 40    for(i=0;i<REGS;i=i+1)
++ 40      for(j=0;j<WP;j=j+1)
++ 40        always @ (posedge clk)
++ 40 	 if (write_en[i][j])
++ 40 	   mem[i] <= wr_data[j*RW+:RW];
+
+Clone Blocks:

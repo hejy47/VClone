@@ -1,0 +1,21 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5782:5794@HdlStmProcess
+			 {(DW){sel5}} & in5[DW-1:0] |
+			 {(DW){sel6}} & in6[DW-1:0]);
+   
+
+   // synthesis translate_off
+   always @*
+     if((sel0+sel1+sel2+sel3+sel4+sel5+sel6>1) & $time>0)
+       $display("ERROR>>Arbitration failure in cell %m");
+   // synthesis translate_on
+   
+   
+endmodule // e16_mux7
+
+
+Diff Content:
+- 5787    always @*
+- 5788      if((sel0+sel1+sel2+sel3+sel4+sel5+sel6>1) & $time>0)
+- 5789        $display("ERROR>>Arbitration failure in cell %m");
+
+Clone Blocks:

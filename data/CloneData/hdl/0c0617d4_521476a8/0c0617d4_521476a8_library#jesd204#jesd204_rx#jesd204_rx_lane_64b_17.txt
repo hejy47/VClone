@@ -1,0 +1,96 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@136:152@HdlStmProcess
+  .data_in(phy_data),
+  .crc12(crc12_calculated)
+);
+
+reg crc12_on = 'b0;
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    crc12_on <= 1'b0;
+  end else if (eomb) begin
+    crc12_on <= 1'b1;
+  end
+end
+
+reg crc12_rdy = 'b0;
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    crc12_rdy <= 1'b0;
+
+Diff Content:
+- 141 always @(posedge clk) begin
+- 142   if (reset == 1'b1) begin
+- 143     crc12_on <= 1'b0;
+- 144   end else if (eomb) begin
+- 145     crc12_on <= 1'b1;
+- 147 end
++ 145   reg [11:0] crc12_calculated_prev;
++ 145   wire [63:0] data_descrambled_s;
++ 145   wire [63:0] data_descrambled;
++ 145   wire [63:0] data_descrambled_reordered;
++ 145   wire [11:0] crc12_received;
++ 145   wire [11:0] crc12_calculated;
++ 145   wire event_invalid_header;
++ 145   wire event_unexpected_eomb;
++ 145   wire event_unexpected_eoemb;
++ 145   wire event_crc12_mismatch;
++ 145   wire err_cnt_rst;
++ 145   wire [63:0] rx_data_msb_s;
++ 145   wire eomb;
++ 145   wire eoemb;
++ 145   wire [7:0] sh_count;
++ 145   jesd204_rx_header i_rx_header (
++ 145     .clk(clk),
++ 145     .reset(reset),
++ 145     .sh_lock(phy_block_sync),
++ 145     .header(phy_header),
++ 145     .cfg_header_mode(cfg_header_mode),
++ 145     .cfg_rx_thresh_emb_err(cfg_rx_thresh_emb_err),
++ 145     .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
++ 145     .emb_lock(emb_lock),
++ 145     .valid_eomb(eomb),
++ 145     .valid_eoemb(eoemb),
++ 145     .crc12(crc12_received),
++ 145     .crc3(),
++ 145     .fec(),
++ 145     .cmd(),
++ 145     .sh_count(sh_count),
++ 145     .status_lane_emb_state(status_lane_emb_state),
++ 145     .event_invalid_header(event_invalid_header),
++ 145     .event_unexpected_eomb(event_unexpected_eomb),
++ 145     .event_unexpected_eoemb(event_unexpected_eoemb));
++ 145   jesd204_crc12 i_crc12 (
++ 145     .clk(clk),
++ 145     .reset(1'b0),
++ 145     .init(eomb),
++ 145     .data_in(phy_data),
++ 145     .crc12(crc12_calculated));
++ 145   reg crc12_on = 'b0;
++ 145   always @(posedge clk) begin
++ 145     if (reset == 1'b1) begin
++ 145       crc12_on <= 1'b0;
++ 145     end else if (eomb) begin
++ 145       crc12_on <= 1'b1;
++ 145     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@145:161
+    crc12_on <= 1'b1;
+  end
+end
+
+reg crc12_rdy = 'b0;
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    crc12_rdy <= 1'b0;
+  end else if (crc12_on && eomb) begin
+    crc12_rdy <= 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (eomb) begin
+    crc12_calculated_prev <= crc12_calculated;
+  end
+

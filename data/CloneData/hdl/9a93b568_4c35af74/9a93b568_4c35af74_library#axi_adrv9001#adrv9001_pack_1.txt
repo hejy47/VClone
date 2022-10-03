@@ -1,0 +1,26 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_pack.v@70:86@HdlStmProcess
+
+  // Single clock mode:
+  reg [6:0] sof_d = 7'b000;
+  // Use sof_d[2] for frame size of 4 beats
+  // Use sof_d[4,6] for frame size of 8 beats
+  always @(posedge clk) begin
+    if (ivalid) begin
+      sof_d <= {sof_d[5:0],sof};
+    end
+    if (ivalid &(sof_d[0] | sof_d[2] | sof_d[4] | sof_d[6])) begin
+      odata <= {idata_d,idata};
+    end
+    ovalid <= ivalid & (sof_d[0] | sof_d[2] | sof_d[4] | sof_d[6]);
+    osof <= ivalid & sof_d[0];
+  end
+
+endmodule
+
+Diff Content:
+- 76     if (ivalid) begin
++ 76     if (rst) begin
++ 76       sof_d <= 7'b0;
++ 76     end else if (ivalid) begin
+
+Clone Blocks:

@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/ecfg_if.v@137:149@HdlStmProcess
+     
+
+   //Access out packet  
+   assign access_forward = (mi_rx_en | mi_rd);
+
+   always @ (posedge clk)
+     if(~wait_in)
+       access_out   <= access_forward;
+   
+   always @ (posedge clk)
+     if(~wait_in)
+       begin
+	  readback_reg      <= mi_rd;
+
+Diff Content:
+- 142    always @ (posedge clk)
+- 143      if(~wait_in)
++ 143    always @ (posedge clk or negedge nreset)
++ 143      if(!nreset)
++ 143        access_out <= 1'b0;   
++ 143      else if(~wait_in)
+
+Clone Blocks:

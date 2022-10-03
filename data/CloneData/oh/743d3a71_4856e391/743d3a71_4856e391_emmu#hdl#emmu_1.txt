@@ -1,0 +1,48 @@
+Source Block: oh/emmu/hdl/emmu.v@81:91@HdlStmAssign
+   
+
+   /*****************************/
+   /*MMU WRITE LOGIC            */
+   /*****************************/
+   assign mi_match       = mi_en & (mi_addr[19:16]==GROUP);
+
+   //write controls
+   assign mi_wr_vec[5:0] = (mi_match & mi_we & ~mi_addr[2]) ? 6'b001111 :
+	                   (mi_match & mi_we & mi_addr[2])  ? 6'b110000 :
+			                                      6'b000000 ;
+
+Diff Content:
+- 86    assign mi_match       = mi_en & (mi_addr[19:16]==GROUP);
++ 86    assign mi_match       = mi_en & (mi_addr[19:16]==GROUP) & (mi_addr[15]);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/hdl/emmu.v@84:96
+   /*MMU WRITE LOGIC            */
+   /*****************************/
+   assign mi_match       = mi_en & (mi_addr[19:16]==GROUP);
+
+   //write controls
+   assign mi_wr_vec[5:0] = (mi_match & mi_we & ~mi_addr[2]) ? 6'b001111 :
+	                   (mi_match & mi_we & mi_addr[2])  ? 6'b110000 :
+			                                      6'b000000 ;
+
+   //write data
+   assign mi_wr_data[63:0] = {mi_din[31:0], mi_din[31:0]};
+
+   /*****************************/
+
+Clone Blocks 2:
+oh/emmu/hdl/emmu.v@89:99
+   assign mi_wr_vec[5:0] = (mi_match & mi_we & ~mi_addr[2]) ? 6'b001111 :
+	                   (mi_match & mi_we & mi_addr[2])  ? 6'b110000 :
+			                                      6'b000000 ;
+
+   //write data
+   assign mi_wr_data[63:0] = {mi_din[31:0], mi_din[31:0]};
+
+   /*****************************/
+   /*MMU READ  LOGIC            */
+   /*****************************/
+   //TODO: could we do with less entries?
+

@@ -1,0 +1,17 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@115:125@HdlStmAssign
+   //#################################
+   //# TX SHIFT REGISTER
+   //#################################
+
+   assign tx_load        = byte_done & (spi_state[1:0]==`SPI_CMD);
+   assign tx_data[63:0]  = spi_regs[spi_addr[5:0]+:64];
+
+   oh_par2ser #(.PW(64),
+		.SW(1))
+   par2ser (.dout	(miso),
+	    .access_out (),
+
+Diff Content:
+- 120    assign tx_data[63:0]  = spi_regs[spi_addr[5:0]+:64];
+
+Clone Blocks:

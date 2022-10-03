@@ -1,0 +1,45 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5977:5987@HdlIdDef
+   
+   //Output Side
+   output [DW-1:0] out;
+
+   reg [DW-1:0] sync_reg0;
+   reg [DW-1:0] sync_reg1;
+   reg [DW-1:0] out;
+     
+   //Synchronization between clock domain
+   //We use two flip-flops for metastability improvement
+   always @ (posedge clk or posedge reset)
+
+Diff Content:
+- 5982    reg [DW-1:0] sync_reg1;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/synchronizer.v@19:29
+   
+   //Output Side
+   output [DW-1:0] out;
+
+   //Three stages
+   reg [DW-1:0] sync_reg0;
+   reg [DW-1:0] out;
+     
+   //We use two flip-flops for metastability improvement
+   always @ (posedge clk or posedge reset)
+     if(reset)
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@5976:5986
+   
+   
+   //Output Side
+   output [DW-1:0] out;
+
+   reg [DW-1:0] sync_reg0;
+   reg [DW-1:0] sync_reg1;
+   reg [DW-1:0] out;
+     
+   //Synchronization between clock domain
+   //We use two flip-flops for metastability improvement
+

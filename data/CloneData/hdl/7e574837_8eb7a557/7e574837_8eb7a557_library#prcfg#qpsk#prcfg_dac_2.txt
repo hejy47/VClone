@@ -1,0 +1,62 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_dac.v@104:114@HdlStmAssign
+      dout[0] = din[7] ^ din[3];
+      pn = dout;
+    end
+  endfunction
+
+  assign status = { 24'h0, RP_ID };
+  assign mode   = control[ 7:4];
+
+  // pass through mode
+  assign dac_data_mode0 = src_dac_ddata;
+
+
+Diff Content:
+- 109   assign status = { 24'h0, RP_ID };
++ 109   always @(posedge clk) begin
++ 109     status <= { 24'h0, RP_ID };
++ 109   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/qpsk/prcfg_dac.v@105:115
+      pn = dout;
+    end
+  endfunction
+
+  assign status = { 24'h0, RP_ID };
+  assign mode   = control[ 7:4];
+
+  // pass through mode
+  assign dac_data_mode0 = src_dac_ddata;
+
+  // prbs geenration
+
+Clone Blocks 2:
+hdl/library/prcfg/bist/prcfg_dac.v@132:142
+      pn = dout;
+    end
+  endfunction
+
+  assign status = {24'h0, RP_ID};
+  assign mode   = control[7:4];
+
+  // pass through for tx/rx side
+  assign dac_data_mode0 = src_dac_ddata;
+
+  // sine tone generation
+
+Clone Blocks 3:
+hdl/library/prcfg/bist/prcfg_dac.v@131:141
+      dout[0]   = din[13] ^ din[11] ^ din[12] ^ din[10];
+      pn = dout;
+    end
+  endfunction
+
+  assign status = {24'h0, RP_ID};
+  assign mode   = control[7:4];
+
+  // pass through for tx/rx side
+  assign dac_data_mode0 = src_dac_ddata;
+
+

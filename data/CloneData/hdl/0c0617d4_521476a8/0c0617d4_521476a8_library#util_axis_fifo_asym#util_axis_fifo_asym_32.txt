@@ -1,0 +1,91 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@254:291@HdlStmIf
+always @(posedge s_axis_aclk) begin
+  s_axis_tlast_d <= s_axis_tlast;
+end
+
+generate
+  if (RATIO == 1) begin
+    always @(*) begin
+      s_axis_counter <= 1'b1;
+    end
+  end else if (RATIO > 1) begin
+    if (RATIO_TYPE) begin
+      always @(posedge s_axis_aclk) begin
+        if (!s_axis_aresetn) begin
+          s_axis_counter <= 0;
+        end else begin
+          if (s_axis_ready && s_axis_valid) begin
+            s_axis_counter <= s_axis_counter + 1'b1;
+          end
+        end
+      end
+    end else begin
+      // in case of a small slave, after an active TLAST reset the counter
+      always @(posedge s_axis_aclk) begin
+        if (!s_axis_aresetn || s_axis_tlast_d) begin
+          s_axis_counter <= 0;
+        end else begin
+          if (s_axis_ready && s_axis_valid) begin
+            s_axis_counter <= s_axis_counter + 1'b1;
+          end
+        end
+      end
+    end
+  end
+endgenerate
+
+// master handshake sequencer
+
+generate
+
+Diff Content:
+- 259   if (RATIO == 1) begin
+- 260     always @(*) begin
+- 261       s_axis_counter <= 1'b1;
+- 262     end
+- 263   end else if (RATIO > 1) begin
+- 264     if (RATIO_TYPE) begin
+- 265       always @(posedge s_axis_aclk) begin
+- 266         if (!s_axis_aresetn) begin
+- 267           s_axis_counter <= 0;
+- 268         end else begin
+- 269           if (s_axis_ready && s_axis_valid) begin
+- 270             s_axis_counter <= s_axis_counter + 1'b1;
+- 273       end
+- 274     end else begin
+- 276       always @(posedge s_axis_aclk) begin
+- 277         if (!s_axis_aresetn || s_axis_tlast_d) begin
+- 278           s_axis_counter <= 0;
+- 279         end else begin
+- 280           if (s_axis_ready && s_axis_valid) begin
+- 281             s_axis_counter <= s_axis_counter + 1'b1;
+- 286   end
++ 270   endgenerate
++ 270   reg s_axis_tlast_d = 0;
++ 270   always @(posedge s_axis_aclk) begin
++ 270     s_axis_tlast_d <= s_axis_tlast;
++ 270   end
++ 270   generate
++ 270     if (RATIO == 1) begin
++ 270       always @(*) begin
++ 270         s_axis_counter <= 1'b1;
++ 270       end
++ 270     end else if (RATIO > 1) begin
++ 270       if (RATIO_TYPE) begin
++ 270         always @(posedge s_axis_aclk) begin
++ 270           if (!s_axis_aresetn) begin
++ 270             s_axis_counter <= 0;
++ 270           end else begin
++ 270             if (s_axis_ready && s_axis_valid) begin
++ 270               s_axis_counter <= s_axis_counter + 1'b1;
++ 270             end
++ 281       end else begin
++ 281         always @(posedge s_axis_aclk) begin
++ 281           if (!s_axis_aresetn || s_axis_tlast_d) begin
++ 281             s_axis_counter <= 0;
++ 281           end else begin
++ 281             if (s_axis_ready && s_axis_valid) begin
++ 281               s_axis_counter <= s_axis_counter + 1'b1;
++ 281             end
+
+Clone Blocks:

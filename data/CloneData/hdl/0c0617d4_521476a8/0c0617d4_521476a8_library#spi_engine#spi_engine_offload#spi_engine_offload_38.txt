@@ -1,0 +1,20 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@299:309@HdlStmProcess
+    ctrl_sdo_wr_addr <= 'h00;
+  else if (ctrl_sdo_wr_en == 1'b1)
+    ctrl_sdo_wr_addr <= ctrl_sdo_wr_addr + 1'b1;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_sdo_wr_en == 1'b1)
+    sdo_mem[ctrl_sdo_wr_addr] <= ctrl_sdo_wr_data;
+end
+
+endmodule
+
+Diff Content:
+- 304 always @(posedge ctrl_clk) begin
+- 305   if (ctrl_sdo_wr_en == 1'b1)
+- 306     sdo_mem[ctrl_sdo_wr_addr] <= ctrl_sdo_wr_data;
+- 307 end
+
+Clone Blocks:

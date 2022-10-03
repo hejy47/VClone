@@ -1,0 +1,81 @@
+Source Block: hdl/library/axi_intr_monitor/axi_intr_monitor.v@174:207@HdlStmProcess
+      arm_counter <= 1'b1;
+    end
+  end
+end
+
+always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 0) begin
+    up_rack <= 'd0;
+    up_rdata <= 'd0;
+  end else begin
+    up_rack <= up_rreq_s;
+    if (up_rreq_s == 1'b1) begin
+      case (up_raddr_s[3:0])
+        4'h0: up_rdata <= VERSION;
+        4'h1: up_rdata <= scratch;
+        4'h2: up_rdata <= control;
+        4'h3: up_rdata <= {31'h0,interrupt};
+        4'h4: up_rdata <= counter_to_interrupt;
+        4'h5: up_rdata <= counter_from_interrupt;
+        4'h6: up_rdata <= counter_interrupt_handling;
+        4'h7: up_rdata <= min_interrupt_handling;
+        4'h8: up_rdata <= max_interrupt_handling;
+        default: up_rdata <= 0;
+      endcase
+    end else begin
+      up_rdata <= 32'd0;
+    end
+  end
+end
+
+// up bus interface
+
+up_axi i_up_axi(
+  .up_rstn(s_axi_aresetn),
+
+Diff Content:
+- 179 always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+- 180   if (s_axi_aresetn == 0) begin
+- 181     up_rack <= 'd0;
+- 182     up_rdata <= 'd0;
+- 183   end else begin
+- 184     up_rack <= up_rreq_s;
+- 185     if (up_rreq_s == 1'b1) begin
+- 186       case (up_raddr_s[3:0])
+- 187         4'h0: up_rdata <= VERSION;
+- 188         4'h1: up_rdata <= scratch;
+- 189         4'h2: up_rdata <= control;
+- 190         4'h3: up_rdata <= {31'h0,interrupt};
+- 191         4'h4: up_rdata <= counter_to_interrupt;
+- 192         4'h5: up_rdata <= counter_from_interrupt;
+- 193         4'h6: up_rdata <= counter_interrupt_handling;
+- 194         4'h7: up_rdata <= min_interrupt_handling;
+- 195         4'h8: up_rdata <= max_interrupt_handling;
+- 196         default: up_rdata <= 0;
+- 197       endcase
+- 199       up_rdata <= 32'd0;
+- 202 end
++ 197   always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
++ 197     if (s_axi_aresetn == 0) begin
++ 197       up_rack <= 'd0;
++ 197       up_rdata <= 'd0;
++ 199       up_rack <= up_rreq_s;
++ 199       if (up_rreq_s == 1'b1) begin
++ 199         case (up_raddr_s[3:0])
++ 199           4'h0: up_rdata <= VERSION;
++ 199           4'h1: up_rdata <= scratch;
++ 199           4'h2: up_rdata <= control;
++ 199           4'h3: up_rdata <= {31'h0,interrupt};
++ 199           4'h4: up_rdata <= counter_to_interrupt;
++ 199           4'h5: up_rdata <= counter_from_interrupt;
++ 199           4'h6: up_rdata <= counter_interrupt_handling;
++ 199           4'h7: up_rdata <= min_interrupt_handling;
++ 199           4'h8: up_rdata <= max_interrupt_handling;
++ 199           default: up_rdata <= 0;
++ 199         endcase
++ 199       end else begin
++ 199         up_rdata <= 32'd0;
++ 199       end
+
+Clone Blocks:

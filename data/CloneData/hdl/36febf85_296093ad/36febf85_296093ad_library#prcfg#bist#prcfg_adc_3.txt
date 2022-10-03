@@ -1,0 +1,18 @@
+Source Block: hdl/library/prcfg/bist/prcfg_adc.v@134:144@HdlStmAssign
+      dout[0]   = din[13] ^ din[11] ^ din[12] ^ din[10];
+      pn = dout;
+    end
+  endfunction
+
+  assign adc_dvalid = src_adc_dwr & src_adc_dsync;
+
+  always @(posedge clk) begin
+    channel_sel  <= control[3:0];
+    mode         <= control[7:4];
+  end
+
+Diff Content:
+- 139   assign adc_dvalid = src_adc_dwr & src_adc_dsync;
++ 139   assign adc_dvalid = src_adc_enable & src_adc_valid;
+
+Clone Blocks:

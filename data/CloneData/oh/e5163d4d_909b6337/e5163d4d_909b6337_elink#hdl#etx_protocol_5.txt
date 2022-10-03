@@ -1,0 +1,46 @@
+Source Block: oh/elink/hdl/etx_protocol.v@188:198@HdlIdDef
+   //########################################	      
+   //immediate wait for state machine
+   assign tx_wait     = tx_wr_wait  | tx_rd_wait;
+
+   //used to detect rising edge of wait signal
+   reg 	     tx_wait_reg;   
+   always @ (posedge clk)
+     tx_wait_reg <=tx_wait;
+
+   //simplify??
+//   assign adjust     =  //sage to sample new value on acknowledge
+
+Diff Content:
+- 193    reg 	     tx_wait_reg;   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@189:200
+   //immediate wait for state machine
+   assign tx_wait     = tx_wr_wait  | tx_rd_wait;
+
+   //used to detect rising edge of wait signal
+   reg 	     tx_wait_reg;   
+   always @ (posedge clk)
+     tx_wait_reg <=tx_wait;
+
+   //simplify??
+//   assign adjust     =  //sage to sample new value on acknowledge
+//			((tx_state[1:0]==`TX_ACK) & tx_wait);
+   
+
+Clone Blocks 2:
+oh/elink/hdl/etx_protocol.v@185:195
+   
+   //#######################################
+   //# Wait propagation circuit backwards
+   //########################################	      
+   //immediate wait for state machine
+   assign tx_wait     = tx_wr_wait  | tx_rd_wait;
+
+   //used to detect rising edge of wait signal
+   reg 	     tx_wait_reg;   
+   always @ (posedge clk)
+     tx_wait_reg <=tx_wait;
+

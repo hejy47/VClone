@@ -1,0 +1,18 @@
+Source Block: oh/elink/hdl/ecfg_if.v@132:142@HdlStmAssign
+			      mi_dout3[63:0];
+     
+
+   //Access out packet
+  
+   assign access_forwad = (mi_rx_en | mi_rd) & ~wait_in;
+
+   always @ (posedge  clk)
+     access_out   <= access_forward;
+   
+   always @ (posedge clk)
+
+Diff Content:
+- 137    assign access_forwad = (mi_rx_en | mi_rd) & ~wait_in;
++ 137    assign access_forward = (mi_rx_en | mi_rd) & ~wait_in;
+
+Clone Blocks:

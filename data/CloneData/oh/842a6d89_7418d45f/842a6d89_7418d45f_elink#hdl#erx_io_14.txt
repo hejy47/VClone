@@ -1,0 +1,87 @@
+Source Block: oh/elink/hdl/erx_io.v@252:262@HdlIdDef
+   // Sync control signals into our RX clock domain
+   reg [1:0]   rxenb_sync;
+   wire        rxenb = rxenb_sync[0];
+   assign      serdes_reset = ~rxenb;
+   reg [1:0]   rxgpio_sync;
+   wire        rxgpio = rxgpio_sync[0];
+   
+   // Register outputs once for good measure, then mux in loopback data if enabled
+   reg [63:0]  rx_data_reg;
+   reg [7:0]   rx_frame_reg;
+
+
+Diff Content:
+- 257    wire        rxgpio = rxgpio_sync[0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_io.v@255:265
+   assign      serdes_reset = ~rxenb;
+   reg [1:0]   rxgpio_sync;
+   wire        rxgpio = rxgpio_sync[0];
+   
+   // Register outputs once for good measure, then mux in loopback data if enabled
+   reg [63:0]  rx_data_reg;
+   reg [7:0]   rx_frame_reg;
+
+   
+   wire        rxreset = reset | ~ecfg_rx_enable;
+   
+
+Clone Blocks 2:
+oh/elink/hdl/erx_io.v@248:258
+      .SHIFTIN1(1'b0),
+      .SHIFTIN2(1'b0)
+      );
+
+   // Sync control signals into our RX clock domain
+   reg [1:0]   rxenb_sync;
+   wire        rxenb = rxenb_sync[0];
+   assign      serdes_reset = ~rxenb;
+   reg [1:0]   rxgpio_sync;
+   wire        rxgpio = rxgpio_sync[0];
+   
+
+Clone Blocks 3:
+oh/elink/hdl/erx_io.v@251:261
+
+   // Sync control signals into our RX clock domain
+   reg [1:0]   rxenb_sync;
+   wire        rxenb = rxenb_sync[0];
+   assign      serdes_reset = ~rxenb;
+   reg [1:0]   rxgpio_sync;
+   wire        rxgpio = rxgpio_sync[0];
+   
+   // Register outputs once for good measure, then mux in loopback data if enabled
+   reg [63:0]  rx_data_reg;
+   reg [7:0]   rx_frame_reg;
+
+Clone Blocks 4:
+oh/elink/hdl/erx_io.v@250:260
+      );
+
+   // Sync control signals into our RX clock domain
+   reg [1:0]   rxenb_sync;
+   wire        rxenb = rxenb_sync[0];
+   assign      serdes_reset = ~rxenb;
+   reg [1:0]   rxgpio_sync;
+   wire        rxgpio = rxgpio_sync[0];
+   
+   // Register outputs once for good measure, then mux in loopback data if enabled
+   reg [63:0]  rx_data_reg;
+
+Clone Blocks 5:
+oh/elink/hdl/erx_io.v@249:259
+      .SHIFTIN2(1'b0)
+      );
+
+   // Sync control signals into our RX clock domain
+   reg [1:0]   rxenb_sync;
+   wire        rxenb = rxenb_sync[0];
+   assign      serdes_reset = ~rxenb;
+   reg [1:0]   rxgpio_sync;
+   wire        rxgpio = rxgpio_sync[0];
+   
+   // Register outputs once for good measure, then mux in loopback data if enabled
+

@@ -1,0 +1,55 @@
+Source Block: hdl/library/common/sync_bits.v@56:66@HdlIdDef
+// Whether input and output clocks are asynchronous, if 0 the synchronizer will
+// be bypassed and the output signal equals the input signal.
+parameter CLK_ASYNC = 1;
+
+reg [NUM_BITS-1:0] out_m1 = 'h0;
+reg [NUM_BITS-1:0] out_m2 = 'h0;
+
+always @(posedge out_clk)
+begin
+	if (out_resetn == 1'b0) begin
+		out_m1 <= 'b0;
+
+Diff Content:
+- 61 reg [NUM_BITS-1:0] out_m2 = 'h0;
++ 61 reg [NUM_BITS-1:0] cdc_sync_stage1 = 'h0;
++ 61 reg [NUM_BITS-1:0] cdc_sync_stage2 = 'h0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/sync_bits.v@58:76
+parameter CLK_ASYNC = 1;
+
+reg [NUM_BITS-1:0] out_m1 = 'h0;
+reg [NUM_BITS-1:0] out_m2 = 'h0;
+
+always @(posedge out_clk)
+begin
+	if (out_resetn == 1'b0) begin
+		out_m1 <= 'b0;
+		out_m2 <= 'b0;
+	end else begin
+		out_m1 <= in;
+	    out_m2 <= out_m1;	
+	end
+end
+
+assign out = CLK_ASYNC ? out_m2 : in;
+
+endmodule
+
+Clone Blocks 2:
+hdl/library/common/sync_bits.v@55:65
+parameter NUM_BITS = 1;
+// Whether input and output clocks are asynchronous, if 0 the synchronizer will
+// be bypassed and the output signal equals the input signal.
+parameter CLK_ASYNC = 1;
+
+reg [NUM_BITS-1:0] out_m1 = 'h0;
+reg [NUM_BITS-1:0] out_m2 = 'h0;
+
+always @(posedge out_clk)
+begin
+	if (out_resetn == 1'b0) begin
+

@@ -1,0 +1,63 @@
+Source Block: oh/emmu/hdl/emmu.v@118:133@HdlStmProcess
+   /*****************************/   
+   //pipeline to compensate for table lookup pipeline 
+   //assumes one cycle memory access!
+   //the pushback is needed stall async transmit path      
+
+   always @ (posedge  rd_clk)
+     if(~emesh_wait)
+     begin
+	emesh_access_out         <= emesh_access_in;
+	emesh_packet_reg[PW-1:0] <= emesh_packet_in[PW-1:0];	  
+     end
+     	 
+   assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
+				                         {32'b0,emesh_packet_reg[39:8]}; 
+   //Concatenating output packet
+   assign emesh_packet_out[PW-1:0] = {emesh_packet_reg[PW-1:40],
+
+Diff Content:
+- 124      if(~emesh_wait)
+- 125      begin
+- 126 	emesh_access_out         <= emesh_access_in;
+- 127 	emesh_packet_reg[PW-1:0] <= emesh_packet_in[PW-1:0];	  
+- 128      end
++ 128      if(~(emesh_wr_wait & write_in) & ~(emesh_rd_wait & ~write_in))
++ 128        begin
++ 128 	  emesh_access_out         <=  emesh_access_in;
++ 128 	  emesh_packet_reg[PW-1:0] <=  emesh_packet_in[PW-1:0];	  
++ 128        end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/hdl/emmu.v@125:136
+     begin
+	emesh_access_out         <= emesh_access_in;
+	emesh_packet_reg[PW-1:0] <= emesh_packet_in[PW-1:0];	  
+     end
+     	 
+   assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
+				                         {32'b0,emesh_packet_reg[39:8]}; 
+   //Concatenating output packet
+   assign emesh_packet_out[PW-1:0] = {emesh_packet_reg[PW-1:40],
+                                      emesh_dstaddr_out[31:0],
+                                      emesh_packet_reg[7:0]
+				     };
+
+Clone Blocks 2:
+oh/emmu/hdl/emmu.v@128:141
+     end
+     	 
+   assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
+				                         {32'b0,emesh_packet_reg[39:8]}; 
+   //Concatenating output packet
+   assign emesh_packet_out[PW-1:0] = {emesh_packet_reg[PW-1:40],
+                                      emesh_dstaddr_out[31:0],
+                                      emesh_packet_reg[7:0]
+				     };
+   
+
+   assign emesh_packet_hi_out[31:0] = emesh_dstaddr_out[63:32];
+      
+endmodule // emmu
+

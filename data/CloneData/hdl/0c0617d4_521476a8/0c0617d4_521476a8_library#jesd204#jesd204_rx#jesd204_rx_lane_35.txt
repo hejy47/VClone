@@ -1,0 +1,41 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane.v@200:219@HdlStmProcess
+  end else if (cgs_beat_is_cgs == 1'b0 && cgs_beat_has_error == 1'b0) begin
+    ifs_ready <= 1'b1;
+  end
+end
+
+always @(*) begin
+  align_found = 1'b0;
+  frame_align_int = 0;
+  for(jj = 0; jj < DATA_PATH_WIDTH; jj=jj+1) begin
+    if (!align_found && (char_is_cgs[jj] == 1'b0)) begin
+      align_found = 1'b1;
+      frame_align_int = jj;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (ifs_ready == 1'b0) begin
+    frame_align <= frame_align_int;
+  end
+
+Diff Content:
+- 205 always @(*) begin
+- 206   align_found = 1'b0;
+- 207   frame_align_int = 0;
+- 208   for(jj = 0; jj < DATA_PATH_WIDTH; jj=jj+1) begin
+- 209     if (!align_found && (char_is_cgs[jj] == 1'b0)) begin
+- 210       align_found = 1'b1;
+- 211       frame_align_int = jj;
+- 214 end
++ 211   function [7:0] num_set_bits;
++ 211   input [DATA_PATH_WIDTH-1:0] x;
++ 211   integer j;
++ 211   begin
++ 211     num_set_bits = 0;
++ 211     for (j = 0; j < DATA_PATH_WIDTH; j = j + 1) begin
++ 211       num_set_bits = num_set_bits + x[j];
++ 214   endfunction
+
+Clone Blocks:

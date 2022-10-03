@@ -1,0 +1,44 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@1523:1538@HdlStmIf
+    .O (tx_out_clk));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 2) begin
+  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
+  assign tx_pll_clk_sel_s = up_tx_sys_clk_sel;
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 2) begin
+  GTHE4_CHANNEL #(
+
+Diff Content:
+- 1529   assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+- 1530   assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
++ 1530   assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_rx_sys_clk_sel[0]};
++ 1530   assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_tx_sys_clk_sel[0]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@768:783
+    .O (tx_out_clk));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 1) begin
+  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign tx_sys_clk_sel_s = (up_tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_pll_clk_sel_s = up_rx_sys_clk_sel;
+  assign tx_pll_clk_sel_s = up_tx_sys_clk_sel;
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 1) begin
+  GTHE3_CHANNEL #(
+

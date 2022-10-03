@@ -1,0 +1,84 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@179:214@HdlStmIf
+  default: up_rdata <= 32'h00;
+  endcase
+end
+
+generate
+if (DMA_2D_TRANSFER == 1) begin
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      up_dma_y_length <= 'h00;
+      up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= 'h00;
+      up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= 'h00;
+    end else if (up_wreq == 1'b1) begin
+      case (up_waddr)
+      9'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+      9'h108: up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= up_wdata[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
+      9'h109: up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= up_wdata[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
+      endcase
+    end
+  end
+  assign request_y_length = up_dma_y_length;
+  assign request_dest_stride = up_dma_dest_stride;
+  assign request_src_stride = up_dma_src_stride;
+end else begin
+  assign request_y_length = 'h0;
+  assign request_dest_stride = 'h0;
+  assign request_src_stride = 'h0;
+end
+endgenerate
+
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot & response_valid & response_ready;
+
+Diff Content:
+- 184 if (DMA_2D_TRANSFER == 1) begin
+- 185   reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
+- 186   reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
+- 187   reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
+- 189   always @(posedge clk) begin
+- 190     if (reset == 1'b1) begin
+- 191       up_dma_y_length <= 'h00;
+- 192       up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= 'h00;
+- 193       up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= 'h00;
+- 194     end else if (up_wreq == 1'b1) begin
+- 195       case (up_waddr)
+- 196       9'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
+- 197       9'h108: up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= up_wdata[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
+- 198       9'h109: up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= up_wdata[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
+- 199       endcase
+- 200     end
+- 202   assign request_y_length = up_dma_y_length;
+- 203   assign request_dest_stride = up_dma_dest_stride;
+- 204   assign request_src_stride = up_dma_src_stride;
+- 205 end else begin
+- 206   assign request_y_length = 'h0;
+- 207   assign request_dest_stride = 'h0;
+- 208   assign request_src_stride = 'h0;
+- 209 end
++ 200   always @(*) begin
++ 200     case (up_raddr)
++ 200     9'h101: up_rdata <= up_transfer_id;
++ 200     9'h102: up_rdata <= up_dma_req_valid;
++ 200     9'h103: up_rdata <= {29'h00, up_dma_enable_tlen_reporting, up_dma_last, up_dma_cyclic}; // Flags
++ 200     9'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
++ 200     9'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
++ 200     9'h106: up_rdata <= up_dma_x_length;
++ 200     9'h107: up_rdata <= request_y_length;
++ 200     9'h108: up_rdata <= request_dest_stride;
++ 200     9'h109: up_rdata <= request_src_stride;
++ 200     9'h10a: up_rdata <= {up_partial_length_valid,27'b0,up_transfer_done_bitmap};
++ 200     9'h10b: up_rdata <= up_transfer_id_eot;
++ 200     9'h10c: up_rdata <= 32'h0;
++ 200     9'h112: up_rdata <= up_measured_transfer_length;
++ 200     9'h113: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH-1 : 0];   // Length
++ 200     9'h114: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH+: 2];  // ID
++ 200     default: up_rdata <= 32'h00;
++ 200     endcase
+
+Clone Blocks:

@@ -1,0 +1,30 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_wr.v@468:490@HdlStmProcess
+    end
+  end
+
+
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_last_transaction <= 1'b0;
+      axi_last_transaction_d <= 1'b0;
+    end else begin
+      if (axi_xfer_last_m[2] == 1'b1) begin
+        axi_last_transaction <= 1'b1;
+      end else if (axi_wlast == 1'b1) begin
+        axi_last_transaction <= 1'b0;
+      end
+      axi_last_transaction_d <= axi_last_transaction;
+    end
+  end
+
+  // AXI Memory Map interface write address channel
+
+  assign axi_awid = 4'b0000;
+  assign axi_awburst = 2'b01;
+
+Diff Content:
+- 478       if (axi_xfer_last_m[2] == 1'b1) begin
++ 478       if ((axi_xfer_req_m[2] == 1'b1) && (axi_xfer_last_m[2] == 1'b1)) begin
+
+Clone Blocks:

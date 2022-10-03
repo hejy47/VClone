@@ -1,0 +1,114 @@
+Source Block: serv/rtl/serv_state.v@86:155@HdlStmProcess
+
+   assign o_dbus_cyc = (state == IDLE) & stage_two_pending & i_mem_op & !mem_misalign;
+
+   assign o_rf_rreq = i_ibus_ack;
+
+   always @(posedge i_clk) begin
+      if (state == INIT)
+	o_ctrl_jump <= i_take_branch;
+      if (state == IDLE)
+	o_ctrl_jump <= 1'b0;
+
+      if (cnt_en)
+	stage_two_pending <= o_init;
+
+      if (i_new_irq)
+	pending_irq <= 1'b1;
+
+      cnt_done <= (o_cnt[4:2] == 3'b111) & o_cnt_r[2];
+
+      //Shift operations require bufreg to hold for one cycle before shifting
+      o_bufreg_hold <= i_shift_op & cnt_done;
+
+      case (state)
+        IDLE : begin
+           if (i_rf_ready | i_dbus_ack) begin
+	      state <= RUN;
+              if (two_stage_op & !stage_two_pending)
+		state <= INIT;
+	      if (i_e_op | pending_irq)
+		state <= TRAP;
+	   end else if (i_alu_sh_done & i_shift_op & stage_two_pending)
+	     state <= RUN;
+        end
+        INIT : begin
+
+           if (cnt_done)
+	     if (mem_misalign | (i_take_branch & i_ctrl_misalign))
+               state <= TRAP;
+	     else if (i_mem_op | i_shift_op )
+	       state <= IDLE;
+	     else
+	       state <= RUN;
+        end
+        RUN : begin
+           if (cnt_done)
+             state <= IDLE;
+        end
+	TRAP : begin
+	   pending_irq <= 1'b0;
+           if (cnt_done)
+             state <= IDLE;
+	end
+        default : state <= IDLE;
+      endcase
+
+      o_cnt <= o_cnt + {4'd0,cnt_en};
+      if (cnt_en)
+	o_cnt_r <= {o_cnt_r[2:0],o_cnt_r[3]};
+
+      if (i_rst) begin
+	 state <= IDLE;
+	 o_cnt   <= 5'd0;
+	 pending_irq <= 1'b0;
+	 stage_two_pending <= 1'b0;
+	 o_ctrl_jump <= 1'b0;
+	 o_cnt_r <= 4'b0001;
+      end
+   end
+
+endmodule
+
+Diff Content:
+- 94       if (state == IDLE)
+- 106       o_bufreg_hold <= i_shift_op & cnt_done;
+- 110            if (i_rf_ready | i_dbus_ack) begin
+- 111 	      state <= RUN;
+- 112               if (two_stage_op & !stage_two_pending)
+- 113 		state <= INIT;
+- 114 	      if (i_e_op | pending_irq)
+- 116 	   end else if (i_alu_sh_done & i_shift_op & stage_two_pending)
+- 117 	     state <= RUN;
+- 118         end
+- 121            if (cnt_done)
+- 122 	     if (mem_misalign | (i_take_branch & i_ctrl_misalign))
+- 123                state <= TRAP;
+- 124 	     else if (i_mem_op | i_shift_op )
+- 125 	       state <= IDLE;
+- 126 	     else
+- 127 	       state <= RUN;
+- 130            if (cnt_done)
+- 131              state <= IDLE;
+- 135            if (cnt_done)
+- 136              state <= IDLE;
++ 94       if (o_ctrl_pc_en & cnt_done)
++ 106       stage_two_req <= cnt_done & (state == INIT);
++ 114 	   if (stage_two_pending) begin
++ 114 	      if (o_rf_wreq)
++ 114 		state <= RUN;
++ 114 	      if (trap_pending & i_rf_ready)
++ 118 	   end else begin
++ 118 	      if (i_rf_ready)
++ 118 		if (i_e_op | pending_irq)
++ 118 		  state <= TRAP;
++ 118 		else if (two_stage_op)
++ 118 		  state <= INIT;
++ 118 		else
++ 118 		  state <= RUN;
++ 118            end
++ 118 	end
++ 139       if (cnt_done)
++ 139         state <= IDLE;
+
+Clone Blocks:

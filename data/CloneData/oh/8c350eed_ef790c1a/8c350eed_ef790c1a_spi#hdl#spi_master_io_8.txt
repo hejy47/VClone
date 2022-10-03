@@ -1,0 +1,49 @@
+Source Block: oh/spi/hdl/spi_master_io.v@125:135@HdlStmAssign
+     if (tx_access)
+       tx_shiftreg[PW-1:0] <= tx_data[PW-1:0];
+     else if(baud_match)       
+       tx_shiftreg[PW-1:0] <= {tx_shiftreg[PW-2:0],miso};
+
+   assign mosi = tx_shiftreg[PW-1];
+
+   assign rx_data[7:0] = tx_shiftreg[7:0];
+   
+   
+endmodule // spi_slave_io
+
+Diff Content:
+- 130    assign mosi = tx_shiftreg[PW-1];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_master_io.v@119:133
+   
+   //#################################
+   //# RX/TX SHIFT REGISTER
+   //#################################
+   
+   always @ (posedge clk)     
+     if (tx_access)
+       tx_shiftreg[PW-1:0] <= tx_data[PW-1:0];
+     else if(baud_match)       
+       tx_shiftreg[PW-1:0] <= {tx_shiftreg[PW-2:0],miso};
+
+   assign mosi = tx_shiftreg[PW-1];
+
+   assign rx_data[7:0] = tx_shiftreg[7:0];
+   
+
+Clone Blocks 2:
+oh/spi/hdl/spi_master_io.v@127:137
+     else if(baud_match)       
+       tx_shiftreg[PW-1:0] <= {tx_shiftreg[PW-2:0],miso};
+
+   assign mosi = tx_shiftreg[PW-1];
+
+   assign rx_data[7:0] = tx_shiftreg[7:0];
+   
+   
+endmodule // spi_slave_io
+
+// Local Variables:
+

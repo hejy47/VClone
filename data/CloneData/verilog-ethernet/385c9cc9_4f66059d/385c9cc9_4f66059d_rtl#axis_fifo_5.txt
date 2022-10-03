@@ -1,0 +1,297 @@
+Source Block: verilog-ethernet/rtl/axis_fifo.v@77:87@HdlStmAssign
+reg write;
+reg read;
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// Write logic
+
+Diff Content:
+- 82 assign output_axis_tdata = output_axis_tdata_reg;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_async_fifo_64.v@102:112
+reg read;
+
+assign input_axis_tready = ~full & ~input_rst_sync3_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// reset synchronization
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_fifo.v@73:83
+// empty when pointers match exactly
+wire empty = wr_ptr_reg == rd_ptr_reg;
+
+// control signals
+reg write;
+reg read;
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_fifo_64.v@85:95
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// FIFO write logic
+always @* begin
+    write = 1'b0;
+
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_async_fifo.v@99:109
+
+assign input_axis_tready = ~full & ~input_rst_sync3_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// reset synchronization
+always @(posedge input_clk or posedge async_rst) begin
+    if (async_rst) begin
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_register.v@74:84
+reg store_axis_input_to_temp;
+reg store_axis_temp_to_output;
+
+assign input_axis_tready = input_axis_tready_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// enable ready input next cycle if output is ready or the temp reg will not be filled on the next cycle (output reg empty or no input)
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_async_fifo.v@93:103
+// empty when pointers match exactly
+wire empty = rd_ptr_gray_reg == wr_ptr_gray_sync2_reg;
+
+// control signals
+reg write;
+reg read;
+
+assign input_axis_tready = ~full & ~input_rst_sync3_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_fifo.v@79:89
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// Write logic
+always @* begin
+    write = 1'b0;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_fifo.v@78:88
+reg read;
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// Write logic
+always @* begin
+
+Clone Blocks 9:
+verilog-ethernet/rtl/axis_async_fifo_64.v@101:111
+reg write;
+reg read;
+
+assign input_axis_tready = ~full & ~input_rst_sync3_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_fifo.v@80:90
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// Write logic
+always @* begin
+    write = 1'b0;
+
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_fifo_64.v@82:92
+reg read;
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// FIFO write logic
+
+Clone Blocks 12:
+verilog-ethernet/rtl/axis_fifo_64.v@79:89
+
+// control signals
+reg write;
+reg read;
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/axis_fifo_64.v@81:91
+reg write;
+reg read;
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+
+Clone Blocks 14:
+verilog-ethernet/rtl/axis_async_fifo.v@97:107
+reg write;
+reg read;
+
+assign input_axis_tready = ~full & ~input_rst_sync3_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// reset synchronization
+
+Clone Blocks 15:
+verilog-ethernet/rtl/axis_async_fifo.v@95:105
+
+// control signals
+reg write;
+reg read;
+
+assign input_axis_tready = ~full & ~input_rst_sync3_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+Clone Blocks 16:
+verilog-ethernet/rtl/axis_fifo.v@75:85
+
+// control signals
+reg write;
+reg read;
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/axis_async_fifo_64.v@99:109
+
+// control signals
+reg write;
+reg read;
+
+assign input_axis_tready = ~full & ~input_rst_sync3_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+
+Clone Blocks 18:
+verilog-ethernet/rtl/axis_async_fifo.v@98:108
+reg read;
+
+assign input_axis_tready = ~full & ~input_rst_sync3_reg;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// reset synchronization
+always @(posedge input_clk or posedge async_rst) begin
+
+Clone Blocks 19:
+verilog-ethernet/rtl/axis_fifo_64.v@84:94
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// FIFO write logic
+always @* begin
+    write = 1'b0;
+
+Clone Blocks 20:
+verilog-ethernet/rtl/axis_fifo_64.v@83:93
+
+assign input_axis_tready = ~full;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tkeep = output_axis_tkeep_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+assign output_axis_tuser = output_axis_tuser_reg;
+
+// FIFO write logic
+always @* begin
+

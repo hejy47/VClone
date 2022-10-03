@@ -1,0 +1,33 @@
+Source Block: oh/gpio/hdl/gpio.v@123:134@HdlStmProcess
+   //################################
+   //# INPUT CONTROL REGISTERS
+   //################################ 
+   
+   //IDATA
+   always @ (posedge clk)
+     idata_reg[N-1:0] <= gpio_sync[N-1:0];
+
+   //################################
+   //# READBACK
+   //################################ 
+   always @ (posedge clk)
+
+Diff Content:
+- 128    always @ (posedge clk)
+- 129      idata_reg[N-1:0] <= gpio_sync[N-1:0];
++ 129    always @ (posedge clk or negedge nreset)
++ 129      if(!nreset)
++ 129        irqmask_reg[63:0] <= 'b0;   
++ 129      else if(irqmask_write & reg_double)
++ 129        irqmask_reg[63:0] <= reg_wdata[63:0];
++ 129      else if(irqmask_write)
++ 129        irqmask_reg[31:0] <= reg_wdata[31:0];
++ 129    oh_edgedetect #(.DW(N))
++ 129    oh_edgedetect (.out	(gpio_edge[N-1:0]),
++ 129 		  .clk	(clk),
++ 129 		  .cfg	(2'b11), //toggle detect
++ 129 		  .in	(idata_reg[N-1:0]));
++ 129    assign gpio_irq = |gpio_edge[N-1:0];
++ 129    assign odd = (N>32) & dstaddr_in[2];
+
+Clone Blocks:

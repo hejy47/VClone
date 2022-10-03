@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dac_interpolate/axi_dac_interpolate_filter.v@130:159@HdlStmProcess
+
+  // - for start synchronized, wait until the DMA has valid data on both channels
+  // - for non synchronized channels the start of transmission gets the 2 data
+  // paths randomly ready, only when using data buffers
+
+  always @(posedge dac_clk) begin
+    if (interpolation_ratio == 0) begin
+      dac_int_ready <= dac_filt_int_valid;
+    end else begin
+      if (dac_filt_int_valid &
+          (!start_sync_channels & dma_valid |
+          (dma_valid & dma_valid_adjacent))) begin
+        if (interpolation_counter < interpolation_ratio) begin
+          interpolation_counter <= interpolation_counter + 1;
+          dac_int_ready <= 1'b0;
+        end else begin
+          interpolation_counter <= 0;
+          dac_int_ready <= 1'b1;
+        end
+      end else begin
+        dac_int_ready <= 1'b0;
+        interpolation_counter <= 0;
+      end
+    end
+  end
+
+  always @(posedge dac_clk) begin
+    if (dma_transfer_suspend == 1'b0) begin
+      transfer <= trigger ? 1'b1 : transfer | !trigger_active;
+    end else begin
+
+Diff Content:
+- 136     if (interpolation_ratio == 0) begin
+- 137       dac_int_ready <= dac_filt_int_valid;
+- 138     end else begin
+- 139       if (dac_filt_int_valid &
+- 140           (!start_sync_channels & dma_valid |
+- 141           (dma_valid & dma_valid_adjacent))) begin
+- 142         if (interpolation_counter < interpolation_ratio) begin
+- 143           interpolation_counter <= interpolation_counter + 1;
+- 144           dac_int_ready <= 1'b0;
+- 145         end else begin
+- 146           interpolation_counter <= 0;
+- 147           dac_int_ready <= 1'b1;
+- 148         end
+- 151         interpolation_counter <= 0;
++ 148     if (dac_filt_int_valid &
++ 148         (!start_sync_channels & dma_valid |
++ 148         (dma_valid & dma_valid_adjacent))) begin
++ 148       if (interpolation_counter == interpolation_ratio) begin
++ 148         interpolation_counter <= 0;
++ 148         dac_int_ready <= 1'b1;
++ 149         interpolation_counter <= interpolation_counter + 1;
++ 152     end else begin
++ 152       dac_int_ready <= 1'b0;
++ 152       interpolation_counter <= 0;
+
+Clone Blocks:

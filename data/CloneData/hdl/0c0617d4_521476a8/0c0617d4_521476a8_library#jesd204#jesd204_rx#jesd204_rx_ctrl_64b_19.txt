@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl_64b.v@89:99@HdlStmAssign
+
+assign phy_block_sync_masked = phy_block_sync | cfg_lanes_disable;
+assign emb_lock_masked = emb_lock_d | cfg_lanes_disable;
+
+assign all_block_sync = &phy_block_sync_masked;
+assign all_emb_lock = &emb_lock_masked;
+
+always @(*) begin
+  next_state = state;
+  rst_good_cnt = 1'b1;
+  event_unexpected_lane_state_error_nx = 1'b0;
+
+Diff Content:
+- 94 assign all_emb_lock = &emb_lock_masked;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl_64b.v@88:98
+end
+
+assign phy_block_sync_masked = phy_block_sync | cfg_lanes_disable;
+assign emb_lock_masked = emb_lock_d | cfg_lanes_disable;
+
+assign all_block_sync = &phy_block_sync_masked;
+assign all_emb_lock = &emb_lock_masked;
+
+always @(*) begin
+  next_state = state;
+  rst_good_cnt = 1'b1;
+

@@ -1,0 +1,29 @@
+Source Block: oh/elink/hdl/etx_protocol.v@111:127@HdlStmProcess
+   
+   //#############################
+   //# Wait signals
+   //#############################
+
+   always @ (posedge tx_lclk_div4) 
+     begin
+	rd_wait_sync <= tx_rd_wait;
+	etx_rd_wait <= rd_wait_sync;
+	wr_wait_sync <= tx_wr_wait;
+	etx_wr_wait <= wr_wait_sync;
+     end
+   
+endmodule // etx_protocol
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+// End:
+
+Diff Content:
+- 119 	etx_rd_wait <= rd_wait_sync;
+- 121 	etx_wr_wait <= wr_wait_sync;
++ 119 	etx_rd_wait  <= rd_wait_sync;
++ 121 	etx_wr_wait  <= wr_wait_sync;
++ 122    assign etx_wait = etx_cycle   |
++ 122 		     etx_rd_wait | 
++ 122 		     etx_wr_wait;
+
+Clone Blocks:

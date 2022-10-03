@@ -1,0 +1,17 @@
+Source Block: hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@108:118@HdlStmAssign
+
+//------------------------------------------------------------------------------
+// Read address counter
+//------------------------------------------------------------------------------
+
+assign m_axis_read_s = m_axis_ready && m_axis_valid && ~m_axis_empty;
+always @(posedge m_axis_aclk)
+begin
+  if (!m_axis_aresetn)
+    m_axis_raddr_reg <= 'h0;
+  else
+
+Diff Content:
+- 113 assign m_axis_read_s = m_axis_ready && m_axis_valid && ~m_axis_empty;
+
+Clone Blocks:

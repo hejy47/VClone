@@ -1,0 +1,49 @@
+Source Block: hdl/library/axi_hdmi_rx/axi_hdmi_rx_core.v@193:230@HdlStmProcess
+    end
+  end
+
+  // sof, enable and data on 422 and 444 domains
+
+  always @(posedge hdmi_clk) begin
+    hdmi_sof_422 <= hdmi_sof;
+    hdmi_de_422 <= hdmi_hs_de_s & hdmi_vs_de_s;
+    hdmi_data_422 <= hdmi_data_de_s;
+    hdmi_sof_444 <= hdmi_sof_444_s;
+    hdmi_de_444 <= hdmi_de_444_s;
+    if (hdmi_bgr == 1'b1) begin
+      hdmi_data_444[23:16] <= hdmi_data_444_s[ 7: 0];
+      hdmi_data_444[15: 8] <= hdmi_data_444_s[15: 8];
+      hdmi_data_444[ 7: 0] <= hdmi_data_444_s[23:16];
+    end else begin
+      hdmi_data_444[23:16] <= hdmi_data_444_s[23:16];
+      hdmi_data_444[15: 8] <= hdmi_data_444_s[15: 8];
+      hdmi_data_444[ 7: 0] <= hdmi_data_444_s[ 7: 0];
+    end
+    if (hdmi_de_444 == 1'b1) begin
+      hdmi_de_444_cnt <= hdmi_de_444_cnt + 1'b1;
+    end
+    hdmi_data_444_hold <= hdmi_data_444[23:8];
+    hdmi_sof_444_p <= hdmi_sof_444;
+    hdmi_de_444_p <= hdmi_de_444_cnt[0] | hdmi_de_444_cnt[1];
+    case (hdmi_de_444_cnt)
+      2'b11: hdmi_data_444_p <= {hdmi_data_444[23:0], hdmi_data_444_hold[15: 8]};
+      2'b10: hdmi_data_444_p <= {hdmi_data_444[15:8], hdmi_data_444_hold[15: 0]};
+      2'b01: hdmi_data_444_p <= {hdmi_data_444[ 7:0], hdmi_data_444_p[23: 0]};
+      default: hdmi_data_444_p <= {8'd0, hdmi_data_444};
+    endcase
+  end
+
+  always @(posedge hdmi_clk) begin
+    if (hdmi_rst == 1'b1) begin
+      hdmi_dma_enable <= 1'b0;
+    end else if (hdmi_sof_s == 1'b1) begin
+
+Diff Content:
+- 213     if (hdmi_de_444 == 1'b1) begin
+- 221       2'b10: hdmi_data_444_p <= {hdmi_data_444[15:8], hdmi_data_444_hold[15: 0]};
++ 213     if (hdmi_sof_444 == 1'b1) begin
++ 213       hdmi_de_444_cnt <= (hdmi_de_444 == 1'b1) ? 2'b1 : 2'b0;
++ 213     end else if (hdmi_de_444 == 1'b1) begin
++ 221       2'b10: hdmi_data_444_p <= {hdmi_data_444[15:0], hdmi_data_444_hold[15: 0]};
+
+Clone Blocks:

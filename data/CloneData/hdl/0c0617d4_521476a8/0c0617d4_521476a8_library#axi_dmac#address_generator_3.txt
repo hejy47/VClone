@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@77:87@HdlStmAssign
+localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
+localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
+
+`include "inc_id.vh"
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+// If CACHE_COHERENT is set, signal downstream that this transaction must be
+// looked up in cache. Otherwise default to "normal non-cachable bufferable".
+assign cache = CACHE_COHERENT ? 4'b1110 : 4'b0011;
+assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
+
+Diff Content:
+- 82 assign burst = 2'b01;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@78:88
+localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
+
+`include "inc_id.vh"
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+// If CACHE_COHERENT is set, signal downstream that this transaction must be
+// looked up in cache. Otherwise default to "normal non-cachable bufferable".
+assign cache = CACHE_COHERENT ? 4'b1110 : 4'b0011;
+assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
+              DMA_DATA_WIDTH ==  512 ? 3'b110 :
+

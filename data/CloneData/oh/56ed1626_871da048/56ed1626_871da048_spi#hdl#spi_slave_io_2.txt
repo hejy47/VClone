@@ -1,0 +1,33 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@145:155@HdlStmAssign
+
+   assign spi_write     = byte_done &
+			  (command_reg[7:6]==2'b00) &
+			  (spi_state[1:0]==`SPI_DATA);
+  
+   assign spi_read      = command_reg[7:6]==2'b11; //read from sclk reg  
+
+   assign spi_remote    = command_reg[7:6]==2'b10; //send remote request
+   
+   assign spi_wdata[7:0] = rx_data[7:0];
+ 
+
+Diff Content:
+- 150    assign spi_read      = command_reg[7:6]==2'b11; //read from sclk reg  
++ 150    assign spi_read      = command_reg[7:6]==2'b10; //read from sclk reg  
++ 150    assign spi_remote    = command_reg[7:6]==2'b11; //send remote request
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_slave_io.v@147:157
+			  (command_reg[7:6]==2'b00) &
+			  (spi_state[1:0]==`SPI_DATA);
+  
+   assign spi_read      = command_reg[7:6]==2'b11; //read from sclk reg  
+
+   assign spi_remote    = command_reg[7:6]==2'b10; //send remote request
+   
+   assign spi_wdata[7:0] = rx_data[7:0];
+ 
+   //###################################
+   //# SYNCHRONIZATION TO CORE
+

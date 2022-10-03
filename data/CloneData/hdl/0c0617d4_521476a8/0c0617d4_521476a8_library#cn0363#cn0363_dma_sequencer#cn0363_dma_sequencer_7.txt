@@ -1,0 +1,52 @@
+Source Block: hdl/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v@140:156@HdlStmProcess
+    'hd: dma_wr_en <= i_q_filtered_valid;
+    endcase
+  end
+end
+
+always @(posedge clk) begin
+  if (count == 'h00) begin
+    dma_wr_sync <= 1'b1;
+  end else if (dma_wr_en == 1'b1) begin
+    dma_wr_sync = 1'b0;
+  end
+end
+
+always @(*) begin
+  case (count)
+  'h0: phase_ready <= 1'b1;
+  'h7: phase_ready <= 1'b1;
+
+Diff Content:
+- 145 always @(posedge clk) begin
+- 146   if (count == 'h00) begin
+- 147     dma_wr_sync <= 1'b1;
+- 148   end else if (dma_wr_en == 1'b1) begin
+- 149     dma_wr_sync = 1'b0;
+- 151 end
++ 149   always @(*) begin
++ 149     case (count)
++ 149       'h2: data_filtered_ready <= 1'b1;
++ 149       'h9: data_filtered_ready <= 1'b1;
++ 149       default: data_filtered_ready <= 1'b0;
++ 149     endcase
++ 149   end
++ 149   always @(*) begin
++ 149     case (count)
++ 149       'h3: i_q_ready <= 1'b1;
++ 149       'h4: i_q_ready <= 1'b1;
++ 149       'ha: i_q_ready <= 1'b1;
++ 149       'hb: i_q_ready <= 1'b1;
++ 149       default: i_q_ready <= 1'b0;
++ 149     endcase
++ 149   end
++ 149   always @(*) begin
++ 149     case (count)
++ 149       'h5: i_q_filtered_ready <= 1'b1;
++ 149       'h6: i_q_filtered_ready <= 1'b1;
++ 149       'hc: i_q_filtered_ready <= 1'b1;
++ 149       'hd: i_q_filtered_ready <= 1'b1;
++ 149       default: i_q_filtered_ready <= 1'b0;
++ 149     endcase
+
+Clone Blocks:

@@ -1,0 +1,88 @@
+Source Block: oh/src/mio/hdl/mio.v@86:96@HdlIdDef
+   wire			tx_empty;		// From mio_dp of mio_dp.v
+   wire			tx_en;			// From mio_regs of mio_regs.v
+   wire			tx_full;		// From mio_dp of mio_dp.v
+   wire [MPW-1:0]	tx_packet_c2io;		// From mio_if of mio_if.v
+   wire			tx_prog_full;		// From mio_dp of mio_dp.v
+   wire			tx_wait_io2c;		// From mio_dp of mio_dp.v
+   // End of automatics
+
+   //################################
+   //# CONFIGURATION REGISTERS
+   //################################
+
+Diff Content:
+- 91    wire			tx_wait_io2c;		// From mio_dp of mio_dp.v
++ 91    wire			tx_full;		// From mtx of mtx.v
++ 91    wire			tx_prog_full;		// From mtx of mtx.v
++ 91    mtx #(.IOW(IOW),
++ 91 	 .AW(AW),
++ 91 	 .PW(PW),
++ 91 	 .TARGET(TARGET))
++ 91    mtx (.io_clk				(io_clk),
++ 91 	/*AUTOINST*/
++ 91 	.tx_empty			(tx_empty),
++ 91 	.tx_full			(tx_full),
++ 91 	.tx_prog_full			(tx_prog_full),
++ 91 	.wait_out			(wait_out),
++ 91 	.tx_access			(tx_access),
++ 91 	.tx_packet			(tx_packet[IOW-1:0]),
++ 91 	.clk				(clk),
++ 91 	.nreset				(nreset),
++ 91 	.tx_en				(tx_en),
++ 91 	.datasize			(datasize[7:0]),
++ 91 	.ddr_mode			(ddr_mode),
++ 91 	.lsbfirst			(lsbfirst),
++ 91 	.emode				(emode),
++ 91 	.iowidth			(iowidth[1:0]),
++ 91 	.access_in			(access_in),
++ 91 	.packet_in			(packet_in[PW-1:0]),
++ 91 	.tx_wait			(tx_wait));
++ 91    mrx #(.IOW(IOW),
++ 91 	 .PW(PW),
++ 91 	 .TARGET(TARGET))
++ 91    mrx (/*AUTOINST*/
++ 91 	.rx_empty			(rx_empty),
++ 91 	.rx_full			(rx_full),
++ 91 	.rx_prog_full			(rx_prog_full),
++ 91 	.rx_wait			(rx_wait),
++ 91 	.access_out			(access_out),
++ 91 	.packet_out			(packet_out[PW-1:0]),
++ 91 	.clk				(clk),
++ 91 	.nreset				(nreset),
++ 91 	.ddr_mode			(ddr_mode),
++ 91 	.iowidth			(iowidth[1:0]),
++ 91 	.rx_clk				(rx_clk),
++ 91 	.rx_access			(rx_access),
++ 91 	.rx_packet			(rx_packet[IOW-1:0]),
++ 91 	.wait_in			(wait_in));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mio.v@84:94
+   wire			rx_wait_c2io;		// From mio_if of mio_if.v
+   wire			tx_access_c2io;		// From mio_if of mio_if.v
+   wire			tx_empty;		// From mio_dp of mio_dp.v
+   wire			tx_en;			// From mio_regs of mio_regs.v
+   wire			tx_full;		// From mio_dp of mio_dp.v
+   wire [MPW-1:0]	tx_packet_c2io;		// From mio_if of mio_if.v
+   wire			tx_prog_full;		// From mio_dp of mio_dp.v
+   wire			tx_wait_io2c;		// From mio_dp of mio_dp.v
+   // End of automatics
+
+   //################################
+
+Clone Blocks 2:
+oh/src/mio/hdl/mio.v@85:95
+   wire			tx_access_c2io;		// From mio_if of mio_if.v
+   wire			tx_empty;		// From mio_dp of mio_dp.v
+   wire			tx_en;			// From mio_regs of mio_regs.v
+   wire			tx_full;		// From mio_dp of mio_dp.v
+   wire [MPW-1:0]	tx_packet_c2io;		// From mio_if of mio_if.v
+   wire			tx_prog_full;		// From mio_dp of mio_dp.v
+   wire			tx_wait_io2c;		// From mio_dp of mio_dp.v
+   // End of automatics
+
+   //################################
+   //# CONFIGURATION REGISTERS
+

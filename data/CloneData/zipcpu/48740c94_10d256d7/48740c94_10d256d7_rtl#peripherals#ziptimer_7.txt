@@ -1,0 +1,113 @@
+Source Block: zipcpu/rtl/peripherals/ziptimer.v@164:172@HdlStmAssign
+	endgenerate
+
+	// Make verilator happy
+	// verilator lint_off UNUSED
+	wire	[32:0]	unused;
+	assign	unused = { i_wb_cyc, i_wb_data };
+	// verilator lint_on  UNUSED
+
+endmodule
+
+Diff Content:
++ 169 `ifdef	FORMAL
++ 169 	always @(*)
++ 169 		if (r_value != 0)
++ 169 			assert(r_running);
++ 169 	always @(posedge i_clk)
++ 169 	if ((f_past_valid)&&(!$past(i_reset)))
++ 169 	begin
++ 169 		if ((!$past(wb_write))&&($past(i_ce)))
++ 169 			assert(o_int == ((r_running)&&(r_value == 0)));
++ 169 		else
++ 169 			assert(!o_int);
++ 169 	end
++ 169 	reg	f_past_valid;
++ 169 	initial	f_past_valid = 1'b0;
++ 169 	always @(posedge i_clk)
++ 169 		f_past_valid <= 1'b1;
++ 169 	initial	assume(i_reset);
++ 169 	always @(*)
++ 169 		if (!f_past_valid)
++ 169 			assume(i_reset);
++ 169 	always @(posedge i_clk)
++ 169 	if ((f_past_valid)&&($past(i_reset)))
++ 169 	begin
++ 169 		assert(r_value     == 0);
++ 169 		assert(auto_reload == 0);
++ 169 		assert(r_running   == 0);
++ 169 	end
++ 169 	always @(*)
++ 169 		if (auto_reload)
++ 169 			assert(reload_value != 0);
++ 169 	always @(posedge i_clk)
++ 169 	if ((f_past_valid)&&(!$past(i_reset))
++ 169 			&&(!$past(wb_write))&&($past(r_value)==0)
++ 169 			&&(!$past(auto_reload)))
++ 169 		assert(r_value == 0);
++ 169 	always @(posedge i_clk)
++ 169 	if ((f_past_valid)&&(!$past(i_reset))
++ 169 			&&(!$past(wb_write))&&($past(r_value)==0)
++ 169 			&&($past(auto_reload)))
++ 169 	begin
++ 169 		if ($past(i_ce))
++ 169 			assert(r_value == reload_value);
++ 169 		else
++ 169 			assert(r_value == $past(r_value));
++ 169 	end
++ 169 	always @(posedge i_clk)
++ 169 	if ((f_past_valid)&&(!$past(i_reset))
++ 169 			&&(!$past(wb_write))&&($past(r_value)!=0))
++ 169 	begin
++ 169 		if ($past(i_ce))
++ 169 			assert(r_value == $past(r_value)-1'b1);
++ 169 		else
++ 169 			assert(r_value == $past(r_value));
++ 169 	end
++ 169 	always @(posedge i_clk)
++ 169 		assert(r_zero == (r_value == 0));
++ 169 	always @(posedge i_clk)
++ 169 	if ((f_past_valid)&&(!$past(i_reset))&&($past(wb_write)))
++ 169 		assert(r_value == $past(i_wb_data[(VW-1):0]));
++ 169 	always @(posedge i_clk)
++ 169 	if ((f_past_valid)&&(!$past(i_reset))&&($past(wb_write))&&(RELOADABLE)
++ 169 		&&(|$past(i_wb_data[(VW-1):0])))
++ 169 		assert(auto_reload == $past(i_wb_data[(BW-1)]));
++ 169 	always @(*)
++ 169 		if (auto_reload)
++ 169 			assert(reload_value != 0);
++ 169 	always @(*)
++ 169 		if (!RELOADABLE)
++ 169 			assert(auto_reload == 0);
++ 169 	always @(*)
++ 169 		if (auto_reload)
++ 169 			assert(r_running);
++ 169 `endif
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/zipcounter.v@85:94
+	assign	o_wb_stall = 1'b0;
+
+
+	// Make verilator happy
+	// verilator lint_off UNUSED
+	wire	unused;
+	assign	unused = i_wb_cyc;
+	// verilator lint_on  UNUSED
+
+endmodule
+
+Clone Blocks 2:
+zipcpu/rtl/peripherals/ziptimer.v@163:172
+		assign	o_wb_data = { auto_reload, r_value };
+	endgenerate
+
+	// Make verilator happy
+	// verilator lint_off UNUSED
+	wire	[32:0]	unused;
+	assign	unused = { i_wb_cyc, i_wb_data };
+	// verilator lint_on  UNUSED
+
+endmodule
+

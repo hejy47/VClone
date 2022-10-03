@@ -1,0 +1,19 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@68:78@HdlIdDef
+  output     [ 1:0]            burst,
+  output     [ 2:0]            prot,
+  output     [ 3:0]            cache
+);
+
+localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
+
+`include "inc_id.h"
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+
+Diff Content:
+- 73 localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
++ 73 localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
++ 73 localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
+
+Clone Blocks:

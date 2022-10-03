@@ -1,0 +1,15 @@
+Source Block: hdl/library/common/sync_bits.v@69:76@HdlStmAssign
+		out_m1 <= in;
+	    out_m2 <= out_m1;	
+	end
+end
+
+assign out = CLK_ASYNC ? out_m2 : in;
+
+endmodule
+
+Diff Content:
+- 74 assign out = CLK_ASYNC ? out_m2 : in;
++ 74 assign out = CLK_ASYNC ? cdc_sync_stage2 : in;
+
+Clone Blocks:

@@ -1,0 +1,46 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@193:229@HdlStmFor
+  .eomf(eomf)
+);
+
+generate
+genvar i;
+for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+
+  localparam D_START = i * DATA_PATH_WIDTH*8;
+  localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+  localparam C_START = i * DATA_PATH_WIDTH;
+  localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
+
+  jesd204_tx_lane #(
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+  ) i_lane (
+    .clk(clk),
+
+    .eof(eof),
+    .eomf(eomf),
+
+    .cgs_enable(lane_cgs_enable[i]),
+
+    .ilas_data(ilas_data[D_STOP:D_START]),
+    .ilas_charisk(ilas_charisk),
+
+    .tx_data(tx_data[D_STOP:D_START]),
+    .tx_ready(tx_ready),
+
+    .phy_data(phy_data[D_STOP:D_START]),
+    .phy_charisk(phy_charisk[C_STOP:C_START]),
+
+    .cfg_disable_scrambler(cfg_disable_scrambler)
+  );
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 221     .phy_data(phy_data[D_STOP:D_START]),
+- 222     .phy_charisk(phy_charisk[C_STOP:C_START]),
++ 222     .phy_data(phy_data_r[D_STOP:D_START]),
++ 222     .phy_charisk(phy_charisk_r[C_STOP:C_START]),
+
+Clone Blocks:

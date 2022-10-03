@@ -1,0 +1,25 @@
+Source Block: hdl/library/axi_dmac/dest_axi_mm.v@190:207@HdlStmProcess
+	.m_axi_ready(m_axi_wready),
+	.m_axi_data(m_axi_wdata),
+	.m_axi_last(m_axi_wlast)
+);
+
+always @(*)
+begin
+	if (data_eot & m_axi_wlast) begin
+		wstrb <= (1 << (req_last_beat_bytes + 1)) - 1;
+	end else begin
+		wstrb <= {(C_DMA_DATA_WIDTH/8){1'b1}};
+	end
+end
+
+assign m_axi_wstrb = wstrb;
+ 
+dmac_response_handler #(
+	.C_ID_WIDTH(C_ID_WIDTH)
+
+Diff Content:
+- 200 		wstrb <= {(C_DMA_DATA_WIDTH/8){1'b1}};
++ 200 		wstrb <= {(DMA_DATA_WIDTH/8){1'b1}};
+
+Clone Blocks:

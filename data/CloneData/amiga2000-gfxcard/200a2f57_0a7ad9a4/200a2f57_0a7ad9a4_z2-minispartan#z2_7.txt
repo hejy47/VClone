@@ -1,0 +1,32 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@898:908@HdlIdDef
+reg [1:0] zorro_write_capture_bytes = 0;
+reg [15:0] zorro_write_capture_data = 0;
+
+reg [15:0] default_data = 'hffff; // causes read/write glitches on A2000 (data bus interference) when 0
+
+reg [31:0] coldstart_counter = 0;
+
+always @(posedge z_sample_clk) begin
+
+  screen_w_with_margin <= (screen_w+margin_x);
+  if (dcm7_psen==1'b1) dcm7_psen <= 1'b0;
+
+Diff Content:
++ 903 reg zorro_idle = 0;
++ 903 reg [11:0] counter_y_sync;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@896:906
+reg z3_ds0=0;
+
+reg [1:0] zorro_write_capture_bytes = 0;
+reg [15:0] zorro_write_capture_data = 0;
+
+reg [15:0] default_data = 'hffff; // causes read/write glitches on A2000 (data bus interference) when 0
+
+reg [31:0] coldstart_counter = 0;
+
+always @(posedge z_sample_clk) begin
+
+

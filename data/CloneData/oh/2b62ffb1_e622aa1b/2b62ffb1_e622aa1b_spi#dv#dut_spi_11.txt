@@ -1,0 +1,48 @@
+Source Block: oh/spi/dv/dut_spi.v@57:68@HdlStmProcess
+
+   assign gpio_in[AW-1:0] = 32'h87654321;
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+
+   emesh2packet e2p (// Outputs
+		     .packet_out	(packet_out[PW-1:0]),
+		     // Inputs
+		     .write_out		(1'b0),
+
+Diff Content:
+- 62    always @ (posedge clk)
+- 63      access_out[0] <= access_in[0] & ~packet_in[0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/gpio/dv/dut_gpio.v@60:71
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   assign clkout          = clk1;
+   assign clk             = clk1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+
+   emesh2packet e2p (// Outputs
+		     .packet_out	(packet_out[PW-1:0]),
+		     // Inputs
+		     .write_out		(1'b0),
+
+Clone Blocks 2:
+oh/spi/dv/dut_spi.v@55:65
+   //DUT
+   //######################################################################
+
+   assign gpio_in[AW-1:0] = 32'h87654321;
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+
+   emesh2packet e2p (// Outputs
+

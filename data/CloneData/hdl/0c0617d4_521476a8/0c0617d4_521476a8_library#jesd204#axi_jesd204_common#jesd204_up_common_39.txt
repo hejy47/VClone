@@ -1,0 +1,66 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@220:236@HdlStmProcess
+reg [NUM_IRQS-1:0] up_irq_clear;
+wire [NUM_IRQS-1:0] up_irq_pending;
+
+assign up_irq_pending = up_irq_source & up_irq_enable;
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    irq <= 1'b0;
+  end else begin
+    irq <= |up_irq_pending;
+  end
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_irq_source <= 'h00;
+  end else begin
+
+Diff Content:
+- 225 always @(posedge up_clk) begin
+- 226   if (up_reset == 1'b1) begin
+- 227     irq <= 1'b0;
+- 228   end else begin
+- 229     irq <= |up_irq_pending;
+- 231 end
++ 229   always @(posedge core_clk) begin
++ 229     if (core_cfg_transfer_en == 1'b1) begin
++ 229       core_cfg_octets_per_multiframe <= up_cfg_octets_per_multiframe;
++ 229       core_cfg_octets_per_frame <= up_cfg_octets_per_frame;
++ 229       core_cfg_lanes_disable <= up_cfg_lanes_disable;
++ 229       core_cfg_links_disable <= up_cfg_links_disable;
++ 229       core_cfg_disable_scrambler <= up_cfg_disable_scrambler;
++ 229       core_cfg_disable_char_replacement <= up_cfg_disable_char_replacement;
++ 229       core_extra_cfg <= up_extra_cfg;
++ 229     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@216:226
+
+/* Interupt handling */
+reg [NUM_IRQS-1:0] up_irq_enable = {NUM_IRQS{1'b0}};
+reg [NUM_IRQS-1:0] up_irq_source = 'h00;
+reg [NUM_IRQS-1:0] up_irq_clear;
+wire [NUM_IRQS-1:0] up_irq_pending;
+
+assign up_irq_pending = up_irq_source & up_irq_enable;
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+
+Clone Blocks 2:
+hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@218:228
+reg [NUM_IRQS-1:0] up_irq_enable = {NUM_IRQS{1'b0}};
+reg [NUM_IRQS-1:0] up_irq_source = 'h00;
+reg [NUM_IRQS-1:0] up_irq_clear;
+wire [NUM_IRQS-1:0] up_irq_pending;
+
+assign up_irq_pending = up_irq_source & up_irq_enable;
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    irq <= 1'b0;
+  end else begin
+

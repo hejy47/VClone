@@ -1,0 +1,45 @@
+Source Block: hdl/library/common/up_clock_mon.v@50:60@HdlIdDef
+  reg     [31:0]  d_count_hold = 'd0;
+  reg     [32:0]  d_count = 'd0;
+
+  // internal signals
+
+  wire            up_count_toggle_s;
+  wire            d_count_toggle_s;
+
+  // processor reference
+
+  assign up_count_toggle_s = up_count_toggle_m3 ^ up_count_toggle_m2;
+
+Diff Content:
+- 55   wire            up_count_toggle_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_clock_mon.v@55:65
+  wire            up_count_toggle_s;
+  wire            d_count_toggle_s;
+
+  // processor reference
+
+  assign up_count_toggle_s = up_count_toggle_m3 ^ up_count_toggle_m2;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_count <= 'd0;
+      up_count_toggle <= 'd0;
+
+Clone Blocks 2:
+hdl/library/common/up_clock_mon.v@51:61
+  reg     [32:0]  d_count = 'd0;
+
+  // internal signals
+
+  wire            up_count_toggle_s;
+  wire            d_count_toggle_s;
+
+  // processor reference
+
+  assign up_count_toggle_s = up_count_toggle_m3 ^ up_count_toggle_m2;
+
+

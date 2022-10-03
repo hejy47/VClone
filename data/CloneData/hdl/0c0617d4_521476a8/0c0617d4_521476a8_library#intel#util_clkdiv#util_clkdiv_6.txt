@@ -1,0 +1,47 @@
+Source Block: hdl/library/intel/util_clkdiv/util_clkdiv.v@60:79@HdlStmIf
+
+always @(posedge clk) begin
+  enable <= ~enable;
+end
+
+generate if (SIM_DEVICE == "CYCLONE5") begin
+	cyclonev_clkena #(
+		.clock_type ("Global Clock"),
+		.ena_register_mode ("falling edge"),
+		.lpm_type ("cyclonev_clkena")
+  ) clock_divider_by_2 (
+	.ena(enable),
+	.enaout(),
+	.inclk(clk),
+//	.clkselect (2'b0),
+	.outclk(clk_out));
+
+end endgenerate
+
+endmodule  // util_clkdiv
+
+Diff Content:
+- 65 generate if (SIM_DEVICE == "CYCLONE5") begin
+- 66 	cyclonev_clkena #(
+- 67 		.clock_type ("Global Clock"),
+- 68 		.ena_register_mode ("falling edge"),
+- 69 		.lpm_type ("cyclonev_clkena")
+- 70   ) clock_divider_by_2 (
+- 71 	.ena(enable),
+- 72 	.enaout(),
+- 73 	.inclk(clk),
+- 75 	.outclk(clk_out));
+- 77 end endgenerate
++ 75   generate if (SIM_DEVICE == "CYCLONE5") begin
++ 75     cyclonev_clkena #(
++ 75       .clock_type ("Global Clock"),
++ 75       .ena_register_mode ("falling edge"),
++ 75       .lpm_type ("cyclonev_clkena")
++ 75     ) clock_divider_by_2 (
++ 75       .ena(enable),
++ 75       .enaout(),
++ 75       .inclk(clk),
++ 75       .outclk(clk_out));
++ 77   end endgenerate
+
+Clone Blocks:

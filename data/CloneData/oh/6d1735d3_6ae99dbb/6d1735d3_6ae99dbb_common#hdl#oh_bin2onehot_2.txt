@@ -1,0 +1,36 @@
+Source Block: oh/common/hdl/oh_bin2onehot.v@13:24@HdlStmFor
+    );
+   
+   localparam NB = $clog2(N); // binary encoded input
+     
+   genvar 	    i;      
+   for(i=0;i<N;i=i+1)
+     assign out[i] = (in[NB-1:0] == i);
+   
+endmodule // oh_bin2onehot
+
+
+
+
+Diff Content:
+- 18    for(i=0;i<N;i=i+1)
+- 19      assign out[i] = (in[NB-1:0] == i);
++ 19    for(i=0;i<N;i=i+1) begin: gen_onehot
++ 19       assign out[i] = (in[NB-1:0] == i);
++ 19    end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_bin2onehot.v@12:22
+    output [N-1:0] out   // one hot output vector
+    );
+   
+   localparam NB = $clog2(N); // binary encoded input
+     
+   genvar 	    i;      
+   for(i=0;i<N;i=i+1)
+     assign out[i] = (in[NB-1:0] == i);
+   
+endmodule // oh_bin2onehot
+
+

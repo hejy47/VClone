@@ -1,0 +1,37 @@
+Source Block: oh/elink/hdl/ecfg_if.v@95:107@HdlStmAssign
+		      ((dstaddr[19:16]==4'hE) & dstaddr[15])                          //RX-EMMU
+
+		     );
+
+   //config select (group 2 and 3)
+   assign mi_cfg_en = mi_match & 
+		      (dstaddr[19:16]==4'hF) &
+		      (dstaddr[10:8]=={2'b01,RX});
+   
+
+   //dma select (group 5)
+   assign mi_dma_en = mi_match &
+		      (dstaddr[19:16]==4'hF) & 
+
+Diff Content:
+- 102 		      (dstaddr[10:8]=={2'b01,RX});
++ 102 		      (dstaddr[10:8]=={2'b01,rx_sel});
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/ecfg_if.v@101:114
+		      (dstaddr[19:16]==4'hF) &
+		      (dstaddr[10:8]=={2'b01,RX});
+   
+
+   //dma select (group 5)
+   assign mi_dma_en = mi_match &
+		      (dstaddr[19:16]==4'hF) & 
+		      (dstaddr[10:8]==3'h5)  & 
+		      (dstaddr[5]==RX);
+   
+
+   //mmu select
+   assign mi_mmu_en = mi_match & 
+		      (dstaddr[19:16]==4'hE) &
+

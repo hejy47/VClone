@@ -1,0 +1,23 @@
+Source Block: oh/common/hdl/oh_regfile.v@29:42@HdlStmFor
+   reg [DW-1:0] mem [0:REGS-1];
+   
+   //#########################################
+   // write port
+   //#########################################	
+   for (i=0;i<RP;i=i+1)
+     always @ (posedge clk)
+       if (wr_valid[i])
+         mem[wr_addr[(i+1)*AW-1:i*AW]] <= wr_data[(i+1)*DW-1:i*DW];
+   
+   //#########################################
+   // read ports
+   //#########################################	
+   
+
+Diff Content:
+- 34    for (i=0;i<RP;i=i+1)
+- 37          mem[wr_addr[(i+1)*AW-1:i*AW]] <= wr_data[(i+1)*DW-1:i*DW];
++ 34    for (i=0;i<WP;i=i+1)
++ 37          mem[wr_addr[(i+1)*RAW-1:i*RAW]] <= wr_data[(i+1)*RW-1:i*RW];
+
+Clone Blocks:

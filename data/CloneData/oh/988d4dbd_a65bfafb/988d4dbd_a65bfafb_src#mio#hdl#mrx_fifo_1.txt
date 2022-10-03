@@ -1,0 +1,36 @@
+Source Block: oh/src/mio/hdl/mrx_fifo.v@94:108@HdlStmProcess
+
+   assign emode_done   = fifo_access & (~&fifo_valid[7:0]);
+   assign emode_active = |emode_select[2:0];
+   assign emode_next[2:0] = {emode_valid[1:0],emode_valid[2]};
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       emode_valid[2:0] <= 3'b001;
+     else if(emode & fifo_access) 
+       emode_valid[2:0] <= emode_next[2:0];   
+
+
+   //Packet buffer
+   assign mux_data[191:0] = {(3){fifo_data[63:0]}};
+   
+
+Diff Content:
++ 101      else if(~emode)
++ 101        emode_valid[2:0] <= 3'b001;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mrx_fifo.v@92:102
+   //# EMODE
+   //#######################################################   
+
+   assign emode_done   = fifo_access & (~&fifo_valid[7:0]);
+   assign emode_active = |emode_select[2:0];
+   assign emode_next[2:0] = {emode_valid[1:0],emode_valid[2]};
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       emode_valid[2:0] <= 3'b001;
+     else if(emode & fifo_access) 
+

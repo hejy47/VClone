@@ -1,0 +1,21 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@164:176@HdlStmProcess
+       clkdiv_reg[7:0] <= reg_wdata[7:0];
+   
+   //####################################
+   //# COMMAND REG
+   //####################################
+   always @ (posedge clk or negedge nreset)
+     if(cmd_write)
+       cmd_reg[7:0] <= reg_wdata[7:0];
+   
+   //####################################
+   //# RX REG
+   //####################################
+   always @ (posedge clk)
+
+Diff Content:
+- 169    always @ (posedge clk or negedge nreset)
+- 170      if(cmd_write)
+- 171        cmd_reg[7:0] <= reg_wdata[7:0];
+
+Clone Blocks:

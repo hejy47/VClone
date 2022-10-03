@@ -1,0 +1,32 @@
+Source Block: oh/elink/hdl/emaxi.v@215:231@HdlStmProcess
+     
+   //--------------------
+   //write alignment circuit
+   //--------------------
+
+   always @*
+     case( emwr_datamode[1:0] )        
+       2'd0:    wdata_aligned[63:0] = { 8{emwr_data[7:0]}};
+       2'd1:    wdata_aligned[63:0] = { 4{emwr_data[15:0]}};
+       2'd2:    wdata_aligned[63:0] = { 2{emwr_data[31:0]}};
+       default: wdata_aligned[63:0] = { emwr_srcaddr[31:0], emwr_data[31:0]};
+     endcase
+
+   //TODO: Simplify logic below!!!!!
+   //Should include separate fields for address/data/datamode!!!!
+   always @*
+     begin
+
+Diff Content:
+- 221      case( emwr_datamode[1:0] )        
+- 222        2'd0:    wdata_aligned[63:0] = { 8{emwr_data[7:0]}};
+- 223        2'd1:    wdata_aligned[63:0] = { 4{emwr_data[15:0]}};
+- 224        2'd2:    wdata_aligned[63:0] = { 2{emwr_data[31:0]}};
+- 225        default: wdata_aligned[63:0] = { emwr_srcaddr[31:0], emwr_data[31:0]};
++ 225      case( rxwr_datamode[1:0] )        
++ 225        2'd0:    wdata_aligned[63:0] = { 8{rxwr_data[7:0]}};
++ 225        2'd1:    wdata_aligned[63:0] = { 4{rxwr_data[15:0]}};
++ 225        2'd2:    wdata_aligned[63:0] = { 2{rxwr_data[31:0]}};
++ 225        default: wdata_aligned[63:0] = { rxwr_srcaddr[31:0], rxwr_data[31:0]};
+
+Clone Blocks:

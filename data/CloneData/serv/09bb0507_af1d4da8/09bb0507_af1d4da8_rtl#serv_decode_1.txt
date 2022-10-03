@@ -1,0 +1,88 @@
+Source Block: serv/rtl/serv_decode.v@101:111@HdlStmAssign
+   assign branch_op = (opcode[4:2] == 3'b110) & !opcode[0];
+
+   assign e_op = (opcode[4:2] == 3'b111) & !(|o_funct3);
+
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+   assign o_ctrl_jump = (opcode[4:2] == 3'b110) & (opcode[0] | i_alu_cmp);
+
+   assign o_ctrl_jalr = opcode[4] & (opcode[2:0] == 3'b001);
+
+   assign o_ctrl_auipc = !opcode[3] & opcode[2] & opcode[0];
+
+
+Diff Content:
+- 106    assign o_ctrl_jump = (opcode[4:2] == 3'b110) & (opcode[0] | i_alu_cmp);
++ 106    wire take_branch = (opcode[4:2] == 3'b110) & (opcode[0] | i_alu_cmp);
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_decode.v@103:113
+   assign e_op = (opcode[4:2] == 3'b111) & !(|o_funct3);
+
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+   assign o_ctrl_jump = (opcode[4:2] == 3'b110) & (opcode[0] | i_alu_cmp);
+
+   assign o_ctrl_jalr = opcode[4] & (opcode[2:0] == 3'b001);
+
+   assign o_ctrl_auipc = !opcode[3] & opcode[2] & opcode[0];
+
+   assign o_ctrl_mret = (opcode[4] & opcode[2]) & op[21] & !(|o_funct3);
+
+
+Clone Blocks 2:
+serv/rtl/serv_decode.v@107:117
+
+   assign o_ctrl_jalr = opcode[4] & (opcode[2:0] == 3'b001);
+
+   assign o_ctrl_auipc = !opcode[3] & opcode[2] & opcode[0];
+
+   assign o_ctrl_mret = (opcode[4] & opcode[2]) & op[21] & !(|o_funct3);
+
+   assign o_rf_rd_en = running & (opcode[2] |
+				  (!opcode[2] & opcode[4] & opcode[0]) |
+				  (!opcode[2] & !opcode[3] & !opcode[0]));
+
+
+Clone Blocks 3:
+serv/rtl/serv_decode.v@105:115
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+   assign o_ctrl_jump = (opcode[4:2] == 3'b110) & (opcode[0] | i_alu_cmp);
+
+   assign o_ctrl_jalr = opcode[4] & (opcode[2:0] == 3'b001);
+
+   assign o_ctrl_auipc = !opcode[3] & opcode[2] & opcode[0];
+
+   assign o_ctrl_mret = (opcode[4] & opcode[2]) & op[21] & !(|o_funct3);
+
+   assign o_rf_rd_en = running & (opcode[2] |
+				  (!opcode[2] & opcode[4] & opcode[0]) |
+
+Clone Blocks 4:
+serv/rtl/serv_decode.v@100:110
+
+   assign branch_op = (opcode[4:2] == 3'b110) & !opcode[0];
+
+   assign e_op = (opcode[4:2] == 3'b111) & !(|o_funct3);
+
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+   assign o_ctrl_jump = (opcode[4:2] == 3'b110) & (opcode[0] | i_alu_cmp);
+
+   assign o_ctrl_jalr = opcode[4] & (opcode[2:0] == 3'b001);
+
+   assign o_ctrl_auipc = !opcode[3] & opcode[2] & opcode[0];
+
+Clone Blocks 5:
+serv/rtl/serv_decode.v@98:108
+   assign shift_op = op_or_opimm & (o_funct3[1:0] == 2'b01);
+   assign slt_op   = op_or_opimm & (o_funct3[2:1] == 2'b01);
+
+   assign branch_op = (opcode[4:2] == 3'b110) & !opcode[0];
+
+   assign e_op = (opcode[4:2] == 3'b111) & !(|o_funct3);
+
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+   assign o_ctrl_jump = (opcode[4:2] == 3'b110) & (opcode[0] | i_alu_cmp);
+
+   assign o_ctrl_jalr = opcode[4] & (opcode[2:0] == 3'b001);
+

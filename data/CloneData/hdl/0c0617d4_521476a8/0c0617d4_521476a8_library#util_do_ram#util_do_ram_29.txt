@@ -1,0 +1,36 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@161:171@HdlStmAssign
+  if (~wr_request_enable | wr_last_beat)
+    wr_addr <= 'h0;
+  else if (s_axis_valid & s_axis_ready & (~(&wr_addr)))
+    wr_addr <= wr_addr + 1;
+end
+assign wr_enable = s_axis_valid & s_axis_ready & ~wr_full;
+
+ad_mem_asym #(
+   .A_ADDRESS_WIDTH (SRC_ADDRESS_WIDTH),
+   .A_DATA_WIDTH (SRC_DATA_WIDTH),
+   .B_ADDRESS_WIDTH (DST_ADDRESS_WIDTH),
+
+Diff Content:
+- 166 assign wr_enable = s_axis_valid & s_axis_ready & ~wr_full;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_do_ram/util_do_ram.v@155:170
+  else if (&wr_addr & (s_axis_valid & s_axis_ready))
+    wr_full <= 1'b1;
+end
+
+// Do not roll over write address
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable | wr_last_beat)
+    wr_addr <= 'h0;
+  else if (s_axis_valid & s_axis_ready & (~(&wr_addr)))
+    wr_addr <= wr_addr + 1;
+end
+assign wr_enable = s_axis_valid & s_axis_ready & ~wr_full;
+
+ad_mem_asym #(
+   .A_ADDRESS_WIDTH (SRC_ADDRESS_WIDTH),
+   .A_DATA_WIDTH (SRC_DATA_WIDTH),
+

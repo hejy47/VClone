@@ -1,0 +1,34 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4094:4104@HdlStmAssign
+   //###########################
+   //# Priority arbitration
+   //###########################
+
+   assign txo_wr_wait_int = txo_rd_rotate_dis;
+   assign txo_rd_wait_int = txo_wr_launch_req_tlc & ~txo_rd_rotate_dis;
+
+   //###########################################
+   //#           Transaction mux
+   //# The "and" part of the "and-or" mux is
+   //# implemented in the link channels blocks  
+
+Diff Content:
+- 4099    assign txo_rd_wait_int = txo_wr_launch_req_tlc & ~txo_rd_rotate_dis;
++ 4099    wire 	 txo_frame;     // selected frame of the transmission
++ 4099    wire [LW-1:0] txo_data_even; // selected even bytes of the transmission
++ 4099    wire [LW-1:0] txo_data_odd;  // selected odd bytes of the transmission
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4093:4103
+
+   //###########################
+   //# Priority arbitration
+   //###########################
+
+   assign txo_wr_wait_int = txo_rd_rotate_dis;
+   assign txo_rd_wait_int = txo_wr_launch_req_tlc & ~txo_rd_rotate_dis;
+
+   //###########################################
+   //#           Transaction mux
+   //# The "and" part of the "and-or" mux is
+

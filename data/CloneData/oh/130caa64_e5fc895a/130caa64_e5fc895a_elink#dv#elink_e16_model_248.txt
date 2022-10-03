@@ -1,0 +1,51 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2358:2368@HdlIdDef
+   // # WIRES
+   // #########
+
+   wire       last_tran;
+   wire [2:0] launch_pointer_incr;
+   wire [6:0] launch_sel;
+
+   //################################
+   //# next transaction read control
+   //################################
+
+
+Diff Content:
+- 2363    wire [6:0] launch_sel;
++ 2363    assign fifo_write = my_tran & frame_reg;
++ 2363    always @(posedge rxi_lclk or posedge reset)
++ 2363      if(reset)
++ 2363        wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
++ 2363      else if(fifo_write)
++ 2363        wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2356:2366
+
+   // #########
+   // # WIRES
+   // #########
+
+   wire       last_tran;
+   wire [2:0] launch_pointer_incr;
+   wire [6:0] launch_sel;
+
+   //################################
+   //# next transaction read control
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@2357:2367
+   // #########
+   // # WIRES
+   // #########
+
+   wire       last_tran;
+   wire [2:0] launch_pointer_incr;
+   wire [6:0] launch_sel;
+
+   //################################
+   //# next transaction read control
+   //################################
+

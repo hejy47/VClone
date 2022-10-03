@@ -1,0 +1,41 @@
+Source Block: hdl/library/common/up_gt.v@711:733@HdlStmProcess
+    end
+  end
+
+  // status
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rx_status_m1 <= 'd0;
+      up_rx_status <= 'd0;
+      up_tx_status_m1 <= 'd0;
+      up_tx_status <= 'd0;
+    end else begin
+      up_rx_status_m1 <= rx_sync & ~rx_error;
+      up_rx_status <= up_rx_status_m1;
+      up_tx_status_m1 <= tx_ip_sync & ~tx_error;
+      up_tx_status <= up_tx_status_m1;
+    end
+  end
+
+  // drp mux
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+
+Diff Content:
+- 716   always @(negedge up_rstn or posedge up_clk) begin
+- 717     if (up_rstn == 0) begin
+- 718       up_rx_status_m1 <= 'd0;
+- 719       up_rx_status <= 'd0;
+- 720       up_tx_status_m1 <= 'd0;
+- 721       up_tx_status <= 'd0;
+- 722     end else begin
+- 723       up_rx_status_m1 <= rx_sync & ~rx_error;
+- 724       up_rx_status <= up_rx_status_m1;
+- 725       up_tx_status_m1 <= tx_ip_sync & ~tx_error;
+- 726       up_tx_status <= up_tx_status_m1;
+- 727     end
+- 728   end
+
+Clone Blocks:

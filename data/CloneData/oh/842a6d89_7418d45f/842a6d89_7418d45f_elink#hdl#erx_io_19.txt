@@ -1,0 +1,31 @@
+Source Block: oh/elink/hdl/erx_io.v@270:287@HdlStmProcess
+	else
+          rxenb_sync[1:0] <= {1'b1, rxenb_sync[1]};
+     end
+
+   //TODO: Is this the right place for the enable signal?
+   always @ (posedge rx_lclk_div4) 
+     begin      
+	rxgpio_sync       <= {ecfg_rx_gpio_enable, rxgpio_sync[1]};      
+	rx_data_reg[63:0] <= rx_data_des[63:0];
+	rx_data_par[63:0] <= rx_data_reg[63:0];
+	rx_frame_reg[7:0] <= rx_frame_des[7:0] & {8{rxenb}} & {8{~rxgpio}};     
+	rx_frame_par[7:0] <= rx_frame_reg[7:0];
+     end
+
+//#############
+//# GPIO mode inputs
+//#############
+reg [8:0] datain_reg;
+
+Diff Content:
+- 275    always @ (posedge rx_lclk_div4) 
+- 276      begin      
+- 277 	rxgpio_sync       <= {ecfg_rx_gpio_enable, rxgpio_sync[1]};      
+- 278 	rx_data_reg[63:0] <= rx_data_des[63:0];
+- 279 	rx_data_par[63:0] <= rx_data_reg[63:0];
+- 280 	rx_frame_reg[7:0] <= rx_frame_des[7:0] & {8{rxenb}} & {8{~rxgpio}};     
+- 281 	rx_frame_par[7:0] <= rx_frame_reg[7:0];
+- 282      end
+
+Clone Blocks:

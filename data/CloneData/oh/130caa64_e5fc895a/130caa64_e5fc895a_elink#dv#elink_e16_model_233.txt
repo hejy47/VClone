@@ -1,0 +1,50 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2230:2250@HdlStmProcess
+   //# While for the actual address calculation we use [FAD-1:0] bits only,
+   //# the bit FAD of the counter is needed in order to distinguish
+   //# between the fifo entry currently being written and the one
+   //# written in the previous "round" (FAD is a carry-out bit and is
+   //# switched every "round")
+   always @(posedge rxi_lclk or posedge reset)
+     if(reset)
+       begin
+	  wr_binary_pointer_rlc[FAD:0] <= {(FAD+1){1'b0}};
+	  wr_gray_pointer_rlc[FAD:0]   <= {(FAD+1){1'b0}};
+       end
+     else if(wr_write_rlc)
+       begin
+	  wr_binary_pointer_rlc[FAD:0] <= wr_binary_next_rlc[FAD:0];	  
+	  wr_gray_pointer_rlc[FAD:0]   <= wr_gray_next_rlc[FAD:0];	  
+       end	  
+
+   assign wr_addr_rlc[FAD-1:0]       = wr_binary_pointer_rlc[FAD-1:0];
+   assign wr_binary_next_rlc[FAD:0]  = wr_binary_pointer_rlc[FAD:0] + 
+				       {{(FAD){1'b0}},wr_write_rlc};
+
+
+Diff Content:
+- 2235    always @(posedge rxi_lclk or posedge reset)
+- 2236      if(reset)
+- 2237        begin
+- 2238 	  wr_binary_pointer_rlc[FAD:0] <= {(FAD+1){1'b0}};
+- 2239 	  wr_gray_pointer_rlc[FAD:0]   <= {(FAD+1){1'b0}};
+- 2240        end
+- 2241      else if(wr_write_rlc)
+- 2242        begin
+- 2243 	  wr_binary_pointer_rlc[FAD:0] <= wr_binary_next_rlc[FAD:0];	  
+- 2244 	  wr_gray_pointer_rlc[FAD:0]   <= wr_gray_next_rlc[FAD:0];	  
+- 2245        end	  
++ 2245    reg 		   rd_tran;
++ 2245    reg [2*LW:0]    fifo_mem[MD-1:0];
++ 2245    reg 		   frame_reg;
++ 2245    reg 		   frame_reg_del;
++ 2245    reg [LW-1:0]    data_even_reg;
++ 2245    reg [LW-1:0]    data_odd_reg;
++ 2245    reg [FAD:0] 	   wr_binary_pointer;
++ 2245    reg [FAD:0] 	   rd_binary_pointer;
++ 2245    reg 		   fifo_read;
++ 2245    reg 		   rxi_wait;
++ 2245    reg 		   start_tran;
++ 2245    reg 		   fifo_data_val;
++ 2245    reg [2*LW-1:0]  fifo_data_reg;
+
+Clone Blocks:

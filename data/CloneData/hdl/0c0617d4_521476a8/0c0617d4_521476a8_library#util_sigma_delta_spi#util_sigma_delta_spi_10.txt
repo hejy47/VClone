@@ -1,0 +1,48 @@
+Source Block: hdl/library/util_sigma_delta_spi/util_sigma_delta_spi.v@97:110@HdlStmProcess
+always @(posedge clk) begin
+  /* The data ready signal is fully asynchronous */
+  sdi_d <= {sdi_d[1:0], m_sdi};
+end
+
+always @(posedge clk) begin
+  if (counter == 'h00 && sdi_d[2] == 1'b0) begin
+    data_ready <= 1'b1;
+  end else begin
+    data_ready <= 1'b0;
+  end
+end
+
+endmodule
+
+Diff Content:
+- 102 always @(posedge clk) begin
+- 103   if (counter == 'h00 && sdi_d[2] == 1'b0) begin
+- 104     data_ready <= 1'b1;
+- 105   end else begin
+- 106     data_ready <= 1'b0;
+- 108 end
++ 106   always @(posedge clk) begin
++ 106     if (counter == 'h00 && sdi_d[2] == 1'b0) begin
++ 106       data_ready <= 1'b1;
++ 106     end else begin
++ 106       data_ready <= 1'b0;
++ 106     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_sigma_delta_spi/util_sigma_delta_spi.v@92:105
+      counter <= IDLE_TIMEOUT;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  /* The data ready signal is fully asynchronous */
+  sdi_d <= {sdi_d[1:0], m_sdi};
+end
+
+always @(posedge clk) begin
+  if (counter == 'h00 && sdi_d[2] == 1'b0) begin
+    data_ready <= 1'b1;
+  end else begin
+

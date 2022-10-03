@@ -1,0 +1,29 @@
+Source Block: zipcpu/rtl/zipsystem.v@374:393@HdlStmIf
+	//	0x01000 -> cc.sleep
+	//	0x02000 -> cc.gie
+	//	0x04000 -> External (PIC) interrupt line is high
+	//	Other external interrupts follow
+	generate
+	if (EXTERNAL_INTERRUPTS < 16)
+		assign	cmd_data = { {(16-EXTERNAL_INTERRUPTS){1'b0}},
+					i_ext_int,
+				cpu_dbg_cc,	// 4 bits
+				1'b0, cmd_halt, (~cpu_dbg_stall), 1'b0,
+				pic_data[15], cpu_reset, cmd_addr };
+	else
+		assign	cmd_data = { i_ext_int[15:0], cpu_dbg_cc,
+				1'b0, cmd_halt, (~cpu_dbg_stall), 1'b0,
+				pic_data[15], cpu_reset, cmd_addr };
+	endgenerate
+
+	wire	cpu_gie;
+	assign	cpu_gie = cpu_dbg_cc[1];
+
+
+Diff Content:
+- 383 				1'b0, cmd_halt, (~cpu_dbg_stall), 1'b0,
+- 387 				1'b0, cmd_halt, (~cpu_dbg_stall), 1'b0,
++ 383 				1'b0, cmd_halt, (!cpu_dbg_stall), 1'b0,
++ 387 				1'b0, cmd_halt, (!cpu_dbg_stall), 1'b0,
+
+Clone Blocks:

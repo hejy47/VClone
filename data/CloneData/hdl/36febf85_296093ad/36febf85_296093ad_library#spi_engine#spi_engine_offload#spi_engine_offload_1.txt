@@ -1,0 +1,101 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@42:52@HdlIdDef
+parameter CMD_MEM_ADDR_WIDTH = 4;
+parameter SDO_MEM_ADDR_WIDTH = 4;
+
+reg spi_active = 1'b0;
+
+reg [CMD_MEM_ADDR_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+
+Diff Content:
+- 47 reg [CMD_MEM_ADDR_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@43:53
+parameter SDO_MEM_ADDR_WIDTH = 4;
+
+reg spi_active = 1'b0;
+
+reg [CMD_MEM_ADDR_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@44:54
+
+reg spi_active = 1'b0;
+
+reg [CMD_MEM_ADDR_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+
+Clone Blocks 3:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@45:55
+reg spi_active = 1'b0;
+
+reg [CMD_MEM_ADDR_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
+
+Clone Blocks 4:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@40:50
+
+parameter SPI_CLK_ASYNC = 0;
+parameter CMD_MEM_ADDR_WIDTH = 4;
+parameter SDO_MEM_ADDR_WIDTH = 4;
+
+reg spi_active = 1'b0;
+
+reg [CMD_MEM_ADDR_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+Clone Blocks 5:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@47:57
+reg [CMD_MEM_ADDR_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+
+Clone Blocks 6:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@48:58
+reg [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDR_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDR_WIDTH-1];
+reg [7:0] sdo_mem[0:2**SDO_MEM_ADDR_WIDTH-1];
+
+wire [CMD_MEM_ADDR_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+

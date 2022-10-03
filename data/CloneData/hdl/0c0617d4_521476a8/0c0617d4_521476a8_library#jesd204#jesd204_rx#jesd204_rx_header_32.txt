@@ -1,0 +1,49 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@133:149@HdlStmProcess
+    sh_count <= sh_count + 8'b1;
+  end
+end
+
+reg [1:0] emb_vcount = 'b0;
+always @(posedge clk) begin
+  if (state[BIT_EMB_INIT]) begin
+    emb_vcount <= 'b0;
+  end else if (state[BIT_EMB_HUNT] && (sh_count == 0 && eoemb)) begin
+    emb_vcount <= emb_vcount + 'b1;
+  end
+end
+
+reg [4:0] emb_icount = 'b0;
+always @(posedge clk) begin
+  if (state[BIT_EMB_INIT]) begin
+    emb_icount <= 'b0;
+
+Diff Content:
+- 138 always @(posedge clk) begin
+- 139   if (state[BIT_EMB_INIT]) begin
+- 140     emb_vcount <= 'b0;
+- 141   end else if (state[BIT_EMB_HUNT] && (sh_count == 0 && eoemb)) begin
+- 142     emb_vcount <= emb_vcount + 'b1;
+- 144 end
++ 142   reg [1:0] emb_vcount = 'b0;
++ 142   always @(posedge clk) begin
++ 142     if (state[BIT_EMB_INIT]) begin
++ 142       emb_vcount <= 'b0;
++ 142     end else if (state[BIT_EMB_HUNT] && (sh_count == 0 && eoemb)) begin
++ 142       emb_vcount <= emb_vcount + 'b1;
++ 142     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@141:151
+  end else if (state[BIT_EMB_HUNT] && (sh_count == 0 && eoemb)) begin
+    emb_vcount <= emb_vcount + 'b1;
+  end
+end
+
+reg [4:0] emb_icount = 'b0;
+always @(posedge clk) begin
+  if (state[BIT_EMB_INIT]) begin
+    emb_icount <= 'b0;
+  end else if (state[BIT_EMB_LOCK]) begin
+    if (sh_count == 0 && eoemb) begin
+

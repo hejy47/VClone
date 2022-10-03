@@ -1,0 +1,110 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@539:553@HdlStmAssign
+assign status_synth_params0 = {NUM_LANES};
+assign status_synth_params1 = {
+                 /*31:16 */  16'b0,
+                 /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
+                 /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
+assign status_synth_params2 = {
+                 /*31:19 */  13'b0,
+                 /*   18 */  ENABLE_CHAR_REPLACE[0],
+                 /*17:13 */  5'b0,
+                 /*   12 */  ASYNC_CLK[0],
+                 /*11:10 */  2'b0,
+                 /* 9: 8 */  LINK_MODE[1:0],
+                 /* 7: 0 */  NUM_LINKS[7:0]};
+
+endmodule
+
+Diff Content:
+- 544 assign status_synth_params2 = {
+- 545                  /*31:19 */  13'b0,
+- 546                  /*   18 */  ENABLE_CHAR_REPLACE[0],
+- 547                  /*17:13 */  5'b0,
+- 548                  /*   12 */  ASYNC_CLK[0],
+- 549                  /*11:10 */  2'b0,
+- 550                  /* 9: 8 */  LINK_MODE[1:0],
+- 551                  /* 7: 0 */  NUM_LINKS[7:0]};
++ 551   pipeline_stage #(
++ 551     .WIDTH(CW + DW + HW),
++ 551     .REGISTERED(NUM_OUTPUT_PIPELINE)
++ 551   ) i_output_pipeline_stage (
++ 551     .clk(clk),
++ 551     .in({
++ 551       phy_data_r,
++ 551       phy_charisk_r,
++ 551       phy_header_r
++ 551     }),
++ 551     .out({
++ 551       phy_data,
++ 551       phy_charisk,
++ 551       phy_header
++ 551     }));
++ 551   assign status_synth_params0 = {NUM_LANES};
++ 551   assign status_synth_params1 = {
++ 551                    /*31:16 */  16'b0,
++ 551                    /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
++ 551                    /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
++ 551   assign status_synth_params2 = {
++ 551                    /*31:19 */  13'b0,
++ 551                    /*   18 */  ENABLE_CHAR_REPLACE[0],
++ 551                    /*17:13 */  5'b0,
++ 551                    /*   12 */  ASYNC_CLK[0],
++ 551                    /*11:10 */  2'b0,
++ 551                    /* 9: 8 */  LINK_MODE[1:0],
++ 551                    /* 7: 0 */  NUM_LINKS[7:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx.v@605:618
+
+endgenerate
+
+// Core static parameters
+assign status_synth_params0 = {NUM_LANES};
+assign status_synth_params1 = {
+                 /*31:16 */  16'b0,
+                 /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
+                 /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
+assign status_synth_params2 = {
+                 /*31:19 */  13'b0,
+                 /*   18 */  ENABLE_CHAR_REPLACE[0],
+                 /*   17 */  ENABLE_FRAME_ALIGN_ERR_RESET[0],
+                 /*   16 */  ENABLE_FRAME_ALIGN_CHECK[0],
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_rx/jesd204_rx.v@609:625
+assign status_synth_params0 = {NUM_LANES};
+assign status_synth_params1 = {
+                 /*31:16 */  16'b0,
+                 /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
+                 /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
+assign status_synth_params2 = {
+                 /*31:19 */  13'b0,
+                 /*   18 */  ENABLE_CHAR_REPLACE[0],
+                 /*   17 */  ENABLE_FRAME_ALIGN_ERR_RESET[0],
+                 /*   16 */  ENABLE_FRAME_ALIGN_CHECK[0],
+                 /*15:13 */  3'b0,
+                 /*   12 */  ASYNC_CLK[0],
+                 /*11:10 */  2'b0,
+                 /* 9: 8 */  LINK_MODE[1:0],
+                 /* 7: 0 */  NUM_LINKS[7:0]};
+
+endmodule
+
+Clone Blocks 3:
+hdl/library/jesd204/jesd204_tx/jesd204_tx.v@535:548
+  })
+);
+
+// Core static parameters
+assign status_synth_params0 = {NUM_LANES};
+assign status_synth_params1 = {
+                 /*31:16 */  16'b0,
+                 /*15: 8 */  1'b0,TPL_DATA_PATH_WIDTH[6:0],
+                 /* 7: 0 */  4'b0,DPW_LOG2[3:0]};
+assign status_synth_params2 = {
+                 /*31:19 */  13'b0,
+                 /*   18 */  ENABLE_CHAR_REPLACE[0],
+                 /*17:13 */  5'b0,
+                 /*   12 */  ASYNC_CLK[0],
+

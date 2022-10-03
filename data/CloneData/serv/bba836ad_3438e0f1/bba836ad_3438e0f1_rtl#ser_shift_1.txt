@@ -1,0 +1,27 @@
+Source Block: serv/rtl/ser_shift.v@23:31@HdlStmAssign
+	 signbit <= i_signbit & i_right;
+      end
+      wrapped <= cnt[5] | (i_shamt_msb & !i_right);
+   end
+
+   assign o_done = (cnt == i_shamt);
+   assign o_q = (i_right^wrapped) ? i_d : signbit;
+
+endmodule
+
+Diff Content:
+- 28    assign o_done = (cnt == i_shamt);
++ 28    assign o_done = (cnt[4:0] == i_shamt);
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/ser_shift.v@24:31
+      end
+      wrapped <= cnt[5] | (i_shamt_msb & !i_right);
+   end
+
+   assign o_done = (cnt == i_shamt);
+   assign o_q = (i_right^wrapped) ? i_d : signbit;
+
+endmodule
+

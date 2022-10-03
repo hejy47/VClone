@@ -1,0 +1,36 @@
+Source Block: hdl/library/xilinx/common/ad_serdes_clk.v@132:158@HdlStmIf
+      .up_drp_locked (up_drp_locked));
+    end
+  endgenerate
+
+  generate
+  if (MMCM_OR_BUFR_N == 0) begin
+    BUFIO i_clk_buf (
+      .I (clk_in_s),
+      .O (clk));
+
+    BUFR #(.BUFR_DIVIDE(BUFR_DIVIDE)) i_div_clk_buf (
+      .CLR (1'b0),
+      .CE (1'b1),
+      .I (clk_in_s),
+      .O (div_clk));
+
+    assign out_clk = clk;
+    assign up_drp_rdata[15:0] = 'd0;
+    assign up_drp_ready = 'd0;
+    assign up_drp_locked = 'd0;
+
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 142     BUFR #(.BUFR_DIVIDE(BUFR_DIVIDE)) i_div_clk_buf (
++ 142     BUFR #(
++ 142       .BUFR_DIVIDE(BUFR_DIVIDE)
++ 142     ) i_div_clk_buf (
+
+Clone Blocks:

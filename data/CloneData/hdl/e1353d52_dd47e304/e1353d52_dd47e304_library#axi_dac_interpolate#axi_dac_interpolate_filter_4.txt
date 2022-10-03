@@ -1,0 +1,47 @@
+Source Block: hdl/library/axi_dac_interpolate/axi_dac_interpolate_filter.v@130:159@HdlStmProcess
+  // - for start synchronized, if the channels run until the DMA has data valid
+  // then if the case wait for second channel DMA to have valid data
+  // - for non synchronized channels the start of transmission gets the 2 data
+  // paths randomly ready. Only valid for the case of loading data buffers
+
+  always @(posedge dac_clk) begin
+    if (interpolation_ratio == 0 || interpolation_ratio == 1) begin
+      dac_int_valid_d <= dac_filt_int_valid;
+    end else begin
+      if (dac_filt_int_valid &
+          (!start_sync_channels | !dma_data_valid |
+           (dma_data_valid & dma_data_valid_adjacent))) begin
+        if (interpolation_counter < interpolation_ratio) begin
+          interpolation_counter <= interpolation_counter + 1;
+          dac_int_valid_d <= 1'b0;
+        end else begin
+          interpolation_counter <= 0;
+          dac_int_valid_d <= 1'b1;
+        end
+      end else begin
+        dac_int_valid_d <= 1'b0;
+        interpolation_counter <= 0;
+      end
+    end
+  end
+
+  always @(posedge dac_clk) begin
+    if (dma_transfer_suspend) begin
+      dma_data_valid <= 1'b0;
+      dma_data_valid_adjacent <=  1'b0;
+
+Diff Content:
+- 137       dac_int_valid_d <= dac_filt_int_valid;
+- 140           (!start_sync_channels | !dma_data_valid |
+- 141            (dma_data_valid & dma_data_valid_adjacent))) begin
+- 144           dac_int_valid_d <= 1'b0;
+- 147           dac_int_valid_d <= 1'b1;
+- 150         dac_int_valid_d <= 1'b0;
++ 137       dac_int_ready <= dac_filt_int_valid;
++ 141           (!start_sync_channels & dma_valid |
++ 141           (dma_valid & dma_valid_adjacent))) begin
++ 144           dac_int_ready <= 1'b0;
++ 147           dac_int_ready <= 1'b1;
++ 150         dac_int_ready <= 1'b0;
+
+Clone Blocks:

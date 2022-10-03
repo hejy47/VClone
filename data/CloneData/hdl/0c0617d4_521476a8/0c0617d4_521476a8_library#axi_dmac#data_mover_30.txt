@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@184:200@HdlStmProcess
+
+/*
+ * If req_sync_transfer_start is set all incoming beats will be skipped until
+ * one has s_axi_sync set. This will be the first beat that is passsed through.
+ */
+always @(posedge clk) begin
+  if (req_ready == 1'b1) begin
+    needs_sync <= req_sync_transfer_start;
+  end else if (m_axi_valid == 1'b1) begin
+    needs_sync <= 1'b0;
+  end
+end
+
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+// In case early tlast happens accept the new descriptor only when the rewind
+// request got accepted.
+
+Diff Content:
+- 189 always @(posedge clk) begin
+- 190   if (req_ready == 1'b1) begin
+- 191     needs_sync <= req_sync_transfer_start;
+- 192   end else if (m_axi_valid == 1'b1) begin
+- 193     needs_sync <= 1'b0;
+- 194   end
+- 195 end
+
+Clone Blocks:

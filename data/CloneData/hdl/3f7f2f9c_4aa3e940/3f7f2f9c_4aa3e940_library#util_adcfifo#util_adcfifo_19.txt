@@ -1,0 +1,43 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@179:203@HdlStmProcess
+  end
+
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign dma_rd_s = (dma_raddr < dma_waddr_rel_s) ? dma_wready_s : 1'b0;
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rd <= 'd0;
+      dma_rd_d <= 'd0;
+      dma_rdata_d <= 'd0;
+      dma_raddr <= 'd0;
+    end else begin
+      dma_rd <= dma_rd_s;
+      dma_rd_d <= dma_rd;
+      dma_rdata_d <= dma_rdata_s;
+      if (dma_rd_s == 1'b1) begin
+        dma_raddr <= dma_raddr + 1'b1;
+      end
+    end
+  end
+
+  // instantiations
+
+  generate
+  if (FPGA_TECHNOLOGY == 1) begin
+
+Diff Content:
+- 185     if (dma_xfer_req == 1'b0) begin
+- 191       dma_rd <= dma_rd_s;
+- 194       if (dma_rd_s == 1'b1) begin
+- 195         dma_raddr <= dma_raddr + 1'b1;
+- 196       end
++ 185     if (dma_read_rst_s == 1'b1) begin
++ 189       dma_endof_read <= 'd0;
++ 191       if (dma_waddr_int != 'd0) begin
++ 191         dma_rd <= dma_rd_s;
++ 191         if (dma_rd_s == 1'b1) begin
++ 191           dma_raddr <= dma_raddr + 1'b1;
++ 191         end
++ 191       end
+
+Clone Blocks:

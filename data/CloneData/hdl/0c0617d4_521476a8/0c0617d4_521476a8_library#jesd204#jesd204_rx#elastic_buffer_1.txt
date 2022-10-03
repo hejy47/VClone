@@ -1,0 +1,36 @@
+Source Block: hdl/library/jesd204/jesd204_rx/elastic_buffer.v@62:78@HdlIdDef
+
+  input ready_n,
+  input do_release_n
+);
+
+localparam ADDR_WIDTH = SIZE > 128 ? 7 :
+  SIZE > 64 ? 6 :
+  SIZE > 32 ? 5 :
+  SIZE > 16 ? 4 :
+  SIZE > 8 ? 3 :
+  SIZE > 4 ? 2 :
+  SIZE > 2 ? 1 : 0;
+
+localparam WIDTH = OWIDTH >= IWIDTH ? OWIDTH : IWIDTH;
+
+reg [ADDR_WIDTH:0] wr_addr = 'h00;
+reg [ADDR_WIDTH:0] rd_addr = 'h00;
+
+Diff Content:
+- 67 localparam ADDR_WIDTH = SIZE > 128 ? 7 :
+- 68   SIZE > 64 ? 6 :
+- 69   SIZE > 32 ? 5 :
+- 70   SIZE > 16 ? 4 :
+- 71   SIZE > 8 ? 3 :
+- 72   SIZE > 4 ? 2 :
+- 73   SIZE > 2 ? 1 : 0;
++ 73   localparam ADDR_WIDTH = SIZE > 128 ? 7 :
++ 73     SIZE > 64 ? 6 :
++ 73     SIZE > 32 ? 5 :
++ 73     SIZE > 16 ? 4 :
++ 73     SIZE > 8 ? 3 :
++ 73     SIZE > 4 ? 2 :
++ 73     SIZE > 2 ? 1 : 0;
+
+Clone Blocks:

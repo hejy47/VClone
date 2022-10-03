@@ -1,0 +1,26 @@
+Source Block: oh/src/stdlib/dv/oh_simctrl.v@101:119@HdlStmProcess
+   //#################################
+   //SYNCHRONOUS STIMULUS
+   //#################################
+
+   //START TEST
+   always @ (posedge clk1 or negedge nreset)
+     if(!nreset)
+       start <= 1'b0;
+     else if(dut_active & ~start)
+       begin
+	  $display("-------------------");
+	  $display("TEST %0s STARTED", testname);
+	  start <= 1'b1; 
+       end
+   
+   //STOP SIMULATION ON END
+   always @ (posedge clk1 or negedge nreset)
+     if(!nreset)
+       test_fail <= 1'b0;
+
+Diff Content:
+- 113 	  start <= 1'b1; 
++ 113 	  start <= 1'b1;
+
+Clone Blocks:

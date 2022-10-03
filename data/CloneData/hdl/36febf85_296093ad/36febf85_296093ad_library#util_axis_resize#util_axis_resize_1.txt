@@ -1,0 +1,139 @@
+Source Block: hdl/library/util_axis_resize/util_axis_resize.v@51:154@HdlStmIf
+
+parameter C_M_DATA_WIDTH = 64;
+parameter C_S_DATA_WIDTH = 64;
+parameter C_BIG_ENDIAN = 0;
+
+generate if (C_S_DATA_WIDTH == C_M_DATA_WIDTH) begin
+
+assign m_valid = s_valid;
+assign s_ready = m_ready;
+assign m_data = s_data;
+
+end else if (C_S_DATA_WIDTH < C_M_DATA_WIDTH) begin
+
+localparam RATIO = C_M_DATA_WIDTH / C_S_DATA_WIDTH;
+
+reg [C_M_DATA_WIDTH-1:0] data;
+reg [$clog2(RATIO)-1:0] count;
+reg valid;
+
+always @(posedge clk)
+begin
+	if (resetn == 1'b0) begin
+		count <= RATIO - 1;
+		valid <= 1'b0;
+	end else begin
+		if (count == 'h00 && s_ready == 1'b1 && s_valid == 1'b1)
+			valid <= 1'b1;
+		else if (m_ready == 1'b1)
+			valid <= 1'b0;
+
+		if (s_ready == 1'b1 && s_valid == 1'b1) begin
+			if (count == 'h00)
+				count <= RATIO - 1;
+			else
+				count <= count - 1'b1;
+		end
+	end
+end
+
+always @(posedge clk)
+begin
+	if (s_ready == 1'b1 && s_valid == 1'b1)
+		if (C_BIG_ENDIAN == 1) begin
+			data <= {data[C_M_DATA_WIDTH-C_S_DATA_WIDTH-1:0], s_data};
+		end else begin
+			data <= {s_data, data[C_M_DATA_WIDTH-1:C_S_DATA_WIDTH]};
+		end
+end
+
+assign s_ready = ~valid || m_ready;
+assign m_valid = valid;
+assign m_data = data;
+
+end else begin
+
+localparam RATIO = C_S_DATA_WIDTH / C_M_DATA_WIDTH;
+
+reg [C_S_DATA_WIDTH-1:0] data;
+reg [$clog2(RATIO)-1:0] count;
+reg valid;
+
+always @(posedge clk)
+begin
+	if (resetn == 1'b0) begin
+		count <= RATIO - 1;
+		valid <= 1'b0;
+	end else begin
+		if (s_valid == 1'b1 && s_ready == 1'b1)
+			valid <= 1'b1;
+		else if (count == 'h0 && m_ready == 1'b1 && m_valid == 1'b1)
+			valid <= 1'b0;
+
+		if (m_ready == 1'b1 && m_valid == 1'b1) begin
+			if (count == 'h00)
+				count <= RATIO - 1;
+			else
+				count <= count - 1'b1;
+		end
+	end
+end
+
+always @(posedge clk)
+begin
+	if (s_ready == 1'b1 && s_valid == 1'b1) begin
+		data <= s_data;
+	end else if (m_ready == 1'b1 && m_valid == 1'b1) begin
+		if (C_BIG_ENDIAN == 1) begin
+			data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH] <= data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0];
+		end else begin
+			data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0] <= data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH];
+		end
+	end
+end
+
+assign s_ready = ~valid || (m_ready && count == 'h0);
+assign m_valid = valid;
+assign m_data = C_BIG_ENDIAN == 1 ?
+	data[C_S_DATA_WIDTH-1:C_S_DATA_WIDTH-C_M_DATA_WIDTH] :
+	data[C_M_DATA_WIDTH-1:0];
+
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 56 generate if (C_S_DATA_WIDTH == C_M_DATA_WIDTH) begin
+- 62 end else if (C_S_DATA_WIDTH < C_M_DATA_WIDTH) begin
+- 64 localparam RATIO = C_M_DATA_WIDTH / C_S_DATA_WIDTH;
+- 66 reg [C_M_DATA_WIDTH-1:0] data;
+- 93 		if (C_BIG_ENDIAN == 1) begin
+- 94 			data <= {data[C_M_DATA_WIDTH-C_S_DATA_WIDTH-1:0], s_data};
+- 96 			data <= {s_data, data[C_M_DATA_WIDTH-1:C_S_DATA_WIDTH]};
+- 106 localparam RATIO = C_S_DATA_WIDTH / C_M_DATA_WIDTH;
+- 108 reg [C_S_DATA_WIDTH-1:0] data;
+- 137 		if (C_BIG_ENDIAN == 1) begin
+- 138 			data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH] <= data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0];
+- 140 			data[C_S_DATA_WIDTH-C_M_DATA_WIDTH-1:0] <= data[C_S_DATA_WIDTH-1:C_M_DATA_WIDTH];
+- 147 assign m_data = C_BIG_ENDIAN == 1 ?
+- 148 	data[C_S_DATA_WIDTH-1:C_S_DATA_WIDTH-C_M_DATA_WIDTH] :
+- 149 	data[C_M_DATA_WIDTH-1:0];
++ 56 generate if (SLAVE_DATA_WIDTH == MASTER_DATA_WIDTH) begin
++ 62 end else if (SLAVE_DATA_WIDTH < MASTER_DATA_WIDTH) begin
++ 64 localparam RATIO = MASTER_DATA_WIDTH / SLAVE_DATA_WIDTH;
++ 66 reg [MASTER_DATA_WIDTH-1:0] data;
++ 94 		if (BIG_ENDIAN == 1) begin
++ 94 			data <= {data[MASTER_DATA_WIDTH-SLAVE_DATA_WIDTH-1:0], s_data};
++ 96 			data <= {s_data, data[MASTER_DATA_WIDTH-1:SLAVE_DATA_WIDTH]};
++ 106 localparam RATIO = SLAVE_DATA_WIDTH / MASTER_DATA_WIDTH;
++ 108 reg [SLAVE_DATA_WIDTH-1:0] data;
++ 138 		if (BIG_ENDIAN == 1) begin
++ 138 			data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH] <= data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0];
++ 140 			data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0] <= data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH];
++ 149 assign m_data = BIG_ENDIAN == 1 ?
++ 149 	data[SLAVE_DATA_WIDTH-1:SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH] :
++ 149 	data[MASTER_DATA_WIDTH-1:0];
+
+Clone Blocks:

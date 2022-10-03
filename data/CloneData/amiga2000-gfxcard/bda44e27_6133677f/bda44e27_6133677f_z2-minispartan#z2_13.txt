@@ -1,0 +1,120 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@175:185@HdlIdDef
+parameter v_max        = 749;
+
+reg [23:0] zaddr;
+reg [23:0] zaddr2;
+reg [15:0] data;
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+
+assign zDIR     = !(dataout_enable);
+assign znSLAVEN = !(dataout);
+
+Diff Content:
++ 180 reg [15:0] regdata_in;
++ 180 reg [15:0] data_z3_hi16;
++ 180 reg [15:0] data_z3_low16;
++ 180 reg [15:0] data_z3_hi16_latched;
++ 180 reg [15:0] data_z3_low16_latched;
++ 180 reg [15:0] data_in_z3_low16;
++ 180 reg [15:0] zdata_in_sync;
++ 180 reg [15:0] z3_din_high_s2;
++ 180 reg [15:0] z3_din_low_s2;
++ 180 reg [31:0] z3addr;
++ 180 reg [31:0] z3addr2;
++ 180 reg [31:0] z3addr3;
++ 180 reg [31:0] z3_mapped_addr;
++ 180 reg [31:0] z3_read_addr;
++ 180 reg [15:0] z3_read_data;
++ 180 reg [15:0] z3_regread_hi;
++ 180 reg [15:0] z3_regread_lo;
++ 180 reg z2_snoop_reset_mode = 1;
++ 180 reg z_confout = 0;
++ 180 assign znCFGOUT = znCFGIN?1'b1:(~z_confout);
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@180:190
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+
+assign zDIR     = !(dataout_enable);
+assign znSLAVEN = !(dataout);
+assign zD  = (dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz;
+
+reg [23:0] last_addr = 0;
+reg [15:0] last_data = 0;
+
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@181:191
+reg dataout = 0;
+reg dataout_enable = 0;
+
+assign zDIR     = !(dataout_enable);
+assign znSLAVEN = !(dataout);
+assign zD  = (dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz;
+
+reg [23:0] last_addr = 0;
+reg [15:0] last_data = 0;
+
+reg host_reading = 0;
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@176:186
+
+reg [23:0] zaddr;
+reg [23:0] zaddr2;
+reg [15:0] data;
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+
+assign zDIR     = !(dataout_enable);
+assign znSLAVEN = !(dataout);
+assign zD  = (dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz;
+
+Clone Blocks 4:
+amiga2000-gfxcard/z2-minispartan/z2.v@174:184
+parameter v_sync_end   = v_rez+3+5;
+parameter v_max        = 749;
+
+reg [23:0] zaddr;
+reg [23:0] zaddr2;
+reg [15:0] data;
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+
+assign zDIR     = !(dataout_enable);
+
+Clone Blocks 5:
+amiga2000-gfxcard/z2-minispartan/z2.v@177:187
+reg [23:0] zaddr;
+reg [23:0] zaddr2;
+reg [15:0] data;
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+
+assign zDIR     = !(dataout_enable);
+assign znSLAVEN = !(dataout);
+assign zD  = (dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz;
+
+
+Clone Blocks 6:
+amiga2000-gfxcard/z2-minispartan/z2.v@179:189
+reg [15:0] data;
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+
+assign zDIR     = !(dataout_enable);
+assign znSLAVEN = !(dataout);
+assign zD  = (dataout) ? data : 16'bzzzz_zzzz_zzzz_zzzz;
+
+reg [23:0] last_addr = 0;
+reg [15:0] last_data = 0;
+

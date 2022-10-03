@@ -1,0 +1,92 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_check.v@202:258@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        
+        frame_ptr_reg <= 0;
+        
+        input_axis_tready_reg <= 0;
+
+        busy_reg <= 0;
+        error_bad_fcs_reg <= 0;
+
+        crc_state <= 32'hFFFFFFFF;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_axis_tready_reg <= input_axis_tready_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+        error_bad_fcs_reg <= error_bad_fcs_next;
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+        end else if (update_crc) begin
+            crc_state <= crc_next;
+        end
+
+        if (shift_reset) begin
+            input_axis_tvalid_d0 <= 0;
+            input_axis_tvalid_d1 <= 0;
+            input_axis_tvalid_d2 <= 0;
+            input_axis_tvalid_d3 <= 0;
+        end else if (shift_in) begin
+            input_axis_tdata_d0 <= input_axis_tdata;
+            input_axis_tdata_d1 <= input_axis_tdata_d0;
+            input_axis_tdata_d2 <= input_axis_tdata_d1;
+            input_axis_tdata_d3 <= input_axis_tdata_d2;
+
+            input_axis_tvalid_d0 <= input_axis_tvalid;
+            input_axis_tvalid_d1 <= input_axis_tvalid_d0;
+            input_axis_tvalid_d2 <= input_axis_tvalid_d1;
+            input_axis_tvalid_d3 <= input_axis_tvalid_d2;
+        end
+    end
+end
+
+// output datapath logic
+reg [7:0]  output_axis_tdata_reg = 0;
+reg        output_axis_tvalid_reg = 0;
+reg        output_axis_tlast_reg = 0;
+
+Diff Content:
+- 211         frame_ptr_reg <= 0;
+- 213         input_axis_tready_reg <= 0;
+- 215         busy_reg <= 0;
+- 216         error_bad_fcs_reg <= 0;
+- 222         frame_ptr_reg <= frame_ptr_next;
+- 237             input_axis_tvalid_d0 <= 0;
+- 238             input_axis_tvalid_d1 <= 0;
+- 239             input_axis_tvalid_d2 <= 0;
+- 240             input_axis_tvalid_d3 <= 0;
+- 242             input_axis_tdata_d0 <= input_axis_tdata;
+- 243             input_axis_tdata_d1 <= input_axis_tdata_d0;
+- 244             input_axis_tdata_d2 <= input_axis_tdata_d1;
+- 245             input_axis_tdata_d3 <= input_axis_tdata_d2;
++ 216         input_axis_tready_reg <= 1'b0;
++ 216         busy_reg <= 1'b0;
++ 216         error_bad_fcs_reg <= 1'b0;
++ 216         input_axis_tvalid_d0 <= 1'b0;
++ 216         input_axis_tvalid_d1 <= 1'b0;
++ 216         input_axis_tvalid_d2 <= 1'b0;
++ 216         input_axis_tvalid_d3 <= 1'b0;
++ 240             input_axis_tvalid_d0 <= 1'b0;
++ 240             input_axis_tvalid_d1 <= 1'b0;
++ 240             input_axis_tvalid_d2 <= 1'b0;
++ 240             input_axis_tvalid_d3 <= 1'b0;
++ 252     if (shift_in) begin
++ 252         input_axis_tdata_d0 <= input_axis_tdata;
++ 252         input_axis_tdata_d1 <= input_axis_tdata_d0;
++ 252         input_axis_tdata_d2 <= input_axis_tdata_d1;
++ 252         input_axis_tdata_d3 <= input_axis_tdata_d2;
++ 252     end
+
+Clone Blocks:

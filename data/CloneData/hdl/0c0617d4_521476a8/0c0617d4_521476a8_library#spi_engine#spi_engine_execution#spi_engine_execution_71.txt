@@ -1,0 +1,52 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@225:243@HdlStmProcess
+    clk_div_last <= 1'b1;
+  else
+    clk_div_last <= 1'b0;
+end
+
+always @(posedge clk) begin
+  if (clk_div_last == 1'b1 || idle == 1'b1 || wait_for_io == 1'b1) begin
+    clk_div_counter <= clk_div;
+    trigger <= 1'b1;
+  end else begin
+    clk_div_counter <= clk_div_counter - 1'b1;
+    trigger <= 1'b0;
+  end
+end
+
+assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+
+Diff Content:
+- 230 always @(posedge clk) begin
+- 231   if (clk_div_last == 1'b1 || idle == 1'b1 || wait_for_io == 1'b1) begin
+- 232     clk_div_counter <= clk_div;
+- 233     trigger <= 1'b1;
+- 234   end else begin
+- 235     clk_div_counter <= clk_div_counter - 1'b1;
+- 236     trigger <= 1'b0;
+- 238 end
++ 236   always @(posedge clk) begin
++ 236     if ((clk_div_last == 1'b0 && idle == 1'b0 && wait_for_io == 1'b0 &&
++ 236       clk_div_counter == 'h01) || clk_div == 'h00)
++ 236       clk_div_last <= 1'b1;
++ 236     else
++ 236       clk_div_last <= 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@239:249
+
+assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (idle == 1'b1) begin
+    counter <= 'h00;
+  end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
+

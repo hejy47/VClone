@@ -1,0 +1,27 @@
+Source Block: hdl/library/common/ad_gt_channel_1.v@236:251@HdlStmAssign
+  assign rx_valid_k_s = rx_charisk & (~rx_disperr) & (~rx_notintable);
+
+  // rate 
+
+  assign rx_rate_p_s = 0;
+  assign rx_rate_s =  (rx_rate_p_s == 3'd0) ? RX_OUT_DIV :
+                      (rx_rate_p_s == 3'd1) ? 8'h01 :
+                      (rx_rate_p_s == 3'd2) ? 8'h02 :
+                      (rx_rate_p_s == 3'd3) ? 8'h04 :
+                      (rx_rate_p_s == 3'd4) ? 8'h08 :
+                      (rx_rate_p_s == 3'd5) ? 8'h10 : 8'h00;
+
+  // pll locked
+
+  assign rx_pll_locked = (rx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+  assign tx_pll_locked = (tx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+
+Diff Content:
+- 241   assign rx_rate_s =  (rx_rate_p_s == 3'd0) ? RX_OUT_DIV :
+- 242                       (rx_rate_p_s == 3'd1) ? 8'h01 :
+- 243                       (rx_rate_p_s == 3'd2) ? 8'h02 :
+- 244                       (rx_rate_p_s == 3'd3) ? 8'h04 :
+- 245                       (rx_rate_p_s == 3'd4) ? 8'h08 :
+- 246                       (rx_rate_p_s == 3'd5) ? 8'h10 : 8'h00;
+
+Clone Blocks:

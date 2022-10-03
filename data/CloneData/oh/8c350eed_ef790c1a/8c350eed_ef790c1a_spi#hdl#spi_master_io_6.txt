@@ -1,0 +1,51 @@
+Source Block: oh/spi/hdl/spi_master_io.v@102:112@HdlStmAssign
+       baud_counter[7:0] <= 'b0;
+     else
+       baud_counter[7:0] <= baud_counter[7:0] + 1'b1;
+
+   assign baud_match  = (baud_counter[7:0]==clkdiv_reg[7:0]);
+   assign phase_match = (baud_counter[7:0]==(clkdiv_reg[7:0]>>1));
+   
+   //#################################
+   //# CHIP SELECT
+   //#################################
+   assign ss = (spi_state==`SPI_IDLE);
+
+Diff Content:
+- 107    assign phase_match = (baud_counter[7:0]==(clkdiv_reg[7:0]>>1));
++ 107    assign baud_match  = (baud_counter[7:0]==((1 << clkdiv_reg[7:0]) - 1'b1));
++ 107    assign phase_match = (baud_counter[7:0]==((1 << (clkdiv_reg[7:0]) >> 1) - 1'b1));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_master_io.v@101:111
+     if(baud_match)
+       baud_counter[7:0] <= 'b0;
+     else
+       baud_counter[7:0] <= baud_counter[7:0] + 1'b1;
+
+   assign baud_match  = (baud_counter[7:0]==clkdiv_reg[7:0]);
+   assign phase_match = (baud_counter[7:0]==(clkdiv_reg[7:0]>>1));
+   
+   //#################################
+   //# CHIP SELECT
+   //#################################
+
+Clone Blocks 2:
+oh/spi/hdl/spi_master_io.v@95:109
+   
+   //#################################
+   //# BAUD COUNTER
+   //#################################
+
+   always @ (posedge clk)
+     if(baud_match)
+       baud_counter[7:0] <= 'b0;
+     else
+       baud_counter[7:0] <= baud_counter[7:0] + 1'b1;
+
+   assign baud_match  = (baud_counter[7:0]==clkdiv_reg[7:0]);
+   assign phase_match = (baud_counter[7:0]==(clkdiv_reg[7:0]>>1));
+   
+   //#################################
+

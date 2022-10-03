@@ -1,0 +1,145 @@
+Source Block: picorv32/picosoc/spimemio.v@94:231@HdlStmProcess
+		.flash_io3_di (flash_io3_di)
+	);
+
+	reg [3:0] state;
+
+	always @(posedge clk) begin
+		xfer_resetn <= 1;
+		din_valid <= 0;
+		din_data <= 8'h 00;
+
+		if (!resetn) begin
+			state <= 0;
+			xfer_resetn <= 0;
+			rd_valid <= 0;
+			din_cont <= 0;
+			din_qspi <= 0;
+			din_ddr <= 0;
+			din_rd <= 0;
+		end else begin
+			if (dout_valid && buffer_wen[0]) buffer[ 7: 0] <= dout_data;
+			if (dout_valid && buffer_wen[1]) buffer[15: 8] <= dout_data;
+			if (dout_valid && buffer_wen[2]) buffer[23:16] <= dout_data;
+			if (dout_valid && buffer_wen[3]) begin
+				rdata <= {dout_data, buffer};
+				rd_addr <= rd_inc ? rd_addr + 4 : addr;
+				rd_valid <= 1;
+				rd_wait <= rd_inc;
+				rd_inc <= 1;
+			end
+
+			if (dout_valid && buffer_wen) begin
+				buffer_wen <= 0;
+			end
+
+			if (valid)
+				rd_wait <= 0;
+
+			case (state)
+				0: begin
+					din_valid <= 1;
+					din_data <= 8'h ff;
+					if (din_ready)
+						state <= 1;
+				end
+				1: begin
+					if (dout_valid) begin
+						xfer_resetn <= 0;
+						state <= 2;
+					end
+				end
+				2: begin
+					din_valid <= 1;
+					din_data <= 8'h ab;
+					if (din_ready)
+						state <= 3;
+				end
+				3: begin
+					if (dout_valid) begin
+						xfer_resetn <= 0;
+						state <= 4;
+					end
+				end
+				4: begin
+					rd_inc <= 0;
+					din_valid <= 1;
+					din_data <= 8'h 03;
+					if (din_ready)
+						state <= 5;
+				end
+				5: begin
+					if (valid && !ready) begin
+						din_valid <= 1;
+						din_data <= addr[23:16];
+						if (din_ready)
+							state <= 6;
+					end
+				end
+				6: begin
+					din_valid <= 1;
+					din_data <= addr[15:8];
+					if (din_ready)
+						state <= 7;
+				end
+				7: begin
+					din_valid <= 1;
+					din_data <= addr[7:0];
+					if (din_ready)
+						state <= 8;
+				end
+				8: begin
+					din_valid <= 1;
+					din_data <= 8'h 00;
+					if (din_ready) begin
+						buffer_wen <= 4'b 0001;
+						state <= 9;
+					end
+				end
+				9: begin
+					din_valid <= 1;
+					din_data <= 8'h 00;
+					if (din_ready) begin
+						buffer_wen <= 4'b 0010;
+						state <= 10;
+					end
+				end
+				10: begin
+					din_valid <= 1;
+					din_data <= 8'h 00;
+					if (din_ready) begin
+						buffer_wen <= 4'b 0100;
+						state <= 11;
+					end
+				end
+				11: begin
+					if (!rd_wait || valid) begin
+						din_valid <= 1;
+						din_data <= 8'h 00;
+						if (din_ready) begin
+							buffer_wen <= 4'b 1000;
+							state <= 8;
+						end
+					end
+				end
+			endcase
+
+			if (jump) begin
+				rd_inc <= 0;
+				rd_valid <= 0;
+				xfer_resetn <= 0;
+				state <= 4;
+			end
+		end
+	end
+endmodule
+
+module spimemio_xfer (
+	input clk, resetn,
+
+
+Diff Content:
++ 107 			buffer_wen <= 0;
++ 222 				buffer_wen <= 0;
+
+Clone Blocks:

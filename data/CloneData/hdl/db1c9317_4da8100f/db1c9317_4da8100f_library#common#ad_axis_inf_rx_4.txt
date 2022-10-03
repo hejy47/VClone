@@ -1,0 +1,103 @@
+Source Block: hdl/library/common/ad_axis_inf_rx.v@151:212@HdlStmProcess
+
+  // read interface
+
+  assign inf_ready_s = inf_ready | ~inf_valid;
+
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      rcnt <= 'd0;
+      inf_valid <= 'd0;
+      inf_last <= 'b0;
+      inf_data <= 'd0;
+    end else if (inf_ready_s == 1'b1) begin
+      if (rcnt == wcnt) begin
+        rcnt <= rcnt;
+        inf_valid <= 1'd0;
+        inf_last <= 1'b0;
+        inf_data <= 'd0;
+      end else begin
+        rcnt <= rcnt + 1'b1;
+        inf_valid <= 1'b1;
+        case (rcnt)
+          3'd0: begin
+            inf_last <= wlast_0;
+            inf_data <= wdata_0;
+          end
+          3'd1: begin
+            inf_last <= wlast_1;
+            inf_data <= wdata_1;
+          end
+          3'd2: begin
+            inf_last <= wlast_2;
+            inf_data <= wdata_2;
+          end
+          3'd3: begin
+            inf_last <= wlast_3;
+            inf_data <= wdata_3;
+          end
+          3'd4: begin
+            inf_last <= wlast_4;
+            inf_data <= wdata_4;
+          end
+          3'd5: begin
+            inf_last <= wlast_5;
+            inf_data <= wdata_5;
+          end
+          3'd6: begin
+            inf_last <= wlast_6;
+            inf_data <= wdata_6;
+          end
+          default: begin
+            inf_last <= wlast_7;
+            inf_data <= wdata_7;
+          end
+        endcase
+      end
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 171         case (rcnt)
+- 172           3'd0: begin
+- 173             inf_last <= wlast_0;
+- 174             inf_data <= wdata_0;
+- 175           end
+- 176           3'd1: begin
+- 177             inf_last <= wlast_1;
+- 178             inf_data <= wdata_1;
+- 179           end
+- 180           3'd2: begin
+- 181             inf_last <= wlast_2;
+- 182             inf_data <= wdata_2;
+- 183           end
+- 184           3'd3: begin
+- 185             inf_last <= wlast_3;
+- 186             inf_data <= wdata_3;
+- 187           end
+- 188           3'd4: begin
+- 189             inf_last <= wlast_4;
+- 190             inf_data <= wdata_4;
+- 191           end
+- 192           3'd5: begin
+- 193             inf_last <= wlast_5;
+- 194             inf_data <= wdata_5;
+- 195           end
+- 196           3'd6: begin
+- 197             inf_last <= wlast_6;
+- 198             inf_data <= wdata_6;
+- 199           end
+- 200           default: begin
+- 201             inf_last <= wlast_7;
+- 202             inf_data <= wdata_7;
+- 203           end
+- 204         endcase
++ 204         inf_last <= inf_last_s;
++ 204         inf_data <= inf_data_s;
+
+Clone Blocks:

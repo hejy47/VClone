@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@236:246@HdlStmAssign
+      end
+    end
+  end
+end
+
+assign tx_next_mf_ready = sync_request_received & last_ilas_mframe & ~cfg_continuous_ilas;
+assign tx_ready_nx = tx_ready | (tx_next_mf_ready & lmfc_edge_d2);
+
+always @(posedge clk) begin
+  if (ilas_reset == 1'b1) begin
+    mframe_counter <= 'h00;
+
+Diff Content:
+- 241 assign tx_next_mf_ready = sync_request_received & last_ilas_mframe & ~cfg_continuous_ilas;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@237:247
+    end
+  end
+end
+
+assign tx_next_mf_ready = sync_request_received & last_ilas_mframe & ~cfg_continuous_ilas;
+assign tx_ready_nx = tx_ready | (tx_next_mf_ready & lmfc_edge_d2);
+
+always @(posedge clk) begin
+  if (ilas_reset == 1'b1) begin
+    mframe_counter <= 'h00;
+  end else if (lmfc_edge_d1 == 1'b1) begin
+

@@ -1,0 +1,238 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_check_64.v@152:304@HdlStmProcess
+    .data_in(input_axis_tdata[63:0]),
+    .crc_state(crc_state),
+    .crc_next(crc_next7)
+);
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+    shift_in = 0;
+    shift_reset = 0;
+
+    last_cycle_tkeep_next = last_cycle_tkeep_reg;
+    last_cycle_tuser_next = last_cycle_tuser_reg;
+
+    input_axis_tready_next = 0;
+
+    output_axis_tdata_int = 0;
+    output_axis_tkeep_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    error_bad_fcs_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            input_axis_tready_next = output_axis_tready_int_early;
+            reset_crc = 1;
+
+            output_axis_tdata_int = input_axis_tdata_d0;
+            output_axis_tkeep_int = input_axis_tkeep_d0;
+            output_axis_tvalid_int = input_axis_tvalid_d0 & input_axis_tvalid;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                shift_in = 1;
+                reset_crc = 0;
+                update_crc = 1;
+                if (input_axis_tlast) begin
+                    if (input_axis_tkeep[7:4] == 0) begin
+                        shift_reset = 1;
+                        reset_crc = 1;
+                        output_axis_tlast_int = 1;
+                        output_axis_tuser_int = input_axis_tuser;
+                        output_axis_tkeep_int = {input_axis_tkeep[3:0], 4'b1111};
+                        if ((input_axis_tkeep[3:0] == 4'b0001 & crc_valid0) ||
+                            (input_axis_tkeep[3:0] == 4'b0011 & crc_valid1) ||
+                            (input_axis_tkeep[3:0] == 4'b0111 & crc_valid2) ||
+                            (input_axis_tkeep[3:0] == 4'b1111 & crc_valid3)) begin
+                            // CRC valid
+                        end else begin
+                            output_axis_tuser_int = 1;
+                            error_bad_fcs_next = 1;
+                        end
+                        input_axis_tready_next = output_axis_tready_int_early;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        last_cycle_tkeep_next = {4'b0000, input_axis_tkeep[7:4]};
+                        last_cycle_tuser_next = input_axis_tuser;
+                        input_axis_tready_next = 0;
+                        state_next = STATE_LAST;
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // transfer payload
+            input_axis_tready_next = output_axis_tready_int_early;
+
+            output_axis_tdata_int = input_axis_tdata_d0;
+            output_axis_tkeep_int = input_axis_tkeep_d0;
+            output_axis_tvalid_int = input_axis_tvalid_d0 & input_axis_tvalid;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                shift_in = 1;
+                update_crc = 1;
+                if (input_axis_tlast) begin
+                    if (input_axis_tkeep[7:4] == 0) begin
+                        shift_reset = 1;
+                        reset_crc = 1;
+                        output_axis_tlast_int = 1;
+                        output_axis_tuser_int = input_axis_tuser;
+                        output_axis_tkeep_int = {input_axis_tkeep[3:0], 4'b1111};
+                        if ((input_axis_tkeep[3:0] == 4'b0001 & crc_valid0) ||
+                            (input_axis_tkeep[3:0] == 4'b0011 & crc_valid1) ||
+                            (input_axis_tkeep[3:0] == 4'b0111 & crc_valid2) ||
+                            (input_axis_tkeep[3:0] == 4'b1111 & crc_valid3)) begin
+                            // CRC valid
+                        end else begin
+                            output_axis_tuser_int = 1;
+                            error_bad_fcs_next = 1;
+                        end
+                        input_axis_tready_next = output_axis_tready_int_early;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        last_cycle_tkeep_next = {4'b0000, input_axis_tkeep[7:4]};
+                        last_cycle_tuser_next = input_axis_tuser;
+                        input_axis_tready_next = 0;
+                        state_next = STATE_LAST;
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_LAST: begin
+            // last cycle
+            input_axis_tready_next = 0;
+
+            output_axis_tdata_int = input_axis_tdata_d0;
+            output_axis_tkeep_int = last_cycle_tkeep_reg;
+            output_axis_tvalid_int = input_axis_tvalid_d0;
+            output_axis_tlast_int = 1;
+            output_axis_tuser_int = last_cycle_tuser_reg;
+
+            if ((input_axis_tkeep_d0[7:4] == 4'b0001 & crc_valid0) ||
+                (input_axis_tkeep_d0[7:4] == 4'b0011 & crc_valid1) ||
+                (input_axis_tkeep_d0[7:4] == 4'b0111 & crc_valid2) ||
+                (input_axis_tkeep_d0[7:4] == 4'b1111 & crc_valid3)) begin
+                // CRC valid
+            end else begin
+                output_axis_tuser_int = 1;
+                error_bad_fcs_next = 1;
+            end
+
+            if (output_axis_tready_int) begin
+                shift_reset = 1;
+                reset_crc = 1;
+                input_axis_tready_next = output_axis_tready_int_early;
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+
+Diff Content:
+- 160     reset_crc = 0;
+- 161     update_crc = 0;
+- 162     shift_in = 0;
+- 163     shift_reset = 0;
+- 168     input_axis_tready_next = 0;
+- 170     output_axis_tdata_int = 0;
+- 171     output_axis_tkeep_int = 0;
+- 172     output_axis_tvalid_int = 0;
+- 173     output_axis_tlast_int = 0;
+- 174     output_axis_tuser_int = 0;
+- 176     error_bad_fcs_next = 0;
+- 182             reset_crc = 1;
+- 187             output_axis_tlast_int = 0;
+- 188             output_axis_tuser_int = 0;
+- 191                 shift_in = 1;
+- 192                 reset_crc = 0;
+- 193                 update_crc = 1;
+- 196                         shift_reset = 1;
+- 197                         reset_crc = 1;
+- 198                         output_axis_tlast_int = 1;
+- 207                             output_axis_tuser_int = 1;
+- 208                             error_bad_fcs_next = 1;
+- 215                         input_axis_tready_next = 0;
+- 232             output_axis_tlast_int = 0;
+- 233             output_axis_tuser_int = 0;
+- 236                 shift_in = 1;
+- 237                 update_crc = 1;
+- 240                         shift_reset = 1;
+- 241                         reset_crc = 1;
+- 242                         output_axis_tlast_int = 1;
+- 251                             output_axis_tuser_int = 1;
+- 252                             error_bad_fcs_next = 1;
+- 259                         input_axis_tready_next = 0;
+- 271             input_axis_tready_next = 0;
+- 276             output_axis_tlast_int = 1;
+- 285                 output_axis_tuser_int = 1;
+- 286                 error_bad_fcs_next = 1;
+- 289             if (output_axis_tready_int) begin
+- 290                 shift_reset = 1;
+- 291                 reset_crc = 1;
++ 163     reset_crc = 1'b0;
++ 163     update_crc = 1'b0;
++ 163     shift_in = 1'b0;
++ 163     shift_reset = 1'b0;
++ 168     input_axis_tready_next = 1'b0;
++ 174     output_axis_tdata_int = 64'd0;
++ 174     output_axis_tkeep_int = 8'd0;
++ 174     output_axis_tvalid_int = 1'b0;
++ 174     output_axis_tlast_int = 1'b0;
++ 174     output_axis_tuser_int = 1'b0;
++ 176     error_bad_fcs_next = 1'b0;
++ 182             reset_crc = 1'b1;
++ 188             output_axis_tlast_int = 1'b0;
++ 188             output_axis_tuser_int = 1'b0;
++ 193                 shift_in = 1'b1;
++ 193                 reset_crc = 1'b0;
++ 193                 update_crc = 1'b1;
++ 198                         shift_reset = 1'b1;
++ 198                         reset_crc = 1'b1;
++ 198                         output_axis_tlast_int = 1'b1;
++ 208                             output_axis_tuser_int = 1'b1;
++ 208                             error_bad_fcs_next = 1'b1;
++ 215                         input_axis_tready_next = 1'b0;
++ 233             output_axis_tlast_int = 1'b0;
++ 233             output_axis_tuser_int = 1'b0;
++ 237                 shift_in = 1'b1;
++ 237                 update_crc = 1'b1;
++ 242                         shift_reset = 1'b1;
++ 242                         reset_crc = 1'b1;
++ 242                         output_axis_tlast_int = 1'b1;
++ 252                             output_axis_tuser_int = 1'b1;
++ 252                             error_bad_fcs_next = 1'b1;
++ 259                         input_axis_tready_next = 1'b0;
++ 271             input_axis_tready_next = 1'b0;
++ 276             output_axis_tlast_int = 1'b1;
++ 286                 output_axis_tuser_int = 1'b1;
++ 286                 error_bad_fcs_next = 1'b1;
++ 291             if (output_axis_tready_int_reg) begin
++ 291                 shift_reset = 1'b1;
++ 291                 reset_crc = 1'b1;
+
+Clone Blocks:

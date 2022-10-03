@@ -1,0 +1,28 @@
+Source Block: hdl/library/prcfg/bist/prcfg_adc.v@161:176@HdlStmProcess
+    .adc_data_pn(adc_pn_data),
+    .adc_pn_oos(adc_pn_oos_s),
+    .adc_pn_err(adc_pn_err_s));
+
+  // rx path are passed through on test mode
+  always @(posedge clk) begin
+    dst_adc_dwr    <= src_adc_dwr;
+    dst_adc_dsync  <= src_adc_dsync;
+    dst_adc_ddata  <= src_adc_ddata;
+    src_adc_dovf   <= dst_adc_dovf;
+  end
+
+  // setup status bits for gpio_out
+  always @(posedge clk) begin
+    if((mode == 3'd2) && (channel_sel == CHANNEL_ID)) begin
+      status <= {22'h0, adc_pn_err_s, adc_pn_oos_s, RP_ID};
+
+Diff Content:
+- 167     dst_adc_dwr    <= src_adc_dwr;
+- 168     dst_adc_dsync  <= src_adc_dsync;
+- 169     dst_adc_ddata  <= src_adc_ddata;
+- 170     src_adc_dovf   <= dst_adc_dovf;
++ 170     dst_adc_enable <= src_adc_enable;
++ 170     dst_adc_data   <= src_adc_data;
++ 170     dst_adc_valid  <= src_adc_valid;
+
+Clone Blocks:

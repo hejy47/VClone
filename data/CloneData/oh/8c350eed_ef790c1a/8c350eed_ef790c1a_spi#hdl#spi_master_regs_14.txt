@@ -1,0 +1,23 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@192:205@HdlStmAssign
+   always @ (posedge clk)
+     for(i=0;i<64;i=i+1)	   
+       if(tx_write & write_mask[i])	       
+ 	 tx_reg[dstaddr_in[4:3]][i] <= reg_wdata[i]; 
+   
+   assign tx_vector[255:0]= {tx_reg[3],
+                             tx_reg[2],
+			     tx_reg[1],
+			     tx_reg[0]};
+   //only taking 
+   assign tx_data[PW-1:0] = tx_vector[PW-1:0];
+   
+endmodule // spi_master_regs
+
+
+Diff Content:
+- 197    assign tx_vector[255:0]= {tx_reg[3],
+- 198                              tx_reg[2],
+- 199 			     tx_reg[1],
+- 200 			     tx_reg[0]};
+
+Clone Blocks:

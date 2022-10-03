@@ -1,0 +1,27 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@137:149@HdlStmAssign
+		      txwr_access;
+   
+   //#####################################################################
+   //# Pipeline stage (arbiter+mux takes time..)
+   //#####################################################################
+   assign access_in = (txwr_grant & ~txwr_wait) |
+		      (txrd_grant & ~txrd_wait) |
+		      (txrr_grant & ~txrr_wait);
+
+   
+   //access
+    always @ (posedge clk)
+      if (!nreset)
+
+Diff Content:
++ 144    packet2emesh #(.AW(AW))
++ 144    p2e (.write_in	(),
++ 144 	.datamode_in	(),
++ 144 	.ctrlmode_in	(),
++ 144 	.dstaddr_in	(dstaddr_mux[31:0]),
++ 144 	.srcaddr_in	(),
++ 144 	.data_in	(),
++ 144 	.packet_in	(etx_mux[PW-1:0]));
++ 144    assign cfg_match = (dstaddr_mux[31:20]==ID);
+
+Clone Blocks:

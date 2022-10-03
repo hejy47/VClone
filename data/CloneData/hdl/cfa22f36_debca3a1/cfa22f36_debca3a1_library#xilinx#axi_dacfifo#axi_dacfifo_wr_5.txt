@@ -1,0 +1,70 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/axi_dacfifo_wr.v@294:322@HdlStmProcess
+    end
+  end
+
+  // The memory module request data until reaches the high threshold.
+
+  always @(posedge dma_clk) begin
+    if (dma_rst_s == 1'b1) begin
+      dma_mem_addr_diff <= 'b0;
+      dma_mem_raddr_m1 <= 'b0;
+      dma_mem_raddr_m2 <= 'b0;
+      dma_mem_raddr <= 'b0;
+      dma_ready_out <= 1'b0;
+    end else begin
+      dma_mem_raddr_m1 <= axi_mem_raddr_g;
+      dma_mem_raddr_m2 <= dma_mem_raddr_m1;
+      dma_mem_raddr <= g2b(dma_mem_raddr_m2);
+      dma_mem_addr_diff <= dma_mem_addr_diff_s[DMA_MEM_ADDRESS_WIDTH-1:0];
+      if (dma_mem_addr_diff >= DMA_BUF_THRESHOLD_HI) begin
+        dma_ready_out <= 1'b0;
+      end else begin
+        dma_ready_out <= 1'b1;
+      end
+    end
+  end
+
+  // Read address generation for the asymmetric memory
+
+  // CDC for the memory write address, xfer_req and xfer_last
+
+
+Diff Content:
+- 300     if (dma_rst_s == 1'b1) begin
+- 305       dma_ready_out <= 1'b0;
++ 300     if ((dma_rst_s == 1'b1) || (dma_xfer_init == 1'b1)) begin
++ 305       dma_ready_out <= 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/util_dacfifo_bypass.v@179:207
+    end
+  end
+
+  // The memory module request data until reaches the high threshold.
+
+  always @(posedge dma_clk) begin
+    if (dma_rst == 1'b1) begin
+      dma_mem_addr_diff <= 'b0;
+      dma_mem_raddr_m1 <= 'b0;
+      dma_mem_raddr_m2 <= 'b0;
+      dma_mem_raddr <= 'b0;
+      dma_ready_out <= 1'b0;
+    end else begin
+      dma_mem_raddr_m1 <= dac_mem_raddr_g;
+      dma_mem_raddr_m2 <= dma_mem_raddr_m1;
+      dma_mem_raddr <= g2b(dma_mem_raddr_m2);
+      dma_mem_addr_diff <= dma_address_diff_s[DMA_ADDRESS_WIDTH-1:0];
+      if (dma_mem_addr_diff >= DMA_BUF_THRESHOLD_HI) begin
+        dma_ready_out <= 1'b0;
+      end else begin
+        dma_ready_out <= 1'b1;
+      end
+    end
+  end
+
+  // relative address offset on dma domain
+  assign dma_address_diff_s = {1'b1, dma_mem_waddr} - dma_mem_raddr_s;
+  assign dma_mem_raddr_s = (DMA_DATA_WIDTH>DAC_DATA_WIDTH) ?
+                                ((MEM_RATIO == 1) ? (dma_mem_raddr) :
+

@@ -1,0 +1,82 @@
+Source Block: hdl/library/common/up_gt_channel.v@794:828@HdlStmProcess
+    end
+  end
+
+  // tx sysref & sync
+
+  always @(posedge tx_clk) begin
+    if (tx_rst_m == 1'b1) begin
+      tx_sysref_sel_m1 <= 'd0;
+      tx_sysref_sel <= 'd0;
+      tx_up_sysref_m1 <= 'd0;
+      tx_up_sysref <= 'd0;
+      tx_ip_sysref <= 'd0;
+      tx_up_sync_m1 <= 'd0;
+      tx_up_sync <= 'd0;
+      tx_ip_sync <= 'd0;
+    end else begin
+      tx_sysref_sel_m1 <= up_tx_sysref_sel;
+      tx_sysref_sel <= tx_sysref_sel_m1;
+      tx_up_sysref_m1 <= up_tx_sysref;
+      tx_up_sysref <= tx_up_sysref_m1;
+      if (tx_sysref_sel_m1 == 1'b1) begin
+        tx_ip_sysref <= tx_sysref;
+      end else begin
+        tx_ip_sysref <= tx_up_sysref;
+      end
+      tx_up_sync_m1 <= up_tx_sync;
+      tx_up_sync <= tx_up_sync_m1;
+      tx_ip_sync <= tx_up_sync & tx_sync;
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 799   always @(posedge tx_clk) begin
++ 799   always @(posedge tx_clk or posedge tx_rst_m) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_xcvr.v@292:328
+    end
+  end
+
+  // tx sysref & sync
+
+  always @(posedge tx_clk or posedge tx_rst) begin
+    if (tx_rst == 1'b1) begin
+      tx_rstn <= 'd0;
+      tx_sysref_sel_m1 <= 'd0;
+      tx_sysref_sel <= 'd0;
+      tx_up_sysref_m1 <= 'd0;
+      tx_up_sysref <= 'd0;
+      tx_sysref <= 'd0;
+      tx_up_sync_m1 <= 'd0;
+      tx_up_sync <= 'd0;
+      tx_ip_sync <= 'd0;
+    end else begin
+      tx_rstn <= 1'd1;
+      tx_sysref_sel_m1 <= up_tx_sysref_sel;
+      tx_sysref_sel <= tx_sysref_sel_m1;
+      tx_up_sysref_m1 <= up_tx_sysref;
+      tx_up_sysref <= tx_up_sysref_m1;
+      if (tx_sysref_sel == 1'b1) begin
+        tx_sysref <= tx_ext_sysref;
+      end else begin
+        tx_sysref <= tx_up_sysref;
+      end
+      tx_up_sync_m1 <= up_tx_sync;
+      tx_up_sync <= tx_up_sync_m1;
+      tx_ip_sync <= tx_up_sync & tx_sync;
+    end
+  end
+
+  // status
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+

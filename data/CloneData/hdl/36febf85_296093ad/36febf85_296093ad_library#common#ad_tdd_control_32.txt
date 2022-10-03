@@ -1,0 +1,134 @@
+Source Block: hdl/library/common/ad_tdd_control.v@547:573@HdlStmProcess
+
+  // output logic
+
+  assign tdd_txrx_only_en_s = tdd_tx_only ^ tdd_rx_only;
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_rx_vco_en <= 1'b0;
+    end
+    else if((tdd_cstate == OFF) || (counter_at_tdd_vco_rx_off_1 == 1'b1) || (counter_at_tdd_vco_rx_off_2 == 1'b1)) begin
+      tdd_rx_vco_en <= 1'b0;
+    end
+    else if((tdd_cstate == ON) && ((counter_at_tdd_vco_rx_on_1 == 1'b1) || (counter_at_tdd_vco_rx_on_2 == 1'b1))) begin
+      tdd_rx_vco_en <= 1'b1;
+    end
+    else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_rx_vco_en <= tdd_rx_only;
+    end
+    else begin
+      tdd_rx_vco_en <= tdd_rx_vco_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_tx_vco_en <= 1'b0;
+    end
+
+Diff Content:
+- 555     end
+- 556     else if((tdd_cstate == OFF) || (counter_at_tdd_vco_rx_off_1 == 1'b1) || (counter_at_tdd_vco_rx_off_2 == 1'b1)) begin
+- 558     end
+- 559     else if((tdd_cstate == ON) && ((counter_at_tdd_vco_rx_on_1 == 1'b1) || (counter_at_tdd_vco_rx_on_2 == 1'b1))) begin
+- 561     end
+- 562     else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+- 564     end
+- 565     else begin
++ 556     end else if((tdd_cstate == OFF) || (counter_at_tdd_vco_rx_off_1 == 1'b1) || (counter_at_tdd_vco_rx_off_2 == 1'b1)) begin
++ 559     end else if((tdd_cstate == ON) && ((counter_at_tdd_vco_rx_on_1 == 1'b1) || (counter_at_tdd_vco_rx_on_2 == 1'b1))) begin
++ 562     end else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
++ 565     end else begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_tdd_control.v@565:591
+    else begin
+      tdd_rx_vco_en <= tdd_rx_vco_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_tx_vco_en <= 1'b0;
+    end
+    else if((tdd_cstate == OFF) || (counter_at_tdd_vco_tx_off_1 == 1'b1) || (counter_at_tdd_vco_tx_off_2 == 1'b1)) begin
+      tdd_tx_vco_en <= 1'b0;
+    end
+    else if((tdd_cstate == ON) && ((counter_at_tdd_vco_tx_on_1 == 1'b1) || (counter_at_tdd_vco_tx_on_2 == 1'b1))) begin
+      tdd_tx_vco_en <= 1'b1;
+    end
+    else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_tx_vco_en <= tdd_tx_only;
+    end
+    else begin
+      tdd_tx_vco_en <= tdd_tx_vco_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_rx_rf_en <= 1'b0;
+    end
+
+Clone Blocks 2:
+hdl/library/common/ad_tdd_control.v@583:609
+    else begin
+      tdd_tx_vco_en <= tdd_tx_vco_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_rx_rf_en <= 1'b0;
+    end
+    else if((tdd_cstate == OFF) || (counter_at_tdd_rx_off_1 == 1'b1) || (counter_at_tdd_rx_off_2 == 1'b1)) begin
+      tdd_rx_rf_en <= 1'b0;
+    end
+    else if((tdd_cstate == ON) && ((counter_at_tdd_rx_on_1 == 1'b1) || (counter_at_tdd_rx_on_2 == 1'b1))) begin
+      tdd_rx_rf_en <= 1'b1;
+    end
+    else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_rx_rf_en <= tdd_rx_only;
+    end
+    else begin
+      tdd_rx_rf_en <= tdd_rx_rf_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_tx_rf_en <= 1'b0;
+    end
+
+Clone Blocks 3:
+hdl/library/common/ad_tdd_control.v@601:627
+    else begin
+      tdd_rx_rf_en <= tdd_rx_rf_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_tx_rf_en <= 1'b0;
+    end
+    else if((tdd_cstate == OFF) || (counter_at_tdd_tx_off_1 == 1'b1) || (counter_at_tdd_tx_off_2 == 1'b1)) begin
+      tdd_tx_rf_en <= 1'b0;
+    end
+    else if((tdd_cstate == ON) && ((counter_at_tdd_tx_on_1 == 1'b1) || (counter_at_tdd_tx_on_2 == 1'b1))) begin
+      tdd_tx_rf_en <= 1'b1;
+    end
+    else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_tx_rf_en <= tdd_tx_only;
+    end
+    else begin
+      tdd_tx_rf_en <= tdd_tx_rf_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_tx_dp_en <= 1'b0;
+    end
+

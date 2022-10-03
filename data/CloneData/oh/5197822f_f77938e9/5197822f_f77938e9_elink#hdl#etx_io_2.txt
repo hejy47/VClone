@@ -1,0 +1,38 @@
+Source Block: oh/elink/hdl/etx_io.v@93:108@HdlStmProcess
+			.fastclk	(tx_lclk_io),
+			.slowclk	(tx_lclk_div4)
+			);
+      
+   //Sample on aligned edge
+   always @ (posedge tx_lclk_io)
+     if(firstedge)
+       begin
+	  tx_access_reg    <= tx_access & ~tx_wait;
+	  tx_burst_reg     <= tx_burst  & ~tx_wait;   
+       end
+
+   //Pushback on wait
+   always @ (posedge tx_lclk_io)
+     if(firstedge & ~tx_wait)
+       tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];	 
+
+Diff Content:
+- 102 	  tx_burst_reg     <= tx_burst  & ~tx_wait;   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_io.v@101:113
+	  tx_access_reg    <= tx_access & ~tx_wait;
+	  tx_burst_reg     <= tx_burst  & ~tx_wait;   
+       end
+
+   //Pushback on wait
+   always @ (posedge tx_lclk_io)
+     if(firstedge & ~tx_wait)
+       tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];	 
+
+   //#########################################
+   //# Transmit state machine
+   //#########################################     
+
+

@@ -1,0 +1,33 @@
+Source Block: oh/elink/hdl/etx_protocol.v@175:190@HdlStmAssign
+   
+   assign tx_frame_slow[3:0] = (tx_state[1:0]==`TX_START) ? 4'b0111 :
+			       (tx_state[1:0]!=`TX_IDLE)  ? 4'b1111 :
+			                                    4'b0000;
+   
+   assign tx_cycle1[63:0]    = {tx_dstaddr[11:0],tx_datamode[1:0],tx_write,tx_access, //47:32
+			        tx_dstaddr[27:12],                                    //31:16
+			        ~tx_write,5'b0,tx_burst_reg,1'b0,                     //8-15
+			        tx_ctrlmode[3:0],tx_dstaddr[31:28],                   //0-7
+			        16'b0 				                      //garbage
+			        };
+   
+   assign tx_cycle2[63:0]   = {tx_srcaddr[15:0],                                      //48-63
+			       tx_srcaddr[31:16],                                     //32-47
+			       tx_data[15:0],                                         //16-31
+			       tx_data[31:16]			                      //0-15
+
+Diff Content:
+- 180    assign tx_cycle1[63:0]    = {tx_dstaddr[11:0],tx_datamode[1:0],tx_write,tx_access, //47:32
+- 181 			        tx_dstaddr[27:12],                                    //31:16
+- 182 			        ~tx_write,5'b0,tx_burst_reg,1'b0,                     //8-15
+- 183 			        tx_ctrlmode[3:0],tx_dstaddr[31:28],                   //0-7
+- 184 			        16'b0 				                      //garbage
+- 185 			        };
++ 185    assign tx_cycle1[63:0] = {tx_dstaddr[11:0],tx_datamode[1:0],tx_write,tx_access, //47:32
++ 185 			     tx_dstaddr[27:12],                                    //31:16
++ 185 			    ~tx_write,5'b0,tx_burst_reg,1'b0,                      //8-15
++ 185 			     tx_ctrlmode[3:0],tx_dstaddr[31:28],                   //0-7
++ 185 			     16'b0 				                   //garbage
++ 185 			    };
+
+Clone Blocks:

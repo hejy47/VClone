@@ -1,0 +1,40 @@
+Source Block: oh/elink/hdl/erx_remap.v@78:91@HdlStmProcess
+       emesh_access_out         <= 1'b0;
+     else if((write_in & ~rx_wr_wait) | (read_in & ~rx_rd_wait))    
+       emesh_access_out         <= emesh_access_in;
+
+   //Packet
+   always @ (posedge clk)
+     if((write_in & ~rx_wr_wait) | (read_in & ~rx_rd_wait))    
+       emesh_packet_out[PW-1:0] <= {emesh_packet_in[103:40],
+                                    remap_mux[31:0],
+                                    emesh_packet_in[7:0]
+				    };
+   
+endmodule // etx_mux
+
+
+Diff Content:
+- 83    always @ (posedge clk)
+- 84      if((write_in & ~rx_wr_wait) | (read_in & ~rx_rd_wait))    
++ 84    always @ (posedge clk)    
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_remap.v@71:85
+			     (remap_mode[1:0]==2'b01) ? static_remap[31:0] :
+	  		                                dynamic_remap[31:0];
+
+
+   //Access
+   always @ (posedge clk)
+     if (reset)
+       emesh_access_out         <= 1'b0;
+     else if((write_in & ~rx_wr_wait) | (read_in & ~rx_rd_wait))    
+       emesh_access_out         <= emesh_access_in;
+
+   //Packet
+   always @ (posedge clk)
+     if((write_in & ~rx_wr_wait) | (read_in & ~rx_rd_wait))    
+       emesh_packet_out[PW-1:0] <= {emesh_packet_in[103:40],
+

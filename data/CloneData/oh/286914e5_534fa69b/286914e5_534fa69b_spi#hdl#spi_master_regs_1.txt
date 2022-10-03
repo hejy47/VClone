@@ -1,0 +1,24 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@168:184@HdlStmProcess
+
+   //####################################
+   //# AUTOTRANSFER
+   //####################################
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       autotran <= 1'b0;   
+     else if(rx_access & emode)
+       autotran <= 1'b1;   
+     else if(~wait_in)
+       autotran <= 1'b1;   
+
+   //####################################
+   //# READBACK
+   //####################################
+
+
+Diff Content:
+- 179        autotran <= 1'b1;   
++ 179        autotran <= 1'b0;   
+
+Clone Blocks:

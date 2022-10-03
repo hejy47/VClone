@@ -1,0 +1,33 @@
+Source Block: oh/spi/hdl/spi_slave_regs.v@101:118@HdlStmProcess
+   
+   //#####################################
+   //# STATUS [1]
+   //#####################################
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       spi_status[7:0] <= 'b0;
+     else if(spi_config_write)
+       spi_status[7:0] <= spi_wdata[7:0];
+     else
+       spi_status[7:0] <= {7'b0,
+			   access_in}; //data ready
+        
+   //#####################################
+   //# DATA FROM SPLIT TRANSACTION (8/16)
+   //#####################################
+
+
+Diff Content:
+- 108        spi_status[7:0] <= 'b0;
+- 109      else if(spi_config_write)
+- 110        spi_status[7:0] <= spi_wdata[7:0];
+- 111      else
+- 113 			   access_in}; //data ready
++ 111        spi_status[7:0] <= 'b0;    
++ 111      else if (1'b0)
++ 111        spi_status[7:0] <= 1'b0; // todo: clear with spi request   
++ 111      else if(access_in)
++ 113 			   1'b1}; //data ready
+
+Clone Blocks:

@@ -1,0 +1,30 @@
+Source Block: oh/elink/hdl/erx_io.v@316:338@HdlStmFor
+   //# IDDR SAMPLERS
+   //#############################  
+ 
+   //DATA
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+     begin : gen_iddr           
+	IDDR #(.DDR_CLK_EDGE  ("SAME_EDGE_PIPELINED"), .SRTYPE("ASYNC"))
+	iddr_data (
+		   .Q1 (rx_word[i]),
+		   .Q2 (rx_word[i+8]),
+		   .C  (rx_lclk),//rx_lclk_iddr
+		   .CE (1'b1),
+		   .D  (rxi_delay_out[i]),
+		   .R  (reset),
+		   .S  (1'b0)
+		   );
+     end
+     endgenerate
+
+   //FRAME
+   IDDR #(.DDR_CLK_EDGE  ("SAME_EDGE_PIPELINED"), .SRTYPE("ASYNC"))
+	iddr_frame (
+
+Diff Content:
+- 330 		   .R  (reset),
++ 330 		   .R  (erx_io_reset),
+
+Clone Blocks:

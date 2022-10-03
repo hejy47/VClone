@@ -1,0 +1,29 @@
+Source Block: serv/rtl/serv_ctrl.v@75:91@HdlStmProcess
+
+   reg        en_r  = 1'b1;
+   reg        en_2r = 1'b0;
+   reg        en_3r = 1'b0;
+
+   always @(posedge clk) begin
+      en_r <= i_en;
+      en_2r <= en_r;
+      en_3r <= en_2r;
+
+      if (en_r & !i_en)
+        o_ibus_cyc <= 1'b1;
+      else if (o_ibus_cyc & i_ibus_ack)
+        o_ibus_cyc <= 1'b0;
+   end
+
+endmodule
+
+Diff Content:
+- 85       if (en_r & !i_en)
++ 83       en_pc_r <= i_pc_en;
++ 83       en_pc_2r <= en_pc_r;
++ 83       en_pc_3r <= en_pc_2r;
++ 85       if (en_r & !en_2r)
++ 85 	o_misalign <= pc_plus_offset;
++ 85       if (en_pc_r & !i_pc_en)
+
+Clone Blocks:

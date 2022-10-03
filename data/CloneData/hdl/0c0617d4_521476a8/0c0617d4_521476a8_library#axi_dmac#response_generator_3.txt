@@ -1,0 +1,46 @@
+Source Block: hdl/library/axi_dmac/response_generator.v@60:70@HdlStmAssign
+`include "resp.vh"
+
+assign resp_resp = RESP_OKAY;
+assign resp_eot = eot;
+
+assign resp_valid = request_id != response_id && enabled;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+
+Diff Content:
+- 65 assign resp_valid = request_id != response_id && enabled;
++ 65   assign resp_valid = request_id != response_id && enabled;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/response_generator.v@58:68
+
+`include "inc_id.vh"
+`include "resp.vh"
+
+assign resp_resp = RESP_OKAY;
+assign resp_eot = eot;
+
+assign resp_valid = request_id != response_id && enabled;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/response_handler.v@67:77
+assign resp_eot = eot;
+
+wire active = id != request_id;
+
+assign bready = active && resp_ready;
+assign resp_valid = active && bvalid;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+

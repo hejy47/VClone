@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/src_axi_mm.v@182:192@HdlStmAssign
+  .prot(m_axi_arprot),
+  .cache(m_axi_arcache)
+);
+
+assign fifo_valid = m_axi_rvalid;
+assign fifo_data = m_axi_rdata;
+assign fifo_last = m_axi_rlast;
+
+/*
+ * There is a requirement that data_id <= address_id (modulo 2**ID_WIDTH).  We
+ * know that we will never receive data before we have requested it so there is
+
+Diff Content:
+- 187 assign fifo_data = m_axi_rdata;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/src_axi_mm.v@183:193
+  .cache(m_axi_arcache)
+);
+
+assign fifo_valid = m_axi_rvalid;
+assign fifo_data = m_axi_rdata;
+assign fifo_last = m_axi_rlast;
+
+/*
+ * There is a requirement that data_id <= address_id (modulo 2**ID_WIDTH).  We
+ * know that we will never receive data before we have requested it so there is
+ * an implicit dependency between data_id and address_id and no need to
+

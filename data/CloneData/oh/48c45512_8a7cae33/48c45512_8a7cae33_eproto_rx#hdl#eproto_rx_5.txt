@@ -1,0 +1,74 @@
+Source Block: oh/eproto_rx/hdl/eproto_rx.v@140:205@HdlStmProcess
+      end
+      
+   end // always @ ( posedge rxlclk_p )
+
+   // 1st cycle
+   always @( posedge rxlclk_p ) begin
+
+      rxactive_0 <= rxactive_in;
+      rxalign_0  <= rxalign_in;
+      
+      case(rxalign_in)
+        3'd7: begin
+           ctrlmode_0       <= rxdata_in[55:52];
+           dstaddr_0[31:0]  <= rxdata_in[51:20];
+           datamode_0       <= rxdata_in[19:18];
+           write_0          <= rxdata_in[17];
+           access_0         <= rxdata_in[16];
+           data_0[31:16]    <= rxdata_in[15:0];
+        end
+        
+        3'd6: begin
+           ctrlmode_0       <= rxdata_in[47:44];
+           dstaddr_0[31:0]  <= rxdata_in[43:12];
+           datamode_0       <= rxdata_in[11:10];
+           write_0          <= rxdata_in[9];
+           access_0         <= rxdata_in[8];
+           data_0[31:24]    <= rxdata_in[7:0];
+        end
+
+        3'd5: begin
+           ctrlmode_0       <= rxdata_in[39:36];
+           dstaddr_0[31:0]  <= rxdata_in[35:4];
+           datamode_0       <= rxdata_in[3:2];
+           write_0          <= rxdata_in[1];
+           access_0         <= rxdata_in[0];
+        end
+
+        3'd4: begin
+           ctrlmode_0       <= rxdata_in[31:28];
+           dstaddr_0[31:4]  <= rxdata_in[27:0];
+        end
+
+        3'd3: begin
+           ctrlmode_0       <= rxdata_in[23:20];
+           dstaddr_0[31:12] <= rxdata_in[19:0];
+        end
+
+        3'd2: begin
+           ctrlmode_0       <= rxdata_in[15:12];
+           dstaddr_0[31:20] <= rxdata_in[11:0];
+        end
+
+        3'd1: begin
+           ctrlmode_0       <= rxdata_in[7:4];
+           dstaddr_0[31:28] <= rxdata_in[3:0];
+        end
+        
+         // if align == 0 then only the tran byte is present, ignore
+      endcase // case (rxalign_in)
+      
+   end // always @ ( posedge rxlclk_p )
+
+   // 2nd cycle
+   always @( posedge rxlclk_p ) begin
+
+      rxactive_1 <= rxactive_0;
+
+Diff Content:
++ 148       stream_0   <= 1'b0;
++ 157            stream_0         <= rxframe_p[1] & (rxactive_in | stream_0);
++ 166            stream_0         <= rxframe_p[0] & (rxactive_in | stream_0);
+
+Clone Blocks:

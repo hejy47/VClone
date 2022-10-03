@@ -1,0 +1,47 @@
+Source Block: hdl/library/common/ad_mem_asym.v@54:64@HdlIdDef
+  parameter   DATA_WIDTH_A = 256;
+  parameter   ADDR_WIDTH_B =   8; 
+  parameter   DATA_WIDTH_B =  64;
+
+  localparam  MEM_SIZE_A = 2**ADDR_WIDTH_A;
+  localparam  MEM_SIZE_B = 2**ADDR_WIDTH_B;
+  localparam  MEM_SIZE = (MEM_SIZE_A > MEM_SIZE_B) ? MEM_SIZE_A : MEM_SIZE_B;
+  localparam  MEM_RATIO = DATA_WIDTH_A/DATA_WIDTH_B;
+
+  // write interface
+
+
+Diff Content:
+- 59   localparam  MEM_SIZE_B = 2**ADDR_WIDTH_B;
++ 59   localparam  MEM_SIZE_A = 2**A_ADDRESS_WIDTH;
++ 59   localparam  MEM_SIZE_B = 2**B_ADDRESS_WIDTH;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_mem_asym.v@55:65
+  parameter   ADDR_WIDTH_B =   8; 
+  parameter   DATA_WIDTH_B =  64;
+
+  localparam  MEM_SIZE_A = 2**ADDR_WIDTH_A;
+  localparam  MEM_SIZE_B = 2**ADDR_WIDTH_B;
+  localparam  MEM_SIZE = (MEM_SIZE_A > MEM_SIZE_B) ? MEM_SIZE_A : MEM_SIZE_B;
+  localparam  MEM_RATIO = DATA_WIDTH_A/DATA_WIDTH_B;
+
+  // write interface
+
+  input                       clka;
+
+Clone Blocks 2:
+hdl/library/common/ad_mem_asym.v@53:63
+  parameter   ADDR_WIDTH_A =  10;
+  parameter   DATA_WIDTH_A = 256;
+  parameter   ADDR_WIDTH_B =   8; 
+  parameter   DATA_WIDTH_B =  64;
+
+  localparam  MEM_SIZE_A = 2**ADDR_WIDTH_A;
+  localparam  MEM_SIZE_B = 2**ADDR_WIDTH_B;
+  localparam  MEM_SIZE = (MEM_SIZE_A > MEM_SIZE_B) ? MEM_SIZE_A : MEM_SIZE_B;
+  localparam  MEM_RATIO = DATA_WIDTH_A/DATA_WIDTH_B;
+
+  // write interface
+

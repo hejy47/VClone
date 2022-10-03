@@ -1,0 +1,19 @@
+Source Block: oh/emmu/hdl/emmu.v@146:156@HdlStmAssign
+	  emesh_ctrlmode_out[3:0]      <= emesh_ctrlmode_in[3:0];
+	  emesh_datamode_out[1:0]      <= emesh_datamode_in[1:0];
+       end
+   
+   //32 or 64 bit address output
+   assign emesh_dstaddr_out[PAW-1:0] = {emmu_mem_rd_data[MW-1:0],emesh_dstaddr_reg[19:0]};//fix
+   
+endmodule // emmu
+// Local Variables:
+// verilog-library-directories:("." "../memory")
+// End:
+
+Diff Content:
+- 151    assign emesh_dstaddr_out[PAW-1:0] = {emmu_mem_rd_data[MW-1:0],emesh_dstaddr_reg[19:0]};//fix
++ 151    assign emesh_dstaddr_out[63:0]   = mmu_en ? {emmu_mem_rd_data[MW-1:0],emesh_dstaddr_reg[19:0]} :
++ 151 				               {32'b0,emesh_dstaddr_reg[AW-1:0]};
+
+Clone Blocks:

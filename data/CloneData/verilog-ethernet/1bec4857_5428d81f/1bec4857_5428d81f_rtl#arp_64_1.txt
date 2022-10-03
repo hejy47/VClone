@@ -1,0 +1,306 @@
+Source Block: verilog-ethernet/rtl/arp_64.v@243:390@HdlStmProcess
+
+assign arp_response_valid = arp_response_valid_reg;
+assign arp_response_error = arp_response_error_reg;
+assign arp_response_mac = arp_response_mac_reg;
+
+always @* begin
+    incoming_frame_ready = 1'b0;
+
+    outgoing_frame_valid_next = outgoing_frame_valid_reg && !outgoing_frame_ready;
+    outgoing_eth_dest_mac_next = outgoing_eth_dest_mac_reg;
+    outgoing_arp_oper_next = outgoing_arp_oper_reg;
+    outgoing_arp_tha_next = outgoing_arp_tha_reg;
+    outgoing_arp_tpa_next = outgoing_arp_tpa_reg;
+
+    cache_query_request_valid_next = 1'b0;
+    cache_query_request_ip_next = cache_query_request_ip_reg;
+
+    cache_write_request_valid_next = 1'b0;
+    cache_write_request_mac_next = cache_write_request_mac_reg;
+    cache_write_request_ip_next = cache_write_request_ip_reg;
+
+    arp_request_ready_next = 1'b0;
+    arp_request_ip_next = arp_request_ip_reg;
+    arp_request_operation_next = arp_request_operation_reg;
+    arp_request_retry_cnt_next = arp_request_retry_cnt_reg;
+    arp_request_timer_next = arp_request_timer_reg;
+    arp_response_valid_next = arp_response_valid_reg && !arp_response_ready;
+    arp_response_error_next = 1'b0;
+    arp_response_mac_next = 48'd0;
+
+    // manage incoming frames
+    incoming_frame_ready = outgoing_frame_ready;
+    if (incoming_frame_valid && incoming_frame_ready) begin
+        if (incoming_eth_type == 16'h0806 && incoming_arp_htype == 16'h0001 && incoming_arp_ptype == 16'h0800) begin
+            // store sender addresses in cache
+            cache_write_request_valid_next = 1'b1;
+            cache_write_request_ip_next = incoming_arp_spa;
+            cache_write_request_mac_next = incoming_arp_sha;
+            if (incoming_arp_oper == ARP_OPER_ARP_REQUEST) begin
+                // ARP request
+                if (incoming_arp_tpa == local_ip) begin
+                    // send reply frame to valid incoming request
+                    outgoing_frame_valid_next = 1'b1;
+                    outgoing_eth_dest_mac_next = incoming_eth_src_mac;
+                    outgoing_arp_oper_next = ARP_OPER_ARP_REPLY;
+                    outgoing_arp_tha_next = incoming_arp_sha;
+                    outgoing_arp_tpa_next = incoming_arp_spa;
+                end
+            end else if (incoming_arp_oper == ARP_OPER_INARP_REPLY) begin
+                // INARP request
+                if (incoming_arp_tha == local_mac) begin
+                    // send reply frame to valid incoming request
+                    outgoing_frame_valid_next = 1'b1;
+                    outgoing_eth_dest_mac_next = incoming_eth_src_mac;
+                    outgoing_arp_oper_next = ARP_OPER_INARP_REPLY;
+                    outgoing_arp_tha_next = incoming_arp_sha;
+                    outgoing_arp_tpa_next = incoming_arp_spa;
+                end 
+            end
+        end
+    end
+
+    // manage ARP lookup requests
+    if (arp_request_operation_reg) begin
+        arp_request_ready_next = 1'b0;
+        cache_query_request_valid_next = 1'b1;
+        arp_request_timer_next = arp_request_timer_reg - 1;
+        // if we got a response, it will go in the cache, so when the query succeds, we're done
+        if (cache_query_response_valid && !cache_query_response_error) begin
+            arp_request_operation_next = 1'b0;
+            cache_query_request_valid_next = 1'b0;
+            arp_response_valid_next = 1'b1;
+            arp_response_error_next = 1'b0;
+            arp_response_mac_next = cache_query_response_mac;
+        end
+        // timer timeout
+        if (arp_request_timer_reg == 0) begin
+            if (arp_request_retry_cnt_reg > 0) begin
+                // have more retries
+                // send ARP request frame
+                outgoing_frame_valid_next = 1'b1;
+                outgoing_eth_dest_mac_next = 48'hffffffffffff;
+                outgoing_arp_oper_next = ARP_OPER_ARP_REQUEST;
+                outgoing_arp_tha_next = 48'h000000000000;
+                outgoing_arp_tpa_next = arp_request_ip_reg;
+                arp_request_retry_cnt_next = arp_request_retry_cnt_reg - 1;
+                if (arp_request_retry_cnt_reg > 1) begin
+                    arp_request_timer_next = REQUEST_RETRY_INTERVAL;
+                end else begin
+                    arp_request_timer_next = REQUEST_TIMEOUT;
+                end
+            end else begin
+                // out of retries
+                arp_request_operation_next = 1'b0;
+                arp_response_valid_next = 1'b1;
+                arp_response_error_next = 1'b1;
+                cache_query_request_valid_next = 1'b0;
+            end
+        end
+    end else begin
+        arp_request_ready_next = !arp_response_valid_next;
+        if (cache_query_request_valid_reg) begin
+            cache_query_request_valid_next = 1'b1;
+            if (cache_query_response_valid) begin
+                if (cache_query_response_error) begin
+                    arp_request_operation_next = 1'b1;
+                    // send ARP request frame
+                    outgoing_frame_valid_next = 1'b1;
+                    outgoing_eth_dest_mac_next = 48'hffffffffffff;
+                    outgoing_arp_oper_next = ARP_OPER_ARP_REQUEST;
+                    outgoing_arp_tha_next = 48'h000000000000;
+                    outgoing_arp_tpa_next = arp_request_ip_reg;
+                    arp_request_retry_cnt_next = REQUEST_RETRY_COUNT-1;
+                    arp_request_timer_next = REQUEST_RETRY_INTERVAL;
+                end else begin
+                    cache_query_request_valid_next = 1'b0;
+                    arp_response_valid_next = 1'b1;
+                    arp_response_error_next = 1'b0;
+                    arp_response_mac_next = cache_query_response_mac;
+                end
+            end
+        end else if (arp_request_valid && arp_request_ready) begin
+            if (~(arp_request_ip | subnet_mask) == 0) begin
+                // broadcast address
+                // (all bits in request IP set where subnet mask is clear)
+                arp_response_valid_next = 1'b1;
+                arp_response_error_next = 1'b0;
+                arp_response_mac_next = 48'hffffffffffff;
+            end else if (((arp_request_ip ^ gateway_ip) & subnet_mask) == 0) begin
+                // within subnet, look up IP directly
+                // (no bits differ between request IP and gateway IP where subnet mask is set)
+                cache_query_request_valid_next = 1'b1;
+                cache_query_request_ip_next = arp_request_ip;
+                arp_request_ip_next = arp_request_ip;
+            end else begin
+                // outside of subnet, so look up gateway address
+                cache_query_request_valid_next = 1'b1;
+                cache_query_request_ip_next = gateway_ip;
+                arp_request_ip_next = gateway_ip;
+            end
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        outgoing_frame_valid_reg <= 1'b0;
+        cache_query_request_valid_reg <= 1'b0;
+
+Diff Content:
+- 291             end else if (incoming_arp_oper == ARP_OPER_INARP_REPLY) begin
++ 291             end else if (incoming_arp_oper == ARP_OPER_INARP_REQUEST) begin
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/arp.v@239:386
+
+assign arp_response_valid = arp_response_valid_reg;
+assign arp_response_error = arp_response_error_reg;
+assign arp_response_mac = arp_response_mac_reg;
+
+always @* begin
+    incoming_frame_ready = 1'b0;
+
+    outgoing_frame_valid_next = outgoing_frame_valid_reg && !outgoing_frame_ready;
+    outgoing_eth_dest_mac_next = outgoing_eth_dest_mac_reg;
+    outgoing_arp_oper_next = outgoing_arp_oper_reg;
+    outgoing_arp_tha_next = outgoing_arp_tha_reg;
+    outgoing_arp_tpa_next = outgoing_arp_tpa_reg;
+
+    cache_query_request_valid_next = 1'b0;
+    cache_query_request_ip_next = cache_query_request_ip_reg;
+
+    cache_write_request_valid_next = 1'b0;
+    cache_write_request_mac_next = cache_write_request_mac_reg;
+    cache_write_request_ip_next = cache_write_request_ip_reg;
+
+    arp_request_ready_next = 1'b0;
+    arp_request_ip_next = arp_request_ip_reg;
+    arp_request_operation_next = arp_request_operation_reg;
+    arp_request_retry_cnt_next = arp_request_retry_cnt_reg;
+    arp_request_timer_next = arp_request_timer_reg;
+    arp_response_valid_next = arp_response_valid_reg && !arp_response_ready;
+    arp_response_error_next = 1'b0;
+    arp_response_mac_next = 48'd0;
+
+    // manage incoming frames
+    incoming_frame_ready = outgoing_frame_ready;
+    if (incoming_frame_valid && incoming_frame_ready) begin
+        if (incoming_eth_type == 16'h0806 && incoming_arp_htype == 16'h0001 && incoming_arp_ptype == 16'h0800) begin
+            // store sender addresses in cache
+            cache_write_request_valid_next = 1'b1;
+            cache_write_request_ip_next = incoming_arp_spa;
+            cache_write_request_mac_next = incoming_arp_sha;
+            if (incoming_arp_oper == ARP_OPER_ARP_REQUEST) begin
+                // ARP request
+                if (incoming_arp_tpa == local_ip) begin
+                    // send reply frame to valid incoming request
+                    outgoing_frame_valid_next = 1'b1;
+                    outgoing_eth_dest_mac_next = incoming_eth_src_mac;
+                    outgoing_arp_oper_next = ARP_OPER_ARP_REPLY;
+                    outgoing_arp_tha_next = incoming_arp_sha;
+                    outgoing_arp_tpa_next = incoming_arp_spa;
+                end
+            end else if (incoming_arp_oper == ARP_OPER_INARP_REPLY) begin
+                // INARP request
+                if (incoming_arp_tha == local_mac) begin
+                    // send reply frame to valid incoming request
+                    outgoing_frame_valid_next = 1'b1;
+                    outgoing_eth_dest_mac_next = incoming_eth_src_mac;
+                    outgoing_arp_oper_next = ARP_OPER_INARP_REPLY;
+                    outgoing_arp_tha_next = incoming_arp_sha;
+                    outgoing_arp_tpa_next = incoming_arp_spa;
+                end 
+            end
+        end
+    end
+
+    // manage ARP lookup requests
+    if (arp_request_operation_reg) begin
+        arp_request_ready_next = 1'b0;
+        cache_query_request_valid_next = 1'b1;
+        arp_request_timer_next = arp_request_timer_reg - 1;
+        // if we got a response, it will go in the cache, so when the query succeds, we're done
+        if (cache_query_response_valid && !cache_query_response_error) begin
+            arp_request_operation_next = 1'b0;
+            cache_query_request_valid_next = 1'b0;
+            arp_response_valid_next = 1'b1;
+            arp_response_error_next = 1'b0;
+            arp_response_mac_next = cache_query_response_mac;
+        end
+        // timer timeout
+        if (arp_request_timer_reg == 0) begin
+            if (arp_request_retry_cnt_reg > 0) begin
+                // have more retries
+                // send ARP request frame
+                outgoing_frame_valid_next = 1'b1;
+                outgoing_eth_dest_mac_next = 48'hffffffffffff;
+                outgoing_arp_oper_next = ARP_OPER_ARP_REQUEST;
+                outgoing_arp_tha_next = 48'h000000000000;
+                outgoing_arp_tpa_next = arp_request_ip_reg;
+                arp_request_retry_cnt_next = arp_request_retry_cnt_reg - 1;
+                if (arp_request_retry_cnt_reg > 1) begin
+                    arp_request_timer_next = REQUEST_RETRY_INTERVAL;
+                end else begin
+                    arp_request_timer_next = REQUEST_TIMEOUT;
+                end
+            end else begin
+                // out of retries
+                arp_request_operation_next = 1'b0;
+                arp_response_valid_next = 1'b1;
+                arp_response_error_next = 1'b1;
+                cache_query_request_valid_next = 1'b0;
+            end
+        end
+    end else begin
+        arp_request_ready_next = !arp_response_valid_next;
+        if (cache_query_request_valid_reg) begin
+            cache_query_request_valid_next = 1'b1;
+            if (cache_query_response_valid) begin
+                if (cache_query_response_error) begin
+                    arp_request_operation_next = 1'b1;
+                    // send ARP request frame
+                    outgoing_frame_valid_next = 1'b1;
+                    outgoing_eth_dest_mac_next = 48'hffffffffffff;
+                    outgoing_arp_oper_next = ARP_OPER_ARP_REQUEST;
+                    outgoing_arp_tha_next = 48'h000000000000;
+                    outgoing_arp_tpa_next = arp_request_ip_reg;
+                    arp_request_retry_cnt_next = REQUEST_RETRY_COUNT-1;
+                    arp_request_timer_next = REQUEST_RETRY_INTERVAL;
+                end else begin
+                    cache_query_request_valid_next = 1'b0;
+                    arp_response_valid_next = 1'b1;
+                    arp_response_error_next = 1'b0;
+                    arp_response_mac_next = cache_query_response_mac;
+                end
+            end
+        end else if (arp_request_valid && arp_request_ready) begin
+            if (~(arp_request_ip | subnet_mask) == 0) begin
+                // broadcast address
+                // (all bits in request IP set where subnet mask is clear)
+                arp_response_valid_next = 1'b1;
+                arp_response_error_next = 1'b0;
+                arp_response_mac_next = 48'hffffffffffff;
+            end else if (((arp_request_ip ^ gateway_ip) & subnet_mask) == 0) begin
+                // within subnet, look up IP directly
+                // (no bits differ between request IP and gateway IP where subnet mask is set)
+                cache_query_request_valid_next = 1'b1;
+                cache_query_request_ip_next = arp_request_ip;
+                arp_request_ip_next = arp_request_ip;
+            end else begin
+                // outside of subnet, so look up gateway address
+                cache_query_request_valid_next = 1'b1;
+                cache_query_request_ip_next = gateway_ip;
+                arp_request_ip_next = gateway_ip;
+            end
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        outgoing_frame_valid_reg <= 1'b0;
+        cache_query_request_valid_reg <= 1'b0;
+

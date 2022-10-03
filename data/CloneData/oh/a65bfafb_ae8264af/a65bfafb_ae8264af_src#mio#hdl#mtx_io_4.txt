@@ -1,0 +1,59 @@
+Source Block: oh/src/mio/hdl/mtx_io.v@37:47@HdlStmAssign
+   //# STATE MACHINE
+   //########################################   
+
+   assign dmode8   = (iowidth[1:0]==2'b00);
+   assign dmode16  = (iowidth[1:0]==2'b01);
+   assign dmode32  = (iowidth[1:0]==2'b10);
+   assign dmode64  = (iowidth[1:0]==2'b11);
+
+   assign io_valid_next[7:0] = dmode8  ? {1'b0,io_valid_reg[7:1]} :
+			       dmode16 ? {2'b0,io_valid_reg[7:2]} :
+			       dmode32 ? {4'b0,io_valid_reg[7:4]} :
+
+Diff Content:
+- 42    assign dmode32  = (iowidth[1:0]==2'b10);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mtx_io.v@38:48
+   //########################################   
+
+   assign dmode8   = (iowidth[1:0]==2'b00);
+   assign dmode16  = (iowidth[1:0]==2'b01);
+   assign dmode32  = (iowidth[1:0]==2'b10);
+   assign dmode64  = (iowidth[1:0]==2'b11);
+
+   assign io_valid_next[7:0] = dmode8  ? {1'b0,io_valid_reg[7:1]} :
+			       dmode16 ? {2'b0,io_valid_reg[7:2]} :
+			       dmode32 ? {4'b0,io_valid_reg[7:4]} :
+			                  8'b0;
+
+Clone Blocks 2:
+oh/src/mio/hdl/mtx_io.v@35:45
+   
+   //########################################
+   //# STATE MACHINE
+   //########################################   
+
+   assign dmode8   = (iowidth[1:0]==2'b00);
+   assign dmode16  = (iowidth[1:0]==2'b01);
+   assign dmode32  = (iowidth[1:0]==2'b10);
+   assign dmode64  = (iowidth[1:0]==2'b11);
+
+   assign io_valid_next[7:0] = dmode8  ? {1'b0,io_valid_reg[7:1]} :
+
+Clone Blocks 3:
+oh/src/mio/hdl/mtx_io.v@36:46
+   //########################################
+   //# STATE MACHINE
+   //########################################   
+
+   assign dmode8   = (iowidth[1:0]==2'b00);
+   assign dmode16  = (iowidth[1:0]==2'b01);
+   assign dmode32  = (iowidth[1:0]==2'b10);
+   assign dmode64  = (iowidth[1:0]==2'b11);
+
+   assign io_valid_next[7:0] = dmode8  ? {1'b0,io_valid_reg[7:1]} :
+			       dmode16 ? {2'b0,io_valid_reg[7:2]} :
+

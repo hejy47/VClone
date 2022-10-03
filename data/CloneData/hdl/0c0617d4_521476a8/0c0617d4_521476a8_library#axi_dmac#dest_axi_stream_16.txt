@@ -1,0 +1,55 @@
+Source Block: hdl/library/axi_dmac/dest_axi_stream.v@97:115@HdlStmProcess
+assign m_axis_valid = fifo_valid & active;
+assign fifo_ready = m_axis_ready & active;
+assign m_axis_last = req_xlast_d & fifo_last & data_eot;
+assign m_axis_data = fifo_data;
+
+always @(posedge s_axis_aclk) begin
+  if (s_axis_aresetn == 1'b0) begin
+    data_enabled <= 1'b0;
+  end else if (enable == 1'b1) begin
+    data_enabled <= 1'b1;
+  end else if (m_axis_valid == 1'b0 || m_axis_ready == 1'b1) begin
+    data_enabled <= 1'b0;
+  end
+end
+
+always @(posedge s_axis_aclk) begin
+  if (req_ready == 1'b1) begin
+    req_xlast_d <= req_xlast;
+  end
+
+Diff Content:
+- 102 always @(posedge s_axis_aclk) begin
+- 103   if (s_axis_aresetn == 1'b0) begin
+- 104     data_enabled <= 1'b0;
+- 105   end else if (enable == 1'b1) begin
+- 106     data_enabled <= 1'b1;
+- 107   end else if (m_axis_valid == 1'b0 || m_axis_ready == 1'b1) begin
+- 108     data_enabled <= 1'b0;
+- 110 end
++ 108   reg data_enabled = 1'b0;
++ 108   reg req_xlast_d = 1'b0;
++ 108   reg active = 1'b0;
++ 108   reg [ID_WIDTH-1:0] id = 'h0;
++ 108   wire fifo_last_beat;
++ 108   wire fifo_eot_beat;
++ 108   assign fifo_last_beat = fifo_ready & fifo_last;
++ 108   assign fifo_eot_beat = fifo_last_beat & data_eot;
++ 108   assign req_ready = fifo_eot_beat | ~active;
++ 108   assign data_id = id;
++ 108   assign xfer_req = active;
++ 108   assign m_axis_valid = fifo_valid & active;
++ 108   assign fifo_ready = m_axis_ready & active;
++ 108   assign m_axis_last = req_xlast_d & fifo_last & data_eot;
++ 108   assign m_axis_data = fifo_data;
++ 108   always @(posedge s_axis_aclk) begin
++ 108     if (s_axis_aresetn == 1'b0) begin
++ 108       data_enabled <= 1'b0;
++ 108     end else if (enable == 1'b1) begin
++ 108       data_enabled <= 1'b1;
++ 108     end else if (m_axis_valid == 1'b0 || m_axis_ready == 1'b1) begin
++ 108       data_enabled <= 1'b0;
++ 108     end
+
+Clone Blocks:

@@ -1,0 +1,97 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap.v@147:163@HdlStmProcess
+// IRQ handling
+assign up_irq_pending = ~up_irq_mask & up_irq_source;
+assign up_irq_trigger  = {up_eot, up_sot};
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 2'b00;
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    irq <= 1'b0;
+  end else begin
+    irq <= |up_irq_pending;
+  end
+end
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_irq_source <= 2'b00;
+  end else begin
+
+Diff Content:
+- 152 always @(posedge s_axi_aclk) begin
+- 153   if (s_axi_aresetn == 1'b0) begin
+- 154     irq <= 1'b0;
+- 155   end else begin
+- 156     irq <= |up_irq_pending;
+- 158 end
++ 156   localparam PCORE_VERSION = 'h00040461;
++ 156   reg [31:0] up_rdata = 32'h00;
++ 156   reg up_wack = 1'b0;
++ 156   reg up_rack = 1'b0;
++ 156   wire up_wreq;
++ 156   wire up_rreq;
++ 156   wire [31:0] up_wdata;
++ 156   wire [8:0] up_waddr;
++ 156   wire [8:0] up_raddr;
++ 156   wire [31:0] up_rdata_request;
++ 156   reg [31:0] up_scratch = 32'h00;
++ 156   wire up_eot; // Asserted for one cycle when a transfer has been completed
++ 156   wire up_sot; // Asserted for one cycle when a transfer has been queued
++ 156   reg [1:0] up_irq_mask = 2'h3;
++ 156   reg [1:0] up_irq_source = 2'h0;
++ 156   wire [1:0] up_irq_pending;
++ 156   wire [1:0] up_irq_trigger;
++ 156   wire [1:0] up_irq_source_clear;
++ 156   assign up_irq_pending = ~up_irq_mask & up_irq_source;
++ 156   assign up_irq_trigger  = {up_eot, up_sot};
++ 156   assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 2'b00;
++ 156   always @(posedge s_axi_aclk) begin
++ 156     if (s_axi_aresetn == 1'b0) begin
++ 156       irq <= 1'b0;
++ 156     end else begin
++ 156       irq <= |up_irq_pending;
++ 156     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_regmap.v@145:155
+wire [1:0] up_irq_source_clear;
+
+// IRQ handling
+assign up_irq_pending = ~up_irq_mask & up_irq_source;
+assign up_irq_trigger  = {up_eot, up_sot};
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 2'b00;
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    irq <= 1'b0;
+  end else begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_regmap.v@144:154
+wire [1:0] up_irq_trigger;
+wire [1:0] up_irq_source_clear;
+
+// IRQ handling
+assign up_irq_pending = ~up_irq_mask & up_irq_source;
+assign up_irq_trigger  = {up_eot, up_sot};
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 2'b00;
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    irq <= 1'b0;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/axi_dmac_regmap.v@143:153
+wire [1:0] up_irq_pending;
+wire [1:0] up_irq_trigger;
+wire [1:0] up_irq_source_clear;
+
+// IRQ handling
+assign up_irq_pending = ~up_irq_mask & up_irq_source;
+assign up_irq_trigger  = {up_eot, up_sot};
+assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[1:0] : 2'b00;
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+

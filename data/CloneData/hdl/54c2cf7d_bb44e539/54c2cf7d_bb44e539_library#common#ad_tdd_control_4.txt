@@ -1,0 +1,30 @@
+Source Block: hdl/library/common/ad_tdd_control.v@814:834@HdlStmProcess
+    end else begin
+      tdd_tx_dp_en <= tdd_tx_dp_en;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_rx_dp_en <= 1'b0;
+    end else if((tdd_cstate == OFF) || (counter_at_tdd_rx_dp_off_1 == 1'b1) || (counter_at_tdd_rx_dp_off_2 == 1'b1)) begin
+      tdd_rx_dp_en <= 1'b0;
+    end else if((tdd_cstate == ON) && ((counter_at_tdd_rx_dp_on_1 == 1'b1) || (counter_at_tdd_rx_dp_on_2 == 1'b1))) begin
+      tdd_rx_dp_en <= 1'b1;
+    end else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+      tdd_rx_dp_en <= tdd_rx_only;
+    end else begin
+      tdd_rx_dp_en <= tdd_rx_dp_en;
+    end
+  end
+
+endmodule
+
+
+Diff Content:
+- 826     end else if((tdd_cstate == ON) && (tdd_txrx_only_en_s == 1'b1)) begin
+- 827       tdd_rx_dp_en <= tdd_rx_only;
++ 827     end else if((tdd_cstate == ON) && (tdd_tx_only == 1'b1)) begin
++ 827       tdd_rx_dp_en <= 1'b0;
+
+Clone Blocks:

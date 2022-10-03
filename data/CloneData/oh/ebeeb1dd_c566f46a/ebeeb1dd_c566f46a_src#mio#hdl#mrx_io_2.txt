@@ -1,0 +1,39 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@91:103@HdlStmAssign
+	     .q2			(ddr_odd[IOW/2-1:0]),
+	     .clk			(rx_clk),
+	     .ce			(rx_access),
+	     .din			(rx_packet[IOW/2-1:0]));
+
+   assign ddr_data[IOW-1:0] = (iowidth[1:0]==2'b00) ? {ddr_odd[7:0],ddr_even[7:0]}   :
+			      (iowidth[1:0]==2'b01) ? {ddr_odd[15:0],ddr_even[15:0]} :
+			                              {ddr_odd[31:0],ddr_even[31:0]};
+    
+   // SDR
+   always @ (posedge rx_clk)
+     if(rx_access)
+       sdr_data[IOW-1:0] <= rx_packet[IOW-1:0];
+
+Diff Content:
+- 96    assign ddr_data[IOW-1:0] = (iowidth[1:0]==2'b00) ? {ddr_odd[7:0],ddr_even[7:0]}   :
+- 97 			      (iowidth[1:0]==2'b01) ? {ddr_odd[15:0],ddr_even[15:0]} :
++ 97    assign ddr_data[IOW-1:0] = (iowidth[1:0]==2'b00) ? {ddr_odd[3:0],ddr_even[3:0]}   :
++ 97 			      (iowidth[1:0]==2'b01) ? {ddr_odd[7:0],ddr_even[7:0]}   :
++ 97 			      (iowidth[1:0]==2'b10) ? {ddr_odd[15:0],ddr_even[15:0]} :
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mrx_io.v@96:108
+   assign ddr_data[IOW-1:0] = (iowidth[1:0]==2'b00) ? {ddr_odd[7:0],ddr_even[7:0]}   :
+			      (iowidth[1:0]==2'b01) ? {ddr_odd[15:0],ddr_even[15:0]} :
+			                              {ddr_odd[31:0],ddr_even[31:0]};
+    
+   // SDR
+   always @ (posedge rx_clk)
+     if(rx_access)
+       sdr_data[IOW-1:0] <= rx_packet[IOW-1:0];
+
+   // select between ddr/sdr data
+   assign io_data[IOW-1:0]   = ddr_mode ? ddr_data[IOW-1:0] :
+                                          sdr_data[IOW-1:0];
+
+

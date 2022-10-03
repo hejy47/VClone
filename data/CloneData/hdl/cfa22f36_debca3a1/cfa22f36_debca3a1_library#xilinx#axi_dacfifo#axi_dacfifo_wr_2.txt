@@ -1,0 +1,18 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/axi_dacfifo_wr.v@247:257@HdlStmAssign
+  end
+  assign dma_rst_s = dma_rst_m2;
+
+  // DMA beat counter
+
+  assign dma_xfer_init = dma_xfer_req & ~dma_xfer_req_d;
+  always @(posedge dma_clk) begin
+    dma_xfer_req_d <= dma_xfer_req;
+    if ((dma_rst_s == 1'b1) || (dma_xfer_init == 1'b1)) begin
+      dma_last_beats <= 4'b0;
+    end else begin
+
+Diff Content:
+- 252   assign dma_xfer_init = dma_xfer_req & ~dma_xfer_req_d;
++ 252   assign dma_xfer_init = ~dma_xfer_req_d[1] & dma_xfer_req_d[0];
+
+Clone Blocks:

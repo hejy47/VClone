@@ -1,0 +1,27 @@
+Source Block: hdl/library/common/ad_iqcor.v@120:139@HdlStmProcess
+    p1_data_p <= p1_data_p_i_s + p1_data_p_q_s;
+  end
+
+  // output registers
+
+  always @(posedge clk) begin
+    valid_out <= p1_valid;
+    if (iqcor_enable == 1'b1) begin
+      data_out <= p1_data_p[29:14];
+    end else if (IQSEL == 1) begin
+      data_out <= p1_data_q;
+    end else begin
+      data_out <= p1_data_i;
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 129     end else if (IQSEL == 1) begin
++ 129     end else if (Q_OR_I_N == 1) begin
+
+Clone Blocks:

@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@330:346@HdlStmProcess
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
+    dest_beat_counter <= 'h00;
+  end else if (dest_beat == 1'b1) begin
+    dest_beat_counter <= dest_beat_counter + 1'b1;
+  end
+end
+
+assign dest_burst_info_length = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1:0];
+assign dest_burst_info_partial = dest_burst_len_data[BYTES_PER_BURST_WIDTH];
+assign dest_burst_info_id = dest_id;
+
+
+Diff Content:
+- 335 always @(posedge dest_clk) begin
+- 336   if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
+- 337     dest_beat_counter <= 'h00;
+- 338   end else if (dest_beat == 1'b1) begin
+- 339     dest_beat_counter <= dest_beat_counter + 1'b1;
+- 341 end
++ 339   /*
++ 339    * This clears dest_data_last after the last beat. Strictly speaking this is not
++ 339    * necessary if this followed AXI handshaking rules since dest_data_last would
++ 339    * be qualified by dest_data_valid and it is OK to retain the previous value of
++ 339    * dest_data_last when dest_data_valid is not asserted. But clearing the signal
++ 339    * here doesn't cost much and can simplify some of the more congested
++ 339    * combinatorical logic further up the pipeline since we can assume that
++ 339    * fifo_last == 1'b1 implies fifo_valid == 1'b1.
++ 339    */
++ 339   always @(posedge dest_clk) begin
++ 339     if (dest_reset == 1'b1) begin
++ 339       dest_mem_data_last <= 1'b0;
++ 339     end else if (dest_beat == 1'b1) begin
++ 339       dest_mem_data_last <= dest_last;
++ 339     end else if (dest_mem_data_ready == 1'b1) begin
++ 339       dest_mem_data_last <= 1'b0;
++ 339     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@338:348
+  end else if (dest_beat == 1'b1) begin
+    dest_beat_counter <= dest_beat_counter + 1'b1;
+  end
+end
+
+assign dest_burst_info_length = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1:0];
+assign dest_burst_info_partial = dest_burst_len_data[BYTES_PER_BURST_WIDTH];
+assign dest_burst_info_id = dest_id;
+
+always @(posedge dest_clk) begin
+  dest_burst_info_write <= (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1);
+

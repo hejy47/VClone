@@ -1,0 +1,37 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3330:3343@HdlStmAssign
+     if(reset)
+       grants_reg[3:0] <= 4'b0000;
+     else
+       grants_reg[3:0] <= grants[3:0];
+
+   assign txo_rotate_dis[3:0] = {c3_txo_rotate_dis,
+				 c2_txo_rotate_dis,
+				 c1_txo_rotate_dis,
+				 c0_txo_rotate_dis};
+
+   assign en_rotate = ~(|(grants_reg[3:0] & txo_rotate_dis[3:0]));
+
+   assign en_arbitration = ~txo_wait_tlc | (|(txo_rotate_dis[3:0]));
+
+
+Diff Content:
+- 3335    assign txo_rotate_dis[3:0] = {c3_txo_rotate_dis,
+- 3336 				 c2_txo_rotate_dis,
+- 3337 				 c1_txo_rotate_dis,
+- 3338 				 c0_txo_rotate_dis};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3335:3345
+   assign txo_rotate_dis[3:0] = {c3_txo_rotate_dis,
+				 c2_txo_rotate_dis,
+				 c1_txo_rotate_dis,
+				 c0_txo_rotate_dis};
+
+   assign en_rotate = ~(|(grants_reg[3:0] & txo_rotate_dis[3:0]));
+
+   assign en_arbitration = ~txo_wait_tlc | (|(txo_rotate_dis[3:0]));
+
+   assign requests_unmasked[3:0] = {c3_txo_launch_req_tlc,
+                                    c2_txo_launch_req_tlc,
+

@@ -1,0 +1,38 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3339:3352@HdlStmAssign
+
+   assign en_rotate = ~(|(grants_reg[3:0] & txo_rotate_dis[3:0]));
+
+   assign en_arbitration = ~txo_wait_tlc | (|(txo_rotate_dis[3:0]));
+
+   assign requests_unmasked[3:0] = {c3_txo_launch_req_tlc,
+                                    c2_txo_launch_req_tlc,
+                                    c1_txo_launch_req_tlc,
+                                    c0_txo_launch_req_tlc};
+   
+   assign requests[3:0] = {(4){en_arbitration}} & 
+			  requests_unmasked[3:0] & (grants_reg[3:0] | {(4){en_rotate}});
+
+   //############
+
+Diff Content:
+- 3344    assign requests_unmasked[3:0] = {c3_txo_launch_req_tlc,
+- 3345                                     c2_txo_launch_req_tlc,
+- 3346                                     c1_txo_launch_req_tlc,
+- 3347                                     c0_txo_launch_req_tlc};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3344:3355
+   assign requests_unmasked[3:0] = {c3_txo_launch_req_tlc,
+                                    c2_txo_launch_req_tlc,
+                                    c1_txo_launch_req_tlc,
+                                    c0_txo_launch_req_tlc};
+   
+   assign requests[3:0] = {(4){en_arbitration}} & 
+			  requests_unmasked[3:0] & (grants_reg[3:0] | {(4){en_rotate}});
+
+   //############
+   //# Grants
+   //############
+   assign c3_txo_launch_ack_tlc   = grants[3] & ~txo_wait_int;
+

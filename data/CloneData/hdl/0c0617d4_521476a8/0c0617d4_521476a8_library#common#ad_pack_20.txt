@@ -1,0 +1,68 @@
+Source Block: hdl/library/common/ad_pack.v@142:172@HdlStmIf
+end
+
+assign pack_wr = ivalid_d & |in_use_nx[SH_W-O_W:0];
+
+generate
+  if (O_REG) begin : o_reg
+
+    always @(posedge clk) begin
+      if (reset) begin
+        ovalid <= 1'b0;
+      end else begin
+        ovalid <= pack_wr;
+      end
+    end
+
+    always @(posedge clk) begin
+      odata <= idata_packed;
+    end
+
+  end else begin
+
+    always @(*) begin
+      ovalid = pack_wr;
+      odata = idata_packed;
+    end
+
+  end
+endgenerate
+
+endmodule
+
+
+Diff Content:
+- 147   if (O_REG) begin : o_reg
+- 149     always @(posedge clk) begin
+- 150       if (reset) begin
+- 151         ovalid <= 1'b0;
+- 152       end else begin
+- 153         ovalid <= pack_wr;
+- 155     end
+- 157     always @(posedge clk) begin
+- 158       odata <= idata_packed;
+- 159     end
+- 161   end else begin
+- 163     always @(*) begin
+- 164       ovalid = pack_wr;
+- 165       odata = idata_packed;
+- 166     end
+- 168   end
++ 147   generate
++ 147     if (O_REG) begin : o_reg
++ 153       always @(posedge clk) begin
++ 153         if (reset) begin
++ 153           ovalid <= 1'b0;
++ 153         end else begin
++ 153           ovalid <= pack_wr;
++ 153         end
++ 159       always @(posedge clk) begin
++ 159         odata <= idata_packed;
++ 159       end
++ 161     end else begin
++ 166       always @(*) begin
++ 166         ovalid = pack_wr;
++ 166         odata = idata_packed;
++ 166       end
+
+Clone Blocks:

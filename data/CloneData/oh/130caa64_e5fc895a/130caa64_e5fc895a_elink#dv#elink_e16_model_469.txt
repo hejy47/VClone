@@ -1,0 +1,50 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4103:4113@HdlStmAssign
+   //# The "and" part of the "and-or" mux is
+   //# implemented in the link channels blocks  
+   //# therefore here we are good with "or" only
+   //###########################################
+
+   assign txo_frame_in = txo_wr_frame | txo_rd_frame;
+
+   assign data_even_in[LW-1:0] = txo_wr_data_even[LW-1:0] |
+				 txo_rd_data_even[LW-1:0];
+
+   assign data_odd_in[LW-1:0] = txo_wr_data_odd[LW-1:0] |
+
+Diff Content:
+- 4108    assign txo_frame_in = txo_wr_frame | txo_rd_frame;
++ 4108    assign txo_frame = c0_tran_frame_tlc;
++ 4108    assign txo_data_even[LW-1:0] = c0_tran_byte_even_tlc[LW-1:0];
++ 4108    assign txo_data_odd[LW-1:0] = c0_tran_byte_odd_tlc[LW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4105:4116
+   //# therefore here we are good with "or" only
+   //###########################################
+
+   assign txo_frame_in = txo_wr_frame | txo_rd_frame;
+
+   assign data_even_in[LW-1:0] = txo_wr_data_even[LW-1:0] |
+				 txo_rd_data_even[LW-1:0];
+
+   assign data_odd_in[LW-1:0] = txo_wr_data_odd[LW-1:0] |
+				txo_rd_data_odd[LW-1:0];
+
+   // ################################
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4108:4119
+   assign txo_frame_in = txo_wr_frame | txo_rd_frame;
+
+   assign data_even_in[LW-1:0] = txo_wr_data_even[LW-1:0] |
+				 txo_rd_data_even[LW-1:0];
+
+   assign data_odd_in[LW-1:0] = txo_wr_data_odd[LW-1:0] |
+				txo_rd_data_odd[LW-1:0];
+
+   // ################################
+   // # Transaction output
+   // ################################
+   
+

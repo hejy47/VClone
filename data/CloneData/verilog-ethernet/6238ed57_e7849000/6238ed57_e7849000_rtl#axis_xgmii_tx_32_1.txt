@@ -1,0 +1,67 @@
+Source Block: verilog-ethernet/rtl/axis_xgmii_tx_32.v@211:264@HdlStmProcess
+        s_axis_tdata_masked[j*8 +: 8] = s_axis_tkeep[j] ? s_axis_tdata[j*8 +: 8] : 8'd0;
+    end
+end
+
+// FCS cycle calculation
+always @* begin
+    casez (s_tkeep_reg)
+        4'bzz01: begin
+            fcs_output_txd_0 = {~crc_next0[23:0], s_tdata_reg[7:0]};
+            fcs_output_txd_1 = {{2{XGMII_IDLE}}, XGMII_TERM, ~crc_next0[31:24]};
+            fcs_output_txc_0 = 4'b0000;
+            fcs_output_txc_1 = 4'b1110;
+            ifg_offset = 8'd3;
+            extra_cycle = 1'b0;
+        end
+        4'bz011: begin
+            fcs_output_txd_0 = {~crc_next1[15:0], s_tdata_reg[15:0]};
+            fcs_output_txd_1 = {XGMII_IDLE, XGMII_TERM, ~crc_next1[31:16]};
+            fcs_output_txc_0 = 4'b0000;
+            fcs_output_txc_1 = 4'b1100;
+            ifg_offset = 8'd2;
+            extra_cycle = 1'b0;
+        end
+        4'b0111: begin
+            fcs_output_txd_0 = {~crc_next2[7:0], s_tdata_reg[23:0]};
+            fcs_output_txd_1 = {XGMII_TERM, ~crc_next2[31:8]};
+            fcs_output_txc_0 = 4'b0000;
+            fcs_output_txc_1 = 4'b1000;
+            ifg_offset = 8'd1;
+            extra_cycle = 1'b0;
+        end
+        4'b1111: begin
+            fcs_output_txd_0 = s_tdata_reg;
+            fcs_output_txd_1 = ~crc_next3;
+            fcs_output_txc_0 = 4'b0000;
+            fcs_output_txc_1 = 4'b0000;
+            ifg_offset = 8'd4;
+            extra_cycle = 1'b1;
+        end
+        default: begin
+            fcs_output_txd_0 = 32'd0;
+            fcs_output_txd_1 = 32'd0;
+            fcs_output_txc_0 = 4'd0;
+            fcs_output_txc_1 = 4'd0;
+            ifg_offset = 8'd0;
+            extra_cycle = 1'b0;
+        end
+    endcase
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 1'b0;
+
+Diff Content:
+- 251             fcs_output_txd_0 = 32'd0;
+- 252             fcs_output_txd_1 = 32'd0;
+- 253             fcs_output_txc_0 = 4'd0;
+- 254             fcs_output_txc_1 = 4'd0;
++ 254             fcs_output_txd_0 = {4{XGMII_ERROR}};
++ 254             fcs_output_txd_1 = {4{XGMII_ERROR}};
++ 254             fcs_output_txc_0 = 4'b1111;
++ 254             fcs_output_txc_1 = 4'b1111;
+
+Clone Blocks:

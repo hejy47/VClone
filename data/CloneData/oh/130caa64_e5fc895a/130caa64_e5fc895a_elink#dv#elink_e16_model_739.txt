@@ -1,0 +1,87 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5691:5711@HdlStmProcess
+       access_reg <= 1'b0;
+     else if(clk_en)
+       if(~wait_int)
+	 access_reg <= access_in;
+      
+   always @ (posedge clk)
+     if(clk_en)
+       if(~wait_int & access_in)
+	 begin
+	    write_reg           <= write_in;
+	    datamode_reg[1:0]   <= datamode_in[1:0];
+	    ctrlmode_reg[3:0]   <= ctrlmode_in[3:0];
+	    data_reg[DW-1:0]    <= data_in[DW-1:0];
+	    dstaddr_reg[AW-1:0] <= dstaddr_in[AW-1:0];
+	    srcaddr_reg[AW-1:0] <= srcaddr_in[AW-1:0];
+	 end
+
+   //##########################
+   //# mesh output busses  
+   //##########################
+
+
+Diff Content:
+- 5696    always @ (posedge clk)
+- 5697      if(clk_en)
+- 5698        if(~wait_int & access_in)
+- 5699 	 begin
+- 5700 	    write_reg           <= write_in;
+- 5701 	    datamode_reg[1:0]   <= datamode_in[1:0];
+- 5702 	    ctrlmode_reg[3:0]   <= ctrlmode_in[3:0];
+- 5703 	    data_reg[DW-1:0]    <= data_in[DW-1:0];
+- 5704 	    dstaddr_reg[AW-1:0] <= dstaddr_in[AW-1:0];
+- 5705 	    srcaddr_reg[AW-1:0] <= srcaddr_in[AW-1:0];
+- 5706 	 end
++ 5706    /*link_txo_arbiter AUTO_TEMPLATE(
++ 5706                                   .txo_wait            (txo_rd_wait),
++ 5706                                   .txo_wait_int        (txo_rd_wait_int),
++ 5706                                   .txo_launch_req_tlc  (txo_rd_launch_req_tlc),
++ 5706                                   .txo_rotate_dis_tlc  (txo_rd_rotate_dis),
++ 5706                                    );
++ 5706     */
++ 5706    link_txo_arbiter link_txo_arbiter (/*AUTOINST*/
++ 5706 				      .txo_launch_req_tlc(txo_rd_launch_req_tlc), // Templated
++ 5706 				      .txo_rotate_dis_tlc(txo_rd_rotate_dis), // Templated
++ 5706 				      .c0_txo_launch_ack_tlc(c0_txo_launch_ack_tlc),
++ 5706 				      .c1_txo_launch_ack_tlc(c1_txo_launch_ack_tlc),
++ 5706 				      .c2_txo_launch_ack_tlc(c2_txo_launch_ack_tlc),
++ 5706 				      .c3_txo_launch_ack_tlc(c3_txo_launch_ack_tlc),
++ 5706 				      .txo_lclk		(txo_lclk),
++ 5706 				      .reset		(reset),
++ 5706 				      .txo_wait		(txo_rd_wait),	 // Templated
++ 5706 				      .txo_wait_int	(txo_rd_wait_int), // Templated
++ 5706 				      .c0_txo_launch_req_tlc(c0_txo_launch_req_tlc),
++ 5706 				      .c0_txo_rotate_dis(c0_txo_rotate_dis),
++ 5706 				      .c1_txo_launch_req_tlc(c1_txo_launch_req_tlc),
++ 5706 				      .c1_txo_rotate_dis(c1_txo_rotate_dis),
++ 5706 				      .c2_txo_launch_req_tlc(c2_txo_launch_req_tlc),
++ 5706 				      .c2_txo_rotate_dis(c2_txo_rotate_dis),
++ 5706 				      .c3_txo_launch_req_tlc(c3_txo_launch_req_tlc),
++ 5706 				      .c3_txo_rotate_dis(c3_txo_rotate_dis));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@5714:5734
+       access_out <= 1'b0;
+     else if(clk_en)
+       if(!wait_in)
+	 access_out <= access;
+
+   always @ (posedge clk)
+     if (clk_en)
+       if(!wait_in & access)
+	 begin
+	    srcaddr_out[AW-1:0] <= srcaddr[AW-1:0];
+	    data_out[DW-1:0]    <= data[DW-1:0];
+	    write_out           <= write;
+	    datamode_out[1:0]   <= datamode[1:0]; 
+	    dstaddr_out[AW-1:0] <= dstaddr[AW-1:0];
+	    ctrlmode_out[3:0]   <= ctrlmode[3:0];
+	 end
+ 
+   //#####################
+   //# Wait out control
+   //#####################
+   always @ (posedge clk or posedge reset)
+

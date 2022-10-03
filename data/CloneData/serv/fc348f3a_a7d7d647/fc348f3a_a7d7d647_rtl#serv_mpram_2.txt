@@ -1,0 +1,33 @@
+Source Block: serv/rtl/serv_mpram.v@63:73@HdlIdDef
+   wire [9:0] waddr = {wreg, wslot};
+
+   wire       wen = wgo & (i_trap | (wport ? i_csr_en : i_rd_wen & run_r));
+
+   reg 	      wreq_r;
+   reg 	      run_r;
+
+   always @(posedge i_clk) begin
+      wreq_r    <= i_wreq | o_rgnt;
+      wdata0_r  <= wdata0;
+      wdata1_r  <= wdata1;
+
+Diff Content:
+- 68    reg 	      run_r;
++ 68    reg 	      wen0_r;
++ 68    reg 	      wen1_r;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_mpram.v@62:72
+   wire [5:0] wreg  = wport ? wreg1 : wreg0;
+   wire [9:0] waddr = {wreg, wslot};
+
+   wire       wen = wgo & (i_trap | (wport ? i_csr_en : i_rd_wen & run_r));
+
+   reg 	      wreq_r;
+   reg 	      run_r;
+
+   always @(posedge i_clk) begin
+      wreq_r    <= i_wreq | o_rgnt;
+      wdata0_r  <= wdata0;
+

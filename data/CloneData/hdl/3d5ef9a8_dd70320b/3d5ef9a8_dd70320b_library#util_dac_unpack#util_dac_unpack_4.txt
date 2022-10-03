@@ -1,0 +1,50 @@
+Source Block: hdl/library/util_dac_unpack/util_dac_unpack.v@210:228@HdlStmFor
+    end
+  endgenerate
+
+  generate
+    genvar j;
+    for (j = 0; j < CHANNELS; j = j + 1) begin : gen_dac_data
+      assign offset[j] = counter + enable_reduce(j);
+      always @(posedge clk) begin
+        if (dac_enable[j])
+          dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= data_array[offset[j]];
+        else
+          dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= 'h0000;
+      end
+    end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 216       assign offset[j] = counter + enable_reduce(j);
+- 218         if (dac_enable[j])
+- 219           dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= data_array[offset[j]];
+- 220         else
+- 221           dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= 'h0000;
++ 216       assign offset[j] = rd_counter + enable_reduce(j);
++ 221         if (dac_chan_valid) begin
++ 221           if (dac_enable[j])
++ 221             dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= data_array[offset[j]];
++ 221           else
++ 221             dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= 'h0000;
++ 221         end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_dac_unpack/util_dac_unpack.v@209:219
+      assign data_array[i] = buffer[DATA_WIDTH+i*DATA_WIDTH-1:i*DATA_WIDTH];
+    end
+  endgenerate
+
+  generate
+    genvar j;
+    for (j = 0; j < CHANNELS; j = j + 1) begin : gen_dac_data
+      assign offset[j] = counter + enable_reduce(j);
+      always @(posedge clk) begin
+        if (dac_enable[j])
+          dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= data_array[offset[j]];
+

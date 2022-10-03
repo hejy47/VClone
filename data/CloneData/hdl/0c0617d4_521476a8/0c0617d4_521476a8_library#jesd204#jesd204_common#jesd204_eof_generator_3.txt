@@ -1,0 +1,46 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_eof_generator.v@69:79@HdlIdDef
+  MAX_OCTETS_PER_FRAME > 4 ? 3 :
+  MAX_OCTETS_PER_FRAME > 2 ? 2 : 1;
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 :
+  DATA_PATH_WIDTH == 4 ? 2 : 1;
+
+reg lmfc_edge_d1 = 1'b0;
+
+wire beat_counter_sof;
+wire beat_counter_eof;
+wire small_octets_per_frame;
+
+
+Diff Content:
+- 74 reg lmfc_edge_d1 = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_common/jesd204_eof_generator.v@66:77
+  MAX_OCTETS_PER_FRAME > 32 ? 6 :
+  MAX_OCTETS_PER_FRAME > 16 ? 5 :
+  MAX_OCTETS_PER_FRAME > 8 ? 4 :
+  MAX_OCTETS_PER_FRAME > 4 ? 3 :
+  MAX_OCTETS_PER_FRAME > 2 ? 2 : 1;
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 :
+  DATA_PATH_WIDTH == 4 ? 2 : 1;
+
+reg lmfc_edge_d1 = 1'b0;
+
+wire beat_counter_sof;
+wire beat_counter_eof;
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_common/jesd204_eof_generator.v@71:81
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 :
+  DATA_PATH_WIDTH == 4 ? 2 : 1;
+
+reg lmfc_edge_d1 = 1'b0;
+
+wire beat_counter_sof;
+wire beat_counter_eof;
+wire small_octets_per_frame;
+
+always @(posedge clk) begin
+  if (cfg_generate_eomf == 1'b1) begin
+

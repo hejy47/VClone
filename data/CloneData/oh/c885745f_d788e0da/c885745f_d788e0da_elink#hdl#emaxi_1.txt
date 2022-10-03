@@ -1,0 +1,30 @@
+Source Block: oh/elink/hdl/emaxi.v@307:323@HdlStmProcess
+   
+   //#########################################################################
+   //Write data alignment circuit
+   //#########################################################################
+
+   always @*
+     case( rxwr_datamode[1:0] )        
+       2'd0:    wdata_aligned[63:0] = { 8{rxwr_data[7:0]}};
+       2'd1:    wdata_aligned[63:0] = { 4{rxwr_data[15:0]}};
+       2'd2:    wdata_aligned[63:0] = { 2{rxwr_data[31:0]}};
+       default: wdata_aligned[63:0] = { rxwr_srcaddr[31:0], rxwr_data[31:0]};
+     endcase
+
+   always @*
+     begin
+	case(rxwr_datamode[1:0])
+          2'd0: // byte
+
+Diff Content:
+- 314        2'd0:    wdata_aligned[63:0] = { 8{rxwr_data[7:0]}};
+- 315        2'd1:    wdata_aligned[63:0] = { 4{rxwr_data[15:0]}};
+- 316        2'd2:    wdata_aligned[63:0] = { 2{rxwr_data[31:0]}};
+- 317        default: wdata_aligned[63:0] = { rxwr_srcaddr[31:0], rxwr_data[31:0]};
++ 317        2'b00:    wdata_aligned[63:0] = { 8{rxwr_data[7:0]}};
++ 317        2'b01:    wdata_aligned[63:0] = { 4{rxwr_data[15:0]}};
++ 317        2'b10:    wdata_aligned[63:0] = { 2{rxwr_data[31:0]}};
++ 317        default: wdata_aligned[63:0]  = { rxwr_srcaddr[31:0], rxwr_data[31:0]};
+
+Clone Blocks:

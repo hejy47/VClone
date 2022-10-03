@@ -1,0 +1,42 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3873:3888@HdlStmProcess
+   wire [FAD:0]   wr_binary_next;
+
+   //###########################
+   //# Write control generation
+   //###########################
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+       frame_del <= 1'b0;
+     else if(cclk_en)
+       if(!wr_fifo_full)
+	 frame_del <= frame_in;
+
+   assign wr_write = (frame_in | frame_del) & ~wr_fifo_full;
+
+   //###################################
+   //# Full transaction write completed
+
+Diff Content:
+- 3878    always @ (posedge cclk or posedge reset)
+- 3879      if(reset)
+- 3880        frame_del <= 1'b0;
+- 3881      else if(cclk_en)
+- 3882        if(!wr_fifo_full)
+- 3883 	 frame_del <= frame_in;
++ 3883    /*AUTOINPUT*/
++ 3883    input		c0_emesh_frame_in;	// To link_txo_wr of link_txo_wr.v
++ 3883    input [2*LW-1:0]	c0_emesh_tran_in;	// To link_txo_wr of link_txo_wr.v
++ 3883    input		c1_emesh_frame_in;	// To link_txo_wr of link_txo_wr.v
++ 3883    input [2*LW-1:0]	c1_emesh_tran_in;	// To link_txo_wr of link_txo_wr.v
++ 3883    input		c2_emesh_frame_in;	// To link_txo_wr of link_txo_wr.v
++ 3883    input [2*LW-1:0]	c2_emesh_tran_in;	// To link_txo_wr of link_txo_wr.v
++ 3883    input		c3_emesh_frame_in;	// To link_txo_wr of link_txo_wr.v
++ 3883    input [2*LW-1:0]	c3_emesh_tran_in;	// To link_txo_wr of link_txo_wr.v
++ 3883    /*AUTOWIRE*/
++ 3883    wire [LW-1:0]	txo_wr_data_even;	// From link_txo_wr of link_txo_wr.v
++ 3883    wire [LW-1:0]	txo_wr_data_odd;	// From link_txo_wr of link_txo_wr.v
++ 3883    wire			txo_wr_frame;		// From link_txo_wr of link_txo_wr.v
++ 3883    wire			txo_wr_launch_req_tlc;	// From link_txo_wr of link_txo_wr.v
++ 3883    wire			txo_wr_rotate_dis;	// From link_txo_wr of link_txo_wr.v
+
+Clone Blocks:

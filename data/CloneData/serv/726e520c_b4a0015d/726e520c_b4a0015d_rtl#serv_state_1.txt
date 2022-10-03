@@ -1,0 +1,39 @@
+Source Block: serv/rtl/serv_state.v@115:143@HdlStmIf
+	 o_cnt_r <= 4'b0001;
+      end
+   end
+
+   generate
+      if (WITH_CSR) begin
+   reg 	irq_sync;
+   reg 	misalign_trap_sync;
+
+   assign o_ctrl_trap = i_e_op | o_pending_irq | misalign_trap_sync;
+   assign o_trap_taken = i_ibus_ack & o_ctrl_trap;
+
+   always @(posedge i_clk) begin
+      if (i_ibus_ack)
+	irq_sync <= 1'b0;
+      if (i_new_irq)
+	irq_sync <= 1'b1;
+
+      if (i_ibus_ack)
+	o_pending_irq <= irq_sync;
+
+      if (stage_two_req)
+	misalign_trap_sync <= trap_pending;
+      if (i_ibus_ack)
+	misalign_trap_sync <= 1'b0;
+   end // always @ (posedge i_clk)
+      end // if (WITH_CSR)
+   endgenerate
+endmodule
+
+Diff Content:
+- 141       end // if (WITH_CSR)
++ 141       end else begin
++ 141 	 always @(*)
++ 141 	   o_pending_irq = 1'b0;
++ 141       end
+
+Clone Blocks:

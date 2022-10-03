@@ -1,0 +1,22 @@
+Source Block: oh/elink/dv/dv_elink.v@871:885@HdlStmProcess
+ 
+   
+   //######################################################################
+   //TRANSACTION MONITORS
+   //######################################################################
+   always @ (posedge clkin or posedge reset)
+     if(reset)
+       etime[31:0] <= 32'b0;
+     else
+       etime[31:0] <= etime[31:0]+1'b1;
+
+  /*emesh_monitor AUTO_TEMPLATE ( 
+                        // Outputs
+                        .emesh_\(.*\)     (@"(substring vl-cell-name  0 3)"_\1[]),
+                        );
+
+Diff Content:
+- 876    always @ (posedge clkin or posedge reset)
++ 876    always @ (posedge clk or posedge reset)
+
+Clone Blocks:

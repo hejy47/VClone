@@ -1,0 +1,46 @@
+Source Block: hdl/library/common/ad_gt_channel_1.v@249:264@HdlStmIf
+
+  assign rx_pll_locked = (rx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+  assign tx_pll_locked = (tx_sys_clk_sel == 2'd3) ? qpll_locked : cpll_locked_s;
+
+  generate
+  if (GTH_GTX_N == 0) begin
+  assign rx_sys_clk_sel_s = rx_sys_clk_sel;
+  assign tx_sys_clk_sel_s = tx_sys_clk_sel;
+  assign rx_pll_clk_sel_s = 2'd0;
+  assign tx_pll_clk_sel_s = 2'd0;
+  end
+  if (GTH_GTX_N == 1) begin
+  assign rx_sys_clk_sel_s = (rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign tx_sys_clk_sel_s = (tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_pll_clk_sel_s = rx_sys_clk_sel;
+  assign tx_pll_clk_sel_s = tx_sys_clk_sel;
+
+Diff Content:
+- 254   if (GTH_GTX_N == 0) begin
+- 255   assign rx_sys_clk_sel_s = rx_sys_clk_sel;
+- 256   assign tx_sys_clk_sel_s = tx_sys_clk_sel;
+- 257   assign rx_pll_clk_sel_s = 2'd0;
+- 258   assign tx_pll_clk_sel_s = 2'd0;
+- 259   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_gt_channel_1.v@255:270
+  assign rx_sys_clk_sel_s = rx_sys_clk_sel;
+  assign tx_sys_clk_sel_s = tx_sys_clk_sel;
+  assign rx_pll_clk_sel_s = 2'd0;
+  assign tx_pll_clk_sel_s = 2'd0;
+  end
+  if (GTH_GTX_N == 1) begin
+  assign rx_sys_clk_sel_s = (rx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign tx_sys_clk_sel_s = (tx_sys_clk_sel == 2'd3) ? 2'b10 : 2'b00;
+  assign rx_pll_clk_sel_s = rx_sys_clk_sel;
+  assign tx_pll_clk_sel_s = tx_sys_clk_sel;
+  end
+  endgenerate
+
+  // user ready
+
+  always @(posedge up_clk) begin
+

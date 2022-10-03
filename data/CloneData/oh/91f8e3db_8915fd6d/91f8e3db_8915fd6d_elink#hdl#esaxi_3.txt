@@ -1,0 +1,54 @@
+Source Block: oh/elink/hdl/esaxi.v@361:407@HdlStmProcess
+   //###################################################
+   //#WRITE REQUEST
+   //###################################################  
+   assign txwr_write         = 1'b1;
+   
+   always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn) 
+       begin
+          txwr_data_reg[31:0]     <= 32'd0;	  
+          txwr_dstaddr_reg[31:0]  <= 32'd0;	 
+          txwr_datamode_reg[1:0]  <= 2'd0;
+          txwr_access             <= 1'b0;
+          pre_wr_en               <= 1'b0;
+       end 
+     else 
+       begin
+	  pre_wr_en                 <= s_axi_wready & s_axi_wvalid;
+          txwr_access               <= pre_wr_en;
+	  txwr_datamode_reg[1:0]    <= axi_awsize[1:0];	
+          txwr_dstaddr_reg[31:2]    <= axi_awaddr[31:2]; //set lsbs of address based on write strobes	 
+	  //What is up with this logic??
+	  if(s_axi_wstrb[0]| (axi_awsize[1:0]==2'b10))//| (axi_awsize[1:0]==2'b10)32-bits
+	    begin
+	       txwr_data_reg[31:0]   <= s_axi_wdata[31:0];
+	       txwr_dstaddr_reg[1:0] <= 2'd0;
+	    end
+	  else if(s_axi_wstrb[1])
+	    begin
+	       txwr_data_reg[31:0]   <= {8'd0, s_axi_wdata[31:8]};
+	       txwr_dstaddr_reg[1:0] <= 2'd1;
+	    end
+	  else if(s_axi_wstrb[2])
+	    begin
+	       txwr_data_reg[31:0]   <= {16'd0, s_axi_wdata[31:16]};
+	       txwr_dstaddr_reg[1:0] <= 2'd2;
+	    end
+	  else
+	    begin
+	       txwr_data_reg[31:0]   <= {24'd0, s_axi_wdata[31:24]};
+	       txwr_dstaddr_reg[1:0] <= 2'd3;
+	    end
+       end // else: !if(~s_axi_aresetn)
+
+   //Pipeline stage!
+   always @( posedge s_axi_aclk )     
+     begin
+        txwr_data[31:0]     <= txwr_data_reg[31:0];	  
+
+Diff Content:
+- 382 	  if(s_axi_wstrb[0]| (axi_awsize[1:0]==2'b10))//| (axi_awsize[1:0]==2'b10)32-bits
++ 382 	  if(s_axi_wstrb[0])//| (axi_awsize[1:0]==2'b10)32-bits
+
+Clone Blocks:

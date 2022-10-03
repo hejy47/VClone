@@ -1,0 +1,39 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@305:326@HdlIdDef
+/* Choose the larger of the two */
+ localparam DMA_LENGTH_ALIGN =
+   DMA_LENGTH_ALIGN_SRC < DMA_LENGTH_ALIGN_DEST ?
+     DMA_LENGTH_ALIGN_DEST : DMA_LENGTH_ALIGN_SRC;
+
+localparam BYTES_PER_BURST_WIDTH =
+  REAL_MAX_BYTES_PER_BURST > 2048 ? 12 :
+  REAL_MAX_BYTES_PER_BURST > 1024 ? 11 :
+  REAL_MAX_BYTES_PER_BURST > 512 ? 10 :
+  REAL_MAX_BYTES_PER_BURST > 256 ? 9 :
+  REAL_MAX_BYTES_PER_BURST > 128 ? 8 :
+  REAL_MAX_BYTES_PER_BURST > 64 ? 7 :
+  REAL_MAX_BYTES_PER_BURST > 32 ? 6 :
+  REAL_MAX_BYTES_PER_BURST > 16 ? 5 :
+  REAL_MAX_BYTES_PER_BURST > 8 ? 4 :
+  REAL_MAX_BYTES_PER_BURST > 4 ? 3 :
+  REAL_MAX_BYTES_PER_BURST > 2 ? 2 : 1;
+
+// ID signals from the DMAC, just for debugging
+wire [ID_WIDTH-1:0] dest_request_id;
+wire [ID_WIDTH-1:0] dest_data_id;
+wire [ID_WIDTH-1:0] dest_address_id;
+
+Diff Content:
+- 310 localparam BYTES_PER_BURST_WIDTH =
+- 311   REAL_MAX_BYTES_PER_BURST > 2048 ? 12 :
+- 312   REAL_MAX_BYTES_PER_BURST > 1024 ? 11 :
+- 313   REAL_MAX_BYTES_PER_BURST > 512 ? 10 :
+- 314   REAL_MAX_BYTES_PER_BURST > 256 ? 9 :
+- 315   REAL_MAX_BYTES_PER_BURST > 128 ? 8 :
+- 316   REAL_MAX_BYTES_PER_BURST > 64 ? 7 :
+- 317   REAL_MAX_BYTES_PER_BURST > 32 ? 6 :
+- 318   REAL_MAX_BYTES_PER_BURST > 16 ? 5 :
+- 319   REAL_MAX_BYTES_PER_BURST > 8 ? 4 :
+- 320   REAL_MAX_BYTES_PER_BURST > 4 ? 3 :
+- 321   REAL_MAX_BYTES_PER_BURST > 2 ? 2 : 1;
+
+Clone Blocks:

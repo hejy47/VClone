@@ -1,0 +1,25 @@
+Source Block: oh/emmu/hdl/emmu.v@119:132@HdlStmAssign
+					     emmu_packet_reg[27:8]} :      //20 bits
+				             {32'b0,emmu_packet_reg[39:8]};//ugly
+      
+
+   //Concatenating output packet
+   assign emmu_packet_out[PW-1:0] = {emmu_packet_reg[PW-1:40],
+                                     emmu_dstaddr_out[31:0],
+                                     emmu_packet_reg[7:0]
+				    };
+   
+
+   assign emmu_packet_hi_out[31:0] = emmu_dstaddr_out[63:32];
+      
+endmodule // emmu
+
+Diff Content:
+- 124    assign emmu_packet_out[PW-1:0] = {emmu_packet_reg[PW-1:40],
+- 125                                      emmu_dstaddr_out[31:0],
+- 126                                      emmu_packet_reg[7:0]
++ 126    assign emesh_packet_out[PW-1:0] = {emesh_packet_reg[PW-1:40],
++ 126                                      emesh_dstaddr_out[31:0],
++ 126                                      emesh_packet_reg[7:0]
+
+Clone Blocks:

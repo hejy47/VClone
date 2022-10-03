@@ -1,0 +1,84 @@
+Source Block: oh/common/hdl/oh_fifo_generic.v@49:73@HdlStmProcess
+   assign empty     = (rd_count[AW-1:0] == 'b0);
+   assign full      = (wr_count[AW-1:0] == DEPTH);
+   assign prog_full = (wr_count[AW-1:0] >= PROG_FULL);   
+
+   // write side state machine
+   always @ ( posedge wr_clk or negedge nreset) 
+     if(!nreset) 
+       begin	   
+          wr_addr[AW-1:0]   <= 'd0;
+	  wr_count[AW-1:0]  <= 'd0;
+       end 
+     else if(wr_en & rd_en_sync) 
+	  wr_addr[AW-1:0] <= wr_addr[AW-1:0] + 'd1;
+     else if(wr_en) 
+       begin
+	  wr_addr[AW-1:0] <= wr_addr[AW-1:0]  + 'd1;
+	  wr_count[AW-1:0]<= wr_count[AW-1:0] + 'd1;	
+       end
+     else if(rd_en_sync) 
+       wr_count[AW-1:0]<= wr_count[AW-1:0] - 'd1;	
+
+   // read side state machine
+   always @ ( posedge rd_clk or negedge nreset) 
+     if(!nreset) 
+       begin	   
+
+Diff Content:
+- 56        begin	   
+- 57           wr_addr[AW-1:0]   <= 'd0;
+- 58 	  wr_count[AW-1:0]  <= 'd0;
+- 59        end 
+- 60      else if(wr_en & rd_en_sync) 
+- 61 	  wr_addr[AW-1:0] <= wr_addr[AW-1:0] + 'd1;
+- 63        begin
+- 64 	  wr_addr[AW-1:0] <= wr_addr[AW-1:0]  + 'd1;
+- 65 	  wr_count[AW-1:0]<= wr_count[AW-1:0] + 'd1;	
+- 66        end
+- 67      else if(rd_en_sync) 
+- 68        wr_count[AW-1:0]<= wr_count[AW-1:0] - 'd1;	
++ 61        wr_addr[AW:0]  <= 'b0;
++ 68        wr_addr[AW:0]  <= wr_addr[AW:0]  + 'd1;
++ 68    always @ (posedge wr_clk)
++ 68      if(~nreset)
++ 68        wr_addr_ahead[AW:0] <= 'b0;   
++ 68      else if(~prog_full)
++ 68        wr_addr_ahead[AW:0] <= wr_addr[AW:0]  + PROG_FULL;
++ 68    oh_bin2gray #(.DW(AW+1))
++ 68    wr_b2g (.gray   (wr_addr_gray[AW:0]),
++ 68 	   .bin	   (wr_addr[AW:0]));
++ 68    oh_dsync  #(.DW(AW+1))
++ 68    wr_sync(.dout (wr_addr_gray_sync[AW:0]),
++ 68 	   .clk  (rd_clk),
++ 68 	   .din  (wr_addr_gray[AW:0]));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_fifo_generic.v@66:90
+       end
+     else if(rd_en_sync) 
+       wr_count[AW-1:0]<= wr_count[AW-1:0] - 'd1;	
+
+   // read side state machine
+   always @ ( posedge rd_clk or negedge nreset) 
+     if(!nreset) 
+       begin	   
+          rd_addr[AW-1:0]   <= 'd0;
+	  rd_count[AW-1:0]  <= 'd0;
+       end 
+     else if(rd_en & wr_en_sync) 
+       rd_addr[AW-1:0] <= rd_addr[AW-1:0] + 'd1;
+     else if(rd_en) 
+       begin
+	  rd_addr[AW-1:0] <= rd_addr[AW-1:0]  + 'd1;
+	  rd_count[AW-1:0] <= rd_count[AW-1:0] - 'd1;	
+       end
+     else if(wr_en_sync) 
+       rd_count[AW-1:0] <= rd_count[AW-1:0] + 'd1;	
+         
+   // clock domain synchronizers
+   oh_dsync wr_sync(.dout (wr_en_sync),
+		    .clk  (rd_clk),
+		    .din  (wr_en));
+

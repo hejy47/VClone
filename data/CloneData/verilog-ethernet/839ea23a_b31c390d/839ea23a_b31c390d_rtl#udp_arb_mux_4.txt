@@ -1,0 +1,451 @@
+Source Block: verilog-ethernet/rtl/udp_arb_mux.v@218:300@HdlStmProcess
+);
+
+assign request = s_udp_hdr_valid & ~grant;
+assign acknowledge = grant & s_udp_payload_axis_tvalid & s_udp_payload_axis_tready & s_udp_payload_axis_tlast;
+
+always @* begin
+    frame_next = frame_reg;
+
+    s_udp_hdr_ready_mask_next = s_udp_hdr_ready_mask_reg;
+
+    m_udp_hdr_valid_next = m_udp_hdr_valid_reg && !m_udp_hdr_ready;
+    m_eth_dest_mac_next = m_eth_dest_mac_reg;
+    m_eth_src_mac_next = m_eth_src_mac_reg;
+    m_eth_type_next = m_eth_type_reg;
+    m_ip_version_next = m_ip_version_reg;
+    m_ip_ihl_next = m_ip_ihl_reg;
+    m_ip_dscp_next = m_ip_dscp_reg;
+    m_ip_ecn_next = m_ip_ecn_reg;
+    m_ip_length_next = m_ip_length_reg;
+    m_ip_identification_next = m_ip_identification_reg;
+    m_ip_flags_next = m_ip_flags_reg;
+    m_ip_fragment_offset_next = m_ip_fragment_offset_reg;
+    m_ip_ttl_next = m_ip_ttl_reg;
+    m_ip_protocol_next = m_ip_protocol_reg;
+    m_ip_header_checksum_next = m_ip_header_checksum_reg;
+    m_ip_source_ip_next = m_ip_source_ip_reg;
+    m_ip_dest_ip_next = m_ip_dest_ip_reg;
+    m_udp_source_port_next = m_udp_source_port_reg;
+    m_udp_dest_port_next = m_udp_dest_port_reg;
+    m_udp_length_next = m_udp_length_reg;
+    m_udp_checksum_next = m_udp_checksum_reg;
+
+    if (s_udp_payload_axis_tvalid[grant_encoded] && s_udp_payload_axis_tready[grant_encoded]) begin
+        // end of frame detection
+        if (s_udp_payload_axis_tlast[grant_encoded]) begin
+            frame_next = 1'b0;
+            s_udp_hdr_ready_mask_next = 1'b0;
+        end
+    end
+
+    if (!frame_reg && grant_valid) begin
+        // start of frame
+        frame_next = 1'b1;
+
+        s_udp_hdr_ready_mask_next = 1'b1;
+
+        m_udp_hdr_valid_next = 1'b1;
+        m_eth_dest_mac_next = s_eth_dest_mac[grant_encoded*48 +: 48];
+        m_eth_src_mac_next = s_eth_src_mac[grant_encoded*48 +: 48];
+        m_eth_type_next = s_eth_type[grant_encoded*16 +: 16];
+        m_ip_version_next = s_ip_version[grant_encoded*4 +: 4];
+        m_ip_ihl_next = s_ip_ihl[grant_encoded*4 +: 4];
+        m_ip_dscp_next = s_ip_dscp[grant_encoded*6 +: 6];
+        m_ip_ecn_next = s_ip_ecn[grant_encoded*2 +: 2];
+        m_ip_length_next = s_ip_length[grant_encoded*16 +: 16];
+        m_ip_identification_next = s_ip_identification[grant_encoded*16 +: 16];
+        m_ip_flags_next = s_ip_flags[grant_encoded*3 +: 3];
+        m_ip_fragment_offset_next = s_ip_fragment_offset[grant_encoded*13 +: 13];
+        m_ip_ttl_next = s_ip_ttl[grant_encoded*8 +: 8];
+        m_ip_protocol_next = s_ip_protocol[grant_encoded*8 +: 8];
+        m_ip_header_checksum_next = s_ip_header_checksum[grant_encoded*16 +: 16];
+        m_ip_source_ip_next = s_ip_source_ip[grant_encoded*32 +: 32];
+        m_ip_dest_ip_next = s_ip_dest_ip[grant_encoded*32 +: 32];
+        m_udp_source_port_next = s_udp_source_port[grant_encoded*16 +: 16];
+        m_udp_dest_port_next = s_udp_dest_port[grant_encoded*16 +: 16];
+        m_udp_length_next = s_udp_length[grant_encoded*16 +: 16];
+        m_udp_checksum_next = s_udp_checksum[grant_encoded*16 +: 16];
+    end
+
+    // pass through selected packet data
+    m_udp_payload_axis_tdata_int  = current_s_tdata;
+    m_udp_payload_axis_tkeep_int  = current_s_tkeep;
+    m_udp_payload_axis_tvalid_int = current_s_tvalid && m_udp_payload_axis_tready_int_reg && grant_valid;
+    m_udp_payload_axis_tlast_int  = current_s_tlast;
+    m_udp_payload_axis_tid_int    = current_s_tid;
+    m_udp_payload_axis_tdest_int  = current_s_tdest;
+    m_udp_payload_axis_tuser_int  = current_s_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        frame_reg <= 1'b0;
+        s_udp_hdr_ready_mask_reg <= 1'b0;
+
+Diff Content:
+- 226     s_udp_hdr_ready_mask_next = s_udp_hdr_ready_mask_reg;
+- 254             s_udp_hdr_ready_mask_next = 1'b0;
+- 258     if (!frame_reg && grant_valid) begin
+- 262         s_udp_hdr_ready_mask_next = 1'b1;
++ 226     s_udp_hdr_ready_next = {S_COUNT{1'b0}};
++ 258     if (!frame_reg && grant_valid && (m_udp_hdr_ready || !m_udp_hdr_valid)) begin
++ 262         s_udp_hdr_ready_next = grant;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip_mux.v@181:261
+wire                  current_s_tlast  = s_ip_payload_axis_tlast[select_reg];
+wire [ID_WIDTH-1:0]   current_s_tid    = s_ip_payload_axis_tid[select_reg*ID_WIDTH +: ID_WIDTH];
+wire [DEST_WIDTH-1:0] current_s_tdest  = s_ip_payload_axis_tdest[select_reg*DEST_WIDTH +: DEST_WIDTH];
+wire [USER_WIDTH-1:0] current_s_tuser  = s_ip_payload_axis_tuser[select_reg*USER_WIDTH +: USER_WIDTH];
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+    s_ip_hdr_ready_next = 0;
+
+    s_ip_payload_axis_tready_next = 0;
+
+    m_ip_hdr_valid_next = m_ip_hdr_valid_reg && !m_ip_hdr_ready;
+    m_eth_dest_mac_next = m_eth_dest_mac_reg;
+    m_eth_src_mac_next = m_eth_src_mac_reg;
+    m_eth_type_next = m_eth_type_reg;
+    m_ip_version_next = m_ip_version_reg;
+    m_ip_ihl_next = m_ip_ihl_reg;
+    m_ip_dscp_next = m_ip_dscp_reg;
+    m_ip_ecn_next = m_ip_ecn_reg;
+    m_ip_length_next = m_ip_length_reg;
+    m_ip_identification_next = m_ip_identification_reg;
+    m_ip_flags_next = m_ip_flags_reg;
+    m_ip_fragment_offset_next = m_ip_fragment_offset_reg;
+    m_ip_ttl_next = m_ip_ttl_reg;
+    m_ip_protocol_next = m_ip_protocol_reg;
+    m_ip_header_checksum_next = m_ip_header_checksum_reg;
+    m_ip_source_ip_next = m_ip_source_ip_reg;
+    m_ip_dest_ip_next = m_ip_dest_ip_reg;
+
+    if (current_s_tvalid & current_s_tready) begin
+        // end of frame detection
+        if (current_s_tlast) begin
+            frame_next = 1'b0;
+        end
+    end
+
+    if (!frame_reg && enable && !m_ip_hdr_valid && (s_ip_hdr_valid & (1 << select))) begin
+        // start of frame, grab select value
+        frame_next = 1'b1;
+        select_next = select;
+
+        s_ip_hdr_ready_next = (1 << select);
+
+        m_ip_hdr_valid_next = 1'b1;
+        m_eth_dest_mac_next = s_eth_dest_mac[select*48 +: 48];
+        m_eth_src_mac_next = s_eth_src_mac[select*48 +: 48];
+        m_eth_type_next = s_eth_type[select*16 +: 16];
+        m_ip_version_next = s_ip_version[select*4 +: 4];
+        m_ip_ihl_next = s_ip_ihl[select*4 +: 4];
+        m_ip_dscp_next = s_ip_dscp[select*6 +: 6];
+        m_ip_ecn_next = s_ip_ecn[select*2 +: 2];
+        m_ip_length_next = s_ip_length[select*16 +: 16];
+        m_ip_identification_next = s_ip_identification[select*16 +: 16];
+        m_ip_flags_next = s_ip_flags[select*3 +: 3];
+        m_ip_fragment_offset_next = s_ip_fragment_offset[select*13 +: 13];
+        m_ip_ttl_next = s_ip_ttl[select*8 +: 8];
+        m_ip_protocol_next = s_ip_protocol[select*8 +: 8];
+        m_ip_header_checksum_next = s_ip_header_checksum[select*16 +: 16];
+        m_ip_source_ip_next = s_ip_source_ip[select*32 +: 32];
+        m_ip_dest_ip_next = s_ip_dest_ip[select*32 +: 32];
+    end
+
+    // generate ready signal on selected port
+    s_ip_payload_axis_tready_next = (m_ip_payload_axis_tready_int_early && frame_next) << select_next;
+
+    // pass through selected packet data
+    m_ip_payload_axis_tdata_int  = current_s_tdata;
+    m_ip_payload_axis_tkeep_int  = current_s_tkeep;
+    m_ip_payload_axis_tvalid_int = current_s_tvalid && current_s_tready && frame_reg;
+    m_ip_payload_axis_tlast_int  = current_s_tlast;
+    m_ip_payload_axis_tid_int    = current_s_tid;
+    m_ip_payload_axis_tdest_int  = current_s_tdest;
+    m_ip_payload_axis_tuser_int  = current_s_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 1'b0;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/udp_mux.v@197:285
+wire                  current_s_tlast  = s_udp_payload_axis_tlast[select_reg];
+wire [ID_WIDTH-1:0]   current_s_tid    = s_udp_payload_axis_tid[select_reg*ID_WIDTH +: ID_WIDTH];
+wire [DEST_WIDTH-1:0] current_s_tdest  = s_udp_payload_axis_tdest[select_reg*DEST_WIDTH +: DEST_WIDTH];
+wire [USER_WIDTH-1:0] current_s_tuser  = s_udp_payload_axis_tuser[select_reg*USER_WIDTH +: USER_WIDTH];
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+    s_udp_hdr_ready_next = 0;
+
+    s_udp_payload_axis_tready_next = 0;
+
+    m_udp_hdr_valid_next = m_udp_hdr_valid_reg && !m_udp_hdr_ready;
+    m_eth_dest_mac_next = m_eth_dest_mac_reg;
+    m_eth_src_mac_next = m_eth_src_mac_reg;
+    m_eth_type_next = m_eth_type_reg;
+    m_ip_version_next = m_ip_version_reg;
+    m_ip_ihl_next = m_ip_ihl_reg;
+    m_ip_dscp_next = m_ip_dscp_reg;
+    m_ip_ecn_next = m_ip_ecn_reg;
+    m_ip_length_next = m_ip_length_reg;
+    m_ip_identification_next = m_ip_identification_reg;
+    m_ip_flags_next = m_ip_flags_reg;
+    m_ip_fragment_offset_next = m_ip_fragment_offset_reg;
+    m_ip_ttl_next = m_ip_ttl_reg;
+    m_ip_protocol_next = m_ip_protocol_reg;
+    m_ip_header_checksum_next = m_ip_header_checksum_reg;
+    m_ip_source_ip_next = m_ip_source_ip_reg;
+    m_ip_dest_ip_next = m_ip_dest_ip_reg;
+    m_udp_source_port_next = m_udp_source_port_reg;
+    m_udp_dest_port_next = m_udp_dest_port_reg;
+    m_udp_length_next = m_udp_length_reg;
+    m_udp_checksum_next = m_udp_checksum_reg;
+
+    if (current_s_tvalid & current_s_tready) begin
+        // end of frame detection
+        if (current_s_tlast) begin
+            frame_next = 1'b0;
+        end
+    end
+
+    if (!frame_reg && enable && !m_udp_hdr_valid && (s_udp_hdr_valid & (1 << select))) begin
+        // start of frame, grab select value
+        frame_next = 1'b1;
+        select_next = select;
+
+        s_udp_hdr_ready_next = (1 << select);
+
+        m_udp_hdr_valid_next = 1'b1;
+        m_eth_dest_mac_next = s_eth_dest_mac[select*48 +: 48];
+        m_eth_src_mac_next = s_eth_src_mac[select*48 +: 48];
+        m_eth_type_next = s_eth_type[select*16 +: 16];
+        m_ip_version_next = s_ip_version[select*4 +: 4];
+        m_ip_ihl_next = s_ip_ihl[select*4 +: 4];
+        m_ip_dscp_next = s_ip_dscp[select*6 +: 6];
+        m_ip_ecn_next = s_ip_ecn[select*2 +: 2];
+        m_ip_length_next = s_ip_length[select*16 +: 16];
+        m_ip_identification_next = s_ip_identification[select*16 +: 16];
+        m_ip_flags_next = s_ip_flags[select*3 +: 3];
+        m_ip_fragment_offset_next = s_ip_fragment_offset[select*13 +: 13];
+        m_ip_ttl_next = s_ip_ttl[select*8 +: 8];
+        m_ip_protocol_next = s_ip_protocol[select*8 +: 8];
+        m_ip_header_checksum_next = s_ip_header_checksum[select*16 +: 16];
+        m_ip_source_ip_next = s_ip_source_ip[select*32 +: 32];
+        m_ip_dest_ip_next = s_ip_dest_ip[select*32 +: 32];
+        m_udp_source_port_next = s_udp_source_port[select*16 +: 16];
+        m_udp_dest_port_next = s_udp_dest_port[select*16 +: 16];
+        m_udp_length_next = s_udp_length[select*16 +: 16];
+        m_udp_checksum_next = s_udp_checksum[select*16 +: 16];
+    end
+
+    // generate ready signal on selected port
+    s_udp_payload_axis_tready_next = (m_udp_payload_axis_tready_int_early && frame_next) << select_next;
+
+    // pass through selected packet data
+    m_udp_payload_axis_tdata_int  = current_s_tdata;
+    m_udp_payload_axis_tkeep_int  = current_s_tkeep;
+    m_udp_payload_axis_tvalid_int = current_s_tvalid && current_s_tready && frame_reg;
+    m_udp_payload_axis_tlast_int  = current_s_tlast;
+    m_udp_payload_axis_tid_int    = current_s_tid;
+    m_udp_payload_axis_tdest_int  = current_s_tdest;
+    m_udp_payload_axis_tuser_int  = current_s_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 1'b0;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/udp_demux.v@191:289
+assign m_udp_length = {M_COUNT{m_udp_length_reg}};
+assign m_udp_checksum = {M_COUNT{m_udp_checksum_reg}};
+
+integer i;
+
+always @* begin
+    select_next = select_reg;
+    select_ctl = select_reg;
+    drop_next = drop_reg;
+    drop_ctl = drop_reg;
+    frame_next = frame_reg;
+    frame_ctl = frame_reg;
+
+    s_udp_hdr_ready_next = 1'b0;
+
+    s_udp_payload_axis_tready_next = 1'b0;
+
+    m_udp_hdr_valid_next = m_udp_hdr_valid_reg & ~m_udp_hdr_ready;
+    m_eth_dest_mac_next = m_eth_dest_mac_reg;
+    m_eth_src_mac_next = m_eth_src_mac_reg;
+    m_eth_type_next = m_eth_type_reg;
+    m_ip_version_next = m_ip_version_reg;
+    m_ip_ihl_next = m_ip_ihl_reg;
+    m_ip_dscp_next = m_ip_dscp_reg;
+    m_ip_ecn_next = m_ip_ecn_reg;
+    m_ip_length_next = m_ip_length_reg;
+    m_ip_identification_next = m_ip_identification_reg;
+    m_ip_flags_next = m_ip_flags_reg;
+    m_ip_fragment_offset_next = m_ip_fragment_offset_reg;
+    m_ip_ttl_next = m_ip_ttl_reg;
+    m_ip_protocol_next = m_ip_protocol_reg;
+    m_ip_header_checksum_next = m_ip_header_checksum_reg;
+    m_ip_source_ip_next = m_ip_source_ip_reg;
+    m_ip_dest_ip_next = m_ip_dest_ip_reg;
+    m_udp_source_port_next = m_udp_source_port_reg;
+    m_udp_dest_port_next = m_udp_dest_port_reg;
+    m_udp_length_next = m_udp_length_reg;
+    m_udp_checksum_next = m_udp_checksum_reg;
+
+    if (s_udp_payload_axis_tvalid && s_udp_payload_axis_tready) begin
+        // end of frame detection
+        if (s_udp_payload_axis_tlast) begin
+            frame_next = 1'b0;
+            drop_next = 1'b0;
+        end
+    end
+
+    if (!frame_reg && s_udp_hdr_valid && s_udp_hdr_ready) begin
+        // start of frame, grab select value
+        select_ctl = select;
+        drop_ctl = drop;
+        frame_ctl = 1'b1;
+
+        select_next = select_ctl;
+        drop_next = drop_ctl;
+        frame_next = frame_ctl;
+
+        s_udp_hdr_ready_next = 1'b0;
+
+        m_udp_hdr_valid_next = (!drop_ctl) << select_ctl;
+        m_eth_dest_mac_next = s_eth_dest_mac;
+        m_eth_src_mac_next = s_eth_src_mac;
+        m_eth_type_next = s_eth_type;
+        m_ip_version_next = s_ip_version;
+        m_ip_ihl_next = s_ip_ihl;
+        m_ip_dscp_next = s_ip_dscp;
+        m_ip_ecn_next = s_ip_ecn;
+        m_ip_length_next = s_ip_length;
+        m_ip_identification_next = s_ip_identification;
+        m_ip_flags_next = s_ip_flags;
+        m_ip_fragment_offset_next = s_ip_fragment_offset;
+        m_ip_ttl_next = s_ip_ttl;
+        m_ip_protocol_next = s_ip_protocol;
+        m_ip_header_checksum_next = s_ip_header_checksum;
+        m_ip_source_ip_next = s_ip_source_ip;
+        m_ip_dest_ip_next = s_ip_dest_ip;
+        m_udp_source_port_next = s_udp_source_port;
+        m_udp_dest_port_next = s_udp_dest_port;
+        m_udp_length_next = s_udp_length;
+        m_udp_checksum_next = s_udp_checksum;
+    end
+
+    s_udp_hdr_ready_next = !frame_next && !m_udp_hdr_valid_next;
+
+    s_udp_payload_axis_tready_next = (m_udp_payload_axis_tready_int_early || drop_ctl) && frame_ctl;
+
+    m_udp_payload_axis_tdata_int  = s_udp_payload_axis_tdata;
+    m_udp_payload_axis_tkeep_int  = s_udp_payload_axis_tkeep;
+    m_udp_payload_axis_tvalid_int = (s_udp_payload_axis_tvalid && s_udp_payload_axis_tready && !drop_ctl) << select_ctl;
+    m_udp_payload_axis_tlast_int  = s_udp_payload_axis_tlast;
+    m_udp_payload_axis_tid_int    = s_udp_payload_axis_tid;
+    m_udp_payload_axis_tdest_int  = s_udp_payload_axis_tdest;
+    m_udp_payload_axis_tuser_int  = s_udp_payload_axis_tuser; 
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 2'd0;
+        drop_reg <= 1'b0;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/ip_arb_mux.v@202:276
+);
+
+assign request = s_ip_hdr_valid & ~grant;
+assign acknowledge = grant & s_ip_payload_axis_tvalid & s_ip_payload_axis_tready & s_ip_payload_axis_tlast;
+
+always @* begin
+    frame_next = frame_reg;
+
+    s_ip_hdr_ready_mask_next = s_ip_hdr_ready_mask_reg;
+
+    m_ip_hdr_valid_next = m_ip_hdr_valid_reg && !m_ip_hdr_ready;
+    m_eth_dest_mac_next = m_eth_dest_mac_reg;
+    m_eth_src_mac_next = m_eth_src_mac_reg;
+    m_eth_type_next = m_eth_type_reg;
+    m_ip_version_next = m_ip_version_reg;
+    m_ip_ihl_next = m_ip_ihl_reg;
+    m_ip_dscp_next = m_ip_dscp_reg;
+    m_ip_ecn_next = m_ip_ecn_reg;
+    m_ip_length_next = m_ip_length_reg;
+    m_ip_identification_next = m_ip_identification_reg;
+    m_ip_flags_next = m_ip_flags_reg;
+    m_ip_fragment_offset_next = m_ip_fragment_offset_reg;
+    m_ip_ttl_next = m_ip_ttl_reg;
+    m_ip_protocol_next = m_ip_protocol_reg;
+    m_ip_header_checksum_next = m_ip_header_checksum_reg;
+    m_ip_source_ip_next = m_ip_source_ip_reg;
+    m_ip_dest_ip_next = m_ip_dest_ip_reg;
+
+    if (s_ip_payload_axis_tvalid[grant_encoded] && s_ip_payload_axis_tready[grant_encoded]) begin
+        // end of frame detection
+        if (s_ip_payload_axis_tlast[grant_encoded]) begin
+            frame_next = 1'b0;
+            s_ip_hdr_ready_mask_next = 1'b0;
+        end
+    end
+
+    if (!frame_reg && grant_valid) begin
+        // start of frame
+        frame_next = 1'b1;
+
+        s_ip_hdr_ready_mask_next = 1'b1;
+
+        m_ip_hdr_valid_next = 1'b1;
+        m_eth_dest_mac_next = s_eth_dest_mac[grant_encoded*48 +: 48];
+        m_eth_src_mac_next = s_eth_src_mac[grant_encoded*48 +: 48];
+        m_eth_type_next = s_eth_type[grant_encoded*16 +: 16];
+        m_ip_version_next = s_ip_version[grant_encoded*4 +: 4];
+        m_ip_ihl_next = s_ip_ihl[grant_encoded*4 +: 4];
+        m_ip_dscp_next = s_ip_dscp[grant_encoded*6 +: 6];
+        m_ip_ecn_next = s_ip_ecn[grant_encoded*2 +: 2];
+        m_ip_length_next = s_ip_length[grant_encoded*16 +: 16];
+        m_ip_identification_next = s_ip_identification[grant_encoded*16 +: 16];
+        m_ip_flags_next = s_ip_flags[grant_encoded*3 +: 3];
+        m_ip_fragment_offset_next = s_ip_fragment_offset[grant_encoded*13 +: 13];
+        m_ip_ttl_next = s_ip_ttl[grant_encoded*8 +: 8];
+        m_ip_protocol_next = s_ip_protocol[grant_encoded*8 +: 8];
+        m_ip_header_checksum_next = s_ip_header_checksum[grant_encoded*16 +: 16];
+        m_ip_source_ip_next = s_ip_source_ip[grant_encoded*32 +: 32];
+        m_ip_dest_ip_next = s_ip_dest_ip[grant_encoded*32 +: 32];
+    end
+
+    // pass through selected packet data
+    m_ip_payload_axis_tdata_int  = current_s_tdata;
+    m_ip_payload_axis_tkeep_int  = current_s_tkeep;
+    m_ip_payload_axis_tvalid_int = current_s_tvalid && m_ip_payload_axis_tready_int_reg && grant_valid;
+    m_ip_payload_axis_tlast_int  = current_s_tlast;
+    m_ip_payload_axis_tid_int    = current_s_tid;
+    m_ip_payload_axis_tdest_int  = current_s_tdest;
+    m_ip_payload_axis_tuser_int  = current_s_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        frame_reg <= 1'b0;
+        s_ip_hdr_ready_mask_reg <= 1'b0;
+

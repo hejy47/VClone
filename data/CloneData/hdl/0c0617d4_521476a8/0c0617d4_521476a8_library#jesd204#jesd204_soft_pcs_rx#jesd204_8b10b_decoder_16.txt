@@ -1,0 +1,60 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v@392:415@HdlStmProcess
+  end else begin
+    notintable_disparity = 1'b0;
+  end
+end
+
+always @(*) begin
+  total_disparity = (ignore3b ? 2'b00 : disparity3b) ^ (ignore5b ? 2'b00 : disparity5b);
+
+  if (total_disparity[0] == 1'b0 || out_notintable == 1'b1) begin
+    out_disparity = in_disparity;
+    out_disperr = 1'b0;
+  end else if (total_disparity[1] == 1'b1) begin
+    out_disparity = 1'b0;
+    out_disperr = ~in_disparity;
+  end else begin
+    out_disparity = 1'b1;
+    out_disperr = in_disparity;
+  end
+end
+
+assign out_char = {data3b,data5b};
+assign out_charisk = charisk;
+assign out_notintable = notintable5b | notintable3b | notintable_disparity;
+
+
+Diff Content:
+- 397 always @(*) begin
+- 398   total_disparity = (ignore3b ? 2'b00 : disparity3b) ^ (ignore5b ? 2'b00 : disparity5b);
+- 400   if (total_disparity[0] == 1'b0 || out_notintable == 1'b1) begin
+- 401     out_disparity = in_disparity;
+- 402     out_disperr = 1'b0;
+- 403   end else if (total_disparity[1] == 1'b1) begin
+- 404     out_disparity = 1'b0;
+- 405     out_disperr = ~in_disparity;
+- 406   end else begin
+- 407     out_disparity = 1'b1;
+- 408     out_disperr = in_disparity;
+- 410 end
++ 398   always @(*) begin
++ 398     if (disparity3b == disparity5b && disparity3b != 2'b00) begin
++ 398       notintable_disparity = 1'b1;
++ 398     end else begin
++ 398       notintable_disparity = 1'b0;
++ 398     end
++ 398   end
++ 398   always @(*) begin
++ 398     total_disparity = (ignore3b ? 2'b00 : disparity3b) ^ (ignore5b ? 2'b00 : disparity5b);
++ 408     if (total_disparity[0] == 1'b0 || out_notintable == 1'b1) begin
++ 408       out_disparity = in_disparity;
++ 408       out_disperr = 1'b0;
++ 408     end else if (total_disparity[1] == 1'b1) begin
++ 408       out_disparity = 1'b0;
++ 408       out_disperr = ~in_disparity;
++ 408     end else begin
++ 408       out_disparity = 1'b1;
++ 408       out_disperr = in_disparity;
++ 408     end
+
+Clone Blocks:

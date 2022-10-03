@@ -1,0 +1,85 @@
+Source Block: verilog-ethernet/rtl/eth_mac_1g_rx.v@108:174@HdlStmProcess
+    .data_in(gmii_rxd_d4),
+    .crc_state(crc_state),
+    .crc_next(crc_next)
+);
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+
+    output_axis_tdata_next = 0;
+    output_axis_tvalid_next = 0;
+    output_axis_tlast_next = 0;
+    output_axis_tuser_next = 0;
+
+    error_bad_frame_next = 0;
+    error_bad_fcs_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for packet
+            reset_crc = 1;
+
+            if (gmii_rx_dv_d4 && ~gmii_rx_er_d4 && gmii_rxd_d4 == 8'hD5) begin
+                state_next = STATE_PAYLOAD;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // read payload
+            update_crc = 1;
+
+            output_axis_tdata_next = gmii_rxd_d4;
+            output_axis_tvalid_next = 1;
+
+            if (gmii_rx_er) begin
+                // error
+                output_axis_tlast_next = 1;
+                output_axis_tuser_next = 1;
+                error_bad_frame_next = 1;
+                state_next = STATE_IDLE;
+            end if (~gmii_rx_dv) begin
+                // end of packet
+                output_axis_tlast_next = 1;
+                if ({gmii_rxd_d0, gmii_rxd_d1, gmii_rxd_d2, gmii_rxd_d3} == ~crc_next) begin
+                    // FCS good
+                    output_axis_tuser_next = 0;
+                end else begin
+                    // FCS bad
+                    output_axis_tuser_next = 1;
+                    error_bad_frame_next = 1;
+                    error_bad_fcs_next = 1;
+                end
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+
+Diff Content:
+- 145             if (gmii_rx_er) begin
+- 150                 state_next = STATE_IDLE;
+- 151             end if (~gmii_rx_dv) begin
++ 145             if (gmii_rx_dv & gmii_rx_er) begin
++ 151                 state_next = STATE_WAIT_LAST;
++ 151             end else if (~gmii_rx_dv) begin
++ 167         STATE_WAIT_LAST: begin
++ 167             if (~gmii_rx_dv) begin
++ 167                 state_next = STATE_IDLE;
++ 167             end else begin
++ 167                 state_next = STATE_WAIT_LAST;
++ 167             end
++ 167         end
+
+Clone Blocks:

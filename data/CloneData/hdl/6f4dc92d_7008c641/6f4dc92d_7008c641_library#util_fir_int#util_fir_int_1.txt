@@ -1,0 +1,60 @@
+Source Block: hdl/library/util_fir_int/util_fir_int.v@52:62@HdlStmAssign
+  input               dac_read);
+
+  wire [31:0] m_axis_data_tdata_s;
+  wire        s_axis_data_tready_s;
+
+  assign {channel_1, channel_0} = (interpolate == 1'b1) ? {m_axis_data_tdata_s[30:16], 1'b0, m_axis_data_tdata_s[14:0], 1'b0} : s_axis_data_tdata;
+  assign s_axis_data_tready = (interpolate == 1'b1) ? s_axis_data_tready_s : dac_read;
+
+  fir_interp interpolator (
+    .aclk(aclk),
+    .s_axis_data_tvalid(s_axis_data_tvalid),
+
+Diff Content:
+- 57   assign {channel_1, channel_0} = (interpolate == 1'b1) ? {m_axis_data_tdata_s[30:16], 1'b0, m_axis_data_tdata_s[14:0], 1'b0} : s_axis_data_tdata;
++ 57   assign {channel_1, channel_0} = (interpolate == 1'b1) ? m_axis_data_tdata_s : s_axis_data_tdata;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_fir_int/util_fir_int.v@53:63
+
+  wire [31:0] m_axis_data_tdata_s;
+  wire        s_axis_data_tready_s;
+
+  assign {channel_1, channel_0} = (interpolate == 1'b1) ? {m_axis_data_tdata_s[30:16], 1'b0, m_axis_data_tdata_s[14:0], 1'b0} : s_axis_data_tdata;
+  assign s_axis_data_tready = (interpolate == 1'b1) ? s_axis_data_tready_s : dac_read;
+
+  fir_interp interpolator (
+    .aclk(aclk),
+    .s_axis_data_tvalid(s_axis_data_tvalid),
+    .s_axis_data_tready(s_axis_data_tready_s),
+
+Clone Blocks 2:
+hdl/library/util_fir_int/util_fir_int.v@49:59
+  output      [15:0]  channel_1,
+  output              m_axis_data_tvalid,
+  input               interpolate,
+  input               dac_read);
+
+  wire [31:0] m_axis_data_tdata_s;
+  wire        s_axis_data_tready_s;
+
+  assign {channel_1, channel_0} = (interpolate == 1'b1) ? {m_axis_data_tdata_s[30:16], 1'b0, m_axis_data_tdata_s[14:0], 1'b0} : s_axis_data_tdata;
+  assign s_axis_data_tready = (interpolate == 1'b1) ? s_axis_data_tready_s : dac_read;
+
+
+Clone Blocks 3:
+hdl/library/util_fir_int/util_fir_int.v@50:60
+  output              m_axis_data_tvalid,
+  input               interpolate,
+  input               dac_read);
+
+  wire [31:0] m_axis_data_tdata_s;
+  wire        s_axis_data_tready_s;
+
+  assign {channel_1, channel_0} = (interpolate == 1'b1) ? {m_axis_data_tdata_s[30:16], 1'b0, m_axis_data_tdata_s[14:0], 1'b0} : s_axis_data_tdata;
+  assign s_axis_data_tready = (interpolate == 1'b1) ? s_axis_data_tready_s : dac_read;
+
+  fir_interp interpolator (
+

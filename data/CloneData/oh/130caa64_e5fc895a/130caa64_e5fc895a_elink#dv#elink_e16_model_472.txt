@@ -1,0 +1,41 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4115:4137@HdlStmProcess
+
+   // ################################
+   // # Transaction output
+   // ################################
+   
+   always @ (posedge txo_lclk or posedge reset)
+     if (reset)
+       begin
+	  txo_frame             <= 1'b0;
+	  data_even_lsl[LW-1:0] <= {(LW){1'b0}};
+	  data_odd_lsl[LW-1:0]  <= {(LW){1'b0}};
+       end
+     else 
+       begin
+	  txo_frame              <= txo_frame_in;
+ 	  data_even_lsl[LW-1:0]  <= data_even_in[LW-1:0];
+	  data_odd_lsl[LW-1:0]   <= data_odd_in[LW-1:0];
+       end
+
+   // # Creating data that is stable high
+   always @ (negedge txo_lclk or posedge reset)
+     if (reset)
+       data_even_lsh[LW-1:0] <= {(LW){1'b0}};
+
+Diff Content:
+- 4120    always @ (posedge txo_lclk or posedge reset)
+- 4121      if (reset)
+- 4122        begin
+- 4123 	  txo_frame             <= 1'b0;
+- 4124 	  data_even_lsl[LW-1:0] <= {(LW){1'b0}};
+- 4125 	  data_odd_lsl[LW-1:0]  <= {(LW){1'b0}};
+- 4126        end
+- 4127      else 
+- 4128        begin
+- 4129 	  txo_frame              <= txo_frame_in;
+- 4130  	  data_even_lsl[LW-1:0]  <= data_even_in[LW-1:0];
+- 4131 	  data_odd_lsl[LW-1:0]   <= data_odd_in[LW-1:0];
+- 4132        end
+
+Clone Blocks:

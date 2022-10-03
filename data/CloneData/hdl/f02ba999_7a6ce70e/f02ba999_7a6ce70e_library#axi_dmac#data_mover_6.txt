@@ -1,0 +1,88 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@77:87@HdlStmAssign
+reg pending_burst;
+reg active;
+
+assign response_id = id;
+
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & active;
+assign m_axi_valid = s_axi_valid & pending_burst & active;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+Diff Content:
+- 82 assign last = beat_counter == (eot ? last_burst_length : 4'hf);
++ 82 assign last = beat_counter == (eot ? last_burst_length : MAX_BEATS_PER_BURST - 1);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/data_mover.v@81:91
+
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & active;
+assign m_axi_valid = s_axi_valid & pending_burst & active;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+assign last_load = s_axi_ready && s_axi_valid && last && eot;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/data_mover.v@79:89
+
+assign response_id = id;
+
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & active;
+assign m_axi_valid = s_axi_valid & pending_burst & active;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+// If we want to support zero delay between transfers we have to assert
+
+Clone Blocks 3:
+hdl/library/axi_dmac/data_mover.v@80:90
+assign response_id = id;
+
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & active;
+assign m_axi_valid = s_axi_valid & pending_burst & active;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+
+Clone Blocks 4:
+hdl/library/axi_dmac/data_mover.v@82:92
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & active;
+assign m_axi_valid = s_axi_valid & pending_burst & active;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+assign last_load = s_axi_ready && s_axi_valid && last && eot;
+assign req_ready = last_load || ~active;
+
+Clone Blocks 5:
+hdl/library/axi_dmac/data_mover.v@75:85
+wire last;
+wire last_load;
+reg pending_burst;
+reg active;
+
+assign response_id = id;
+
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & active;
+assign m_axi_valid = s_axi_valid & pending_burst & active;
+

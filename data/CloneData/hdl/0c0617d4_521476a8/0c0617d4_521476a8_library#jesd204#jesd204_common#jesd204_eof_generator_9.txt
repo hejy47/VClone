@@ -1,0 +1,17 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_eof_generator.v@126:136@HdlIdDef
+  default: ffs = 0;
+  endcase
+end
+endfunction
+
+integer i;
+
+/* Only 1, 2 and multiples of 4 are supported atm */
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sof <= {DATA_PATH_WIDTH{1'b0}};
+
+Diff Content:
+- 131 integer i;
+
+Clone Blocks:

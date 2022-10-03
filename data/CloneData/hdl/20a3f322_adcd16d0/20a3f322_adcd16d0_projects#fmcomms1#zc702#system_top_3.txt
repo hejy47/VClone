@@ -1,0 +1,29 @@
+Source Block: hdl/projects/fmcomms1/zc702/system_top.v@201:217@HdlStmFor
+    .O (ref_clk_out_p),
+    .OB (ref_clk_out_n));
+
+  genvar n;
+  generate
+  for (n = 0; n <= 15; n = n + 1) begin: g_iobuf_gpio_bd
+  IOBUF i_iobuf_gpio_bd (
+    .I (gpio_o[n]),
+    .O (gpio_i[n]),
+    .T (gpio_t[n]),
+    .IO (gpio_bd[n]));
+  end
+  endgenerate
+
+  always @(posedge dac_clk) begin
+    dac_dma_rd <= dac_valid_0 & dac_enable_0;
+    dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+
+Diff Content:
+- 206   for (n = 0; n <= 15; n = n + 1) begin: g_iobuf_gpio_bd
+- 207   IOBUF i_iobuf_gpio_bd (
+- 208     .I (gpio_o[n]),
+- 209     .O (gpio_i[n]),
+- 210     .T (gpio_t[n]),
+- 211     .IO (gpio_bd[n]));
+- 212   end
+
+Clone Blocks:

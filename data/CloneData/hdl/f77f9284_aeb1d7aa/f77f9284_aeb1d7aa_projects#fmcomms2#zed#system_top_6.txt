@@ -1,0 +1,45 @@
+Source Block: hdl/projects/fmcomms2/zed/system_top.v@219:229@HdlStmAssign
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(51)) i_iobuf_gpio (
+
+Diff Content:
+- 224   assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms2/zed/system_top.v@215:225
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks 2:
+hdl/projects/fmcomms2/zed/system_top.v@220:230
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(51)) i_iobuf_gpio (
+    .dio_t ({gpio_t[50:0]}),
+

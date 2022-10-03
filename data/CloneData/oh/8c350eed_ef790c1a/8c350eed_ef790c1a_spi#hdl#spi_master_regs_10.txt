@@ -1,0 +1,22 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@155:169@HdlStmProcess
+   
+   //####################################
+   //# CLKDIV 
+   //####################################
+
+   always @ (posedge clk or negedge nreset)
+     if (~nreset)
+       clkdiv_reg[7:0] <= CLKDIV;   
+     else if(psize_write)
+       clkdiv_reg[7:0] <= reg_wdata[7:0];
+   
+   //####################################
+   //# COMMAND REG
+   //####################################
+   always @ (posedge clk or negedge nreset)
+
+Diff Content:
+- 163      else if(psize_write)
++ 163      else if(clkdiv_write)
+
+Clone Blocks:

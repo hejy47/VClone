@@ -1,0 +1,34 @@
+Source Block: hdl/library/common/ad_dds.v@68:78@HdlIdDef
+  );
+
+  // internal registers
+
+  reg         [PHASE_DW-1:0]  dac_dds_incr_0 = 'd0;
+  reg         [PHASE_DW-1:0]  dac_dds_incr_1 = 'd0;
+
+  // dds solution
+
+  genvar i;
+
+
+Diff Content:
+- 73   reg         [PHASE_DW-1:0]  dac_dds_incr_1 = 'd0;
++ 73   always @(posedge clk) begin
++ 73     dac_dds_data <= dac_dds_data_s;
++ 73   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_dds.v@72:82
+  reg         [PHASE_DW-1:0]  dac_dds_incr_0 = 'd0;
+  reg         [PHASE_DW-1:0]  dac_dds_incr_1 = 'd0;
+
+  // dds solution
+
+  genvar i;
+
+  generate
+
+    if (DISABLE == 1) begin
+      always @(posedge clk) begin
+

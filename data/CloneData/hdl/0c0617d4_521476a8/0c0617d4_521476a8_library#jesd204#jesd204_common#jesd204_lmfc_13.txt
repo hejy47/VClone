@@ -1,0 +1,25 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@101:115@HdlStmProcess
+ * Unfortunately setup and hold are often ignored on the sysref signal relative
+ * to the device clock. The device will often still work fine, just not
+ * deterministic. Reduce the probability that the meta-stability creeps into the
+ * reset of the system and causes non-reproducible issues.
+ */
+always @(posedge clk) begin
+  sysref_d1 <= sysref_r;
+  sysref_d2 <= sysref_d1;
+  sysref_d3 <= sysref_d2;
+end
+
+always @(posedge clk) begin
+  if (sysref_d3 == 1'b0 && sysref_d2 == 1'b1 && cfg_sysref_disable == 1'b0) begin
+    sysref_edge <= 1'b1;
+  end else begin
+
+Diff Content:
+- 106 always @(posedge clk) begin
+- 107   sysref_d1 <= sysref_r;
+- 108   sysref_d2 <= sysref_d1;
+- 109   sysref_d3 <= sysref_d2;
+- 110 end
+
+Clone Blocks:

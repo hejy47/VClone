@@ -1,0 +1,23 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2207:2217@HdlStmAssign
+   //# and then prevents new transaction to be dispatched.
+   //# So it takes THREE CYCLES to stop new transaction versus
+   //# FOUR CYCLES to dispatch new one and therefore we are save.
+   //####################################################################
+   
+   assign wr_write_rlc = fifo_access_rlc & ~fifo_full_rlc;
+
+   //#################################
+   //# FIFO data
+   //#################################
+ 
+
+Diff Content:
+- 2212    assign wr_write_rlc = fifo_access_rlc & ~fifo_full_rlc;
++ 2212    output 	      rxi_wait;          //wait indicator   
++ 2212    output [14*LW-1:0] rxi_assembled_tran; // data to be transferred to secondary fifos
++ 2212    output             rxi_c0_access; //transfering to c0_fifo
++ 2212    output 	      rxi_c1_access; //transfering to c1_fifo
++ 2212    output 	      rxi_c2_access; //transfering to c2_fifo
++ 2212    output 	      rxi_c3_access; //transfering to c3_fifo  
+
+Clone Blocks:

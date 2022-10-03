@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tdd.v@252:269@HdlStmProcess
+      end
+    end
+  end
+
+  // generate tdd enable in function of the terminal type
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      tdd_enable <= 1'b0;
+    end else begin
+      tdd_enable <= (tdd_terminal_type_s == 1'b1) ? tdd_enable_s :
+                                                    (tdd_enable_s & tdd_slave_synced);
+    end
+  end
+
+  // instantiations
+
+  up_tdd_cntrl i_up_tdd_cntrl(
+    .clk(clk),
+
+Diff Content:
+- 257   always @(posedge clk) begin
+- 258     if (rst == 1'b1) begin
+- 259       tdd_enable <= 1'b0;
+- 260     end else begin
+- 261       tdd_enable <= (tdd_terminal_type_s == 1'b1) ? tdd_enable_s :
+- 262                                                     (tdd_enable_s & tdd_slave_synced);
+- 263     end
+- 264   end
++ 264   assign  tdd_enabled = tdd_enable_synced_s;
++ 264   assign  tdd_terminal_type = ~tdd_terminal_type_s;
+
+Clone Blocks:

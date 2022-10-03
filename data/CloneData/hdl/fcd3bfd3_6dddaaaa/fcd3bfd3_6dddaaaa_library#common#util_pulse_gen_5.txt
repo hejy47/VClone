@@ -1,0 +1,90 @@
+Source Block: hdl/library/common/util_pulse_gen.v@93:108@HdlStmProcess
+  end
+  assign end_of_period_s = (pulse_period_cnt == 32'b0) ? 1'b1 : 1'b0;
+
+  // generate pulse with a specified width
+
+  always @ (posedge clk) begin
+    if ((end_of_period_s == 1'b1) || (rstn == 1'b0)) begin
+      pulse <= 1'b0;
+    end else if (pulse_period_cnt == pulse_width_d) begin
+      pulse <= 1'b1;
+    end
+  end
+
+  assign pulse_counter = pulse_period_cnt;
+
+endmodule
+
+Diff Content:
+- 99     if ((end_of_period_s == 1'b1) || (rstn == 1'b0)) begin
++ 99     if ((pulse_period_cnt == 'h0) || (rstn == 1'b0)) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_pwm_gen/axi_pwm_gen_1.v@125:140
+  assign end_of_period = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
+  assign end_of_pulse = (pulse_period_cnt == pulse_width_d) ? 1'b1 : 1'b0;
+
+  // generate pulse with a specified width
+
+  always @ (posedge clk) begin
+    if ((rstn == 1'b0) || (phase_align == 1'b1) || (end_of_pulse == 1'b1)) begin
+      pulse <= 1'b0;
+    end else if (end_of_period == 1'b1 && pulse_enable == 1'b1) begin
+      pulse <= 1'b1;
+    end
+  end
+
+  assign pulse_counter = pulse_period_cnt;
+
+endmodule
+
+Clone Blocks 2:
+hdl/library/axi_pwm_gen/axi_pwm_gen_1.v@120:130
+        pulse_period_cnt <= pulse_period_cnt + 1'b1;
+      end
+    end
+  end
+
+  assign end_of_period = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
+  assign end_of_pulse = (pulse_period_cnt == pulse_width_d) ? 1'b1 : 1'b0;
+
+  // generate pulse with a specified width
+
+  always @ (posedge clk) begin
+
+Clone Blocks 3:
+hdl/library/common/util_pulse_gen.v@89:99
+      pulse_period_cnt <= pulse_period_d;
+    end else begin
+      pulse_period_cnt <= pulse_period_cnt - 1'b1;
+    end
+  end
+  assign end_of_period_s = (pulse_period_cnt == 32'b0) ? 1'b1 : 1'b0;
+
+  // generate pulse with a specified width
+
+  always @ (posedge clk) begin
+    if ((end_of_period_s == 1'b1) || (rstn == 1'b0)) begin
+
+Clone Blocks 4:
+hdl/library/common/util_pulse_gen.v@82:98
+    end
+  end
+
+  // a free running counter
+
+  always @(posedge clk) begin
+    if (pulse_period_cnt == 1'b0) begin
+      pulse_period_cnt <= pulse_period_d;
+    end else begin
+      pulse_period_cnt <= pulse_period_cnt - 1'b1;
+    end
+  end
+  assign end_of_period_s = (pulse_period_cnt == 32'b0) ? 1'b1 : 1'b0;
+
+  // generate pulse with a specified width
+
+  always @ (posedge clk) begin
+

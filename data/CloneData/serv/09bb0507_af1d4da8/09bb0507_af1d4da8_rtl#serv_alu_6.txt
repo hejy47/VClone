@@ -1,0 +1,23 @@
+Source Block: serv/rtl/serv_alu.v@116:131@HdlStmProcess
+                 (i_rd_sel == ALU_RESULT_XOR) ? i_rs1^i_op_b :
+                 (i_rd_sel == ALU_RESULT_OR)  ? i_rs1|i_op_b :
+                 (i_rd_sel == ALU_RESULT_AND) ? i_rs1&i_op_b :
+                 1'bx;
+
+   always @(posedge clk) begin
+      if (i_init) begin
+         last_eq <= i_rs1 == i_op_b;
+         msb_lt <= i_cmp_uns ? (~i_rs1 & i_op_b) : (i_rs1 & ~i_op_b);
+      end
+
+      en_r <= i_en;
+      init_r <= i_init;
+
+   end
+endmodule
+
+Diff Content:
+- 124          msb_lt <= i_cmp_uns ? (~i_rs1 & i_op_b) : (i_rs1 & ~i_op_b);
++ 124 	 result_lt_r <= result_lt;
+
+Clone Blocks:

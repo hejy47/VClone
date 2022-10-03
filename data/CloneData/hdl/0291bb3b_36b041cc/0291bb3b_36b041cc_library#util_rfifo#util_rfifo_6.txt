@@ -1,0 +1,53 @@
+Source Block: hdl/library/util_rfifo/util_rfifo.v@116:128@HdlStmFor
+    fifo_wr <= ~fifo_wfull;
+  end
+
+  genvar s;
+  generate
+  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_wdata
+  assign fifo_wdata[s] = s_rdata[(S_DATA_WIDTH-1)-s];
+  end
+  endgenerate
+
+  // read is non-destructive
+
+  assign fifo_rd = m_rd;
+
+Diff Content:
+- 121   for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_wdata
+- 122   assign fifo_wdata[s] = s_rdata[(S_DATA_WIDTH-1)-s];
++ 122   for (s = 0; s < DMA_DATA_WIDTH; s = s + 1) begin: g_wdata
++ 122   assign fifo_wdata[s] = dma_rdata[(DMA_DATA_WIDTH-1)-s];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_rfifo/util_rfifo.v@109:122
+  assign fifo_rst = ~rstn;
+
+  // independent clocks and buswidths- simply expect
+  // user to set a reasonable threshold on the full signal
+
+  always @(posedge s_clk) begin
+    s_rd <= ~fifo_wfull;
+    fifo_wr <= ~fifo_wfull;
+  end
+
+  genvar s;
+  generate
+  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_wdata
+  assign fifo_wdata[s] = s_rdata[(S_DATA_WIDTH-1)-s];
+
+Clone Blocks 2:
+hdl/library/util_rfifo/util_rfifo.v@114:124
+  always @(posedge s_clk) begin
+    s_rd <= ~fifo_wfull;
+    fifo_wr <= ~fifo_wfull;
+  end
+
+  genvar s;
+  generate
+  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_wdata
+  assign fifo_wdata[s] = s_rdata[(S_DATA_WIDTH-1)-s];
+  end
+  endgenerate
+

@@ -1,0 +1,82 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_check_64.v@296:349@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+        last_cycle_tkeep_reg <= 0;
+        last_cycle_tuser_reg <= 0;
+        
+        input_axis_tready_reg <= 0;
+
+        busy_reg <= 0;
+        error_bad_fcs_reg <= 0;
+
+        crc_state <= 32'hFFFFFFFF;
+        crc_state3 <= 32'hFFFFFFFF;
+    end else begin
+        state_reg <= state_next;
+
+        last_cycle_tkeep_reg <= last_cycle_tkeep_next;
+        last_cycle_tuser_reg <= last_cycle_tuser_next;
+
+        input_axis_tready_reg <= input_axis_tready_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+        error_bad_fcs_reg <= error_bad_fcs_next;
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+            crc_state3 <= 32'hFFFFFFFF;
+        end else if (update_crc) begin
+            crc_state <= crc_next7;
+            crc_state3 <= crc_next3;
+        end
+
+        if (shift_reset) begin
+            input_axis_tvalid_d0 <= 0;
+        end else if (shift_in) begin
+            input_axis_tdata_d0 <= input_axis_tdata;
+            input_axis_tkeep_d0 <= input_axis_tkeep;
+            input_axis_tvalid_d0 <= input_axis_tvalid;
+            input_axis_tuser_d0 <= input_axis_tuser;
+        end
+    end
+end
+
+// output datapath logic
+reg [63:0] output_axis_tdata_reg = 0;
+reg [7:0]  output_axis_tkeep_reg = 0;
+reg        output_axis_tvalid_reg = 0;
+
+Diff Content:
+- 305         last_cycle_tkeep_reg <= 0;
+- 306         last_cycle_tuser_reg <= 0;
+- 308         input_axis_tready_reg <= 0;
+- 310         busy_reg <= 0;
+- 311         error_bad_fcs_reg <= 0;
+- 318         last_cycle_tkeep_reg <= last_cycle_tkeep_next;
+- 319         last_cycle_tuser_reg <= last_cycle_tuser_next;
+- 336             input_axis_tvalid_d0 <= 0;
+- 338             input_axis_tdata_d0 <= input_axis_tdata;
+- 339             input_axis_tkeep_d0 <= input_axis_tkeep;
+- 341             input_axis_tuser_d0 <= input_axis_tuser;
++ 308         input_axis_tready_reg <= 1'b0;
++ 308         busy_reg <= 1'b0;
++ 308         error_bad_fcs_reg <= 1'b0;
++ 311         input_axis_tvalid_d0 <= 1'b0;
++ 336             input_axis_tvalid_d0 <= 1'b0;
++ 343     last_cycle_tkeep_reg <= last_cycle_tkeep_next;
++ 343     last_cycle_tuser_reg <= last_cycle_tuser_next;
++ 343     if (shift_in) begin
++ 343         input_axis_tdata_d0 <= input_axis_tdata;
++ 343         input_axis_tkeep_d0 <= input_axis_tkeep;
++ 343         input_axis_tuser_d0 <= input_axis_tuser;
++ 343     end
+
+Clone Blocks:

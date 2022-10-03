@@ -1,0 +1,44 @@
+Source Block: oh/elink/hdl/erx_io.v@251:284@HdlStmFor
+			       .REFCLK(rx_ref_clk_idlyctrl),//200MHz clk (78ps tap delay)
+			       .RST(1'b0)
+			       );
+   
+   genvar        j;
+   generate for(j=0; j<9; j=j+1)
+     begin : gen_idelay	     
+	IDELAYE2 #(.CINVCTRL_SEL("FALSE"),
+		   .DELAY_SRC("IDATAIN"), 
+		   .HIGH_PERFORMANCE_MODE("FALSE"),
+		   .IDELAY_TYPE("FIXED"),
+		   .IDELAY_VALUE(14),
+		   .PIPE_SEL("FALSE"),
+		   .REFCLK_FREQUENCY(200.0),
+		   .SIGNAL_PATTERN("DATA"))
+	idelay_inst (.CNTVALUEOUT(),                   
+		     .DATAOUT(rxi_delay_out[j]),
+		     .C(1'b0),
+		     .CE(1'b0),
+		     .CINVCTRL(1'b0),
+		     .CNTVALUEIN(5'b0),
+		     .DATAIN(1'b0),
+		     .IDATAIN(rxi_delay_in[j]),
+		     .INC(1'b0),
+		     .LD(1'b0),
+		     .LDPIPEEN(1'b0),
+		     .REGRST(1'b0)
+		     );
+     end // block: gen_idelay
+   endgenerate
+
+   
+   //#############################
+   //# IDDR SAMPLERS
+
+Diff Content:
+- 257      begin : gen_idelay	     
+- 262 		   .IDELAY_VALUE(14),
++ 257      begin : gen_idelay
++ 257 	(* IODELAY_GROUP = "IDELAY_GROUP" *) // Group name for IDELAYCTRL
++ 262 		   .IDELAY_VALUE(RX_TAP_DELAY[j]),
+
+Clone Blocks:

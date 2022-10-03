@@ -1,0 +1,75 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v@68:99@HdlStmFor
+end
+
+generate
+genvar lane;
+genvar i;
+for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
+  assign disparity_chain[lane][0] = disparity[lane];
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      disparity[lane] <= 1'b0;
+    end else begin
+      disparity[lane] <= disparity_chain[lane][DATA_PATH_WIDTH];
+    end
+  end
+
+  for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_dpw
+    localparam j = DATA_PATH_WIDTH * lane + i;
+
+    jesd204_8b10b_encoder i_enc (
+      .in_char(char[j*8+:8]),
+      .in_charisk(charisk[j]),
+      .out_char(data_s[j*10+:10]),
+
+      .in_disparity(disparity_chain[lane][i]),
+      .out_disparity(disparity_chain[lane][i+1])
+    );
+  end
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 73 for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
+- 74   assign disparity_chain[lane][0] = disparity[lane];
+- 76   always @(posedge clk) begin
+- 77     if (reset == 1'b1) begin
+- 78       disparity[lane] <= 1'b0;
+- 79     end else begin
+- 80       disparity[lane] <= disparity_chain[lane][DATA_PATH_WIDTH];
+- 82   end
+- 84   for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_dpw
+- 85     localparam j = DATA_PATH_WIDTH * lane + i;
+- 87     jesd204_8b10b_encoder i_enc (
+- 88       .in_char(char[j*8+:8]),
+- 89       .in_charisk(charisk[j]),
+- 90       .out_char(data_s[j*10+:10]),
+- 92       .in_disparity(disparity_chain[lane][i]),
+- 93       .out_disparity(disparity_chain[lane][i+1])
+- 94     );
+- 96 end
++ 74   generate
++ 74   genvar lane;
++ 74   genvar i;
++ 74   for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
++ 74     assign disparity_chain[lane][0] = disparity[lane];
++ 80     always @(posedge clk) begin
++ 80       if (reset == 1'b1) begin
++ 80         disparity[lane] <= 1'b0;
++ 80       end else begin
++ 80         disparity[lane] <= disparity_chain[lane][DATA_PATH_WIDTH];
++ 80       end
++ 85     for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_dpw
++ 85       localparam j = DATA_PATH_WIDTH * lane + i;
++ 90       jesd204_8b10b_encoder i_enc (
++ 90         .in_char(char[j*8+:8]),
++ 90         .in_charisk(charisk[j]),
++ 90         .out_char(data_s[j*10+:10]),
++ 94         .in_disparity(disparity_chain[lane][i]),
++ 94         .out_disparity(disparity_chain[lane][i+1]));
++ 94     end
+
+Clone Blocks:

@@ -1,0 +1,53 @@
+Source Block: oh/elink/hdl/elink.v@646:656@HdlStmAssign
+   /*AXI-LITE READBACK                                        */
+   /***********************************************************/
+   //TODO: fix decode logic
+   //add readnack for EMBOX and MMUs...
+   
+   assign mi_rd_data[31:0] = mi_dout_ecfg[31:0];
+   
+endmodule // elink
+// Local Variables:
+// verilog-library-directories:("." "../../embox/hdl" "../../erx/hdl" "../../etx/hdl" "../../axi/hdl" "../../ecfg/hdl" "../../eclock/hdl")
+// End:
+
+Diff Content:
+- 651    assign mi_rd_data[31:0] = mi_dout_ecfg[31:0];
++ 651    esaxi_mux esaxi_mux(.clk		(s_axi_aclk),
++ 651 		       /*AUTOINST*/
++ 651 		       .emwr_full	(emwr_full),
++ 651 		       .emwr_prog_full	(emwr_prog_full),
++ 651 		       .emrq_full	(emrq_full),
++ 651 		       .emrq_prog_full	(emrq_prog_full),
++ 651 		       .emrr_rd_data	(emrr_rd_data[31:0]),
++ 651 		       .emrr_empty	(emrr_empty),
++ 651 		       .esaxi_emwr_wr_data(esaxi_emwr_wr_data[102:0]),
++ 651 		       .esaxi_emwr_wr_en(esaxi_emwr_wr_en),
++ 651 		       .esaxi_emrq_wr_data(esaxi_emrq_wr_data[102:0]),
++ 651 		       .esaxi_emrq_wr_en(esaxi_emrq_wr_en),
++ 651 		       .esaxi_emrr_rd_en(esaxi_emrr_rd_en),
++ 651 		       .mi_clk		(mi_clk),
++ 651 		       .mi_rx_emmu_en	(mi_rx_emmu_en),
++ 651 		       .mi_tx_emmu_en	(mi_tx_emmu_en),
++ 651 		       .mi_ecfg_en	(mi_ecfg_en),
++ 651 		       .mi_embox_en	(mi_embox_en),
++ 651 		       .mi_we		(mi_we),
++ 651 		       .mi_addr		(mi_addr[19:0]),
++ 651 		       .mi_din		(mi_din[31:0]),
++ 651 		       .emwr_wr_data	(emwr_wr_data[102:0]),
++ 651 		       .emwr_wr_en	(emwr_wr_en),
++ 651 		       .emrq_wr_data	(emrq_wr_data[102:0]),
++ 651 		       .emrq_wr_en	(emrq_wr_en),
++ 651 		       .emrr_rd_en	(emrr_rd_en),
++ 651 		       .esaxi_emwr_full	(esaxi_emwr_full),
++ 651 		       .esaxi_emwr_prog_full(esaxi_emwr_prog_full),
++ 651 		       .esaxi_emrq_full	(esaxi_emrq_full),
++ 651 		       .esaxi_emrq_prog_full(esaxi_emrq_prog_full),
++ 651 		       .esaxi_emrr_rd_data(esaxi_emrr_rd_data[31:0]),
++ 651 		       .esaxi_emrr_empty(esaxi_emrr_empty),
++ 651 		       .mi_ecfg_dout	(mi_ecfg_dout[DW-1:0]),
++ 651 		       .mi_tx_emmu_dout	(mi_tx_emmu_dout[DW-1:0]),
++ 651 		       .mi_rx_emmu_dout	(mi_rx_emmu_dout[DW-1:0]),
++ 651 		       .mi_embox_dout	(mi_embox_dout[DW-1:0]));
+
+Clone Blocks:

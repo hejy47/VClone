@@ -1,0 +1,238 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@483:554@HdlStmIf
+assign dest_response_partial = 1'b0;
+assign dest_response_data_burst_length = 'h0;
+
+end
+
+if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
+
+assign dest_clk = m_axis_aclk;
+assign dest_ext_resetn = 1'b1;
+
+wire [ID_WIDTH-1:0] data_id;
+
+wire data_eot = eot_mem_dest[data_id];
+wire response_eot = eot_mem_dest[dest_response_id];
+
+assign dest_data_request_id = dest_request_id;
+
+assign dbg_dest_address_id = 'h00;
+assign dbg_dest_data_id = data_id;
+
+
+dest_axi_stream #(
+  .ID_WIDTH(ID_WIDTH),
+  .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
+) i_dest_dma_stream (
+  .s_axis_aclk(m_axis_aclk),
+  .s_axis_aresetn(dest_resetn),
+
+  .enable(dest_enable),
+  .enabled(dest_enabled),
+
+  .req_valid(dest_req_valid),
+  .req_ready(dest_req_ready),
+  .req_xlast(dest_req_xlast),
+
+  .response_valid(dest_response_valid),
+  .response_ready(dest_response_ready),
+  .response_resp(dest_response_resp),
+  .response_resp_eot(dest_response_resp_eot),
+
+  .response_id(dest_response_id),
+  .data_id(data_id),
+  .xfer_req(m_axis_xfer_req),
+
+  .data_eot(data_eot),
+  .response_eot(response_eot),
+
+  .fifo_valid(dest_valid),
+  .fifo_ready(dest_ready),
+  .fifo_data(dest_data),
+  .fifo_last(dest_last),
+
+  .m_axis_valid(m_axis_valid),
+  .m_axis_ready(m_axis_ready),
+  .m_axis_data(m_axis_data),
+  .m_axis_last(m_axis_last)
+);
+
+end else begin
+
+assign m_axis_valid = 1'b0;
+assign m_axis_last = 1'b0;
+assign m_axis_xfer_req = 1'b0;
+assign m_axis_data = 'h00;
+
+end
+
+if (DMA_TYPE_DEST == DMA_TYPE_FIFO) begin
+
+assign dest_clk = fifo_rd_clk;
+assign dest_ext_resetn = 1'b1;
+
+Diff Content:
+- 488 if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
+- 490 assign dest_clk = m_axis_aclk;
+- 491 assign dest_ext_resetn = 1'b1;
+- 493 wire [ID_WIDTH-1:0] data_id;
+- 495 wire data_eot = eot_mem_dest[data_id];
+- 496 wire response_eot = eot_mem_dest[dest_response_id];
+- 498 assign dest_data_request_id = dest_request_id;
+- 500 assign dbg_dest_address_id = 'h00;
+- 501 assign dbg_dest_data_id = data_id;
+- 504 dest_axi_stream #(
+- 505   .ID_WIDTH(ID_WIDTH),
+- 506   .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+- 507   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
+- 508 ) i_dest_dma_stream (
+- 509   .s_axis_aclk(m_axis_aclk),
+- 510   .s_axis_aresetn(dest_resetn),
+- 512   .enable(dest_enable),
+- 513   .enabled(dest_enabled),
+- 515   .req_valid(dest_req_valid),
+- 516   .req_ready(dest_req_ready),
+- 517   .req_xlast(dest_req_xlast),
+- 519   .response_valid(dest_response_valid),
+- 520   .response_ready(dest_response_ready),
+- 521   .response_resp(dest_response_resp),
+- 522   .response_resp_eot(dest_response_resp_eot),
+- 524   .response_id(dest_response_id),
+- 525   .data_id(data_id),
+- 526   .xfer_req(m_axis_xfer_req),
+- 528   .data_eot(data_eot),
+- 529   .response_eot(response_eot),
+- 531   .fifo_valid(dest_valid),
+- 532   .fifo_ready(dest_ready),
+- 533   .fifo_data(dest_data),
+- 534   .fifo_last(dest_last),
+- 536   .m_axis_valid(m_axis_valid),
+- 537   .m_axis_ready(m_axis_ready),
+- 538   .m_axis_data(m_axis_data),
+- 539   .m_axis_last(m_axis_last)
+- 540 );
+- 542 end else begin
+- 544 assign m_axis_valid = 1'b0;
+- 545 assign m_axis_last = 1'b0;
+- 546 assign m_axis_xfer_req = 1'b0;
+- 547 assign m_axis_data = 'h00;
+- 549 end
++ 488   assign m_axi_wvalid = 1'b0;
++ 488   assign m_axi_wdata = 'h00;
++ 488   assign m_axi_wstrb = 'h00;
++ 488   assign m_axi_wlast = 1'b0;
++ 491   assign m_axi_bready = 1'b0;
++ 493   assign src_bl_ready = 1'b1;
++ 496   assign dest_response_partial = 1'b0;
++ 496   assign dest_response_data_burst_length = 'h0;
++ 498   end
++ 501   if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
++ 501   assign dest_clk = m_axis_aclk;
++ 501   assign dest_ext_resetn = 1'b1;
++ 510   wire [ID_WIDTH-1:0] data_id;
++ 513   wire data_eot = eot_mem_dest[data_id];
++ 513   wire response_eot = eot_mem_dest[dest_response_id];
++ 517   assign dest_data_request_id = dest_request_id;
++ 522   assign dbg_dest_address_id = 'h00;
++ 522   assign dbg_dest_data_id = data_id;
++ 526   dest_axi_stream #(
++ 526     .ID_WIDTH(ID_WIDTH),
++ 526     .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
++ 526     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
++ 526   ) i_dest_dma_stream (
++ 526     .s_axis_aclk(m_axis_aclk),
++ 526     .s_axis_aresetn(dest_resetn),
++ 529     .enable(dest_enable),
++ 529     .enabled(dest_enabled),
++ 534     .req_valid(dest_req_valid),
++ 534     .req_ready(dest_req_ready),
++ 534     .req_xlast(dest_req_xlast),
++ 540     .response_valid(dest_response_valid),
++ 540     .response_ready(dest_response_ready),
++ 540     .response_resp(dest_response_resp),
++ 540     .response_resp_eot(dest_response_resp_eot),
++ 542     .response_id(dest_response_id),
++ 542     .data_id(data_id),
++ 542     .xfer_req(m_axis_xfer_req),
++ 547     .data_eot(data_eot),
++ 547     .response_eot(response_eot),
++ 549     .fifo_valid(dest_valid),
++ 549     .fifo_ready(dest_ready),
++ 549     .fifo_data(dest_data),
++ 549     .fifo_last(dest_last),
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_arb.v@546:615
+assign m_axis_xfer_req = 1'b0;
+assign m_axis_data = 'h00;
+
+end
+
+if (DMA_TYPE_DEST == DMA_TYPE_FIFO) begin
+
+assign dest_clk = fifo_rd_clk;
+assign dest_ext_resetn = 1'b1;
+
+wire [ID_WIDTH-1:0] data_id;
+
+wire data_eot = eot_mem_dest[data_id];
+wire response_eot = eot_mem_dest[dest_response_id];
+
+assign dest_data_request_id = dest_request_id;
+
+assign dbg_dest_address_id = 'h00;
+assign dbg_dest_data_id = data_id;
+
+dest_fifo_inf #(
+  .ID_WIDTH(ID_WIDTH),
+  .DATA_WIDTH(DMA_DATA_WIDTH_DEST),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
+) i_dest_dma_fifo (
+  .clk(fifo_rd_clk),
+  .resetn(dest_resetn),
+
+  .enable(dest_enable),
+  .enabled(dest_enabled),
+
+  .req_valid(dest_req_valid),
+  .req_ready(dest_req_ready),
+
+  .response_valid(dest_response_valid),
+  .response_ready(dest_response_ready),
+  .response_resp(dest_response_resp),
+  .response_resp_eot(dest_response_resp_eot),
+
+  .response_id(dest_response_id),
+  .data_id(data_id),
+
+  .data_eot(data_eot),
+  .response_eot(response_eot),
+
+  .fifo_valid(dest_valid),
+  .fifo_ready(dest_ready),
+  .fifo_data(dest_data),
+  .fifo_last(dest_last),
+
+  .en(fifo_rd_en),
+  .valid(fifo_rd_valid),
+  .dout(fifo_rd_dout),
+  .underflow(fifo_rd_underflow),
+  .xfer_req(fifo_rd_xfer_req)
+);
+
+end else begin
+
+assign fifo_rd_valid = 1'b0;
+assign fifo_rd_dout = 'h0;
+assign fifo_rd_underflow = 1'b0;
+assign fifo_rd_xfer_req = 1'b0;
+
+end endgenerate
+
+generate if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
+
+wire [ID_WIDTH-1:0] src_data_id;
+wire [ID_WIDTH-1:0] src_address_id;
+

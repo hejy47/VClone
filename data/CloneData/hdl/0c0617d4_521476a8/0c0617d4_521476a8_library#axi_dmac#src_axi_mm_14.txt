@@ -1,0 +1,23 @@
+Source Block: hdl/library/axi_dmac/src_axi_mm.v@120:133@HdlStmProcess
+    last_beat_bytes <= req_last_beat_bytes;
+  end
+end
+
+
+always @(posedge m_axi_aclk) begin
+  last_beat_bytes_mem[address_id] <= address_eot ? last_beat_bytes :
+                                                   {BYTES_PER_BEAT_WIDTH{1'b1}};
+end
+
+splitter #(
+  .NUM_M(3)
+) i_req_splitter (
+  .clk(m_axi_aclk),
+
+Diff Content:
+- 125 always @(posedge m_axi_aclk) begin
+- 126   last_beat_bytes_mem[address_id] <= address_eot ? last_beat_bytes :
+- 127                                                    {BYTES_PER_BEAT_WIDTH{1'b1}};
+- 128 end
+
+Clone Blocks:

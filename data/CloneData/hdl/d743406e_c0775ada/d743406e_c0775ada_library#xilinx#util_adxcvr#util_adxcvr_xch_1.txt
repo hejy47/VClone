@@ -1,0 +1,34 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@221:231@HdlIdDef
+  wire    [ 1:0]  tx_pll_clk_sel_s;
+  wire    [11:0]  rx_charisk_open_s;
+  wire    [11:0]  rx_disperr_open_s;
+  wire    [ 3:0]  rx_notintable_open_s;
+  wire    [95:0]  rx_data_open_s;
+  wire            cpll_locked_s;
+
+  // pll
+
+  assign up_rx_pll_locked = (up_rx_sys_clk_sel == 2'd3) ? qpll2ch_locked : (up_rx_sys_clk_sel == 2'd2) ? qpll1_locked : cpll_locked_s;
+  assign up_tx_pll_locked = (up_tx_sys_clk_sel == 2'd3) ? qpll2ch_locked : (up_tx_sys_clk_sel == 2'd2) ? qpll1_locked : cpll_locked_s;
+
+Diff Content:
++ 226   wire            rx_usrclk;
++ 226   wire            rx_usrclk2;
++ 226   wire            tx_usrclk;
++ 226   wire            tx_usrclk2;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@220:230
+  wire    [ 1:0]  rx_pll_clk_sel_s;
+  wire    [ 1:0]  tx_pll_clk_sel_s;
+  wire    [11:0]  rx_charisk_open_s;
+  wire    [11:0]  rx_disperr_open_s;
+  wire    [ 3:0]  rx_notintable_open_s;
+  wire    [95:0]  rx_data_open_s;
+  wire            cpll_locked_s;
+
+  // pll
+
+  assign up_rx_pll_locked = (up_rx_sys_clk_sel == 2'd3) ? qpll2ch_locked : (up_rx_sys_clk_sel == 2'd2) ? qpll1_locked : cpll_locked_s;
+

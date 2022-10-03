@@ -1,0 +1,30 @@
+Source Block: oh/elink/hdl/etx_protocol.v@73:89@HdlStmProcess
+
+   //Simple stall state machine
+   //Gets set for one cycle whenever there is no burst
+   //gets cleared by ack from io logic
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       tx_io_wait <= 1'b0;    
+     else if (tx_io_ack)
+       tx_io_wait <= 1'b0;
+     else
+       tx_io_wait <= tx_access & ~burst_in;        
+     
+   //Hold transaction while waiting
+   //This transaction should be flushed out
+   always @ (posedge clk)
+     if(!nreset)
+
+Diff Content:
+- 80        tx_io_wait <= 1'b0;    
+- 81      else if (tx_io_ack)
+- 82        tx_io_wait <= 1'b0;
+- 84        tx_io_wait <= tx_access & ~burst_in;        
++ 82        tx_io_wait <= 1'b0;         
++ 82      else if (tx_io_wait)
++ 82        tx_io_wait <= 1'b0;   
++ 84        tx_io_wait <= etx_access & ~tx_burst;        
+
+Clone Blocks:

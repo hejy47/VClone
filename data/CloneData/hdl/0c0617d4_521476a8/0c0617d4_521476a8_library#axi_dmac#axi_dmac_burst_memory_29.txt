@@ -1,0 +1,101 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@155:165@HdlIdDef
+reg dest_valid = 1'b0;
+reg dest_mem_data_valid = 1'b0;
+reg dest_mem_data_last = 1'b0;
+reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
+
+reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+
+wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
+reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
+
+wire src_beat;
+
+Diff Content:
+- 160 reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@153:163
+reg [BURST_LEN_WIDTH_DEST-1:0] dest_beat_counter = 'h00;
+wire [BURST_LEN_WIDTH_DEST-1:0] dest_burst_len;
+reg dest_valid = 1'b0;
+reg dest_mem_data_valid = 1'b0;
+reg dest_mem_data_last = 1'b0;
+reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
+
+reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+
+wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
+reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@151:161
+reg dest_id_reduced_msb = 1'b0;
+reg [ID_WIDTH-1:0] dest_id = 'h0;
+reg [BURST_LEN_WIDTH_DEST-1:0] dest_beat_counter = 'h00;
+wire [BURST_LEN_WIDTH_DEST-1:0] dest_burst_len;
+reg dest_valid = 1'b0;
+reg dest_mem_data_valid = 1'b0;
+reg dest_mem_data_last = 1'b0;
+reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
+
+reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+
+
+Clone Blocks 3:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@152:162
+reg [ID_WIDTH-1:0] dest_id = 'h0;
+reg [BURST_LEN_WIDTH_DEST-1:0] dest_beat_counter = 'h00;
+wire [BURST_LEN_WIDTH_DEST-1:0] dest_burst_len;
+reg dest_valid = 1'b0;
+reg dest_mem_data_valid = 1'b0;
+reg dest_mem_data_last = 1'b0;
+reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
+
+reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+
+wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
+
+Clone Blocks 4:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@157:167
+reg dest_mem_data_last = 1'b0;
+reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
+
+reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+
+wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
+reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
+
+wire src_beat;
+wire src_last_beat;
+wire [ID_WIDTH-1:0] src_dest_id;
+
+Clone Blocks 5:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@158:168
+reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
+
+reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+
+wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
+reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
+
+wire src_beat;
+wire src_last_beat;
+wire [ID_WIDTH-1:0] src_dest_id;
+wire [ADDRESS_WIDTH_SRC-1:0] src_waddr;
+
+Clone Blocks 6:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@160:170
+reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+
+wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
+reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
+
+wire src_beat;
+wire src_last_beat;
+wire [ID_WIDTH-1:0] src_dest_id;
+wire [ADDRESS_WIDTH_SRC-1:0] src_waddr;
+wire [ID_WIDTH-2:0] src_id_reduced;
+wire src_mem_data_valid;
+

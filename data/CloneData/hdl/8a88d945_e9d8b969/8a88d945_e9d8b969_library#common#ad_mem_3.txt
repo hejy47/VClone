@@ -1,0 +1,36 @@
+Source Block: hdl/library/common/ad_mem.v@51:61@HdlIdDef
+
+  localparam      DW = DATA_WIDTH - 1;
+  localparam      AW = ADDRESS_WIDTH - 1;
+
+  (* ram_style = "block" *)
+  reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
+
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[addra] <= dina;
+    end
+
+Diff Content:
+- 56   reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
++ 56   reg         [(DATA_WIDTH-1):0]      m_ram[0:((2**ADDRESS_WIDTH)-1)];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_mem.v@53:67
+  localparam      AW = ADDRESS_WIDTH - 1;
+
+  (* ram_style = "block" *)
+  reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
+
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[addra] <= dina;
+    end
+  end
+
+  always @(posedge clkb) begin
+    doutb <= m_ram[addrb];
+  end
+
+

@@ -1,0 +1,110 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx.v@203:220@HdlStmProcess
+reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
+reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
+
+reg buffer_release_opportunity = 1'b0;
+
+always @(posedge device_clk) begin
+  if (lmfc_counter == device_cfg_buffer_delay ||
+      device_cfg_buffer_early_release == 1'b1) begin
+    buffer_release_opportunity <= 1'b1;
+  end else begin
+    buffer_release_opportunity <= 1'b0;
+  end
+end
+
+assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
+
+sync_bits #(
+  .NUM_OF_BITS (1),
+
+Diff Content:
+- 208 always @(posedge device_clk) begin
+- 209   if (lmfc_counter == device_cfg_buffer_delay ||
+- 210       device_cfg_buffer_early_release == 1'b1) begin
+- 211     buffer_release_opportunity <= 1'b1;
+- 212   end else begin
+- 213     buffer_release_opportunity <= 1'b0;
+- 215 end
++ 213   /*
++ 213    * Can be used to enable additional pipeline stages to ease timing. Usually not
++ 213    * necessary.
++ 213    */
++ 213   localparam CHAR_INFO_REGISTERED = 0;
++ 213   localparam ALIGN_MUX_REGISTERED = 1;
++ 213   localparam SCRAMBLER_REGISTERED = 0;
++ 213   /*
++ 213    * Maximum number of octets per multiframe for ADI JESD204 DACs is 256 (Adjust
++ 213    * as necessary). Divide by data path width.
++ 213    */
++ 213   localparam MAX_OCTETS_PER_FRAME = 32;
++ 213   localparam MAX_OCTETS_PER_MULTIFRAME =
++ 213     (MAX_OCTETS_PER_FRAME * 32) > 1024 ? 1024 : (MAX_OCTETS_PER_FRAME * 32);
++ 213   localparam MAX_BEATS_PER_MULTIFRAME = MAX_OCTETS_PER_MULTIFRAME / DATA_PATH_WIDTH;
++ 213   localparam ELASTIC_BUFFER_SIZE = MAX_BEATS_PER_MULTIFRAME;
++ 213   localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
++ 213   localparam LMFC_COUNTER_WIDTH = MAX_BEATS_PER_MULTIFRAME > 256 ? 9 :
++ 213     MAX_BEATS_PER_MULTIFRAME > 128 ? 8 :
++ 213     MAX_BEATS_PER_MULTIFRAME > 64 ? 7 :
++ 213     MAX_BEATS_PER_MULTIFRAME > 32 ? 6 :
++ 213     MAX_BEATS_PER_MULTIFRAME > 16 ? 5 :
++ 213     MAX_BEATS_PER_MULTIFRAME > 8 ? 4 :
++ 213     MAX_BEATS_PER_MULTIFRAME > 4 ? 3 :
++ 213     MAX_BEATS_PER_MULTIFRAME > 2 ? 2 : 1;
++ 213   /* Helper for common expressions */
++ 213   localparam DW = 8*DATA_PATH_WIDTH*NUM_LANES;
++ 213   localparam ODW = 8*TPL_DATA_PATH_WIDTH*NUM_LANES;
++ 213   localparam CW = DATA_PATH_WIDTH*NUM_LANES;
++ 213   localparam HW = 2*NUM_LANES;
++ 213   wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe >> DPW_LOG2;
++ 213   wire [7:0] device_cfg_beats_per_multiframe_s;
++ 213   wire [NUM_LANES-1:0] cgs_reset;
++ 213   wire [NUM_LANES-1:0] cgs_ready;
++ 213   wire [NUM_LANES-1:0] ifs_reset;
++ 213   reg buffer_release_n = 1'b1;
++ 213   reg buffer_release_d1 = 1'b0;
++ 213   wire [NUM_LANES-1:0] buffer_ready_n;
++ 213   wire all_buffer_ready_n;
++ 213   wire dev_all_buffer_ready_n;
++ 213   reg eof_reset = 1'b1;
++ 213   wire [DW-1:0] phy_data_r;
++ 213   wire [HW-1:0] phy_header_r;
++ 213   wire [CW-1:0] phy_charisk_r;
++ 213   wire [CW-1:0] phy_notintable_r;
++ 213   wire [CW-1:0] phy_disperr_r;
++ 213   wire [NUM_LANES-1:0] phy_block_sync_r;
++ 213   wire [ODW-1:0] rx_data_s;
++ 213   wire rx_valid_s = buffer_release_d1;
++ 213   wire [7:0] lmfc_counter;
++ 213   wire latency_monitor_reset;
++ 213   wire [3*NUM_LANES-1:0] frame_align;
++ 213   wire [NUM_LANES-1:0] ifs_ready;
++ 213   wire event_data_phase;
++ 213   wire err_statistics_reset;
++ 213   wire lmfc_edge_synced;
++ 213   reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
++ 213   reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
++ 213   reg buffer_release_opportunity = 1'b0;
++ 213   always @(posedge device_clk) begin
++ 213     if (lmfc_counter == device_cfg_buffer_delay ||
++ 213         device_cfg_buffer_early_release == 1'b1) begin
++ 213       buffer_release_opportunity <= 1'b1;
++ 213     end else begin
++ 213       buffer_release_opportunity <= 1'b0;
++ 213     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx.v@201:211
+wire lmfc_edge_synced;
+
+reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
+reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
+
+reg buffer_release_opportunity = 1'b0;
+
+always @(posedge device_clk) begin
+  if (lmfc_counter == device_cfg_buffer_delay ||
+      device_cfg_buffer_early_release == 1'b1) begin
+    buffer_release_opportunity <= 1'b1;
+

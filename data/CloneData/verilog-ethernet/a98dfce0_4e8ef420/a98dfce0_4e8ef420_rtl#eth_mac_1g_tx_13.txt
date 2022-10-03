@@ -1,0 +1,250 @@
+Source Block: verilog-ethernet/rtl/eth_mac_1g_tx.v@97:253@HdlStmProcess
+    .data_in(gmii_txd_next),
+    .crc_state(crc_state),
+    .crc_next(crc_next)
+);
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    input_axis_tready_next = 0;
+
+    gmii_txd_next = 0;
+    gmii_tx_en_next = 0;
+    gmii_tx_er_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for packet
+            reset_crc = 1;
+
+            if (input_axis_tvalid) begin
+                frame_ptr_next = 1;
+                gmii_txd_next = 8'h55; // Preamble
+                gmii_tx_en_next = 1;
+                state_next = STATE_PREAMBLE;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PREAMBLE: begin
+            // send preamble
+            reset_crc = 1;
+            frame_ptr_next = frame_ptr_reg + 1;
+
+            gmii_txd_next = 8'h55; // Preamble
+            gmii_tx_en_next = 1;
+
+            if (frame_ptr_reg == 7) begin
+                // end of preamble; start payload
+                frame_ptr_next = 0;
+                input_axis_tready_next = 1;
+                gmii_txd_next = 8'hD5; // SFD
+                state_next = STATE_PAYLOAD;
+            end else begin
+                state_next = STATE_PREAMBLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // send payload
+            update_crc = 1;
+            input_axis_tready_next = 1;
+
+            frame_ptr_next = frame_ptr_reg + 1;
+
+            gmii_txd_next = input_axis_tdata;
+            gmii_tx_en_next = 1;
+
+            if (input_axis_tvalid) begin
+                if (input_axis_tlast) begin
+                    input_axis_tready_next = 0;
+                    if (input_axis_tuser) begin
+                        gmii_tx_er_next = 1;
+                        frame_ptr_next = 0;
+                        state_next = STATE_IFG;
+                    end else begin
+                        if (ENABLE_PADDING && frame_ptr_reg < MIN_FRAME_LENGTH-5) begin
+                            state_next = STATE_PAD;
+                        end else begin
+                            frame_ptr_next = 0;
+                            state_next = STATE_FCS;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                // tvalid deassert, fail frame
+                gmii_tx_er_next = 1;
+                frame_ptr_next = 0;
+                state_next = STATE_WAIT_END;
+            end
+        end
+        STATE_PAD: begin
+            // send padding
+            update_crc = 1;
+            frame_ptr_next = frame_ptr_reg + 1;
+
+            gmii_txd_next = 0;
+            gmii_tx_en_next = 1;
+
+            if (frame_ptr_reg < MIN_FRAME_LENGTH-5) begin
+                state_next = STATE_PAD;
+            end else begin
+                frame_ptr_next = 0;
+                state_next = STATE_FCS;
+            end
+        end
+        STATE_FCS: begin
+            // send FCS
+            frame_ptr_next = frame_ptr_reg + 1;
+
+            case (frame_ptr_reg)
+                2'd0: gmii_txd_next = ~crc_state[7:0];
+                2'd1: gmii_txd_next = ~crc_state[15:8];
+                2'd2: gmii_txd_next = ~crc_state[23:16];
+                2'd3: gmii_txd_next = ~crc_state[31:24];
+            endcase
+            gmii_tx_en_next = 1;
+
+            if (frame_ptr_reg < 3) begin
+                state_next = STATE_FCS;
+            end else begin
+                frame_ptr_next = 0;
+                state_next = STATE_IFG;
+            end
+        end
+        STATE_IFG: begin
+            // send IFG
+            frame_ptr_next = frame_ptr_reg + 1;
+            reset_crc = 1;
+
+            if (frame_ptr_reg < ifg_delay-1) begin
+                state_next = STATE_IFG;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_WAIT_END: begin
+            // wait for end of frame
+            frame_ptr_next = frame_ptr_reg + 1;
+            reset_crc = 1;
+
+            if (input_axis_tvalid) begin
+                if (input_axis_tlast) begin
+                    if (frame_ptr_reg < ifg_delay-1) begin
+                        state_next = STATE_IFG;
+                    end else begin
+                        state_next = STATE_IDLE;
+                    end
+                end else begin
+                    state_next = STATE_WAIT_END;
+                end
+            end else begin
+                state_next = STATE_WAIT_END;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+
+Diff Content:
+- 105     reset_crc = 0;
+- 106     update_crc = 0;
+- 110     input_axis_tready_next = 0;
+- 112     gmii_txd_next = 0;
+- 113     gmii_tx_en_next = 0;
+- 114     gmii_tx_er_next = 0;
+- 119             reset_crc = 1;
+- 122                 frame_ptr_next = 1;
+- 124                 gmii_tx_en_next = 1;
+- 132             reset_crc = 1;
+- 133             frame_ptr_next = frame_ptr_reg + 1;
+- 136             gmii_tx_en_next = 1;
+- 138             if (frame_ptr_reg == 7) begin
+- 140                 frame_ptr_next = 0;
+- 141                 input_axis_tready_next = 1;
+- 150             update_crc = 1;
+- 151             input_axis_tready_next = 1;
+- 153             frame_ptr_next = frame_ptr_reg + 1;
+- 156             gmii_tx_en_next = 1;
+- 160                     input_axis_tready_next = 0;
+- 162                         gmii_tx_er_next = 1;
+- 163                         frame_ptr_next = 0;
+- 169                             frame_ptr_next = 0;
+- 178                 gmii_tx_er_next = 1;
+- 179                 frame_ptr_next = 0;
+- 185             update_crc = 1;
+- 186             frame_ptr_next = frame_ptr_reg + 1;
+- 188             gmii_txd_next = 0;
+- 189             gmii_tx_en_next = 1;
+- 194                 frame_ptr_next = 0;
+- 200             frame_ptr_next = frame_ptr_reg + 1;
+- 208             gmii_tx_en_next = 1;
+- 213                 frame_ptr_next = 0;
+- 217         STATE_IFG: begin
+- 219             frame_ptr_next = frame_ptr_reg + 1;
+- 220             reset_crc = 1;
+- 222             if (frame_ptr_reg < ifg_delay-1) begin
+- 223                 state_next = STATE_IFG;
+- 224             end else begin
+- 225                 state_next = STATE_IDLE;
+- 226             end
+- 227         end
+- 230             frame_ptr_next = frame_ptr_reg + 1;
+- 231             reset_crc = 1;
++ 106     reset_crc = 1'b0;
++ 106     update_crc = 1'b0;
++ 110     input_axis_tready_next = 1'b0;
++ 114     gmii_txd_next = 8'd0;
++ 114     gmii_tx_en_next = 1'b0;
++ 114     gmii_tx_er_next = 1'b0;
++ 119             reset_crc = 1'b1;
++ 122                 frame_ptr_next = 16'd1;
++ 124                 gmii_tx_en_next = 1'b1;
++ 133             reset_crc = 1'b1;
++ 133             frame_ptr_next = frame_ptr_reg + 16'd1;
++ 136             gmii_tx_en_next = 1'b1;
++ 138             if (frame_ptr_reg == 16'd7) begin
++ 141                 frame_ptr_next = 16'd0;
++ 141                 input_axis_tready_next = 1'b1;
++ 151             update_crc = 1'b1;
++ 151             input_axis_tready_next = 1'b1;
++ 153             frame_ptr_next = frame_ptr_reg + 16'd1;
++ 156             gmii_tx_en_next = 1'b1;
++ 160                     input_axis_tready_next = 1'b0;
++ 163                         gmii_tx_er_next = 1'b1;
++ 163                         frame_ptr_next = 1'b0;
++ 169                             frame_ptr_next = 16'd0;
++ 179                 gmii_tx_er_next = 1'b1;
++ 179                 frame_ptr_next = 16'd0;
++ 186             update_crc = 1'b1;
++ 186             frame_ptr_next = frame_ptr_reg + 16'd1;
++ 189             gmii_txd_next = 8'd0;
++ 189             gmii_tx_en_next = 1'b1;
++ 194                 frame_ptr_next = 16'd0;
++ 200             frame_ptr_next = frame_ptr_reg + 16'd1;
++ 208             gmii_tx_en_next = 1'b1;
++ 213                 frame_ptr_next = 16'd0;
++ 231             frame_ptr_next = frame_ptr_reg + 16'd1;
++ 231             reset_crc = 1'b1;
++ 246         STATE_IFG: begin
++ 246             frame_ptr_next = frame_ptr_reg + 16'd1;
++ 246             reset_crc = 1'b1;
++ 246             if (frame_ptr_reg < ifg_delay-1) begin
++ 246                 state_next = STATE_IFG;
++ 246             end else begin
++ 246                 state_next = STATE_IDLE;
++ 246             end
++ 246         end
+
+Clone Blocks:

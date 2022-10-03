@@ -1,0 +1,26 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_ilas_monitor.v@120:132@HdlStmProcess
+  end else if (ilas_config_valid_i == 1'b1) begin
+    ilas_config_addr_i <= ilas_config_addr_i + 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  ilas_config_data_i <= data;
+end
+
+
+generate
+if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
+
+
+Diff Content:
+- 125 always @(posedge clk) begin
+- 126   ilas_config_data_i <= data;
+- 127 end
++ 127   always @(posedge clk) begin
++ 127     ilas_config_data_i <= data;
++ 127   end
++ 127   generate
++ 127   if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
+
+Clone Blocks:

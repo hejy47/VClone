@@ -1,0 +1,28 @@
+Source Block: oh/elink/hdl/etx_protocol.v@182:196@HdlStmAssign
+			        ~tx_write,5'b0,tx_burst_reg,1'b0,                     //8-15
+			        tx_ctrlmode[3:0],tx_dstaddr[31:28],                   //0-7
+			        16'b0 				                      //garbage
+			        };
+   
+   assign tx_cycle2[63:0]   = {tx_srcaddr[15:0],                                      //48-63
+			       tx_srcaddr[31:16],                                     //32-47
+			       tx_data[15:0],                                         //16-31
+			       tx_data[31:16]			                      //0-15
+			       };
+			       
+   assign tx_data_slow[63:0]  = (tx_state[2:0]==`TX_START) ? tx_cycle1[63:0] : 
+				                             tx_cycle2[63:0];
+ 
+   
+
+Diff Content:
+- 187    assign tx_cycle2[63:0]   = {tx_srcaddr[15:0],                                      //48-63
+- 188 			       tx_srcaddr[31:16],                                     //32-47
+- 189 			       tx_data[15:0],                                         //16-31
+- 190 			       tx_data[31:16]			                      //0-15
++ 190    assign tx_cycle2[63:0]   = {tx_srcaddr[15:0],                                   //48-63
++ 190 			       tx_srcaddr[31:16],                                  //32-47
++ 190 			       tx_data[15:0],                                      //16-31
++ 190 			       tx_data[31:16]			                   //0-15
+
+Clone Blocks:

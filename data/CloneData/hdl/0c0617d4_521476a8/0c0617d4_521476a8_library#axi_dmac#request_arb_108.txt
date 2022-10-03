@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@896:914@HdlStmProcess
+  .in_event(rewind_state),
+  .out_clk(src_clk),
+  .out_event(src_throttler_enable)
+);
+
+always @(posedge src_clk) begin
+  if (src_resetn == 1'b0) begin
+    src_throttler_enabled <= 'b1;
+  end else if (rewind_req_valid) begin
+    src_throttler_enabled <= 'b0;
+  end else if (src_throttler_enable) begin
+    src_throttler_enabled <= 'b1;
+  end
+end
+
+/*
+ * Make sure that we do not request more data than what fits into the
+ * store-and-forward burst memory.
+ * Throttler must be blocked during rewind since it does not tolerate
+
+Diff Content:
+- 901 always @(posedge src_clk) begin
+- 902   if (src_resetn == 1'b0) begin
+- 903     src_throttler_enabled <= 'b1;
+- 904   end else if (rewind_req_valid) begin
+- 905     src_throttler_enabled <= 'b0;
+- 906   end else if (src_throttler_enable) begin
+- 907     src_throttler_enabled <= 'b1;
+- 908   end
+- 909 end
+
+Clone Blocks:

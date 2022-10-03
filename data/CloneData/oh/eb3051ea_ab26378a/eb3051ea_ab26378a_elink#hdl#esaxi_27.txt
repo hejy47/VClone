@@ -1,0 +1,85 @@
+Source Block: oh/elink/hdl/esaxi.v@388:435@HdlStmProcess
+   //###################################################
+   //#WRITE DATA
+   //###################################################  
+   assign emwr_write         = 1'b1;
+   
+   always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn) 
+       begin
+          emwr_data_reg[31:0]     <= 32'd0;	  
+          emwr_dstaddr_reg[31:0]  <= 32'd0;	 
+	  emwr_ctrlmode_reg[3:0]  <= 4'd0;
+          emwr_datamode_reg[1:0]  <= 2'd0;
+          emwr_access_all         <= 1'b0;
+          pre_wr_en               <= 1'b0;
+       end 
+     else 
+       begin
+	  pre_wr_en                 <= s_axi_wready & s_axi_wvalid;
+          emwr_access_all           <= pre_wr_en;
+	  emwr_ctrlmode_reg[3:0]    <= ecfg_tx_ctrlmode[3:0];//static
+	  emwr_datamode_reg[1:0]    <= axi_awsize[1:0];	
+          emwr_dstaddr_reg[31:2]    <= axi_awaddr[31:2]; //set lsbs of address based on write strobes	 
+	  if(s_axi_wstrb[0] | (axi_awsize[1:0]==2'b10))
+	    begin
+	       emwr_data_reg[31:0]   <= s_axi_wdata[31:0];
+	       emwr_dstaddr_reg[1:0] <= 2'd0;
+	    end
+	  else if(s_axi_wstrb[1])
+	    begin
+	       emwr_data_reg[31:0]   <= {8'd0, s_axi_wdata[31:8]};
+	       emwr_dstaddr_reg[1:0] <= 2'd1;
+	    end
+	  else if(s_axi_wstrb[2])
+	    begin
+	       emwr_data_reg[31:0]   <= {16'd0, s_axi_wdata[31:16]};
+	       emwr_dstaddr_reg[1:0] <= 2'd2;
+	    end
+	  else
+	    begin
+	       emwr_data_reg[31:0]   <= {24'd0, s_axi_wdata[31:24]};
+	       emwr_dstaddr_reg[1:0] <= 2'd3;
+	    end
+       end // else: !if(~s_axi_aresetn)
+
+//Pipeline stage
+ always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn)
+       begin
+
+Diff Content:
+- 396           emwr_data_reg[31:0]     <= 32'd0;	  
+- 397           emwr_dstaddr_reg[31:0]  <= 32'd0;	 
+- 398 	  emwr_ctrlmode_reg[3:0]  <= 4'd0;
+- 399           emwr_datamode_reg[1:0]  <= 2'd0;
+- 400           emwr_access_all         <= 1'b0;
+- 406           emwr_access_all           <= pre_wr_en;
+- 407 	  emwr_ctrlmode_reg[3:0]    <= ecfg_tx_ctrlmode[3:0];//static
+- 408 	  emwr_datamode_reg[1:0]    <= axi_awsize[1:0];	
+- 409           emwr_dstaddr_reg[31:2]    <= axi_awaddr[31:2]; //set lsbs of address based on write strobes	 
+- 412 	       emwr_data_reg[31:0]   <= s_axi_wdata[31:0];
+- 413 	       emwr_dstaddr_reg[1:0] <= 2'd0;
+- 417 	       emwr_data_reg[31:0]   <= {8'd0, s_axi_wdata[31:8]};
+- 418 	       emwr_dstaddr_reg[1:0] <= 2'd1;
+- 422 	       emwr_data_reg[31:0]   <= {16'd0, s_axi_wdata[31:16]};
+- 423 	       emwr_dstaddr_reg[1:0] <= 2'd2;
+- 427 	       emwr_data_reg[31:0]   <= {24'd0, s_axi_wdata[31:24]};
+- 428 	       emwr_dstaddr_reg[1:0] <= 2'd3;
++ 400           txwr_data_reg[31:0]     <= 32'd0;	  
++ 400           txwr_dstaddr_reg[31:0]  <= 32'd0;	 
++ 400           txwr_datamode_reg[1:0]  <= 2'd0;
++ 400           txwr_access             <= 1'b0;
++ 409           txwr_access               <= pre_wr_en;
++ 409 	  txwr_datamode_reg[1:0]    <= axi_awsize[1:0];	
++ 409           txwr_dstaddr_reg[31:2]    <= axi_awaddr[31:2]; //set lsbs of address based on write strobes	 
++ 413 	       txwr_data_reg[31:0]   <= s_axi_wdata[31:0];
++ 413 	       txwr_dstaddr_reg[1:0] <= 2'd0;
++ 418 	       txwr_data_reg[31:0]   <= {8'd0, s_axi_wdata[31:8]};
++ 418 	       txwr_dstaddr_reg[1:0] <= 2'd1;
++ 423 	       txwr_data_reg[31:0]   <= {16'd0, s_axi_wdata[31:16]};
++ 423 	       txwr_dstaddr_reg[1:0] <= 2'd2;
++ 428 	       txwr_data_reg[31:0]   <= {24'd0, s_axi_wdata[31:24]};
++ 428 	       txwr_dstaddr_reg[1:0] <= 2'd3;
+
+Clone Blocks:

@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_mc_controller/axi_mc_controller.v@245:265@HdlStmProcess
+  pwm_gen_clk <= ~pwm_gen_clk; // generate 50 MHz clk
+end
+
+// processor read interface
+
+always @(negedge up_rstn or posedge up_clk) begin
+    if(up_rstn == 0) begin
+        up_rdata  <= 'd0;
+        up_wack   <= 'd0;
+        up_rack   <= 'd0;
+    end else begin
+        up_rdata  <= up_control_rdata_s | up_adc_common_rdata_s | rdata_c0_s | rdata_c1_s | rdata_c2_s | rdata_c3_s | rdata_c4_s | rdata_c5_s | rdata_c6_s | rdata_c7_s;
+        up_rack   <= up_control_rack_s | up_adc_common_rack_s | rack_c0_s | rack_c1_s | rack_c2_s | rack_c3_s | rack_c4_s | rack_c5_s | rack_c6_s | rack_c7_s;
+        up_wack   <= up_control_wack_s | up_adc_common_wack_s | wack_c0_s | wack_c1_s | wack_c2_s | wack_c3_s | wack_c4_s | wack_c5_s | wack_c6_s | wack_c7_s;
+    end
+end
+
+// main (device interface)
+
+motor_driver
+#( .PWM_BITS(11))
+
+Diff Content:
+- 256         up_rdata  <= up_control_rdata_s | up_adc_common_rdata_s | rdata_c0_s | rdata_c1_s | rdata_c2_s | rdata_c3_s | rdata_c4_s | rdata_c5_s | rdata_c6_s | rdata_c7_s;
+- 257         up_rack   <= up_control_rack_s | up_adc_common_rack_s | rack_c0_s | rack_c1_s | rack_c2_s | rack_c3_s | rack_c4_s | rack_c5_s | rack_c6_s | rack_c7_s;
+- 258         up_wack   <= up_control_wack_s | up_adc_common_wack_s | wack_c0_s | wack_c1_s | wack_c2_s | wack_c3_s | wack_c4_s | wack_c5_s | wack_c6_s | wack_c7_s;
++ 258         up_rdata  <= up_control_rdata_s ;
++ 258         up_rack   <= up_control_rack_s ;
++ 258         up_wack   <= up_control_wack_s ;
+
+Clone Blocks:

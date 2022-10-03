@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_gpreg/axi_gpreg.v@288:304@HdlStmIf
+    .up_rack (up_rack_s[n]));
+  end
+
+  // clock monitors
+
+  if (NUM_OF_CLK_MONS < 8) begin
+  for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
+  assign up_wack_s[(8+n)] = 1'd0;
+  assign up_rdata_s[(8+n)] = 32'd0;
+  assign up_rack_s[(8+n)] = 1'd0;
+  end
+  end
+
+  for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
+  axi_gpreg_clock_mon #(
+    .ID (32+n),
+    .BUF_ENABLE (BUF_ENABLE[n]))
+
+Diff Content:
+- 293   if (NUM_OF_CLK_MONS < 8) begin
+- 294   for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
+- 295   assign up_wack_s[(8+n)] = 1'd0;
+- 296   assign up_rdata_s[(8+n)] = 32'd0;
+- 297   assign up_rack_s[(8+n)] = 1'd0;
+- 298   end
+- 299   end
+
+Clone Blocks:

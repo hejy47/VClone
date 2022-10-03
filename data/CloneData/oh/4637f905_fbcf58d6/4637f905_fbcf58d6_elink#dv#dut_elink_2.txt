@@ -1,0 +1,111 @@
+Source Block: oh/elink/dv/dut_elink.v@316:328@HdlStmAssign
+   assign  emem_access           = ~elink1_rxwr_wait & (elink1_rxwr_access | elink1_rxrd_access);      
+
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+                                                        elink1_rxrd_packet[PW-1:0];
+
+   assign elink1_rxrd_wait       = emem_wait | 
+				   elink1_rxwr_access |
+				   elink1_rxwr_wait;
+  
+  
+   /*ememory AUTO_TEMPLATE ( 
+                        // Outputs
+                        .\(.*\)_out       (elink1_txrr_\1[]),
+
+Diff Content:
+- 321    assign elink1_rxrd_wait       = emem_wait | 
+- 322 				   elink1_rxwr_access |
+- 323 				   elink1_rxwr_wait;
++ 323    assign elink1_rxrd_wait       = emem_wait | elink1_rxwr_access;
++ 323    assign elink1_rxwr_wait       = emem_wait;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/dut_elink.v@311:321
+   
+
+   wire emem_wait;
+   
+   //"Arbitration" between read/write transaction   
+   assign  emem_access           = ~elink1_rxwr_wait & (elink1_rxwr_access | elink1_rxrd_access);      
+
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+                                                        elink1_rxrd_packet[PW-1:0];
+
+   assign elink1_rxrd_wait       = emem_wait | 
+
+Clone Blocks 2:
+oh/elink/dv/dut_axi_elink.v@532:544
+   assign  emem_access           = ~elink1_rxwr_wait & (elink1_rxwr_access | elink1_rxrd_access);
+   
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+                                                        elink1_rxrd_packet[PW-1:0];
+
+   assign elink1_rxrd_wait       = emem_wait | 
+				   elink1_rxwr_access |
+				   elink1_rxwr_wait;
+   
+   /*ememory AUTO_TEMPLATE ( 
+                        // Outputs
+                        .\(.*\)_out       (elink1_txrr_\1[]),
+                        .\(.*\)_in        (emem_\1[]),
+
+Clone Blocks 3:
+oh/elink/dv/dut_elink.v@308:318
+		 .txi_rd_wait_n		(elink0_rxo_rd_wait_n),	 // Templated
+		 .rxwr_wait		(elink1_rxwr_wait),	 // Templated
+		 .rxrd_wait		(elink1_rxrd_wait));	 // Templated
+   
+
+   wire emem_wait;
+   
+   //"Arbitration" between read/write transaction   
+   assign  emem_access           = ~elink1_rxwr_wait & (elink1_rxwr_access | elink1_rxrd_access);      
+
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+
+Clone Blocks 4:
+oh/elink/dv/dut_axi_elink.v@527:537
+		 .rxwr_wait		(elink1_rxwr_wait),	 // Templated
+		 .rxrd_wait		(elink1_rxrd_wait));	 // Templated
+   
+
+   //"Arbitration" between read/write transaction   
+   assign  emem_access           = ~elink1_rxwr_wait & (elink1_rxwr_access | elink1_rxrd_access);
+   
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+                                                        elink1_rxrd_packet[PW-1:0];
+
+   assign elink1_rxrd_wait       = emem_wait | 
+
+Clone Blocks 5:
+oh/elink/dv/dut_axi_elink.v@529:540
+   
+
+   //"Arbitration" between read/write transaction   
+   assign  emem_access           = ~elink1_rxwr_wait & (elink1_rxwr_access | elink1_rxrd_access);
+   
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+                                                        elink1_rxrd_packet[PW-1:0];
+
+   assign elink1_rxrd_wait       = emem_wait | 
+				   elink1_rxwr_access |
+				   elink1_rxwr_wait;
+   
+
+Clone Blocks 6:
+oh/elink/dv/dut_elink.v@313:324
+   wire emem_wait;
+   
+   //"Arbitration" between read/write transaction   
+   assign  emem_access           = ~elink1_rxwr_wait & (elink1_rxwr_access | elink1_rxrd_access);      
+
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+                                                        elink1_rxrd_packet[PW-1:0];
+
+   assign elink1_rxrd_wait       = emem_wait | 
+				   elink1_rxwr_access |
+				   elink1_rxwr_wait;
+  
+

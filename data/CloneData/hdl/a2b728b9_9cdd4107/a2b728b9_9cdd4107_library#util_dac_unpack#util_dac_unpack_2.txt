@@ -1,0 +1,32 @@
+Source Block: hdl/library/util_dac_unpack/util_dac_unpack.v@212:235@HdlStmProcess
+      begin
+        buffer_r    <= dma_data;
+      end
+  end
+
+  always @(posedge clk)
+  begin
+    if (path_enabled == 8'h0)
+    begin
+      counter_0 <= 3'h0;
+    end
+    else
+    begin
+      if (dac_chan_valid == 1'b1 )
+      begin
+        counter_0 <= counter_0 + enable_cnt;
+      end
+    end
+  end
+
+  always @(posedge clk)
+  begin
+
+    // channel 0
+
+Diff Content:
+- 219     if (path_enabled == 8'h0)
++ 219     path_enabled_d1 <= path_enabled;
++ 219     if ((path_enabled == 8'h0) || (path_enabled_d1 != path_enabled))
+
+Clone Blocks:

@@ -1,0 +1,28 @@
+Source Block: hdl/library/data_offload/data_offload_fsm.v@388:408@HdlStmProcess
+        rd_last <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge rd_clk) begin
+    if (rd_resetn_in == 1'b0) begin
+      rd_valid <= 1'b0;
+    end else begin
+      if ((rd_ready) && (rd_fsm_state == RD_READ_FROM_MEM)) begin
+        rd_valid <= 1'b1;
+      end else begin
+        rd_valid <= 1'b0;
+      end
+    end
+  end
+
+  // CDC circuits
+
+  sync_event #(
+    .NUM_OF_EVENTS (1),
+
+Diff Content:
+- 397       if ((rd_ready) && (rd_fsm_state == RD_READ_FROM_MEM)) begin
++ 397       if ((rd_ready) && (rd_fsm_state == RD_READ_FROM_MEM) && !(rd_valid && rd_last && rd_oneshot)) begin
+
+Clone Blocks:

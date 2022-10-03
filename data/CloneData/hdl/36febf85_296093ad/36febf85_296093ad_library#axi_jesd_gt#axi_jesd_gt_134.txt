@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@460:470@HdlStmAssign
+  // transmit data interleave -- since transceivers are shared, lane assignments may not match pin assignments
+
+  assign tx_ip_data = tx_data;
+
+  assign tx_gt_data_extn_zero_s = 288'd0;
+  assign tx_gt_charisk_extn_zero_s = 36'd0;
+  assign tx_gt_data_extn_s = {tx_gt_data_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*32)-1):0], tx_gt_data_s};
+  assign tx_gt_charisk_extn_s = {tx_gt_charisk_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*4)-1):0], tx_gt_charisk_s};
+
+  assign tx_gt_data_mux_s[((8*32)+31):(8*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_8*32)+31):(PCORE_TX_LANE_SEL_8*32)];
+  assign tx_gt_data_mux_s[((7*32)+31):(7*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_7*32)+31):(PCORE_TX_LANE_SEL_7*32)];
+
+Diff Content:
+- 465   assign tx_gt_charisk_extn_zero_s = 36'd0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@461:471
+
+  assign tx_ip_data = tx_data;
+
+  assign tx_gt_data_extn_zero_s = 288'd0;
+  assign tx_gt_charisk_extn_zero_s = 36'd0;
+  assign tx_gt_data_extn_s = {tx_gt_data_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*32)-1):0], tx_gt_data_s};
+  assign tx_gt_charisk_extn_s = {tx_gt_charisk_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*4)-1):0], tx_gt_charisk_s};
+
+  assign tx_gt_data_mux_s[((8*32)+31):(8*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_8*32)+31):(PCORE_TX_LANE_SEL_8*32)];
+  assign tx_gt_data_mux_s[((7*32)+31):(7*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_7*32)+31):(PCORE_TX_LANE_SEL_7*32)];
+  assign tx_gt_data_mux_s[((6*32)+31):(6*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_6*32)+31):(PCORE_TX_LANE_SEL_6*32)];
+
+Clone Blocks 2:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@462:472
+  assign tx_ip_data = tx_data;
+
+  assign tx_gt_data_extn_zero_s = 288'd0;
+  assign tx_gt_charisk_extn_zero_s = 36'd0;
+  assign tx_gt_data_extn_s = {tx_gt_data_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*32)-1):0], tx_gt_data_s};
+  assign tx_gt_charisk_extn_s = {tx_gt_charisk_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*4)-1):0], tx_gt_charisk_s};
+
+  assign tx_gt_data_mux_s[((8*32)+31):(8*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_8*32)+31):(PCORE_TX_LANE_SEL_8*32)];
+  assign tx_gt_data_mux_s[((7*32)+31):(7*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_7*32)+31):(PCORE_TX_LANE_SEL_7*32)];
+  assign tx_gt_data_mux_s[((6*32)+31):(6*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_6*32)+31):(PCORE_TX_LANE_SEL_6*32)];
+  assign tx_gt_data_mux_s[((5*32)+31):(5*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_5*32)+31):(PCORE_TX_LANE_SEL_5*32)];
+
+Clone Blocks 3:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@459:469
+
+  // transmit data interleave -- since transceivers are shared, lane assignments may not match pin assignments
+
+  assign tx_ip_data = tx_data;
+
+  assign tx_gt_data_extn_zero_s = 288'd0;
+  assign tx_gt_charisk_extn_zero_s = 36'd0;
+  assign tx_gt_data_extn_s = {tx_gt_data_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*32)-1):0], tx_gt_data_s};
+  assign tx_gt_charisk_extn_s = {tx_gt_charisk_extn_zero_s[(((9-PCORE_NUM_OF_LANES)*4)-1):0], tx_gt_charisk_s};
+
+  assign tx_gt_data_mux_s[((8*32)+31):(8*32)] = tx_gt_data_extn_s[((PCORE_TX_LANE_SEL_8*32)+31):(PCORE_TX_LANE_SEL_8*32)];
+

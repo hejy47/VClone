@@ -1,0 +1,45 @@
+Source Block: oh/common/hdl/oh_fifo_sync.v@23:33@HdlIdDef
+   output 	       prog_full, // fifo is almost full
+   output 	       empty, // fifo is empty  
+   output reg [AW-1:0] rd_count     // valid entries in fifo
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+
+   assign fifo_read   = rd_en & ~empty;
+
+Diff Content:
+- 28    reg [AW-1:0]        wr_addr;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_fifo_sync.v@25:35
+   output reg [AW-1:0] rd_count     // valid entries in fifo
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+
+Clone Blocks 2:
+oh/common/hdl/oh_fifo_sync.v@24:34
+   output 	       empty, // fifo is empty  
+   output reg [AW-1:0] rd_count     // valid entries in fifo
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+

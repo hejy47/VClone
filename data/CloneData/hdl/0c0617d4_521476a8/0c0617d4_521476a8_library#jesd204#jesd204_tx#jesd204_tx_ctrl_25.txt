@@ -1,0 +1,17 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@124:134@HdlStmAssign
+  .out_clk(clk),
+  .out_resetn(1'b1),
+  .out_bits(status_sync)
+);
+
+assign status_sync_masked = status_sync | cfg_links_disable;
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sync_request <= {NUM_LINKS{1'b0}};
+  end else begin
+
+Diff Content:
+- 129 assign status_sync_masked = status_sync | cfg_links_disable;
+
+Clone Blocks:

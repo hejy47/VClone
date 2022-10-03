@@ -1,0 +1,82 @@
+Source Block: oh/elink/hdl/etx_protocol.v@70:115@HdlStmProcess
+		     .srcaddr_out	(etx_srcaddr[31:0]),
+		     // Inputs
+		     .packet_in		(etx_packet[PW-1:0]));
+      
+   // TODO: Bursts
+   always @( posedge tx_lclk_div4 or posedge reset ) 
+     begin
+	if(reset) 
+	  begin	     
+             etx_ack          <= 1'b0;
+             tx_frame_par[7:0] <= 8'd0;
+             tx_data_par[63:0] <= 64'd0;	     
+	  end 
+	else 
+	  begin
+             if( etx_access & ~etx_ack ) //first cycle
+	       begin
+		  etx_ack  <= 1'b1;
+		  tx_frame_par[7:0] <= 8'h3F;
+		  tx_data_par[63:0]  <= {8'd0,  // Not used
+					 8'd0,
+					 ~etx_write, 7'd0, // B0-TODO: For bursts, add the inc bit
+					 etx_ctrlmode[3:0], etx_dstaddr[31:28], // B1
+					 etx_dstaddr[27:4],  // B2, B3, B4
+					 etx_dstaddr[3:0], etx_datamode[1:0], etx_write, etx_access // B5
+				   };
+               end 
+	     else if( etx_ack ) //second cycle
+	       begin
+		  etx_ack  <= 1'b0;
+		  tx_frame_par[7:0] <= 8'hFF;
+		  tx_data_par[63:0]  <= { etx_data[31:0], etx_srcaddr[31:0]};   
+               end 
+	     else 
+	       begin
+		  etx_ack    <= 1'b0;
+		  tx_frame_par[7:0] <= 8'h00;
+		  tx_data_par[63:0]  <= 64'd0;
+               end
+	  end // else: !if(reset)	
+     end // always @ ( posedge txlclk_p or posedge reset )
+   
+   //#############################
+   //# Wait signals
+   //#############################
+
+
+Diff Content:
+- 79              etx_ack          <= 1'b0;
+- 80              tx_frame_par[7:0] <= 8'd0;
+- 81              tx_data_par[63:0] <= 64'd0;	     
+- 85              if( etx_access & ~etx_ack ) //first cycle
+- 87 		  etx_ack  <= 1'b1;
+- 88 		  tx_frame_par[7:0] <= 8'h3F;
+- 89 		  tx_data_par[63:0]  <= {8'd0,  // Not used
+- 90 					 8'd0,
+- 97 	     else if( etx_ack ) //second cycle
+- 99 		  etx_ack  <= 1'b0;
+- 101 		  tx_data_par[63:0]  <= { etx_data[31:0], etx_srcaddr[31:0]};   
+- 105 		  etx_ack    <= 1'b0;
+- 106 		  tx_frame_par[7:0] <= 8'h00;
+- 107 		  tx_data_par[63:0]  <= 64'd0;
++ 81              etx_cycle          <= 1'b0;
++ 81              tx_frame_par[7:0]  <= 8'd0;
++ 81              tx_data_reg[127:0] <= 'd0;	     
++ 85              if( etx_access & ~etx_cycle ) //first cycle (0)
++ 90 		  etx_cycle           <= 1'b1;
++ 90 		  tx_frame_par[7:0]   <= 8'h3F;
++ 90 		  tx_data_reg[127:0]  <= {etx_data[31:0], 
++ 90 					 etx_srcaddr[31:0],
++ 90 					 8'd0,  // Not used
++ 90 					 8'd0,  //not used
++ 97 	     else if( etx_cycle ) //second cycle (1)
++ 99 		  etx_cycle  <= 1'b0;
++ 107 		  etx_cycle           <= 1'b0;
++ 107 		  tx_frame_par[7:0]   <= 8'h00;
++ 107 		  tx_data_reg[127:0]  <= 64'd0;
++ 110    assign tx_data_par[63:0] = etx_cycle ? tx_data_reg[127:64]:
++ 110 			                  tx_data_reg[63:0];
+
+Clone Blocks:

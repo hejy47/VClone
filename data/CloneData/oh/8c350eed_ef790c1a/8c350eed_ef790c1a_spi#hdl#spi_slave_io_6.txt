@@ -1,0 +1,46 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@135:145@HdlStmAssign
+     
+   //#################################
+   //# REGISTER FILE INTERFACE
+   //#################################
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = spi_rx[5:0];
+   assign spi_write     = byte_done & (spi_state[2:0]==`SPI_WRITE);
+   assign spi_read      = byte_done & (spi_state[2:0]==`SPI_READ);
+   assign spi_data[7:0] = spi_rx[7:0];
+ 
+   //#################################
+
+Diff Content:
+- 140    assign spi_addr[5:0] = spi_rx[5:0];
++ 140    assign spi_addr[5:0] = rx_data[5:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_slave_io.v@134:144
+   assign miso = spi_tx[7];
+     
+   //#################################
+   //# REGISTER FILE INTERFACE
+   //#################################
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = spi_rx[5:0];
+   assign spi_write     = byte_done & (spi_state[2:0]==`SPI_WRITE);
+   assign spi_read      = byte_done & (spi_state[2:0]==`SPI_READ);
+   assign spi_data[7:0] = spi_rx[7:0];
+ 
+
+Clone Blocks 2:
+oh/spi/hdl/spi_slave_io.v@138:148
+   //#################################
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = spi_rx[5:0];
+   assign spi_write     = byte_done & (spi_state[2:0]==`SPI_WRITE);
+   assign spi_read      = byte_done & (spi_state[2:0]==`SPI_READ);
+   assign spi_data[7:0] = spi_rx[7:0];
+ 
+   //#################################
+   //# CLOCK SYNCHRONIZATION
+   //#################################
+
+

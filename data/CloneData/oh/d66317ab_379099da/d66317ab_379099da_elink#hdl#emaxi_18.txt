@@ -1,0 +1,151 @@
+Source Block: oh/elink/hdl/emaxi.v@494:550@HdlStmProcess
+       if ( ~m_axi_aresetn )
+           m_axi_rdata_reg <= 'b0;
+       else
+           m_axi_rdata_reg <= m_axi_rdata;
+
+   always @( posedge m_axi_aclk )
+     if( ~m_axi_aresetn ) 
+       begin      
+	  txrr_data[31:0]     <= 32'b0;
+	  txrr_srcaddr[31:0]  <= 32'b0;
+	  txrr_access_reg     <= 1'b0;
+	  txrr_access         <= 1'b0;         
+      end 
+     else 
+       begin
+          txrr_access_reg     <= fifo_rd_en;	  
+	  txrr_access         <= txrr_access_reg;//added pipeline stage for data ???/
+	  // steer read data according to size & host address lsbs
+	  //all data needs to be right aligned
+	  //(this is due to the Epiphany right aligning all words)
+	  case(readinfo_out[1:0])//datamode
+            2'd0:  // byte read
+              case(readinfo_out[8:6])
+		3'd0:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[7:0]};
+		3'd1:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[15:8]};
+		3'd2:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[23:16]};
+		3'd3:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[31:24]};
+		3'd4:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[39:32]};
+		3'd5:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[47:40]};
+		3'd6:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[55:48]};
+		default:  txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[63:56]};
+              endcase	    
+            2'd1:  // 16b hword
+              case( readinfo_out[8:7] )
+		2'd0:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[15:0]};
+		2'd1:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[31:16]};
+		2'd2:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[47:32]};
+		default: txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[63:48]};
+              endcase
+            2'd2:  // 32b word
+              if( readinfo_out[8] )
+               txrr_data[31:0] <= m_axi_rdata_reg[63:32];
+             else
+               txrr_data[31:0] <= m_axi_rdata_reg[31:0];
+           // 64b word already defined by defaults above
+           2'd3: 
+	     begin // 64b dword
+		txrr_data[31:0]  <= m_axi_rdata_reg[31:0];
+		txrr_srcaddr[31:0]  <= m_axi_rdata_reg[63:32];
+             end
+         endcase         
+       end // else: !if( ~m_axi_aresetn )
+   
+endmodule // emaxi
+// Local Variables:
+// verilog-library-directories:("." "../../emesh/hdl" "../../memory/hdl" "../../common/hdl"  )
+// End:
+
+Diff Content:
+- 499    always @( posedge m_axi_aclk )
+- 500      if( ~m_axi_aresetn ) 
+- 501        begin      
+- 502 	  txrr_data[31:0]     <= 32'b0;
+- 503 	  txrr_srcaddr[31:0]  <= 32'b0;
+- 504 	  txrr_access_reg     <= 1'b0;
+- 505 	  txrr_access         <= 1'b0;         
+- 506       end 
+- 507      else 
+- 509           txrr_access_reg     <= fifo_rd_en;	  
+- 510 	  txrr_access         <= txrr_access_reg;//added pipeline stage for data ???/
+- 514 	  case(readinfo_out[1:0])//datamode
+- 516               case(readinfo_out[8:6])
+- 517 		3'd0:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[7:0]};
+- 518 		3'd1:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[15:8]};
+- 519 		3'd2:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[23:16]};
+- 520 		3'd3:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[31:24]};
+- 521 		3'd4:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[39:32]};
+- 522 		3'd5:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[47:40]};
+- 523 		3'd6:     txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[55:48]};
+- 524 		default:  txrr_data[31:0] <= {24'b0,m_axi_rdata_reg[63:56]};
+- 527               case( readinfo_out[8:7] )
+- 528 		2'd0:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[15:0]};
+- 529 		2'd1:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[31:16]};
+- 530 		2'd2:    txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[47:32]};
+- 531 		default: txrr_data[31:0] <= {16'b0,m_axi_rdata_reg[63:48]};
+- 534               if( readinfo_out[8] )
+- 535                txrr_data[31:0] <= m_axi_rdata_reg[63:32];
+- 536              else
+- 537                txrr_data[31:0] <= m_axi_rdata_reg[31:0];
+- 541 		txrr_data[31:0]  <= m_axi_rdata_reg[31:0];
+- 542 		txrr_srcaddr[31:0]  <= m_axi_rdata_reg[63:32];
++ 507    assign    m_axi_rready         = ~txrr_wait; //BUG!: 1'b1
++ 507    wire [1:0] 	 txrr_datamode_fifo;
++ 507    wire [3:0] 	 txrr_ctrlmode_fifo;
++ 507    wire [31:0] 	 txrr_dstaddr_fifo;
++ 507    wire [2:0] 	 txrr_srcaddr_fifo;
++ 507    reg [1:0] 	 txrr_datamode;
++ 507    reg [3:0] 	 txrr_ctrlmode;
++ 507    reg [31:0] 	 txrr_dstaddr;
++ 507    assign  txrr_datamode_fifo[1:0] = readinfo_out[1:0];
++ 507    assign  txrr_ctrlmode_fifo[3:0] = readinfo_out[5:2];
++ 507    assign  txrr_srcaddr_fifo[2:0]  = readinfo_out[8:6];
++ 507    assign  txrr_dstaddr_fifo[31:0] = readinfo_out[40:9];
++ 507    reg [63:0] 	 m_axi_rdata_fifo;
++ 507    reg 		 txrr_access_fifo;   
++ 507    always @( posedge m_axi_aclk)
++ 507      if(!m_axi_aresetn) 
++ 510 	  txrr_access_fifo      <= 1'b0;	  
++ 510        end
++ 510      else	 
++ 510        begin
++ 510 	  txrr_access_fifo       <= fifo_rd_en;
++ 510 	  m_axi_rdata_fifo[63:0] <= m_axi_rdata[63:0];      
++ 510        end
++ 510    always @ (posedge m_axi_aclk )
++ 510      if(!m_axi_aresetn)
++ 510        begin
++ 510 	  txrr_access  <= 1'b0;	  
++ 510        end
++ 510      else
++ 510        begin
++ 510 	  txrr_access        <= txrr_access_fifo;	  
++ 510 	  txrr_datamode[1:0] <= txrr_datamode_fifo[1:0];
++ 510 	  txrr_ctrlmode[3:0] <= txrr_ctrlmode_fifo[3:0];
++ 510 	  txrr_dstaddr[31:0] <= txrr_dstaddr_fifo[31:0];	  
++ 514 	  case(txrr_datamode_fifo[1:0])//datamode
++ 524               case(txrr_srcaddr_fifo[2:0])
++ 524 		3'd0:     txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[7:0]};
++ 524 		3'd1:     txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[15:8]};
++ 524 		3'd2:     txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[23:16]};
++ 524 		3'd3:     txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[31:24]};
++ 524 		3'd4:     txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[39:32]};
++ 524 		3'd5:     txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[47:40]};
++ 524 		3'd6:     txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[55:48]};
++ 524 		3'd7:     txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[63:56]};
++ 524 		default:  txrr_data[31:0] <= {24'b0,m_axi_rdata_fifo[7:0]};
++ 531               case(txrr_srcaddr_fifo[2:1])
++ 531 		2'd0:    txrr_data[31:0] <= {16'b0,m_axi_rdata_fifo[15:0]};
++ 531 		2'd1:    txrr_data[31:0] <= {16'b0,m_axi_rdata_fifo[31:16]};
++ 531 		2'd2:    txrr_data[31:0] <= {16'b0,m_axi_rdata_fifo[47:32]};
++ 531 		2'd3:    txrr_data[31:0] <= {16'b0,m_axi_rdata_fifo[63:48]};
++ 531 		default: txrr_data[31:0] <= {16'b0,m_axi_rdata_fifo[15:0]};
++ 537               if(txrr_srcaddr_fifo[2])
++ 537 		txrr_data[31:0] <= m_axi_rdata_fifo[63:32];
++ 537               else
++ 537 		txrr_data[31:0] <= m_axi_rdata_fifo[31:0];
++ 542 		txrr_data[31:0]     <= m_axi_rdata_fifo[31:0];
++ 542 		txrr_srcaddr[31:0]  <= m_axi_rdata_fifo[63:32];
+
+Clone Blocks:

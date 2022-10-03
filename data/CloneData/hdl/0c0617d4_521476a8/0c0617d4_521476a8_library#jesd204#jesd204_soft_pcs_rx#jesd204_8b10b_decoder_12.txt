@@ -1,0 +1,394 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v@72:269@HdlStmProcess
+reg notintable_disparity;
+
+// Only detect K28.X
+wire charisk = in_char[5:0] == 6'b000011 || in_char[5:0] == 6'b111100;
+
+always @(*) begin
+  notintable5b = 1'b0;
+  disparity5b = 2'b00;
+  ignore5b = 1'b0;
+
+  case (in_char[5:0])
+  6'b000011: begin
+    data5b = 5'd28;
+    disparity5b = 2'b11;
+  end
+  6'b111100: begin
+    data5b = 5'd28;
+    disparity5b = 2'b01;
+  end
+  6'b000110: begin
+    data5b = 5'd00;
+    disparity5b = 2'b11;
+  end
+  6'b111001: begin
+    data5b = 5'd00;
+    disparity5b = 2'b01;
+  end
+  6'b010001: begin
+    data5b = 5'd01;
+    disparity5b = 2'b11;
+  end
+  6'b101110: begin
+    data5b = 5'd01;
+    disparity5b = 2'b01;
+  end
+  6'b010010: begin
+    data5b = 5'd02;
+    disparity5b = 2'b11;
+  end
+  6'b101101: begin
+    data5b = 5'd02;
+    disparity5b = 2'b01;
+  end
+  6'b100011: begin
+    data5b = 5'd03;
+  end
+  6'b010100: begin
+    data5b = 5'd04;
+    disparity5b = 2'b11;
+  end
+  6'b101011: begin
+    data5b = 5'd04;
+    disparity5b = 2'b01;
+  end
+  6'b100101: begin
+    data5b = 5'd05;
+  end
+  6'b100110: begin
+    data5b = 5'd06;
+  end
+  6'b000111: begin
+    data5b = 5'd7;
+    disparity5b = 2'b11;
+    ignore5b = 1'b1;
+  end
+  6'b111000: begin
+    data5b = 5'd7;
+    disparity5b = 2'b01;
+    ignore5b = 1'b1;
+  end
+  6'b011000: begin
+    data5b = 5'd8;
+    disparity5b = 2'b11;
+  end
+  6'b100111: begin
+    data5b = 5'd8;
+    disparity5b = 2'b01;
+  end
+  6'b101001: begin
+    data5b = 5'd9;
+  end
+  6'b101010: begin
+    data5b = 5'd10;
+  end
+  6'b001011: begin
+    data5b = 5'd11;
+  end
+  6'b101100: begin
+    data5b = 5'd12;
+  end
+  6'b001101: begin
+    data5b = 5'd13;
+  end
+  6'b001110: begin
+    data5b = 5'd14;
+  end
+  6'b000101: begin
+    data5b = 5'd15;
+    disparity5b = 2'b11;
+  end
+  6'b111010: begin
+    data5b = 5'd15;
+    disparity5b = 2'b01;
+  end
+  6'b001001: begin
+    data5b = 5'd16;
+    disparity5b = 2'b11;
+  end
+  6'b110110: begin
+    data5b = 5'd16;
+    disparity5b = 2'b01;
+  end
+  6'b110001: begin
+    data5b = 5'd17;
+  end
+  6'b110010: begin
+    data5b = 5'd18;
+  end
+  6'b010011: begin
+    data5b = 5'd19;
+  end
+  6'b110100: begin
+    data5b = 5'd20;
+  end
+  6'b010101: begin
+    data5b = 5'd21;
+  end
+  6'b010110: begin
+    data5b = 5'd22;
+  end
+  6'b101000: begin
+    data5b = 5'd23;
+    disparity5b = 2'b11;
+  end
+  6'b010111: begin
+    data5b = 5'd23;
+    disparity5b = 2'b01;
+  end
+  6'b001100: begin
+    data5b = 5'd24;
+    disparity5b = 2'b11;
+  end
+  6'b110011: begin
+    data5b = 5'd24;
+    disparity5b = 2'b01;
+  end
+  6'b011001: begin
+    data5b = 5'd25;
+  end
+  6'b011010: begin
+    data5b = 5'd26;
+  end
+  6'b100100: begin
+    data5b = 5'd27;
+    disparity5b = 2'b11;
+  end
+  6'b011011: begin
+    data5b = 5'd27;
+    disparity5b = 2'b01;
+  end
+  6'b011100: begin
+    data5b = 5'd28;
+  end
+  6'b100010: begin
+    data5b = 5'd29;
+    disparity5b = 2'b11;
+  end
+  6'b011101: begin
+    data5b = 5'd29;
+    disparity5b = 2'b01;
+  end
+  6'b100001: begin
+    data5b = 5'd30;
+    disparity5b = 2'b11;
+  end
+  6'b011110: begin
+    data5b = 5'd30;
+    disparity5b = 2'b01;
+  end
+  6'b001010: begin
+    data5b = 5'd31;
+    disparity5b = 2'b11;
+  end
+  6'b110101: begin
+    data5b = 5'd31;
+    disparity5b = 2'b01;
+  end
+  default: begin
+    data5b = 5'd00;
+    notintable5b = 1'b1;
+  end
+  endcase
+end
+
+always @(*) begin
+  ignore3b = 1'b0;
+
+  case (in_char[9:6])
+
+Diff Content:
+- 77 always @(*) begin
+- 78   notintable5b = 1'b0;
+- 79   disparity5b = 2'b00;
+- 80   ignore5b = 1'b0;
+- 82   case (in_char[5:0])
+- 83   6'b000011: begin
+- 84     data5b = 5'd28;
+- 85     disparity5b = 2'b11;
+- 86   end
+- 87   6'b111100: begin
+- 88     data5b = 5'd28;
+- 89     disparity5b = 2'b01;
+- 90   end
+- 91   6'b000110: begin
+- 92     data5b = 5'd00;
+- 93     disparity5b = 2'b11;
+- 94   end
+- 95   6'b111001: begin
+- 96     data5b = 5'd00;
+- 97     disparity5b = 2'b01;
+- 98   end
+- 99   6'b010001: begin
+- 100     data5b = 5'd01;
+- 101     disparity5b = 2'b11;
+- 102   end
+- 103   6'b101110: begin
+- 104     data5b = 5'd01;
+- 105     disparity5b = 2'b01;
+- 106   end
+- 107   6'b010010: begin
+- 108     data5b = 5'd02;
+- 109     disparity5b = 2'b11;
+- 110   end
+- 111   6'b101101: begin
+- 112     data5b = 5'd02;
+- 113     disparity5b = 2'b01;
+- 114   end
+- 115   6'b100011: begin
+- 116     data5b = 5'd03;
+- 117   end
+- 118   6'b010100: begin
+- 119     data5b = 5'd04;
+- 120     disparity5b = 2'b11;
+- 121   end
+- 122   6'b101011: begin
+- 123     data5b = 5'd04;
+- 124     disparity5b = 2'b01;
+- 125   end
+- 126   6'b100101: begin
+- 127     data5b = 5'd05;
+- 128   end
+- 129   6'b100110: begin
+- 130     data5b = 5'd06;
+- 131   end
+- 132   6'b000111: begin
+- 133     data5b = 5'd7;
+- 134     disparity5b = 2'b11;
+- 135     ignore5b = 1'b1;
+- 136   end
+- 137   6'b111000: begin
+- 138     data5b = 5'd7;
+- 139     disparity5b = 2'b01;
+- 140     ignore5b = 1'b1;
+- 141   end
+- 142   6'b011000: begin
+- 143     data5b = 5'd8;
+- 144     disparity5b = 2'b11;
+- 145   end
+- 146   6'b100111: begin
+- 147     data5b = 5'd8;
+- 148     disparity5b = 2'b01;
+- 149   end
+- 150   6'b101001: begin
+- 151     data5b = 5'd9;
+- 152   end
+- 153   6'b101010: begin
+- 154     data5b = 5'd10;
+- 155   end
+- 156   6'b001011: begin
+- 157     data5b = 5'd11;
+- 158   end
+- 159   6'b101100: begin
+- 160     data5b = 5'd12;
+- 161   end
+- 162   6'b001101: begin
+- 163     data5b = 5'd13;
+- 164   end
+- 165   6'b001110: begin
+- 166     data5b = 5'd14;
+- 167   end
+- 168   6'b000101: begin
+- 169     data5b = 5'd15;
+- 170     disparity5b = 2'b11;
+- 171   end
+- 172   6'b111010: begin
+- 173     data5b = 5'd15;
+- 174     disparity5b = 2'b01;
+- 175   end
+- 176   6'b001001: begin
+- 177     data5b = 5'd16;
+- 178     disparity5b = 2'b11;
+- 179   end
+- 180   6'b110110: begin
+- 181     data5b = 5'd16;
+- 182     disparity5b = 2'b01;
+- 183   end
+- 184   6'b110001: begin
+- 185     data5b = 5'd17;
+- 186   end
+- 187   6'b110010: begin
+- 188     data5b = 5'd18;
+- 189   end
+- 190   6'b010011: begin
+- 191     data5b = 5'd19;
+- 192   end
+- 193   6'b110100: begin
+- 194     data5b = 5'd20;
+- 195   end
+- 196   6'b010101: begin
+- 197     data5b = 5'd21;
+- 198   end
+- 199   6'b010110: begin
+- 200     data5b = 5'd22;
+- 201   end
+- 202   6'b101000: begin
+- 203     data5b = 5'd23;
+- 204     disparity5b = 2'b11;
+- 205   end
+- 206   6'b010111: begin
+- 207     data5b = 5'd23;
+- 208     disparity5b = 2'b01;
+- 209   end
+- 210   6'b001100: begin
+- 211     data5b = 5'd24;
+- 212     disparity5b = 2'b11;
+- 213   end
+- 214   6'b110011: begin
+- 215     data5b = 5'd24;
+- 216     disparity5b = 2'b01;
+- 217   end
+- 218   6'b011001: begin
+- 219     data5b = 5'd25;
+- 220   end
+- 221   6'b011010: begin
+- 222     data5b = 5'd26;
+- 223   end
+- 224   6'b100100: begin
+- 225     data5b = 5'd27;
+- 226     disparity5b = 2'b11;
+- 227   end
+- 228   6'b011011: begin
+- 229     data5b = 5'd27;
+- 230     disparity5b = 2'b01;
+- 231   end
+- 232   6'b011100: begin
+- 233     data5b = 5'd28;
+- 234   end
+- 235   6'b100010: begin
+- 236     data5b = 5'd29;
+- 237     disparity5b = 2'b11;
+- 238   end
+- 239   6'b011101: begin
+- 240     data5b = 5'd29;
+- 241     disparity5b = 2'b01;
+- 242   end
+- 243   6'b100001: begin
+- 244     data5b = 5'd30;
+- 245     disparity5b = 2'b11;
+- 246   end
+- 247   6'b011110: begin
+- 248     data5b = 5'd30;
+- 249     disparity5b = 2'b01;
+- 250   end
+- 251   6'b001010: begin
+- 252     data5b = 5'd31;
+- 253     disparity5b = 2'b11;
+- 254   end
+- 255   6'b110101: begin
+- 256     data5b = 5'd31;
+- 257     disparity5b = 2'b01;
+- 258   end
+- 259   default: begin
+- 260     data5b = 5'd00;
+- 261     notintable5b = 1'b1;
+- 262   end
+- 263   endcase
+- 264 end
++ 80   always @(*) begin
++ 80     notintable5b = 1'b0;
++ 80     disparity5b = 2'b00;
++ 80     ignore5b = 1'b0;
+
+Clone Blocks:

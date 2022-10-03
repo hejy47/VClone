@@ -1,0 +1,18 @@
+Source Block: hdl/library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v@92:102@HdlIdDef
+  output s1_sync_valid,
+  input s1_sync_ready,
+  output [7:0] s1_sync
+);
+
+reg s_active = 1'b0;
+
+reg idle = 1'b1;
+
+`define spi_engine_interconnect_mux(s0, s1) (idle == 1'b1 ? 1'b0 : (s_active == 1'b0 ? s0 : s1))
+
+
+Diff Content:
+- 97 reg s_active = 1'b0;
++ 97   reg s_active = 1'b0;
+
+Clone Blocks:

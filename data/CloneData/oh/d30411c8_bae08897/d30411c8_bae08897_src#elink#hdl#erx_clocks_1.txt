@@ -1,0 +1,111 @@
+Source Block: oh/src/elink/hdl/erx_clocks.v@133:225@HdlStmIf
+			.clk		(rx_lclk_div4),
+			.nrst_in	(rx_nreset)
+			);
+
+   generate
+      if(TARGET=="XILINX")
+	begin
+	   //###########################
+	   // PLL RX
+	   //###########################  
+	   
+	   PLLE2_ADV
+	     #(
+	       .BANDWIDTH("OPTIMIZED"),          
+	       .CLKFBOUT_MULT(PLL_VCO_MULT),              
+	       .CLKFBOUT_PHASE(0.0),
+	       .CLKIN1_PERIOD(RXCLK_PERIOD),
+	       .CLKOUT0_DIVIDE(128),
+	       .CLKOUT1_DIVIDE(128),
+	       .CLKOUT2_DIVIDE(128),
+	       .CLKOUT3_DIVIDE(IREF_DIVIDE),    // idelay ref clk
+	       .CLKOUT4_DIVIDE(RXCLK_DIVIDE),   // rx_lclk
+	       .CLKOUT5_DIVIDE(RXCLK_DIVIDE*4), // rx_lclk_div4
+	       .CLKOUT0_DUTY_CYCLE(0.5),         
+	       .CLKOUT1_DUTY_CYCLE(0.5),
+	       .CLKOUT2_DUTY_CYCLE(0.5),
+	       .CLKOUT3_DUTY_CYCLE(0.5),
+	       .CLKOUT4_DUTY_CYCLE(0.5),
+	       .CLKOUT5_DUTY_CYCLE(0.5),
+	       .CLKOUT0_PHASE(0.0),
+	       .CLKOUT1_PHASE(0.0),
+	       .CLKOUT2_PHASE(0.0),
+	       .CLKOUT3_PHASE(0.0),
+	       .CLKOUT4_PHASE(0.0),//RXCLK_PHASE
+	       .CLKOUT5_PHASE(0.0),//RXCLK_PHASE/4
+	       .DIVCLK_DIVIDE(1.0), 
+	       .REF_JITTER1(0.01), 
+	       .STARTUP_WAIT("FALSE") 
+	       ) pll_rx
+	       (
+		.CLKOUT0(),
+		.CLKOUT1(),
+		.CLKOUT2(),
+		.CLKOUT3(idelay_ref_clk_pll),
+		.CLKOUT4(rx_lclk_pll),
+		.CLKOUT5(rx_lclk_div4_pll),
+		.PWRDWN(1'b0),
+		.RST(pll_reset),
+		.CLKFBIN(rx_lclk_fb),    
+		.CLKFBOUT(rx_lclk_fb),       
+		.CLKIN1(rx_clkin),
+		.CLKIN2(1'b0),
+		.CLKINSEL(1'b1),      
+		.DADDR(7'b0),
+		.DCLK(1'b0),
+		.DEN(1'b0),
+		.DI(16'b0),
+		.DWE(1'b0),
+		.DRDY(),//??
+		.DO(), //??
+		.LOCKED(pll_locked)
+		);
+	   
+	   //Clock network
+	   BUFG i_lclk_bufg      (.I(rx_lclk_pll),      .O(rx_lclk));       //300Mhz
+	   BUFG i_lclk_div4_bufg (.I(rx_lclk_div4_pll), .O(rx_lclk_div4)); //(300Mhz/4)
+	   
+	   BUFG i_idelay_bufg  (.I(idelay_ref_clk_pll),.O(idelay_ref_clk));//idelay ctrl clock
+	   
+	   //two clock synchronizer for lock signal
+	   oh_dsync dsync (.dout (pll_locked_sync),
+			   .clk	 (sys_clk),
+			   .nreset (1'b1),
+			   .din	 (pll_locked)
+			   );
+	   
+	   //###########################
+	   // Idelay controller
+	   //###########################
+	   
+	   (* IODELAY_GROUP = "IDELAY_GROUP" *) // Group name for IDELAYCTRL
+	   IDELAYCTRL idelayctrl_inst 
+	     (
+	      .RDY(idelay_ready), // check ready flag in reset sequence?
+	      .REFCLK(idelay_ref_clk),//200MHz clk (78ps tap delay)
+	      .RST(idelay_reset));
+	   
+	end // if (TARGET=="XILINX")
+   endgenerate
+
+endmodule // eclocks
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+
+Diff Content:
+- 214 	   IDELAYCTRL idelayctrl_inst 
+- 218 	      .RST(idelay_reset));
++ 210 `define IDELAYCTRL_WONT_SYNTHESIZE
++ 210 `ifdef IDELAYCTRL_WONT_SYNTHESIZE
++ 210 	  assign idelay_ready = 'b1;
++ 210 `else
++ 214 	   IDELAYCTRL
++ 214 	    #(
++ 214 	      .SIM_DEVICE("ULTRASCALE_PLUS_ES2")
++ 214 	     ) idelayctrl_inst
++ 218 	      .RST(idelay_reset)
++ 218 	      );
++ 218 `endif
+
+Clone Blocks:

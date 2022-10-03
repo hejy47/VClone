@@ -1,0 +1,37 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361.v@543:553@HdlStmAssign
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_pps_rcounter (up_pps_rcounter_s),
+    .up_irq_mask (up_irq_mask_s),
+    .up_irq (gps_pps_irq));
+  assign up_irq_mask_s = adc_up_pps_irq_mask_s | dac_up_pps_irq_mask_s;
+
+  // receive
+
+  axi_ad9361_rx #(
+    .ID (ID),
+
+Diff Content:
+- 548   assign up_irq_mask_s = adc_up_pps_irq_mask_s | dac_up_pps_irq_mask_s;
++ 548   generate if (PPS_RECEIVER_ENABLE == 1) begin
++ 548     ad_pps_receiver i_pps_receiver (
++ 548       .clk (clk),
++ 548       .rst (rst),
++ 548       .gps_pps (gps_pps),
++ 548       .up_clk (up_clk),
++ 548       .up_rstn (up_rstn),
++ 548       .up_pps_rcounter (up_pps_rcounter_s),
++ 548       .up_pps_status (up_pps_status_s),
++ 548       .up_irq_mask (up_irq_mask_s),
++ 548       .up_irq (gps_pps_irq));
++ 548     assign up_irq_mask_s = adc_up_pps_irq_mask_s | dac_up_pps_irq_mask_s;
++ 548   end
++ 548   endgenerate
++ 548   generate if (PPS_RECEIVER_ENABLE == 0) begin
++ 548     assign up_pps_rcounter_s = 32'b0;
++ 548     assign up_pps_status_s = 1'b1;
++ 548     assign gps_pps_irq = 1'b0;
++ 548   end
++ 548   endgenerate
+
+Clone Blocks:

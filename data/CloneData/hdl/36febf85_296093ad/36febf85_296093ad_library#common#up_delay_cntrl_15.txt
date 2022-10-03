@@ -1,0 +1,24 @@
+Source Block: hdl/library/common/up_delay_cntrl.v@129:145@HdlStmFor
+  assign up_rdata_s[2] = | up_drdata2_s;
+  assign up_rdata_s[1] = | up_drdata1_s;
+  assign up_rdata_s[0] = | up_drdata0_s;
+
+  generate
+  for (n = 0; n < IO_WIDTH; n = n + 1) begin: g_drd
+  assign up_drdata4_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+4)] : 1'd0;
+  assign up_drdata3_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+3)] : 1'd0;
+  assign up_drdata2_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+2)] : 1'd0;
+  assign up_drdata1_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+1)] : 1'd0;
+  assign up_drdata0_s[n] = (up_raddr[7:0] == n) ? up_drdata[((n*5)+0)] : 1'd0;
+  end
+  endgenerate
+
+  // processor interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Diff Content:
+- 134   for (n = 0; n < IO_WIDTH; n = n + 1) begin: g_drd
++ 134   for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_drd
+
+Clone Blocks:

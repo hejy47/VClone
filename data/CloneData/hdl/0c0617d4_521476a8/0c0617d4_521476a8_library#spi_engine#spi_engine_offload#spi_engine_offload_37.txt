@@ -1,0 +1,44 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@292:307@HdlStmProcess
+always @(posedge ctrl_clk) begin
+  if (ctrl_cmd_wr_en == 1'b1)
+    cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1)
+    ctrl_sdo_wr_addr <= 'h00;
+  else if (ctrl_sdo_wr_en == 1'b1)
+    ctrl_sdo_wr_addr <= ctrl_sdo_wr_addr + 1'b1;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_sdo_wr_en == 1'b1)
+    sdo_mem[ctrl_sdo_wr_addr] <= ctrl_sdo_wr_data;
+end
+
+Diff Content:
+- 297 always @(posedge ctrl_clk) begin
+- 298   if (ctrl_mem_reset == 1'b1)
+- 299     ctrl_sdo_wr_addr <= 'h00;
+- 300   else if (ctrl_sdo_wr_en == 1'b1)
+- 301     ctrl_sdo_wr_addr <= ctrl_sdo_wr_addr + 1'b1;
+- 302 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@287:300
+    ctrl_cmd_wr_addr <= 'h00;
+  else if (ctrl_cmd_wr_en == 1'b1)
+    ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1'b1;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_cmd_wr_en == 1'b1)
+    cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1)
+    ctrl_sdo_wr_addr <= 'h00;
+  else if (ctrl_sdo_wr_en == 1'b1)
+

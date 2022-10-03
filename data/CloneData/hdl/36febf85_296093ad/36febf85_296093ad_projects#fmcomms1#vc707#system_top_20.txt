@@ -1,0 +1,157 @@
+Source Block: hdl/projects/fmcomms1/vc707/system_top.v@236:256@HdlStmProcess
+  OBUFDS i_obufds_ref_clk (
+    .I (oddr_ref_clk),
+    .O (ref_clk_out_p),
+    .OB (ref_clk_out_n));
+
+  always @(posedge dac_clk) begin
+    dac_dma_rd <= dac_valid_0 & dac_enable_0;
+    dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+    dac_ddata_1[47:32] <= dac_dma_rdata[63:48];
+    dac_ddata_1[31:16] <= dac_dma_rdata[31:16];
+    dac_ddata_1[15: 0] <= dac_dma_rdata[31:16];
+    dac_ddata_0[63:48] <= dac_dma_rdata[47:32];
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin 
+    adc_data_cnt <= ~adc_data_cnt;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+
+Diff Content:
+- 241   always @(posedge dac_clk) begin
+- 242     dac_dma_rd <= dac_valid_0 & dac_enable_0;
+- 243     dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+- 244     dac_ddata_1[47:32] <= dac_dma_rdata[63:48];
+- 245     dac_ddata_1[31:16] <= dac_dma_rdata[31:16];
+- 246     dac_ddata_1[15: 0] <= dac_dma_rdata[31:16];
+- 247     dac_ddata_0[63:48] <= dac_dma_rdata[47:32];
+- 248     dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+- 249     dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+- 250     dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+- 251   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms1/zed/system_top.v@259:279
+    .dio_t({iic_mux_sda_t_s, iic_mux_sda_t_s}),
+    .dio_i(iic_mux_sda_o_s),
+    .dio_o(iic_mux_sda_i_s),
+    .dio_p(iic_mux_sda));
+
+  always @(posedge dac_clk) begin
+    dac_dma_rd <= dac_valid_0 & dac_enable_0;
+    dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+    dac_ddata_1[47:32] <= dac_dma_rdata[63:48];
+    dac_ddata_1[31:16] <= dac_dma_rdata[31:16];
+    dac_ddata_1[15: 0] <= dac_dma_rdata[31:16];
+    dac_ddata_0[63:48] <= dac_dma_rdata[47:32];
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt ;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+
+Clone Blocks 2:
+hdl/projects/fmcomms1/zc702/system_top.v@216:236
+    .dio_t(gpio_t[15:0]),
+    .dio_i(gpio_o[15:0]),
+    .dio_o(gpio_i[15:0]),
+    .dio_p(gpio_bd));
+
+  always @(posedge dac_clk) begin
+    dac_dma_rd <= dac_valid_0 & dac_enable_0;
+    dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+    dac_ddata_1[47:32] <= dac_dma_rdata[63:48];
+    dac_ddata_1[31:16] <= dac_dma_rdata[31:16];
+    dac_ddata_1[15: 0] <= dac_dma_rdata[31:16];
+    dac_ddata_0[63:48] <= dac_dma_rdata[47:32];
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt ;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+
+Clone Blocks 3:
+hdl/projects/fmcomms1/kc705/system_top.v@246:266
+  OBUFDS i_obufds_ref_clk (
+    .I (oddr_ref_clk),
+    .O (ref_clk_out_p),
+    .OB (ref_clk_out_n));
+
+  always @(posedge dac_clk) begin
+    dac_dma_rd <= dac_valid_0 & dac_enable_0;
+    dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+    dac_ddata_1[47:32] <= dac_dma_rdata[63:48];
+    dac_ddata_1[31:16] <= dac_dma_rdata[31:16];
+    dac_ddata_1[15: 0] <= dac_dma_rdata[31:16];
+    dac_ddata_0[63:48] <= dac_dma_rdata[47:32];
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin 
+    adc_data_cnt <= ~adc_data_cnt;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+
+Clone Blocks 4:
+hdl/projects/fmcomms1/zc706/system_top.v@215:235
+    .dio_t(gpio_t[14:0]),
+    .dio_i(gpio_o[14:0]),
+    .dio_o(gpio_i[14:0]),
+    .dio_p(gpio_bd));
+
+  always @(posedge dac_clk) begin
+    dac_dma_rd <= dac_valid_0 & dac_enable_0;
+    dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+    dac_ddata_1[47:32] <= dac_dma_rdata[63:48];
+    dac_ddata_1[31:16] <= dac_dma_rdata[31:16];
+    dac_ddata_1[15: 0] <= dac_dma_rdata[31:16];
+    dac_ddata_0[63:48] <= dac_dma_rdata[47:32];
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt ;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+
+Clone Blocks 5:
+hdl/projects/fmcomms1/ac701/system_top.v@223:243
+  OBUFDS i_obufds_ref_clk (
+    .I (oddr_ref_clk),
+    .O (ref_clk_out_p),
+    .OB (ref_clk_out_n));
+
+   always @(posedge dac_clk) begin
+    dac_dma_rd <= dac_valid_0 & dac_enable_0;
+    dac_ddata_1[63:48] <= dac_dma_rdata[63:48];
+    dac_ddata_1[47:32] <= dac_dma_rdata[63:48];
+    dac_ddata_1[31:16] <= dac_dma_rdata[31:16];
+    dac_ddata_1[15: 0] <= dac_dma_rdata[31:16];
+    dac_ddata_0[63:48] <= dac_dma_rdata[47:32];
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+

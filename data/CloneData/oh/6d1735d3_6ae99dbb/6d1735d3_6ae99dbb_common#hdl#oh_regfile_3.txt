@@ -1,0 +1,29 @@
+Source Block: oh/common/hdl/oh_regfile.v@50:63@HdlStmFor
+	       .sel (write_en[i][WP-1:0]),
+	       .in  (wr_data[WP*RW-1:0]));
+     end
+	     		 
+   //Memory Array Write
+   for(i=0;i<REGS;i=i+1)
+     always @ (posedge clk)
+       if (|write_en[i][WP-1:0])
+	 mem[i] <= datamux[i];
+   
+   //#########################################
+   // read ports
+   //#########################################	
+   
+
+Diff Content:
+- 55    for(i=0;i<REGS;i=i+1)
+- 56      always @ (posedge clk)
+- 57        if (|write_en[i][WP-1:0])
+- 58 	 mem[i] <= datamux[i];
++ 58    for(i=0;i<REGS;i=i+1) 
++ 58      begin: gen_reg
++ 58 	always @ (posedge clk)
++ 58 	  if (|write_en[i][WP-1:0])
++ 58 	    mem[i] <= datamux[i];
++ 58 end
+
+Clone Blocks:

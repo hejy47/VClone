@@ -1,0 +1,40 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/util_dacfifo_bypass.v@267:281@HdlStmProcess
+    end
+  end
+
+  // DAC data output logic
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_data <= 0;
+    end else begin
+      dac_data <= dac_mem_rdata_s;
+    end
+  end
+
+endmodule
+
+
+Diff Content:
+- 273     if (dac_rst == 1'b1) begin
++ 273     if (dac_dunf == 1'b1) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/altera/avl_dacfifo/util_dacfifo_bypass.v@262:276
+    end
+  end
+
+  // DAC data output logic
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_data <= 0;
+    end else begin
+      dac_data <= dac_mem_rdata_s;
+    end
+  end
+
+endmodule
+
+

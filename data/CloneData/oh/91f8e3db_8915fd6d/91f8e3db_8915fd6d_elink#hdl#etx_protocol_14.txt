@@ -1,0 +1,67 @@
+Source Block: oh/elink/hdl/etx_protocol.v@52:62@HdlIdDef
+   wire [AW-1:0] tx_dstaddr;   
+   wire 	 burst_match;
+   wire 	 burst_type_match;
+   wire [31:0] 	 burst_addr;
+   wire 	 burst_addr_match;
+   wire 	 burst_in;
+
+   //##############################################################
+   //# Packet Pipeline
+   //##############################################################
+   packet2emesh p2m0 (
+
+Diff Content:
+- 57    wire 	 burst_in;
++ 57    reg [2:0] 	  tx_state;   
++ 57    reg [PW-1:0]   tx_packet; 
++ 57    wire 	  etx_write;
++ 57    wire [1:0] 	  etx_datamode;
++ 57    wire [3:0] 	  etx_ctrlmode;
++ 57    wire [AW-1:0]  etx_dstaddr;
++ 57    wire [DW-1:0]  etx_data;
++ 57    wire 	  tx_write;
++ 57    wire [1:0] 	  tx_datamode;
++ 57    wire [3:0] 	  tx_ctrlmode;
++ 57    wire [AW-1:0]  tx_dstaddr;
++ 57    wire [DW-1:0]  tx_data;
++ 57    wire [AW-1:0]  tx_srcaddr;   
++ 57    wire 	  burst_match;
++ 57    wire 	  burst_type_match;
++ 57    wire [31:0] 	  burst_addr;
++ 57    wire 	  burst_addr_match;
++ 57    wire 	  burst_in;
++ 57    wire 	  adjust;
++ 57    wire 	  current_match;
++ 57    wire 	  next_match;
++ 57    wire 	  tx_burst_in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@51:61
+   wire [3:0]	 tx_ctrlmode;
+   wire [AW-1:0] tx_dstaddr;   
+   wire 	 burst_match;
+   wire 	 burst_type_match;
+   wire [31:0] 	 burst_addr;
+   wire 	 burst_addr_match;
+   wire 	 burst_in;
+
+   //##############################################################
+   //# Packet Pipeline
+   //##############################################################
+
+Clone Blocks 2:
+oh/elink/hdl/etx_protocol.v@50:60
+   wire [1:0] 	 tx_datamode;
+   wire [3:0]	 tx_ctrlmode;
+   wire [AW-1:0] tx_dstaddr;   
+   wire 	 burst_match;
+   wire 	 burst_type_match;
+   wire [31:0] 	 burst_addr;
+   wire 	 burst_addr_match;
+   wire 	 burst_in;
+
+   //##############################################################
+   //# Packet Pipeline
+

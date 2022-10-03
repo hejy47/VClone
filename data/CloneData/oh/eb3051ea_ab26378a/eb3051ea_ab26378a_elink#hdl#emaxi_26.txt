@@ -1,0 +1,31 @@
+Source Block: oh/elink/hdl/emaxi.v@307:324@HdlStmAssign
+   //   read data comes back.
+   //----------------------------
+
+   //TODO: Can we improve this??
+   
+   assign  readinfo_in[47:0] = 
+               {
+		7'b0,
+                emrq_srcaddr[31:0],//40:9
+                emrq_dstaddr[2:0], //8:6
+                emrq_ctrlmode[3:0], //5:2
+                emrq_datamode[1:0]
+                };
+   
+   fifo_sync 
+     #(
+       // parameters
+       .AW                              (5),
+
+Diff Content:
+- 315                 emrq_srcaddr[31:0],//40:9
+- 316                 emrq_dstaddr[2:0], //8:6
+- 317                 emrq_ctrlmode[3:0], //5:2
+- 318                 emrq_datamode[1:0]
++ 318                 rxrd_srcaddr[31:0],//40:9
++ 318                 rxrd_dstaddr[2:0], //8:6
++ 318                 rxrd_ctrlmode[3:0], //5:2
++ 318                 rxrd_datamode[1:0]
+
+Clone Blocks:

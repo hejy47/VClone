@@ -1,0 +1,80 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@136:159@HdlStmProcess
+  end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
+    address <= address + MAX_BEATS_PER_BURST;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    bl_ready <= 1'b1;
+  end else begin
+    if (bl_ready == 1'b1) begin
+      bl_ready <= ~bl_valid;
+    end else if (addr_valid == 1'b0 && eot == 1'b1) begin
+      // assert bl_ready only when the addr_valid asserts in the next cycle
+      if (id != request_id && enable == 1'b1) begin
+        bl_ready <= 1'b1;
+      end
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    req_ready <= 1'b1;
+    addr_valid <= 1'b0;
+
+Diff Content:
+- 141 always @(posedge clk) begin
+- 142   if (resetn == 1'b0) begin
+- 143     bl_ready <= 1'b1;
+- 144   end else begin
+- 145     if (bl_ready == 1'b1) begin
+- 146       bl_ready <= ~bl_valid;
+- 147     end else if (addr_valid == 1'b0 && eot == 1'b1) begin
+- 149       if (id != request_id && enable == 1'b1) begin
+- 150         bl_ready <= 1'b1;
+- 154 end
++ 150   always @(posedge clk) begin
++ 150     if (resetn == 1'b0) begin
++ 150       bl_ready <= 1'b1;
++ 150     end else begin
++ 150       if (bl_ready == 1'b1) begin
++ 150         bl_ready <= ~bl_valid;
++ 150       end else if (addr_valid == 1'b0 && eot == 1'b1) begin
++ 150         if (id != request_id && enable == 1'b1) begin
++ 150           bl_ready <= 1'b1;
++ 150         end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@151:178
+      end
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    req_ready <= 1'b1;
+    addr_valid <= 1'b0;
+  end else begin
+    if (req_ready == 1'b1) begin
+      req_ready <= ~req_valid;
+    end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
+      addr_valid <= 1'b0;
+      req_ready <= last;
+    end else if (id != request_id && enable == 1'b1) begin
+      // if eot wait until the last_burst_len gets synced over
+      if (eot == 1'b0 || (eot == 1'b1 && bl_ready == 1'b0)) begin
+        addr_valid <= 1'b1;
+      end
+    end
+  end
+end
+
+always @(posedge clk) begin
+  addr_valid_d1 <= addr_valid;
+end
+
+

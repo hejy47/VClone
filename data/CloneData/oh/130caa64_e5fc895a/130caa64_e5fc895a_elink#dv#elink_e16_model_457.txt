@@ -1,0 +1,23 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3995:4006@HdlStmAssign
+   //# * the size is actually FAD-1:0 but since FAD=3 causes syntax
+   //#   error for (FAD-3){1'b0} expression, we use a biger range
+   //#   FAD:0 and (FAD-2){1'b0}
+   //assign rd_addr_traninfo0_next_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] + 
+   //                                             {{(FAD-3){1'b0}},3'b111};
+   assign rd_addr_traninfo0_next_tlc[FAD:0] = rd_addr_traninfo0_tlc[FAD:0] + 
+                                                {{(FAD-2){1'b0}},3'b111};
+
+   always @(posedge txo_lclk or posedge reset)
+     if(reset)
+       rd_addr_traninfo0_tlc[FAD-1:0] <= {(FAD){1'b0}};
+     else if(check_next_dstaddr_tlc)
+
+Diff Content:
+- 4000    assign rd_addr_traninfo0_next_tlc[FAD:0] = rd_addr_traninfo0_tlc[FAD:0] + 
+- 4001                                                 {{(FAD-2){1'b0}},3'b111};
++ 4001    e16_synchronizer #(.DW(1)) synchronizer(.out	(txo_wait_tlc),
++ 4001 			               .in	(txo_wait),
++ 4001 				       .clk	(txo_lclk),
++ 4001 				       .reset	(reset));
+
+Clone Blocks:

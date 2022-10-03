@@ -1,0 +1,64 @@
+Source Block: oh/ecfg/hdl/ecfg.v@235:249@HdlStmProcess
+   assign ecfg_tx_clkdiv[3:0]    = ecfg_cfgtx_reg[11:8];
+
+   //###########################
+   //# ESYSCFGRX
+   //###########################
+   always @ (posedge mi_clk)
+     if(hw_reset)
+       ecfg_cfgrx_reg[4:0] <= 5'b0;
+     else if (ecfg_cfgrx_write)
+       ecfg_cfgrx_reg[4:0] <= mi_din[4:0];
+
+   assign ecfg_rx_enable        = ecfg_cfgrx_reg[0];
+   assign ecfg_rx_mmu_mode      = ecfg_cfgrx_reg[1];   
+   assign ecfg_rx_gpio_mode     = ecfg_cfgrx_reg[3:2]==2'b01;
+   assign ecfg_rx_monitor_mode  = ecfg_cfgrx_reg[4];
+
+Diff Content:
+- 240    always @ (posedge mi_clk)
++ 240    always @ (posedge clk)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/ecfg/hdl/ecfg.v@241:251
+     if(hw_reset)
+       ecfg_cfgrx_reg[4:0] <= 5'b0;
+     else if (ecfg_cfgrx_write)
+       ecfg_cfgrx_reg[4:0] <= mi_din[4:0];
+
+   assign ecfg_rx_enable        = ecfg_cfgrx_reg[0];
+   assign ecfg_rx_mmu_mode      = ecfg_cfgrx_reg[1];   
+   assign ecfg_rx_gpio_mode     = ecfg_cfgrx_reg[3:2]==2'b01;
+   assign ecfg_rx_monitor_mode  = ecfg_cfgrx_reg[4];
+
+   //###########################
+
+Clone Blocks 2:
+oh/ecfg/hdl/ecfg.v@242:252
+       ecfg_cfgrx_reg[4:0] <= 5'b0;
+     else if (ecfg_cfgrx_write)
+       ecfg_cfgrx_reg[4:0] <= mi_din[4:0];
+
+   assign ecfg_rx_enable        = ecfg_cfgrx_reg[0];
+   assign ecfg_rx_mmu_mode      = ecfg_cfgrx_reg[1];   
+   assign ecfg_rx_gpio_mode     = ecfg_cfgrx_reg[3:2]==2'b01;
+   assign ecfg_rx_monitor_mode  = ecfg_cfgrx_reg[4];
+
+   //###########################
+   //# ESYSCFGCLK
+
+Clone Blocks 3:
+oh/ecfg/hdl/ecfg.v@226:236
+     if(hw_reset)
+       ecfg_cfgtx_reg[11:0] <= 12'b0;
+     else if (ecfg_cfgtx_write)
+       ecfg_cfgtx_reg[11:0] <= mi_din[11:0];
+
+   assign ecfg_tx_enable         = ecfg_cfgtx_reg[0];
+   assign ecfg_tx_mmu_mode       = ecfg_cfgtx_reg[1];   
+   assign ecfg_tx_gpio_mode      = ecfg_cfgtx_reg[3:2]==2'b01;
+   assign ecfg_tx_ctrl_mode[3:0] = ecfg_cfgtx_reg[7:4];
+   assign ecfg_tx_clkdiv[3:0]    = ecfg_cfgtx_reg[11:8];
+
+

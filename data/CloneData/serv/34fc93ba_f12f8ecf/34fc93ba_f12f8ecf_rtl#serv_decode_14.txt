@@ -1,0 +1,68 @@
+Source Block: serv/rtl/serv_decode.v@266:308@HdlStmProcess
+        (state == INIT);
+
+   wire cnt_done = cnt == 31;
+   assign running = (state == RUN);
+
+   always @(posedge clk) begin
+      if (cnt_done)
+	o_ctrl_trap <= i_mem_misalign;
+      if (go)
+	o_ctrl_trap <= jal_misalign;
+      state <= state;
+      case (state)
+        IDLE : begin
+           if (go) begin
+	      state <= RUN;
+              if ((opcode == OP_BRANCH) |
+                  (((opcode == OP_OPIMM) | (opcode == OP_OP)) &
+		   (o_funct3[2:1] == 2'b01)) |
+                  mem_op | shift_op)
+		state <= INIT;
+	   end
+	   if (i_mem_dbus_ack | i_mem_misalign)
+	     state <= RUN;
+        end
+        INIT : begin
+           if (cnt_done)
+             state <= mem_op ? IDLE : RUN;
+        end
+        RUN : begin
+           if (cnt_done)
+             state <= IDLE;
+        end
+        default : state <= 3'bxxx;
+      endcase
+
+      cnt <= cnt + {4'd0,cnt_en};
+
+   end
+`define SERV_DECODE_CHECKS
+`ifdef SERV_DECODE_CHECKS
+   reg unknown_op = 1'b0;
+
+   always @(opcode)
+
+Diff Content:
+- 272       if (cnt_done)
+- 273 	o_ctrl_trap <= i_mem_misalign;
+- 274       if (go)
+- 275 	o_ctrl_trap <= jal_misalign;
+- 281               if ((opcode == OP_BRANCH) |
+- 282                   (((opcode == OP_OPIMM) | (opcode == OP_OP)) &
+- 283 		   (o_funct3[2:1] == 2'b01)) |
+- 287 	   if (i_mem_dbus_ack | i_mem_misalign)
+- 292              state <= mem_op ? IDLE : RUN;
+- 298         default : state <= 3'bxxx;
++ 283               if (branch_op |
++ 283                   slt_op | (opcode == OP_JAL) | (opcode == OP_JALR) |
++ 287 	   if (i_mem_dbus_ack)
++ 292              state <= (i_mem_misalign | (o_ctrl_jump & i_ctrl_misalign) /*| jal_misalign*/) ? TRAP :
++ 292 		      mem_op ? IDLE : RUN;
++ 298 	TRAP : begin
++ 298            if (cnt_done)
++ 298              state <= IDLE;
++ 298 	end
++ 298         default : state <= 2'bxx;
+
+Clone Blocks:

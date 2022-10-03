@@ -1,0 +1,42 @@
+Source Block: hdl/library/axi_dmac/2d_transfer.v@103:117@HdlStmProcess
+      req_eot <= 1'b0;
+    end
+  end
+end
+
+always @(posedge req_aclk) begin
+  if (out_req_valid == 1'b1 && out_req_ready == 1'b1) begin
+    last_req[req_id] <= out_last;
+  end
+end
+
+always @(posedge req_aclk) begin
+  if (req_ready == 1'b1 && req_valid == 1'b1) begin
+    dest_address <= req_dest_address;
+    src_address <= req_src_address;
+
+Diff Content:
++ 112 always @(posedge req_aclk) begin
++ 112   if (out_response_valid == 1'b1 && out_response_ready == 1'b1) begin
++ 112     req_measured_burst_length <= out_measured_burst_length;
++ 112     req_response_partial <= out_response_partial;
++ 112   end
++ 112 end
++ 112 always @(posedge req_aclk) begin
++ 112   if (out_response_valid == 1'b1 && out_response_ready == 1'b1) begin
++ 112     req_response_valid <= 1'b1;
++ 112   end else if (req_response_ready == 1'b1) begin
++ 112     req_response_valid <= 1'b0;
++ 112   end
++ 112 end
++ 112 always @(posedge req_aclk) begin
++ 112   if (req_aresetn == 1'b0) begin
++ 112     out_response_ready <= 1'b1;
++ 112   end else if (out_response_ready == 1'b1) begin
++ 112     out_response_ready <= ~out_response_valid;
++ 112   end else if (req_response_ready == 1'b1) begin
++ 112     out_response_ready <= 1'b1;
++ 112   end
++ 112 end
+
+Clone Blocks:

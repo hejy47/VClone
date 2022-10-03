@@ -1,0 +1,31 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@357:367@HdlStmAssign
+/* Evaluates to true if FIFO level/room is 3/4 or above */
+`define axi_spi_engine_check_watermark(x, n) \
+        (x[n] == 1'b1 || x[n-1:n-2] == 2'b11)
+
+assign cmd_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h38;
+assign cmd_fifo_in_data = up_wdata_s[15:0];
+assign cmd_fifo_almost_empty =
+        `axi_spi_engine_check_watermark(cmd_fifo_room, CMD_FIFO_ADDRESS_WIDTH);
+
+util_axis_fifo #(
+        .DATA_WIDTH(16),
+
+Diff Content:
+- 362 assign cmd_fifo_in_data = up_wdata_s[15:0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@356:366
+
+/* Evaluates to true if FIFO level/room is 3/4 or above */
+`define axi_spi_engine_check_watermark(x, n) \
+        (x[n] == 1'b1 || x[n-1:n-2] == 2'b11)
+
+assign cmd_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h38;
+assign cmd_fifo_in_data = up_wdata_s[15:0];
+assign cmd_fifo_almost_empty =
+        `axi_spi_engine_check_watermark(cmd_fifo_room, CMD_FIFO_ADDRESS_WIDTH);
+
+util_axis_fifo #(
+

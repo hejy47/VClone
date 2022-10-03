@@ -1,0 +1,31 @@
+Source Block: oh/emailbox/hdl/emailbox.v@83:93@HdlStmAssign
+   
+   /*****************************/
+   /*WRITE TO FIFO              */
+   /*****************************/  
+
+   assign emesh_addr[31:0]  = emesh_packet[39:8];
+
+   assign emesh_din[63:0]   = emesh_packet[103:40];
+  
+   assign emesh_write       = emesh_access &
+			      emesh_packet[1] &
+
+Diff Content:
+- 88    assign emesh_addr[31:0]  = emesh_packet[39:8];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emailbox/hdl/emailbox.v@85:95
+   /*WRITE TO FIFO              */
+   /*****************************/  
+
+   assign emesh_addr[31:0]  = emesh_packet[39:8];
+
+   assign emesh_din[63:0]   = emesh_packet[103:40];
+  
+   assign emesh_write       = emesh_access &
+			      emesh_packet[1] &
+			      (emesh_addr[31:20]==ID) & 
+			      (emesh_addr[10:8]==3'h3) & 
+

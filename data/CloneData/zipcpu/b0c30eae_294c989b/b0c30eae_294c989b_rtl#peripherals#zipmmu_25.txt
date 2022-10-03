@@ -1,0 +1,31 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@606:629@HdlStmProcess
+			status_word <= { r_addr[(AW-1):(AW-VAW)],
+				{(LGPGSZW-1){1'b0}}, 
+				(table_err), (ro_miss), (simple_miss) };
+
+	initial	last_page_valid = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		last_page_valid <= 1'b0;
+	else if ((i_wbs_cyc_stb)&&(i_wbs_we))
+		last_page_valid <= 1'b0;
+	else if (!kernel_context)
+	begin
+		if (!o_rtn_stall)
+			// A new bus request
+			last_page_valid <= (last_page_valid)
+				&&(i_wbm_addr[(DW-3):(DW-2-VAW)] == last_vpage);
+		else if ((r_pending)&&(!last_page_valid))
+			last_page_valid <= (s_tlb_hit)&&(!ro_miss);
+	end
+
+	parameter	LGFIFO = 6;
+	reg	[LGFIFO-1:0]	bus_outstanding;
+	initial	bus_outstanding = 0;
+	always @(posedge i_clk)
+
+Diff Content:
+- 623 			last_page_valid <= (s_tlb_hit)&&(!ro_miss);
++ 623 			last_page_valid <= (s_pending)&&(s_tlb_hit);
+
+Clone Blocks:

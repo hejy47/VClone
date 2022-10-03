@@ -1,0 +1,47 @@
+Source Block: zipcpu/rtl/core/pipemem.v@107:121@HdlStmProcess
+		misaligned = 1'b0;
+
+	always @(posedge i_clk)
+		fifo_oreg[wraddr] <= { i_oreg, i_op[2:1], i_addr[1:0] };
+
+	always @(posedge i_clk)
+		if ((i_reset)||((i_wb_err)&&(cyc))||((i_pipe_stb)&&(misaligned)))
+			wraddr <= 0;
+		else if (i_pipe_stb)
+			wraddr <= wraddr + 1'b1;
+	always @(posedge i_clk)
+		if ((i_reset)||((i_wb_err)&&(cyc))||((i_pipe_stb)&&(misaligned)))
+			rdaddr <= 0;
+		else if ((i_wb_ack)&&(cyc))
+			rdaddr <= rdaddr + 1'b1;
+
+Diff Content:
+- 113 		if ((i_reset)||((i_wb_err)&&(cyc))||((i_pipe_stb)&&(misaligned)))
+- 115 		else if (i_pipe_stb)
+- 116 			wraddr <= wraddr + 1'b1;
++ 113 	if (i_reset)
++ 113 		wraddr <= 0;
++ 113 	else if (((i_wb_err)&&(cyc))||((i_pipe_stb)&&(misaligned)))
++ 116 	else if (i_pipe_stb)
++ 116 		wraddr <= wraddr + 1'b1;
++ 116 	initial	rdaddr = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/pipemem.v@112:126
+	always @(posedge i_clk)
+		if ((i_reset)||((i_wb_err)&&(cyc))||((i_pipe_stb)&&(misaligned)))
+			wraddr <= 0;
+		else if (i_pipe_stb)
+			wraddr <= wraddr + 1'b1;
+	always @(posedge i_clk)
+		if ((i_reset)||((i_wb_err)&&(cyc))||((i_pipe_stb)&&(misaligned)))
+			rdaddr <= 0;
+		else if ((i_wb_ack)&&(cyc))
+			rdaddr <= rdaddr + 1'b1;
+	assign	nxt_rdaddr = rdaddr + 1'b1;
+
+	wire	gbl_stb, lcl_stb, lcl_bus;
+	assign	lcl_bus = (i_addr[31:24]==8'hff)&&(WITH_LOCAL_BUS);
+	assign	lcl_stb = (lcl_bus)&&(!misaligned);
+

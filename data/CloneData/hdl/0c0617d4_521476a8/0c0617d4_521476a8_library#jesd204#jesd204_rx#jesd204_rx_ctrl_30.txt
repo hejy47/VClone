@@ -1,0 +1,21 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@178:187@HdlStmAssign
+      state <= next_state;
+    end
+  end
+end
+
+assign event_data_phase = state == STATE_CGS &&
+                          next_state == STATE_SYNCHRONIZED &&
+                          good_cnt_limit_reached_s;
+
+endmodule
+
+Diff Content:
+- 183 assign event_data_phase = state == STATE_CGS &&
+- 184                           next_state == STATE_SYNCHRONIZED &&
+- 185                           good_cnt_limit_reached_s;
++ 185   assign event_data_phase = state == STATE_CGS &&
++ 185                             next_state == STATE_SYNCHRONIZED &&
++ 185                             good_cnt_limit_reached_s;
+
+Clone Blocks:

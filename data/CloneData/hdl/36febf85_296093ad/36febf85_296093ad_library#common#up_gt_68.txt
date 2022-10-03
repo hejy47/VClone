@@ -1,0 +1,33 @@
+Source Block: hdl/library/common/up_gt.v@379:389@HdlStmAssign
+  end
+
+  // up clock domain reset done
+
+  assign rx_rst_done_up  = up_rx_rst_done_s;
+  assign tx_rst_done_up  = up_tx_rst_done_s;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 384   assign tx_rst_done_up  = up_tx_rst_done_s;
++ 384   assign up_wreq_s = (up_waddr[13:8] == 6'h10) ? up_wreq : 1'b0;
++ 384   assign up_rreq_s = (up_raddr[13:8] == 6'h10) ? up_rreq : 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_gt.v@378:388
+    end
+  end
+
+  // up clock domain reset done
+
+  assign rx_rst_done_up  = up_rx_rst_done_s;
+  assign tx_rst_done_up  = up_tx_rst_done_s;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+

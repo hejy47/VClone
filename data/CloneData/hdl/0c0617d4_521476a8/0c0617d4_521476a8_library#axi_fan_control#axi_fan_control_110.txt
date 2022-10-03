@@ -1,0 +1,108 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@638:693@HdlStmProcess
+    end
+  end
+end
+
+//axi registers read
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+    up_rdata <= 'd0;
+  end else begin
+    up_rack <= up_rreq_s;
+    if (up_rreq_s == 1'b1) begin
+      case (up_raddr_s)
+        8'h00: up_rdata <= CORE_VERSION;
+        8'h01: up_rdata <= ID;
+        8'h02: up_rdata <= up_scratch;
+        8'h03: up_rdata <= CORE_MAGIC;
+        8'h10: up_rdata <= up_irq_mask;
+        8'h11: up_rdata <= up_irq_pending;
+        8'h12: up_rdata <= up_irq_source;
+        8'h20: up_rdata <= up_resetn;
+        8'h21: up_rdata <= pwm_width;
+        8'h22: up_rdata <= up_tacho_val;
+        8'h23: up_rdata <= up_tacho_tol;
+        8'h24: up_rdata <= INTERNAL_SYSMONE;
+        8'h30: up_rdata <= PWM_PERIOD;
+        8'h31: up_rdata <= up_tacho_avg_sum;
+        8'h32: up_rdata <= sysmone_temp;
+        8'h40: up_rdata <= up_temp_00_h;
+        8'h41: up_rdata <= up_temp_25_l;
+        8'h42: up_rdata <= up_temp_25_h;
+        8'h43: up_rdata <= up_temp_50_l;
+        8'h44: up_rdata <= up_temp_50_h;
+        8'h45: up_rdata <= up_temp_75_l;
+        8'h46: up_rdata <= up_temp_75_h;
+        8'h47: up_rdata <= up_temp_100_l;
+        8'h50: up_rdata <= up_tacho_25;
+        8'h51: up_rdata <= up_tacho_50;
+        8'h52: up_rdata <= up_tacho_75;
+        8'h53: up_rdata <= up_tacho_100;
+        8'h54: up_rdata <= up_tacho_25_tol;
+        8'h55: up_rdata <= up_tacho_50_tol;
+        8'h56: up_rdata <= up_tacho_75_tol;
+        8'h57: up_rdata <= up_tacho_100_tol;
+        default: up_rdata <= 0;
+      endcase
+    end else begin
+      up_rdata <= 32'd0;
+    end
+  end
+end
+
+//IRQ handling
+always @(posedge up_clk) begin
+  if (up_resetn == 1'b0) begin
+    irq <= 1'b0;
+
+Diff Content:
+- 643 always @(posedge up_clk) begin
+- 644   if (s_axi_aresetn == 1'b0) begin
+- 645     up_rack <= 'd0;
+- 646     up_rdata <= 'd0;
+- 647   end else begin
+- 648     up_rack <= up_rreq_s;
+- 649     if (up_rreq_s == 1'b1) begin
+- 650       case (up_raddr_s)
+- 651         8'h00: up_rdata <= CORE_VERSION;
+- 652         8'h01: up_rdata <= ID;
+- 653         8'h02: up_rdata <= up_scratch;
+- 654         8'h03: up_rdata <= CORE_MAGIC;
+- 655         8'h10: up_rdata <= up_irq_mask;
+- 656         8'h11: up_rdata <= up_irq_pending;
+- 657         8'h12: up_rdata <= up_irq_source;
+- 658         8'h20: up_rdata <= up_resetn;
+- 659         8'h21: up_rdata <= pwm_width;
+- 660         8'h22: up_rdata <= up_tacho_val;
+- 661         8'h23: up_rdata <= up_tacho_tol;
+- 662         8'h24: up_rdata <= INTERNAL_SYSMONE;
+- 663         8'h30: up_rdata <= PWM_PERIOD;
+- 664         8'h31: up_rdata <= up_tacho_avg_sum;
+- 665         8'h32: up_rdata <= sysmone_temp;
+- 666         8'h40: up_rdata <= up_temp_00_h;
+- 667         8'h41: up_rdata <= up_temp_25_l;
+- 668         8'h42: up_rdata <= up_temp_25_h;
+- 669         8'h43: up_rdata <= up_temp_50_l;
+- 670         8'h44: up_rdata <= up_temp_50_h;
+- 671         8'h45: up_rdata <= up_temp_75_l;
+- 672         8'h46: up_rdata <= up_temp_75_h;
+- 673         8'h47: up_rdata <= up_temp_100_l;
+- 674         8'h50: up_rdata <= up_tacho_25;
+- 675         8'h51: up_rdata <= up_tacho_50;
+- 676         8'h52: up_rdata <= up_tacho_75;
+- 677         8'h53: up_rdata <= up_tacho_100;
+- 678         8'h54: up_rdata <= up_tacho_25_tol;
+- 679         8'h55: up_rdata <= up_tacho_50_tol;
+- 680         8'h56: up_rdata <= up_tacho_75_tol;
+- 681         8'h57: up_rdata <= up_tacho_100_tol;
+- 682         default: up_rdata <= 0;
+- 683       endcase
+- 685       up_rdata <= 32'd0;
+- 688 end
++ 683   always @(posedge up_clk) begin
++ 683     if (up_resetn == 1'b0) begin
++ 683       irq <= 1'b0;
++ 685       irq <= |up_irq_pending;
+
+Clone Blocks:

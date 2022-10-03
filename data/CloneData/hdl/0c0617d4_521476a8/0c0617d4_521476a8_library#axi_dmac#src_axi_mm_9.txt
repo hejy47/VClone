@@ -1,0 +1,74 @@
+Source Block: hdl/library/axi_dmac/src_axi_mm.v@106:116@HdlStmAssign
+wire bl_valid_ag;
+
+assign data_id = id;
+assign response_id = id;
+
+assign measured_last_burst_length = req_last_burst_length;
+
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes;
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes_mem[0:2**ID_WIDTH-1];
+
+assign fifo_valid_bytes = last_beat_bytes_mem[data_id];
+
+Diff Content:
+- 111 assign measured_last_burst_length = req_last_burst_length;
++ 111   assign measured_last_burst_length = req_last_burst_length;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/src_axi_mm.v@108:118
+assign data_id = id;
+assign response_id = id;
+
+assign measured_last_burst_length = req_last_burst_length;
+
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes;
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes_mem[0:2**ID_WIDTH-1];
+
+assign fifo_valid_bytes = last_beat_bytes_mem[data_id];
+
+always @(posedge m_axi_aclk) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/src_axi_mm.v@111:121
+assign measured_last_burst_length = req_last_burst_length;
+
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes;
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes_mem[0:2**ID_WIDTH-1];
+
+assign fifo_valid_bytes = last_beat_bytes_mem[data_id];
+
+always @(posedge m_axi_aclk) begin
+  if (bl_ready_ag == 1'b1 && bl_valid_ag == 1'b1) begin
+    last_beat_bytes <= req_last_beat_bytes;
+  end
+
+Clone Blocks 3:
+hdl/library/axi_dmac/src_axi_mm.v@104:114
+wire req_valid_ag;
+wire bl_ready_ag;
+wire bl_valid_ag;
+
+assign data_id = id;
+assign response_id = id;
+
+assign measured_last_burst_length = req_last_burst_length;
+
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes;
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes_mem[0:2**ID_WIDTH-1];
+
+Clone Blocks 4:
+hdl/library/axi_dmac/src_axi_mm.v@109:119
+assign response_id = id;
+
+assign measured_last_burst_length = req_last_burst_length;
+
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes;
+reg [BYTES_PER_BEAT_WIDTH-1:0] last_beat_bytes_mem[0:2**ID_WIDTH-1];
+
+assign fifo_valid_bytes = last_beat_bytes_mem[data_id];
+
+always @(posedge m_axi_aclk) begin
+  if (bl_ready_ag == 1'b1 && bl_valid_ag == 1'b1) begin
+

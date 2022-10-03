@@ -1,0 +1,239 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@1627:1852@HdlStmProcess
+reg display_sprite = 0;
+
+reg [4:0] preheat_x = 0;
+reg preheat = 0;
+
+always @(posedge vga_clk) begin
+  if (counter_x >= h_max-preheat_x && !preheat) begin
+    counter_8x <= margin_x;
+    counter_x_hi <= 0;
+    counter_scale <= scalemode;
+    display_x <= margin_x;
+    display_x2 <= margin_x<<1'b1;
+    display_x3 <= (margin_x<<1'b1)+1'b1;
+    
+    preheat <= 1;
+  end
+  
+  if (counter_x >= h_max) begin
+    counter_x <= 0;
+    preheat <= 0;
+    
+    if (counter_y >= v_max) begin
+      counter_y <= 0;
+    end else
+      counter_y <= counter_y + 1'b1;
+  end else begin
+    counter_x <= counter_x + 1'b1;
+    display_x <= display_x + 1'b1;
+  
+    if (counter_x==h_max-fetch_preroll) begin
+      if (counter_y<screen_h-1'b1)
+        need_row_fetch_y <= (counter_y>>scalemode)+1'b1;
+      else //if (counter_y==screen_h-1'b1)
+        need_row_fetch_y <= 0;
+    end
+  end
+    
+  if (counter_x>=h_sync_start && counter_x<h_sync_end)
+    dvi_hsync <= 1;
+  else
+    dvi_hsync <= 0;
+    
+  if (counter_y>=v_sync_start && counter_y<v_sync_end)
+    dvi_vsync <= 1;
+  else
+    dvi_vsync <= 0;
+      
+  if (counter_x<h_rez && counter_y<v_rez) begin
+    dvi_blank <= 0;
+  end else begin
+    dvi_blank <= 1;
+  end
+  
+  if (!preheat && (dvi_blank || (counter_x>=h_rez) || (counter_y>=screen_h))) begin
+    red_p   <= 0;
+    green_p <= 0;
+    blue_p  <= 0;
+  end else if (counter_y>=590) begin
+    if (counter_x<110) begin
+      if (zorro_state[4]) green_p <= 8'hff;
+      else green_p <= 8'h20;
+    end else if (counter_x<120) begin
+      if (zorro_state[3]) green_p <= 8'hff;
+      else green_p <= 8'h40;
+    end else if (counter_x<130) begin
+      if (zorro_state[2]) green_p <= 8'hff;
+      else green_p <= 8'h20;
+    end else if (counter_x<140) begin
+      if (zorro_state[1]) green_p <= 8'hff;
+      else green_p <= 8'h40;
+    end else if (counter_x<150) begin
+      if (zorro_state[0]) green_p <= 8'hff;
+      else green_p <= 8'h20;
+    end else if (counter_x<160) begin
+      green_p <= 0;
+    
+    end else if (counter_x<170) begin
+      if (ram_arbiter_state[4]) green_p <= 8'hff;
+      else green_p <= 8'h20;
+    end else if (counter_x<180) begin
+      if (ram_arbiter_state[3]) green_p <= 8'hff;
+      else green_p <= 8'h40;
+    end else if (counter_x<190) begin
+      if (ram_arbiter_state[2]) green_p <= 8'hff;
+      else green_p <= 8'h20;
+    end else if (counter_x<200) begin
+      if (ram_arbiter_state[1]) green_p <= 8'hff;
+      else green_p <= 8'h40;
+    end else if (counter_x<210) begin
+      if (ram_arbiter_state[0]) green_p <= 8'hff;
+      else green_p <= 8'h20;
+      
+    /*end else if (counter_x<220) begin
+      green_p <= 0;
+    end else if (counter_x<230) begin
+      if (cmd_ready) green_p <= 8'hff;
+      else green_p <= 8'h40;
+    end else if (counter_x<240) begin
+      if (blitter_enable[0]) green_p <= 8'hff;
+      else green_p <= 8'h20;
+    end else if (counter_x<250) begin
+      if (zorro_ram_read_request) green_p <= 8'hff;
+      else green_p <= 8'h40;
+    end else if (counter_x<260) begin
+      if (zorro_ram_read_done) green_p <= 8'hff;
+      else green_p <= 8'h40;*/
+    end else begin
+      green_p <= 0;
+      blue_p <= 0;
+    end
+    
+    /*if (counter_y<600) begin
+      if (rec_zreadraw[counter_x]) green_p <= 8'hff;
+      else green_p <= 0;
+    end else if (counter_y<610) begin
+      if (rec_zread[counter_x]) green_p <= 8'hff;
+      else green_p <= 0;
+    end else if (counter_y<620) begin
+      if (rec_zwrite[counter_x]) green_p <= 8'hff;
+      else green_p <= 0;
+    end else if (counter_y<630) begin
+      if (rec_zas0[counter_x]) green_p <= 8'hff;
+      else green_p <= 0;
+    end else if (counter_y<640) begin
+      if (rec_zas1[counter_x]) green_p <= 8'hff;
+      else green_p <= 0;
+    end else if (counter_y<650) begin
+      if (rec_zaddr_in_ram[counter_x]) green_p <= 8'hff;
+      else green_p <= 0;
+    end else if (counter_y<660) begin
+      if (rec_state[counter_x]) blue_p <= 8'hff;
+      else blue_p <= 0;
+    end else if (counter_y<670) begin
+      if (rec_statew[counter_x]) blue_p <= 8'hff;
+      else blue_p <= 0;
+    end else if (counter_y<680) begin
+      if (rec_ready[counter_x]) green_p <= 8'hff;
+      else green_p <= 0;
+    end else begin
+      green_p <= 0;
+      blue_p <= 0;
+    end*/
+    
+  end else if (colormode==0) begin
+    // 0: +0a +0b +1a
+    // 1: +0b +1a +1b
+    
+    if (preheat) begin
+      red_p <= 0;
+      green_p <= 0;
+      blue_p <= 0;
+    end else if (counter_scale != scalemode) begin
+      counter_scale <= counter_scale + 1'b1;
+    end else if (counter_x_hi==1) begin
+      red_p   <= palette_r[fetch_buffer[counter_8x][7:0]];
+      green_p <= palette_g[fetch_buffer[counter_8x][7:0]];
+      blue_p  <= palette_b[fetch_buffer[counter_8x][7:0]];
+      counter_8x <= counter_8x + 1'b1;
+      counter_x_hi <= 0;
+      counter_scale <= 0;
+    end else begin
+      red_p   <= palette_r[fetch_buffer[counter_8x][15:8]];
+      green_p <= palette_g[fetch_buffer[counter_8x][15:8]];
+      blue_p  <= palette_b[fetch_buffer[counter_8x][15:8]];
+      counter_x_hi <= 1;
+      counter_scale <= 0;
+    end
+  end else if (colormode==1) begin
+    // decode 16 to 24 bit color
+    if (counter_scale != scalemode) begin
+      counter_scale <= counter_scale + 1'b1;
+    end else begin
+      counter_scale <= 0;
+      rgb <= fetch_buffer[counter_8x];
+      counter_8x <= counter_8x + 1'b1;
+    end
+  
+    red_p[0] <= rgb[0];
+    red_p[1] <= rgb[0];
+    red_p[2] <= rgb[1];
+    red_p[3] <= rgb[1];
+    red_p[4] <= rgb[2];
+    red_p[5] <= rgb[2];
+    red_p[6] <= rgb[3];
+    red_p[7] <= rgb[4];
+    
+    green_p[0] <= rgb[5];
+    green_p[1] <= rgb[5];
+    green_p[2] <= rgb[6];
+    green_p[3] <= rgb[6];
+    green_p[4] <= rgb[7];
+    green_p[5] <= rgb[8];
+    green_p[6] <= rgb[9];
+    green_p[7] <= rgb[10];
+    
+    blue_p[0] <= rgb[11];
+    blue_p[1] <= rgb[11];
+    blue_p[2] <= rgb[12];
+    blue_p[3] <= rgb[12];
+    blue_p[4] <= rgb[13];
+    blue_p[5] <= rgb[13];
+    blue_p[6] <= rgb[14];
+    blue_p[7] <= rgb[15];
+  end else if (colormode==2) begin
+    // true color!
+    if (counter_scale != scalemode) begin
+      counter_scale <= counter_scale + 1'b1;
+    end else begin
+      counter_scale <= 0;
+      counter_8x <= counter_8x + 1'b1;
+      display_x2 <= display_x2 + 2'b10;
+      display_x3 <= display_x3 + 2'b10;
+    end
+    
+    rgb32 <= {fetch_buffer[display_x3],fetch_buffer[display_x2]};
+    red_p   <= rgb32[15:8];
+    green_p <= rgb32[7:0];
+    blue_p <= rgb32[31:24];
+  end else begin
+    red_p   <= 0;
+    green_p <= 0;
+    blue_p  <= 0;
+  end
+end
+
+endmodule
+
+Diff Content:
+- 1684   end else if (counter_y>=590) begin
+- 1719     /*end else if (counter_x<220) begin
+- 1732       else green_p <= 8'h40;*/
+- 1736     end
++ 1684   /*end else if (counter_y>=590) begin
++ 1719     end else if (counter_x<220) begin
++ 1732       else green_p <= 8'h40;
++ 1736     end*/
+
+Clone Blocks:

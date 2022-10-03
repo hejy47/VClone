@@ -1,0 +1,89 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@105:115@HdlIdDef
+  wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_raddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_raddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
+  wire                                dac_mem_ren_s;
+
+  // DMA / Write interface
+
+  assign dma_addr_diff_s = {1'b1, dma_waddr} - dma_raddr;
+
+
+Diff Content:
++ 110   wire                                dac_xfer_posedge_s;
++ 110   wire                                dac_rst_int_s;
++ 110   always @(posedge dma_clk) begin
++ 110     dma_xfer_req_d1 <= dma_xfer_req;
++ 110     dma_xfer_req_d2 <= dma_xfer_req_d1;
++ 110   end
++ 110   assign dma_xfer_posedge_s = ~dma_xfer_req_d2 & dma_xfer_req_d1;
++ 110   always @(posedge dma_clk) begin
++ 110     if ((dma_rst == 1'b1) || (dma_xfer_last == 1'b1)) begin
++ 110       dma_init <= 1'b0;
++ 110     end else begin
++ 110       if (dma_xfer_posedge_s == 1'b1) begin
++ 110         dma_init <= 1'b1;
++ 110       end
++ 110     end
++ 110   end
++ 110   assign dma_rst_int_s = dma_rst | (dma_xfer_posedge_s & ~dma_init);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_dacfifo/util_dacfifo.v@102:112
+  wire    [(DATA_WIDTH-1):0]          dac_data_bypass_s;
+  wire    [ADDRESS_WIDTH:0]           dma_addr_diff_s;
+  wire    [ADDRESS_WIDTH:0]           dac_addr_diff_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_raddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_raddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
+  wire                                dac_mem_ren_s;
+
+  // DMA / Write interface
+
+Clone Blocks 2:
+hdl/library/util_dacfifo/util_dacfifo.v@101:111
+  wire    [(DATA_WIDTH-1):0]          dac_data_fifo_s;
+  wire    [(DATA_WIDTH-1):0]          dac_data_bypass_s;
+  wire    [ADDRESS_WIDTH:0]           dma_addr_diff_s;
+  wire    [ADDRESS_WIDTH:0]           dac_addr_diff_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_raddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_raddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
+  wire                                dac_mem_ren_s;
+
+
+Clone Blocks 3:
+hdl/library/util_dacfifo/util_dacfifo.v@103:113
+  wire    [ADDRESS_WIDTH:0]           dma_addr_diff_s;
+  wire    [ADDRESS_WIDTH:0]           dac_addr_diff_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_raddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_raddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
+  wire                                dac_mem_ren_s;
+
+  // DMA / Write interface
+
+
+Clone Blocks 4:
+hdl/library/util_dacfifo/util_dacfifo.v@104:114
+  wire    [ADDRESS_WIDTH:0]           dac_addr_diff_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_raddr_b2g_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dma_raddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
+  wire                                dac_mem_ren_s;
+
+  // DMA / Write interface
+
+  assign dma_addr_diff_s = {1'b1, dma_waddr} - dma_raddr;
+

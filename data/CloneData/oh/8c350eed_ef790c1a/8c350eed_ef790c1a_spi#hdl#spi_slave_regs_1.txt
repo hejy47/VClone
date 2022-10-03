@@ -1,0 +1,43 @@
+Source Block: oh/spi/hdl/spi_slave_regs.v@111:125@HdlStmProcess
+   
+   //#####################################
+   //# PACKET SIZE [3]
+   //#####################################
+
+   always @ (posedge spi_clk or negedge nreset)
+     if(!nreset)
+       spi_psize[7:0] <= PW;
+     else if(spi_psize_write)
+       spi_psize[7:0] <= spi_data[7:0];
+   
+   //#####################################
+   //# CORE DATA [15:8]
+   //#####################################
+
+
+Diff Content:
+- 116    always @ (posedge spi_clk or negedge nreset)
+- 117      if(!nreset)
+- 118        spi_psize[7:0] <= PW;
+- 119      else if(spi_psize_write)
+- 120        spi_psize[7:0] <= spi_data[7:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_slave_regs.v@83:97
+   //#####################################
+   //[0]    = 1--> user regs valid (default is off)
+   //[1]    = 1--> disable spi port (default is enabled)
+   //[7:2]  = reserved
+
+   always @ (posedge spi_clk or negedge nreset)
+     if(!nreset)
+       spi_config[7:0] <= 'b0;
+     else if(spi_config_write)
+       spi_config[7:0] <= spi_data[7:0];
+   
+   //#####################################
+   //# STATUS [1]
+   //#####################################
+
+

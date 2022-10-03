@@ -1,0 +1,21 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_lane_64b.v@105:117@HdlStmProcess
+always @(posedge clk) begin
+  scrambled_data <= scrambled_data_r;
+  phy_data <= scrambled_data;
+end
+
+always @(posedge clk) begin
+  tx_ready_d1 <= tx_ready;
+end
+
+jesd204_crc12 i_crc12 (
+  .clk(clk),
+  .reset(~tx_ready_d1),
+  .init(lmc_edge_d2),
+
+Diff Content:
+- 110 always @(posedge clk) begin
+- 111   tx_ready_d1 <= tx_ready;
+- 112 end
+
+Clone Blocks:

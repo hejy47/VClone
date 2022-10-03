@@ -1,0 +1,98 @@
+Source Block: hdl/projects/ad9081_fmca_ebz/vcu128/system_top.v@240:259@HdlStmIf
+  assign rxen[1]          = gpio_o[57];
+  assign txen[0]          = gpio_o[58];
+  assign txen[1]          = gpio_o[59];
+
+  generate
+  if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign tx_syncin[1] = fpga_syncin_1_p;
+  end else begin
+    ad_iobuf #(.DATA_WIDTH(2)) i_syncin_iobuf (
+      .dio_t (gpio_t[61:60]),
+      .dio_i (gpio_o[61:60]),
+      .dio_o (gpio_i[61:60]),
+      .dio_p ({fpga_syncin_1_n,      // 61
+               fpga_syncin_1_p}));   // 60
+  end
+
+  if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign fpga_syncout_1_p = rx_syncout[1];
+    assign fpga_syncout_1_n = 0;
+  end else begin
+
+Diff Content:
+- 248     ad_iobuf #(.DATA_WIDTH(2)) i_syncin_iobuf (
++ 248     ad_iobuf #(
++ 248       .DATA_WIDTH(2)
++ 248     ) i_syncin_iobuf (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/ad9081_fmca_ebz/zcu102/system_top.v@206:225
+  assign rxen[1]          = gpio_o[57];
+  assign txen[0]          = gpio_o[58];
+  assign txen[1]          = gpio_o[59];
+
+  generate 
+  if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign tx_syncin[1] = fpga_syncin_1_p;
+  end else begin
+    ad_iobuf #(.DATA_WIDTH(2)) i_syncin_iobuf (
+      .dio_t (gpio_t[61:60]),
+      .dio_i (gpio_o[61:60]),
+      .dio_o (gpio_i[61:60]),
+      .dio_p ({fpga_syncin_1_n,      // 61
+               fpga_syncin_1_p}));   // 60
+  end
+
+  if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign fpga_syncout_1_p = rx_syncout[1];
+    assign fpga_syncout_1_n = 0; 
+  end else begin
+
+Clone Blocks 2:
+hdl/projects/ad9081_fmca_ebz/zc706/system_top.v@231:250
+  assign rxen[1]          = gpio_o[57];
+  assign txen[0]          = gpio_o[58];
+  assign txen[1]          = gpio_o[59];
+
+  generate
+  if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign tx_syncin[1] = fpga_syncin_1_p;
+  end else begin
+    ad_iobuf #(.DATA_WIDTH(2)) i_syncin_iobuf (
+      .dio_t (gpio_t[61:60]),
+      .dio_i (gpio_o[61:60]),
+      .dio_o (gpio_i[61:60]),
+      .dio_p ({fpga_syncin_1_n,      // 61
+               fpga_syncin_1_p}));   // 60
+  end
+
+  if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign fpga_syncout_1_p = rx_syncout[1];
+    assign fpga_syncout_1_n = 0;
+  end else begin
+
+Clone Blocks 3:
+hdl/projects/ad9081_fmca_ebz/vck190/system_top.v@212:231
+  assign rxen[1]    = gpio_o[57];
+  assign txen[0]    = gpio_o[58];
+  assign txen[1]    = gpio_o[59];
+
+  generate
+  if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign tx_syncin[1] = fpga_syncin_1_p;
+  end else begin
+    ad_iobuf #(.DATA_WIDTH(2)) i_syncin_iobuf (
+      .dio_t (gpio_t[61:60]),
+      .dio_i (gpio_o[61:60]),
+      .dio_o (gpio_i[61:60]),
+      .dio_p ({fpga_syncin_1_n,      // 61
+               fpga_syncin_1_p}));   // 60
+  end
+
+  if (RX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
+    assign fpga_syncout_1_p = rx_syncout[1];
+    assign fpga_syncout_1_n = 0;
+  end else begin
+

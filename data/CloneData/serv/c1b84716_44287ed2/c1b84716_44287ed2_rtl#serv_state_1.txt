@@ -1,0 +1,45 @@
+Source Block: serv/rtl/serv_state.v@92:102@HdlStmAssign
+   assign o_rf_wreq = ((i_shift_op & i_alu_sh_done & stage_two_pending) | (i_mem_op & i_dbus_ack) | (stage_two_req & (i_slt_op | i_branch_op))) & !trap_pending;
+
+   assign o_rf_rd_en = i_rd_op & o_cnt_en & !o_init;
+
+   //Shift operations require bufreg to hold for one cycle between INIT and RUN before shifting
+   assign o_bufreg_hold = !o_cnt_en & (stage_two_req | ~i_shift_op);
+
+   always @(posedge i_clk) begin
+      if (o_cnt_done)
+	o_ctrl_jump <= o_init & take_branch;
+
+
+Diff Content:
++ 97    initial if (RESET_STRATEGY == "NONE") o_cnt_r = 4'b0001;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_state.v@89:99
+   assign o_rf_rreq = i_ibus_ack | (stage_two_req & trap_pending);
+
+   //Prepare RF for writes when everything is ready to enter stage two
+   assign o_rf_wreq = ((i_shift_op & i_alu_sh_done & stage_two_pending) | (i_mem_op & i_dbus_ack) | (stage_two_req & (i_slt_op | i_branch_op))) & !trap_pending;
+
+   assign o_rf_rd_en = i_rd_op & o_cnt_en & !o_init;
+
+   //Shift operations require bufreg to hold for one cycle between INIT and RUN before shifting
+   assign o_bufreg_hold = !o_cnt_en & (stage_two_req | ~i_shift_op);
+
+   always @(posedge i_clk) begin
+
+Clone Blocks 2:
+serv/rtl/serv_state.v@87:97
+   //Prepare RF for reads when a new instruction is fetched
+   // or when stage one caused an exception (rreq implies a write request too)
+   assign o_rf_rreq = i_ibus_ack | (stage_two_req & trap_pending);
+
+   //Prepare RF for writes when everything is ready to enter stage two
+   assign o_rf_wreq = ((i_shift_op & i_alu_sh_done & stage_two_pending) | (i_mem_op & i_dbus_ack) | (stage_two_req & (i_slt_op | i_branch_op))) & !trap_pending;
+
+   assign o_rf_rd_en = i_rd_op & o_cnt_en & !o_init;
+
+   //Shift operations require bufreg to hold for one cycle between INIT and RUN before shifting
+   assign o_bufreg_hold = !o_cnt_en & (stage_two_req | ~i_shift_op);
+

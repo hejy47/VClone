@@ -1,0 +1,38 @@
+Source Block: oh/elink/hdl/etx_protocol.v@69:89@HdlStmProcess
+		      .packet_in	(etx_packet[PW-1:0]));//input
+   
+   //Hold transaction while waiting
+   //This transaction should be flushed out on wait????
+   reg 	 tx_access_reg;  
+   always @ (posedge clk)
+     if(!nreset)
+       begin
+	  tx_access_reg <= 'b0;
+	  tx_packet[PW-1:0] <= 'b0;	  
+       end
+     else if(~(etx_wr_wait | etx_rd_wait))
+       begin
+	  tx_packet[PW-1:0] <= etx_packet[PW-1:0];
+	  tx_access_reg     <= tx_enable & etx_access;
+       end
+  
+   //Clear out the access while in wait state
+   //the IO pipeline flushes out
+   assign tx_access = tx_access_reg  &
+		      ~(tx_wr_wait | tx_rd_wait);
+
+Diff Content:
+- 75      if(!nreset)
+- 76        begin
+- 77 	  tx_access_reg <= 'b0;
+- 78 	  tx_packet[PW-1:0] <= 'b0;	  
+- 79        end
+- 80      else if(~(etx_wr_wait | etx_rd_wait))
+- 81        begin
+- 82 	  tx_packet[PW-1:0] <= etx_packet[PW-1:0];
+- 83 	  tx_access_reg     <= tx_enable & etx_access;
+- 84        end
++ 84      if(~etx_wait)
++ 84        tx_packet[PW-1:0] <= etx_packet[PW-1:0];
+
+Clone Blocks:

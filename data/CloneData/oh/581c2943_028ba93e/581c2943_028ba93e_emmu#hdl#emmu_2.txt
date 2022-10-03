@@ -1,0 +1,33 @@
+Source Block: oh/emmu/hdl/emmu.v@120:135@HdlStmProcess
+   /*EMESH OUTPUT TRANSACTION   */
+   /*****************************/   
+   //pipeline to compensate for table lookup pipeline 
+   //assumes one cycle memory access!     
+
+    always @ (posedge  rd_clk)          
+      if((write_in & ~emesh_wr_wait) | (~write_in & ~emesh_rd_wait))
+	begin
+	   emesh_access_out         <= emesh_access_in;
+	   emesh_packet_reg[PW-1:0] <= emesh_packet_in[PW-1:0];	  
+	end
+     	 
+   assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
+				                         {32'b0,emesh_packet_reg[39:8]}; 
+      
+   //Concatenating output packet
+
+Diff Content:
+- 125     always @ (posedge  rd_clk)          
+- 126       if((write_in & ~emesh_wr_wait) | (~write_in & ~emesh_rd_wait))
+- 127 	begin
+- 128 	   emesh_access_out         <= emesh_access_in;
+- 129 	   emesh_packet_reg[PW-1:0] <= emesh_packet_in[PW-1:0];	  
+- 130 	end
++ 130    always @ (posedge  rd_clk)
++ 130      if(~emesh_wait)
++ 130      begin
++ 130 	emesh_access_out         <= emesh_access_in;
++ 130 	emesh_packet_reg[PW-1:0] <= emesh_packet_in[PW-1:0];	  
++ 130      end
+
+Clone Blocks:

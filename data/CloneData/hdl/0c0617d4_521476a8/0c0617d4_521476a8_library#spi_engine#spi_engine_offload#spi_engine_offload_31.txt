@@ -1,0 +1,31 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@238:248@HdlIdDef
+assign ctrl_enabled = spi_enable | spi_active;
+end endgenerate
+
+assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
+
+wire trigger_s;
+sync_bits #(
+  .NUM_OF_BITS(1),
+  .ASYNC_CLK(ASYNC_TRIG)
+) i_sync_trigger (
+  .in_bits(trigger),
+
+Diff Content:
+- 243 wire trigger_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@236:246
+end else begin
+assign spi_enable = ctrl_enable;
+assign ctrl_enabled = spi_enable | spi_active;
+end endgenerate
+
+assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
+
+wire trigger_s;
+sync_bits #(
+  .NUM_OF_BITS(1),
+  .ASYNC_CLK(ASYNC_TRIG)
+

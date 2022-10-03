@@ -1,0 +1,40 @@
+Source Block: oh/emmu/hdl/emmu.v@131:144@HdlStmAssign
+     	 
+   assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
+				                         {32'b0,emesh_packet_reg[39:8]}; 
+      
+   //Concatenating output packet
+   assign emesh_packet_out[PW-1:0] = {emesh_packet_reg[PW-1:40],
+                                     emesh_dstaddr_out[31:0],
+                                     emesh_packet_reg[7:0]
+				    };
+   
+
+   assign emesh_packet_hi_out[31:0] = emesh_dstaddr_out[63:32];
+      
+endmodule // emmu
+
+Diff Content:
+- 137                                      emesh_dstaddr_out[31:0],
+- 138                                      emesh_packet_reg[7:0]
+- 139 				    };
++ 139                                       emesh_dstaddr_out[31:0],
++ 139                                       emesh_packet_reg[7:0]
++ 139 				     };
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/hdl/emmu.v@127:138
+	begin
+	   emesh_access_out         <= emesh_access_in;
+	   emesh_packet_reg[PW-1:0] <= emesh_packet_in[PW-1:0];	  
+	end
+     	 
+   assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
+				                         {32'b0,emesh_packet_reg[39:8]}; 
+      
+   //Concatenating output packet
+   assign emesh_packet_out[PW-1:0] = {emesh_packet_reg[PW-1:40],
+                                     emesh_dstaddr_out[31:0],
+                                     emesh_packet_reg[7:0]
+

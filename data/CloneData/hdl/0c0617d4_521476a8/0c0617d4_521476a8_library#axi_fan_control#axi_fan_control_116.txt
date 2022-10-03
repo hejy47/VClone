@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@753:769@HdlStmProcess
+    end
+  end
+end
+
+//prescaler; sets the rate at which the fsm is run
+always @(posedge up_clk) begin
+  if (up_resetn  == 1'b0) begin
+    presc_reg <= 'h0;
+  end else begin
+    if (presc_reg == 'h8000) begin
+      presc_reg <= 'h0;
+    end else begin
+      presc_reg <= presc_reg + 1'b1;
+    end
+  end
+end
+endmodule
+
+Diff Content:
+- 758 always @(posedge up_clk) begin
+- 759   if (up_resetn  == 1'b0) begin
+- 760     presc_reg <= 'h0;
+- 761   end else begin
+- 762     if (presc_reg == 'h8000) begin
+- 765       presc_reg <= presc_reg + 1'b1;
+- 768 end
++ 762   always @(posedge up_clk) begin
++ 762     if (up_resetn  == 1'b0) begin
++ 765       if (presc_reg == 'h8000) begin
++ 765         presc_reg <= 'h0;
++ 765       end else begin
++ 765         presc_reg <= presc_reg + 1'b1;
++ 765       end
+
+Clone Blocks:

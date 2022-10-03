@@ -1,0 +1,28 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@143:162@HdlStmProcess
+    deglitch_counter <= 'h3f;
+  end
+  endcase
+end
+
+always @(*) begin
+  case (state)
+  STATE_RESET: state_good <= 1'b1;
+  STATE_WAIT_FOR_PHY: state_good <= phy_ready;
+  STATE_CGS: state_good <= &(cgs_ready | cfg_lanes_disable);
+  STATE_DEGLITCH: state_good <= deglitch_counter == 'h00;
+  STATE_SYNCHRONIZED: state_good <= 1'b1;
+  default: state_good <= 1'b0;
+  endcase
+end
+
+always @(posedge clk) begin
+  if (state_good == 1'b1) begin
+    good_counter <= good_counter + 1'b1;
+  end else begin
+
+Diff Content:
+- 153   STATE_DEGLITCH: state_good <= deglitch_counter == 'h00;
++ 157 assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
++ 157 assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
+
+Clone Blocks:

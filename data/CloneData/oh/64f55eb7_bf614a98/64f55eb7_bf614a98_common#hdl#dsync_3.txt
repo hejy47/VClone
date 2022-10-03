@@ -1,0 +1,70 @@
+Source Block: oh/common/hdl/dsync.v@23:41@HdlStmFor
+   
+   genvar 	i;
+   integer 	j;
+
+   generate
+      for(i=0;i<DW;i=i+1)
+	begin
+	   always @ (posedge clk)
+	     begin
+		sync_pipe[i][0] = din;		  
+		for(j=1;j<PS;j=j+1)
+		  sync_pipe[i][j] = sync_pipe[i][j-1];		  
+	     end
+	   assign dout[i] = sync_pipe[i][PS-1];
+	end 
+   endgenerate
+   
+endmodule // dsync
+
+
+Diff Content:
+- 28       for(i=0;i<DW;i=i+1)
+- 29 	begin
+- 30 	   always @ (posedge clk)
+- 31 	     begin
+- 32 		sync_pipe[i][0] = din;		  
+- 33 		for(j=1;j<PS;j=j+1)
+- 34 		  sync_pipe[i][j] = sync_pipe[i][j-1];		  
+- 35 	     end
+- 36 	   assign dout[i] = sync_pipe[i][PS-1];
+- 37 	end 
++ 37    generate          
++ 37       for(i=0;i<PS;i=i+1)
++ 37 	if(i==0)
++ 37 	  begin
++ 37 	     always @ (posedge clk)
++ 37 	       sync_pipe[0][DW-1:0] <= din[DW-1:0];	     
++ 37 	  end
++ 37 	else
++ 37 	  begin
++ 37 	  always @ (posedge clk )
++ 37 	    sync_pipe[i][DW-1:0] <= sync_pipe[i-1][DW-1:0];	     
++ 37 	  end // else: !if(i==0)      
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/rsync.v@23:43
+ 
+   genvar 	i;
+   integer 	j;
+   
+   generate    
+      for(i=0;i<DW;i=i+1)
+	begin
+	   always @ (posedge clk or negedge nrst_in[i])
+	     if(!nrst_in[i])
+	       sync_pipe[i]  <= 'b0;
+	     else
+	       begin
+		  sync_pipe[i][0] =1'b1;		  
+		  for(j=1;j<PS;j=j+1)
+		    sync_pipe[i][j] = sync_pipe[i][j-1];		  
+	       end
+	   assign nrst_out[i] = sync_pipe[i][PS-1];
+	end      
+   endgenerate
+
+endmodule // rsync
+

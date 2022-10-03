@@ -1,0 +1,26 @@
+Source Block: hdl/library/common/ad_ss_444to422.v@120:138@HdlStmProcess
+
+  assign cb_s = {2'd0, s444_data_d[7:0]} +
+                {2'd0, s444_data_3d[7:0]} +
+                {1'd0, s444_data_2d[7:0], 1'd0};
+
+  always @(posedge clk) begin
+    cr <= cr_s[9:2];
+    cb <= cb_s[9:2];
+    if (s444_de_3d == 1'b1) begin
+      cr_cb_sel <= ~cr_cb_sel;
+    end else begin
+      cr_cb_sel <= Cr_Cb_N;
+    end
+  end
+
+  // 422 outputs
+
+  always @(posedge clk) begin
+    s422_sync <= s444_sync_3d;
+
+Diff Content:
+- 131       cr_cb_sel <= Cr_Cb_N;
++ 131       cr_cb_sel <= CR_CB_N;
+
+Clone Blocks:

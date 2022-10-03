@@ -1,0 +1,172 @@
+Source Block: verilog-ethernet/rtl/ptp_clock_cdc.v@155:234@HdlStmIf
+reg sample_update_sync2_reg = 1'b0;
+reg sample_update_sync3_reg = 1'b0;
+
+generate
+
+if (PIPELINE_OUTPUT > 0) begin
+
+    // pipeline
+    (* shreg_extract = "no" *)
+    reg [TS_WIDTH-1:0]  output_ts_reg[0:PIPELINE_OUTPUT-1];
+    (* shreg_extract = "no" *)
+    reg                 output_ts_step_reg[0:PIPELINE_OUTPUT-1];
+    (* shreg_extract = "no" *)
+    reg                 output_pps_reg[0:PIPELINE_OUTPUT-1];
+
+    assign output_ts = output_ts_reg[PIPELINE_OUTPUT-1];
+    assign output_ts_step = output_ts_step_reg[PIPELINE_OUTPUT-1];
+    assign output_pps = output_pps_reg[PIPELINE_OUTPUT-1];
+
+    integer i;
+
+    initial begin
+        for (i = 0; i < PIPELINE_OUTPUT; i = i + 1) begin
+            output_ts_reg[i] = 0;
+            output_ts_step_reg[i] = 1'b0;
+            output_pps_reg[i] = 1'b0;
+        end
+    end
+
+    always @(posedge output_clk) begin
+        if (TS_WIDTH == 96) begin
+            output_ts_reg[0][95:48] <= ts_s_reg;
+            output_ts_reg[0][47:46] <= 2'b00;
+            output_ts_reg[0][45:16] <= ts_ns_reg;
+            output_ts_reg[0][15:0]  <= {ts_fns_reg, 16'd0} >> FNS_WIDTH;
+        end else if (TS_WIDTH == 64) begin
+            output_ts_reg[0][63:16] <= ts_ns_reg;
+            output_ts_reg[0][15:0]  <= {ts_fns_reg, 16'd0} >> FNS_WIDTH;
+        end
+
+        output_ts_step_reg[0] <= ts_step_reg;
+        output_pps_reg[0] <= pps_reg;
+
+        for (i = 0; i < PIPELINE_OUTPUT-1; i = i + 1) begin
+            output_ts_reg[i+1] <= output_ts_reg[i];
+            output_ts_step_reg[i+1] <= output_ts_step_reg[i];
+            output_pps_reg[i+1] <= output_pps_reg[i];
+        end
+
+        if (output_rst) begin
+            for (i = 0; i < PIPELINE_OUTPUT; i = i + 1) begin
+                output_ts_reg[i] = 0;
+                output_ts_step_reg[i] = 1'b0;
+                output_pps_reg[i] = 1'b0;
+            end
+        end
+    end
+
+end else begin
+
+    if (TS_WIDTH == 96) begin
+        assign output_ts[95:48] = ts_s_reg;
+        assign output_ts[47:46] = 2'b00;
+        assign output_ts[45:16] = ts_ns_reg;
+        assign output_ts[15:0]  = {ts_fns_reg, 16'd0} >> FNS_WIDTH;
+    end else if (TS_WIDTH == 64) begin
+        assign output_ts[63:16] = ts_ns_reg;
+        assign output_ts[15:0]  = {ts_fns_reg, 16'd0} >> FNS_WIDTH;
+    end
+
+    assign output_ts_step = ts_step_reg;
+
+    assign output_pps = pps_reg;
+
+end
+
+endgenerate
+
+integer i;
+
+
+Diff Content:
+- 206                 output_ts_reg[i] = 0;
+- 207                 output_ts_step_reg[i] = 1'b0;
+- 208                 output_pps_reg[i] = 1'b0;
++ 208                 output_ts_reg[i] <= 0;
++ 208                 output_ts_step_reg[i] <= 1'b0;
++ 208                 output_pps_reg[i] <= 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ptp_clock.v@132:209
+
+assign input_adj_active = adj_active_reg;
+
+generate
+
+if (PIPELINE_OUTPUT > 0) begin
+
+    // pipeline
+    (* shreg_extract = "no" *)
+    reg [95:0]  output_ts_96_reg[0:PIPELINE_OUTPUT-1];
+    (* shreg_extract = "no" *)
+    reg [63:0]  output_ts_64_reg[0:PIPELINE_OUTPUT-1];
+    (* shreg_extract = "no" *)
+    reg         output_ts_step_reg[0:PIPELINE_OUTPUT-1];
+    (* shreg_extract = "no" *)
+    reg         output_pps_reg[0:PIPELINE_OUTPUT-1];
+
+    assign output_ts_96 = output_ts_96_reg[PIPELINE_OUTPUT-1];
+    assign output_ts_64 = output_ts_64_reg[PIPELINE_OUTPUT-1];
+    assign output_ts_step = output_ts_step_reg[PIPELINE_OUTPUT-1];
+    assign output_pps = output_pps_reg[PIPELINE_OUTPUT-1];
+
+    integer i;
+
+    initial begin
+        for (i = 0; i < PIPELINE_OUTPUT; i = i + 1) begin
+            output_ts_96_reg[i] = 96'd0;
+            output_ts_64_reg[i] = 64'd0;
+            output_ts_step_reg[i] = 1'b0;
+            output_pps_reg[i] = 1'b0;
+        end
+    end
+
+    always @(posedge clk) begin
+        output_ts_96_reg[0][95:48] <= ts_96_s_reg;
+        output_ts_96_reg[0][47:46] <= 2'b00;
+        output_ts_96_reg[0][45:16] <= ts_96_ns_reg;
+        output_ts_96_reg[0][15:0]  <= {ts_96_fns_reg, 16'd0} >> FNS_WIDTH;
+        output_ts_64_reg[0][63:16] <= ts_64_ns_reg;
+        output_ts_64_reg[0][15:0]  <= {ts_64_fns_reg, 16'd0} >> FNS_WIDTH;
+        output_ts_step_reg[0] <= ts_step_reg;
+        output_pps_reg[0] <= pps_reg;
+
+        for (i = 0; i < PIPELINE_OUTPUT-1; i = i + 1) begin
+            output_ts_96_reg[i+1] <= output_ts_96_reg[i];
+            output_ts_64_reg[i+1] <= output_ts_64_reg[i];
+            output_ts_step_reg[i+1] <= output_ts_step_reg[i];
+            output_pps_reg[i+1] <= output_pps_reg[i];
+        end
+
+        if (rst) begin
+            for (i = 0; i < PIPELINE_OUTPUT; i = i + 1) begin
+                output_ts_96_reg[i] = 96'd0;
+                output_ts_64_reg[i] = 64'd0;
+                output_ts_step_reg[i] = 1'b0;
+                output_pps_reg[i] = 1'b0;
+            end
+        end
+    end
+
+end else begin
+
+    assign output_ts_96[95:48] = ts_96_s_reg;
+    assign output_ts_96[47:46] = 2'b00;
+    assign output_ts_96[45:16] = ts_96_ns_reg;
+    assign output_ts_96[15:0]  = {ts_96_fns_reg, 16'd0} >> FNS_WIDTH;
+    assign output_ts_64[63:16] = ts_64_ns_reg;
+    assign output_ts_64[15:0]  = {ts_64_fns_reg, 16'd0} >> FNS_WIDTH;
+    assign output_ts_step = ts_step_reg;
+
+    assign output_pps = pps_reg;
+
+end
+
+endgenerate
+
+always @(posedge clk) begin
+    ts_step_reg <= 0;
+

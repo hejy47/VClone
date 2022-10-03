@@ -1,0 +1,17 @@
+Source Block: hdl/library/common/up_gt.v@687:697@HdlStmAssign
+    end
+  end
+
+  // tx sysref & sync
+
+  assign tx_sysref_s = (up_tx_sysref_sel == 1'b1) ? tx_ext_sysref : up_tx_sysref;
+
+  always @(posedge tx_clk) begin
+    if (tx_rst == 1'b1) begin
+      tx_sysref_m1 <= 'd0;
+      tx_sysref_m2 <= 'd0;
+
+Diff Content:
+- 692   assign tx_sysref_s = (up_tx_sysref_sel == 1'b1) ? tx_ext_sysref : up_tx_sysref;
+
+Clone Blocks:

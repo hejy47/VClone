@@ -1,0 +1,47 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4489:4503@HdlStmProcess
+   assign txo_launch_cnt_next[2:0] =  jump_4entries ? 3'b011 :
+	 (jump_3entries_write | txo_launch_cnt_max) ? 3'b000 :
+			         jump_3entries_read ? 3'b101 : txo_launch_cnt_inc[2:0];
+
+   //# Launch counter
+   always @ (posedge txo_lclk or posedge reset)
+     if (reset)
+       txo_launch_cnt[2:0] <= 3'b000;
+     else if(txo_op_ack)
+       txo_launch_cnt[2:0] <= txo_launch_cnt_next[2:0];
+
+   //#############################################
+   //# Completion of the transaction transmission 
+   //#############################################
+
+
+Diff Content:
+- 4494    always @ (posedge txo_lclk or posedge reset)
+- 4495      if (reset)
+- 4496        txo_launch_cnt[2:0] <= 3'b000;
+- 4497      else if(txo_op_ack)
+- 4498        txo_launch_cnt[2:0] <= txo_launch_cnt_next[2:0];
++ 4498    /*AUTOINPUT*/
++ 4498    /*AUTOWIRE*/
++ 4498    reg [LW-1:0]   data_even_lsl;// Even bytes of the transmission
++ 4498    reg [LW-1:0]   data_even_lsh;// Even bytes of the transmission
++ 4498    reg [LW-1:0]   data_odd_lsl; // Odd bytes of the transmission
++ 4498    reg 		  txo_frame; //indicates transmission of new package
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4484:4496
+   //# Counter Next Cycle Value
+   assign txo_launch_cnt_max = (txo_launch_cnt[2:0] == 3'b110);
+
+   assign txo_launch_cnt_inc[2:0] = txo_launch_cnt[2:0] + {2'b00,jump_1entry};
+
+   assign txo_launch_cnt_next[2:0] =  jump_4entries ? 3'b011 :
+	 (jump_3entries_write | txo_launch_cnt_max) ? 3'b000 :
+			         jump_3entries_read ? 3'b101 : txo_launch_cnt_inc[2:0];
+
+   //# Launch counter
+   always @ (posedge txo_lclk or posedge reset)
+     if (reset)
+       txo_launch_cnt[2:0] <= 3'b000;
+

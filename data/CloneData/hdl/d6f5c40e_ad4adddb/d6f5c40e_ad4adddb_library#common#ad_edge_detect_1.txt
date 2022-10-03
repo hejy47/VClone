@@ -1,0 +1,26 @@
+Source Block: hdl/library/common/ad_edge_detect.v@53:71@HdlStmProcess
+  localparam  ANY_EDGE = 2;
+
+  reg         ff_m1 = 0;
+  reg         ff_m2 = 0;
+
+  always @(posedge clk) begin
+    if (rst == 1) begin
+      ff_m1 <= 0;
+      ff_m2 <= 0;
+    end else begin
+      ff_m1 <= in;
+      ff_m2 <= ff_m1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rst == 1) begin
+      out <= 1'b0;
+    end else begin
+
+Diff Content:
+- 63       ff_m1 <= in;
++ 63       ff_m1 <= signal_in;
+
+Clone Blocks:

@@ -1,0 +1,454 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@1515:1764@HdlStmProcess
+reg display_sprite = 0;
+
+reg [4:0] preheat_x = 0;
+reg preheat = 0;
+
+always @(posedge vga_clk) begin
+  if (counter_x >= h_max-preheat_x && !preheat) begin
+    counter_8x <= margin_x;
+    counter_x_hi <= 0;
+    counter_scale <= scalemode;
+    display_x <= margin_x;
+    display_x2 <= margin_x<<1'b1;
+    display_x3 <= (margin_x<<1'b1)+1'b1;
+    
+    preheat <= 1;
+  end
+  
+  if (counter_x >= h_max) begin
+    counter_x <= 0;
+    preheat <= 0;
+    
+    if (counter_y >= v_max) begin
+      counter_y <= 0;
+      
+      //sprite_ptr <= 0;
+      //sprite_bit <= 15;
+    end else
+      counter_y <= counter_y + 1'b1;
+  end else begin
+    counter_x <= counter_x + 1'b1;
+    display_x <= display_x + 1'b1;
+  
+    if (counter_x>=h_max-fetch_preroll && counter_y<screen_h)
+      need_row_fetch <= 1;
+    else
+      need_row_fetch <= 0;
+  end
+    
+  if (counter_x>=h_sync_start && counter_x<h_sync_end)
+    dvi_hsync <= 1;
+  else
+    dvi_hsync <= 0;
+    
+  if (counter_y>=v_sync_start && counter_y<v_sync_end)
+    dvi_vsync <= 1;
+  else
+    dvi_vsync <= 0;
+      
+  if (counter_x<h_rez && counter_y<v_rez) begin
+    dvi_blank <= 0;
+  end else begin
+    dvi_blank <= 1;
+  end
+  
+  /*if (counter_x>=sprite_ax && counter_x<=sprite_ax2 && counter_y>=sprite_ay && counter_y<=sprite_ay2)
+    display_sprite <= 1'b1;
+  else
+    display_sprite <= 1'b0;*/
+  
+  /*if (display_sprite) begin
+    sprite_pidx = {sprite_a1[sprite_ptr][sprite_bit],sprite_a2[sprite_ptr][sprite_bit]};
+    
+    if (sprite_bit==0) begin
+      sprite_bit <= 15;
+      if (sprite_ptr==63) begin
+        sprite_ptr <= 0;
+      end else begin
+        sprite_ptr <= sprite_ptr+1'b1;
+      end
+    end else begin
+      sprite_bit <= sprite_bit-1'b1;
+    end
+  end*/
+  
+  if (!preheat && (dvi_blank || (counter_x>=screen_w) || (counter_y>=screen_h))) begin
+    red_p   <= 0;
+    green_p <= 0;
+    blue_p  <= 0;
+  end else if (colormode==0) begin
+    // 0: +0a +0b +1a
+    // 1: +0b +1a +1b
+    
+    if (preheat) begin
+      red_p <= 0;
+      green_p <= 0;
+      blue_p <= 0;
+    end else if (counter_scale != scalemode) begin
+      counter_scale <= counter_scale + 1'b1;
+    end else if (counter_x_hi==1) begin
+      red_p   <= palette_r[fetch_buffer[counter_8x][7:0]];
+      green_p <= palette_g[fetch_buffer[counter_8x][7:0]];
+      blue_p  <= palette_b[fetch_buffer[counter_8x][7:0]];
+      counter_8x <= counter_8x + 1'b1;
+      counter_x_hi <= 0;
+      counter_scale <= 0;
+    end else begin
+      red_p   <= palette_r[fetch_buffer[counter_8x][15:8]];
+      green_p <= palette_g[fetch_buffer[counter_8x][15:8]];
+      blue_p  <= palette_b[fetch_buffer[counter_8x][15:8]];
+      counter_x_hi <= 1;
+      counter_scale <= 0;
+    end
+    
+    //if (!display_sprite || sprite_pidx==0) begin
+    /*red_p   <= pidx_r;
+    green_p <= pidx_g;
+    blue_p  <= pidx_b;*/
+    
+    /*end else begin
+      red_p   <= sprite_palette_r[sprite_pidx];
+      green_p <= sprite_palette_g[sprite_pidx];
+      blue_p  <= sprite_palette_b[sprite_pidx];
+    //end*/
+  end else if (colormode==1) begin
+    // decode 16 to 24 bit color
+    if (counter_scale != scalemode) begin
+      counter_scale <= counter_scale + 1'b1;
+    end else begin
+      counter_scale <= 0;
+      rgb <= fetch_buffer[counter_8x];
+      counter_8x <= counter_8x + 1'b1;
+    end
+    
+    //if (!display_sprite || sprite_pidx==0) begin
+      red_p[0] <= rgb[0];
+      red_p[1] <= rgb[0];
+      red_p[2] <= rgb[1];
+      red_p[3] <= rgb[1];
+      red_p[4] <= rgb[2];
+      red_p[5] <= rgb[2];
+      red_p[6] <= rgb[3];
+      red_p[7] <= rgb[4];
+      
+      green_p[0] <= rgb[5];
+      green_p[1] <= rgb[5];
+      green_p[2] <= rgb[6];
+      green_p[3] <= rgb[6];
+      green_p[4] <= rgb[7];
+      green_p[5] <= rgb[8];
+      green_p[6] <= rgb[9];
+      green_p[7] <= rgb[10];
+      
+      blue_p[0] <= rgb[11];
+      blue_p[1] <= rgb[11];
+      blue_p[2] <= rgb[12];
+      blue_p[3] <= rgb[12];
+      blue_p[4] <= rgb[13];
+      blue_p[5] <= rgb[13];
+      blue_p[6] <= rgb[14];
+      blue_p[7] <= rgb[15];
+   /* end else begin
+      red_p   <= sprite_palette_r[sprite_pidx];
+      green_p <= sprite_palette_g[sprite_pidx];
+      blue_p  <= sprite_palette_b[sprite_pidx];
+    end*/
+  end else if (colormode==2) begin
+    // true color!
+    if (counter_scale != scalemode) begin
+      counter_scale <= counter_scale + 1'b1;
+    end else begin
+      counter_scale <= 0;
+      //rgb32 <= {fetch_buffer[display_x3],fetch_buffer[display_x2]};
+      counter_8x <= counter_8x + 1'b1;
+      display_x2 <= display_x2 + 2'b10;
+      display_x3 <= display_x3 + 2'b10;
+    end
+  
+    /*red_p   <= fetch_buffer[display_x2][15:8];
+    green_p <= fetch_buffer[display_x2][7:0];
+    blue_p  <= fetch_buffer2[display_x3][15:8];*/
+  /*end else if (colormode==3) begin // zorro debug
+    if (counter_y<90) begin
+      if (counter_x<100)
+        red_p <= zSENSEZ3?8'hff:8'h00;
+      else if (counter_x<200)
+        red_p <= znCFGIN?8'h00:8'hff;
+      else if (counter_x<300)
+        red_p <= zorro_read?8'hff:8'h00;
+      else if (counter_x<400)
+        red_p <= znAS?8'h00:8'hff;
+      else if (counter_x<500) begin
+        blue_p <= (zaddr_autoconfig)?8'hff:8'h00;
+        red_p <= 0;
+      end else begin
+        blue_p <= 0;
+        green_p <= 0;
+        red_p <= 0;
+      end
+    end else if (counter_y<100)
+      red_p <= 0;*/
+    /*else if (counter_y<110)
+      blue_p <= zaddr[22]?'hff:'h00;
+    else if (counter_y<120)
+      blue_p <= zaddr[21]?'hff:'h00;
+    else if (counter_y<130)
+      blue_p <= zaddr[20]?'hff:'h00;
+    else if (counter_y<140)
+      blue_p <= zaddr[19]?'hff:'h00;
+    else if (counter_y<150)
+      blue_p <= zaddr[18]?'hff:'h00;
+    else if (counter_y<160)
+      blue_p <= zaddr[17]?'hff:'h00;
+    else if (counter_y<170)
+      blue_p <= zaddr[16]?'hff:'h00;
+    else if (counter_y<180)
+      blue_p <= zaddr[15]?'hff:'h00;
+    else if (counter_y<190)
+      blue_p <= zaddr[14]?'hff:'h00;
+    else if (counter_y<200)
+      blue_p <= zaddr[13]?'hff:'h00;
+    else if (counter_y<210)
+      blue_p <= zaddr[12]?'hff:'h00;
+    else if (counter_y<220)
+      blue_p <= zaddr[11]?'hff:'h00;
+    else if (counter_y<230)
+      blue_p <= zaddr[10]?'hff:'h00;
+    else if (counter_y<240)
+      blue_p <= zaddr[9]?'hff:'h00;
+    else if (counter_y<250)
+      blue_p <= zaddr[8]?'hff:'h00;
+    else if (counter_y<260)
+      blue_p <= zaddr[7]?'hff:'h00;
+    else if (counter_y<270)
+      blue_p <= zaddr[6]?'hff:'h00;
+    else if (counter_y<280)
+      blue_p <= zaddr[5]?'hff:'h00;
+    else if (counter_y<290)
+      blue_p <= zaddr[4]?'hff:'h00;
+    else if (counter_y<300)
+      blue_p <= zaddr[3]?'hff:'h00;
+    else if (counter_y<310)
+      blue_p <= zaddr[2]?'hff:'h00;
+    else if (counter_y<320)
+      blue_p <= zaddr[1]?'hff:'h00;
+    else if (counter_y<330)
+      blue_p <= zaddr[0]?'hff:'h00;
+      */
+    /*else begin
+      red_p <= 0;
+      green_p <= 0;
+      green_p <= 0;
+    end*/
+  end else begin
+    red_p   <= 0;
+    green_p <= 0;
+    blue_p  <= 0;
+  end
+end
+
+endmodule
+
+Diff Content:
+- 1569   /*if (counter_x>=sprite_ax && counter_x<=sprite_ax2 && counter_y>=sprite_ay && counter_y<=sprite_ay2)
+- 1570     display_sprite <= 1'b1;
+- 1571   else
+- 1572     display_sprite <= 1'b0;*/
+- 1574   /*if (display_sprite) begin
+- 1575     sprite_pidx = {sprite_a1[sprite_ptr][sprite_bit],sprite_a2[sprite_ptr][sprite_bit]};
+- 1577     if (sprite_bit==0) begin
+- 1578       sprite_bit <= 15;
+- 1579       if (sprite_ptr==63) begin
+- 1580         sprite_ptr <= 0;
+- 1581       end else begin
+- 1582         sprite_ptr <= sprite_ptr+1'b1;
+- 1583       end
+- 1584     end else begin
+- 1585       sprite_bit <= sprite_bit-1'b1;
+- 1586     end
+- 1587   end*/
+- 1589   if (!preheat && (dvi_blank || (counter_x>=screen_w) || (counter_y>=screen_h))) begin
+- 1619     /*red_p   <= pidx_r;
+- 1620     green_p <= pidx_g;
+- 1621     blue_p  <= pidx_b;*/
+- 1623     /*end else begin
+- 1624       red_p   <= sprite_palette_r[sprite_pidx];
+- 1625       green_p <= sprite_palette_g[sprite_pidx];
+- 1626       blue_p  <= sprite_palette_b[sprite_pidx];
+- 1639       red_p[0] <= rgb[0];
+- 1640       red_p[1] <= rgb[0];
+- 1641       red_p[2] <= rgb[1];
+- 1642       red_p[3] <= rgb[1];
+- 1643       red_p[4] <= rgb[2];
+- 1644       red_p[5] <= rgb[2];
+- 1645       red_p[6] <= rgb[3];
+- 1646       red_p[7] <= rgb[4];
+- 1648       green_p[0] <= rgb[5];
+- 1649       green_p[1] <= rgb[5];
+- 1650       green_p[2] <= rgb[6];
+- 1651       green_p[3] <= rgb[6];
+- 1652       green_p[4] <= rgb[7];
+- 1653       green_p[5] <= rgb[8];
+- 1654       green_p[6] <= rgb[9];
+- 1655       green_p[7] <= rgb[10];
+- 1657       blue_p[0] <= rgb[11];
+- 1658       blue_p[1] <= rgb[11];
+- 1659       blue_p[2] <= rgb[12];
+- 1660       blue_p[3] <= rgb[12];
+- 1661       blue_p[4] <= rgb[13];
+- 1662       blue_p[5] <= rgb[13];
+- 1663       blue_p[6] <= rgb[14];
+- 1664       blue_p[7] <= rgb[15];
+- 1665    /* end else begin
+- 1666       red_p   <= sprite_palette_r[sprite_pidx];
+- 1667       green_p <= sprite_palette_g[sprite_pidx];
+- 1668       blue_p  <= sprite_palette_b[sprite_pidx];
+- 1669     end*/
+- 1672     if (counter_scale != scalemode) begin
+- 1675       counter_scale <= 0;
+- 1680     end
+- 1682     /*red_p   <= fetch_buffer[display_x2][15:8];
+- 1683     green_p <= fetch_buffer[display_x2][7:0];
+- 1684     blue_p  <= fetch_buffer2[display_x3][15:8];*/
+- 1685   /*end else if (colormode==3) begin // zorro debug
+- 1686     if (counter_y<90) begin
+- 1687       if (counter_x<100)
+- 1688         red_p <= zSENSEZ3?8'hff:8'h00;
+- 1689       else if (counter_x<200)
+- 1690         red_p <= znCFGIN?8'h00:8'hff;
+- 1691       else if (counter_x<300)
+- 1692         red_p <= zorro_read?8'hff:8'h00;
+- 1693       else if (counter_x<400)
+- 1694         red_p <= znAS?8'h00:8'hff;
+- 1695       else if (counter_x<500) begin
+- 1696         blue_p <= (zaddr_autoconfig)?8'hff:8'h00;
+- 1697         red_p <= 0;
+- 1698       end else begin
+- 1699         blue_p <= 0;
+- 1700         green_p <= 0;
+- 1701         red_p <= 0;
+- 1702       end
+- 1703     end else if (counter_y<100)
+- 1704       red_p <= 0;*/
+- 1705     /*else if (counter_y<110)
+- 1706       blue_p <= zaddr[22]?'hff:'h00;
+- 1707     else if (counter_y<120)
+- 1708       blue_p <= zaddr[21]?'hff:'h00;
+- 1709     else if (counter_y<130)
+- 1710       blue_p <= zaddr[20]?'hff:'h00;
+- 1711     else if (counter_y<140)
+- 1712       blue_p <= zaddr[19]?'hff:'h00;
+- 1713     else if (counter_y<150)
+- 1714       blue_p <= zaddr[18]?'hff:'h00;
+- 1715     else if (counter_y<160)
+- 1716       blue_p <= zaddr[17]?'hff:'h00;
+- 1717     else if (counter_y<170)
+- 1718       blue_p <= zaddr[16]?'hff:'h00;
+- 1719     else if (counter_y<180)
+- 1720       blue_p <= zaddr[15]?'hff:'h00;
+- 1721     else if (counter_y<190)
+- 1722       blue_p <= zaddr[14]?'hff:'h00;
+- 1723     else if (counter_y<200)
+- 1724       blue_p <= zaddr[13]?'hff:'h00;
+- 1725     else if (counter_y<210)
+- 1726       blue_p <= zaddr[12]?'hff:'h00;
+- 1727     else if (counter_y<220)
+- 1728       blue_p <= zaddr[11]?'hff:'h00;
+- 1729     else if (counter_y<230)
+- 1730       blue_p <= zaddr[10]?'hff:'h00;
+- 1731     else if (counter_y<240)
+- 1732       blue_p <= zaddr[9]?'hff:'h00;
+- 1733     else if (counter_y<250)
+- 1734       blue_p <= zaddr[8]?'hff:'h00;
+- 1735     else if (counter_y<260)
+- 1736       blue_p <= zaddr[7]?'hff:'h00;
+- 1737     else if (counter_y<270)
+- 1738       blue_p <= zaddr[6]?'hff:'h00;
+- 1739     else if (counter_y<280)
+- 1740       blue_p <= zaddr[5]?'hff:'h00;
+- 1741     else if (counter_y<290)
+- 1742       blue_p <= zaddr[4]?'hff:'h00;
+- 1743     else if (counter_y<300)
+- 1744       blue_p <= zaddr[3]?'hff:'h00;
+- 1745     else if (counter_y<310)
+- 1746       blue_p <= zaddr[2]?'hff:'h00;
+- 1747     else if (counter_y<320)
+- 1748       blue_p <= zaddr[1]?'hff:'h00;
+- 1749     else if (counter_y<330)
+- 1750       blue_p <= zaddr[0]?'hff:'h00;
+- 1751       */
+- 1752     /*else begin
+- 1753       red_p <= 0;
+- 1754       green_p <= 0;
+- 1755       green_p <= 0;
+- 1756     end*/
++ 1530   if (counter_y>=v_rez && counter_y<(v_rez+ram_refresh_lines))
++ 1530     display_in_refresh_lines <= 1;
++ 1530   else
++ 1530     display_in_refresh_lines <= 0;
++ 1589   if (!preheat && (dvi_blank || (counter_x>=h_rez) || (counter_y>=screen_h))) begin
++ 1592   /*end else if (counter_y>=590) begin
++ 1592     if (counter_y<600) begin
++ 1592       if (rec_zreadraw[counter_x]) green_p <= 8'hff;
++ 1592       else green_p <= 0;
++ 1592     end else if (counter_y<610) begin
++ 1592       if (rec_zread[counter_x]) green_p <= 8'hff;
++ 1592       else green_p <= 0;
++ 1592     end else if (counter_y<620) begin
++ 1592       if (rec_zwrite[counter_x]) green_p <= 8'hff;
++ 1592       else green_p <= 0;
++ 1592     end else if (counter_y<630) begin
++ 1592       if (rec_zas0[counter_x]) green_p <= 8'hff;
++ 1592       else green_p <= 0;
++ 1592     end else if (counter_y<640) begin
++ 1592       if (rec_zas1[counter_x]) green_p <= 8'hff;
++ 1592       else green_p <= 0;
++ 1592     end else if (counter_y<650) begin
++ 1592       if (rec_zaddr_in_ram[counter_x]) green_p <= 8'hff;
++ 1592       else green_p <= 0;
++ 1592     end else if (counter_y<660) begin
++ 1592       if (rec_state[counter_x]) blue_p <= 8'hff;
++ 1592       else blue_p <= 0;
++ 1592     end else if (counter_y<670) begin
++ 1592       if (rec_statew[counter_x]) blue_p <= 8'hff;
++ 1592       else blue_p <= 0;
++ 1592     end else if (counter_y<680) begin
++ 1592       if (rec_ready[counter_x]) green_p <= 8'hff;
++ 1592       else green_p <= 0;
++ 1592     end else begin
++ 1592       green_p <= 0;
++ 1592       blue_p <= 0;
++ 1592     end*/
++ 1636     red_p[0] <= rgb[0];
++ 1636     red_p[1] <= rgb[0];
++ 1636     red_p[2] <= rgb[1];
++ 1636     red_p[3] <= rgb[1];
++ 1636     red_p[4] <= rgb[2];
++ 1636     red_p[5] <= rgb[2];
++ 1636     red_p[6] <= rgb[3];
++ 1636     red_p[7] <= rgb[4];
++ 1669     green_p[0] <= rgb[5];
++ 1669     green_p[1] <= rgb[5];
++ 1669     green_p[2] <= rgb[6];
++ 1669     green_p[3] <= rgb[6];
++ 1669     green_p[4] <= rgb[7];
++ 1669     green_p[5] <= rgb[8];
++ 1669     green_p[6] <= rgb[9];
++ 1669     green_p[7] <= rgb[10];
++ 1669     blue_p[0] <= rgb[11];
++ 1669     blue_p[1] <= rgb[11];
++ 1669     blue_p[2] <= rgb[12];
++ 1669     blue_p[3] <= rgb[12];
++ 1669     blue_p[4] <= rgb[13];
++ 1669     blue_p[5] <= rgb[13];
++ 1669     blue_p[6] <= rgb[14];
++ 1669     blue_p[7] <= rgb[15];
++ 1672     /*if (counter_scale != scalemode) begin
++ 1675       counter_scale <= 0;*/
++ 1756     rgb32 <= {fetch_buffer[display_x3],fetch_buffer[display_x2]};
++ 1756     red_p   <= rgb32[15:8];
++ 1756     green_p <= rgb32[7:0];
++ 1756     blue_p <= rgb32[31:24];
+
+Clone Blocks:

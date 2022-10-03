@@ -1,0 +1,48 @@
+Source Block: verilog-ethernet/rtl/axis_tap.v@156:174@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+        frame_reg <= frame_next;
+    end
+end
+
+// output datapath logic
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = 0;
+reg                  output_axis_tvalid_reg = 0;
+reg                  output_axis_tlast_reg = 0;
+
+Diff Content:
+- 164         frame_reg <= 0;
++ 164         frame_reg <= 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_tap_64.v@164:182
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+        frame_reg <= frame_next;
+    end
+end
+
+// output datapath logic
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = 0;
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = 0;
+reg                  output_axis_tvalid_reg = 0;
+

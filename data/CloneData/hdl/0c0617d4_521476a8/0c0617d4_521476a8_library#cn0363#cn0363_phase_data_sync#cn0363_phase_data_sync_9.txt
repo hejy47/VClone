@@ -1,0 +1,31 @@
+Source Block: hdl/library/cn0363/cn0363_phase_data_sync/cn0363_phase_data_sync.v@75:85@HdlStmAssign
+   not. So we'll always accept new samples and assert overflow if necessary if
+   the pipeline is not ready. */
+assign s_axis_sample_ready = 1'b1;
+
+// Conversion from offset binary to signed on data
+assign m_axis_sample_data = {~sample_hold[23],sample_hold[22:0]};
+assign m_axis_phase_data = phase_hold;
+
+always @(posedge clk) begin
+  if (conv_done_d1 == 1'b0 && conv_done == 1'b1) begin
+    // Is the processing pipeline ready to accept data?
+
+Diff Content:
+- 80 assign m_axis_sample_data = {~sample_hold[23],sample_hold[22:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/cn0363/cn0363_phase_data_sync/cn0363_phase_data_sync.v@76:86
+   the pipeline is not ready. */
+assign s_axis_sample_ready = 1'b1;
+
+// Conversion from offset binary to signed on data
+assign m_axis_sample_data = {~sample_hold[23],sample_hold[22:0]};
+assign m_axis_phase_data = phase_hold;
+
+always @(posedge clk) begin
+  if (conv_done_d1 == 1'b0 && conv_done == 1'b1) begin
+    // Is the processing pipeline ready to accept data?
+    if (m_axis_sample_valid | m_axis_phase_valid | ~processing_resetn) begin
+

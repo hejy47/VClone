@@ -1,0 +1,67 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@299:329@HdlStmProcess
+        end else begin
+                up_rack_ff <= up_rreq_s;
+        end
+end
+
+always @(posedge clk) begin
+        case (up_raddr_s)
+        8'h00: up_rdata_ff <= PCORE_VERSION;
+        8'h01: up_rdata_ff <= ID;
+        8'h02: up_rdata_ff <= up_scratch;
+        8'h03: up_rdata_ff <= DATA_WIDTH;
+        8'h10: up_rdata_ff <= up_sw_reset;
+        8'h20: up_rdata_ff <= up_irq_mask;
+        8'h21: up_rdata_ff <= up_irq_pending;
+        8'h22: up_rdata_ff <= up_irq_source;
+        8'h30: up_rdata_ff <= sync_id;
+        8'h34: up_rdata_ff <= cmd_fifo_room;
+        8'h35: up_rdata_ff <= sdo_fifo_room;
+        8'h36: up_rdata_ff <= sdi_fifo_level;
+        8'h3a: up_rdata_ff <= sdi_fifo_out_data;
+        8'h3c: up_rdata_ff <= sdi_fifo_out_data; /* PEEK register */
+        8'h40: up_rdata_ff <= {offload0_enable};
+        8'h41: up_rdata_ff <= {offload0_enabled};
+        default: up_rdata_ff <= 'h00;
+        endcase
+end
+
+always @(posedge clk) begin
+        if (up_sw_resetn == 1'b0) begin
+                sync_id <= 'h00;
+                sync_id_pending <= 1'b0;
+
+Diff Content:
+- 304 always @(posedge clk) begin
+- 305         case (up_raddr_s)
+- 306         8'h00: up_rdata_ff <= PCORE_VERSION;
+- 307         8'h01: up_rdata_ff <= ID;
+- 308         8'h02: up_rdata_ff <= up_scratch;
+- 309         8'h03: up_rdata_ff <= DATA_WIDTH;
+- 310         8'h10: up_rdata_ff <= up_sw_reset;
+- 311         8'h20: up_rdata_ff <= up_irq_mask;
+- 312         8'h21: up_rdata_ff <= up_irq_pending;
+- 313         8'h22: up_rdata_ff <= up_irq_source;
+- 314         8'h30: up_rdata_ff <= sync_id;
+- 315         8'h34: up_rdata_ff <= cmd_fifo_room;
+- 316         8'h35: up_rdata_ff <= sdo_fifo_room;
+- 317         8'h36: up_rdata_ff <= sdi_fifo_level;
+- 318         8'h3a: up_rdata_ff <= sdi_fifo_out_data;
+- 319         8'h3c: up_rdata_ff <= sdi_fifo_out_data; /* PEEK register */
+- 320         8'h40: up_rdata_ff <= {offload0_enable};
+- 321         8'h41: up_rdata_ff <= {offload0_enabled};
+- 322         default: up_rdata_ff <= 'h00;
+- 324 end
++ 322   always @(posedge clk) begin
++ 322     if (up_sw_resetn == 1'b0) begin
++ 322       up_irq_mask <= 'h00;
++ 322       offload0_enable <= 1'b0;
++ 322       offload0_mem_reset <= 1'b0;
++ 322     end else begin
++ 322       if (up_wreq_s) begin
++ 322         case (up_waddr_s)
++ 322           8'h20: up_irq_mask <= up_wdata_s;
++ 322           8'h40: offload0_enable <= up_wdata_s[0];
++ 322           8'h42: offload0_mem_reset <= up_wdata_s[0];
+
+Clone Blocks:

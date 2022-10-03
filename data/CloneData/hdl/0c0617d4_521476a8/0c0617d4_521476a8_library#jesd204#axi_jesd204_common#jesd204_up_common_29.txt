@@ -1,0 +1,74 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@167:183@HdlStmProcess
+  end else begin
+    core_reset_vector <= {1'b0,core_reset_vector[4:1]};
+  end
+end
+
+always @(posedge device_clk or posedge core_reset_all) begin
+  if (core_reset_all == 1'b1) begin
+    device_reset_vector <= 5'b11111;
+  end else begin
+    device_reset_vector <= {1'b0,device_reset_vector[4:1]};
+  end
+end
+
+always @(posedge up_clk or posedge core_reset) begin
+  if (core_reset == 1'b1) begin
+    up_reset_synchronizer_vector <= 2'b11;
+  end else begin
+
+Diff Content:
+- 172 always @(posedge device_clk or posedge core_reset_all) begin
+- 173   if (core_reset_all == 1'b1) begin
+- 174     device_reset_vector <= 5'b11111;
+- 175   end else begin
+- 176     device_reset_vector <= {1'b0,device_reset_vector[4:1]};
+- 178 end
++ 176   always @(posedge device_clk or posedge core_reset_all) begin
++ 176     if (core_reset_all == 1'b1) begin
++ 176       device_reset_vector <= 5'b11111;
++ 176     end else begin
++ 176       device_reset_vector <= {1'b0,device_reset_vector[4:1]};
++ 176     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@159:175
+  end
+end
+
+wire core_reset_all = up_reset_core | core_reset_ext;
+
+always @(posedge core_clk or posedge core_reset_all) begin
+  if (core_reset_all == 1'b1) begin
+    core_reset_vector <= 5'b11111;
+  end else begin
+    core_reset_vector <= {1'b0,core_reset_vector[4:1]};
+  end
+end
+
+always @(posedge device_clk or posedge core_reset_all) begin
+  if (core_reset_all == 1'b1) begin
+    device_reset_vector <= 5'b11111;
+  end else begin
+
+Clone Blocks 2:
+hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@175:191
+  end else begin
+    device_reset_vector <= {1'b0,device_reset_vector[4:1]};
+  end
+end
+
+always @(posedge up_clk or posedge core_reset) begin
+  if (core_reset == 1'b1) begin
+    up_reset_synchronizer_vector <= 2'b11;
+  end else begin
+    up_reset_synchronizer_vector <= {1'b0,up_reset_synchronizer_vector[1]};
+  end
+end
+
+always @(posedge up_clk or posedge core_reset_ext) begin
+  if (core_reset_ext == 1'b1) begin
+    up_core_reset_ext_synchronizer_vector <= 2'b11;
+  end else begin
+

@@ -1,0 +1,22 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@586:597@HdlStmProcess
+    sclk_int <= cpol;
+  end
+end
+
+// Additional register stage to improve timing
+always @(posedge clk) begin
+  sclk <= sclk_int;
+  sdo <= sdo_int_s;
+  sdo_t <= sdo_t_int;
+end
+
+endmodule
+
+Diff Content:
+- 591 always @(posedge clk) begin
+- 592   sclk <= sclk_int;
+- 593   sdo <= sdo_int_s;
+- 594   sdo_t <= sdo_t_int;
+- 595 end
+
+Clone Blocks:

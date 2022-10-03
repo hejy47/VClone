@@ -1,0 +1,38 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_sysref.v@82:107@HdlStmProcess
+  };
+  default: up_rdata <= 32'h00000000;
+  endcase
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_cfg_sysref_oneshot <= 1'b0;
+    up_cfg_lmfc_offset <= 'h00;
+    up_cfg_sysref_disable <= 1'b0;
+  end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
+    case (up_waddr)
+    /* JESD SYSREF configuraton */
+    12'h040: begin
+      up_cfg_sysref_oneshot <= up_wdata[1];
+      up_cfg_sysref_disable <= up_wdata[0];
+    end
+    12'h041: begin
+      /* Aligned to data path width */
+      up_cfg_lmfc_offset <= up_wdata[9:2];
+    end
+    endcase
+  end
+end
+
+endmodule
+
+Diff Content:
++ 105 always @(*) begin
++ 105   if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
++ 105     up_sysref_status_clear <= up_wdata[1:0];
++ 105   end else begin
++ 105     up_sysref_status_clear <= 2'b00;
++ 105   end
++ 105 end
+
+Clone Blocks:

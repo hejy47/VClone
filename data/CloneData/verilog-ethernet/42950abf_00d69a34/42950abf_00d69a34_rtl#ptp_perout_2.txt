@@ -1,0 +1,277 @@
+Source Block: verilog-ethernet/rtl/ptp_perout.v@121:252@HdlStmProcess
+
+assign locked = locked_reg;
+assign error = error_reg;
+assign output_pulse = output_reg;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    next_rise_s_next = next_rise_s_reg;
+    next_rise_ns_next = next_rise_ns_reg;
+    next_rise_fns_next = next_rise_fns_reg;
+
+    next_fall_s_next = next_fall_s_reg;
+    next_fall_ns_next = next_fall_ns_reg;
+    next_fall_fns_next = next_fall_fns_reg;
+
+    ts_96_ns_inc_next = ts_96_ns_inc_reg;
+    ts_96_fns_inc_next = ts_96_fns_inc_reg;
+
+    ts_96_ns_ovf_next = ts_96_ns_ovf_reg;
+    ts_96_fns_ovf_next = ts_96_fns_ovf_reg;
+
+    locked_next = locked_reg;
+    level_next = level_reg;
+    output_next = output_reg;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // set next rise to start time
+            next_rise_s_next = start_s_reg;
+            next_rise_ns_next = start_ns_reg;
+            if (FNS_ENABLE) begin
+                next_rise_fns_next = start_fns_reg;
+            end
+            locked_next = 1'b0;
+            level_next = 1'b0;
+            output_next = 1'b0;
+            if (input_start_valid || input_period_valid) begin
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_UPDATE_FALL_1;
+            end
+        end
+        STATE_UPDATE_RISE_1: begin
+            // set next rise time to next rise time plus period
+            {ts_96_ns_inc_next, ts_96_fns_inc_next} = {next_rise_ns_reg, next_rise_fns_reg} + {period_ns_reg, period_fns_reg};
+            {ts_96_ns_ovf_next, ts_96_fns_ovf_next} = {next_rise_ns_reg, next_rise_fns_reg} + {period_ns_reg, period_fns_reg} - {31'd1_000_000_000, 16'd0};
+            if (input_start_valid || input_period_valid) begin
+                level_next = 1'b0;
+                output_next = 1'b0;
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_UPDATE_RISE_2;
+            end
+        end
+        STATE_UPDATE_RISE_2: begin
+            if (!ts_96_ns_ovf_reg[30]) begin
+                // if the overflow lookahead did not borrow, one second has elapsed
+                next_rise_s_next = next_rise_s_reg + period_s_reg + 1;
+                next_rise_ns_next = ts_96_ns_ovf_reg;
+                next_rise_fns_next = ts_96_fns_ovf_reg;
+            end else begin
+                // no increment seconds field
+                next_rise_s_next = next_rise_s_reg + period_s_reg;
+                next_rise_ns_next = ts_96_ns_inc_reg;
+                next_rise_fns_next = ts_96_fns_inc_reg;
+            end
+            if (input_start_valid || input_period_valid) begin
+                level_next = 1'b0;
+                output_next = 1'b0;
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_WAIT_EDGE;
+            end
+        end
+        STATE_UPDATE_FALL_1: begin
+            // set next fall time to next rise time plus width
+            {ts_96_ns_inc_next, ts_96_fns_inc_next} = {next_rise_ns_reg, next_rise_fns_reg} + {width_ns_reg, width_fns_reg};
+            {ts_96_ns_ovf_next, ts_96_fns_ovf_next} = {next_rise_ns_reg, next_rise_fns_reg} + {width_ns_reg, width_fns_reg} - {31'd1_000_000_000, 16'd0};
+            if (input_start_valid || input_period_valid) begin
+                level_next = 1'b0;
+                output_next = 1'b0;
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_UPDATE_FALL_2;
+            end
+        end
+        STATE_UPDATE_FALL_2: begin
+            if (!ts_96_ns_ovf_reg[30]) begin
+                // if the overflow lookahead did not borrow, one second has elapsed
+                next_fall_s_next = next_rise_s_reg + width_s_reg + 1;
+                next_fall_ns_next = ts_96_ns_ovf_reg;
+                next_fall_fns_next = ts_96_fns_ovf_reg;
+            end else begin
+                // no increment seconds field
+                next_fall_s_next = next_rise_s_reg + width_s_reg;
+                next_fall_ns_next = ts_96_ns_inc_reg;
+                next_fall_fns_next = ts_96_fns_inc_reg;
+            end
+            if (input_start_valid || input_period_valid) begin
+                level_next = 1'b0;
+                output_next = 1'b0;
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_WAIT_EDGE;
+            end
+        end
+        STATE_WAIT_EDGE: begin
+            if (input_start_valid || input_period_valid) begin
+                state_next = STATE_IDLE;
+            end else if ((time_s_reg > next_rise_s_reg) || (time_s_reg == next_rise_s_reg && {time_ns_reg, time_fns_reg} > {next_rise_ns_reg, next_rise_fns_reg})) begin
+                // rising edge
+                level_next = 1'b1;
+                output_next = enable && locked_reg;
+                state_next = STATE_UPDATE_RISE_1;
+            end else if ((time_s_reg > next_fall_s_reg) || (time_s_reg == next_fall_s_reg && {time_ns_reg, time_fns_reg} > {next_fall_ns_reg, next_fall_fns_reg})) begin
+                // falling edge
+                level_next = 1'b0;
+                output_next = 1'b0;
+                state_next = STATE_UPDATE_FALL_1;
+            end else begin
+                locked_next = locked_reg || level_reg;
+                state_next = STATE_WAIT_EDGE;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    state_reg <= state_next;
+
+    time_s_reg <= input_ts_96[95:48];
+
+Diff Content:
+- 147     case (state_reg)
+- 148         STATE_IDLE: begin
+- 150             next_rise_s_next = start_s_reg;
+- 151             next_rise_ns_next = start_ns_reg;
+- 152             if (FNS_ENABLE) begin
+- 153                 next_rise_fns_next = start_fns_reg;
+- 154             end
+- 155             locked_next = 1'b0;
+- 156             level_next = 1'b0;
+- 157             output_next = 1'b0;
+- 158             if (input_start_valid || input_period_valid) begin
+- 159                 state_next = STATE_IDLE;
+- 160             end else begin
+- 161                 state_next = STATE_UPDATE_FALL_1;
+- 162             end
+- 163         end
+- 164         STATE_UPDATE_RISE_1: begin
+- 166             {ts_96_ns_inc_next, ts_96_fns_inc_next} = {next_rise_ns_reg, next_rise_fns_reg} + {period_ns_reg, period_fns_reg};
+- 167             {ts_96_ns_ovf_next, ts_96_fns_ovf_next} = {next_rise_ns_reg, next_rise_fns_reg} + {period_ns_reg, period_fns_reg} - {31'd1_000_000_000, 16'd0};
+- 168             if (input_start_valid || input_period_valid) begin
+- 171                 state_next = STATE_IDLE;
+- 172             end else begin
+- 173                 state_next = STATE_UPDATE_RISE_2;
+- 175         end
+- 176         STATE_UPDATE_RISE_2: begin
+- 177             if (!ts_96_ns_ovf_reg[30]) begin
+- 179                 next_rise_s_next = next_rise_s_reg + period_s_reg + 1;
+- 180                 next_rise_ns_next = ts_96_ns_ovf_reg;
+- 181                 next_rise_fns_next = ts_96_fns_ovf_reg;
+- 182             end else begin
+- 184                 next_rise_s_next = next_rise_s_reg + period_s_reg;
+- 185                 next_rise_ns_next = ts_96_ns_inc_reg;
+- 186                 next_rise_fns_next = ts_96_fns_inc_reg;
+- 188             if (input_start_valid || input_period_valid) begin
+- 189                 level_next = 1'b0;
+- 190                 output_next = 1'b0;
+- 191                 state_next = STATE_IDLE;
+- 192             end else begin
+- 195         end
+- 196         STATE_UPDATE_FALL_1: begin
+- 198             {ts_96_ns_inc_next, ts_96_fns_inc_next} = {next_rise_ns_reg, next_rise_fns_reg} + {width_ns_reg, width_fns_reg};
+- 199             {ts_96_ns_ovf_next, ts_96_fns_ovf_next} = {next_rise_ns_reg, next_rise_fns_reg} + {width_ns_reg, width_fns_reg} - {31'd1_000_000_000, 16'd0};
+- 200             if (input_start_valid || input_period_valid) begin
+- 201                 level_next = 1'b0;
+- 202                 output_next = 1'b0;
+- 203                 state_next = STATE_IDLE;
+- 204             end else begin
+- 207         end
+- 208         STATE_UPDATE_FALL_2: begin
+- 209             if (!ts_96_ns_ovf_reg[30]) begin
+- 211                 next_fall_s_next = next_rise_s_reg + width_s_reg + 1;
+- 212                 next_fall_ns_next = ts_96_ns_ovf_reg;
+- 213                 next_fall_fns_next = ts_96_fns_ovf_reg;
+- 214             end else begin
+- 216                 next_fall_s_next = next_rise_s_reg + width_s_reg;
+- 217                 next_fall_ns_next = ts_96_ns_inc_reg;
+- 218                 next_fall_fns_next = ts_96_fns_inc_reg;
+- 219             end
+- 220             if (input_start_valid || input_period_valid) begin
+- 221                 level_next = 1'b0;
+- 222                 output_next = 1'b0;
+- 223                 state_next = STATE_IDLE;
+- 224             end else begin
+- 227         end
+- 228         STATE_WAIT_EDGE: begin
+- 229             if (input_start_valid || input_period_valid) begin
+- 230                 state_next = STATE_IDLE;
+- 231             end else if ((time_s_reg > next_rise_s_reg) || (time_s_reg == next_rise_s_reg && {time_ns_reg, time_fns_reg} > {next_rise_ns_reg, next_rise_fns_reg})) begin
+- 233                 level_next = 1'b1;
+- 234                 output_next = enable && locked_reg;
+- 235                 state_next = STATE_UPDATE_RISE_1;
+- 236             end else if ((time_s_reg > next_fall_s_reg) || (time_s_reg == next_fall_s_reg && {time_ns_reg, time_fns_reg} > {next_fall_ns_reg, next_fall_fns_reg})) begin
+- 238                 level_next = 1'b0;
+- 239                 output_next = 1'b0;
+- 240                 state_next = STATE_UPDATE_FALL_1;
+- 241             end else begin
+- 242                 locked_next = locked_reg || level_reg;
+- 243                 state_next = STATE_WAIT_EDGE;
+- 245         end
+- 246     endcase
++ 143     error_next = error_reg;
++ 168     if (input_start_valid || input_period_valid || input_ts_step) begin
++ 168         locked_next = 1'b0;
++ 168         level_next = 1'b0;
++ 168         output_next = 1'b0;
++ 168         error_next = input_ts_step;
++ 168         state_next = STATE_IDLE;
++ 168     end else begin
++ 168         case (state_reg)
++ 168             STATE_IDLE: begin
++ 168                 next_rise_s_next = start_s_reg;
++ 168                 next_rise_ns_next = start_ns_reg;
++ 168                 if (FNS_ENABLE) begin
++ 168                     next_rise_fns_next = start_fns_reg;
++ 168                 end
++ 168                 locked_next = 1'b0;
++ 173                 state_next = STATE_UPDATE_FALL_1;
++ 186             STATE_UPDATE_RISE_1: begin
++ 186                 {ts_96_ns_inc_next, ts_96_fns_inc_next} = {next_rise_ns_reg, next_rise_fns_reg} + {period_ns_reg, period_fns_reg};
++ 186                 {ts_96_ns_ovf_next, ts_96_fns_ovf_next} = {next_rise_ns_reg, next_rise_fns_reg} + {period_ns_reg, period_fns_reg} - {31'd1_000_000_000, 16'd0};
++ 186                 state_next = STATE_UPDATE_RISE_2;
++ 192             STATE_UPDATE_RISE_2: begin
++ 192                 if (!ts_96_ns_ovf_reg[30]) begin
++ 192                     next_rise_s_next = next_rise_s_reg + period_s_reg + 1;
++ 192                     next_rise_ns_next = ts_96_ns_ovf_reg;
++ 192                     next_rise_fns_next = ts_96_fns_ovf_reg;
++ 192                 end else begin
++ 192                     next_rise_s_next = next_rise_s_reg + period_s_reg;
++ 192                     next_rise_ns_next = ts_96_ns_inc_reg;
++ 192                     next_rise_fns_next = ts_96_fns_inc_reg;
++ 192                 end
++ 204             STATE_UPDATE_FALL_1: begin
++ 204                 {ts_96_ns_inc_next, ts_96_fns_inc_next} = {next_rise_ns_reg, next_rise_fns_reg} + {width_ns_reg, width_fns_reg};
++ 204                 {ts_96_ns_ovf_next, ts_96_fns_ovf_next} = {next_rise_ns_reg, next_rise_fns_reg} + {width_ns_reg, width_fns_reg} - {31'd1_000_000_000, 16'd0};
++ 224             STATE_UPDATE_FALL_2: begin
++ 224                 if (!ts_96_ns_ovf_reg[30]) begin
++ 224                     next_fall_s_next = next_rise_s_reg + width_s_reg + 1;
++ 224                     next_fall_ns_next = ts_96_ns_ovf_reg;
++ 224                     next_fall_fns_next = ts_96_fns_ovf_reg;
++ 224                 end else begin
++ 224                     next_fall_s_next = next_rise_s_reg + width_s_reg;
++ 224                     next_fall_ns_next = ts_96_ns_inc_reg;
++ 224                     next_fall_fns_next = ts_96_fns_inc_reg;
++ 224                 end
++ 243             STATE_WAIT_EDGE: begin
++ 243                 if ((time_s_reg > next_rise_s_reg) || (time_s_reg == next_rise_s_reg && {time_ns_reg, time_fns_reg} > {next_rise_ns_reg, next_rise_fns_reg})) begin
++ 243                     level_next = 1'b1;
++ 243                     output_next = enable && locked_reg;
++ 243                     state_next = STATE_UPDATE_RISE_1;
++ 243                 end else if ((time_s_reg > next_fall_s_reg) || (time_s_reg == next_fall_s_reg && {time_ns_reg, time_fns_reg} > {next_fall_ns_reg, next_fall_fns_reg})) begin
++ 243                     level_next = 1'b0;
++ 243                     output_next = 1'b0;
++ 243                     state_next = STATE_UPDATE_FALL_1;
++ 243                 end else begin
++ 243                     locked_next = locked_reg || level_reg;
++ 243                     error_next = error_reg && !(locked_reg || level_reg);
++ 243                     state_next = STATE_WAIT_EDGE;
++ 243                 end
++ 246         endcase
++ 246     end
+
+Clone Blocks:

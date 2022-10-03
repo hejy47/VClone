@@ -1,0 +1,53 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_frame_align.v@160:185@HdlStmProcess
+
+assign align_err_cnt_next = {1'b0, align_err_cnt} + cur_align_err_cnt;
+
+// Alignment error counter
+// Resets upon good alignment
+always @(posedge clk) begin
+  if(reset) begin
+    align_err_cnt <= 8'd0;
+    cur_align_err_cnt <= 'd0;
+  end else begin
+    cur_align_err_cnt <= count_ones({eomf_err, eof_err});
+
+    if(align_good && !align_err) begin
+      align_err_cnt <= 8'd0;
+    end else if(align_err_cnt_next[8]) begin
+      align_err_cnt <= 8'hFF;
+    end else begin
+      align_err_cnt <= align_err_cnt_next[7:0];
+    end
+  end
+end
+
+jesd204_frame_align_replace #(
+  .DATA_PATH_WIDTH              (DATA_PATH_WIDTH),
+  .IS_RX                        (1'b1),
+  .ENABLED                      (ENABLE_CHAR_REPLACE)
+
+Diff Content:
+- 165 always @(posedge clk) begin
+- 166   if(reset) begin
+- 167     align_err_cnt <= 8'd0;
+- 168     cur_align_err_cnt <= 'd0;
+- 169   end else begin
+- 170     cur_align_err_cnt <= count_ones({eomf_err, eof_err});
+- 172     if(align_good && !align_err) begin
+- 174     end else if(align_err_cnt_next[8]) begin
+- 175       align_err_cnt <= 8'hFF;
+- 177       align_err_cnt <= align_err_cnt_next[7:0];
+- 180 end
++ 172   always @(posedge clk) begin
++ 172     if(reset) begin
++ 175       cur_align_err_cnt <= 'd0;
++ 177       cur_align_err_cnt <= count_ones({eomf_err, eof_err});
++ 177       if(align_good && !align_err) begin
++ 177         align_err_cnt <= 8'd0;
++ 177       end else if(align_err_cnt_next[8]) begin
++ 177         align_err_cnt <= 8'hFF;
++ 177       end else begin
++ 177         align_err_cnt <= align_err_cnt_next[7:0];
++ 177       end
+
+Clone Blocks:

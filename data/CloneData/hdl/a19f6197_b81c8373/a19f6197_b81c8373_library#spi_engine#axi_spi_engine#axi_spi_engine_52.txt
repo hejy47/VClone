@@ -1,0 +1,31 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@383:393@HdlStmAssign
+        .m_axis_data(cmd_data),
+        .m_axis_level()
+);
+
+assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h39;
+assign sdo_fifo_in_data = up_wdata_s[(DATA_WIDTH-1):0];
+assign sdo_fifo_almost_empty =
+        `axi_spi_engine_check_watermark(sdo_fifo_room, SDO_FIFO_ADDRESS_WIDTH);
+
+util_axis_fifo #(
+        .DATA_WIDTH(DATA_WIDTH),
+
+Diff Content:
+- 388 assign sdo_fifo_in_data = up_wdata_s[(DATA_WIDTH-1):0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@382:392
+        .m_axis_valid(cmd_valid),
+        .m_axis_data(cmd_data),
+        .m_axis_level()
+);
+
+assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h39;
+assign sdo_fifo_in_data = up_wdata_s[(DATA_WIDTH-1):0];
+assign sdo_fifo_almost_empty =
+        `axi_spi_engine_check_watermark(sdo_fifo_room, SDO_FIFO_ADDRESS_WIDTH);
+
+util_axis_fifo #(
+

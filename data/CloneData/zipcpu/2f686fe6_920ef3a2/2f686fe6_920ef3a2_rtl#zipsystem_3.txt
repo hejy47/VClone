@@ -1,0 +1,26 @@
+Source Block: zipcpu/rtl/zipsystem.v@333:349@HdlStmProcess
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(dbg_idata[6]));
+	//
+	initial	cmd_halt  = START_HALTED;
+	always @(posedge i_clk)
+		if (i_rst)
+			cmd_halt <= (START_HALTED == 1)? 1'b1 : 1'b0;
+		else if (dbg_cmd_write)
+			cmd_halt <= ((dbg_idata[10])||(dbg_idata[8]));
+		else if ((cmd_step)||(cpu_break))
+			cmd_halt  <= 1'b1;
+
+	initial	cmd_clear_pf_cache = 1'b1;
+	always @(posedge i_clk)
+		cmd_clear_pf_cache <= (~i_rst)&&(dbg_cmd_write)
+					&&((dbg_idata[11])||(dbg_idata[6]));
+
+Diff Content:
+- 340 			cmd_halt <= (START_HALTED == 1)? 1'b1 : 1'b0;
+- 342 			cmd_halt <= ((dbg_idata[10])||(dbg_idata[8]));
++ 340 			cmd_halt <= (START_HALTED);
++ 342 			cmd_halt <= ((i_dbg_data[`HALT_BIT])&&(!i_dbg_data[`STEP_BIT]));
+
+Clone Blocks:

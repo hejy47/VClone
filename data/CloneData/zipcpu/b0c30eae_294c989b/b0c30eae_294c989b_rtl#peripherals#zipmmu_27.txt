@@ -1,0 +1,52 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@651:674@HdlStmProcess
+	endcase
+
+	initial	rtn_err = 1'b0;
+	initial	o_cyc   = 1'b0;
+	initial	o_rtn_ack = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		o_cyc <= 1'b0;
+		o_rtn_ack <= 1'b0;
+		rtn_err   <= 1'b0;
+		o_rtn_data <= 0;
+	end else begin
+		o_cyc <=  (i_wbm_cyc)&&(!o_rtn_err)&&((!i_err)||(!o_cyc)); /// &&((o_cyc)||(r_valid));
+
+		o_rtn_ack  <= (i_wbm_cyc)&&(i_ack)&&(o_cyc);
+		o_rtn_data <= i_data;
+		rtn_err  <= (i_wbm_cyc)&&(i_err)&&(o_cyc);
+	end
+	assign	o_stb = (r_valid);
+	assign	o_we  =  (r_we);
+	assign	o_rtn_stall = (i_wbm_cyc)&&(
+			(o_rtn_err)
+			||((r_pending)&&(!r_valid))
+
+Diff Content:
+- 660 		o_rtn_ack <= 1'b0;
+- 662 		o_rtn_data <= 0;
+- 666 		o_rtn_ack  <= (i_wbm_cyc)&&(i_ack)&&(o_cyc);
+- 667 		o_rtn_data <= i_data;
++ 669 	generate if (OPT_DELAY_RETURN)
++ 669 	begin
++ 669 		initial	r_rtn_data = 0;
++ 669 		initial	r_rtn_ack  = 0;
++ 669 		always @(posedge i_clk)
++ 669 		if (i_reset)
++ 669 		begin
++ 669 			r_rtn_ack  <= 0;
++ 669 			r_rtn_data <= 0;
++ 669 		end else begin
++ 669 			r_rtn_ack  <= (i_wbm_cyc)&&(i_ack)&&(o_cyc);
++ 669 			r_rtn_data <= i_data;
++ 669 		end
++ 669 		assign	o_rtn_ack  = r_rtn_ack;
++ 669 		assign	o_rtn_data = r_rtn_data;
++ 669 	end else begin
++ 669 		assign	o_rtn_ack  = (i_ack)&&(o_cyc);
++ 669 		assign	o_rtn_data = i_data;
++ 669 	end endgenerate
+
+Clone Blocks:

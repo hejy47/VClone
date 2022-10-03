@@ -1,0 +1,21 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4544:4556@HdlStmProcess
+
+   //###################
+   //# ERROR CHECKERS 
+   //###################
+   // synthesis translate_off
+   always @*
+     if(~(|(fifo_trans[AE+1:0])) & $time>0)
+       $display("ERROR>>link launcher mechanism is broken in cell %m");
+
+   always @*
+     if(((jump_4entries       & (jump_3entries_read | jump_3entries_write | jump_1entry))|
+	 (jump_3entries_read  & (                     jump_3entries_write | jump_1entry))|
+	 (jump_3entries_write & (                                           jump_1entry)))
+
+Diff Content:
+- 4549    always @*
+- 4550      if(~(|(fifo_trans[AE+1:0])) & $time>0)
+- 4551        $display("ERROR>>link launcher mechanism is broken in cell %m");
+
+Clone Blocks:

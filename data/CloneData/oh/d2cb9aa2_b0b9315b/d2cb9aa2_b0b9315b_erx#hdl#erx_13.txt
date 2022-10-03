@@ -1,0 +1,98 @@
+Source Block: oh/erx/hdl/erx.v@331:359@HdlStmProcess
+		  .ecfg_dataout		(ecfg_dataout[10:0]));
+
+   /************************************************************/
+   /*Debug signals                                             */
+   /************************************************************/
+   always @ (posedge rx_lclk_div4)
+     begin
+	ecfg_rx_debug_signals[15:0] <= {2'b0,                     //15:14
+					emesh_rx_rd_wait,         //13
+					emesh_rx_wr_wait,         //12
+					esaxi_emrr_rd_en,         //11
+					emrr_full,                //10
+					emrr_prog_full,           //9
+					emrr_wr_en,	          //8			
+					emaxi_emrq_rd_en,         //7
+					emrq_full,                //6
+					emrq_prog_full,           //5
+					emrq_wr_en,	          //4			 
+					emaxi_emwr_rd_en,         //3
+					emwr_full,	          //2			 
+					emwr_prog_full,           //1
+					emwr_wr_en                //0
+					};
+     end
+
+   
+endmodule // elink
+// Local Variables:
+// verilog-library-directories:("." "../../memory/hdl" "../../emmu/hdl")
+
+Diff Content:
+- 338 	ecfg_rx_debug_signals[15:0] <= {2'b0,                     //15:14
+- 339 					emesh_rx_rd_wait,         //13
+- 340 					emesh_rx_wr_wait,         //12
+- 341 					esaxi_emrr_rd_en,         //11
+- 342 					emrr_full,                //10
+- 343 					emrr_prog_full,           //9
+- 344 					emrr_wr_en,	          //8			
+- 345 					emaxi_emrq_rd_en,         //7
+- 346 					emrq_full,                //6
+- 347 					emrq_prog_full,           //5
+- 348 					emrq_wr_en,	          //4			 
+- 349 					emaxi_emwr_rd_en,         //3
+- 350 					emwr_full,	          //2			 
+- 351 					emwr_prog_full,           //1
+- 352 					emwr_wr_en                //0
+- 353 					};
++ 353 	ecfg_rx_debug[15:0] <= {2'b0,                     //15:14
++ 353 				emesh_rx_rd_wait,         //13
++ 353 				emesh_rx_wr_wait,         //12
++ 353 				esaxi_emrr_rd_en,         //11
++ 353 				emrr_full,                //10
++ 353 				emrr_progfull,            //9
++ 353 				emrr_wr_en,	          //8			
++ 353 				emaxi_emrq_rd_en,         //7
++ 353 				emrq_full,                //6
++ 353 				emrq_progfull,            //5
++ 353 				emrq_wr_en,	          //4			 
++ 353 				emaxi_emwr_rd_en,         //3
++ 353 				emwr_full,	          //2			 
++ 353 				emwr_progfull,            //1
++ 353 				emwr_wr_en                //0
++ 353 				};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/etx/hdl/etx.v@279:307
+
+
+   /************************************************************/
+   /*Debug signals                                             */
+   /************************************************************/
+   always @ (posedge tx_lclk_p)
+     begin
+	ecfg_tx_debug_signals[15:0] <= {2'b0,                     //15:14
+					e_tx_rd_wait,             //13
+					e_tx_wr_wait,             //12
+					emrr_rd_en,               //11
+					emaxi_emrr_full,          //10
+					emaxi_emrr_prog_full,     //9
+					emaxi_emrr_wr_en,	  //8			
+					emrq_rd_en,               //7
+					esaxi_emrq_full,          //6
+					esaxi_emrq_prog_full,     //5
+					esaxi_emrq_wr_en,	  //4			 
+					emwr_rd_en,               //3
+					esaxi_emwr_full,	  //2			 
+					esaxi_emwr_prog_full,     //1
+					esaxi_emwr_wr_en          //0
+					};
+     end
+   
+endmodule // elink
+// Local Variables:
+// verilog-library-directories:("." "../../memory/hdl")
+// End:
+

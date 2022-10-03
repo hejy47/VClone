@@ -1,0 +1,35 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4333:4343@HdlStmAssign
+   //# 3. transaction is read but there are more already written indicated by fifo_trans
+   assign start_new_read = (fifo_trans[0]           & tran_written) |
+			   (tran_read               & tran_written) |
+			   ((|(fifo_trans[AE+1:2])) & tran_read );
+
+   assign check_next_dstaddr = start_new_read;
+
+   //#####################
+   //# Bursting logic
+   //#####################
+
+
+Diff Content:
+- 4338    assign check_next_dstaddr = start_new_read;
++ 4338    assign next_write_tlc  = traninfo2_tlc[1];
++ 4338    assign next_access_tlc = traninfo2_tlc[0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4329:4341
+
+   //# we start new read if:
+   //# 1. there is an indication of the first written transaction
+   //# 2. transaction is read and the new one is written at the same cycle
+   //# 3. transaction is read but there are more already written indicated by fifo_trans
+   assign start_new_read = (fifo_trans[0]           & tran_written) |
+			   (tran_read               & tran_written) |
+			   ((|(fifo_trans[AE+1:2])) & tran_read );
+
+   assign check_next_dstaddr = start_new_read;
+
+   //#####################
+   //# Bursting logic
+

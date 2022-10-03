@@ -1,0 +1,30 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@348:364@HdlStmProcess
+  default: up_rdata = 'h00;
+  endcase
+end
+
+/* IRQ pending register is write-1-to-clear */
+always @(*) begin
+  if (up_wreq == 1'b1 && up_waddr == 12'h21) begin
+    up_irq_clear = up_wdata[NUM_IRQS-1:0];
+  end else begin
+    up_irq_clear = {NUM_IRQS{1'b0}};
+  end
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_scratch <= 'h00;
+    up_irq_enable <= {NUM_IRQS{1'b0}};
+
+Diff Content:
+- 353 always @(*) begin
+- 354   if (up_wreq == 1'b1 && up_waddr == 12'h21) begin
+- 355     up_irq_clear = up_wdata[NUM_IRQS-1:0];
+- 356   end else begin
+- 357     up_irq_clear = {NUM_IRQS{1'b0}};
+- 358   end
+- 359 end
++ 359     assign up_link_enable_cnt_s = up_link_enable_cnt;
+
+Clone Blocks:

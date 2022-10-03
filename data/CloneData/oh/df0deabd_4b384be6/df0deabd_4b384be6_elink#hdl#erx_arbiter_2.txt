@@ -1,0 +1,63 @@
+Source Block: oh/elink/hdl/erx_arbiter.v@107:117@HdlStmAssign
+   //####################################
+   //Wait Signals
+   //####################################   
+   
+   assign rx_rd_wait    = rxrd_wait;
+   assign rx_wr_wait    = rxwr_wait | (rxrr_wait & rxrr_access);
+   assign edma_wait     = rxrd_wait | emmu_read;
+   assign ecfg_wait     = erx_rr_access |
+			  rxrr_wait     |
+			  rxwr_wait;
+   
+
+Diff Content:
+- 112    assign rx_wr_wait    = rxwr_wait | (rxrr_wait & rxrr_access);
++ 112    assign rx_wr_wait    = rxwr_wait | 
++ 112 			  rxrr_wait;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_arbiter.v@109:121
+   //####################################   
+   
+   assign rx_rd_wait    = rxrd_wait;
+   assign rx_wr_wait    = rxwr_wait | (rxrr_wait & rxrr_access);
+   assign edma_wait     = rxrd_wait | emmu_read;
+   assign ecfg_wait     = erx_rr_access |
+			  rxrr_wait     |
+			  rxwr_wait;
+   
+endmodule // erx_arbiter
+
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl" "../../emesh/hdl")
+
+Clone Blocks 2:
+oh/elink/hdl/erx_arbiter.v@108:118
+   //Wait Signals
+   //####################################   
+   
+   assign rx_rd_wait    = rxrd_wait;
+   assign rx_wr_wait    = rxwr_wait | (rxrr_wait & rxrr_access);
+   assign edma_wait     = rxrd_wait | emmu_read;
+   assign ecfg_wait     = erx_rr_access |
+			  rxrr_wait     |
+			  rxwr_wait;
+   
+endmodule // erx_arbiter
+
+Clone Blocks 3:
+oh/elink/hdl/erx_arbiter.v@106:116
+   
+   //####################################
+   //Wait Signals
+   //####################################   
+   
+   assign rx_rd_wait    = rxrd_wait;
+   assign rx_wr_wait    = rxwr_wait | (rxrr_wait & rxrr_access);
+   assign edma_wait     = rxrd_wait | emmu_read;
+   assign ecfg_wait     = erx_rr_access |
+			  rxrr_wait     |
+			  rxwr_wait;
+

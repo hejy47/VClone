@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dmac/request_generator.v@102:112@HdlStmAssign
+wire [ID_WIDTH-1:0] id_next = inc_id(id);
+wire incr_en;
+wire incr_id;
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+assign incr_en = (response_id != id_next) && (enable == 1'b1);
+assign incr_id = (state == STATE_GEN_ID) && (incr_en == 1'b1);
+
+always @(posedge clk) begin
+
+Diff Content:
+- 107 assign request_id = id;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_generator.v@101:111
+reg [ID_WIDTH-1:0] id;
+wire [ID_WIDTH-1:0] id_next = inc_id(id);
+wire incr_en;
+wire incr_id;
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+assign incr_en = (response_id != id_next) && (enable == 1'b1);
+assign incr_id = (state == STATE_GEN_ID) && (incr_en == 1'b1);
+
+
+Clone Blocks 2:
+hdl/library/axi_dmac/request_generator.v@104:114
+wire incr_id;
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+assign incr_en = (response_id != id_next) && (enable == 1'b1);
+assign incr_id = (state == STATE_GEN_ID) && (incr_en == 1'b1);
+
+always @(posedge clk) begin
+  if (state == STATE_IDLE) begin
+    burst_count <= req_burst_count;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/request_generator.v@105:115
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+assign incr_en = (response_id != id_next) && (enable == 1'b1);
+assign incr_id = (state == STATE_GEN_ID) && (incr_en == 1'b1);
+
+always @(posedge clk) begin
+  if (state == STATE_IDLE) begin
+    burst_count <= req_burst_count;
+  end else if (state == STATE_REWIND_ID) begin
+

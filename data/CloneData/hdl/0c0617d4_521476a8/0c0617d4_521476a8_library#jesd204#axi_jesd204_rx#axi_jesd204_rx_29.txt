@@ -1,0 +1,218 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/axi_jesd204_rx.v@348:365@HdlStmProcess
+  .core_ilas_config_valid(core_ilas_config_valid),
+  .core_ilas_config_addr(core_ilas_config_addr),
+  .core_ilas_config_data(core_ilas_config_data)
+);
+
+always @(posedge s_axi_aclk) begin
+  up_wack <= up_wreq;
+
+  // ILAS memory takes one clock cycle before the data is ready, hence the extra
+  // delay.
+  up_rreq_d1 <= up_rreq;
+  up_rack <= up_rreq_d1;
+  if (up_rreq_d1 == 1'b1) begin
+    up_rdata <= up_rdata_common | up_rdata_sysref | up_rdata_rx;
+  end
+end
+
+endmodule
+
+Diff Content:
+- 353 always @(posedge s_axi_aclk) begin
+- 354   up_wack <= up_wreq;
+- 358   up_rreq_d1 <= up_rreq;
+- 359   up_rack <= up_rreq_d1;
+- 360   if (up_rreq_d1 == 1'b1) begin
+- 361     up_rdata <= up_rdata_common | up_rdata_sysref | up_rdata_rx;
+- 363 end
++ 361   localparam PCORE_VERSION = 32'h00010761; // 1.07.a
++ 361   localparam PCORE_MAGIC = 32'h32303452; // 204R
++ 361   localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
++ 361   /* Register interface signals */
++ 361   reg [31:0] up_rdata = 'h0;
++ 361   reg up_wack = 1'b0;
++ 361   reg up_rack = 1'b0;
++ 361   reg up_rreq_d1 = 1'b0;
++ 361   wire up_wreq;
++ 361   wire up_rreq;
++ 361   wire [31:0] up_wdata;
++ 361   wire [11:0] up_waddr;
++ 361   wire [11:0] up_raddr;
++ 361   wire [31:0] up_rdata_common;
++ 361   wire [31:0] up_rdata_sysref;
++ 361   wire [31:0] up_rdata_rx;
++ 361   wire [4:0] up_irq_trigger;
++ 361   wire up_cfg_is_writeable;
++ 361   wire up_cfg_sysref_oneshot;
++ 361   wire up_cfg_sysref_disable;
++ 361   wire up_cfg_buffer_early_release;
++ 361   wire [7:0] up_cfg_buffer_delay;
++ 361   wire [7:0] up_cfg_lmfc_offset;
++ 361   wire [7:0] up_cfg_frame_align_err_threshold;
++ 361   wire up_reset;
++ 361   wire up_reset_synchronizer;
++ 361   wire up_event_frame_alignment_error;
++ 361   wire up_event_unexpected_lane_state_error;
++ 361   sync_event #(
++ 361     .NUM_OF_EVENTS (2)
++ 361   ) i_sync_frame_align_err (
++ 361     .in_clk(core_clk),
++ 361     .in_event({core_event_unexpected_lane_state_error,
++ 361                core_event_frame_alignment_error}),
++ 361     .out_clk(s_axi_aclk),
++ 361     .out_event({up_event_unexpected_lane_state_error,
++ 361                 up_event_frame_alignment_error}));
++ 361   assign up_irq_trigger = {3'b0,
++ 361                            up_event_unexpected_lane_state_error,
++ 361                            up_event_frame_alignment_error} &
++ 361                           {5{~up_cfg_is_writeable}};
++ 361   up_axi #(
++ 361     .AXI_ADDRESS_WIDTH (14)
++ 361   ) i_up_axi (
++ 361     .up_rstn(~up_reset),
++ 361     .up_clk(s_axi_aclk),
++ 361     .up_axi_awvalid(s_axi_awvalid),
++ 361     .up_axi_awaddr(s_axi_awaddr),
++ 361     .up_axi_awready(s_axi_awready),
++ 361     .up_axi_wvalid(s_axi_wvalid),
++ 361     .up_axi_wdata(s_axi_wdata),
++ 361     .up_axi_wstrb(s_axi_wstrb),
++ 361     .up_axi_wready(s_axi_wready),
++ 361     .up_axi_bvalid(s_axi_bvalid),
++ 361     .up_axi_bresp(s_axi_bresp),
++ 361     .up_axi_bready(s_axi_bready),
++ 361     .up_axi_arvalid(s_axi_arvalid),
++ 361     .up_axi_araddr(s_axi_araddr),
++ 361     .up_axi_arready(s_axi_arready),
++ 361     .up_axi_rvalid(s_axi_rvalid),
++ 361     .up_axi_rresp(s_axi_rresp),
++ 361     .up_axi_rdata(s_axi_rdata),
++ 361     .up_axi_rready(s_axi_rready),
++ 361     .up_wreq(up_wreq),
++ 361     .up_waddr(up_waddr),
++ 361     .up_wdata(up_wdata),
++ 361     .up_wack(up_wack),
++ 361     .up_rreq(up_rreq),
++ 361     .up_raddr(up_raddr),
++ 361     .up_rdata(up_rdata),
++ 361     .up_rack(up_rack));
++ 361   jesd204_up_common #(
++ 361     .PCORE_VERSION(PCORE_VERSION),
++ 361     .PCORE_MAGIC(PCORE_MAGIC),
++ 361     .ID(ID),
++ 361     .NUM_LANES(NUM_LANES),
++ 361     .NUM_LINKS(NUM_LINKS),
++ 361     .NUM_IRQS(5),
++ 361     .EXTRA_CFG_WIDTH(8),
++ 361     .DEV_EXTRA_CFG_WIDTH(19),
++ 361     .ENABLE_LINK_STATS(ENABLE_LINK_STATS)
++ 361   ) i_up_common (
++ 361     .up_clk(s_axi_aclk),
++ 361     .ext_resetn(s_axi_aresetn),
++ 361     .up_reset(up_reset),
++ 361     .up_reset_synchronizer(up_reset_synchronizer),
++ 361     .core_clk(core_clk),
++ 361     .core_reset_ext(core_reset_ext),
++ 361     .core_reset(core_reset),
++ 361     .device_clk(device_clk),
++ 361     .device_reset(device_reset),
++ 361     .up_raddr(up_raddr),
++ 361     .up_rdata(up_rdata_common),
++ 361     .up_wreq(up_wreq),
++ 361     .up_waddr(up_waddr),
++ 361     .up_wdata(up_wdata),
++ 361     .up_cfg_is_writeable(up_cfg_is_writeable),
++ 361     .up_irq_trigger(up_irq_trigger),
++ 361     .irq(irq),
++ 361     .core_cfg_octets_per_multiframe(core_cfg_octets_per_multiframe),
++ 361     .core_cfg_octets_per_frame(core_cfg_octets_per_frame),
++ 361     .core_cfg_lanes_disable(core_cfg_lanes_disable),
++ 361     .core_cfg_links_disable(core_cfg_links_disable),
++ 361     .core_cfg_disable_scrambler(core_cfg_disable_scrambler),
++ 361     .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
++ 361     .up_extra_cfg({
++ 361       /* 00-07 */ up_cfg_frame_align_err_threshold
++ 361     }),
++ 361     .core_extra_cfg({
++ 361       /* 00-07 */ core_cfg_frame_align_err_threshold
++ 361     }),
++ 361     .device_cfg_octets_per_multiframe(device_cfg_octets_per_multiframe),
++ 361     .device_cfg_octets_per_frame(device_cfg_octets_per_frame),
++ 361     .device_cfg_beats_per_multiframe(device_cfg_beats_per_multiframe),
++ 361     .up_dev_extra_cfg({
++ 361       /*    18 */ up_cfg_sysref_disable,
++ 361       /*    17 */ up_cfg_sysref_oneshot,
++ 361       /*    16 */ up_cfg_buffer_early_release,
++ 361       /* 15-08 */ up_cfg_buffer_delay,
++ 361       /* 00-07 */ up_cfg_lmfc_offset
++ 361     }),
++ 361     .device_extra_cfg({
++ 361       /*    18 */ device_cfg_sysref_disable,
++ 361       /*    17 */ device_cfg_sysref_oneshot,
++ 361       /*    16 */ device_cfg_buffer_early_release,
++ 361       /* 15-08 */ device_cfg_buffer_delay,
++ 361       /* 00-07 */ device_cfg_lmfc_offset
++ 361     }),
++ 361     .status_synth_params0(status_synth_params0),
++ 361     .status_synth_params1(status_synth_params1),
++ 361     .status_synth_params2(status_synth_params2));
++ 361   jesd204_up_sysref #(
++ 361     .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
++ 361   ) i_up_sysref (
++ 361     .up_clk(s_axi_aclk),
++ 361     .up_reset(up_reset),
++ 361     .core_clk(core_clk),
++ 361     .device_clk(device_clk),
++ 361     .device_event_sysref_edge(device_event_sysref_edge),
++ 361     .device_event_sysref_alignment_error(device_event_sysref_alignment_error),
++ 361     .up_raddr(up_raddr),
++ 361     .up_rdata(up_rdata_sysref),
++ 361     .up_wreq(up_wreq),
++ 361     .up_waddr(up_waddr),
++ 361     .up_wdata(up_wdata),
++ 361     .up_cfg_is_writeable(up_cfg_is_writeable),
++ 361     .up_cfg_lmfc_offset(up_cfg_lmfc_offset),
++ 361     .up_cfg_sysref_oneshot(up_cfg_sysref_oneshot),
++ 361     .up_cfg_sysref_disable(up_cfg_sysref_disable));
++ 361   jesd204_up_rx #(
++ 361     .NUM_LANES(NUM_LANES),
++ 361     .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
++ 361     .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
++ 361   ) i_up_rx (
++ 361     .up_clk(s_axi_aclk),
++ 361     .up_reset(up_reset),
++ 361     .up_reset_synchronizer(up_reset_synchronizer),
++ 361     .core_clk(core_clk),
++ 361     .core_reset(core_reset),
++ 361     .up_rreq(up_rreq),
++ 361     .up_raddr(up_raddr),
++ 361     .up_rdata(up_rdata_rx),
++ 361     .up_wreq(up_wreq),
++ 361     .up_waddr(up_waddr),
++ 361     .up_wdata(up_wdata),
++ 361     .up_cfg_is_writeable(up_cfg_is_writeable),
++ 361     .up_cfg_buffer_early_release(up_cfg_buffer_early_release),
++ 361     .up_cfg_buffer_delay(up_cfg_buffer_delay),
++ 361     .up_cfg_frame_align_err_threshold(up_cfg_frame_align_err_threshold),
++ 361     .core_ctrl_err_statistics_reset(core_ctrl_err_statistics_reset),
++ 361     .core_ctrl_err_statistics_mask(core_ctrl_err_statistics_mask),
++ 361     .core_status_ctrl_state(core_status_ctrl_state),
++ 361     .core_status_lane_cgs_state(core_status_lane_cgs_state),
++ 361     .core_status_lane_emb_state(core_status_lane_emb_state),
++ 361     .core_status_lane_ifs_ready(core_status_lane_ifs_ready),
++ 361     .core_status_lane_latency(core_status_lane_latency),
++ 361     .core_status_lane_frame_align_err_cnt(core_status_lane_frame_align_err_cnt),
++ 361     .core_status_err_statistics_cnt(core_status_err_statistics_cnt),
++ 361     .core_ilas_config_valid(core_ilas_config_valid),
++ 361     .core_ilas_config_addr(core_ilas_config_addr),
++ 361     .core_ilas_config_data(core_ilas_config_data));
++ 361   always @(posedge s_axi_aclk) begin
++ 361     up_wack <= up_wreq;
++ 361     up_rreq_d1 <= up_rreq;
++ 361     up_rack <= up_rreq_d1;
++ 361     if (up_rreq_d1 == 1'b1) begin
++ 361       up_rdata <= up_rdata_common | up_rdata_sysref | up_rdata_rx;
++ 361     end
+
+Clone Blocks:

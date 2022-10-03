@@ -1,0 +1,48 @@
+Source Block: oh/accelerator/hdl/accelerator.v@119:129@HdlStmAssign
+   assign input1_match  = acc_match & (dstaddr_in[RFAW+1:2]==`REG_INPUT1);
+   assign output0_match = acc_match & (dstaddr_in[RFAW+1:2]==`REG_OUTPUT);
+   
+   assign input0_write  = input0_match  & write_in;
+   assign input1_write  = input1_match  & write_in;
+   assign output0_read  = output0_match & ~write_in;
+
+
+   //input0
+   always @ (posedge clk)
+     if(input0_write)
+
+Diff Content:
+- 124    assign output0_read  = output0_match & ~write_in;
++ 124    assign input0_write  = input0_match  &  write_in;
++ 124    assign input1_write  = input1_match  &  write_in;
++ 124    assign output_read   = output_match  & ~write_in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/accelerator/hdl/accelerator.v@118:128
+   assign input0_match  = acc_match & (dstaddr_in[RFAW+1:2]==`REG_INPUT0);
+   assign input1_match  = acc_match & (dstaddr_in[RFAW+1:2]==`REG_INPUT1);
+   assign output0_match = acc_match & (dstaddr_in[RFAW+1:2]==`REG_OUTPUT);
+   
+   assign input0_write  = input0_match  & write_in;
+   assign input1_write  = input1_match  & write_in;
+   assign output0_read  = output0_match & ~write_in;
+
+
+   //input0
+   always @ (posedge clk)
+
+Clone Blocks 2:
+oh/accelerator/hdl/accelerator.v@117:127
+   
+   assign input0_match  = acc_match & (dstaddr_in[RFAW+1:2]==`REG_INPUT0);
+   assign input1_match  = acc_match & (dstaddr_in[RFAW+1:2]==`REG_INPUT1);
+   assign output0_match = acc_match & (dstaddr_in[RFAW+1:2]==`REG_OUTPUT);
+   
+   assign input0_write  = input0_match  & write_in;
+   assign input1_write  = input1_match  & write_in;
+   assign output0_read  = output0_match & ~write_in;
+
+
+   //input0
+

@@ -1,0 +1,41 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4371:4381@HdlStmAssign
+   assign next_inc0_match = (ref_dstaddr[AW-1:0]      == next_dstaddr[AW-1:0]);
+
+   assign ref_ctrl[7:0]  = {ref_ctrlmode[3:0], ref_datamode[1:0], ref_write, ref_access};
+   assign next_ctrl[7:0] = {next_ctrlmode[3:0],next_datamode[1:0],next_write,next_access};
+
+   assign type_match = (ref_ctrl[7:0] == next_ctrl[7:0]);
+
+   //# burst mode determination
+   assign burst_tran = ~cfg_burst_dis  & // bursting is enabled by user
+		        start_new_read & // valid cycle
+		        tran_read      & // only continuous burst is supported
+
+Diff Content:
+- 4376    assign type_match = (ref_ctrl[7:0] == next_ctrl[7:0]);
++ 4376    always @(posedge txo_lclk or posedge reset)
++ 4376      if(reset)
++ 4376        begin
++ 4376 	  rd_binary_pointer_tlc[FAD:0]  <= {(FAD+1){1'b0}};
++ 4376 	  rd_gray_pointer_tlc[FAD:0]    <= {(FAD+1){1'b0}};
++ 4376        end
++ 4376      else if(|(rd_read_tlc[FAD:0]))
++ 4376        begin	  rd_binary_pointer_tlc[FAD:0]  <= rd_binary_next_tlc[FAD:0];	  
++ 4376 	  rd_gray_pointer_tlc[FAD:0]    <= rd_gray_next_tlc[FAD:0];	  
++ 4376        end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4369:4379
+
+   assign next_inc8_match = (ref_dstaddr_inc8[AW-1:0] == next_dstaddr[AW-1:0]);
+   assign next_inc0_match = (ref_dstaddr[AW-1:0]      == next_dstaddr[AW-1:0]);
+
+   assign ref_ctrl[7:0]  = {ref_ctrlmode[3:0], ref_datamode[1:0], ref_write, ref_access};
+   assign next_ctrl[7:0] = {next_ctrlmode[3:0],next_datamode[1:0],next_write,next_access};
+
+   assign type_match = (ref_ctrl[7:0] == next_ctrl[7:0]);
+
+   //# burst mode determination
+   assign burst_tran = ~cfg_burst_dis  & // bursting is enabled by user
+

@@ -1,0 +1,60 @@
+Source Block: serv/rtl/shift_reg.v@7:17@HdlIdDef
+   input wire 		 i_en,
+   input wire 		 i_d,
+   output wire 		 o_q,
+   output wire [LEN-2:0] o_par);
+
+   reg [LEN-1:0] 	 data = INIT;
+   assign o_q = data[0];
+   assign o_par = data[LEN-1:1];
+   always @(posedge clk)
+     if (i_rst)
+       data <= INIT;
+
+Diff Content:
+- 12    reg [LEN-1:0] 	 data = INIT;
++ 12    reg [LEN-1:0] 	 data;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/shift_reg.v@8:18
+   input wire 		 i_d,
+   output wire 		 o_q,
+   output wire [LEN-2:0] o_par);
+
+   reg [LEN-1:0] 	 data = INIT;
+   assign o_q = data[0];
+   assign o_par = data[LEN-1:1];
+   always @(posedge clk)
+     if (i_rst)
+       data <= INIT;
+     else if (i_en)
+
+Clone Blocks 2:
+serv/rtl/shift_reg.v@10:20
+   output wire [LEN-2:0] o_par);
+
+   reg [LEN-1:0] 	 data = INIT;
+   assign o_q = data[0];
+   assign o_par = data[LEN-1:1];
+   always @(posedge clk)
+     if (i_rst)
+       data <= INIT;
+     else if (i_en)
+       data <= {i_d, data[LEN-1:1]};
+endmodule
+
+Clone Blocks 3:
+serv/rtl/shift_reg.v@9:19
+   output wire 		 o_q,
+   output wire [LEN-2:0] o_par);
+
+   reg [LEN-1:0] 	 data = INIT;
+   assign o_q = data[0];
+   assign o_par = data[LEN-1:1];
+   always @(posedge clk)
+     if (i_rst)
+       data <= INIT;
+     else if (i_en)
+       data <= {i_d, data[LEN-1:1]};
+

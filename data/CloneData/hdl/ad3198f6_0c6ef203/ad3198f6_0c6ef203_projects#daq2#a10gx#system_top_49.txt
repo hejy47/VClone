@@ -1,0 +1,90 @@
+Source Block: hdl/projects/daq2/a10gx/system_top.v@216:226@HdlStmAssign
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+
+Diff Content:
+- 221   assign eth_phy_resetn = phy_rst_reg;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/usdrx1/a5gt/system_top.v@286:297
+  wire    [  3:0]   sync_raddr;
+  wire              sync_signal;
+
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+
+Clone Blocks 2:
+hdl/projects/fmcjesdadc1/a5gt/system_top.v@216:226
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+
+Clone Blocks 3:
+hdl/projects/usdrx1/a5gt/system_top.v@289:299
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+
+Clone Blocks 4:
+hdl/projects/fmcjesdadc1/a5gt/system_top.v@213:224
+  wire              rx_pll_locked_s;
+  wire    [ 15:0]   rx_xcvr_status_s;
+
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+
+Clone Blocks 5:
+hdl/projects/daq2/a10gx/system_top.v@213:224
+  wire              rx_pll_locked_s;
+  wire    [ 15:0]   rx_xcvr_status_s;
+
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+

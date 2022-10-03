@@ -1,0 +1,224 @@
+Source Block: verilog-ethernet/rtl/axis_tap_64.v@76:172@HdlStmProcess
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg frame_reg = 0, frame_next;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    frame_next = frame_reg;
+
+    output_axis_tdata_int = 0;
+    output_axis_tkeep_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    if (tap_axis_tready & tap_axis_tvalid) begin
+        frame_next = ~tap_axis_tlast;
+    end
+
+    case (state_reg)
+        STATE_IDLE: begin
+            if (tap_axis_tready & tap_axis_tvalid) begin
+                // start of frame
+                if (output_axis_tready_int) begin
+                    output_axis_tdata_int = tap_axis_tdata;
+                    output_axis_tkeep_int = tap_axis_tkeep;
+                    output_axis_tvalid_int = tap_axis_tvalid & tap_axis_tready;
+                    output_axis_tlast_int = tap_axis_tlast;
+                    output_axis_tuser_int = tap_axis_tuser;
+                    if (tap_axis_tlast) begin
+                        state_next = STATE_IDLE;
+                    end else begin
+                        state_next = STATE_TRANSFER;
+                    end
+                end else begin
+                    state_next = STATE_WAIT;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_TRANSFER: begin
+            if (tap_axis_tready & tap_axis_tvalid) begin
+                // transfer data
+                if (output_axis_tready_int) begin
+                    output_axis_tdata_int = tap_axis_tdata;
+                    output_axis_tkeep_int = tap_axis_tkeep;
+                    output_axis_tvalid_int = tap_axis_tvalid & tap_axis_tready;
+                    output_axis_tlast_int = tap_axis_tlast;
+                    output_axis_tuser_int = tap_axis_tuser;
+                    if (tap_axis_tlast) begin
+                        state_next = STATE_IDLE;
+                    end else begin
+                        state_next = STATE_TRANSFER;
+                    end
+                end else begin
+                    state_next = STATE_TRUNCATE;
+                end
+            end else begin
+                state_next = STATE_TRANSFER;
+            end
+        end
+        STATE_TRUNCATE: begin
+            if (output_axis_tready_int) begin
+                output_axis_tdata_int = 0;
+                output_axis_tkeep_int = 1;
+                output_axis_tvalid_int = 1;
+                output_axis_tlast_int = 1;
+                output_axis_tuser_int = 1;
+                if (frame_next) begin
+                    state_next = STATE_WAIT;
+                end else begin
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                state_next = STATE_TRUNCATE;
+            end
+        end
+        STATE_WAIT: begin
+            if (tap_axis_tready & tap_axis_tvalid) begin
+                if (tap_axis_tlast) begin
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT;
+                end
+            end else begin
+                state_next = STATE_WAIT;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_reg <= 0;
+
+Diff Content:
+- 86     output_axis_tdata_int = 0;
+- 87     output_axis_tkeep_int = 0;
+- 88     output_axis_tvalid_int = 0;
+- 89     output_axis_tlast_int = 0;
+- 90     output_axis_tuser_int = 0;
+- 100                 if (output_axis_tready_int) begin
+- 121                 if (output_axis_tready_int) begin
+- 140             if (output_axis_tready_int) begin
+- 141                 output_axis_tdata_int = 0;
+- 142                 output_axis_tkeep_int = 1;
+- 143                 output_axis_tvalid_int = 1;
+- 144                 output_axis_tlast_int = 1;
+- 145                 output_axis_tuser_int = 1;
++ 90     output_axis_tdata_int = {DATA_WIDTH{1'b0}};
++ 90     output_axis_tkeep_int = {KEEP_WIDTH{1'b0}};
++ 90     output_axis_tvalid_int = 1'b0;
++ 90     output_axis_tlast_int = 1'b0;
++ 90     output_axis_tuser_int = 1'b0;
++ 100                 if (output_axis_tready_int_reg) begin
++ 121                 if (output_axis_tready_int_reg) begin
++ 145             if (output_axis_tready_int_reg) begin
++ 145                 output_axis_tdata_int = {DATA_WIDTH{1'b0}};
++ 145                 output_axis_tkeep_int = {{KEEP_WIDTH-1{1'b0}}, 1'b1};
++ 145                 output_axis_tvalid_int = 1'b1;
++ 145                 output_axis_tlast_int = 1'b1;
++ 145                 output_axis_tuser_int = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_tap.v@72:164
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg frame_reg = 0, frame_next;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    frame_next = frame_reg;
+
+    output_axis_tdata_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    if (tap_axis_tready & tap_axis_tvalid) begin
+        frame_next = ~tap_axis_tlast;
+    end
+
+    case (state_reg)
+        STATE_IDLE: begin
+            if (tap_axis_tready & tap_axis_tvalid) begin
+                // start of frame
+                if (output_axis_tready_int) begin
+                    output_axis_tdata_int = tap_axis_tdata;
+                    output_axis_tvalid_int = tap_axis_tvalid & tap_axis_tready;
+                    output_axis_tlast_int = tap_axis_tlast;
+                    output_axis_tuser_int = tap_axis_tuser;
+                    if (tap_axis_tlast) begin
+                        state_next = STATE_IDLE;
+                    end else begin
+                        state_next = STATE_TRANSFER;
+                    end
+                end else begin
+                    state_next = STATE_WAIT;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_TRANSFER: begin
+            if (tap_axis_tready & tap_axis_tvalid) begin
+                // transfer data
+                if (output_axis_tready_int) begin
+                    output_axis_tdata_int = tap_axis_tdata;
+                    output_axis_tvalid_int = tap_axis_tvalid & tap_axis_tready;
+                    output_axis_tlast_int = tap_axis_tlast;
+                    output_axis_tuser_int = tap_axis_tuser;
+                    if (tap_axis_tlast) begin
+                        state_next = STATE_IDLE;
+                    end else begin
+                        state_next = STATE_TRANSFER;
+                    end
+                end else begin
+                    state_next = STATE_TRUNCATE;
+                end
+            end else begin
+                state_next = STATE_TRANSFER;
+            end
+        end
+        STATE_TRUNCATE: begin
+            if (output_axis_tready_int) begin
+                output_axis_tdata_int = 0;
+                output_axis_tvalid_int = 1;
+                output_axis_tlast_int = 1;
+                output_axis_tuser_int = 1;
+                if (frame_next) begin
+                    state_next = STATE_WAIT;
+                end else begin
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                state_next = STATE_TRUNCATE;
+            end
+        end
+        STATE_WAIT: begin
+            if (tap_axis_tready & tap_axis_tvalid) begin
+                if (tap_axis_tlast) begin
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT;
+                end
+            end else begin
+                state_next = STATE_WAIT;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_reg <= 0;
+

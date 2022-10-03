@@ -1,0 +1,79 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@299:310@HdlStmAssign
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+                         external_decimation_en ? 5'd0 : adc_data_delay;
+
+  always @(posedge clk_out) begin
+    if (sample_valid_la == 1'b1) begin
+      adc_data <= adc_data_mn;
+    end
+
+Diff Content:
+- 305                          external_decimation_en ? 5'd0 : adc_data_delay;
++ 305                          external_decimation_en ? 4'd0 : adc_data_delay;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@302:316
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+                         external_decimation_en ? 5'd0 : adc_data_delay;
+
+  always @(posedge clk_out) begin
+    if (sample_valid_la == 1'b1) begin
+      adc_data <= adc_data_mn;
+    end
+  end
+
+  assign adc_valid = sample_valid_la;
+
+  always @(posedge clk_out) begin
+    trigger_m1 <= trigger_i;
+
+Clone Blocks 2:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@294:304
+      3'd1:    adc_data_delay <= 5'd3; // 10MSPS
+      default: adc_data_delay <= 5'd1; // <= 1MSPS
+    endcase
+  end
+
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+
+Clone Blocks 3:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@298:308
+
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+                         external_decimation_en ? 5'd0 : adc_data_delay;
+
+  always @(posedge clk_out) begin
+    if (sample_valid_la == 1'b1) begin
+
+Clone Blocks 4:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@295:305
+      default: adc_data_delay <= 5'd1; // <= 1MSPS
+    endcase
+  end
+
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+                         external_decimation_en ? 5'd0 : adc_data_delay;
+

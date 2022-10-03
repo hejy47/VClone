@@ -1,0 +1,71 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4480:4490@HdlStmAssign
+			    ({(3){jump_1entry}}   & 3'b001);
+
+   assign rd_read[FAD:0] = {{(FAD-2){1'b0}},jump_value[2:0]};
+
+   //# Counter Next Cycle Value
+   assign txo_launch_cnt_max = (txo_launch_cnt[2:0] == 3'b110);
+
+   assign txo_launch_cnt_inc[2:0] = txo_launch_cnt[2:0] + {2'b00,jump_1entry};
+
+   assign txo_launch_cnt_next[2:0] =  jump_4entries ? 3'b011 :
+	 (jump_3entries_write | txo_launch_cnt_max) ? 3'b000 :
+
+Diff Content:
+- 4485    assign txo_launch_cnt_max = (txo_launch_cnt[2:0] == 3'b110);
++ 4485    input [LW-1:0]  txo_wr_data_even; //Even byte word
++ 4485    input [LW-1:0]  txo_wr_data_odd;  //Odd byte word
++ 4485    input 	   txo_wr_frame;     //indicates new transmission 
++ 4485    input 	   txo_wr_launch_req_tlc;
++ 4485    input 	   txo_wr_rotate_dis;
++ 4485    input [LW-1:0]  txo_rd_data_even; //Even byte word
++ 4485    input [LW-1:0]  txo_rd_data_odd;  //Odd byte word
++ 4485    input 	   txo_rd_frame;     //indicates new transmission 
++ 4485    input 	   txo_rd_launch_req_tlc;
++ 4485    input 	   txo_rd_rotate_dis;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4482:4492
+   assign rd_read[FAD:0] = {{(FAD-2){1'b0}},jump_value[2:0]};
+
+   //# Counter Next Cycle Value
+   assign txo_launch_cnt_max = (txo_launch_cnt[2:0] == 3'b110);
+
+   assign txo_launch_cnt_inc[2:0] = txo_launch_cnt[2:0] + {2'b00,jump_1entry};
+
+   assign txo_launch_cnt_next[2:0] =  jump_4entries ? 3'b011 :
+	 (jump_3entries_write | txo_launch_cnt_max) ? 3'b000 :
+			         jump_3entries_read ? 3'b101 : txo_launch_cnt_inc[2:0];
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4477:4487
+   //# FIFO Read Pointer Jump Value
+   assign jump_value[2:0] = ({(3){jump_4entries}} & 3'b100) |
+			    ({(3){jump_3entries}} & 3'b011) |
+			    ({(3){jump_1entry}}   & 3'b001);
+
+   assign rd_read[FAD:0] = {{(FAD-2){1'b0}},jump_value[2:0]};
+
+   //# Counter Next Cycle Value
+   assign txo_launch_cnt_max = (txo_launch_cnt[2:0] == 3'b110);
+
+   assign txo_launch_cnt_inc[2:0] = txo_launch_cnt[2:0] + {2'b00,jump_1entry};
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@4484:4496
+   //# Counter Next Cycle Value
+   assign txo_launch_cnt_max = (txo_launch_cnt[2:0] == 3'b110);
+
+   assign txo_launch_cnt_inc[2:0] = txo_launch_cnt[2:0] + {2'b00,jump_1entry};
+
+   assign txo_launch_cnt_next[2:0] =  jump_4entries ? 3'b011 :
+	 (jump_3entries_write | txo_launch_cnt_max) ? 3'b000 :
+			         jump_3entries_read ? 3'b101 : txo_launch_cnt_inc[2:0];
+
+   //# Launch counter
+   always @ (posedge txo_lclk or posedge reset)
+     if (reset)
+       txo_launch_cnt[2:0] <= 3'b000;
+

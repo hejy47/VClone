@@ -1,0 +1,91 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1583:1599@HdlStmProcess
+   //# the number of available entries won't be reduced.            
+   //###############################################################################
+
+   assign stop_fifo_read = c0_fifo_full | c1_fifo_full | c2_fifo_full | c3_fifo_full;
+
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       rxi_wait <= 1'b0;
+     else if(stop_fifo_read)
+       rxi_wait <= 1'b1;
+     else if(fifo_empty)
+       rxi_wait <= 1'b0;
+
+   //##################################
+   //#   Input FIFO of the receiver
+   //##################################
+
+
+Diff Content:
+- 1588    always @ (posedge rxi_lclk or posedge reset)
+- 1589      if(reset)
+- 1590        rxi_wait <= 1'b0;
+- 1591      else if(stop_fifo_read)
+- 1592        rxi_wait <= 1'b1;
+- 1593      else if(fifo_empty)
+- 1594        rxi_wait <= 1'b0;
++ 1594    link_transmitter  link_transmitter(.txo_lclk90	(txo_lclk),
++ 1594 				      /*AUTOINST*/
++ 1594 				      .txo_data		(txo_data[LW-1:0]),
++ 1594 				      .txo_frame	(txo_frame),
++ 1594 				      .c0_emesh_wait_out(c0_emesh_wait_out),
++ 1594 				      .c1_emesh_wait_out(c1_emesh_wait_out),
++ 1594 				      .c2_emesh_wait_out(c2_emesh_wait_out),
++ 1594 				      .c3_emesh_wait_out(c3_emesh_wait_out),
++ 1594 				      .c0_rdmesh_wait_out(c0_rdmesh_wait_out),
++ 1594 				      .c1_rdmesh_wait_out(c1_rdmesh_wait_out),
++ 1594 				      .c2_rdmesh_wait_out(c2_rdmesh_wait_out),
++ 1594 				      .c3_rdmesh_wait_out(c3_rdmesh_wait_out),
++ 1594 				      .c0_mesh_wait_out	(c0_mesh_wait_out),
++ 1594 				      .c3_mesh_wait_out	(c3_mesh_wait_out),
++ 1594 				      .reset		(reset),
++ 1594 				      .ext_yid_k	(ext_yid_k[3:0]),
++ 1594 				      .ext_xid_k	(ext_xid_k[3:0]),
++ 1594 				      .who_am_i		(who_am_i[3:0]),
++ 1594 				      .txo_cfg_reg	(txo_cfg_reg[5:0]),
++ 1594 				      .txo_wr_wait	(txo_wr_wait),
++ 1594 				      .txo_rd_wait	(txo_rd_wait),
++ 1594 				      .c0_clk_in	(c0_clk_in),
++ 1594 				      .c1_clk_in	(c1_clk_in),
++ 1594 				      .c2_clk_in	(c2_clk_in),
++ 1594 				      .c3_clk_in	(c3_clk_in),
++ 1594 				      .c0_mesh_access_in(c0_mesh_access_in),
++ 1594 				      .c0_mesh_write_in	(c0_mesh_write_in),
++ 1594 				      .c0_mesh_dstaddr_in(c0_mesh_dstaddr_in[AW-1:0]),
++ 1594 				      .c0_mesh_srcaddr_in(c0_mesh_srcaddr_in[AW-1:0]),
++ 1594 				      .c0_mesh_data_in	(c0_mesh_data_in[DW-1:0]),
++ 1594 				      .c0_mesh_datamode_in(c0_mesh_datamode_in[1:0]),
++ 1594 				      .c0_mesh_ctrlmode_in(c0_mesh_ctrlmode_in[3:0]),
++ 1594 				      .c3_mesh_access_in(c3_mesh_access_in),
++ 1594 				      .c3_mesh_write_in	(c3_mesh_write_in),
++ 1594 				      .c3_mesh_dstaddr_in(c3_mesh_dstaddr_in[AW-1:0]),
++ 1594 				      .c3_mesh_srcaddr_in(c3_mesh_srcaddr_in[AW-1:0]),
++ 1594 				      .c3_mesh_data_in	(c3_mesh_data_in[DW-1:0]),
++ 1594 				      .c3_mesh_datamode_in(c3_mesh_datamode_in[1:0]),
++ 1594 				      .c3_mesh_ctrlmode_in(c3_mesh_ctrlmode_in[3:0]),
++ 1594 				      .c0_emesh_frame_in(c0_emesh_frame_in),
++ 1594 				      .c0_emesh_tran_in	(c0_emesh_tran_in[2*LW-1:0]),
++ 1594 				      .c1_emesh_frame_in(c1_emesh_frame_in),
++ 1594 				      .c1_emesh_tran_in	(c1_emesh_tran_in[2*LW-1:0]),
++ 1594 				      .c2_emesh_frame_in(c2_emesh_frame_in),
++ 1594 				      .c2_emesh_tran_in	(c2_emesh_tran_in[2*LW-1:0]),
++ 1594 				      .c3_emesh_frame_in(c3_emesh_frame_in),
++ 1594 				      .c3_emesh_tran_in	(c3_emesh_tran_in[2*LW-1:0]));
++ 1594 endmodule // link_port
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1581:1591
+   //# But the uncertainty mentioned above forces us to start from empty fifo
+   //# every time after wait indication is raised in order to ensure that 
+   //# the number of available entries won't be reduced.            
+   //###############################################################################
+
+   assign stop_fifo_read = c0_fifo_full | c1_fifo_full | c2_fifo_full | c3_fifo_full;
+
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       rxi_wait <= 1'b0;
+     else if(stop_fifo_read)
+

@@ -1,0 +1,68 @@
+Source Block: hdl/library/common/util_pulse_gen.v@60:88@HdlStmProcess
+
+  wire                         end_of_period_s;
+
+  // flop the desired period
+
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      pulse_period_d <= PULSE_PERIOD;
+      pulse_width_d <= PULSE_WIDTH;
+      pulse_period_read <= PULSE_PERIOD;
+      pulse_width_read <= PULSE_WIDTH;
+    end else begin
+      // latch the input period/width values
+      if (load_config) begin
+        pulse_period_read <= pulse_period;
+        pulse_width_read <= pulse_width;
+      end
+      // update the current period/width at the end of the period
+      if (end_of_period_s) begin
+        pulse_period_d <= pulse_period_read;
+        pulse_width_d <= pulse_width_read;
+      end
+    end
+  end
+
+  // a free running counter
+
+  always @(posedge clk) begin
+    if (pulse_period_cnt == 1'b0) begin
+
+Diff Content:
+- 78       if (end_of_period_s) begin
++ 78       if (pulse_period_cnt == 32'h1) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_pwm_gen/axi_pwm_gen_1.v@72:100
+
+  assign pulse_enable = (pulse_period_d != 32'd0) ? 1'b1 : 1'b0;
+
+  // flop the desired period
+
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      pulse_period_d <= pulse_period;
+      pulse_width_d <= pulse_width;
+      pulse_period_read <= pulse_period;
+      pulse_width_read <= pulse_width;
+    end else begin
+      // load the input period/width values
+      if (load_config) begin
+        pulse_period_read <= pulse_period;
+        pulse_width_read <= pulse_width;
+      end
+      // update the current period/width at the end of the period
+      if (end_of_period | ~pulse_enable) begin
+        pulse_period_d <= pulse_period_read;
+        pulse_width_d <= pulse_width_read;
+      end
+    end
+  end
+
+  // phase align to the first sync pulse until another load_config
+
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+

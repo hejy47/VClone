@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@285:295@HdlIdDef
+  assign up_irq_event_cnt_bus = 'h0;
+  assign up_link_enable_cnt_s = 'h0;
+end
+endgenerate
+
+wire [20:0] clk_mon_count;
+wire [20:0] device_clk_mon_count;
+
+always @(*) begin
+  case (up_raddr)
+  /* Standard registers */
+
+Diff Content:
+- 290 wire [20:0] clk_mon_count;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@286:296
+  assign up_link_enable_cnt_s = 'h0;
+end
+endgenerate
+
+wire [20:0] clk_mon_count;
+wire [20:0] device_clk_mon_count;
+
+always @(*) begin
+  case (up_raddr)
+  /* Standard registers */
+  12'h000: up_rdata = PCORE_VERSION;
+

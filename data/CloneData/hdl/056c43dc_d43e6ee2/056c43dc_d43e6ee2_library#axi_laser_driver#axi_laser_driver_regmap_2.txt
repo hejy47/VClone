@@ -1,0 +1,61 @@
+Source Block: hdl/library/axi_laser_driver/axi_laser_driver_regmap.v@108:159@HdlStmProcess
+  // map the laser driver registers into the address space
+
+  assign up_wreq_int_s = (up_waddr[13:5] == LASER_DRIVER_ID) ? up_wreq : 1'b0;
+  assign up_rreq_int_s = (up_raddr[13:5] == LASER_DRIVER_ID) ? up_rreq : 1'b0;
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 1'b0;
+      up_driver_en_n <= 1'b1;   // by default laser is disabled
+      up_irq_mask <= 3'b111;
+      up_sequence_en <= 1'b0;
+      up_auto_sequence <= 1'b1;
+      up_sequence_offset <= 32'b0;
+      up_auto_seq0 <= 2'b00;
+      up_auto_seq1 <= 2'b01;
+      up_auto_seq2 <= 2'b10;
+      up_auto_seq3 <= 2'b11;
+      up_manual_select <= 8'h00;
+    end else begin
+      up_wack <= up_wreq_int_s;
+      if ((up_wreq_int_s == 1'b1) && (up_waddr[3:0] == 4'h0)) begin
+        up_driver_en_n <= up_wdata[0];
+      end
+      if ((up_wreq_int_s == 1'b1) && (up_waddr[3:0] == 4'h8)) begin
+        up_irq_mask <= up_wdata[2:0];
+      end
+      if ((up_wreq_int_s == 1'b1) && (up_waddr[3:0] == 4'hB)) begin
+        up_sequence_en <= up_wdata[0];
+        up_auto_sequence <= up_wdata[1];
+      end
+      if ((up_wreq_int_s == 1'b1) && (up_waddr[3:0] == 4'hC)) begin
+        up_sequence_offset <= up_wdata;
+      end
+      if ((up_wreq_int_s == 1'b1) && (up_waddr[3:0] == 4'hD)) begin
+        up_auto_seq0 <= up_wdata[1:0];
+        up_auto_seq1 <= up_wdata[5:4];
+        up_auto_seq2 <= up_wdata[9:8];
+        up_auto_seq3 <= up_wdata[13:12];
+      end
+      if ((up_wreq_int_s == 1'b1) && (up_waddr[3:0] == 4'hE)) begin
+        up_manual_select <= {up_wdata[13:12],
+                             up_wdata[9:8],
+                             up_wdata[5:4],
+                             up_wdata[1:0]};
+      end
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack <= 1'b0;
+      up_rdata <= 32'b0;
+
+Diff Content:
+- 116       up_driver_en_n <= 1'b1;   // by default laser is disabled
+- 120       up_sequence_offset <= 32'b0;
++ 116       up_driver_en_n <= 1'b1;        // by default laser is disabled
++ 120       up_sequence_offset <= 32'h19;  // 25*4ns is the default offset for TIA selection
+
+Clone Blocks:

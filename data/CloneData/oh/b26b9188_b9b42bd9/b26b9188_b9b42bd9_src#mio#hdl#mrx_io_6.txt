@@ -1,0 +1,25 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@55:65@HdlStmAssign
+      
+   //########################################
+   //# SELECT FRAME POLARITY
+   //########################################
+
+   assign rx_frame =  framepol ^ rx_access;
+   
+   //########################################
+   //# ACCESS (SDR)
+   //########################################
+
+
+Diff Content:
+- 60    assign rx_frame =  framepol ^ rx_access;
++ 60    assign valid_input[7:0] = dmode8  ? 8'b00000001 :
++ 60 			     dmode16 ? 8'b00000011 :
++ 60 			     dmode32 ? 8'b00001111 :
++ 60                                        8'b11111111;
++ 60    assign valid_next[7:0] = dmode8  ? {io_valid[6:0],1'b1}     :
++ 60 			    dmode16 ? {io_valid[5:0],2'b11}    :
++ 60                             dmode32 ? {io_valid[3:0],4'b1111} :
++ 60 			               8'b11111111;
+
+Clone Blocks:

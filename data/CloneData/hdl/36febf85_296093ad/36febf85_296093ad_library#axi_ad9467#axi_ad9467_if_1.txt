@@ -1,0 +1,166 @@
+Source Block: hdl/library/axi_ad9467/axi_ad9467_if.v@161:189@HdlStmFor
+  end
+
+  // data interface
+
+  generate
+  for (l_inst = 0; l_inst <= 7; l_inst = l_inst + 1) begin : g_adc_if
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_BUFTYPE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_adc_data (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (adc_data_in_p[l_inst]),
+    .rx_data_in_n (adc_data_in_n[l_inst]),
+    .rx_data_p (adc_data_p_s[l_inst]),
+    .rx_data_n (adc_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_dld[l_inst]),
+    .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // over-range interface
+
+  ad_lvds_in #(
+
+Diff Content:
+- 168     .BUFTYPE (PCORE_BUFTYPE),
+- 170     .IODELAY_GROUP (PCORE_IODELAY_GROUP))
++ 168     .DEVICE_TYPE (DEVICE_TYPE),
++ 170     .IODELAY_GROUP (IO_DELAY_GROUP))
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_dev_if.v@373:401
+  end
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  generate
+  for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_rx_data
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_DEVICE_TYPE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_rx_data (
+    .rx_clk (l_clk),
+    .rx_data_in_p (rx_data_in_p[l_inst]),
+    .rx_data_in_n (rx_data_in_n[l_inst]),
+    .rx_data_p (rx_data_p_s[l_inst]),
+    .rx_data_n (rx_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_adc_dld[l_inst]),
+    .up_dwdata (up_adc_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_adc_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // receive frame interface, ibuf -> idelay -> iddr
+
+  ad_lvds_in #(
+
+Clone Blocks 2:
+hdl/library/axi_ad9265/axi_ad9265_if.v@127:155
+  end
+
+  // data interface
+
+  generate
+  for (l_inst = 0; l_inst <= 7; l_inst = l_inst + 1) begin : g_adc_if
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_BUFTYPE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_adc_data (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (adc_data_in_p[l_inst]),
+    .rx_data_in_n (adc_data_in_n[l_inst]),
+    .rx_data_p (adc_data_p_s[l_inst]),
+    .rx_data_n (adc_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_dld[l_inst]),
+    .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // over-range interface
+
+  ad_lvds_in #(
+
+Clone Blocks 3:
+hdl/library/axi_ad9652/axi_ad9652_if.v@166:194
+
+
+  // data interface
+
+  generate
+  for (l_inst = 0; l_inst <= 15; l_inst = l_inst + 1) begin : g_adc_if
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_BUFTYPE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_adc_data (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (adc_data_in_p[l_inst]),
+    .rx_data_in_n (adc_data_in_n[l_inst]),
+    .rx_data_p (adc_data_p_s[l_inst]),
+    .rx_data_n (adc_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_dld[l_inst]),
+    .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // over-range interface
+
+  ad_lvds_in #(
+
+Clone Blocks 4:
+hdl/library/axi_ad9643/axi_ad9643_if.v@197:225
+  end
+
+  // data interface
+
+  generate
+  for (l_inst = 0; l_inst <= 13; l_inst = l_inst + 1) begin : g_adc_if
+  ad_lvds_in #(
+    .BUFTYPE (PCORE_BUFTYPE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (PCORE_IODELAY_GROUP))
+  i_adc_data (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (adc_data_in_p[l_inst]),
+    .rx_data_in_n (adc_data_in_n[l_inst]),
+    .rx_data_p (adc_data_p_s[l_inst]),
+    .rx_data_n (adc_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_dld[l_inst]),
+    .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // over-range interface
+
+  ad_lvds_in #(
+

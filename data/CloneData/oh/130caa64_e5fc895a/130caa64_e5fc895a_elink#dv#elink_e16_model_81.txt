@@ -1,0 +1,59 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1276:1286@HdlStmAssign
+   //# In this case we just replace the external coordinates of the destination 
+   //# address with the chip coordinates.
+//   assign dstaddr[31:29] = cfg_extcomp_dis ? ext_yid_k[2:0] : dstaddr_int[31:29];
+//   assign dstaddr[28:26] = cfg_extcomp_dis ? ext_xid_k[2:0] : dstaddr_int[28:26];
+//   assign dstaddr[25:0]  = dstaddr_int[25:0];
+   assign dstaddr[31:28] = cfg_extcomp_dis ? ext_yid_k[3:0] : dstaddr_int[31:28];
+   assign dstaddr[25:22] = cfg_extcomp_dis ? ext_xid_k[3:0] : dstaddr_int[25:22];
+   assign dstaddr[27:26] = dstaddr_int[27:26];
+   assign dstaddr[21:0]  = dstaddr_int[21:0];
+
+//   assign comp_addr[5:0]  = vertical_k ? {dstaddr[31:29],dstaddr[25:23]} : 
+
+Diff Content:
+- 1281    assign dstaddr[31:28] = cfg_extcomp_dis ? ext_yid_k[3:0] : dstaddr_int[31:28];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1278:1288
+//   assign dstaddr[31:29] = cfg_extcomp_dis ? ext_yid_k[2:0] : dstaddr_int[31:29];
+//   assign dstaddr[28:26] = cfg_extcomp_dis ? ext_xid_k[2:0] : dstaddr_int[28:26];
+//   assign dstaddr[25:0]  = dstaddr_int[25:0];
+   assign dstaddr[31:28] = cfg_extcomp_dis ? ext_yid_k[3:0] : dstaddr_int[31:28];
+   assign dstaddr[25:22] = cfg_extcomp_dis ? ext_xid_k[3:0] : dstaddr_int[25:22];
+   assign dstaddr[27:26] = dstaddr_int[27:26];
+   assign dstaddr[21:0]  = dstaddr_int[21:0];
+
+//   assign comp_addr[5:0]  = vertical_k ? {dstaddr[31:29],dstaddr[25:23]} : 
+//                                         {dstaddr[28:26],dstaddr[22:20]} ;   
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1279:1289
+//   assign dstaddr[28:26] = cfg_extcomp_dis ? ext_xid_k[2:0] : dstaddr_int[28:26];
+//   assign dstaddr[25:0]  = dstaddr_int[25:0];
+   assign dstaddr[31:28] = cfg_extcomp_dis ? ext_yid_k[3:0] : dstaddr_int[31:28];
+   assign dstaddr[25:22] = cfg_extcomp_dis ? ext_xid_k[3:0] : dstaddr_int[25:22];
+   assign dstaddr[27:26] = dstaddr_int[27:26];
+   assign dstaddr[21:0]  = dstaddr_int[21:0];
+
+//   assign comp_addr[5:0]  = vertical_k ? {dstaddr[31:29],dstaddr[25:23]} : 
+//                                         {dstaddr[28:26],dstaddr[22:20]} ;   
+
+//   assign chip_addr[2:0]   = vertical_k ?  ext_yid_k[2:0] : ext_xid_k[2:0];
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1277:1287
+   //# address with the chip coordinates.
+//   assign dstaddr[31:29] = cfg_extcomp_dis ? ext_yid_k[2:0] : dstaddr_int[31:29];
+//   assign dstaddr[28:26] = cfg_extcomp_dis ? ext_xid_k[2:0] : dstaddr_int[28:26];
+//   assign dstaddr[25:0]  = dstaddr_int[25:0];
+   assign dstaddr[31:28] = cfg_extcomp_dis ? ext_yid_k[3:0] : dstaddr_int[31:28];
+   assign dstaddr[25:22] = cfg_extcomp_dis ? ext_xid_k[3:0] : dstaddr_int[25:22];
+   assign dstaddr[27:26] = dstaddr_int[27:26];
+   assign dstaddr[21:0]  = dstaddr_int[21:0];
+
+//   assign comp_addr[5:0]  = vertical_k ? {dstaddr[31:29],dstaddr[25:23]} : 
+//                                         {dstaddr[28:26],dstaddr[22:20]} ;   
+

@@ -1,0 +1,124 @@
+Source Block: oh/elink/hdl/erx_protocol.v@178:268@HdlStmProcess
+      
+      
+   end // always @ ( posedge rx_lclk_div4 )
+
+   // 2nd cycle
+   always @( posedge rx_lclk_div4 ) begin
+
+      rxactive_1 <= rxactive_0;
+      rxalign_1  <= rxalign_0;
+
+      // default pass-throughs
+      ctrlmode_1    <= ctrlmode_0;
+      dstaddr_1     <= dstaddr_0;
+      datamode_1    <= datamode_0;
+      write_1       <= write_0;
+      access_1      <= access_0;
+      data_1[31:16] <= data_0[31:16];
+      stream_1      <= stream_0;
+      
+      case(rxalign_0)
+        3'd7: begin
+           data_1[15:0] <= rx_data_in[63:48];
+           srcaddr_1    <= rx_data_in[47:16];
+        end
+
+        3'd6: begin
+           data_1[23:0] <= rx_data_in[63:40];
+           srcaddr_1   <= rx_data_in[39:8];
+        end
+
+        3'd5: begin
+           data_1       <= rx_data_in[63:32];
+           srcaddr_1    <= rx_data_in[31:0];
+           stream_1     <= rx_frame_par[7] & (rxactive_0 | stream_1);
+        end
+
+        3'd4: begin
+           dstaddr_1[3:0]  <= rx_data_in[63:60];
+           datamode_1      <= rx_data_in[59:58];
+           write_1         <= rx_data_in[57];
+           access_1        <= rx_data_in[56];
+           data_1          <= rx_data_in[55:24];
+           srcaddr_1[31:8] <= rx_data_in[23:0];
+           stream_1        <= rx_frame_par[6] & (rxactive_0 | stream_1);
+        end
+
+        3'd3: begin
+           dstaddr_1[11:0]  <= rx_data_in[63:52];
+           datamode_1       <= rx_data_in[51:50];
+           write_1          <= rx_data_in[49];
+           access_1         <= rx_data_in[48];
+           data_1           <= rx_data_in[47:16];
+           srcaddr_1[31:16] <= rx_data_in[15:0];
+           stream_1         <= rx_frame_par[5] & (rxactive_0 | stream_1);
+        end
+           
+        3'd2: begin
+           dstaddr_1[19:0]  <= rx_data_in[63:44];
+           datamode_1       <= rx_data_in[43:42];
+           write_1          <= rx_data_in[41];
+           access_1         <= rx_data_in[40];
+           data_1           <= rx_data_in[39:8];
+           srcaddr_1[31:24] <= rx_data_in[7:0];
+           stream_1         <= rx_frame_par[4] & (rxactive_0 | stream_1);
+        end
+        
+        3'd1: begin
+           dstaddr_1[27:0]  <= rx_data_in[63:36];
+           datamode_1       <= rx_data_in[35:34];
+           write_1          <= rx_data_in[33];
+           access_1         <= rx_data_in[32];
+           data_1           <= rx_data_in[31:0];
+           stream_1         <= rx_frame_par[3] & (rxactive_0 | stream_1);
+        end
+           
+        3'd0: begin
+           ctrlmode_1       <= rx_data_in[63:60];
+           dstaddr_1[31:0]  <= rx_data_in[59:28];
+           datamode_1       <= rx_data_in[27:26];
+           write_1          <= rx_data_in[25];
+           access_1         <= rx_data_in[24];
+           data_1[31:8]     <= rx_data_in[23:0];
+           stream_1         <= rx_frame_par[2] & (rxactive_0 | stream_1);
+        end
+      endcase
+   end // always @ ( posedge rx_lclk_div4 )
+   
+   // 3rd cycle
+   always @( posedge rx_lclk_div4 ) begin
+
+      // default pass-throughs
+
+Diff Content:
+- 183    always @( posedge rx_lclk_div4 ) begin
+- 185       rxactive_1 <= rxactive_0;
+- 186       rxalign_1  <= rxalign_0;
+- 189       ctrlmode_1    <= ctrlmode_0;
+- 190       dstaddr_1     <= dstaddr_0;
+- 191       datamode_1    <= datamode_0;
+- 192       write_1       <= write_0;
+- 193       access_1      <= access_0;
+- 194       data_1[31:16] <= data_0[31:16];
+- 195       stream_1      <= stream_0;
++ 195    always @( posedge rx_lclk_div4 or posedge reset)
++ 195      if(reset)
++ 195        begin
++ 195 	  rxactive_1 <= 1'b0;	  
++ 195 	  rxalign_1  <= 1'b0; 
++ 195 	  access_1   <= 1'b0;	  
++ 195        end
++ 195      else
++ 195        begin
++ 195 	  rxactive_1 <= rxactive_0;
++ 195 	  rxalign_1  <= rxalign_0;
++ 195 	  ctrlmode_1    <= ctrlmode_0;
++ 195 	  dstaddr_1     <= dstaddr_0;
++ 195 	  datamode_1    <= datamode_0;
++ 195 	  write_1       <= write_0;
++ 195 	  access_1      <= access_0;
++ 195 	  data_1[31:16] <= data_0[31:16];
++ 195 	  stream_1      <= stream_0;
+
+Clone Blocks:

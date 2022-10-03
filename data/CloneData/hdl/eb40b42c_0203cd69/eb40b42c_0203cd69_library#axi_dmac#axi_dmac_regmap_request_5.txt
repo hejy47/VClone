@@ -1,0 +1,91 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@184:207@HdlStmProcess
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+// Request ID and Request done bitmap handling
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+    up_transfer_id <= 2'h0;
+    up_transfer_id_eot <= 2'h0;
+    up_transfer_done_bitmap <= 4'h0;
+  end else begin
+    if (up_sot == 1'b1) begin
+      up_transfer_id <= up_transfer_id + 1'b1;
+      up_transfer_done_bitmap[up_transfer_id] <= 1'b0;
+    end
+
+    if (up_eot == 1'b1) begin
+      up_transfer_id_eot <= up_transfer_id_eot + 1'b1;
+      up_transfer_done_bitmap[up_transfer_id_eot] <= 1'b1;
+    end
+  end
+end
+
+endmodule
+
+Diff Content:
++ 205 assign up_tlf_rd = up_rreq && up_raddr == 'h114;
++ 205 assign up_bl_partial = response_valid & response_ready & response_partial & up_dma_enable_tlen_reporting;
++ 205 always @(posedge clk) begin
++ 205   if (ctrl_enable == 1'b0) begin
++ 205     up_partial_length_valid <= 1'b0;
++ 205   end else begin
++ 205     if (up_bl_partial == 1'b1) begin
++ 205       up_partial_length_valid <= 1'b1;
++ 205     end else if (up_tlf_rd == 1'b1) begin
++ 205       up_partial_length_valid <= 1'b0;
++ 205     end else if (up_tlf_valid == 1'b1) begin
++ 205       up_partial_length_valid <= 1'b1;
++ 205     end
++ 205   end
++ 205 end
++ 205 always @(posedge clk)
++ 205 begin
++ 205   if (response_valid == 1'b1 & response_ready == 1'b1) begin
++ 205     up_measured_transfer_length <= up_measured_transfer_length + response_measured_burst_length + 1'b1;
++ 205     up_transfer_id_eot_d <= up_transfer_id_eot;
++ 205   end else if (up_clear_tl == 1'b1) begin
++ 205     up_measured_transfer_length <= 'h0;
++ 205   end
++ 205 end
++ 205 always @(posedge clk)
++ 205 begin
++ 205   if (ctrl_enable == 1'b0) begin
++ 205     response_ready <= 1'b1;
++ 205   end else if (response_ready == 1'b1) begin
++ 205     response_ready <= ~response_valid;
++ 205   end else if (up_tlf_s_ready == 1'b1) begin
++ 205     response_ready <= 1'b1;
++ 205   end
++ 205 end
++ 205 always @(posedge clk)
++ 205 begin
++ 205   if (response_valid == 1'b1 && response_ready == 1'b1) begin
++ 205     up_tlf_s_valid <= up_bl_partial;
++ 205     up_clear_tl <= up_eot;
++ 205   end else if (up_tlf_s_ready == 1'b1) begin
++ 205     up_tlf_s_valid <= 1'b0;
++ 205   end
++ 205 end
++ 205 util_axis_fifo #(
++ 205   .DATA_WIDTH(MEASURED_LENGTH_WIDTH + 2),
++ 205   .ADDRESS_WIDTH(2),
++ 205   .ASYNC_CLK(0)
++ 205 ) i_transfer_lenghts_fifo (
++ 205   .s_axis_aclk(clk),
++ 205   .s_axis_aresetn(ctrl_enable),
++ 205   .s_axis_valid(up_tlf_s_valid),
++ 205   .s_axis_ready(up_tlf_s_ready),
++ 205   .s_axis_empty(),
++ 205   .s_axis_data({up_transfer_id_eot_d, up_measured_transfer_length}),
++ 205   .s_axis_room(),
++ 205   .m_axis_aclk(clk),
++ 205   .m_axis_aresetn(ctrl_enable),
++ 205   .m_axis_valid(up_tlf_valid),
++ 205   .m_axis_ready(up_tlf_rd & up_tlf_valid),
++ 205   .m_axis_data(up_tlf_data),
++ 205   .m_axis_level()
++ 205 );
+
+Clone Blocks:

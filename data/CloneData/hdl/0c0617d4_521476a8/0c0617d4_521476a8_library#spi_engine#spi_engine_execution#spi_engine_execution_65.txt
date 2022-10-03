@@ -1,0 +1,56 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@167:177@HdlStmAssign
+wire end_of_sdi_latch;
+
+(* direct_enable = "yes" *) wire cs_gen;
+
+assign cs_gen = inst_d1 == CMD_CHIPSELECT && cs_sleep_counter_compare == 1'b1;
+assign cmd_ready = idle;
+
+always @(posedge clk) begin
+  if (exec_transfer_cmd) begin
+    sdo_enabled <= cmd[8];
+    sdi_enabled <= cmd[9];
+
+Diff Content:
+- 172 assign cmd_ready = idle;
++ 172   always @(posedge clk) begin
++ 172     if (exec_transfer_cmd) begin
++ 172       sdo_enabled <= cmd[8];
++ 172       sdi_enabled <= cmd[9];
++ 172     end
++ 172   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@166:176
+wire last_sdi_bit;
+wire end_of_sdi_latch;
+
+(* direct_enable = "yes" *) wire cs_gen;
+
+assign cs_gen = inst_d1 == CMD_CHIPSELECT && cs_sleep_counter_compare == 1'b1;
+assign cmd_ready = idle;
+
+always @(posedge clk) begin
+  if (exec_transfer_cmd) begin
+    sdo_enabled <= cmd[8];
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@169:184
+(* direct_enable = "yes" *) wire cs_gen;
+
+assign cs_gen = inst_d1 == CMD_CHIPSELECT && cs_sleep_counter_compare == 1'b1;
+assign cmd_ready = idle;
+
+always @(posedge clk) begin
+  if (exec_transfer_cmd) begin
+    sdo_enabled <= cmd[8];
+    sdi_enabled <= cmd[9];
+  end
+end
+
+always @(posedge clk) begin
+  if (cmd_ready & cmd_valid)
+   cmd_d1 <= cmd;
+end
+

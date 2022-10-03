@@ -1,0 +1,28 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@120:140@HdlStmProcess
+      end
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (req_ready) begin
+    last_eot <= req_last_burst_length == 'h0; 
+    last_non_eot <= 1'b0;
+    beat_counter <= 'h1;
+  end else if (s_axi_ready && s_axi_valid) begin
+    last_eot <= beat_counter == last_burst_length;
+    last_non_eot <= beat_counter == MAX_BEATS_PER_BURST - 1;
+    beat_counter <= beat_counter + 1;
+  end
+end
+
+always @(posedge clk) begin
+  if (req_ready)
+    last_burst_length <= req_last_burst_length;
+end
+
+Diff Content:
+- 127     last_eot <= req_last_burst_length == 'h0; 
++ 127     last_eot <= req_last_burst_length == 'h0;
+
+Clone Blocks:

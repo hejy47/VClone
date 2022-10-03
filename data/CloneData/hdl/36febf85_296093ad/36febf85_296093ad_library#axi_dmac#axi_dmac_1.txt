@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@201:211@HdlIdDef
+localparam DMA_TYPE_AXI_STREAM = 1;
+localparam DMA_TYPE_FIFO = 2;
+
+localparam PCORE_VERSION = 'h00040062;
+
+localparam HAS_DEST_ADDR = C_DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
+localparam HAS_SRC_ADDR = C_DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
+
+// Argh... "[Synth 8-2722] system function call clog2 is not allowed here"
+localparam BYTES_PER_BEAT_WIDTH_DEST = C_DMA_DATA_WIDTH_DEST > 1024 ? 8 :
+	C_DMA_DATA_WIDTH_DEST > 512 ? 7 :
+
+Diff Content:
+- 206 localparam HAS_DEST_ADDR = C_DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac.v@199:209
+
+localparam DMA_TYPE_AXI_MM = 0;
+localparam DMA_TYPE_AXI_STREAM = 1;
+localparam DMA_TYPE_FIFO = 2;
+
+localparam PCORE_VERSION = 'h00040062;
+
+localparam HAS_DEST_ADDR = C_DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
+localparam HAS_SRC_ADDR = C_DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
+
+// Argh... "[Synth 8-2722] system function call clog2 is not allowed here"
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac.v@202:212
+localparam DMA_TYPE_FIFO = 2;
+
+localparam PCORE_VERSION = 'h00040062;
+
+localparam HAS_DEST_ADDR = C_DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
+localparam HAS_SRC_ADDR = C_DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
+
+// Argh... "[Synth 8-2722] system function call clog2 is not allowed here"
+localparam BYTES_PER_BEAT_WIDTH_DEST = C_DMA_DATA_WIDTH_DEST > 1024 ? 8 :
+	C_DMA_DATA_WIDTH_DEST > 512 ? 7 :
+	C_DMA_DATA_WIDTH_DEST > 256 ? 6 :
+

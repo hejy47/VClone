@@ -1,0 +1,33 @@
+Source Block: oh/src/spi/hdl/spi_master_regs.v@116:135@HdlStmProcess
+  
+   //####################################
+   //# STATUS
+   //####################################
+
+   always @ (posedge clk or negedge nreset)
+     if (~nreset)
+       status_reg[7:0] <= 'b0;   
+     else if(status_write)
+       status_reg[7:0] <= reg_wdata[7:0];
+     else
+       status_reg[7:0] <= {5'b0,                        //7:3
+			   fifo_prog_full,              //2
+			   |spi_state[1:0],             //1
+			   (rx_access | status_reg[0])};//0
+   			       
+   //####################################
+   //# CLKDIV 
+   //####################################
+
+
+Diff Content:
+- 127        status_reg[7:0] <= {5'b0,                        //7:3
+- 128 			   fifo_prog_full,              //2
+- 129 			   |spi_state[1:0],             //1
+- 130 			   (rx_access | status_reg[0])};//0
++ 130        status_reg[7:0] <= {5'b0,                 //7:4
++ 130 			   fifo_prog_full,       //3
++ 130 			   1'b0,                 //reserved
++ 130 			   (rx_access | (~tx_write & status_reg[0]))};//0
+
+Clone Blocks:

@@ -1,0 +1,40 @@
+Source Block: oh/common/dv/oh_simctrl.v@43:57@HdlStmProcess
+	r=$value$plusargs("TESTNAME=%s", testname[1023:0]);
+	$timeformat(-9, 0, " ns", 20);
+     end
+   
+`ifndef VERILATOR 
+   initial
+     begin
+	$dumpfile("waveform.vcd");
+	$dumpvars(0, dv_top);
+     end
+`endif
+   
+   //#################################
+   // RANDOM NUMBER GENERATOR
+   // (SEED SUPPLIED EXERNALLY)
+
+Diff Content:
+- 51 	$dumpvars(0, dv_top);
++ 51 	$dumpvars(0, testbench);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/dv/oh_simctrl.v@36:50
+   reg [1023:0] testname;
+
+   //#################################
+   // CONFIGURATION
+   //#################################
+   initial
+     begin
+	r=$value$plusargs("TESTNAME=%s", testname[1023:0]);
+	$timeformat(-9, 0, " ns", 20);
+     end
+   
+`ifndef VERILATOR 
+   initial
+     begin
+	$dumpfile("waveform.vcd");
+

@@ -1,0 +1,31 @@
+Source Block: oh/src/elink/hdl/erx_io.v@308:318@HdlIdDef
+   //#IDELAY CIRCUIT
+   //###################################
+
+   assign  rxi_delay_in[8:0] ={rxi_frame,rxi_data[7:0]};
+   
+   genvar        j;
+   generate for(j=0; j<9; j=j+1)
+     begin : gen_idelay
+`define IDELAYCTRL_WONT_SYNTHESIZE
+`ifdef IDELAYCTRL_WONT_SYNTHESIZE
+	IDELAYE3 #(.DELAY_SRC("IDATAIN"),
+
+Diff Content:
+- 313    genvar        j;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/elink/hdl/erx_io.v@306:316
+      
+   //###################################
+   //#IDELAY CIRCUIT
+   //###################################
+
+   assign  rxi_delay_in[8:0] ={rxi_frame,rxi_data[7:0]};
+   
+   genvar        j;
+   generate for(j=0; j<9; j=j+1)
+     begin : gen_idelay
+`define IDELAYCTRL_WONT_SYNTHESIZE
+

@@ -1,0 +1,29 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@291:307@HdlStmProcess
+      endcase
+    end
+  end
+end
+
+always @(posedge clk) begin
+        if (rstn == 1'b0) begin
+                up_rack_ff <= 'd0;
+        end else begin
+                up_rack_ff <= up_rreq_s;
+        end
+end
+
+always @(posedge clk) begin
+        case (up_raddr_s)
+        8'h00: up_rdata_ff <= PCORE_VERSION;
+        8'h01: up_rdata_ff <= ID;
+
+Diff Content:
+- 296 always @(posedge clk) begin
+- 297         if (rstn == 1'b0) begin
+- 298                 up_rack_ff <= 'd0;
+- 299         end else begin
+- 300                 up_rack_ff <= up_rreq_s;
+- 301         end
+- 302 end
+
+Clone Blocks:

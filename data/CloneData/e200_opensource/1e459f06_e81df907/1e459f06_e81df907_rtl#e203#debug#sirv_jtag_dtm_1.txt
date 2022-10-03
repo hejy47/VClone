@@ -1,0 +1,60 @@
+Source Block: e200_opensource/rtl/e203/debug/sirv_jtag_dtm.v@156:166@HdlStmAssign
+   wire [SHIFT_REG_BITS -1 : 0]         nonbusyResponse;
+   
+   //--------------------------------------------------------
+   // Combo Logic
+
+   assign idcode  = {JTAG_VERSION, JTAG_PART_NUM, JTAG_MANUF_ID, 1'h1};
+
+   wire [3:0]                           debugAddrBits = DEBUG_ADDR_BITS[3:0];
+   wire [3:0]                           debugVersion = DEBUG_VERSION[3:0];
+
+   wire [1:0]                           dbusStatus;
+
+Diff Content:
+- 161    assign idcode  = {JTAG_VERSION, JTAG_PART_NUM, JTAG_MANUF_ID, 1'h1};
++ 161    assign idcode  = {JTAG_VERSION, 16'he200 , 11'h536, 1'h1};
+
+Clone Blocks:
+Clone Blocks 1:
+e200_opensource/rtl/e203/debug/sirv_jtag_dtm.v@158:168
+   //--------------------------------------------------------
+   // Combo Logic
+
+   assign idcode  = {JTAG_VERSION, JTAG_PART_NUM, JTAG_MANUF_ID, 1'h1};
+
+   wire [3:0]                           debugAddrBits = DEBUG_ADDR_BITS[3:0];
+   wire [3:0]                           debugVersion = DEBUG_VERSION[3:0];
+
+   wire [1:0]                           dbusStatus;
+   wire [2:0]                           dbusIdleCycles;
+
+
+Clone Blocks 2:
+e200_opensource/rtl/e203/debug/sirv_jtag_dtm.v@159:169
+   // Combo Logic
+
+   assign idcode  = {JTAG_VERSION, JTAG_PART_NUM, JTAG_MANUF_ID, 1'h1};
+
+   wire [3:0]                           debugAddrBits = DEBUG_ADDR_BITS[3:0];
+   wire [3:0]                           debugVersion = DEBUG_VERSION[3:0];
+
+   wire [1:0]                           dbusStatus;
+   wire [2:0]                           dbusIdleCycles;
+
+   wire                                 dbusReset;
+
+Clone Blocks 3:
+e200_opensource/rtl/e203/debug/sirv_jtag_dtm.v@161:171
+   assign idcode  = {JTAG_VERSION, JTAG_PART_NUM, JTAG_MANUF_ID, 1'h1};
+
+   wire [3:0]                           debugAddrBits = DEBUG_ADDR_BITS[3:0];
+   wire [3:0]                           debugVersion = DEBUG_VERSION[3:0];
+
+   wire [1:0]                           dbusStatus;
+   wire [2:0]                           dbusIdleCycles;
+
+   wire                                 dbusReset;
+   
+   assign dbusIdleCycles = DBUS_IDLE_CYCLES;
+

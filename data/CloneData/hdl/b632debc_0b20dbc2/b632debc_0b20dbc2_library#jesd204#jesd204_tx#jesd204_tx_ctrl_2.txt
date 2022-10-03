@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@93:110@HdlStmFor
+
+wire [NUM_LINKS-1:0] status_sync_cdc;
+
+genvar i;
+generate
+  for (i=0; i<NUM_LINKS; i=i+1) begin : SYNC_CDC
+    sync_bits i_cdc_sync (
+      .in(sync[i]),
+      .out_clk(clk),
+      .out_resetn(1'b1),
+      .out(status_sync_cdc[i])
+    );
+  end
+endgenerate
+assign status_sync = status_sync_cdc ^ cfg_links_disable;
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+
+Diff Content:
+- 98   for (i=0; i<NUM_LINKS; i=i+1) begin : SYNC_CDC
+- 99     sync_bits i_cdc_sync (
+- 100       .in(sync[i]),
+- 101       .out_clk(clk),
+- 102       .out_resetn(1'b1),
+- 103       .out(status_sync_cdc[i])
+- 104     );
+- 105   end
+
+Clone Blocks:

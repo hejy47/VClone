@@ -1,0 +1,22 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@249:261@HdlStmProcess
+endgenerate
+
+// slave handshake counter
+
+reg s_axis_tlast_d = 0;
+always @(posedge s_axis_aclk) begin
+  s_axis_tlast_d <= s_axis_tlast;
+end
+
+generate
+  if (RATIO == 1) begin
+    always @(*) begin
+      s_axis_counter <= 1'b1;
+
+Diff Content:
+- 254 always @(posedge s_axis_aclk) begin
+- 255   s_axis_tlast_d <= s_axis_tlast;
+- 256 end
++ 256     assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
+
+Clone Blocks:

@@ -1,0 +1,91 @@
+Source Block: hdl/library/util_adc_pack/util_adc_pack.v@266:349@HdlStmProcess
+  always @(temp_data_0, temp_data_1, enable_cnt_0)
+  begin
+    packed_data = temp_data_0 | temp_data_1 << (enable_cnt_0 * DATA_WIDTH);
+  end
+
+  always @(counter_0, path_enabled)
+  begin
+    case (counter_0)
+      0:
+      begin
+        en1 = path_enabled[0];
+        en2 = {2{path_enabled[1]}};
+        en4 = {4{path_enabled[3]}};
+      end
+      1:
+      begin
+        en1 = path_enabled[0]       << 1;
+        en2 = {2{path_enabled[1]}}  << 0;
+        en4 = {4{path_enabled[3]}}  << 0;
+      end
+      2:
+      begin
+        en1 = path_enabled[0]       << 2;
+        en2 = {2{path_enabled[1]}}  << 2;
+        en4 = {4{path_enabled[3]}}  << 0;
+      end
+      3:
+      begin
+        en1 = path_enabled[0]       << 3;
+        en2 = {2{path_enabled[1]}}  << 2;
+        en4 = {4{path_enabled[3]}}  << 0;
+      end
+      4:
+      begin
+        if (CHANNELS == 8)
+        begin
+          en1 = path_enabled[0]       << 4;
+          en2 = {2{path_enabled[1]}}  << 4;
+          en4 = {4{path_enabled[3]}}  << 4;
+        end
+        else
+        begin
+          en1 = path_enabled[0];
+          en2 = {2{path_enabled[1]}};
+          en4 = {4{path_enabled[3]}};
+        end
+      end
+      5:
+      begin
+        en1 = path_enabled[0]       << 5;
+        en2 = {2{path_enabled[1]}}  << 4;
+        en4 = {4{path_enabled[3]}}  << 4;
+      end
+      6:
+      begin
+        en1 = path_enabled[0]       << 6;
+        en2 = {2{path_enabled[1]}}  << 6;
+        en4 = {4{path_enabled[3]}}  << 4;
+      end
+      7:
+      begin
+        en1 = path_enabled[0]       << 7;
+        en2 = {2{path_enabled[1]}}  << 6;
+        en4 = {4{path_enabled[3]}}  << 4;
+      end
+      8:
+      begin
+        en1 = path_enabled[0]       << 0;
+        en2 = {2{path_enabled[1]}}  << 0;
+        en4 = {4{path_enabled[3]}}  << 0;
+      end
+      default:
+      begin
+        en1 = 8'h0;
+        en2 = 8'h0;
+        en4 = 8'h0;
+      end
+    endcase
+  end
+
+  always @(posedge clk)
+  begin
+    path_enabled_d1 <= path_enabled;
+    if (path_enabled == 8'h0 || path_enabled_d1 != path_enabled )
+
+Diff Content:
+- 300         if (CHANNELS == 8)
++ 300         if (NUM_OF_CHANNELS == 8)
+
+Clone Blocks:

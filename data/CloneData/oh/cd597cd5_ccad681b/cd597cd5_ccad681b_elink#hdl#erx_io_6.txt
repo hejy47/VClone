@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/erx_io.v@193:207@HdlStmProcess
+	.in(valid_packet),
+	.clk(rx_lclk),
+	.reset(reset));
+
+   
+   always @ (posedge rx_lclk_div4 or posedge reset)
+     if(reset)
+       rx_access <= 1'b0;   
+     else
+       rx_access <= access_wide;
+      
+   always @ (posedge rx_lclk_div4)
+     if(access_wide)
+       begin
+	  rx_packet[PW-1:0] <= rx_packet_lclk[PW-1:0];
+
+Diff Content:
+- 198    always @ (posedge rx_lclk_div4 or posedge reset)
+- 199      if(reset)
++ 199    always @ (posedge rx_lclk_div4 or posedge erx_reset)
++ 199      if(erx_reset)
+
+Clone Blocks:

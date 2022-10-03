@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@138:148@HdlStmAssign
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
+  assign trigger_out_delayed = trigger_delay == 32'h0 ? 1: 0;
+
+  generate
+  for (i = 0 ; i < 16; i = i + 1) begin
+    assign data_t[i] = od_pp_n[i] ? io_selection[i] & !data_o[i] : io_selection[i];
+    always @(posedge clk_out) begin
+
+Diff Content:
+- 143   assign trigger_out_delayed = trigger_delay == 32'h0 ? 1: 0;
++ 143   assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@137:147
+  // signal name changes
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
+  assign trigger_out_delayed = trigger_delay == 32'h0 ? 1: 0;
+
+  generate
+  for (i = 0 ; i < 16; i = i + 1) begin
+    assign data_t[i] = od_pp_n[i] ? io_selection[i] & !data_o[i] : io_selection[i];
+

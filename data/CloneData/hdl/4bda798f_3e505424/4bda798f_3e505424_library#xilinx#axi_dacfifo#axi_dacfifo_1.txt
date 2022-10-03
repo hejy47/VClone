@@ -1,0 +1,63 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/axi_dacfifo.v@309:344@HdlStmIf
+    .dac_xfer_out (dac_xfer_out),
+    .dac_dunf (dac_dunf));
+
+  // bypass logic
+
+  generate if (BYPASS_EN == 1) begin
+
+    util_axis_resize #(
+      .MASTER_DATA_WIDTH (AXI_DATA_WIDTH),
+      .SLAVE_DATA_WIDTH (DMA_DATA_WIDTH)
+    ) i_util_axis_resize (
+      .clk (axi_clk),
+      .resetn (axi_resetn),
+      .s_valid (dma_valid),
+      .s_ready (dma_ready_bp_s),
+      .s_data (dma_data),
+      .m_valid (dma_valid_bp_s),
+      .m_ready (axi_rd_ready_s),
+      .m_data (dma_data_bp_s)
+    );
+
+    assign  dac_rd_valid_s = (dac_fifo_bypass) ? dma_valid_bp_s : axi_rd_valid_s;
+    assign  dac_rd_data_s = (dac_fifo_bypass) ? dma_data_bp_s : axi_rd_data_s;
+    assign  dma_ready = (dac_fifo_bypass) ? dma_ready_bp_s : dma_ready_s;
+
+  end else begin
+
+    assign  dac_rd_valid_s = axi_rd_valid_s;
+    assign  dac_rd_data_s = axi_rd_data_s;
+    assign  dma_ready = dma_ready_s;
+
+  end
+  endgenerate
+
+endmodule
+
+
+Diff Content:
+- 314   generate if (BYPASS_EN == 1) begin
+- 316     util_axis_resize #(
+- 317       .MASTER_DATA_WIDTH (AXI_DATA_WIDTH),
+- 318       .SLAVE_DATA_WIDTH (DMA_DATA_WIDTH)
+- 319     ) i_util_axis_resize (
+- 320       .clk (axi_clk),
+- 321       .resetn (axi_resetn),
+- 322       .s_valid (dma_valid),
+- 323       .s_ready (dma_ready_bp_s),
+- 324       .s_data (dma_data),
+- 325       .m_valid (dma_valid_bp_s),
+- 326       .m_ready (axi_rd_ready_s),
+- 327       .m_data (dma_data_bp_s)
+- 328     );
+- 330     assign  dac_rd_valid_s = (dac_fifo_bypass) ? dma_valid_bp_s : axi_rd_valid_s;
+- 331     assign  dac_rd_data_s = (dac_fifo_bypass) ? dma_data_bp_s : axi_rd_data_s;
+- 332     assign  dma_ready = (dac_fifo_bypass) ? dma_ready_bp_s : dma_ready_s;
+- 334   end else begin
+- 336     assign  dac_rd_valid_s = axi_rd_valid_s;
+- 337     assign  dac_rd_data_s = axi_rd_data_s;
+- 338     assign  dma_ready = dma_ready_s;
+- 340   end
+
+Clone Blocks:

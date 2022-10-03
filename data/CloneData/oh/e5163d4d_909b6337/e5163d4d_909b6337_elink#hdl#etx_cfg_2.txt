@@ -1,0 +1,25 @@
+Source Block: oh/elink/hdl/etx_cfg.v@133:147@HdlStmProcess
+       tx_version_reg[15:0] <= mi_din[15:0];       
+
+   //###########################
+   //# MONITOR
+   //###########################
+   always @ (posedge clk)
+     if (tx_monitor_write)
+       tx_monitor_reg[31:0] <= mi_din[31:0];       
+     else
+       tx_monitor_reg[31:0] <=  tx_monitor_reg[31:0] + tx_access;
+      
+   //###############################
+   //# DATA READBACK MUX
+   //###############################
+   //Pipelineing readback
+
+Diff Content:
+- 142        tx_monitor_reg[31:0] <=  tx_monitor_reg[31:0] + tx_access;
++ 142        tx_monitor_reg[31:0] <=  tx_monitor_reg[31:0] + (etx_access & ~(etx_packet[39:28]==ID) & ~(|tx_status[7:6]));
++ 142    always @ (posedge clk)  
++ 142      if(etx_access & ~(etx_packet[39:28]==ID))
++ 142        tx_packet_reg[31:0] <= etx_packet[39:8];
+
+Clone Blocks:

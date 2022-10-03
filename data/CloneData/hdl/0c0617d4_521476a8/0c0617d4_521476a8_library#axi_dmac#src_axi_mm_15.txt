@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_dmac/src_axi_mm.v@181:191@HdlStmAssign
+  .burst(m_axi_arburst),
+  .prot(m_axi_arprot),
+  .cache(m_axi_arcache)
+);
+
+assign fifo_valid = m_axi_rvalid;
+assign fifo_data = m_axi_rdata;
+assign fifo_last = m_axi_rlast;
+
+/*
+ * There is a requirement that data_id <= address_id (modulo 2**ID_WIDTH).  We
+
+Diff Content:
+- 186 assign fifo_valid = m_axi_rvalid;
+
+Clone Blocks:

@@ -1,0 +1,25 @@
+Source Block: hdl/library/common/ad_sysref_gen.v@74:87@HdlStmProcess
+      counter <= 0;
+    end
+  end
+
+  // generate SYSREF
+  always @(posedge core_clk) begin
+    if (counter == SYSREF_HALFPERIOD) begin
+      sysref_out <= ~sysref_out;
+    end else begin
+      sysref_out <= 1'b0;
+    end
+  end
+
+endmodule
+
+Diff Content:
+- 80     if (counter == SYSREF_HALFPERIOD) begin
+- 81       sysref_out <= ~sysref_out;
++ 81     if (sysref_en_int) begin
++ 81       if (counter == SYSREF_HALFPERIOD) begin
++ 81         sysref_out <= ~sysref_out;
++ 81       end
+
+Clone Blocks:

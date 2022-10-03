@@ -1,0 +1,47 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_64.v@122:155@HdlStmProcess
+    .data_in(input_axis_tdata[63:0]),
+    .crc_state(crc_state),
+    .crc_next(crc_next7)
+);
+
+always @(posedge clk) begin
+    if (rst) begin
+        crc_state <= 32'hFFFFFFFF;
+        fcs_reg <= 0;
+        fcs_valid_reg <= 0;
+    end else begin
+        fcs_valid_reg <= 0;
+        if (input_axis_tvalid) begin
+            if (input_axis_tlast) begin
+                crc_state <= 32'hFFFFFFFF;
+                case (input_axis_tkeep)
+                    8'b00000001: fcs_reg <= ~crc_next0;
+                    8'b00000011: fcs_reg <= ~crc_next1;
+                    8'b00000111: fcs_reg <= ~crc_next2;
+                    8'b00001111: fcs_reg <= ~crc_next3;
+                    8'b00011111: fcs_reg <= ~crc_next4;
+                    8'b00111111: fcs_reg <= ~crc_next5;
+                    8'b01111111: fcs_reg <= ~crc_next6;
+                    8'b11111111: fcs_reg <= ~crc_next7;
+                endcase
+                fcs_valid_reg <= 1;
+            end else begin
+                crc_state <= crc_next7;
+            end
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 130         fcs_reg <= 0;
+- 131         fcs_valid_reg <= 0;
+- 133         fcs_valid_reg <= 0;
+- 147                 fcs_valid_reg <= 1;
++ 131         fcs_reg <= 1'b0;
++ 131         fcs_valid_reg <= 1'b0;
++ 133         fcs_valid_reg <= 1'b0;
++ 147                 fcs_valid_reg <= 1'b1;
+
+Clone Blocks:

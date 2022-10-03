@@ -1,0 +1,40 @@
+Source Block: hdl/library/common/ad_dds_2.v@115:131@HdlStmIf
+       dds_scale_0_d <= dds_scale_0;
+       dds_scale_1_d <= dds_scale_1;
+     end
+
+     // phase
+      if (DDS_P_DW > PHASE_DW) begin
+        assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-PHASE_DW{1'b0}}};
+        assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
+      end else begin
+        assign dds_phase_0_s = dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+        assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+      end
+
+     // dds-1
+
+     ad_dds_1 #(
+       .DDS_TYPE(DDS_TYPE),
+
+Diff Content:
+- 120       if (DDS_P_DW > PHASE_DW) begin
+- 121         assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-PHASE_DW{1'b0}}};
+- 122         assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
+- 123       end else begin
+- 124         assign dds_phase_0_s = dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+- 125         assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+- 126       end
++ 126     always @(posedge clk) begin
++ 126       dds_scale_0_d <= dds_scale_0;
++ 126       dds_scale_1_d <= dds_scale_1;
++ 126     end
++ 126     if (DDS_P_DW > PHASE_DW) begin
++ 126       assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-PHASE_DW{1'b0}}};
++ 126       assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
++ 126     end else begin
++ 126       assign dds_phase_0_s = dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
++ 126       assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
++ 126     end
+
+Clone Blocks:

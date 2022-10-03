@@ -1,0 +1,33 @@
+Source Block: hdl/projects/ad9467_fmc/zed/system_top.v@128:138@HdlStmAssign
+    .dio_i (iic_mux_sda_o_s),
+    .dio_o (iic_mux_sda_i_s),
+    .dio_p (iic_mux_sda));
+
+assign spi_csn_adc = spi_csn[0];
+assign spi_csn_clk = spi_csn[1];
+
+ad9467_spi i_spi (
+    .spi_csn(spi_csn),
+    .spi_clk(spi_clk),
+    .spi_mosi(spi_mosi),
+
+Diff Content:
+- 133 assign spi_csn_clk = spi_csn[1];
++ 133   assign spi_csn_adc = spi_csn[0];
++ 133   assign spi_csn_clk = spi_csn[1];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/ad9467_fmc/zed/system_top.v@127:137
+    .dio_t ({iic_mux_sda_t_s,iic_mux_sda_t_s}),
+    .dio_i (iic_mux_sda_o_s),
+    .dio_o (iic_mux_sda_i_s),
+    .dio_p (iic_mux_sda));
+
+assign spi_csn_adc = spi_csn[0];
+assign spi_csn_clk = spi_csn[1];
+
+ad9467_spi i_spi (
+    .spi_csn(spi_csn),
+    .spi_clk(spi_clk),
+

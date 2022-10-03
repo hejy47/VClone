@@ -1,0 +1,74 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616_pif.v@229:239@HdlStmAssign
+    data_out_a <= (rd_db_valid) ? db_i : data_out_a;
+    data_out_b <= (rd_db_valid) ? data_out_a : data_out_b;
+  end
+
+  assign rd_data = data_out_a;
+  assign rd_dvalid = rd_db_valid;
+
+  assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
+  assign db_t = ~wr_req_d;
+  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ||
+                  (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
+
+Diff Content:
+- 234   assign rd_dvalid = rd_db_valid;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad7616/axi_ad7616_pif.v@232:242
+
+  assign rd_data = data_out_a;
+  assign rd_dvalid = rd_db_valid;
+
+  assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
+  assign db_t = ~wr_req_d;
+  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ||
+                  (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
+  assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_d == 1'b1)) ? 1'b0 : 1'b1;
+
+  // Master AXI stream output logic with additional xfer_req signal
+
+Clone Blocks 2:
+hdl/library/axi_ad7616/axi_ad7616_pif.v@231:241
+  end
+
+  assign rd_data = data_out_a;
+  assign rd_dvalid = rd_db_valid;
+
+  assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
+  assign db_t = ~wr_req_d;
+  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ||
+                  (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
+  assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_d == 1'b1)) ? 1'b0 : 1'b1;
+
+
+Clone Blocks 3:
+hdl/library/axi_ad7616/axi_ad7616_pif.v@233:244
+  assign rd_data = data_out_a;
+  assign rd_dvalid = rd_db_valid;
+
+  assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
+  assign db_t = ~wr_req_d;
+  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ||
+                  (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
+  assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_d == 1'b1)) ? 1'b0 : 1'b1;
+
+  // Master AXI stream output logic with additional xfer_req signal
+  // The first valid data is ALWAYS the first sample of a convertion
+
+
+Clone Blocks 4:
+hdl/library/axi_ad7616/axi_ad7616_pif.v@228:238
+  always @(posedge clk) begin
+    data_out_a <= (rd_db_valid) ? db_i : data_out_a;
+    data_out_b <= (rd_db_valid) ? data_out_a : data_out_b;
+  end
+
+  assign rd_data = data_out_a;
+  assign rd_dvalid = rd_db_valid;
+
+  assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
+  assign db_t = ~wr_req_d;
+  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ||
+

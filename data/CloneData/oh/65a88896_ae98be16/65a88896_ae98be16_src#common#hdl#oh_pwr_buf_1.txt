@@ -1,0 +1,18 @@
+Source Block: oh/src/common/hdl/oh_pwr_buf.v@20:30@HdlStmAssign
+   output [DW-1:0] out;    // buffered output signal
+   
+`ifdef TARGET_SIM   
+   assign out = ((vdd===1'b1) && (vss===1'b0)) ? in : 1'bX;
+`else
+   assign out = in;
+`endif
+   
+endmodule // oh_buf
+
+///////////////////////////////////////////////////////////////////////////////
+
+Diff Content:
+- 25    assign out = in;
++ 25    assign out[DW-1:0] = in[DW-1:0];
+
+Clone Blocks:

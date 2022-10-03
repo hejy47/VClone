@@ -1,0 +1,51 @@
+Source Block: oh/src/mio/hdl/mrx_fifo.v@24:34@HdlIdDef
+    input 	    wait_in     // wait pushback for fifo
+    );
+
+   wire [71:0] 	    fifo_packet_out;
+   wire 	    fifo_access_out;
+   wire 	    fifo_wait_out;
+   
+   //########################################################
+   //# FIFO 
+   //#######################################################   
+   
+
+Diff Content:
+- 29    wire 	    fifo_wait_out;
++ 29    reg [191:0] 	    emode_shiftreg;
++ 29    reg 		    emode_access;
++ 29    reg [2:0] 	    emode_valid;
++ 29    wire [2:0] 	    emode_select;
++ 29    wire [2:0] 	    emode_next;   
++ 29    wire [71:0] 	    fifo_packet;
++ 29    wire [63:0] 	    fifo_data;
++ 29    wire [7:0] 	    fifo_valid;
++ 29    wire 	    fifo_access;
++ 29    wire [191:0]     mux_data;
++ 29    wire  	    amode_write;
++ 29    wire [1:0] 	    amode_datamode;
++ 29    wire [4:0] 	    amode_ctrlmode;
++ 29    wire [AW-1:0]    amode_dstaddr;
++ 29    wire [AW-1:0]    amode_srcaddr;
++ 29    wire [AW-1:0]    amode_data;
++ 29    wire [PW-1:0]    emode_packet;
++ 29    wire 	    emode_done;
++ 29    /*AUTOWIRE*/
++ 29    wire [PW-1:0]	amode_packet;		// From e2p_amode of emesh2packet.v
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mrx_fifo.v@23:33
+    output [PW-1:0] packet_out, // fifo packet
+    input 	    wait_in     // wait pushback for fifo
+    );
+
+   wire [71:0] 	    fifo_packet_out;
+   wire 	    fifo_access_out;
+   wire 	    fifo_wait_out;
+   
+   //########################################################
+   //# FIFO 
+   //#######################################################   
+

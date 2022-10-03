@@ -1,0 +1,46 @@
+Source Block: serv/rtl/riscv_timer.v@9:19@HdlStmAssign
+   output wire [31:0] o_wb_dat);
+
+   reg [15:0] 	     mtime;
+   reg [15:0] 	     mtimecmp;
+
+   assign o_wb_dat = mtime;
+
+   always @(posedge i_clk) begin
+      if (i_wb_cyc & i_wb_we)
+	mtimecmp <= i_wb_dat;
+      mtime <= mtime + 16'd1;
+
+Diff Content:
+- 14    assign o_wb_dat = mtime;
++ 14    assign o_wb_dat = {16'd0,mtime};
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/riscv_timer.v@7:17
+   input wire 	      i_wb_we,
+   input wire 	      i_wb_cyc,
+   output wire [31:0] o_wb_dat);
+
+   reg [15:0] 	     mtime;
+   reg [15:0] 	     mtimecmp;
+
+   assign o_wb_dat = mtime;
+
+   always @(posedge i_clk) begin
+      if (i_wb_cyc & i_wb_we)
+
+Clone Blocks 2:
+serv/rtl/riscv_timer.v@6:16
+   input wire [31:0]  i_wb_dat,
+   input wire 	      i_wb_we,
+   input wire 	      i_wb_cyc,
+   output wire [31:0] o_wb_dat);
+
+   reg [15:0] 	     mtime;
+   reg [15:0] 	     mtimecmp;
+
+   assign o_wb_dat = mtime;
+
+   always @(posedge i_clk) begin
+

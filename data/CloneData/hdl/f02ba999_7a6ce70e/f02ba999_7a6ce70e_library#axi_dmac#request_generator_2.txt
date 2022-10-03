@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_dmac/request_generator.v@66:76@HdlIdDef
+ * the lower bits of the byte count. The last last burst may not contain the
+ * maximum number of bytes, but the address_generator and data_mover will take
+ * care that only the requested ammount of bytes is transfered.
+ */
+
+reg [BURST_COUNT_WIDTH-1:0] burst_count = 'h00;
+reg [C_ID_WIDTH-1:0] id;
+wire [C_ID_WIDTH-1:0] id_next = inc_id(id);
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+Diff Content:
+- 71 reg [BURST_COUNT_WIDTH-1:0] burst_count = 'h00;
++ 71 reg [C_BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_generator.v@67:77
+ * maximum number of bytes, but the address_generator and data_mover will take
+ * care that only the requested ammount of bytes is transfered.
+ */
+
+reg [BURST_COUNT_WIDTH-1:0] burst_count = 'h00;
+reg [C_ID_WIDTH-1:0] id;
+wire [C_ID_WIDTH-1:0] id_next = inc_id(id);
+
+assign eot = burst_count == 'h00;
+assign request_id = id;
+
+

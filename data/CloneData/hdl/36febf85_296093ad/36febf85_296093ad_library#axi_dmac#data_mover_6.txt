@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@99:129@HdlStmProcess
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+assign last_load = s_axi_ready && s_axi_valid && last_eot && eot;
+assign req_ready = last_load || ~active;
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		enabled <= 1'b0;
+	end else begin
+		if (enable) begin
+			enabled <= 1'b1;
+		end else begin
+			if (C_DISABLE_WAIT_FOR_ID == 0) begin
+				// We are not allowed to just deassert valid, so wait until the
+				// current beat has been accepted
+				if (~s_axi_valid || m_axi_ready)
+					enabled <= 1'b0;
+			end else begin
+				// For memory mapped AXI busses we have to complete all pending
+				// burst requests before we can disable the data mover.
+				if (response_id == request_id)
+					enabled <= 1'b0;
+			end
+		end
+	end
+end
+
+always @(posedge clk) begin
+	if (req_ready) begin
+		last_eot <= req_last_burst_length == 'h0; 
+		last_non_eot <= 1'b0;
+
+Diff Content:
+- 111 			if (C_DISABLE_WAIT_FOR_ID == 0) begin
++ 111 			if (DISABLE_WAIT_FOR_ID == 0) begin
+
+Clone Blocks:

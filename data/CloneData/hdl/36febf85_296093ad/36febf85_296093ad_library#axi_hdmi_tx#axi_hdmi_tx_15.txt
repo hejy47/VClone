@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_hdmi_tx/axi_hdmi_tx.v@393:412@HdlStmIf
+    .datain_l (1'b0),
+    .outclock (hdmi_clk),
+    .oe_out (),
+    .dataout (hdmi_out_clk));
+  end
+  if (PCORE_DEVICE_TYPE == XILINX_7SERIES) begin
+  ODDR #(.INIT(1'b0)) i_clk_oddr (
+    .R (1'b0),
+    .S (1'b0),
+    .CE (1'b1),
+    .D1 (1'b1),
+    .D2 (1'b0),
+    .C (hdmi_clk),
+    .Q (hdmi_out_clk));
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 398   if (PCORE_DEVICE_TYPE == XILINX_7SERIES) begin
+- 403     .D1 (1'b1),
+- 404     .D2 (1'b0),
++ 398   if (DEVICE_TYPE == XILINX_7SERIES) begin
++ 404     .D1 (~OUT_CLK_POLARITY),
++ 404     .D2 (OUT_CLK_POLARITY),
+
+Clone Blocks:

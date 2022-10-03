@@ -1,0 +1,77 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1403:1413@HdlStmAssign
+     if(reset)
+       rxi_cx_access <= 1'b0;
+     else
+       rxi_cx_access <= tran_assembled;
+
+   assign rxi_c0_access   = (c0_match |  multicast_match) & rxi_cx_access;
+   assign rxi_c1_access   = (c1_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c2_access   = (c2_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c3_access   = (c3_match & ~multicast_match) & rxi_cx_access;
+
+   //# address preparation for comparison based on the links position (horiz or vert)
+
+Diff Content:
+- 1408    assign rxi_c0_access   = (c0_match |  multicast_match) & rxi_cx_access;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1406:1416
+       rxi_cx_access <= tran_assembled;
+
+   assign rxi_c0_access   = (c0_match |  multicast_match) & rxi_cx_access;
+   assign rxi_c1_access   = (c1_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c2_access   = (c2_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c3_access   = (c3_match & ~multicast_match) & rxi_cx_access;
+
+   //# address preparation for comparison based on the links position (horiz or vert)
+//   assign comp_addr[5:0]  = vertical_k ? {dstaddr[31:29],dstaddr[25:23]} : 
+//                                         {dstaddr[28:26],dstaddr[22:20]} ;   
+   assign comp_addr[5:0]  = vertical_k ? dstaddr[31:26] : dstaddr[25:20];   
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1404:1414
+       rxi_cx_access <= 1'b0;
+     else
+       rxi_cx_access <= tran_assembled;
+
+   assign rxi_c0_access   = (c0_match |  multicast_match) & rxi_cx_access;
+   assign rxi_c1_access   = (c1_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c2_access   = (c2_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c3_access   = (c3_match & ~multicast_match) & rxi_cx_access;
+
+   //# address preparation for comparison based on the links position (horiz or vert)
+//   assign comp_addr[5:0]  = vertical_k ? {dstaddr[31:29],dstaddr[25:23]} : 
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1405:1415
+     else
+       rxi_cx_access <= tran_assembled;
+
+   assign rxi_c0_access   = (c0_match |  multicast_match) & rxi_cx_access;
+   assign rxi_c1_access   = (c1_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c2_access   = (c2_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c3_access   = (c3_match & ~multicast_match) & rxi_cx_access;
+
+   //# address preparation for comparison based on the links position (horiz or vert)
+//   assign comp_addr[5:0]  = vertical_k ? {dstaddr[31:29],dstaddr[25:23]} : 
+//                                         {dstaddr[28:26],dstaddr[22:20]} ;   
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@1397:1411
+
+   //###########################################
+   //# Secondary-FIFOs transaction distribution
+   //###########################################
+
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       rxi_cx_access <= 1'b0;
+     else
+       rxi_cx_access <= tran_assembled;
+
+   assign rxi_c0_access   = (c0_match |  multicast_match) & rxi_cx_access;
+   assign rxi_c1_access   = (c1_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c2_access   = (c2_match & ~multicast_match) & rxi_cx_access;   
+   assign rxi_c3_access   = (c3_match & ~multicast_match) & rxi_cx_access;
+

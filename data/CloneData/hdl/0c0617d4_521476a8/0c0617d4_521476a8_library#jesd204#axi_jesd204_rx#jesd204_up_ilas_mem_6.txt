@@ -1,0 +1,24 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/jesd204_up_ilas_mem.v@99:113@HdlStmProcess
+  end
+end
+end
+endgenerate
+
+always @(posedge core_clk) begin
+  if (core_ilas_config_valid == 1'b1) begin
+    mem[core_ilas_config_addr] <= core_ilas_config_data;
+  end
+end
+
+/*
+ * Shift register with variable tap for accessing the stored data.
+ *
+ * This has slightly better utilization on Xilinx based platforms than the dual
+
+Diff Content:
+- 104 always @(posedge core_clk) begin
+- 105   if (core_ilas_config_valid == 1'b1) begin
+- 106     mem[core_ilas_config_addr] <= core_ilas_config_data;
+- 108 end
+
+Clone Blocks:

@@ -1,0 +1,26 @@
+Source Block: oh/elink/hdl/etx_remap.v@55:73@HdlStmProcess
+   assign addr_out[31:0] = (remap_en & ~remap_bypass) ? addr_remap[31:0] :
+                	                                addr_in[31:0];
+        		
+
+   //stall read/write access appropriately
+   always @ (posedge clk)     
+     if((write_in & ~etx_wr_wait) | (~write_in & ~etx_rd_wait))
+       begin
+	  emesh_access_out         <= emesh_access_in;
+	  emesh_packet_out[PW-1:0] <= {emesh_packet_in[PW-1:40],
+				       addr_out[31:0],
+				       emesh_packet_in[7:0]
+				       };	
+       end
+   
+endmodule // etx_remap
+
+
+// Local Variables:
+
+Diff Content:
+- 61      if((write_in & ~etx_wr_wait) | (~write_in & ~etx_rd_wait))
++ 61      if(~(etx_wr_wait | etx_rd_wait))
+
+Clone Blocks:

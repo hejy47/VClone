@@ -1,0 +1,73 @@
+Source Block: hdl/library/prcfg/bist/prcfg_adc.v@151:182@HdlStmProcess
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? src_adc_ddata : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_data == adc_pn_data) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_data    <= src_adc_ddata;
+      adc_pn_data <= pn(adc_pn_data_s);
+    end
+    adc_dvalid_d <= adc_dvalid;
+    if(adc_dvalid_d == 1'b1) begin
+      adc_pn_err <= adc_pn_err_s;
+      if(adc_pn_update_s == 1'b1) begin
+        if(adc_pn_oos_count >= 'd16) begin
+          adc_pn_oos_count <= 'd0;
+          adc_pn_oos <= ~adc_pn_oos;
+        end else begin
+          adc_pn_oos_count <= adc_pn_oos_count + 1;
+          adc_pn_oos <= adc_pn_oos;
+        end
+      end else begin
+        adc_pn_oos_count <= 'd0;
+        adc_pn_oos <= adc_pn_oos;
+      end
+    end
+  end
+
+  // rx path are passed through on test mode
+  always @(posedge clk) begin
+    dst_adc_dwr    <= src_adc_dwr;
+    dst_adc_dsync  <= src_adc_dsync;
+
+Diff Content:
+- 158       adc_data    <= src_adc_ddata;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/qpsk/prcfg_adc.v@128:159
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? {adc_pn_data[7:2], src_adc_ddata} : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_ddata == adc_pn_data[1:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_ddata    <= src_adc_ddata;
+      adc_pn_data <= pn(adc_pn_data_s);
+    end
+    adc_dvalid_d <= adc_dvalid;
+    if(adc_dvalid_d == 1'b1) begin
+      adc_pn_err <= adc_pn_err_s;
+      if(adc_pn_update_s == 1'b1) begin
+        if(adc_pn_oos_count >= 'd16) begin
+          adc_pn_oos_count <= 'd0;
+          adc_pn_oos <= ~adc_pn_oos;
+        end else begin
+          adc_pn_oos_count <= adc_pn_oos_count + 1;
+          adc_pn_oos <= adc_pn_oos;
+        end
+      end else begin
+        adc_pn_oos_count <= 'd0;
+        adc_pn_oos <= adc_pn_oos;
+      end
+    end
+  end
+
+  // qpsk demodulator
+  qpsk_demod i_qpsk_demod1 (
+    .clk(clk),
+    .data_qpsk_i(src_adc_ddata[15: 0]),
+

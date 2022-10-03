@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@96:112@HdlStmProcess
+
+assign req_enable = do_enable;
+
+assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,1'b0,req_enabled,enabled_src,enabled_dest,1'b0,state};
+
+always @(posedge clk) begin
+  if (state == STATE_DO_RESET) begin
+    do_reset <= 1'b1;
+  end else begin
+    do_reset <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (state == STATE_STARTUP || state == STATE_ENABLED) begin
+    do_enable <= 1'b1;
+  end else begin
+
+Diff Content:
+- 101 always @(posedge clk) begin
+- 102   if (state == STATE_DO_RESET) begin
+- 103     do_reset <= 1'b1;
+- 104   end else begin
+- 105     do_reset <= 1'b0;
+- 107 end
++ 105   /*
++ 105    * TODO:
++ 105    * If an external reset is asserted for a domain that domain will go into reset
++ 105    * immediately. If a transfer is currently active the transfer will be aborted
++ 105    * and other domains will be shutdown gracefully. The reset manager will stay in
++ 105    * the shutdown state until all external resets have been de-asserted.
++ 105    */
++ 105   localparam STATE_DO_RESET = 3'h0;
++ 105   localparam STATE_RESET = 3'h1;
++ 105   localparam STATE_DISABLED = 3'h2;
++ 105   localparam STATE_STARTUP = 3'h3;
++ 105   localparam STATE_ENABLED = 3'h4;
++ 105   localparam STATE_SHUTDOWN = 3'h5;
++ 105   reg [2:0] state = 3'b000;
++ 105   reg needs_reset = 1'b0;
++ 105   reg do_reset = 1'b0;
++ 105   reg do_enable = 1'b0;
++ 105   wire enabled_dest;
++ 105   wire enabled_src;
++ 105   wire enabled_all;
++ 105   wire disabled_all;
++ 105   assign enabled_all = req_enabled & enabled_src & enabled_dest;
++ 105   assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
++ 105   assign req_enable = do_enable;
++ 105   assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,1'b0,req_enabled,enabled_src,enabled_dest,1'b0,state};
++ 105   always @(posedge clk) begin
++ 105     if (state == STATE_DO_RESET) begin
++ 105       do_reset <= 1'b1;
++ 105     end else begin
++ 105       do_reset <= 1'b0;
++ 105     end
+
+Clone Blocks:

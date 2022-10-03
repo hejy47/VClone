@@ -1,0 +1,27 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@200:215@HdlStmProcess
+
+assign rd_last_beat = (rd_addr == rd_length) & rd_enable;
+assign rd_response_eot = m_axis_last & m_axis_valid & m_axis_ready;
+
+// Read logic
+always @(posedge m_axis_aclk) begin
+  if (rd_request_valid & rd_request_ready)
+    rd_active <= 1'b1;
+  else if (rd_last_beat)
+    rd_active <= rd_req_cnt == 2;
+end
+
+assign rd_enable = rd_fifo_s_ready & rd_active &
+    (rd_fifo_room >= (m_axis_valid&m_axis_ready ? 1 : RAM_LATENCY));
+
+always @(posedge m_axis_aclk) begin
+
+Diff Content:
+- 205 always @(posedge m_axis_aclk) begin
+- 206   if (rd_request_valid & rd_request_ready)
+- 207     rd_active <= 1'b1;
+- 208   else if (rd_last_beat)
+- 209     rd_active <= rd_req_cnt == 2;
+- 210 end
+
+Clone Blocks:

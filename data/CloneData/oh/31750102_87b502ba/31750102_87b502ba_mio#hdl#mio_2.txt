@@ -1,0 +1,108 @@
+Source Block: oh/mio/hdl/mio.v@14:24@HdlIdDef
+   //parameters
+   parameter  AW      = 32;          // address width
+   parameter  N       = 8;           // Mini IO width
+   parameter  TARGET    = "GENERIC"; // GENERIC,XILINX,ALTERA,GENERIC,ASIC
+   localparam PW      = 2*AW+40;     // emesh packet width
+   localparam MPW     = PW+8;        // mio packet width   
+
+   // reset, clk, config
+   input           clk;           // main core clock   
+   input 	   nreset;        // async active low reset
+      
+
+Diff Content:
+- 19    localparam MPW     = PW+8;        // mio packet width   
++ 19    parameter  AW      = 32;         // address width
++ 19    localparam PW      = 2*AW+40;    // emesh packet width
++ 19    parameter  MPW     = 128;        // mio packet width (>PW)  
++ 19    parameter  N       = 8;          // Mini IO width
++ 19    parameter  DEF_CFG = 0;          // Default config   
++ 19    parameter  DEF_CLK = 0;          // Default clock
++ 19    parameter  TARGET  = "GENERIC";  // GENERIC,XILINX,ALTERA,GENERIC,ASIC
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_slave_regs.v@17:27
+
+   //parameters
+   parameter  UREGS  = 13;        // number of user regs (max 48)
+   parameter  CHIPID = 0;         // reset chipid value   
+   parameter  AW     = 32;        // address width
+   localparam PW     = (2*AW+40); // packet width
+   localparam SREGS  = UREGS+32;  // total regs
+           
+   // clk, rest, chipid
+   input 	   clk;           // core clock
+   input 	   nreset;        // asych active low 
+
+Clone Blocks 2:
+oh/spi/hdl/spi_master.v@14:24
+
+   //parameters
+   parameter  DEPTH = 32;                // fifo depth   
+   parameter  REGS  = 16;                // total regs   
+   parameter  AW    = 32;                // addresss width
+   localparam PW    = (2*AW+40);         // packet width
+ 
+   //clk,reset, cfg
+   input 		clk;             // core clock
+   input 	        nreset;          // async active low reset
+   
+
+Clone Blocks 3:
+oh/spi/hdl/spi_slave_regs.v@18:28
+   //parameters
+   parameter  UREGS  = 13;        // number of user regs (max 48)
+   parameter  CHIPID = 0;         // reset chipid value   
+   parameter  AW     = 32;        // address width
+   localparam PW     = (2*AW+40); // packet width
+   localparam SREGS  = UREGS+32;  // total regs
+           
+   // clk, rest, chipid
+   input 	   clk;           // core clock
+   input 	   nreset;        // asych active low 
+
+
+Clone Blocks 4:
+oh/spi/hdl/spi_master_regs.v@18:28
+
+   //parameters
+   parameter  CLKDIV = 1;             // default clkdiv     
+   parameter  PSIZE  = 0;             // default is 32 bits
+   parameter  AW     = 32;            // addresss width
+   localparam PW     = (2*AW+40);     // packet width
+ 
+   //clk,reset, cfg
+   input 	     clk;             // core clock
+   input 	     nreset;          // async active low reset
+
+
+Clone Blocks 5:
+oh/mio/hdl/mio.v@13:23
+
+   //parameters
+   parameter  AW      = 32;          // address width
+   parameter  N       = 8;           // Mini IO width
+   parameter  TARGET    = "GENERIC"; // GENERIC,XILINX,ALTERA,GENERIC,ASIC
+   localparam PW      = 2*AW+40;     // emesh packet width
+   localparam MPW     = PW+8;        // mio packet width   
+
+   // reset, clk, config
+   input           clk;           // main core clock   
+   input 	   nreset;        // async active low reset
+
+Clone Blocks 6:
+oh/emesh/hdl/ememory.v@13:23
+   parameter NAME  = "emem";
+   parameter WAIT  = 0;     //turns on random wait circuit
+   parameter MON   = 0;     //turns on monitor
+
+   //derived parameters
+   localparam DW      = AW;     //always the same
+   localparam PW      = 2*AW+40;//packet width   
+
+   //Basic Interface
+   input            clk;
+   input 	    nreset;  
+

@@ -1,0 +1,42 @@
+Source Block: verilog-ethernet/rtl/eth_axis_rx_64.v@137:167@HdlStmProcess
+assign output_eth_type = output_eth_type_reg;
+
+assign busy = busy_reg;
+assign error_header_early_termination = error_header_early_termination_reg;
+
+always @* begin
+    shift_axis_tdata[15:0] = save_axis_tdata_reg[63:48];
+    shift_axis_tkeep[1:0] = save_axis_tkeep_reg[7:6];
+    shift_axis_extra_cycle = save_axis_tlast_reg & (save_axis_tkeep_reg[7:6] != 0);
+
+    if (shift_axis_extra_cycle) begin
+        shift_axis_tdata[63:16] = 0;
+        shift_axis_tkeep[7:2] = 0;
+        shift_axis_tvalid = 1;
+        shift_axis_tlast = save_axis_tlast_reg;
+        shift_axis_tuser = save_axis_tuser_reg;
+        shift_axis_input_tready = flush_save;
+    end else begin
+        shift_axis_tdata[63:16] = input_axis_tdata[47:0];
+        shift_axis_tkeep[7:2] = input_axis_tkeep[5:0];
+        shift_axis_tvalid = input_axis_tvalid;
+        shift_axis_tlast = (input_axis_tlast & (input_axis_tkeep[7:6] == 0));
+        shift_axis_tuser = (input_axis_tuser & (input_axis_tkeep[7:6] == 0));
+        shift_axis_input_tready = ~(input_axis_tlast & input_axis_tvalid & transfer_in_save);
+    end
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_axis_tready_next = 0;
+
+Diff Content:
+- 148         shift_axis_tdata[63:16] = 0;
+- 149         shift_axis_tkeep[7:2] = 0;
+- 150         shift_axis_tvalid = 1;
++ 150         shift_axis_tdata[63:16] = 48'd0;
++ 150         shift_axis_tkeep[7:2] = 6'd0;
++ 150         shift_axis_tvalid = 1'b1;
+
+Clone Blocks:

@@ -1,0 +1,42 @@
+Source Block: hdl/library/util_cpack/util_cpack.v@274:298@HdlStmFor
+  end
+
+  // store & fwd
+
+  generate
+  for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
+  util_cpack_dsf #(
+    .CH_MCNT (CH_MCNT),
+    .P_CNT (P_CNT),
+    .CH_DW (CH_DW),
+    .CH_ICNT ((n+1)))
+  i_dsf (
+    .adc_clk (adc_clk),
+    .adc_valid (adc_mux_valid),
+    .adc_enable (adc_mux_enable[n]),
+    .adc_data (adc_mux_data[((CH_SCNT*16*((11*n)+1))-1):(CH_SCNT*16*10*n)]),
+    .adc_dsf_valid (adc_dsf_valid_s[n]),
+    .adc_dsf_sync (adc_dsf_sync_s[n]),
+    .adc_dsf_data (adc_dsf_data_s[n]));
+  end
+  endgenerate
+
+  generate
+  if (CH_MCNT > P_CNT) begin
+  for (n = P_CNT; n < CH_MCNT; n = n + 1) begin: g_def
+
+Diff Content:
+- 279   for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
+- 281     .CH_MCNT (CH_MCNT),
+- 282     .P_CNT (P_CNT),
+- 283     .CH_DW (CH_DW),
+- 284     .CH_ICNT ((n+1)))
+- 289     .adc_data (adc_mux_data[((CH_SCNT*16*((11*n)+1))-1):(CH_SCNT*16*10*n)]),
++ 279   for (n = 0; n < NUM_OF_CHANNELS_P; n = n + 1) begin: g_dsf
++ 284     .NUM_OF_CHANNELS_M (NUM_OF_CHANNELS_M),
++ 284     .NUM_OF_CHANNELS_P (NUM_OF_CHANNELS_P),
++ 284     .CHANNEL_DATA_WIDTH (CHANNEL_DATA_WIDTH),
++ 284     .NUM_OF_CHANNELS_I ((n+1)))
++ 289     .adc_data (adc_mux_data[((SAMPLES_PCHANNEL*16*((11*n)+1))-1):(SAMPLES_PCHANNEL*16*10*n)]),
+
+Clone Blocks:

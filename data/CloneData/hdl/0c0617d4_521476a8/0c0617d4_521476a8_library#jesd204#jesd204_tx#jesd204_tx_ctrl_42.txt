@@ -1,0 +1,34 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@266:282@HdlStmProcess
+  end else begin
+    ilas_config_addr <= ilas_config_addr + 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (ilas_reset == 1'b1) begin
+    ilas_counter <= 'h00;
+  end else begin
+    ilas_counter <= ilas_counter + 1'b1;
+  end
+end
+
+generate
+for(ii = 0; ii < DATA_PATH_WIDTH; ii=ii+1) begin : gen_default_data
+wire [(8-ILAS_COUNTER_WIDTH)-1:0] ii_sig = ii;
+assign ilas_default_data[(ii*8)+7:ii*8] = {ilas_counter, ii_sig};
+
+Diff Content:
+- 271 always @(posedge clk) begin
+- 272   if (ilas_reset == 1'b1) begin
+- 273     ilas_counter <= 'h00;
+- 274   end else begin
+- 275     ilas_counter <= ilas_counter + 1'b1;
+- 277 end
++ 275   always @(posedge clk) begin
++ 275     if (ilas_reset == 1'b1) begin
++ 275       ilas_counter <= 'h00;
++ 275     end else begin
++ 275       ilas_counter <= ilas_counter + 1'b1;
++ 275     end
+
+Clone Blocks:

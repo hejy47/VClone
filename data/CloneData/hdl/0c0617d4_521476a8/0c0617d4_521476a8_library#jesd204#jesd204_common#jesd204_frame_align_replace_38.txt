@@ -1,0 +1,49 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@123:138@HdlStmProcess
+  end
+end
+
+// Capture single EOF in current cycle
+
+always @(eof, data) begin
+  data_prev_eof_single_int = 'b0;
+  for(ll = 0; ll < DATA_PATH_WIDTH; ll=ll+1) begin
+    data_prev_eof_single_int = data_prev_eof_single_int | (data[ll*8 +: 8] & {8{eof[ll]}});
+  end
+end
+
+always @(posedge clk) begin
+  if(reset) begin
+    data_prev_eof_single <= 'b0;
+  end else begin
+
+Diff Content:
+- 128 always @(eof, data) begin
+- 129   data_prev_eof_single_int = 'b0;
+- 130   for(ll = 0; ll < DATA_PATH_WIDTH; ll=ll+1) begin
+- 131     data_prev_eof_single_int = data_prev_eof_single_int | (data[ll*8 +: 8] & {8{eof[ll]}});
+- 132   end
+- 133 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@130:148
+  for(ll = 0; ll < DATA_PATH_WIDTH; ll=ll+1) begin
+    data_prev_eof_single_int = data_prev_eof_single_int | (data[ll*8 +: 8] & {8{eof[ll]}});
+  end
+end
+
+always @(posedge clk) begin
+  if(reset) begin
+    data_prev_eof_single <= 'b0;
+  end else begin
+    if(|eof && (!IS_RX || !(|char_is_align))) begin
+      data_prev_eof_single <= data_prev_eof_single_int;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if(reset) begin
+    char_is_align_prev_single <= 'b0;
+  end else begin
+

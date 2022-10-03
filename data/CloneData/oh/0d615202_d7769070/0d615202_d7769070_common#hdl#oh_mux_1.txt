@@ -1,0 +1,158 @@
+Source Block: oh/common/hdl/oh_mux.v@15:30@HdlStmProcess
+    );
+   
+   reg [DW-1:0]     out;
+   
+   integer 	    i;   
+   always @*
+     begin
+	out[DW-1:0] = 'b0;
+	for(i=0;i<N;i=i+1)
+	  out[DW-1:0] |= {(DW){sel[i]}} & in[((i+1)*DW-1)-:DW];
+     end
+
+endmodule // oh_mux
+
+
+
+
+Diff Content:
+- 24 	  out[DW-1:0] |= {(DW){sel[i]}} & in[((i+1)*DW-1)-:DW];
++ 24 	  out[DW-1:0] = out[DW-1:0] | {(DW){sel[i]}} & in[((i+1)*DW-1)-:DW];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_gray2bin.v@9:19
+   (
+    input [DW-1:0]  in,  //gray encoded input
+    output [DW-1:0] out  //binary encoded output
+    );
+   
+   reg [DW-1:0]     bin;
+   wire [DW-1:0]    gray;
+   
+   integer 	   i,j;
+
+   assign gray[DW-1:0] = in[DW-1:0];
+
+Clone Blocks 2:
+oh/common/hdl/oh_rise2pulse.v@19:27
+     if(!nreset)
+       in_reg[DW-1:0]  <= 'b0 ;
+     else
+       in_reg[DW-1:0]  <= in[DW-1:0] ;
+   
+   assign out[DW-1:0]  = in[DW-1:0] & ~in_reg[DW-1:0] ;
+   
+endmodule // oh_rise2pulse
+
+
+Clone Blocks 3:
+oh/common/hdl/oh_gray2bin.v@12:22
+    );
+   
+   reg [DW-1:0]     bin;
+   wire [DW-1:0]    gray;
+   
+   integer 	   i,j;
+
+   assign gray[DW-1:0] = in[DW-1:0];
+   assign out[DW-1:0]  = bin[DW-1:0];
+
+   always @*
+
+Clone Blocks 4:
+oh/common/hdl/oh_bin2gray.v@13:23
+    );
+   
+   reg [DW-1:0]    gray; 
+   wire [DW-1:0]   bin;
+
+   integer 	   i;   
+
+   assign bin[DW-1:0]  = in[DW-1:0];
+   assign out[DW-1:0]  = gray[DW-1:0];
+  
+   always @*
+
+Clone Blocks 5:
+oh/common/hdl/oh_bin2gray.v@10:20
+   (
+    input [DW-1:0]  in, //binary encoded input
+    output [DW-1:0] out //gray encoded output
+    );
+   
+   reg [DW-1:0]    gray; 
+   wire [DW-1:0]   bin;
+
+   integer 	   i;   
+
+   assign bin[DW-1:0]  = in[DW-1:0];
+
+Clone Blocks 6:
+oh/common/hdl/oh_bin2gray.v@18:30
+   integer 	   i;   
+
+   assign bin[DW-1:0]  = in[DW-1:0];
+   assign out[DW-1:0]  = gray[DW-1:0];
+  
+   always @*
+     begin
+	gray[DW-1] = bin[DW-1];   
+	for (i=0; i<(DW-1); i=i+1)
+	  gray[i] = bin[i] ^ bin[i+1];	      
+     end
+   
+endmodule // oh_bin2gray
+
+Clone Blocks 7:
+oh/common/hdl/oh_mux.v@14:24
+    output [DW-1:0]  out  // output
+    );
+   
+   reg [DW-1:0]     out;
+   
+   integer 	    i;   
+   always @*
+     begin
+	out[DW-1:0] = 'b0;
+	for(i=0;i<N;i=i+1)
+	  out[DW-1:0] |= {(DW){sel[i]}} & in[((i+1)*DW-1)-:DW];
+
+Clone Blocks 8:
+oh/common/hdl/oh_edge2pulse.v@19:26
+     if(!nreset)
+       in_reg[DW-1:0]  <= 'b0 ;
+     else
+       in_reg[DW-1:0]  <= in[DW-1:0] ;
+     
+   assign out[DW-1:0]  = in_reg[DW-1:0]  ^ in[DW-1:0] ;
+   
+endmodule // oh_edge2pulse
+
+Clone Blocks 9:
+oh/common/hdl/oh_fall2pulse.v@19:27
+     if(!nreset)
+       in_reg[DW-1:0]  <= 'b0 ;
+     else
+       in_reg[DW-1:0]  <= in[DW-1:0] ;
+   
+   assign out[DW-1:0]  = ~in[DW-1:0] & in_reg[DW-1:0] ;
+   
+endmodule // oh_fall2pulse
+
+
+Clone Blocks 10:
+oh/common/hdl/oh_gray2bin.v@12:22
+    );
+   
+   reg [DW-1:0]     bin;
+   wire [DW-1:0]    gray;
+   
+   integer 	   i,j;
+
+   assign gray[DW-1:0] = in[DW-1:0];
+   assign out[DW-1:0]  = bin[DW-1:0];
+
+   always @*
+

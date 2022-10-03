@@ -1,0 +1,88 @@
+Source Block: oh/elink/hdl/erx_cfg.v@104:114@HdlStmAssign
+   assign test_mode           = rx_cfg_reg[0];
+   assign mmu_enable          = rx_cfg_reg[1];
+   assign remap_mode[1:0]     = rx_cfg_reg[3:2];
+   assign remap_sel[11:0]     = rx_cfg_reg[15:4];
+   assign remap_pattern[11:0] = rx_cfg_reg[27:16];
+   assign timer_cfg[1:0]      = rx_cfg_reg[29:28];
+      
+   //###########################
+   //# DATAIN
+   //###########################
+   always @ (posedge clk)
+
+Diff Content:
+- 109    assign timer_cfg[1:0]      = rx_cfg_reg[29:28];
++ 109    assign mailbox_irq_en      = rx_cfg_reg[28];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_cfg.v@101:111
+     else if (rx_cfg_write)
+       rx_cfg_reg[31:0] <= mi_din[31:0];
+
+   assign test_mode           = rx_cfg_reg[0];
+   assign mmu_enable          = rx_cfg_reg[1];
+   assign remap_mode[1:0]     = rx_cfg_reg[3:2];
+   assign remap_sel[11:0]     = rx_cfg_reg[15:4];
+   assign remap_pattern[11:0] = rx_cfg_reg[27:16];
+   assign timer_cfg[1:0]      = rx_cfg_reg[29:28];
+      
+   //###########################
+
+Clone Blocks 2:
+oh/elink/hdl/erx_cfg.v@103:113
+
+   assign test_mode           = rx_cfg_reg[0];
+   assign mmu_enable          = rx_cfg_reg[1];
+   assign remap_mode[1:0]     = rx_cfg_reg[3:2];
+   assign remap_sel[11:0]     = rx_cfg_reg[15:4];
+   assign remap_pattern[11:0] = rx_cfg_reg[27:16];
+   assign timer_cfg[1:0]      = rx_cfg_reg[29:28];
+      
+   //###########################
+   //# DATAIN
+   //###########################
+
+Clone Blocks 3:
+oh/elink/hdl/erx_cfg.v@102:112
+       rx_cfg_reg[31:0] <= mi_din[31:0];
+
+   assign test_mode           = rx_cfg_reg[0];
+   assign mmu_enable          = rx_cfg_reg[1];
+   assign remap_mode[1:0]     = rx_cfg_reg[3:2];
+   assign remap_sel[11:0]     = rx_cfg_reg[15:4];
+   assign remap_pattern[11:0] = rx_cfg_reg[27:16];
+   assign timer_cfg[1:0]      = rx_cfg_reg[29:28];
+      
+   //###########################
+   //# DATAIN
+
+Clone Blocks 4:
+oh/elink/hdl/erx_cfg.v@100:110
+       rx_cfg_reg[31:0] <= 'b0;
+     else if (rx_cfg_write)
+       rx_cfg_reg[31:0] <= mi_din[31:0];
+
+   assign test_mode           = rx_cfg_reg[0];
+   assign mmu_enable          = rx_cfg_reg[1];
+   assign remap_mode[1:0]     = rx_cfg_reg[3:2];
+   assign remap_sel[11:0]     = rx_cfg_reg[15:4];
+   assign remap_pattern[11:0] = rx_cfg_reg[27:16];
+   assign timer_cfg[1:0]      = rx_cfg_reg[29:28];
+      
+
+Clone Blocks 5:
+oh/elink/hdl/erx_cfg.v@99:109
+     if(!nreset)
+       rx_cfg_reg[31:0] <= 'b0;
+     else if (rx_cfg_write)
+       rx_cfg_reg[31:0] <= mi_din[31:0];
+
+   assign test_mode           = rx_cfg_reg[0];
+   assign mmu_enable          = rx_cfg_reg[1];
+   assign remap_mode[1:0]     = rx_cfg_reg[3:2];
+   assign remap_sel[11:0]     = rx_cfg_reg[15:4];
+   assign remap_pattern[11:0] = rx_cfg_reg[27:16];
+   assign timer_cfg[1:0]      = rx_cfg_reg[29:28];
+

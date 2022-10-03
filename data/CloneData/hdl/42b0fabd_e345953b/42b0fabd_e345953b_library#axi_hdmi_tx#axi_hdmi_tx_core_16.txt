@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_hdmi_tx/axi_hdmi_tx_core.v@503:513@HdlStmAssign
+    end
+  end
+
+  // hdmi clipping
+
+  assign hdmi_clip_data_s = hdmi_24_csc_data;
+
+  always @(posedge hdmi_clk) begin
+    hdmi_clip_hs_d <= hdmi_24_csc_hsync;
+    hdmi_clip_vs_d <= hdmi_24_csc_vsync;
+    hdmi_clip_hs_de_d <= hdmi_24_csc_hsync_data_e;
+
+Diff Content:
+- 508   assign hdmi_clip_data_s = hdmi_24_csc_data;
+
+Clone Blocks:

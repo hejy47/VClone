@@ -1,0 +1,36 @@
+Source Block: hdl/library/util_mii_to_rmii/phy_mac_link.v@232:256@HdlStmProcess
+    end else begin
+      data_valid_d <= data_valid;
+    end
+  end
+
+  always @(posedge ref_clk) begin
+    if (!reset_n) begin
+      clk_phase_r <= 1'b0;
+      nibble_valid <= 1'b0;
+    end else begin
+      if (sopack_w) begin
+        clk_phase_r <= mii_rx_clk;
+        nibble_valid <=  1'b0;
+      end else begin
+        if (dibit_sample) begin
+          nibble_valid <= ~nibble_valid;
+        end
+      end
+    end
+  end
+
+  always @(posedge ref_clk) begin
+    if (!reset_n) begin
+      reg_count <= 1'b0;
+    end else begin
+
+Diff Content:
+- 246         if (dibit_sample) begin
++ 246         if (RATE_10_100) begin
++ 246           if (dibit_sample) begin
++ 246             nibble_valid <= ~nibble_valid;
++ 246           end
++ 246         end else begin
+
+Clone Blocks:

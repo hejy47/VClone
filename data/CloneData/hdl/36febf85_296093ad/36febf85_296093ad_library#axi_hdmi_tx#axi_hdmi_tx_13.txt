@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_hdmi_tx/axi_hdmi_tx.v@371:388@HdlStmIf
+    .hdmi_ve_min (hdmi_ve_min_s));
+
+  // hdmi output clock
+
+  generate
+  if (PCORE_DEVICE_TYPE == XILINX_ULTRASCALE) begin
+  ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
+    .SR (1'b0),
+    .D1 (1'b1),
+    .D2 (1'b0),
+    .C (hdmi_clk),
+    .Q (hdmi_out_clk));
+  end
+  if (PCORE_DEVICE_TYPE == ALTERA_5SERIES) begin
+  altddio_out #(.WIDTH(1)) i_clk_oddr (
+    .aclr (1'b0),
+    .aset (1'b0),
+    .sclr (1'b0),
+
+Diff Content:
+- 376   if (PCORE_DEVICE_TYPE == XILINX_ULTRASCALE) begin
+- 379     .D1 (1'b1),
+- 380     .D2 (1'b0),
++ 376   if (DEVICE_TYPE == XILINX_ULTRASCALE) begin
++ 380     .D1 (~OUT_CLK_POLARITY),
++ 380     .D2 (OUT_CLK_POLARITY),
+
+Clone Blocks:

@@ -1,0 +1,38 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/axi_dacfifo_wr.v@270:300@HdlStmProcess
+                           (MEM_RATIO == 8) ? {dma_mem_raddr, 3'b0} :
+                                              {dma_mem_raddr, 4'b0};
+  assign dma_mem_last_read_s = dma_mem_last_read_toggle_m[2] ^ dma_mem_last_read_toggle_m[1];
+  assign dma_mem_wea_s = dma_xfer_req & dma_valid & dma_ready;
+
+  always @(posedge dma_clk) begin
+    if (dma_rst_s == 1'b1) begin
+      dma_mem_waddr <= 'h0;
+      dma_mem_waddr_g <= 'h0;
+      dma_mem_last_read_toggle_m <= 3'b0;
+    end else begin
+      dma_mem_last_read_toggle_m = {dma_mem_last_read_toggle_m[1:0], axi_mem_last_read_toggle};
+      if (dma_mem_wea_s == 1'b1) begin
+        dma_mem_waddr <= dma_mem_waddr + 1;
+        if (dma_xfer_last == 1'b1) begin
+          if (dma_last_beats != (MEM_RATIO - 1)) begin
+            dma_mem_waddr <= dma_mem_waddr + (MEM_RATIO - dma_last_beats);
+          end
+        end
+      end
+      if (dma_mem_last_read_s == 1'b1) begin
+        dma_mem_waddr <= 'h0;
+      end
+      dma_mem_waddr_g <= b2g(dma_mem_waddr);
+    end
+  end
+
+  // The memory module request data until reaches the high threshold.
+
+  always @(posedge dma_clk) begin
+    if (dma_rst_s == 1'b1) begin
+
+Diff Content:
+- 276     if (dma_rst_s == 1'b1) begin
++ 276     if ((dma_rst_s == 1'b1) || (dma_xfer_init == 1'b1)) begin
+
+Clone Blocks:

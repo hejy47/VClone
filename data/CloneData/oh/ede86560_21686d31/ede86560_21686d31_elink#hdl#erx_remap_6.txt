@@ -1,0 +1,38 @@
+Source Block: oh/elink/hdl/erx_remap.v@64:76@HdlStmAssign
+                             - (addr_in[31:26]<<$clog2(colid));
+     			     
+
+   wire 	   remap_en = ~(remap_mode[1:0]==2'b00);
+   
+   assign remap_mux[31:0]  = (remap_bypass | ~remap_en)  ? addr_in[31:0] :
+			     (remap_mode[1:0]==2'b01)    ? static_remap[31:0] :
+	  		                                   dynamic_remap[31:0];
+      
+   always @ (posedge clk)
+     if (reset)
+       begin
+	  emesh_access_out         <= 'b0;
+
+Diff Content:
+- 69    assign remap_mux[31:0]  = (remap_bypass | ~remap_en)  ? addr_in[31:0] :
+- 70 			     (remap_mode[1:0]==2'b01)    ? static_remap[31:0] :
+- 71 	  		                                   dynamic_remap[31:0];
++ 71    assign remap_mux[31:0]  = (remap_mode[1:0]==2'b00) ? addr_in[31:0] :
++ 71 			     (remap_mode[1:0]==2'b01) ? static_remap[31:0] :
++ 71 	  		                                dynamic_remap[31:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_remap.v@62:72
+			     - (colid << 20)    //subtracing elink (start at 0)
+			     + remap_base[31:0]  //adding back base
+                             - (addr_in[31:26]<<$clog2(colid));
+     			     
+
+   wire 	   remap_en = ~(remap_mode[1:0]==2'b00);
+   
+   assign remap_mux[31:0]  = (remap_bypass | ~remap_en)  ? addr_in[31:0] :
+			     (remap_mode[1:0]==2'b01)    ? static_remap[31:0] :
+	  		                                   dynamic_remap[31:0];
+      
+

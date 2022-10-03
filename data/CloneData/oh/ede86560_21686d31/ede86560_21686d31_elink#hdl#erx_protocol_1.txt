@@ -1,0 +1,51 @@
+Source Block: oh/elink/hdl/erx_protocol.v@47:58@HdlStmAssign
+     if(rx_access)
+       dstaddr_reg[31:0]     <= dstaddr_mux[31:0];
+
+   assign dstaddr_next[31:0] = dstaddr_reg[31:0] + 4'b1000;
+   
+   assign dstaddr_mux[31:0] =  rx_burst ? dstaddr_next[31:0] :
+			                  rx_packet[39:8];
+      
+   //Pipeline stage
+   always @ (posedge clk)
+     begin
+	erx_access          <= rx_access;      
+
+Diff Content:
+- 53 			                  rx_packet[39:8];
++ 53 			                  rx_addr[31:0];
++ 53    assign read_response = (rx_addr[31:20] == myid[11:0]) & 
++ 53 			  (rx_addr[19:16] == `EGROUP_RR);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_protocol.v@41:53
+   wire [31:0] 	   dstaddr_mux;
+   reg 		   erx_access;
+   reg [PW-1:0]    erx_packet;
+   
+   //Address generator for bursting
+   always @ (posedge clk)
+     if(rx_access)
+       dstaddr_reg[31:0]     <= dstaddr_mux[31:0];
+
+   assign dstaddr_next[31:0] = dstaddr_reg[31:0] + 4'b1000;
+   
+   assign dstaddr_mux[31:0] =  rx_burst ? dstaddr_next[31:0] :
+			                  rx_packet[39:8];
+
+Clone Blocks 2:
+oh/elink/hdl/erx_protocol.v@45:55
+   //Address generator for bursting
+   always @ (posedge clk)
+     if(rx_access)
+       dstaddr_reg[31:0]     <= dstaddr_mux[31:0];
+
+   assign dstaddr_next[31:0] = dstaddr_reg[31:0] + 4'b1000;
+   
+   assign dstaddr_mux[31:0] =  rx_burst ? dstaddr_next[31:0] :
+			                  rx_packet[39:8];
+      
+   //Pipeline stage
+

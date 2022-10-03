@@ -1,0 +1,24 @@
+Source Block: oh/memory/hdl/fifo_full_block.v@87:101@HdlStmProcess
+       wr_fifo_full <= 1'b0;
+     else
+       wr_fifo_full <=wr_fifo_full_next;
+
+
+   always @ (posedge wr_clk or posedge reset)
+     if(reset)
+       wr_fifo_prog_full <= 1'b0;
+     else
+       wr_fifo_prog_full <=wr_fifo_prog_full_next;
+
+endmodule // fifo_full_block
+
+   
+		 
+
+Diff Content:
+- 94        wr_fifo_prog_full <= 1'b0;
+- 96        wr_fifo_prog_full <=wr_fifo_prog_full_next;
++ 94        wr_fifo_almost_full <= 1'b0;
++ 96        wr_fifo_almost_full <=wr_fifo_almost_full_next;
+
+Clone Blocks:

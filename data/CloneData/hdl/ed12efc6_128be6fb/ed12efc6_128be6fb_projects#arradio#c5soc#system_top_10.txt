@@ -1,0 +1,62 @@
+Source Block: hdl/projects/arradio/c5soc/system_top.v@175:185@HdlStmAssign
+  assign sys_gpio_bd_i[31:8] = sys_gpio_bd_o[31:8];
+  assign sys_gpio_bd_i[ 7:0] = gpio_bd_i;
+  
+  assign ad9361_resetb = sys_gpio_o[4];
+  assign ad9361_en_agc = sys_gpio_o[3];
+  assign ad9361_sync = sys_gpio_o[2];
+  assign ga0 = 1'b0;
+  assign ga1 = 1'b0;
+
+ ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
+ ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
+
+Diff Content:
+- 180   assign ad9361_sync = sys_gpio_o[2];
++ 180   assign vga_hs = vid_h_sync;
++ 180   assign vga_vs = vid_v_sync;
++ 180   assign {vga_b,vga_g,vga_r} =  {vid_b,vid_g,vid_r};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/arradio/c5soc/system_top.v@177:187
+  
+  assign ad9361_resetb = sys_gpio_o[4];
+  assign ad9361_en_agc = sys_gpio_o[3];
+  assign ad9361_sync = sys_gpio_o[2];
+  assign ga0 = 1'b0;
+  assign ga1 = 1'b0;
+
+ ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
+ ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
+
+  // instantiations
+
+Clone Blocks 2:
+hdl/projects/arradio/c5soc/system_top.v@174:184
+
+  assign sys_gpio_bd_i[31:8] = sys_gpio_bd_o[31:8];
+  assign sys_gpio_bd_i[ 7:0] = gpio_bd_i;
+  
+  assign ad9361_resetb = sys_gpio_o[4];
+  assign ad9361_en_agc = sys_gpio_o[3];
+  assign ad9361_sync = sys_gpio_o[2];
+  assign ga0 = 1'b0;
+  assign ga1 = 1'b0;
+
+ ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
+
+Clone Blocks 3:
+hdl/projects/arradio/c5soc/system_top.v@176:186
+  assign sys_gpio_bd_i[ 7:0] = gpio_bd_i;
+  
+  assign ad9361_resetb = sys_gpio_o[4];
+  assign ad9361_en_agc = sys_gpio_o[3];
+  assign ad9361_sync = sys_gpio_o[2];
+  assign ga0 = 1'b0;
+  assign ga1 = 1'b0;
+
+ ALT_IOBUF scl_iobuf (.i(1'b0), .oe(i2c0_out_clk), .o(i2c0_scl_in_clk), .io(scl));
+ ALT_IOBUF sda_iobuf (.i(1'b0), .oe(i2c0_out_data), .o(i2c0_sda), .io(sda));
+
+

@@ -1,0 +1,64 @@
+Source Block: oh/common/hdl/oh_memory_ram.v@29:42@HdlStmProcess
+   always @ (posedge rd_clk)
+     if(rd_en)       
+       rd_dout[DW-1:0] <= ram[rd_addr[AW-1:0]];
+   
+   //write port with vector enable
+   always @(posedge wr_clk)    
+     for (i=0;i<DW;i=i+1)
+       if (wr_en & wr_wem[i]) 
+         ram[wr_addr[AW-1:0]][i] <= wr_din[i];
+  
+endmodule // oh_memory_ram
+
+
+
+
+Diff Content:
++ 37    assign rdata[DW-1:0] = ram[rd_addr[AW-1:0]];
++ 37    generate
++ 37       if(REG)
++ 37 	begin
++ 37 	   reg [DW-1:0] rd_reg;
++ 37 	   always @ (posedge rd_clk)
++ 37 	     if(rd_en)       
++ 37 	       rd_reg[DW-1:0] <= rdata[DW-1:0];
++ 37 	   assign rd_dout[DW-1:0] = rd_reg[DW-1:0];
++ 37 	end
++ 37       else
++ 37 	begin
++ 37 	   assign rd_dout[DW-1:0] = rdata[DW-1:0];
++ 37 	end
++ 37    endgenerate
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_memory_ram.v@24:36
+   
+   reg [DW-1:0]        ram    [DEPTH-1:0];  
+   integer 	       i;
+      
+   //registered read port
+   always @ (posedge rd_clk)
+     if(rd_en)       
+       rd_dout[DW-1:0] <= ram[rd_addr[AW-1:0]];
+   
+   //write port with vector enable
+   always @(posedge wr_clk)    
+     for (i=0;i<DW;i=i+1)
+       if (wr_en & wr_wem[i]) 
+
+Clone Blocks 2:
+oh/common/hdl/oh_memory_ram.v@21:31
+    input [DW-1:0] 	wr_wem, // write enable vector    
+    input [DW-1:0] 	wr_din // data input
+    );
+   
+   reg [DW-1:0]        ram    [DEPTH-1:0];  
+   integer 	       i;
+      
+   //registered read port
+   always @ (posedge rd_clk)
+     if(rd_en)       
+       rd_dout[DW-1:0] <= ram[rd_addr[AW-1:0]];
+

@@ -1,0 +1,98 @@
+Source Block: hdl/library/common/ad_tdd_control.v@273:330@HdlStmProcess
+
+  // ***************************************************************************
+  // tdd counter (state machine)
+  // ***************************************************************************
+
+  always @(posedge clk) begin
+
+    // sync reset
+    if (rst == 1'b1) begin
+      tdd_counter <= 24'h0;
+      tdd_counter_state <= OFF;
+      tdd_burst_state <= OFF;
+    end else begin
+
+      // counter reset
+      if (tdd_counter_reset == 1'b1) begin
+        tdd_counter_state <= OFF;
+        tdd_burst_state <= OFF;
+      end else
+
+      // start counter, the start pulse should have one clock cycle
+      // NOTE: a start pulse during a transaction will reinitialize the counter
+      if (tdd_start == 1'b1) begin
+        tdd_counter <= tdd_counter_init_d;
+        tdd_burst_counter <= tdd_burst_count_d;
+        tdd_counter_state <= ON;
+        if ((tdd_burst_en_d == 1) &&
+            ((tdd_burst_count_d > 0) || (tdd_infinite_burst_d == 1))) begin
+          tdd_burst_state <= ON;
+        end else begin
+          tdd_burst_state <= OFF;
+        end
+      end else
+
+      // free running counter
+      if (tdd_counter_state == ON) begin
+        if (tdd_counter == tdd_frame_length_d) begin
+          tdd_counter <= 22'h0;
+          if ((tdd_burst_state == ON) && ((tdd_burst_counter > 0) || (tdd_infinite_burst_d == 1))) begin
+            tdd_burst_counter <= tdd_burst_counter - 1;
+            tdd_counter_state <= ON;
+          end else begin
+            tdd_burst_counter <= 6'h0;
+            tdd_counter_state <= OFF;
+            tdd_burst_state <= OFF;
+          end
+        end else begin
+          tdd_counter <= tdd_counter + 1;
+        end
+      end
+
+    end
+  end
+
+  // ***************************************************************************
+  // generate control signals
+  // ***************************************************************************
+
+
+Diff Content:
+- 284       tdd_burst_state <= OFF;
+- 290         tdd_burst_state <= OFF;
+- 296         tdd_counter <= tdd_counter_init_d;
+- 297         tdd_burst_counter <= tdd_burst_count_d;
+- 299         if ((tdd_burst_en_d == 1) &&
+- 300             ((tdd_burst_count_d > 0) || (tdd_infinite_burst_d == 1))) begin
+- 301           tdd_burst_state <= ON;
+- 302         end else begin
+- 303           tdd_burst_state <= OFF;
+- 304         end
+- 309         if (tdd_counter == tdd_frame_length_d) begin
+- 311           if ((tdd_burst_state == ON) && ((tdd_burst_counter > 0) || (tdd_infinite_burst_d == 1))) begin
+- 312             tdd_burst_counter <= tdd_burst_counter - 1;
+- 313             tdd_counter_state <= ON;
+- 314           end else begin
+- 316             tdd_counter_state <= OFF;
+- 317             tdd_burst_state <= OFF;
+- 319         end else begin
++ 297         tdd_counter <= tdd_counter_init;
++ 297         tdd_burst_counter <= tdd_burst_count;
++ 309         if (tdd_counter == tdd_frame_length) begin
++ 314           if (tdd_burst_en == 1) begin
++ 314             if ( tdd_burst_counter > 0) begin // inside a burst
++ 314               tdd_burst_counter <= tdd_burst_counter - 1;
++ 314               tdd_counter_state <= ON;
++ 314             end
++ 314             else begin // end of burst
++ 314               tdd_burst_counter <= 6'h0;
++ 314               tdd_counter_state <= OFF;
++ 314             end
++ 314           end
++ 314           else begin // contiuous mode
++ 317             tdd_counter_state <= ON;
++ 319         end
++ 319         else begin
+
+Clone Blocks:

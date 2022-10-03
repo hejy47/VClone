@@ -1,0 +1,62 @@
+Source Block: oh/gpio/hdl/gpio.v@120:134@HdlStmProcess
+       oen_reg[31:0] <= reg_wdata[31:0];
+   
+   assign gpio_oen[N-1:0] = oen_reg[N-1:0];
+   
+   //odata
+   always @ (posedge clk)
+     if(odata_write & reg_double)
+       odata_reg[63:0] <= reg_wdata[63:0];
+     else if(odata_write)
+       odata_reg[31:0] <= reg_wdata[31:0];
+ 
+   assign gpio_out[N-1:0] = odata_reg[N-1:0];
+
+   //################################
+   //# INPUT
+
+Diff Content:
+- 126      if(odata_write & reg_double)
+- 127        odata_reg[63:0] <= reg_wdata[63:0];
+- 128      else if(odata_write)
+- 129        odata_reg[31:0] <= reg_wdata[31:0];
++ 129      if(out_reg_write & reg_double)
++ 129        out_reg[63:0] <= out_dmux[63:0];
++ 129      else if(out_reg_write)
++ 129        out_reg[31:0] <= out_dmux[31:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/gpio/hdl/gpio.v@117:127
+     else if(oen_write & reg_double)
+       oen_reg[63:0] <= reg_wdata[63:0];
+     else if(oen_write)
+       oen_reg[31:0] <= reg_wdata[31:0];
+   
+   assign gpio_oen[N-1:0] = oen_reg[N-1:0];
+   
+   //odata
+   always @ (posedge clk)
+     if(odata_write & reg_double)
+       odata_reg[63:0] <= reg_wdata[63:0];
+
+Clone Blocks 2:
+oh/gpio/hdl/gpio.v@109:125
+   //################################
+   //# OUTPUT
+   //################################ 
+
+   //oen (active low, tristate by default)
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       oen_reg[63:0] <= 'b0;   
+     else if(oen_write & reg_double)
+       oen_reg[63:0] <= reg_wdata[63:0];
+     else if(oen_write)
+       oen_reg[31:0] <= reg_wdata[31:0];
+   
+   assign gpio_oen[N-1:0] = oen_reg[N-1:0];
+   
+   //odata
+   always @ (posedge clk)
+

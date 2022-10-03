@@ -1,0 +1,60 @@
+Source Block: zipcpu/rtl/ex/fwb_master.v@177:201@HdlStmIf
+		assume(!i_wb_ack);
+		assume(!i_wb_err);
+	end
+
+	// Things can only change on the positive edge of the clock
+	generate if (F_OPT_CLK2FFLOGIC)
+	begin
+		always @($global_clock)
+		if ((f_past_valid)&&(!$rose(i_clk)))
+		begin
+			assert($stable(i_reset));
+			assert($stable(i_wb_cyc));
+			assert($stable(f_request)); // The entire request should b stabl
+			//
+			assume($stable(i_wb_ack));
+			assume($stable(i_wb_stall));
+			assume($stable(i_wb_idata));
+			assume($stable(i_wb_err));
+		end
+	end endgenerate
+
+	//
+	//
+	// Bus requests
+	//
+
+Diff Content:
+- 183 	begin
++ 183 	begin : CHECK_ASYNC
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/ex/fwb_slave.v@166:190
+		assert(!i_wb_ack);
+		assert(!i_wb_err);
+	end
+
+	// Things can only change on the positive edge of the clock
+	generate if (F_OPT_CLK2FFLOGIC)
+	begin : FORCE_POSEDGE_CLK
+		always @($global_clock)
+		if ((f_past_valid)&&(!$rose(i_clk)))
+		begin
+			assert($stable(i_reset));
+			assume($stable(i_wb_cyc));
+			assume($stable(f_request)); // The entire request should b stabl
+			//
+			assert($stable(i_wb_ack));
+			assert($stable(i_wb_stall));
+			assert($stable(i_wb_idata));
+			assert($stable(i_wb_err));
+		end
+	end endgenerate
+
+	always @(*)
+	if (!f_past_valid)
+	begin
+		assume(!i_wb_cyc);
+

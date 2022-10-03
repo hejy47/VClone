@@ -1,0 +1,37 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@191:211@HdlStmProcess
+  end else begin
+    up_core_reset_ext_synchronizer_vector <= {1'b0,up_core_reset_ext_synchronizer_vector[1]};
+  end
+end
+
+always @(posedge core_clk) begin
+  if (core_cfg_transfer_en == 1'b1) begin
+    core_cfg_octets_per_multiframe <= up_cfg_octets_per_multiframe;
+    core_cfg_octets_per_frame <= up_cfg_octets_per_frame;
+    core_cfg_lanes_disable <= up_cfg_lanes_disable;
+    core_cfg_links_disable <= up_cfg_links_disable;
+    core_cfg_disable_scrambler <= up_cfg_disable_scrambler;
+    core_cfg_disable_char_replacement <= up_cfg_disable_char_replacement;
+    core_extra_cfg <= up_extra_cfg;
+  end
+end
+
+always @(posedge device_clk) begin
+  if (device_cfg_transfer_en == 1'b1) begin
+    device_cfg_octets_per_multiframe <= up_cfg_octets_per_multiframe;
+    device_cfg_octets_per_frame <= up_cfg_octets_per_frame;
+
+Diff Content:
+- 196 always @(posedge core_clk) begin
+- 197   if (core_cfg_transfer_en == 1'b1) begin
+- 198     core_cfg_octets_per_multiframe <= up_cfg_octets_per_multiframe;
+- 199     core_cfg_octets_per_frame <= up_cfg_octets_per_frame;
+- 200     core_cfg_lanes_disable <= up_cfg_lanes_disable;
+- 201     core_cfg_links_disable <= up_cfg_links_disable;
+- 202     core_cfg_disable_scrambler <= up_cfg_disable_scrambler;
+- 203     core_cfg_disable_char_replacement <= up_cfg_disable_char_replacement;
+- 204     core_extra_cfg <= up_extra_cfg;
+- 205   end
+- 206 end
+
+Clone Blocks:

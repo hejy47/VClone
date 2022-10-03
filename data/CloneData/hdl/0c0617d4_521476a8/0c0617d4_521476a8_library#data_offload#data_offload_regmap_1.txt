@@ -1,0 +1,58 @@
+Source Block: hdl/library/data_offload/data_offload_regmap.v@292:330@HdlStmIf
+    .out_clk (up_clk),
+    .out_data (up_wr_fsm_status_s)
+  );
+
+  generate
+  if (TX_OR_RXN_PATH) begin : sync_tx_path
+
+    sync_data #(
+      .NUM_OF_BITS (3),
+      .ASYNC_CLK (1))
+    i_sync_xfer_control (
+      .in_clk (up_clk),
+      .in_data ({up_sync_config,
+                 up_sync}),
+      .out_clk (dst_clk),
+      .out_data ({sync_config,
+                  sync})
+    );
+
+  end else begin : sync_rx_path
+
+    sync_data #(
+      .NUM_OF_BITS (3),
+      .ASYNC_CLK (1))
+    i_sync_xfer_control (
+      .in_clk (up_clk),
+      .in_data ({up_sync_config,
+                 up_sync}),
+      .out_clk (src_clk),
+      .out_data ({sync_config,
+                  sync})
+    );
+
+  end
+  endgenerate
+
+  sync_bits #(
+    .NUM_OF_BITS (2),
+    .ASYNC_CLK (1))
+
+Diff Content:
+- 301       .ASYNC_CLK (1))
+- 302     i_sync_xfer_control (
+- 308                   sync})
+- 309     );
+- 315       .ASYNC_CLK (1))
+- 316     i_sync_xfer_control (
+- 322                   sync})
+- 323     );
++ 302       .ASYNC_CLK (1)
++ 302     ) i_sync_xfer_control (
++ 309                   sync}));
++ 316       .ASYNC_CLK (1)
++ 316     ) i_sync_xfer_control (
++ 323                   sync}));
+
+Clone Blocks:

@@ -1,0 +1,18 @@
+Source Block: oh/gpio/hdl/gpio.v@126:136@HdlStmAssign
+     if(odata_write & reg_double)
+       odata_reg[63:0] <= reg_wdata[63:0];
+     else if(odata_write)
+       odata_reg[31:0] <= reg_wdata[31:0];
+ 
+   assign gpio_out[N-1:0] = odata_reg[N-1:0];
+
+   //################################
+   //# INPUT
+   //################################ 
+
+
+Diff Content:
+- 131    assign gpio_out[N-1:0] = odata_reg[N-1:0];
++ 131    assign gpio_out[N-1:0] = out_reg[N-1:0];
+
+Clone Blocks:

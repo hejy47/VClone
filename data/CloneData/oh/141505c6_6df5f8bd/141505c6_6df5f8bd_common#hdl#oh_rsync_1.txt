@@ -1,0 +1,35 @@
+Source Block: oh/common/hdl/oh_rsync.v@16:26@HdlIdDef
+`ifdef CFG_ASIC   
+   asic_rsync asic_rsync (.clk(clk),
+			  .nrst_in(nrst_in),
+			  .nrst_out(nrst_out));
+`else
+   reg [PS-1:0] sync_pipe;   
+   always @ (posedge clk or negedge nrst_in)		 
+     if(!nrst_in)
+       sync_pipe[PS-1:0] <= 1'b0;
+     else
+       sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      	      
+
+Diff Content:
+- 21    reg [PS-1:0] sync_pipe;   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_rsync.v@17:31
+   asic_rsync asic_rsync (.clk(clk),
+			  .nrst_in(nrst_in),
+			  .nrst_out(nrst_out));
+`else
+   reg [PS-1:0] sync_pipe;   
+   always @ (posedge clk or negedge nrst_in)		 
+     if(!nrst_in)
+       sync_pipe[PS-1:0] <= 1'b0;
+     else
+       sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      	      
+   assign nrst_out = sync_pipe[PS-1];
+`endif // unmatched `else, `elsif or `endif
+      
+endmodule // oh_rsync
+
+

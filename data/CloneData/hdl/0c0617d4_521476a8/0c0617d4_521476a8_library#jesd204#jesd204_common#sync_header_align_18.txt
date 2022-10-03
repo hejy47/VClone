@@ -1,0 +1,70 @@
+Source Block: hdl/library/jesd204/jesd204_common/sync_header_align.v@95:127@HdlStmProcess
+  end else if (state[BIT_SH_LOCK] & ~header_icnt[LOG2_RX_THRESH_SH_ERR]) begin
+    header_icnt <= header_icnt + 'b1;
+  end
+end
+
+always @(*) begin
+  next_state = state;
+  case (state)
+    STATE_SH_HUNT:
+      if (valid_header) begin
+        if (header_vcnt[7]) begin
+          next_state = STATE_SH_LOCK;
+        end
+      end else begin
+        next_state = STATE_SH_SLIP;
+      end
+    STATE_SH_SLIP:
+      if (i_slip_done) begin
+        next_state = STATE_SH_HUNT;
+      end
+    STATE_SH_LOCK:
+      if (~valid_header) begin
+        if (header_icnt[LOG2_RX_THRESH_SH_ERR]) begin
+          next_state = STATE_SH_HUNT;
+        end
+      end
+  endcase
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    state <= STATE_SH_HUNT;
+  end else begin
+
+Diff Content:
+- 100 always @(*) begin
+- 101   next_state = state;
+- 102   case (state)
+- 103     STATE_SH_HUNT:
+- 104       if (valid_header) begin
+- 105         if (header_vcnt[7]) begin
+- 106           next_state = STATE_SH_LOCK;
+- 108       end else begin
+- 109         next_state = STATE_SH_SLIP;
+- 110       end
+- 111     STATE_SH_SLIP:
+- 112       if (i_slip_done) begin
+- 113         next_state = STATE_SH_HUNT;
+- 114       end
+- 115     STATE_SH_LOCK:
+- 116       if (~valid_header) begin
+- 117         if (header_icnt[LOG2_RX_THRESH_SH_ERR]) begin
+- 120       end
+- 121   endcase
+- 122 end
++ 106   always @(*) begin
++ 106     next_state = state;
++ 106     case (state)
++ 106       STATE_SH_HUNT:
++ 106         if (valid_header) begin
++ 106           if (header_vcnt[7]) begin
++ 106             next_state = STATE_SH_LOCK;
++ 106           end
++ 106         end else begin
++ 106           next_state = STATE_SH_SLIP;
++ 117       STATE_SH_SLIP:
++ 117         if (i_slip_done) begin
+
+Clone Blocks:

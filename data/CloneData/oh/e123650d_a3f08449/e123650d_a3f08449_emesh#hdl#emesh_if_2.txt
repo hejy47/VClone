@@ -1,0 +1,22 @@
+Source Block: oh/emesh/hdl/emesh_if.v@71:83@HdlStmAssign
+  	 	 
+   //#####################################################
+   //# (RMESH/XMESH/CMESH)-->EMESH
+   //#####################################################
+
+   assign emesh_access_out = cmesh_access_in |
+			     rmesh_access_in |
+			     xmesh_access_in;
+   
+
+   //TODO: Make round robin?? (Fancify)
+   assign emesh_packet_out[PW-1:0] = cmesh_access_in ? cmesh_packet_in[PW-1:0] :
+				     rmesh_access_in ? rmesh_packet_in[PW-1:0] :
+
+Diff Content:
+- 76    assign emesh_access_out = cmesh_access_in |
+- 77 			     rmesh_access_in |
++ 77    assign emesh_access_out = cmesh_access_in &
++ 77 			     rmesh_access_in &
+
+Clone Blocks:

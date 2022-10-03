@@ -1,0 +1,101 @@
+Source Block: hdl/library/axi_ad9643/axi_ad9643_channel.v@127:137@HdlStmAssign
+  wire            adc_pn_oos_s;
+
+  // iq correction inputs
+
+  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
+  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
+
+  axi_ad9643_pnmon i_pnmon (
+    .adc_clk (adc_clk),
+    .adc_data (adc_data),
+    .adc_pn_oos (adc_pn_oos_s),
+
+Diff Content:
+- 132   assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9652/axi_ad9652_channel.v@122:132
+  wire            adc_pn_err_s;
+  wire            adc_pn_oos_s;
+
+  // iq correction inputs
+
+  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
+  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
+
+  axi_ad9652_pnmon i_pnmon (
+    .adc_clk (adc_clk),
+    .adc_data (adc_data),
+
+Clone Blocks 2:
+hdl/library/axi_ad9361/axi_ad9361_rx_channel.v@138:148
+  wire            adc_pn_err_s;
+  wire            adc_pn_oos_s;
+
+  // iq correction inputs
+
+  assign adc_data_s = (adc_data_sel_s == 4'h0) ? adc_data : dac_data;
+  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
+  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
+
+  axi_ad9361_rx_pnmon #(.IQSEL (IQSEL), .PRBS_SEL (CHID)) i_rx_pnmon (
+    .adc_clk (adc_clk),
+
+Clone Blocks 3:
+hdl/library/axi_ad9361/axi_ad9361_rx_channel.v@139:149
+  wire            adc_pn_oos_s;
+
+  // iq correction inputs
+
+  assign adc_data_s = (adc_data_sel_s == 4'h0) ? adc_data : dac_data;
+  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
+  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
+
+  axi_ad9361_rx_pnmon #(.IQSEL (IQSEL), .PRBS_SEL (CHID)) i_rx_pnmon (
+    .adc_clk (adc_clk),
+    .adc_valid (adc_valid),
+
+Clone Blocks 4:
+hdl/library/axi_ad9652/axi_ad9652_channel.v@123:133
+  wire            adc_pn_oos_s;
+
+  // iq correction inputs
+
+  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
+  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
+
+  axi_ad9652_pnmon i_pnmon (
+    .adc_clk (adc_clk),
+    .adc_data (adc_data),
+    .adc_pn_oos (adc_pn_oos_s),
+
+Clone Blocks 5:
+hdl/library/axi_ad9361/axi_ad9361_rx_channel.v@140:150
+
+  // iq correction inputs
+
+  assign adc_data_s = (adc_data_sel_s == 4'h0) ? adc_data : dac_data;
+  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
+  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
+
+  axi_ad9361_rx_pnmon #(.IQSEL (IQSEL), .PRBS_SEL (CHID)) i_rx_pnmon (
+    .adc_clk (adc_clk),
+    .adc_valid (adc_valid),
+    .adc_data_i (adc_data),
+
+Clone Blocks 6:
+hdl/library/axi_ad9643/axi_ad9643_channel.v@126:136
+  wire            adc_pn_err_s;
+  wire            adc_pn_oos_s;
+
+  // iq correction inputs
+
+  assign adc_dcfilter_data_i_s = (IQSEL == 1) ? adc_dcfilter_data_in  : adc_dcfilter_data_out;
+  assign adc_dcfilter_data_q_s = (IQSEL == 1) ? adc_dcfilter_data_out : adc_dcfilter_data_in;
+
+  axi_ad9643_pnmon i_pnmon (
+    .adc_clk (adc_clk),
+    .adc_data (adc_data),
+

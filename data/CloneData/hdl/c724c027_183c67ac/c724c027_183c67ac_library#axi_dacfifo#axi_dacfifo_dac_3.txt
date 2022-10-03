@@ -1,0 +1,40 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_dac.v@204:230@HdlStmProcess
+
+  // incomming data flow control
+
+  assign axi_mem_addr_diff_s = {1'b1, axi_mem_waddr} - axi_mem_raddr_s;
+
+  always @(posedge axi_clk) begin
+    if (axi_xfer_req == 1'b0) begin
+      axi_mem_addr_diff <= 'd0;
+      axi_mem_raddr <= 'd0;
+      axi_mem_raddr_m <= 'd0;
+      axi_dready <= 'd0;
+    end else begin
+      axi_mem_raddr_m <= g2b(dac_mem_raddr_g);
+      axi_mem_raddr <= axi_mem_raddr_m;
+      axi_mem_addr_diff <= axi_mem_addr_diff_s[AXI_ADDRESS_WIDTH-1:0];
+      if (axi_mem_addr_diff >= AXI_BUF_THRESHOLD_HI) begin
+        axi_dready <= 1'b0;
+      end else if (axi_mem_addr_diff <= AXI_BUF_THRESHOLD_LO) begin
+        axi_dready <= 1'b1;
+      end
+    end
+  end
+
+  // CDC for xfer_req signal
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+
+Diff Content:
+- 213       axi_mem_raddr_m <= 'd0;
+- 216       axi_mem_raddr_m <= g2b(dac_mem_raddr_g);
+- 217       axi_mem_raddr <= axi_mem_raddr_m;
++ 213       axi_mem_raddr_m1 <= 'd0;
++ 213       axi_mem_raddr_m2 <= 'd0;
++ 217       axi_mem_raddr_m1 <= dac_mem_raddr_g;
++ 217       axi_mem_raddr_m2 <= axi_mem_raddr_m1;
++ 217       axi_mem_raddr <= g2b(axi_mem_raddr_m2);
+
+Clone Blocks:

@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_wr.v@375:401@HdlStmProcess
+  // The asymmetric memory have to have enough data for at least one AXI burst,
+  // before the controller start an AXI write transaction.
+
+  // CDC for the memory write address, xfer_req and xfer_last
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_xfer_req_m <= 3'b0;
+      axi_xfer_last_m <= 3'b0;
+      axi_xfer_init <= 1'b0;
+      axi_mem_waddr_m1 <= 'b0;
+      axi_mem_waddr_m2 <= 'b0;
+      axi_mem_waddr <= 'b0;
+    end else begin
+      axi_xfer_req_m <= {axi_xfer_req_m[1:0], dma_xfer_req};
+      axi_xfer_last_m <= {axi_xfer_last_m[1:0], dma_xfer_last};
+      axi_mem_waddr_m1 <= g2b(dma_mem_waddr_g);
+      axi_mem_waddr_m2 <= axi_mem_waddr_m1;
+      axi_mem_waddr <= axi_mem_waddr_m2;
+      axi_xfer_init = ~axi_xfer_req_m[2] & axi_xfer_req_m[1];
+    end
+  end
+
+  // check if the AXI write channel is ready
+
+  assign axi_wready_s = ~axi_wvalid | axi_wready;
+
+
+Diff Content:
+- 391       axi_mem_waddr_m1 <= g2b(dma_mem_waddr_g);
+- 392       axi_mem_waddr_m2 <= axi_mem_waddr_m1;
+- 393       axi_mem_waddr <= axi_mem_waddr_m2;
++ 394       axi_mem_waddr_m1 <= dma_mem_waddr_g;
++ 394       axi_mem_waddr_m2 <= axi_mem_waddr_m1;
++ 394       axi_mem_waddr <= g2b(axi_mem_waddr_m2);
+
+Clone Blocks:

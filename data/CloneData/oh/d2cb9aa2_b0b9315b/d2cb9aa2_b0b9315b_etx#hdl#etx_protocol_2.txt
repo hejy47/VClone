@@ -1,0 +1,33 @@
+Source Block: oh/etx/hdl/etx_protocol.v@125:139@HdlStmProcess
+   reg     rd_wait_sync;
+   reg     wr_wait_sync;
+   reg     e_tx_rd_wait;
+   reg     e_tx_wr_wait;
+   
+   always @( posedge txlclk_p ) begin
+      rd_wait_sync <= tx_rd_wait;
+      e_tx_rd_wait <= rd_wait_sync;
+      wr_wait_sync <= tx_wr_wait;
+      e_tx_wr_wait <= wr_wait_sync;
+   end
+            
+endmodule // e_tx_protocol
+
+
+
+Diff Content:
+- 130    always @( posedge txlclk_p ) begin
+- 131       rd_wait_sync <= tx_rd_wait;
+- 132       e_tx_rd_wait <= rd_wait_sync;
+- 133       wr_wait_sync <= tx_wr_wait;
+- 134       e_tx_wr_wait <= wr_wait_sync;
+- 135    end
++ 135    always @ (posedge tx_lclk_par) 
++ 135      begin
++ 135 	rd_wait_sync <= tx_rd_wait;
++ 135 	e_tx_rd_wait <= rd_wait_sync;
++ 135 	wr_wait_sync <= tx_wr_wait;
++ 135 	e_tx_wr_wait <= wr_wait_sync;
++ 135      end
+
+Clone Blocks:

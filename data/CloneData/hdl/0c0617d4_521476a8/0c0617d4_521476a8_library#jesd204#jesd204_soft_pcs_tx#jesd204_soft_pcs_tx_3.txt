@@ -1,0 +1,49 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v@59:69@HdlIdDef
+);
+
+reg [NUM_LANES-1:0] disparity = 'h00;
+
+wire [DATA_PATH_WIDTH:0] disparity_chain[0:NUM_LANES-1];
+wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
+
+always @(posedge clk) begin
+  data <= INVERT_OUTPUTS ? ~data_s : data_s;
+end
+
+
+Diff Content:
+- 64 wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
++ 64   wire [DATA_PATH_WIDTH:0] disparity_chain[0:NUM_LANES-1];
++ 64   wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v@58:68
+   output reg [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data
+);
+
+reg [NUM_LANES-1:0] disparity = 'h00;
+
+wire [DATA_PATH_WIDTH:0] disparity_chain[0:NUM_LANES-1];
+wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
+
+always @(posedge clk) begin
+  data <= INVERT_OUTPUTS ? ~data_s : data_s;
+end
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v@61:73
+reg [NUM_LANES-1:0] disparity = 'h00;
+
+wire [DATA_PATH_WIDTH:0] disparity_chain[0:NUM_LANES-1];
+wire [NUM_LANES*DATA_PATH_WIDTH*10-1:0] data_s;
+
+always @(posedge clk) begin
+  data <= INVERT_OUTPUTS ? ~data_s : data_s;
+end
+
+generate
+genvar lane;
+genvar i;
+for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
+

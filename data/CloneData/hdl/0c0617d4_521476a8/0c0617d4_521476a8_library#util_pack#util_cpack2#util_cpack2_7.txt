@@ -1,0 +1,58 @@
+Source Block: hdl/library/util_pack/util_cpack2/util_cpack2.v@199:218@HdlStmAssign
+wire [REAL_NUM_OF_CHANNELS-1:0] enable;
+wire [63:0] enable_s;
+wire [CHANNEL_DATA_WIDTH*REAL_NUM_OF_CHANNELS-1:0] fifo_wr_data;
+wire [CHANNEL_DATA_WIDTH*64-1:0] fifo_wr_data_s;
+
+assign enable_s = {
+  enable_63,enable_62,enable_61,enable_60,enable_59,enable_58,enable_57,enable_56,
+  enable_55,enable_54,enable_53,enable_52,enable_51,enable_50,enable_49,enable_48,
+  enable_47,enable_46,enable_45,enable_44,enable_43,enable_42,enable_41,enable_40,
+  enable_39,enable_38,enable_37,enable_36,enable_35,enable_34,enable_33,enable_32,
+  enable_31,enable_30,enable_29,enable_28,enable_27,enable_26,enable_25,enable_24,
+  enable_23,enable_22,enable_21,enable_20,enable_19,enable_18,enable_17,enable_16,
+	enable_15,enable_14,enable_13,enable_12,enable_11,enable_10,enable_9,enable_8,
+	enable_7,enable_6,enable_5,enable_4,enable_3,enable_2,enable_1,enable_0
+};
+assign enable = enable_s[REAL_NUM_OF_CHANNELS-1:0];
+
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*0+:CHANNEL_DATA_WIDTH] = fifo_wr_data_0;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*1+:CHANNEL_DATA_WIDTH] = fifo_wr_data_1;
+assign fifo_wr_data_s[CHANNEL_DATA_WIDTH*2+:CHANNEL_DATA_WIDTH] = fifo_wr_data_2;
+
+Diff Content:
+- 204 assign enable_s = {
+- 205   enable_63,enable_62,enable_61,enable_60,enable_59,enable_58,enable_57,enable_56,
+- 206   enable_55,enable_54,enable_53,enable_52,enable_51,enable_50,enable_49,enable_48,
+- 207   enable_47,enable_46,enable_45,enable_44,enable_43,enable_42,enable_41,enable_40,
+- 208   enable_39,enable_38,enable_37,enable_36,enable_35,enable_34,enable_33,enable_32,
+- 209   enable_31,enable_30,enable_29,enable_28,enable_27,enable_26,enable_25,enable_24,
+- 210   enable_23,enable_22,enable_21,enable_20,enable_19,enable_18,enable_17,enable_16,
+- 211 	enable_15,enable_14,enable_13,enable_12,enable_11,enable_10,enable_9,enable_8,
+- 212 	enable_7,enable_6,enable_5,enable_4,enable_3,enable_2,enable_1,enable_0
+- 213 };
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_pack/util_upack2/util_upack2.v@219:238
+  .s_axis_valid (s_axis_valid),
+  .s_axis_ready (s_axis_ready),
+  .s_axis_data (s_axis_data)
+);
+
+assign enable_s = {
+  enable_63,enable_62,enable_61,enable_60,enable_59,enable_58,enable_57,enable_56,
+  enable_55,enable_54,enable_53,enable_52,enable_51,enable_50,enable_49,enable_48,
+  enable_47,enable_46,enable_45,enable_44,enable_43,enable_42,enable_41,enable_40,
+  enable_39,enable_38,enable_37,enable_36,enable_35,enable_34,enable_33,enable_32,
+  enable_31,enable_30,enable_29,enable_28,enable_27,enable_26,enable_25,enable_24,
+  enable_23,enable_22,enable_21,enable_20,enable_19,enable_18,enable_17,enable_16,
+  enable_15,enable_14,enable_13,enable_12,enable_11,enable_10,enable_9,enable_8,
+  enable_7,enable_6,enable_5,enable_4,enable_3,enable_2,enable_1,enable_0
+};
+
+assign fifo_rd_data_s = {{(64-NUM_OF_CHANNELS)*CHANNEL_DATA_WIDTH{1'b0}},fifo_rd_data};
+
+assign fifo_rd_data_0 = fifo_rd_data_s[CHANNEL_DATA_WIDTH*0+:CHANNEL_DATA_WIDTH];
+assign fifo_rd_data_1 = fifo_rd_data_s[CHANNEL_DATA_WIDTH*1+:CHANNEL_DATA_WIDTH];
+

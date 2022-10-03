@@ -1,0 +1,22 @@
+Source Block: hdl/library/prcfg/bist/prcfg_dac.v@191:205@HdlStmProcess
+      dac_prbs <= pn(dac_prbs);
+    end
+  end
+
+  // constant pattern generator
+  always @(posedge clk) begin
+    if(dst_dac_en == 1'h1) begin
+      pattern <= ~pattern;
+    end
+  end
+
+  assign dac_pattern_s = (pattern == 1'h1) ?
+                          {16'h5555, 16'hAAAA, 16'h5555, 16'hAAAA} :
+                          {16'hAAAA, 16'h5555, 16'hAAAA, 16'h5555};
+
+
+Diff Content:
+- 197     if(dst_dac_en == 1'h1) begin
++ 197     if((dst_dac_enable == 1'h1) && (dst_dac_valid == 1'h1)) begin
+
+Clone Blocks:

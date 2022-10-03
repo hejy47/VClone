@@ -1,0 +1,32 @@
+Source Block: hdl/library/common/ad_pnmon.v@94:119@HdlStmProcess
+  // pn oos and counters (16 to clear and set).
+
+  assign adc_pn_oos = adc_pn_oos_int;
+  assign adc_pn_err = adc_pn_err_int;
+
+  always @(posedge adc_clk) begin
+    adc_valid_d <= adc_valid_in;
+    adc_pn_match_d <= adc_pn_match_d_s;
+    adc_pn_match_z <= adc_pn_match_z_s;
+    if (adc_valid_d == 1'b1) begin
+      adc_pn_err_int <= adc_pn_err_s;
+      if ((adc_pn_update_s == 1'b1) && (adc_pn_oos_count >= OOS_THRESHOLD-1)) begin
+        adc_pn_oos_int <= ~adc_pn_oos_int;
+      end
+      if (adc_pn_update_s == 1'b1) begin
+        adc_pn_oos_count <= adc_pn_oos_count + 1'b1;
+      end else begin
+        adc_pn_oos_count <= 'd0;
+      end
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
++ 102     adc_valid_zero_d <= adc_valid_zero;
+
+Clone Blocks:

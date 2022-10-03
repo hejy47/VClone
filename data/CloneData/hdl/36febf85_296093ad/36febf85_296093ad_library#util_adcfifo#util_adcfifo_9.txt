@@ -1,0 +1,28 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@152:172@HdlStmProcess
+        end
+      end
+    end
+  end
+
+  always @(posedge adc_clk or posedge adc_rst) begin
+    if (adc_rst == 1'b1) begin
+      adc_waddr_rel_t <= 'd0;
+      adc_waddr_rel <= 'd0;
+    end else begin
+      if ((adc_wr_int == 1'b1) && (adc_waddr_int[2:0] == 3'd7)) begin
+        adc_waddr_rel_t <= ~adc_waddr_rel_t;
+        adc_waddr_rel <= adc_waddr_int;
+      end
+    end
+  end
+
+  // read interface
+
+  assign dma_xfer_status = 4'd0;
+  assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
+
+Diff Content:
+- 162       if ((adc_wr_int == 1'b1) && (adc_waddr_int[2:0] == 3'd7)) begin
++ 162       if ((adc_wr_int == 1'b1) && (adc_waddr_int[2:0] == 3'h7)) begin
+
+Clone Blocks:

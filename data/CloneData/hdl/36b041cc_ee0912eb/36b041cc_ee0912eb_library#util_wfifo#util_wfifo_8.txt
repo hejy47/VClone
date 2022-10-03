@@ -1,0 +1,45 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@112:122@HdlStmAssign
+
+  assign fifo_rst = ~rstn;
+
+  // write is pass through
+
+  assign fifo_wr = m_wr;
+  assign m_wovf_s = s_wovf | fifo_wovf;
+
+  genvar m;
+  generate
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_wdata
+
+Diff Content:
+- 117   assign fifo_wr = m_wr;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_wfifo/util_wfifo.v@113:123
+  assign fifo_rst = ~rstn;
+
+  // write is pass through
+
+  assign fifo_wr = m_wr;
+  assign m_wovf_s = s_wovf | fifo_wovf;
+
+  genvar m;
+  generate
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = m_wdata[(M_DATA_WIDTH-1)-m];
+
+Clone Blocks 2:
+hdl/library/util_wfifo/util_wfifo.v@115:125
+  // write is pass through
+
+  assign fifo_wr = m_wr;
+  assign m_wovf_s = s_wovf | fifo_wovf;
+
+  genvar m;
+  generate
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = m_wdata[(M_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+

@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_gearbox.v@101:116@HdlStmProcess
+  end
+end
+
+assign mem_rd_en = output_ready&unpacker_ready[0];
+
+always @(posedge link_clk) begin
+  if (mem_rd_en) begin
+    mem_rd_data <= mem[out_addr];
+  end
+  mem_rd_valid <= mem_rd_en;
+end
+
+always @(posedge link_clk) begin
+  if (reset) begin
+    out_addr <= 'b0;
+  end else if (mem_rd_en) begin
+
+Diff Content:
+- 106 always @(posedge link_clk) begin
+- 107   if (mem_rd_en) begin
+- 108     mem_rd_data <= mem[out_addr];
+- 110   mem_rd_valid <= mem_rd_en;
+- 111 end
++ 108   always @(posedge link_clk) begin
++ 108     if (mem_rd_en) begin
++ 108       mem_rd_data <= mem[out_addr];
++ 108     end
++ 108     mem_rd_valid <= mem_rd_en;
+
+Clone Blocks:

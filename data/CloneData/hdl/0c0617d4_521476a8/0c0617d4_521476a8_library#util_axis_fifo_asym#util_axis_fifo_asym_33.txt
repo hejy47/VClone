@@ -1,0 +1,53 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@287:309@HdlStmIf
+endgenerate
+
+// master handshake sequencer
+
+generate
+  if (RATIO == 1) begin
+    always @(*) begin
+      m_axis_counter <= 1'b0;
+    end
+  end else if (RATIO > 1) begin
+    always @(posedge m_axis_aclk) begin
+      if (!m_axis_aresetn) begin
+        m_axis_counter <= 0;
+      end else begin
+        if (m_axis_ready && m_axis_valid) begin
+          m_axis_counter <= m_axis_counter + 1'b1;
+        end
+      end
+    end
+  end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 292   if (RATIO == 1) begin
+- 293     always @(*) begin
+- 294       m_axis_counter <= 1'b0;
+- 295     end
+- 296   end else if (RATIO > 1) begin
+- 297     always @(posedge m_axis_aclk) begin
+- 298       if (!m_axis_aresetn) begin
+- 299         m_axis_counter <= 0;
+- 300       end else begin
+- 301         if (m_axis_ready && m_axis_valid) begin
+- 302           m_axis_counter <= m_axis_counter + 1'b1;
+- 306   end
++ 302   generate
++ 302     if (RATIO == 1) begin
++ 302       always @(*) begin
++ 302         m_axis_counter <= 1'b0;
++ 302       end
++ 302     end else if (RATIO > 1) begin
++ 302       always @(posedge m_axis_aclk) begin
++ 302         if (!m_axis_aresetn) begin
++ 302           m_axis_counter <= 0;
++ 302         end else begin
++ 302           if (m_axis_ready && m_axis_valid) begin
++ 302             m_axis_counter <= m_axis_counter + 1'b1;
++ 302           end
+
+Clone Blocks:

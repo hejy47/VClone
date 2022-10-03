@@ -1,0 +1,17 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx.v@212:222@HdlStmAssign
+  end else begin
+    buffer_release_opportunity <= 1'b0;
+  end
+end
+
+assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
+
+sync_bits #(
+  .NUM_OF_BITS (1),
+  .ASYNC_CLK(ASYNC_CLK)
+) i_all_buffer_ready_cdc (
+
+Diff Content:
+- 217 assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
+
+Clone Blocks:

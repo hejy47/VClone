@@ -1,0 +1,50 @@
+Source Block: hdl/library/axi_hdmi_rx/axi_hdmi_rx_core.v@164:200@HdlStmProcess
+    end
+  end
+
+  // 32 bit interface
+
+  always @(posedge hdmi_clk) begin
+    if (hdmi_dma_enable == 1'b0) begin
+      hdmi_dma_sof_int <= 1'd0;
+      hdmi_dma_de_int <= 1'd0;
+      hdmi_dma_data_int <= 32'd0;
+    end else if (hdmi_csc_bypass == 1'b1) begin
+      if (hdmi_packed == 1'b0) begin
+        hdmi_dma_sof_int <= hdmi_sof_422;
+        hdmi_dma_de_int <= hdmi_de_422;
+        hdmi_dma_data_int <= {16'd0, hdmi_data_422};
+      end else begin
+        hdmi_dma_sof_int <= hdmi_sof_422;
+        hdmi_dma_de_int <= ~hdmi_dma_de_int & hdmi_de_422;
+        hdmi_dma_data_int <= {hdmi_data_422, hdmi_dma_data_int[31:16]};
+      end
+    end else begin
+      if (hdmi_packed == 1'b0) begin
+        hdmi_dma_sof_int <= hdmi_sof_444;
+        hdmi_dma_de_int <= hdmi_de_444;
+        hdmi_dma_data_int <= {8'd0, hdmi_data_444};
+      end else begin
+        hdmi_dma_sof_int <= hdmi_sof_444_p;
+        hdmi_dma_de_int <= hdmi_de_444_p;
+        hdmi_dma_data_int <= hdmi_data_444_p;
+      end
+    end
+  end
+
+  // sof, enable and data on 422 and 444 domains
+
+  always @(posedge hdmi_clk) begin
+    hdmi_sof_422 <= hdmi_sof;
+
+Diff Content:
+- 181         hdmi_dma_de_int <= ~hdmi_dma_de_int & hdmi_de_422;
+- 182         hdmi_dma_data_int <= {hdmi_data_422, hdmi_dma_data_int[31:16]};
++ 173       hdmi_de_422_cnt <= 1'b0;
++ 182         hdmi_dma_de_int <= hdmi_de_422_cnt && hdmi_de_422;
++ 182         if (hdmi_de_422) begin
++ 182           hdmi_de_422_cnt <= hdmi_de_422_cnt + 1'b1;
++ 182           hdmi_dma_data_int <= {hdmi_data_422, hdmi_dma_data_int[31:16]};
++ 182         end
+
+Clone Blocks:

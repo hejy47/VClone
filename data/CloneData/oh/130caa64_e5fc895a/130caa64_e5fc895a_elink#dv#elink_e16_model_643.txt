@@ -1,0 +1,45 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4922:4932@HdlStmAssign
+			   (ctrlmode_reg[1:0]==2'b11) & ~(datamode_reg[1:0] == 2'b11);
+
+   //# External source or destination address of the transaction for the comparison
+//   assign addr_y[2:0] = multicast_tran ? srcaddr_reg[31:29] : dstaddr_reg[31:29];
+//   assign addr_x[2:0] = multicast_tran ? srcaddr_reg[28:26] : dstaddr_reg[28:26];
+   assign addr_y[3:0] = multicast_tran ? srcaddr_reg[31:28] : dstaddr_reg[31:28];
+   assign addr_x[3:0] = multicast_tran ? srcaddr_reg[25:22] : dstaddr_reg[25:22];
+
+   //# External address based router
+   assign ycoord_k_n[3:0] = ~ext_yid_k[3:0];
+   assign xcoord_k_n[3:0] = ~ext_xid_k[3:0];
+
+Diff Content:
+- 4927    assign addr_y[3:0] = multicast_tran ? srcaddr_reg[31:28] : dstaddr_reg[31:28];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4926:4936
+//   assign addr_x[2:0] = multicast_tran ? srcaddr_reg[28:26] : dstaddr_reg[28:26];
+   assign addr_y[3:0] = multicast_tran ? srcaddr_reg[31:28] : dstaddr_reg[31:28];
+   assign addr_x[3:0] = multicast_tran ? srcaddr_reg[25:22] : dstaddr_reg[25:22];
+
+   //# External address based router
+   assign ycoord_k_n[3:0] = ~ext_yid_k[3:0];
+   assign xcoord_k_n[3:0] = ~ext_xid_k[3:0];
+
+   //# External address comparison 
+   assign ext_yzero      = addr_y[3:0]==ext_yid_k[3:0];
+   assign ext_xzero      = addr_x[3:0]==ext_xid_k[3:0];   
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4923:4933
+
+   //# External source or destination address of the transaction for the comparison
+//   assign addr_y[2:0] = multicast_tran ? srcaddr_reg[31:29] : dstaddr_reg[31:29];
+//   assign addr_x[2:0] = multicast_tran ? srcaddr_reg[28:26] : dstaddr_reg[28:26];
+   assign addr_y[3:0] = multicast_tran ? srcaddr_reg[31:28] : dstaddr_reg[31:28];
+   assign addr_x[3:0] = multicast_tran ? srcaddr_reg[25:22] : dstaddr_reg[25:22];
+
+   //# External address based router
+   assign ycoord_k_n[3:0] = ~ext_yid_k[3:0];
+   assign xcoord_k_n[3:0] = ~ext_xid_k[3:0];
+
+

@@ -1,0 +1,62 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@266:284@HdlStmProcess
+  if (response_valid == 1'b1 && response_ready == 1'b1) begin
+    up_transfer_id_eot_d <= up_transfer_id_eot;
+  end
+end
+
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+    response_ready <= 1'b1;
+  end else if (response_ready == 1'b1) begin
+    response_ready <= ~response_valid;
+  end else if (up_tlf_s_ready == 1'b1) begin
+    response_ready <= 1'b1;
+  end
+end
+
+always @(posedge clk)
+begin
+  if (response_valid == 1'b1 && response_ready == 1'b1) begin
+    up_tlf_s_valid <= up_bl_partial;
+
+Diff Content:
+- 271 always @(posedge clk) begin
+- 272   if (ctrl_enable == 1'b0) begin
+- 273     response_ready <= 1'b1;
+- 274   end else if (response_ready == 1'b1) begin
+- 275     response_ready <= ~response_valid;
+- 276   end else if (up_tlf_s_ready == 1'b1) begin
+- 277     response_ready <= 1'b1;
+- 279 end
++ 277   always @(posedge clk) begin
++ 277     if (ctrl_enable == 1'b0) begin
++ 277       response_ready <= 1'b1;
++ 277     end else if (response_ready == 1'b1) begin
++ 277       response_ready <= ~response_valid;
++ 277     end else if (up_tlf_s_ready == 1'b1) begin
++ 277       response_ready <= 1'b1;
++ 277     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/dmac_2d_transfer.v@144:162
+    end else if (req_response_ready == 1'b1) begin
+      req_response_valid <= 1'b0;
+    end
+  end
+
+  always @(posedge req_aclk) begin
+    if (req_aresetn == 1'b0) begin
+      out_response_ready <= 1'b1;
+    end else if (out_response_ready == 1'b1) begin
+      out_response_ready <= ~out_response_valid;
+    end else if (req_response_ready == 1'b1) begin
+      out_response_ready <= 1'b1;
+    end
+  end
+
+  always @(posedge req_aclk) begin
+    if (req_ready == 1'b1 && req_valid == 1'b1) begin
+      dest_address <= req_dest_address;
+      src_address <= req_src_address;
+

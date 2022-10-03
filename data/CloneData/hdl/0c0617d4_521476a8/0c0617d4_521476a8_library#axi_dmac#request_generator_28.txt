@@ -1,0 +1,48 @@
+Source Block: hdl/library/axi_dmac/request_generator.v@133:149@HdlStmProcess
+  end else if (incr_id == 1'b1) begin
+    id <= id_next;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    req_ready <= 1'b0;
+  end else begin
+    req_ready <= (nx_state == STATE_IDLE || nx_state == STATE_CONSUME);
+  end
+end
+
+assign transfer_id_match = cur_transfer_id == rew_transfer_id[0];
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+
+Diff Content:
+- 138 always @(posedge clk) begin
+- 139   if (resetn == 1'b0) begin
+- 140     req_ready <= 1'b0;
+- 141   end else begin
+- 142     req_ready <= (nx_state == STATE_IDLE || nx_state == STATE_CONSUME);
+- 144 end
++ 142   always @(posedge clk) begin
++ 142     if (resetn == 1'b0) begin
++ 142       req_ready <= 1'b0;
++ 142     end else begin
++ 142       req_ready <= (nx_state == STATE_IDLE || nx_state == STATE_CONSUME);
++ 142     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_generator.v@141:151
+  end else begin
+    req_ready <= (nx_state == STATE_IDLE || nx_state == STATE_CONSUME);
+  end
+end
+
+assign transfer_id_match = cur_transfer_id == rew_transfer_id[0];
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    cur_transfer_id <= 1'b0;
+  end else if (req_valid == 1'b1 && req_ready == 1'b1) begin
+

@@ -1,0 +1,23 @@
+Source Block: hdl/library/common/ad_dds_sine.v@190:203@HdlStmProcess
+    s7_ddata <= s7_ddata_s;
+  end
+
+  // output registers
+
+  always @(posedge clk) begin
+    sine <= s7_data[30:15];
+    ddata_out <= s7_ddata;
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 196     sine <= s7_data[30:15];
+- 197     ddata_out <= s7_ddata;
++ 197     sine_int <= s7_data[30:15];
++ 197     ddata_out_int <= s7_ddata;
+
+Clone Blocks:

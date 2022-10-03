@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@249:266@HdlIdDef
+  DMA_DATA_WIDTH_DEST > 128 ? 5 :
+  DMA_DATA_WIDTH_DEST > 64 ? 4 :
+  DMA_DATA_WIDTH_DEST > 32 ? 3 :
+  DMA_DATA_WIDTH_DEST > 16 ? 2 :
+  DMA_DATA_WIDTH_DEST > 8 ? 1 : 0;
+localparam BYTES_PER_BEAT_WIDTH_SRC = DMA_DATA_WIDTH_SRC > 1024 ? 8 :
+  DMA_DATA_WIDTH_SRC > 512 ? 7 :
+  DMA_DATA_WIDTH_SRC > 256 ? 6 :
+  DMA_DATA_WIDTH_SRC > 128 ? 5 :
+  DMA_DATA_WIDTH_SRC > 64 ? 4 :
+  DMA_DATA_WIDTH_SRC > 32 ? 3 :
+  DMA_DATA_WIDTH_SRC > 16 ? 2 :
+  DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
+localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
+  (FIFO_SIZE) > 32 ? 7 :
+  (FIFO_SIZE) > 16 ? 6 :
+  (FIFO_SIZE) > 8 ? 5 :
+  (FIFO_SIZE) > 4 ? 4 :
+
+Diff Content:
+- 254 localparam BYTES_PER_BEAT_WIDTH_SRC = DMA_DATA_WIDTH_SRC > 1024 ? 8 :
+- 255   DMA_DATA_WIDTH_SRC > 512 ? 7 :
+- 256   DMA_DATA_WIDTH_SRC > 256 ? 6 :
+- 257   DMA_DATA_WIDTH_SRC > 128 ? 5 :
+- 258   DMA_DATA_WIDTH_SRC > 64 ? 4 :
+- 259   DMA_DATA_WIDTH_SRC > 32 ? 3 :
+- 260   DMA_DATA_WIDTH_SRC > 16 ? 2 :
+- 261   DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
+
+Clone Blocks:

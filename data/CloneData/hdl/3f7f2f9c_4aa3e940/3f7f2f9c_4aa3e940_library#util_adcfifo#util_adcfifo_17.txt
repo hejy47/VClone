@@ -1,0 +1,37 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@164:184@HdlStmProcess
+
+  always @(posedge dma_clk) begin
+    dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], adc_waddr_rel_t};
+  end
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rst <= 1'b1;
+      dma_waddr_rel <= 'd0;
+    end else begin
+      dma_rst <= 1'b0;
+      if (dma_waddr_rel_t_s == 1'b1) begin
+        dma_waddr_rel <= adc_waddr_rel;
+      end
+    end
+  end
+
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign dma_rd_s = (dma_raddr < dma_waddr_rel_s) ? dma_wready_s : 1'b0;
+
+  always @(posedge dma_clk) begin
+
+Diff Content:
+- 170     if (dma_xfer_req == 1'b0) begin
+- 171       dma_rst <= 1'b1;
+- 172       dma_waddr_rel <= 'd0;
+- 174       dma_rst <= 1'b0;
+- 175       if (dma_waddr_rel_t_s == 1'b1) begin
+- 176         dma_waddr_rel <= adc_waddr_rel;
+- 177       end
++ 172     if (dma_read_rst_s == 1'b1) begin
++ 172       dma_waddr_int <= 'd0;
++ 177       dma_waddr_int <= {dma_waddr_int_s,{ADDRESS_PADDING_WIDTH{1'b0}}};
++ 179   assign dma_read_rst_s = ~dma_xfer_req;
+
+Clone Blocks:

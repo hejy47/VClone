@@ -1,0 +1,53 @@
+Source Block: oh/eproto_rx/hdl/eproto_rx.v@103:147@HdlStmProcess
+   reg [31:0]     srcaddr_2;
+
+   // Here we handle any alignment of the frame within an 8-cycle group,
+   // though in theory frames should only start on rising edges??
+
+   always @( posedge rxlclk_p ) begin
+
+      frame_prev  <= rxframe_p[0] ;  // Capture last bit for next group
+      rxdata_in   <= rxdata_p;
+      
+      if( ~frame_prev & rxframe_p[7] ) begin   // All 8 bytes are a new frame
+         rxalign_in  <= 3'd7;
+         rxactive_in <= 1'b1;
+      end else if( ~rxframe_p[7] & rxframe_p[6] ) begin
+         rxalign_in  <= 3'd6;
+         rxactive_in <= 1'b1;
+      end else if( ~rxframe_p[6] & rxframe_p[5] ) begin
+         rxalign_in  <= 3'd5;
+         rxactive_in <= 1'b1;
+      end else if( ~rxframe_p[5] & rxframe_p[4] ) begin
+         rxalign_in  <= 3'd4;
+         rxactive_in <= 1'b1;
+      end else if( ~rxframe_p[4] & rxframe_p[3] ) begin
+         rxalign_in  <= 3'd3;
+         rxactive_in <= 1'b1;
+      end else if( ~rxframe_p[3] & rxframe_p[2] ) begin
+         rxalign_in  <= 3'd2;
+         rxactive_in <= 1'b1;
+      end else if( ~rxframe_p[2] & rxframe_p[1] ) begin
+         rxalign_in  <= 3'd1;
+         rxactive_in <= 1'b1;
+      end else if( ~rxframe_p[1] & rxframe_p[0] ) begin
+         rxalign_in  <= 3'd0;
+         rxactive_in <= 1'b1;
+      end else begin
+         rxalign_in  <= 3'd0;   // No edge
+         rxactive_in <= 3'd0;
+      end
+      
+   end // always @ ( posedge rxlclk_p )
+
+   // 1st cycle
+   always @( posedge rxlclk_p ) begin
+
+      rxactive_0 <= rxactive_in;
+
+Diff Content:
+- 138          rxalign_in  <= 3'd0;   // No edge
+- 139          rxactive_in <= 3'd0;
++ 139          rxactive_in <= 3'd0;  // No edge
+
+Clone Blocks:

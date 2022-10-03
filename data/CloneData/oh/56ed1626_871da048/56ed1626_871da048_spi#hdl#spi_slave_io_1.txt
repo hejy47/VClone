@@ -1,0 +1,19 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@83:93@HdlStmAssign
+     if(ss)
+       bit_count[7:0] <= 'b0;
+     else
+       bit_count[7:0] <=  bit_count[7:0] + 1'b1;
+   
+   assign byte_done  = (bit_count[2:0]==3'b000);
+        
+   // command/address register
+   // auto increment for every byte
+
+
+
+Diff Content:
+- 88    assign byte_done  = (bit_count[2:0]==3'b000);
++ 88    assign byte_done  = (spi_state[1:0]!=`SPI_IDLE) &
++ 88 		       (bit_count[2:0]==3'b000);
+
+Clone Blocks:

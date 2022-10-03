@@ -1,0 +1,70 @@
+Source Block: oh/common/hdl/oh_mux4.v@20:32@HdlStmAssign
+   input 	   sel3;
+
+   output [DW-1:0] out;
+   
+  
+   assign out[DW-1:0] = ({(DW){sel0}} & in0[DW-1:0] |
+			 {(DW){sel1}} & in1[DW-1:0] |
+			 {(DW){sel2}} & in2[DW-1:0] |
+			 {(DW){sel3}} & in3[DW-1:0]);
+   
+			
+endmodule // oh_mux4
+
+
+Diff Content:
++ 28    assign error = (sel0 | sel1 | sel2 | sel3) &
++ 28    		  ~(sel0 ^ sel1 ^ sel2 ^ sel3);
++ 28    always @ (posedge error)
++ 28      $display ("ERROR in oh_mux4 %m");
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_mux6.v@25:39
+   input 	   sel5;
+
+   output [DW-1:0] out;
+   
+  
+   assign out[DW-1:0] = ({(DW){sel0}} & in0[DW-1:0] |
+			 {(DW){sel1}} & in1[DW-1:0] |
+			 {(DW){sel2}} & in2[DW-1:0] |
+			 {(DW){sel3}} & in3[DW-1:0] |
+			 {(DW){sel4}} & in4[DW-1:0] |
+			 {(DW){sel5}} & in5[DW-1:0]);
+   
+   
+endmodule // oh_mux6
+
+
+Clone Blocks 2:
+oh/common/hdl/oh_mux5.v@22:34
+   input sel4;
+
+   output [DW-1:0] out;
+   
+  
+   assign out[DW-1:0] = ({(DW){sel0}} & in0[DW-1:0] |
+			 {(DW){sel1}} & in1[DW-1:0] |
+			 {(DW){sel2}} & in2[DW-1:0] |
+			 {(DW){sel3}} & in3[DW-1:0] |
+			 {(DW){sel4}} & in4[DW-1:0]);
+   		            
+   
+endmodule // mux5
+
+Clone Blocks 3:
+oh/common/hdl/oh_mux3.v@18:28
+   input           sel2;
+
+   output [DW-1:0] out;
+   
+  
+   assign out[DW-1:0] = ({(DW){sel0}} & in0[DW-1:0] |
+			 {(DW){sel1}} & in1[DW-1:0] |
+			 {(DW){sel2}} & in2[DW-1:0]);
+   			  
+endmodule // oh_mux3
+
+

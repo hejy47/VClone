@@ -1,0 +1,49 @@
+Source Block: hdl/library/common/ad_gt_channel_1.v@273:289@HdlStmProcess
+    end else begin
+      rx_user_ready <= {rx_user_ready[2:0], 1'b1};
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if ((tx_rst == 1'b1) || (tx_pll_locked == 1'b0)) begin
+      tx_user_ready <= 4'd0;
+    end else begin
+      tx_user_ready <= {tx_user_ready[2:0], 1'b1};
+    end
+  end
+
+  // reset done
+
+  always @(posedge rx_clk) begin
+    rx_rst_done <= rx_rst_done_s;
+
+Diff Content:
+- 278   always @(posedge up_clk) begin
+- 279     if ((tx_rst == 1'b1) || (tx_pll_locked == 1'b0)) begin
+- 280       tx_user_ready <= 4'd0;
+- 281     end else begin
+- 282       tx_user_ready <= {tx_user_ready[2:0], 1'b1};
+- 283     end
+- 284   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_gt_channel_1.v@265:281
+  end
+  endgenerate
+
+  // user ready
+
+  always @(posedge up_clk) begin
+    if ((rx_rst == 1'b1) || (rx_pll_locked == 1'b0)) begin
+      rx_user_ready <= 4'd0;
+    end else begin
+      rx_user_ready <= {rx_user_ready[2:0], 1'b1};
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if ((tx_rst == 1'b1) || (tx_pll_locked == 1'b0)) begin
+      tx_user_ready <= 4'd0;
+    end else begin
+

@@ -1,0 +1,63 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@142:162@HdlStmProcess
+    emb_vcount <= emb_vcount + 'b1;
+  end
+end
+
+reg [4:0] emb_icount = 'b0;
+always @(posedge clk) begin
+  if (state[BIT_EMB_INIT]) begin
+    emb_icount <= 'b0;
+  end else if (state[BIT_EMB_LOCK]) begin
+    if (sh_count == 0 && eoemb) begin
+      emb_icount <= 'b0;
+    end else if (invalid_eoemb || invalid_eomb) begin
+      emb_icount <= emb_icount + 5'b1;
+    end
+  end
+end
+
+
+always @(*) begin
+  next_state = state;
+  case (state)
+
+Diff Content:
+- 147 always @(posedge clk) begin
+- 148   if (state[BIT_EMB_INIT]) begin
+- 149     emb_icount <= 'b0;
+- 150   end else if (state[BIT_EMB_LOCK]) begin
+- 151     if (sh_count == 0 && eoemb) begin
+- 153     end else if (invalid_eoemb || invalid_eomb) begin
+- 154       emb_icount <= emb_icount + 5'b1;
+- 157 end
++ 151   reg [4:0] emb_icount = 'b0;
++ 151   always @(posedge clk) begin
++ 151     if (state[BIT_EMB_INIT]) begin
++ 154     end else if (state[BIT_EMB_LOCK]) begin
++ 154       if (sh_count == 0 && eoemb) begin
++ 154         emb_icount <= 'b0;
++ 154       end else if (invalid_eoemb || invalid_eomb) begin
++ 154         emb_icount <= emb_icount + 5'b1;
++ 154       end
++ 157   always @(*) begin
++ 157     next_state = state;
++ 157     case (state)
++ 157       STATE_EMB_INIT:
++ 157         if (eoemb) begin
++ 157           next_state = STATE_EMB_HUNT;
++ 157         end
++ 157       STATE_EMB_HUNT:
++ 157         if (invalid_sequence) begin
++ 157           next_state = STATE_EMB_INIT;
++ 157         end else if (eoemb && emb_vcount == 2'd3) begin
++ 157           next_state = STATE_EMB_LOCK;
++ 157         end
++ 157       STATE_EMB_LOCK:
++ 157         if (emb_icount == cfg_rx_thresh_emb_err) begin
++ 157           next_state = STATE_EMB_INIT;
++ 157         end
++ 157     endcase
++ 157     if (sh_lock == 1'b0) next_state = STATE_EMB_INIT;
++ 157   end
+
+Clone Blocks:

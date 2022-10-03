@@ -1,0 +1,49 @@
+Source Block: hdl/library/axi_dmac/src_axi_mm.v@209:227@HdlStmProcess
+
+/*
+ * We need to complete all bursts for which an address has been put onto the
+ * AXI-MM interface.
+ */
+always @(posedge m_axi_aclk) begin
+  if (m_axi_aresetn == 1'b0) begin
+    enabled <= 1'b0;
+  end else if (address_enabled == 1'b1) begin
+    enabled <= 1'b1;
+  end else if (id == address_id) begin
+    enabled <= 1'b0;
+  end
+end
+
+/* TODO
+`include "resp.vh"
+
+assign response_valid = 1'b0;
+
+Diff Content:
+- 214 always @(posedge m_axi_aclk) begin
+- 215   if (m_axi_aresetn == 1'b0) begin
+- 216     enabled <= 1'b0;
+- 217   end else if (address_enabled == 1'b1) begin
+- 218     enabled <= 1'b1;
+- 219   end else if (id == address_id) begin
+- 220     enabled <= 1'b0;
+- 222 end
++ 220   /*
++ 220    * We won't be receiving data before we've requested it and we won't request
++ 220    * data unless there is room in the store-and-forward memory.
++ 220    */
++ 220   assign m_axi_rready = 1'b1;
++ 220   /*
++ 220    * We need to complete all bursts for which an address has been put onto the
++ 220    * AXI-MM interface.
++ 220    */
++ 220   always @(posedge m_axi_aclk) begin
++ 220     if (m_axi_aresetn == 1'b0) begin
++ 220       enabled <= 1'b0;
++ 220     end else if (address_enabled == 1'b1) begin
++ 220       enabled <= 1'b1;
++ 220     end else if (id == address_id) begin
++ 220       enabled <= 1'b0;
++ 220     end
+
+Clone Blocks:

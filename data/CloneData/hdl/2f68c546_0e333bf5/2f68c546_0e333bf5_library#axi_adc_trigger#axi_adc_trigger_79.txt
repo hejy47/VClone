@@ -1,0 +1,100 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@173:183@HdlIdDef
+  reg               data_valid_b_r;
+
+  reg     [31:0]    trigger_delay_counter;
+  reg               triggered;
+
+  reg               streaming_on;
+
+  // signal name changes
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+Diff Content:
+- 178   reg               streaming_on;
++ 178   wire                  up_clk;
++ 178   wire                  up_rstn;
++ 178   wire         [ 4:0]   up_waddr;
++ 178   wire         [31:0]   up_wdata;
++ 178   wire                  up_wack;
++ 178   wire                  up_wreq;
++ 178   wire                  up_rack;
++ 178   wire         [31:0]   up_rdata;
++ 178   wire                  up_rreq;
++ 178   wire         [ 4:0]   up_raddr;
++ 178   wire         [ 1:0]   io_selection;
++ 178   wire         [ 1:0]   low_level;
++ 178   wire         [ 1:0]   high_level;
++ 178   wire         [ 1:0]   any_edge;
++ 178   wire         [ 1:0]   rise_edge;
++ 178   wire         [ 1:0]   fall_edge;
++ 178   wire         [15:0]   limit_a;
++ 178   wire         [ 1:0]   function_a;
++ 178   wire         [31:0]   hysteresis_a;
++ 178   wire         [ 3:0]   trigger_l_mix_a;
++ 178   wire         [15:0]   limit_b;
++ 178   wire         [ 1:0]   function_b;
++ 178   wire         [31:0]   hysteresis_b;
++ 178   wire         [ 3:0]   trigger_l_mix_b;
++ 178   wire         [ 2:0]   trigger_out_mix;
++ 178   wire         [31:0]   trigger_delay;
++ 178   wire signed  [DW:0]   data_a_cmp;
++ 178   wire signed  [DW:0]   data_b_cmp;
++ 178   wire signed  [DW:0]   limit_a_cmp;
++ 178   wire signed  [DW:0]   limit_b_cmp;
++ 178   wire                  comp_low_a_s; // signal is over the limit
++ 178   wire                  comp_low_b_s; // signal is over the limit
++ 178   wire                  passthrough_high_a_s; // trigger when rising through the limit
++ 178   wire                  passthrough_low_a_s;  // trigger when fallingh thorugh the limit
++ 178   wire                  passthrough_high_b_s; // trigger when rising through the limit
++ 178   wire                  passthrough_low_b_s;  // trigger when fallingh thorugh the limit
++ 178   wire                  trigger_a_fall_edge;
++ 178   wire                  trigger_a_rise_edge;
++ 178   wire                  trigger_b_fall_edge;
++ 178   wire                  trigger_b_rise_edge;
++ 178   wire                  trigger_a_any_edge;
++ 178   wire                  trigger_b_any_edge;
++ 178   wire                  trigger_out_delayed;
++ 178   wire                  streaming;
++ 178   reg                   trigger_a_d1; // synchronization flip flop
++ 178   reg                   trigger_a_d2; // synchronization flip flop
++ 178   reg                   trigger_a_d3;
++ 178   reg                   trigger_b_d1; // synchronization flip flop
++ 178   reg                   trigger_b_d2; // synchronization flip flop
++ 178   reg                   trigger_b_d3;
++ 178   reg                   comp_high_a;  // signal is over the limit
++ 178   reg                   old_comp_high_a;   // t + 1 version of comp_high_a
++ 178   reg                   first_a_h_trigger; // valid hysteresis range on passthrough high trigger limit
++ 178   reg                   first_a_l_trigger; // valid hysteresis range on passthrough low trigger limit
++ 178   reg signed [DW:0]     hyst_a_high_limit;
++ 178   reg signed [DW:0]     hyst_a_low_limit;
++ 178   reg                   comp_high_b;       // signal is over the limit
++ 178   reg                   old_comp_high_b;   // t + 1 version of comp_high_b
++ 178   reg                   first_b_h_trigger; // valid hysteresis range on passthrough high trigger limit
++ 178   reg                   first_b_l_trigger; // valid hysteresis range on passthrough low trigger limit
++ 178   reg signed [DW:0]     hyst_b_high_limit;
++ 178   reg signed [DW:0]     hyst_b_low_limit;
++ 178   reg                   trigger_pin_a;
++ 178   reg                   trigger_pin_b;
++ 178   reg                   trigger_adc_a;
++ 178   reg                   trigger_adc_b;
++ 178   reg                   trigger_a;
++ 178   reg                   trigger_b;
++ 178   reg                   trigger_out_mixed;
++ 178   reg                   up_triggered;
++ 178   reg                   up_triggered_d1;
++ 178   reg                   up_triggered_d2;
++ 178   reg                   up_triggered_set;
++ 178   reg                   up_triggered_reset;
++ 178   reg                   up_triggered_reset_d1;
++ 178   reg                   up_triggered_reset_d2;
++ 178   reg        [14:0]     data_a_r;
++ 178   reg        [14:0]     data_b_r;
++ 178   reg                   data_valid_a_r;
++ 178   reg                   data_valid_b_r;
++ 178   reg        [31:0]     trigger_delay_counter;
++ 178   reg                   triggered;
++ 178   reg                   streaming_on;
+
+Clone Blocks:

@@ -1,0 +1,31 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3438:3449@HdlStmAssign
+   //# The "and" part of the "and-or" mux is
+   //# implemented in the link channels blocks  
+   //# therefore here we are good with "or" only
+   //###########################################
+
+   assign txo_frame = c0_tran_frame_tlc | c1_tran_frame_tlc |
+		      c2_tran_frame_tlc | c3_tran_frame_tlc;
+
+   assign txo_data_even[LW-1:0] = c0_tran_byte_even_tlc[LW-1:0] |
+				  c1_tran_byte_even_tlc[LW-1:0] |
+				  c2_tran_byte_even_tlc[LW-1:0] |
+				  c3_tran_byte_even_tlc[LW-1:0];
+
+Diff Content:
+- 3443    assign txo_frame = c0_tran_frame_tlc | c1_tran_frame_tlc |
+- 3444 		      c2_tran_frame_tlc | c3_tran_frame_tlc;
++ 3444    wire           request_cvre;
++ 3444    /********************************************/
++ 3444    /*Splitting Vector Into Components          */
++ 3444    /********************************************/
++ 3444    assign mesh_write_cvre           = fifo_data_out_cvre[0];
++ 3444    assign mesh_read_cvre            = fifo_data_out_cvre[1];
++ 3444    assign mesh_datamode_cvre[1:0]   = fifo_data_out_cvre[3:2];
++ 3444    assign mesh_ctrlmode_cvre[3:0]   = fifo_data_out_cvre[7:4];
++ 3444    assign mesh_reserved_cvre[7:0]   = fifo_data_out_cvre[15:8];
++ 3444    assign mesh_data_cvre[MDW-1:0]   = fifo_data_out_cvre[47:16];
++ 3444    assign mesh_dst_addr_cvre[AW-1:0]= fifo_data_out_cvre[79:48];
++ 3444    assign mesh_src_addr_cvre[AW-1:0]= fifo_data_out_cvre[111:80];
+
+Clone Blocks:

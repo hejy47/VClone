@@ -1,0 +1,52 @@
+Source Block: hdl/library/common/ad_lvds_clk.v@63:83@HdlStmIf
+    .I (clk_in_p),
+    .IB (clk_in_n),
+    .O (clk_ibuf_s));
+
+  generate
+  if (BUFTYPE == VIRTEX6) begin
+  BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_rbuf (
+    .CLR (1'b0),
+    .CE (1'b1),
+    .I (clk_ibuf_s),
+    .O (clk));
+  end else begin
+  BUFG i_clk_gbuf (
+    .I (clk_ibuf_s),
+    .O (clk));
+  end
+  endgenerate
+
+
+
+endmodule
+
+Diff Content:
+- 68   if (BUFTYPE == VIRTEX6) begin
++ 68   if (DEVICE_TYPE == VIRTEX6) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_lvds_clk.v@63:83
+    .I (clk_in_p),
+    .IB (clk_in_n),
+    .O (clk_ibuf_s));
+
+  generate
+  if (BUFTYPE == VIRTEX6) begin
+  BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_rbuf (
+    .CLR (1'b0),
+    .CE (1'b1),
+    .I (clk_ibuf_s),
+    .O (clk));
+  end else begin
+  BUFG i_clk_gbuf (
+    .I (clk_ibuf_s),
+    .O (clk));
+  end
+  endgenerate
+
+
+
+endmodule
+

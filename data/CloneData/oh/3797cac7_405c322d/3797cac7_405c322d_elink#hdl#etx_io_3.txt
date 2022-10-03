@@ -1,0 +1,35 @@
+Source Block: oh/elink/hdl/etx_io.v@147:174@HdlStmProcess
+  
+   //#############################
+   //# SELECTING DATA FOR TRANSMIT
+   //#############################  
+   
+   always @ (posedge tx_lclk)
+     case(tx_state_reg[2:0])
+       //Cycle1
+       3'b001: tx_data16[15:0]  <= tx_double[47:32];       
+       //Cycle2
+       3'b010: tx_data16[15:0]  <= tx_double[31:16];       
+       //Cycle3
+       3'b011: tx_data16[15:0]  <= tx_double[15:0];       
+       //Cycle4				      
+       3'b100: tx_data16[15:0]  <= tx_double[63:48];       
+       //Cycle5
+       3'b101: tx_data16[15:0]  <= tx_double[47:32];       
+       //Cycle6
+       3'b110: tx_data16[15:0]  <= tx_double[31:16];       
+       //Cycle7
+       3'b111: tx_data16[15:0]  <= tx_double[15:0];       
+       default  tx_data16[15:0] <= 16'b0;
+     endcase // case (tx_state[2:0])
+                       
+   //#############################
+   //# CLOCK DRIVERS
+   //#############################  
+   BUFIO i_lclk    (.I(tx_lclk_io), .O(tx_lclk_ddr));
+
+Diff Content:
+- 152    always @ (posedge tx_lclk)
++ 152    always @ (posedge tx_lclk_io)
+
+Clone Blocks:

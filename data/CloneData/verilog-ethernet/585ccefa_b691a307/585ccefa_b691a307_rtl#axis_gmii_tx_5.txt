@@ -1,0 +1,55 @@
+Source Block: verilog-ethernet/rtl/axis_gmii_tx.v@350:397@HdlStmProcess
+            gmii_txd_next[7:4] = 4'd0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+        frame_ptr_reg <= 16'd0;
+
+        s_axis_tready_reg <= 1'b0;
+
+        gmii_tx_en_reg <= 1'b0;
+        gmii_tx_er_reg <= 1'b0;
+
+        start_packet_reg <= 1'b0;
+
+        crc_state <= 32'hFFFFFFFF;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        s_axis_tready_reg <= s_axis_tready_next;
+
+        gmii_tx_en_reg <= gmii_tx_en_next;
+        gmii_tx_er_reg <= gmii_tx_er_next;
+
+        start_packet_reg <= start_packet_next;
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+        end else if (update_crc) begin
+            crc_state <= crc_next;
+        end
+    end
+
+    mii_odd_reg <= mii_odd_next;
+    mii_msn_reg <= mii_msn_next;
+
+    s_tdata_reg <= s_tdata_next;
+
+    gmii_txd_reg <= gmii_txd_next;
+end
+
+endmodule
+
+Diff Content:
++ 366         error_underflow_reg <= 1'b0;
++ 379         error_underflow_reg <= error_underflow_next;
+
+Clone Blocks:

@@ -1,0 +1,61 @@
+Source Block: hdl/library/axi_ad9963/axi_ad9963_rx_pnmon.v@94:109@HdlStmProcess
+
+  // standard, runs on 24bit
+
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+
+ always @(posedge adc_clk) begin
+   if(adc_valid == 1'b1) begin
+     adc_pn_data_in <= {adc_pn_data_in[22:11], adc_data};
+     adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+   end
+ end
+
+  // pn oos & pn err
+
+  ad_pnmon #(.DATA_WIDTH(24)) i_pnmon (
+    .adc_clk (adc_clk),
+
+Diff Content:
+- 99  always @(posedge adc_clk) begin
+- 100    if(adc_valid == 1'b1) begin
+- 101      adc_pn_data_in <= {adc_pn_data_in[22:11], adc_data};
+- 102      adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+- 103    end
+- 104  end
++ 104   always @(posedge adc_clk) begin
++ 104     if(adc_valid == 1'b1) begin
++ 104       adc_pn_data_in <= {adc_pn_data_in[22:11], adc_data};
++ 104       adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
++ 104     end
++ 104   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9963/axi_ad9963_rx_pnmon.v@92:102
+    end
+  endfunction
+
+  // standard, runs on 24bit
+
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+
+ always @(posedge adc_clk) begin
+   if(adc_valid == 1'b1) begin
+     adc_pn_data_in <= {adc_pn_data_in[22:11], adc_data};
+     adc_pn_data_pn <= pn23(adc_pn_data_pn_s);
+
+Clone Blocks 2:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@146:156
+  endfunction
+
+  // pn sequence select
+
+  assign adc_pn_valid_s = adc_valid & adc_pn_valid;
+  assign adc_pn_data_pn_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in : adc_pn_data_pn;
+
+  always @(posedge adc_clk) begin
+    if (adc_valid == 1'b1) begin
+      adc_pn_valid <= ~adc_pn_valid;
+      adc_pn_data_in <= {adc_pn_data_in[15:0], ~adc_data[15], adc_data[14:0]};
+

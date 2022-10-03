@@ -1,0 +1,38 @@
+Source Block: oh/emmu/hdl/emmu.v@127:142@HdlStmProcess
+   /*****************************/   
+   //pipeline to compensate for table lookup pipeline 
+   //assumes one cycle memory access!
+   //the pushback is needed stall async transmit path      
+
+   always @ (posedge  rd_clk)
+     if(~(emesh_wr_wait | emesh_rd_wait))
+       begin
+	  emesh_access_out         <=  emesh_access_in;
+	  emesh_packet_reg[PW-1:0] <=  emesh_packet_in[PW-1:0];	  
+       end
+     	 
+   assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
+				                         {32'b0,emesh_packet_reg[39:8]}; 
+   //Concatenating output packet
+   assign emesh_packet_out[PW-1:0] = {emesh_packet_reg[PW-1:40],
+
+Diff Content:
+- 133      if(~(emesh_wr_wait | emesh_rd_wait))
++ 133      if(~emesh_wait_in)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/hdl/emmu.v@134:145
+       begin
+	  emesh_access_out         <=  emesh_access_in;
+	  emesh_packet_reg[PW-1:0] <=  emesh_packet_in[PW-1:0];	  
+       end
+     	 
+   assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
+				                         {32'b0,emesh_packet_reg[39:8]}; 
+   //Concatenating output packet
+   assign emesh_packet_out[PW-1:0] = {emesh_packet_reg[PW-1:40],
+                                      emesh_dstaddr_out[31:0],
+                                      emesh_packet_reg[7:0]
+				     };
+

@@ -1,0 +1,42 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@170:185@HdlStmProcess
+    .up_rack (up_rack)
+  );
+
+  integer n;
+
+  always @(*) begin
+    up_rdata_all = 'h00;
+    for (n = 0; n < NUM_CHANNELS + 2; n = n + 1) begin
+      up_rdata_all = up_rdata_all | up_rdata_s[n];
+     end
+  end
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_rdata <= 'd0;
+      up_rack <= 'd0;
+
+Diff Content:
+- 179      end
++ 179     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v@172:187
+    .up_rack (up_rack)
+  );
+
+  integer n;
+
+  always @(*) begin
+    up_rdata_all = 'h00;
+    for (n = 0; n <= NUM_CHANNELS+1; n = n + 1) begin
+      up_rdata_all = up_rdata_all | up_rdata_s[n];
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_status_pn_err <= 'd0;
+      up_status_pn_oos <= 'd0;
+

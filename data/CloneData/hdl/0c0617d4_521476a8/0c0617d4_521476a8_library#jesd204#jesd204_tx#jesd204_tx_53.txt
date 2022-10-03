@@ -1,0 +1,151 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@461:522@HdlStmIf
+
+assign phy_header_r = 'h0;
+
+end
+
+if (LINK_MODE[1] == 1) begin : mode_64b66b
+
+  for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+    localparam D_START = i * DATA_PATH_WIDTH*8;
+    localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+    localparam H_START = i * 2;
+    localparam H_STOP = H_START + 2 -1;
+    jesd204_tx_lane_64b i_lane(
+      .clk(clk),
+      .reset(reset),
+
+      .tx_data(gearbox_data[D_STOP:D_START]),
+      .tx_ready(tx_ready_64b),
+
+      .phy_data(phy_data_r[D_STOP:D_START]),
+      .phy_header(phy_header_r[H_STOP:H_START]),
+
+      .lmc_edge(lmc_edge),
+      .lmc_quarter_edge(lmc_quarter_edge),
+      .eoemb(eoemb),
+
+      .cfg_disable_scrambler(cfg_disable_scrambler),
+      .cfg_header_mode(2'b0),
+      .cfg_lane_disable(cfg_lanes_disable[i])
+    );
+  end
+
+  assign tx_ready_64b_next = reset ? 1'b0 : (link_lmfc_edge || tx_ready_64b);
+
+  always @(posedge clk) begin
+    if (reset) begin
+      tx_ready_64b <= 1'b0;
+    end else begin
+      tx_ready_64b <= tx_ready_64b_next;
+    end
+  end
+
+  assign tx_ready_nx = tx_ready_64b_next;
+  assign tx_next_mf_ready = 1'b1;
+
+  assign link_tx_ready = tx_ready_64b;
+  // Link considered in DATA phase when SYSREF received and LEMC clock started
+  // running
+  assign status_state = {2{tx_ready_64b}};
+
+
+  assign phy_charisk_r = 'h0;
+  assign ilas_config_rd = 'h0;
+  assign ilas_config_addr = 'h0;
+  assign status_sync = 'h0;
+
+end
+
+endgenerate
+
+pipeline_stage #(
+  .WIDTH(CW + DW + HW),
+
+Diff Content:
+- 466 if (LINK_MODE[1] == 1) begin : mode_64b66b
+- 471     localparam H_START = i * 2;
+- 472     localparam H_STOP = H_START + 2 -1;
+- 473     jesd204_tx_lane_64b i_lane(
+- 475       .reset(reset),
+- 478       .tx_ready(tx_ready_64b),
+- 481       .phy_header(phy_header_r[H_STOP:H_START]),
+- 483       .lmc_edge(lmc_edge),
+- 484       .lmc_quarter_edge(lmc_quarter_edge),
+- 485       .eoemb(eoemb),
+- 487       .cfg_disable_scrambler(cfg_disable_scrambler),
+- 488       .cfg_header_mode(2'b0),
+- 489       .cfg_lane_disable(cfg_lanes_disable[i])
+- 490     );
+- 493   assign tx_ready_64b_next = reset ? 1'b0 : (link_lmfc_edge || tx_ready_64b);
+- 495   always @(posedge clk) begin
+- 496     if (reset) begin
+- 497       tx_ready_64b <= 1'b0;
+- 498     end else begin
+- 499       tx_ready_64b <= tx_ready_64b_next;
+- 503   assign tx_ready_nx = tx_ready_64b_next;
+- 504   assign tx_next_mf_ready = 1'b1;
+- 506   assign link_tx_ready = tx_ready_64b;
+- 509   assign status_state = {2{tx_ready_64b}};
+- 512   assign phy_charisk_r = 'h0;
+- 513   assign ilas_config_rd = 'h0;
+- 514   assign ilas_config_addr = 'h0;
+- 515   assign status_sync = 'h0;
+- 517 end
++ 466     .status_sync(status_sync),
++ 466     .status_state(status_state));
++ 473     localparam C_START = i * DATA_PATH_WIDTH;
++ 473     localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
++ 473     jesd204_tx_lane #(
++ 473       .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
++ 473       .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE)
++ 473     ) i_lane (
++ 475       .eof(tx_eof_fm_d3),
++ 475       .eomf(tx_eomf_fm_d3),
++ 475       .cgs_enable(lane_cgs_enable[i]),
++ 475       .ilas_data(ilas_data[D_STOP:D_START]),
++ 475       .ilas_charisk(ilas_charisk[C_STOP:C_START]),
++ 478       .tx_ready(link_tx_ready),
++ 481       .phy_charisk(phy_charisk_r[C_STOP:C_START]),
++ 485       .cfg_octets_per_frame(cfg_octets_per_frame),
++ 485       .cfg_disable_char_replacement(cfg_disable_char_replacement),
++ 485       .cfg_disable_scrambler(cfg_disable_scrambler));
++ 485   end
++ 485   assign phy_header_r = 'h0;
++ 493   if (LINK_MODE[1] == 1) begin : mode_64b66b
++ 499     for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
++ 499       localparam D_START = i * DATA_PATH_WIDTH*8;
++ 499       localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
++ 499       localparam H_START = i * 2;
++ 499       localparam H_STOP = H_START + 2 -1;
++ 499       jesd204_tx_lane_64b i_lane(
++ 499         .clk(clk),
++ 499         .reset(reset),
++ 499         .tx_data(gearbox_data[D_STOP:D_START]),
++ 499         .tx_ready(tx_ready_64b),
++ 499         .phy_data(phy_data_r[D_STOP:D_START]),
++ 499         .phy_header(phy_header_r[H_STOP:H_START]),
++ 499         .lmc_edge(lmc_edge),
++ 499         .lmc_quarter_edge(lmc_quarter_edge),
++ 499         .eoemb(eoemb),
++ 499         .cfg_disable_scrambler(cfg_disable_scrambler),
++ 499         .cfg_header_mode(2'b0),
++ 499         .cfg_lane_disable(cfg_lanes_disable[i]));
++ 500     assign tx_ready_64b_next = reset ? 1'b0 : (link_lmfc_edge || tx_ready_64b);
++ 500     always @(posedge clk) begin
++ 500       if (reset) begin
++ 500         tx_ready_64b <= 1'b0;
++ 500       end else begin
++ 500         tx_ready_64b <= tx_ready_64b_next;
++ 500       end
++ 500     end
++ 500     assign tx_ready_nx = tx_ready_64b_next;
++ 500     assign tx_next_mf_ready = 1'b1;
++ 500     assign link_tx_ready = tx_ready_64b;
++ 500     assign status_state = {2{tx_ready_64b}};
++ 500     assign phy_charisk_r = 'h0;
++ 500     assign ilas_config_rd = 'h0;
++ 500     assign ilas_config_addr = 'h0;
++ 500     assign status_sync = 'h0;
+
+Clone Blocks:

@@ -1,0 +1,34 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@195:205@HdlStmAssign
+end
+
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+assign last_load = m_axi_valid && last_eot && eot;
+assign req_ready = last_load || ~active || (transfer_abort_s & rewind_req_ready);
+
+always @(posedge clk) begin
+  if (req_ready) begin
+    last_eot <= req_last_burst_length == 'h0;
+    last_non_eot <= 1'b0;
+
+Diff Content:
+- 200 assign req_ready = last_load || ~active || (transfer_abort_s & rewind_req_ready);
++ 200 assign req_ready = (last_load && ~early_tlast) ||
++ 200                    (~active && ~transfer_abort_s) ||
++ 200                    (transfer_abort_s && rewind_req_ready);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/data_mover.v@194:204
+  end
+end
+
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+assign last_load = m_axi_valid && last_eot && eot;
+assign req_ready = last_load || ~active || (transfer_abort_s & rewind_req_ready);
+
+always @(posedge clk) begin
+  if (req_ready) begin
+    last_eot <= req_last_burst_length == 'h0;
+

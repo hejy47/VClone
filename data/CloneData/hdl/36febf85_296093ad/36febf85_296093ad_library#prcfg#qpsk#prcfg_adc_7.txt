@@ -1,0 +1,60 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_adc.v@148:186@HdlStmProcess
+    .data_valid(adc_dvalid),
+    .data_output(adc_ddata_s)
+  );
+
+  // output logic for data ans status
+  always @(posedge clk) begin
+
+    dst_adc_dsync  <= src_adc_dsync;
+    dst_adc_dwr    <= src_adc_dwr;
+
+    case(mode)
+
+      4'h0 : begin
+        dst_adc_ddata <= src_adc_ddata;
+        src_adc_dovf   <= dst_adc_dovf;
+      end
+      4'h1 : begin
+        dst_adc_ddata <= 32'h0;
+        src_adc_dovf  <= 1'b0;
+      end
+      4'h2 : begin
+        dst_adc_ddata <= {30'h0, adc_ddata_s};
+        src_adc_dovf   <= dst_adc_dovf;
+      end
+      default : begin
+        dst_adc_ddata <= src_adc_ddata;
+        src_adc_dovf   <= dst_adc_dovf;
+      end
+    endcase
+
+    if((mode == 3'd2) && (channel_sel == CHANNEL_ID)) begin
+      status <= {22'h0, adc_pn_err_s, adc_pn_oos_s, RP_ID};
+    end else begin
+      status <= {24'h0, RP_ID};
+    end
+  end
+
+endmodule
+
+
+Diff Content:
+- 155     dst_adc_dsync  <= src_adc_dsync;
+- 156     dst_adc_dwr    <= src_adc_dwr;
+- 161         dst_adc_ddata <= src_adc_ddata;
+- 162         src_adc_dovf   <= dst_adc_dovf;
+- 165         dst_adc_ddata <= 32'h0;
+- 166         src_adc_dovf  <= 1'b0;
+- 169         dst_adc_ddata <= {30'h0, adc_ddata_s};
+- 170         src_adc_dovf   <= dst_adc_dovf;
+- 173         dst_adc_ddata <= src_adc_ddata;
+- 174         src_adc_dovf   <= dst_adc_dovf;
++ 156     dst_adc_valid <= src_adc_valid;
++ 156     dst_adc_enable <= src_adc_enable;
++ 162         dst_adc_data <= src_adc_data;
++ 166         dst_adc_data <= 32'h0;
++ 170         dst_adc_data <= {30'h0, adc_data_s};
++ 174         dst_adc_data <= src_adc_data;
+
+Clone Blocks:

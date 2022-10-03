@@ -1,0 +1,41 @@
+Source Block: hdl/library/util_cpack/util_cpack.v@213:246@HdlStmFor
+  endgenerate
+
+  // mux
+
+  generate
+  for (n = 0; n < CH_SCNT; n = n + 1) begin: g_mux
+  util_cpack_mux i_mux (
+    .adc_clk (adc_clk),
+    .adc_valid (adc_valid_d),
+    .adc_enable (adc_enable_s),
+    .adc_data (adc_data_intlv_s[((16*NUM_OF_CHANNELS_M*(n+1))-1):(16*NUM_OF_CHANNELS_M*n)]),
+    .adc_mux_valid (adc_mux_valid_s[n]),
+    .adc_mux_enable_0 (adc_mux_enable_0_s[n]),
+    .adc_mux_data_0 (adc_mux_data_0_s[(((n+1)*16*1)-1):(n*16*1)]),
+    .adc_mux_enable_1 (adc_mux_enable_1_s[n]),
+    .adc_mux_data_1 (adc_mux_data_1_s[(((n+1)*16*2)-1):(n*16*2)]),
+    .adc_mux_enable_2 (adc_mux_enable_2_s[n]),
+    .adc_mux_data_2 (adc_mux_data_2_s[(((n+1)*16*3)-1):(n*16*3)]),
+    .adc_mux_enable_3 (adc_mux_enable_3_s[n]),
+    .adc_mux_data_3 (adc_mux_data_3_s[(((n+1)*16*4)-1):(n*16*4)]),
+    .adc_mux_enable_4 (adc_mux_enable_4_s[n]),
+    .adc_mux_data_4 (adc_mux_data_4_s[(((n+1)*16*5)-1):(n*16*5)]),
+    .adc_mux_enable_5 (adc_mux_enable_5_s[n]),
+    .adc_mux_data_5 (adc_mux_data_5_s[(((n+1)*16*6)-1):(n*16*6)]),
+    .adc_mux_enable_6 (adc_mux_enable_6_s[n]),
+    .adc_mux_data_6 (adc_mux_data_6_s[(((n+1)*16*7)-1):(n*16*7)]),
+    .adc_mux_enable_7 (adc_mux_enable_7_s[n]),
+    .adc_mux_data_7 (adc_mux_data_7_s[(((n+1)*16*8)-1):(n*16*8)]));
+  end
+  endgenerate
+
+  // concat
+
+  always @(posedge adc_clk) begin
+
+Diff Content:
+- 218   for (n = 0; n < CH_SCNT; n = n + 1) begin: g_mux
++ 218   for (n = 0; n < SAMPLES_PCHANNEL; n = n + 1) begin: g_mux
+
+Clone Blocks:

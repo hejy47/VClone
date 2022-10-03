@@ -1,0 +1,46 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v@239:266@HdlStmProcess
+    end
+    endcase
+  end
+end
+
+always @(*) begin
+  if (in_charisk == 1'b1) begin
+    alt7 = 1'b1;
+  end else begin
+//    case (in_char[4:0])
+//    5'd11, 5'd13, 5'd14: alt7 = in_disparity;
+//    5'd17, 5'd18, 5'd20: alt7 = ~in_disparity;
+//    default: alt7 = 1'b0;
+//    endcase
+
+      // Slightly better packing
+      case ({may_invert6b,data6b[5:4]})
+      3'b000: alt7 = in_disparity;
+      3'b011: alt7 = ~in_disparity;
+      default: alt7 = 1'b0;
+      endcase
+  end
+end
+
+always @(*) begin
+  case (in_char[7:5])
+  3'd0: begin
+    data4b = 4'b0010;
+
+Diff Content:
+- 244 always @(*) begin
+- 245   if (in_charisk == 1'b1) begin
+- 246     alt7 = 1'b1;
+- 247   end else begin
+- 255       case ({may_invert6b,data6b[5:4]})
+- 256       3'b000: alt7 = in_disparity;
+- 257       3'b011: alt7 = ~in_disparity;
+- 258       default: alt7 = 1'b0;
+- 259       endcase
+- 260   end
+- 261 end
++ 261   assign disparity4b_in = in_disparity ^ disparity6b;
++ 261   assign out_disparity = disparity4b_in ^ disparity4b;
+
+Clone Blocks:

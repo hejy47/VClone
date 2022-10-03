@@ -1,0 +1,120 @@
+Source Block: hdl/library/axi_pwm_gen/axi_pwm_gen.v@291:325@HdlStmIf
+    end else begin
+      assign pwm_2 = 1'b0;
+      assign pwm_counter[2] = 32'd1;
+    end
+
+    if (N_PWMS >= 4) begin
+      axi_pwm_gen_1  #(
+        .PULSE_WIDTH (PULSE_3_WIDTH),
+        .PULSE_PERIOD (PULSE_3_PERIOD))
+      i3_axi_pwm_gen_1(
+        .clk (clk),
+        .rstn (pwm_gen_resetn),
+        .pulse_width (pwm_width_s[127:96]),
+        .pulse_period (pwm_period_s[127:96]),
+        .load_config (load_config_s),
+        .sync (sync_3),
+        .pulse (pwm_3),
+        .pulse_counter (pwm_counter[3]));
+
+      always @(posedge clk) begin
+        if (pwm_gen_resetn == 1'b0) begin
+          sync_3 <= 1'b1;
+        end else begin
+          sync_3 <= (offset_cnt == pwm_offset_s[127:96]) ? 1'b0 : 1'b1;
+        end
+      end
+    end else begin
+      assign pwm_3 = 1'b0;
+      assign pwm_counter[3] = 32'd1;
+    end
+  endgenerate
+
+  up_axi #(
+    .AXI_ADDRESS_WIDTH(16))
+  i_up_axi (
+
+Diff Content:
+- 299         .PULSE_PERIOD (PULSE_3_PERIOD))
+- 300       i3_axi_pwm_gen_1(
++ 300         .PULSE_PERIOD (PULSE_3_PERIOD)
++ 300       ) i3_axi_pwm_gen_1(
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_pwm_gen/axi_pwm_gen.v@265:299
+    end else begin
+      assign pwm_1 = 1'b0;
+      assign pwm_counter[1] = 32'd1;
+    end
+
+    if (N_PWMS >= 3) begin
+      axi_pwm_gen_1  #(
+        .PULSE_WIDTH (PULSE_2_WIDTH),
+        .PULSE_PERIOD (PULSE_2_PERIOD))
+      i2_axi_pwm_gen_1(
+        .clk (clk),
+        .rstn (pwm_gen_resetn),
+        .pulse_width (pwm_width_s[95:64]),
+        .pulse_period (pwm_period_s[95:64]),
+        .load_config (load_config_s),
+        .sync (sync_2),
+        .pulse (pwm_2),
+        .pulse_counter (pwm_counter[2]));
+
+      always @(posedge clk) begin
+        if (pwm_gen_resetn == 1'b0) begin
+          sync_2 <= 1'b1;
+        end else begin
+          sync_2 <= (offset_cnt == pwm_offset_s[95:64]) ? 1'b0 : 1'b1;
+        end
+      end
+    end else begin
+      assign pwm_2 = 1'b0;
+      assign pwm_counter[2] = 32'd1;
+    end
+
+    if (N_PWMS >= 4) begin
+      axi_pwm_gen_1  #(
+        .PULSE_WIDTH (PULSE_3_WIDTH),
+        .PULSE_PERIOD (PULSE_3_PERIOD))
+
+Clone Blocks 2:
+hdl/library/axi_pwm_gen/axi_pwm_gen.v@239:273
+    end
+  end
+
+  generate
+
+    if (N_PWMS >= 2) begin
+      axi_pwm_gen_1  #(
+        .PULSE_WIDTH (PULSE_1_WIDTH),
+        .PULSE_PERIOD (PULSE_1_PERIOD))
+      i1_axi_pwm_gen_1(
+        .clk (clk),
+        .rstn (pwm_gen_resetn),
+        .pulse_width (pwm_width_s[63:32]),
+        .pulse_period (pwm_period_s[63:32]),
+        .load_config (load_config_s),
+        .sync (sync_1),
+        .pulse (pwm_1),
+        .pulse_counter (pwm_counter[1]));
+
+      always @(posedge clk) begin
+        if (pwm_gen_resetn == 1'b0) begin
+          sync_1 <= 1'b1;
+        end else begin
+          sync_1 <= (offset_cnt == pwm_offset_s[63:32]) ? 1'b0 : 1'b1;
+        end
+      end
+    end else begin
+      assign pwm_1 = 1'b0;
+      assign pwm_counter[1] = 32'd1;
+    end
+
+    if (N_PWMS >= 3) begin
+      axi_pwm_gen_1  #(
+        .PULSE_WIDTH (PULSE_2_WIDTH),
+        .PULSE_PERIOD (PULSE_2_PERIOD))
+

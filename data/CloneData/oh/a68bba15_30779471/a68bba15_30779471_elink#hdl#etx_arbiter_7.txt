@@ -1,0 +1,27 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@107:119@HdlStmAssign
+					   txrd_access,
+					   txwr_access
+					   })	
+				);
+   //Priority Mux
+   assign etx_mux[PW-1:0] =({(PW){txwr_grant}} & txwr_splice_packet[PW-1:0]) |
+			   ({(PW){txrd_grant}} & txrd_splice_packet[PW-1:0]) |
+			   ({(PW){txrr_grant}} & txrr_packet[PW-1:0]);
+ 
+   
+   //######################################################################
+   //Pushback (stall) Signals
+   //######################################################################
+
+Diff Content:
+- 112    assign etx_mux[PW-1:0] =({(PW){txwr_grant}} & txwr_splice_packet[PW-1:0]) |
+- 113 			   ({(PW){txrd_grant}} & txrd_splice_packet[PW-1:0]) |
+- 114 			   ({(PW){txrr_grant}} & txrr_packet[PW-1:0]);
++ 114    oh_mux3 #(.DW(PW))
++ 114    mux3(.out	(etx_mux[PW-1:0]),
++ 114 	.in0	(txwr_packet[PW-1:0]),.sel0 (txwr_grant),
++ 114 	.in1	(txrd_packet[PW-1:0]),.sel1 (txrd_grant),
++ 114 	.in2	(txrr_packet[PW-1:0]),.sel2 (txrr_grant)
++ 114 	);
+
+Clone Blocks:

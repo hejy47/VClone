@@ -1,0 +1,114 @@
+Source Block: hdl/library/cordic_demod/cordic_demod.v@68:110@HdlStmProcess
+localparam STATE_ADD = 3;
+localparam STATE_DONE = 4;
+
+reg [31:0] angle[0:30];
+
+initial begin
+  angle[0] = 32'h20000000;
+  angle[1] = 32'h12e4051e;
+  angle[2] = 32'h09fb385b;
+  angle[3] = 32'h051111d4;
+  angle[4] = 32'h028b0d43;
+  angle[5] = 32'h0145d7e1;
+  angle[6] = 32'h00a2f61e;
+  angle[7] = 32'h00517c55;
+  angle[8] = 32'h0028be53;
+  angle[9] = 32'h00145f2f;
+  angle[10] = 32'h000a2f98;
+  angle[11] = 32'h000517cc;
+  angle[12] = 32'h00028be6;
+  angle[13] = 32'h000145f3;
+  angle[14] = 32'h0000a2fa;
+  angle[15] = 32'h0000517d;
+  angle[16] = 32'h000028be;
+  angle[17] = 32'h0000145f;
+  angle[18] = 32'h00000a30;
+  angle[19] = 32'h00000518;
+  angle[20] = 32'h0000028c;
+  angle[21] = 32'h00000146;
+  angle[22] = 32'h000000a3;
+  angle[23] = 32'h00000051;
+  angle[24] = 32'h00000029;
+  angle[25] = 32'h00000014;
+  angle[26] = 32'h0000000a;
+  angle[27] = 32'h00000005;
+  angle[28] = 32'h00000003;
+  angle[29] = 32'h00000001;
+  angle[30] = 32'h00000001;
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    state <= STATE_IDLE;
+  end else begin
+
+Diff Content:
+- 73 initial begin
+- 74   angle[0] = 32'h20000000;
+- 75   angle[1] = 32'h12e4051e;
+- 76   angle[2] = 32'h09fb385b;
+- 77   angle[3] = 32'h051111d4;
+- 78   angle[4] = 32'h028b0d43;
+- 79   angle[5] = 32'h0145d7e1;
+- 80   angle[6] = 32'h00a2f61e;
+- 81   angle[7] = 32'h00517c55;
+- 82   angle[8] = 32'h0028be53;
+- 83   angle[9] = 32'h00145f2f;
+- 84   angle[10] = 32'h000a2f98;
+- 85   angle[11] = 32'h000517cc;
+- 86   angle[12] = 32'h00028be6;
+- 87   angle[13] = 32'h000145f3;
+- 88   angle[14] = 32'h0000a2fa;
+- 89   angle[15] = 32'h0000517d;
+- 90   angle[16] = 32'h000028be;
+- 91   angle[17] = 32'h0000145f;
+- 92   angle[18] = 32'h00000a30;
+- 93   angle[19] = 32'h00000518;
+- 94   angle[20] = 32'h0000028c;
+- 95   angle[21] = 32'h00000146;
+- 96   angle[22] = 32'h000000a3;
+- 97   angle[23] = 32'h00000051;
+- 98   angle[24] = 32'h00000029;
+- 99   angle[25] = 32'h00000014;
+- 100   angle[26] = 32'h0000000a;
+- 101   angle[27] = 32'h00000005;
+- 102   angle[28] = 32'h00000003;
+- 103   angle[29] = 32'h00000001;
+- 104   angle[30] = 32'h00000001;
+- 105 end
++ 105   initial begin
++ 105     angle[0] = 32'h20000000;
++ 105     angle[1] = 32'h12e4051e;
++ 105     angle[2] = 32'h09fb385b;
++ 105     angle[3] = 32'h051111d4;
++ 105     angle[4] = 32'h028b0d43;
++ 105     angle[5] = 32'h0145d7e1;
++ 105     angle[6] = 32'h00a2f61e;
++ 105     angle[7] = 32'h00517c55;
++ 105     angle[8] = 32'h0028be53;
++ 105     angle[9] = 32'h00145f2f;
++ 105     angle[10] = 32'h000a2f98;
++ 105     angle[11] = 32'h000517cc;
++ 105     angle[12] = 32'h00028be6;
++ 105     angle[13] = 32'h000145f3;
++ 105     angle[14] = 32'h0000a2fa;
++ 105     angle[15] = 32'h0000517d;
++ 105     angle[16] = 32'h000028be;
++ 105     angle[17] = 32'h0000145f;
++ 105     angle[18] = 32'h00000a30;
++ 105     angle[19] = 32'h00000518;
++ 105     angle[20] = 32'h0000028c;
++ 105     angle[21] = 32'h00000146;
++ 105     angle[22] = 32'h000000a3;
++ 105     angle[23] = 32'h00000051;
++ 105     angle[24] = 32'h00000029;
++ 105     angle[25] = 32'h00000014;
++ 105     angle[26] = 32'h0000000a;
++ 105     angle[27] = 32'h00000005;
++ 105     angle[28] = 32'h00000003;
++ 105     angle[29] = 32'h00000001;
++ 105     angle[30] = 32'h00000001;
++ 105   end
+
+Clone Blocks:

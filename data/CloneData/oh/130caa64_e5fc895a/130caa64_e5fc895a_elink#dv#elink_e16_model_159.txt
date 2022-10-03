@@ -1,0 +1,51 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1556:1568@HdlStmProcess
+   //# The indication of the type of the transaction
+   //# is sent in the byte0 of the transaction.
+   //##################################################
+
+   assign my_tran = ~(rd_tran ^ rxi_rd);
+   always @ (posedge rxi_lclk)
+     if(~frame_reg)            //will stop sampling when byte0 is received
+       rd_tran <= rxi_data[7];
+
+   //# frame rising edge detection
+   assign new_tran = my_tran & frame_reg & ~frame_reg_del;
+
+   //# bytes packaging into short words + new transaction indication
+
+Diff Content:
+- 1561    always @ (posedge rxi_lclk)
+- 1562      if(~frame_reg)            //will stop sampling when byte0 is received
+- 1563        rd_tran <= rxi_data[7];
++ 1563    input [2*LW-1:0] c0_emesh_tran_in;  // serialized transaction
++ 1563    input 	    c0_emesh_frame_in; // transaction frame
++ 1563    input [2*LW-1:0] c1_emesh_tran_in;  // serialized transaction
++ 1563    input 	    c1_emesh_frame_in; // transaction frame
++ 1563    input [2*LW-1:0] c2_emesh_tran_in;  // serialized transaction
++ 1563    input 	    c2_emesh_frame_in; // transaction frame
++ 1563    input [2*LW-1:0] c3_emesh_tran_in;  // serialized transaction
++ 1563    input 	    c3_emesh_frame_in; // transaction frame
++ 1563    input [2*LW-1:0] c0_rdmesh_tran_in;  // serialized transaction
++ 1563    input 	    c0_rdmesh_frame_in; // transaction frame
++ 1563    input [2*LW-1:0] c1_rdmesh_tran_in;  // serialized transaction
++ 1563    input 	    c1_rdmesh_frame_in; // transaction frame
++ 1563    input [2*LW-1:0] c2_rdmesh_tran_in;  // serialized transaction
++ 1563    input 	    c2_rdmesh_frame_in; // transaction frame
++ 1563    input [2*LW-1:0] c3_rdmesh_tran_in;  // serialized transaction
++ 1563    input 	    c3_rdmesh_frame_in; // transaction frame
++ 1563    input 	    c0_mesh_access_in;  // access control from the mesh
++ 1563    input 	    c0_mesh_write_in;   // write control from the mesh
++ 1563    input [AW-1:0]   c0_mesh_dstaddr_in; // destination address from the mesh
++ 1563    input [AW-1:0]   c0_mesh_srcaddr_in; // source address from the mesh
++ 1563    input [DW-1:0]   c0_mesh_data_in;    // data from the mesh
++ 1563    input [1:0] 	    c0_mesh_datamode_in;// data mode from the mesh 
++ 1563    input [3:0] 	    c0_mesh_ctrlmode_in;// ctrl mode from the mesh
++ 1563    input 	    c3_mesh_access_in;  // access control from the mesh
++ 1563    input 	    c3_mesh_write_in;   // write control from the mesh
++ 1563    input [AW-1:0]   c3_mesh_dstaddr_in; // destination address from the mesh
++ 1563    input [AW-1:0]   c3_mesh_srcaddr_in; // source address from the mesh
++ 1563    input [DW-1:0]   c3_mesh_data_in;    // data from the mesh
++ 1563    input [1:0] 	    c3_mesh_datamode_in;// data mode from the mesh 
++ 1563    input [3:0] 	    c3_mesh_ctrlmode_in;// ctrl mode from the mesh
+
+Clone Blocks:

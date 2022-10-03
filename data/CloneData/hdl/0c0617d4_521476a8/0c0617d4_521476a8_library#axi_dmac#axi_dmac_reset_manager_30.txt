@@ -1,0 +1,103 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@215:260@HdlStmFor
+assign reset_sync_chain[0] = reset_async_chain[3];
+
+generate
+genvar i;
+
+for (i = 0; i < 3; i = i + 1) begin: reset_gen
+
+  if (GEN_ASYNC_RESET[i] == 1'b1) begin
+
+    reg [3:0] reset_async = 4'b1111;
+    reg [1:0] reset_sync = 2'b11;
+    reg reset_sync_in = 1'b1;
+
+    always @(posedge reset_chain_clks[i] or posedge reset_sync_chain[i]) begin
+      if (reset_sync_chain[i] == 1'b1) begin
+        reset_sync_in <= 1'b1;
+      end else begin
+        reset_sync_in <= reset_async[0];
+      end
+    end
+
+    always @(posedge reset_chain_clks[i] or posedge do_reset) begin
+      if (do_reset == 1'b1) begin
+        reset_async <= 4'b1111;
+      end else begin
+        reset_async <= {reset_async_chain[i], reset_async[3:1]};
+      end
+    end
+
+    always @(posedge reset_chain_clks[i]) begin
+      reset_sync <= {reset_sync_in,reset_sync[1]};
+    end
+
+    assign reset_async_chain[i+1] = reset_async[0];
+    assign reset_sync_chain[i+1] = reset_sync[0];
+
+  end else begin
+    assign reset_async_chain[i+1] = reset_async_chain[i];
+    assign reset_sync_chain[i+1] = reset_sync_chain[i];
+  end
+end
+
+endgenerate
+
+/* De-assertions in the opposite direction of the data flow: dest, src, request */
+assign dest_resetn = ~reset_sync_chain[1];
+
+Diff Content:
+- 220 for (i = 0; i < 3; i = i + 1) begin: reset_gen
+- 222   if (GEN_ASYNC_RESET[i] == 1'b1) begin
+- 224     reg [3:0] reset_async = 4'b1111;
+- 225     reg [1:0] reset_sync = 2'b11;
+- 226     reg reset_sync_in = 1'b1;
+- 228     always @(posedge reset_chain_clks[i] or posedge reset_sync_chain[i]) begin
+- 229       if (reset_sync_chain[i] == 1'b1) begin
+- 230         reset_sync_in <= 1'b1;
+- 231       end else begin
+- 232         reset_sync_in <= reset_async[0];
+- 234     end
+- 236     always @(posedge reset_chain_clks[i] or posedge do_reset) begin
+- 237       if (do_reset == 1'b1) begin
+- 238         reset_async <= 4'b1111;
+- 239       end else begin
+- 240         reset_async <= {reset_async_chain[i], reset_async[3:1]};
+- 242     end
+- 244     always @(posedge reset_chain_clks[i]) begin
+- 245       reset_sync <= {reset_sync_in,reset_sync[1]};
+- 246     end
+- 248     assign reset_async_chain[i+1] = reset_async[0];
+- 249     assign reset_sync_chain[i+1] = reset_sync[0];
+- 251   end else begin
+- 252     assign reset_async_chain[i+1] = reset_async_chain[i];
+- 253     assign reset_sync_chain[i+1] = reset_sync_chain[i];
+- 255 end
++ 220   for (i = 0; i < 3; i = i + 1) begin: reset_gen
++ 222     if (GEN_ASYNC_RESET[i] == 1'b1) begin
++ 226       reg [3:0] reset_async = 4'b1111;
++ 226       reg [1:0] reset_sync = 2'b11;
++ 226       reg reset_sync_in = 1'b1;
++ 232       always @(posedge reset_chain_clks[i] or posedge reset_sync_chain[i]) begin
++ 232         if (reset_sync_chain[i] == 1'b1) begin
++ 232           reset_sync_in <= 1'b1;
++ 232         end else begin
++ 232           reset_sync_in <= reset_async[0];
++ 232         end
++ 240       always @(posedge reset_chain_clks[i] or posedge do_reset) begin
++ 240         if (do_reset == 1'b1) begin
++ 240           reset_async <= 4'b1111;
++ 240         end else begin
++ 240           reset_async <= {reset_async_chain[i], reset_async[3:1]};
++ 240         end
++ 246       always @(posedge reset_chain_clks[i]) begin
++ 246         reset_sync <= {reset_sync_in,reset_sync[1]};
++ 246       end
++ 249       assign reset_async_chain[i+1] = reset_async[0];
++ 249       assign reset_sync_chain[i+1] = reset_sync[0];
++ 253     end else begin
++ 253       assign reset_async_chain[i+1] = reset_async_chain[i];
++ 253       assign reset_sync_chain[i+1] = reset_sync_chain[i];
++ 253     end
+
+Clone Blocks:

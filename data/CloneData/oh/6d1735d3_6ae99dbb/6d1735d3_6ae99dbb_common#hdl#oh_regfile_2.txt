@@ -1,0 +1,24 @@
+Source Block: oh/common/hdl/oh_regfile.v@41:57@HdlStmFor
+     for(j=0;j<WP;j=j+1)
+       assign write_en[i][j] = wr_valid[j] & (wr_addr[j*RAW+:RAW] == i);
+
+
+   //Multi Write-Port Mux
+   for(i=0;i<REGS;i=i+1) 
+     begin: gmux
+	oh_mux #(.DW(RW), .N(WP))
+	iwrmux(.out (datamux[i][RW-1:0]),
+	       .sel (write_en[i][WP-1:0]),
+	       .in  (wr_data[WP*RW-1:0]));
+     end
+	     		 
+   //Memory Array Write
+   for(i=0;i<REGS;i=i+1)
+     always @ (posedge clk)
+       if (|write_en[i][WP-1:0])
+
+Diff Content:
+- 47      begin: gmux
++ 47      begin: gen_wrmux
+
+Clone Blocks:

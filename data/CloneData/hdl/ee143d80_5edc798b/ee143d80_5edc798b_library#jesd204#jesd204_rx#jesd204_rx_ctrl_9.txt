@@ -1,0 +1,36 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@97:116@HdlStmProcess
+assign cgs_reset = cgs_rst;
+assign ifs_reset = ifs_rst;
+assign sync = sync_n;
+assign phy_en_char_align = en_align;
+
+always @(posedge clk) begin
+  case (state)
+  STATE_RESET: status_state <= STATUS_STATE_RESET;
+  STATE_WAIT_FOR_PHY: status_state <= STATUS_STATE_WAIT_FOR_PHY;
+  STATE_CGS: status_state <= STATUS_STATE_CGS;
+  STATE_DEGLITCH: status_state <= STATUS_STATE_CGS;
+  STATE_SYNCHRONIZED: status_state <= STATUS_STATE_SYNCHRONIZED;
+  default: status_state <= STATUS_STATE_RESET;
+  endcase
+end
+
+always @(posedge clk) begin
+  case (state)
+  STATE_RESET: begin
+    cgs_rst <= {NUM_LANES{1'b1}};
+
+Diff Content:
+- 102 always @(posedge clk) begin
+- 103   case (state)
+- 104   STATE_RESET: status_state <= STATUS_STATE_RESET;
+- 105   STATE_WAIT_FOR_PHY: status_state <= STATUS_STATE_WAIT_FOR_PHY;
+- 106   STATE_CGS: status_state <= STATUS_STATE_CGS;
+- 107   STATE_DEGLITCH: status_state <= STATUS_STATE_CGS;
+- 108   STATE_SYNCHRONIZED: status_state <= STATUS_STATE_SYNCHRONIZED;
+- 109   default: status_state <= STATUS_STATE_RESET;
+- 110   endcase
+- 111 end
++ 111 assign status_state = state;
+
+Clone Blocks:

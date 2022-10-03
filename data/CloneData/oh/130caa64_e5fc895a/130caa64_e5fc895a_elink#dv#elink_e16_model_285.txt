@@ -1,0 +1,17 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2493:2503@HdlStmAssign
+
+   //# Read next entry
+   assign mesh_fifo_read = access & ~mesh_wait_in;
+
+   //# Mesh transaction fields extraction
+   assign ctrlmode[3:0]   =  fifo_tran_out[2*LW-1:2*LW-4];
+
+   assign dstaddr[AW-1:0] = {fifo_tran_out[2*LW-5:0],
+                             fifo_tran_out[4*LW-1:2*LW],
+                             fifo_tran_out[6*LW-1:6*LW-4]};
+
+
+Diff Content:
+- 2498    assign ctrlmode[3:0]   =  fifo_tran_out[2*LW-1:2*LW-4];
+
+Clone Blocks:

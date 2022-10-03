@@ -1,0 +1,439 @@
+Source Block: miaow/scripts/xilinx/axi_slave_v1_0_S00_AXI.v@364:428@HdlStmProcess
+	// These registers are cleared when reset (active low) is applied.
+	// Slave register write enable is asserted when valid address and data are available
+	// and the slave is ready to accept the write address and write data.
+	assign slv_reg_wren = axi_wready && S_AXI_WVALID && axi_awready && S_AXI_AWVALID;
+
+	always @( posedge S_AXI_ACLK )
+    begin
+      if ( S_AXI_ARESETN == 1'b0 )
+      begin
+        waveID    <= 32'd0;
+        baseVGPR  <= 32'd0;
+        baseSGPR  <= 32'd0;
+        baseLDS   <= 32'd0;
+        waveCount <= 32'd0;
+
+        resultsReadyTag <= 32'd0;
+        
+        slv_reg_wren_buffer <= 1'b0;
+      end
+      else begin
+        slv_reg_wren_buffer <= slv_reg_wren;
+        if(cu2dispatch_wf_done_in) begin
+          resultsReadyTag <= resultsReadyTag_in;
+        end
+        if (slv_reg_wren)
+          begin
+            case ( axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] )
+              // 7'h00: Start command initiate program
+              7'h01: waveID       <= S_AXI_WDATA;
+              7'h02: baseVGPR     <= S_AXI_WDATA;
+              7'h03: baseSGPR     <= S_AXI_WDATA;
+              7'h04: baseLDS      <= S_AXI_WDATA;
+              7'h05: waveCount    <= S_AXI_WDATA;
+              7'h06: pcStart      <= S_AXI_WDATA;
+              7'h07: instrAddrReg <= S_AXI_WDATA;
+              // 7'h08: Instruction value
+              // 7'h09: Unused
+              // 7'h0A: GPR command register
+              7'h0B: quadBaseAddress <= S_AXI_WDATA[9:0];
+              7'h0C: quadData0 <= S_AXI_WDATA;
+              7'h0D: quadData1 <= S_AXI_WDATA;
+              7'h0E: quadData2 <= S_AXI_WDATA;
+              7'h0F: quadData3 <= S_AXI_WDATA;
+              
+              7'h30: mb2fpgamem_data_in_reg <= S_AXI_WDATA;
+              7'h31: mb2fpgamem_data_we_reg <= S_AXI_WDATA[0];
+              7'h32: mb2fpgamem_ack_reg <= S_AXI_WDATA[0];
+              7'h33: mb2fpgamem_done_reg <= S_AXI_WDATA[0];
+              default:
+              begin
+                waveID    <= waveID;
+                baseVGPR  <= baseVGPR;
+                baseSGPR  <= baseSGPR;
+                baseLDS   <= baseLDS;
+                waveCount <= waveCount;
+              end
+            endcase
+          end
+      end
+    end
+
+	// Implement write response logic generation
+	// The write response and response valid signals are asserted by the slave
+	// when axi_wready, S_AXI_WVALID, axi_wready and S_AXI_WVALID are asserted.
+	// This marks the acceptance of address and indicates the status of
+
+Diff Content:
+- 384         slv_reg_wren_buffer <= slv_reg_wren;
+- 385         if(cu2dispatch_wf_done_in) begin
+- 386           resultsReadyTag <= resultsReadyTag_in;
+- 387         end
++ 381         singleVectorWrDataMask <= 64'd0;
++ 387       	if( mb_reset == 1'b0)
++ 387             begin
++ 387               waveID    <= 32'd0;
++ 387               baseVGPR  <= 32'd0;
++ 387               baseSGPR  <= 32'd0;
++ 387               baseLDS   <= 32'd0;
++ 387               waveCount <= 32'd0;
++ 387               resultsReadyTag <= 32'd0;
++ 387               singleVectorWrDataMask <= 64'd0;
++ 387               slv_reg_wren_buffer <= 1'b0;
++ 387             end
++ 387         else
++ 387           begin
++ 387               slv_reg_wren_buffer <= slv_reg_wren;
++ 387               if(cu2dispatch_wf_done_in) begin
++ 387                 resultsReadyTag <= resultsReadyTag_in;
++ 387               end
++ 387           end
++ 398               7'h09: mb_reset <= ~S_AXI_WDATA[0];
++ 411               7'h34:
++ 411               begin
++ 411                singleVectorBaseAddress <= S_AXI_WDATA[9:0];
++ 411                singleVectorWrDataMask <= 64'd0;
++ 411               end
++ 411               7'h35:
++ 411               begin
++ 411                singleVectorWrData0 <= S_AXI_WDATA;
++ 411                singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000001;
++ 411               end
++ 411               7'h36:
++ 411               begin
++ 411                singleVectorWrData1 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000002;
++ 411               end
++ 411               7'h37:
++ 411               begin
++ 411                singleVectorWrData2 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000004;
++ 411               end
++ 411               7'h38:
++ 411               begin
++ 411                singleVectorWrData3 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000008;
++ 411               end
++ 411               7'h39:
++ 411               begin
++ 411                singleVectorWrData4 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000010;
++ 411               end
++ 411               7'h3a:
++ 411               begin
++ 411                singleVectorWrData5 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000020;
++ 411               end
++ 411               7'h3b:
++ 411               begin
++ 411                singleVectorWrData6 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000040;
++ 411               end
++ 411               7'h3c:
++ 411               begin
++ 411                singleVectorWrData7 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000080;
++ 411               end
++ 411               7'h3d:
++ 411               begin
++ 411                singleVectorWrData8 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000100;
++ 411               end
++ 411               7'h3e:
++ 411               begin
++ 411                singleVectorWrData9 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000200;
++ 411               end
++ 411               7'h3f:
++ 411               begin
++ 411                singleVectorWrData10 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000400;
++ 411               end
++ 411               7'h40:
++ 411               begin
++ 411                singleVectorWrData11 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000000800;
++ 411               end
++ 411               7'h41:
++ 411               begin
++ 411                singleVectorWrData12 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000001000;
++ 411                end
++ 411               7'h42:
++ 411               begin
++ 411                singleVectorWrData13 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000002000;
++ 411               end
++ 411               7'h43:
++ 411               begin
++ 411                singleVectorWrData14 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000004000;
++ 411               end
++ 411               7'h44:
++ 411               begin
++ 411                singleVectorWrData15 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000008000;
++ 411               end
++ 411               7'h45:
++ 411               begin
++ 411                singleVectorWrData16 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000010000;
++ 411               end
++ 411               7'h46:
++ 411               begin
++ 411                singleVectorWrData17 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000020000;
++ 411               end
++ 411               7'h47:
++ 411               begin
++ 411                singleVectorWrData18 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000040000;
++ 411               end
++ 411               7'h48:
++ 411               begin
++ 411                singleVectorWrData19 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000080000;
++ 411               end
++ 411               7'h49:
++ 411               begin
++ 411                singleVectorWrData20 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000100000;
++ 411               end
++ 411               7'h4a:
++ 411               begin
++ 411                singleVectorWrData21 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000200000;
++ 411               end
++ 411               7'h4b:
++ 411               begin
++ 411                singleVectorWrData22 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000400000;
++ 411               end
++ 411               7'h4c:
++ 411               begin
++ 411                singleVectorWrData23 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000000800000;
++ 411               end
++ 411               7'h4d:
++ 411               begin
++ 411                singleVectorWrData24 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000001000000;
++ 411               end
++ 411               7'h4e:
++ 411               begin
++ 411                singleVectorWrData25 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000002000000;
++ 411               end
++ 411               7'h4f:
++ 411               begin
++ 411                singleVectorWrData26 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000004000000;
++ 411               end
++ 411               7'h50:
++ 411               begin
++ 411                singleVectorWrData27 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000008000000;
++ 411               end
++ 411               7'h51:
++ 411               begin
++ 411                singleVectorWrData28 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000010000000;
++ 411               end
++ 411               7'h52:
++ 411               begin
++ 411                singleVectorWrData29 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000020000000;
++ 411               end
++ 411               7'h53:
++ 411               begin
++ 411                singleVectorWrData30 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000040000000;
++ 411               end
++ 411               7'h54:
++ 411               begin
++ 411                singleVectorWrData31 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000080000000;
++ 411               end
++ 411               7'h55:
++ 411               begin
++ 411                singleVectorWrData32 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000100000000;
++ 411               end
++ 411               7'h56:
++ 411               begin
++ 411                singleVectorWrData33 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000000200000000;
++ 411               end
++ 411               7'h57:
++ 411               begin
++ 411                singleVectorWrData34 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000000400000000;
++ 411               end
++ 411               7'h58:
++ 411               begin
++ 411                singleVectorWrData35 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000000800000000;
++ 411               end
++ 411               7'h59:
++ 411               begin
++ 411                singleVectorWrData36 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |   64'h0000001000000000;
++ 411               end
++ 411               7'h5a:
++ 411               begin
++ 411                singleVectorWrData37 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000002000000000;
++ 411               end
++ 411               7'h5b:
++ 411               begin
++ 411                singleVectorWrData38 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000004000000000;
++ 411               end
++ 411               7'h5c:
++ 411               begin
++ 411                singleVectorWrData39 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000008000000000;
++ 411               end
++ 411               7'h5d:
++ 411               begin
++ 411                singleVectorWrData40 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000010000000000;
++ 411               end
++ 411               7'h5e:
++ 411               begin
++ 411                singleVectorWrData41 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000020000000000;
++ 411               end
++ 411               7'h5f:
++ 411               begin
++ 411                singleVectorWrData42 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000040000000000;
++ 411               end
++ 411               7'h60:
++ 411               begin
++ 411                singleVectorWrData43 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000080000000000;
++ 411               end
++ 411               7'h61:
++ 411               begin
++ 411                singleVectorWrData44 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000100000000000;
++ 411               end
++ 411               7'h62:
++ 411               begin
++ 411                singleVectorWrData45 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000200000000000;
++ 411               end
++ 411               7'h63:
++ 411               begin
++ 411                singleVectorWrData46 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000400000000000;
++ 411               end
++ 411               7'h64:
++ 411               begin
++ 411                singleVectorWrData47 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0000800000000000;
++ 411               end
++ 411               7'h65:
++ 411               begin
++ 411                singleVectorWrData48 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0001000000000000;
++ 411               end
++ 411               7'h66:
++ 411               begin
++ 411                singleVectorWrData49 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0002000000000000;
++ 411               end
++ 411               7'h67:
++ 411               begin
++ 411                singleVectorWrData50 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0004000000000000;
++ 411               end
++ 411               7'h68:
++ 411               begin
++ 411                singleVectorWrData51 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0008000000000000;
++ 411               end
++ 411               7'h69:
++ 411               begin
++ 411                singleVectorWrData52 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0010000000000000;
++ 411               end
++ 411               7'h6a:
++ 411               begin
++ 411                singleVectorWrData53 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0020000000000000;
++ 411               end
++ 411               7'h6b:
++ 411               begin
++ 411                singleVectorWrData54 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0040000000000000;
++ 411               end
++ 411               7'h6c:
++ 411               begin
++ 411                singleVectorWrData55 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0080000000000000;
++ 411               end
++ 411               7'h6d:
++ 411               begin
++ 411                singleVectorWrData56 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0100000000000000;
++ 411               end
++ 411               7'h6e:
++ 411               begin
++ 411                singleVectorWrData57 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0200000000000000;
++ 411               end
++ 411               7'h6f:
++ 411               begin
++ 411                singleVectorWrData58 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0400000000000000;
++ 411               end
++ 411               7'h70:
++ 411               begin
++ 411                singleVectorWrData59 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h0800000000000000;
++ 411               end
++ 411               7'h71:
++ 411               begin
++ 411                singleVectorWrData60 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h1000000000000000;
++ 411               end
++ 411               7'h72:
++ 411               begin
++ 411                singleVectorWrData61 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h2000000000000000;
++ 411               end
++ 411               7'h73:
++ 411               begin
++ 411                singleVectorWrData62 <= S_AXI_WDATA;
++ 411                 singleVectorWrDataMask <= singleVectorWrDataMask |  64'h4000000000000000;
++ 411               end
++ 411               7'h74:
++ 411               begin
++ 411                singleVectorWrData63 <= S_AXI_WDATA;
++ 411                singleVectorWrDataMask <= singleVectorWrDataMask |  64'h8000000000000000;
++ 411               end
++ 411               7'h76://reset_vector_values
++ 411               begin
++ 411                 {         singleVectorWrData63, singleVectorWrData62, singleVectorWrData61, singleVectorWrData60, singleVectorWrData59, singleVectorWrData58,
++ 411                           singleVectorWrData57, singleVectorWrData56, singleVectorWrData55, singleVectorWrData54, singleVectorWrData53, singleVectorWrData52,
++ 411                           singleVectorWrData51, singleVectorWrData50, singleVectorWrData49, singleVectorWrData48, singleVectorWrData47, singleVectorWrData46,
++ 411                           singleVectorWrData45, singleVectorWrData44, singleVectorWrData43, singleVectorWrData42, singleVectorWrData41, singleVectorWrData40,
++ 411                           singleVectorWrData39, singleVectorWrData38, singleVectorWrData37, singleVectorWrData36, singleVectorWrData35, singleVectorWrData34,
++ 411                           singleVectorWrData33, singleVectorWrData32, singleVectorWrData31, singleVectorWrData30, singleVectorWrData29, singleVectorWrData28,
++ 411                           singleVectorWrData27, singleVectorWrData26, singleVectorWrData25, singleVectorWrData24, singleVectorWrData23, singleVectorWrData22,
++ 411                           singleVectorWrData21, singleVectorWrData20, singleVectorWrData19, singleVectorWrData18, singleVectorWrData17, singleVectorWrData16,
++ 411                           singleVectorWrData15, singleVectorWrData14, singleVectorWrData13, singleVectorWrData12, singleVectorWrData11, singleVectorWrData10,
++ 411                           singleVectorWrData9,  singleVectorWrData8,  singleVectorWrData7,  singleVectorWrData6,  singleVectorWrData5,  singleVectorWrData4,
++ 411                           singleVectorWrData3,  singleVectorWrData2,  singleVectorWrData1,  singleVectorWrData0
++ 411                          } <= 2048'd0;
++ 411                 singleVectorWrDataMask <= 64'hffffffffffffffff;
++ 411               end
++ 411               7'h77://DataMask_Lo
++ 411                 singleVectorWrDataMask[31:0] <= S_AXI_WDATA;
++ 411               7'h78://DataMask_Hi
++ 411                 singleVectorWrDataMask[63:32] <= S_AXI_WDATA;
+
+Clone Blocks:

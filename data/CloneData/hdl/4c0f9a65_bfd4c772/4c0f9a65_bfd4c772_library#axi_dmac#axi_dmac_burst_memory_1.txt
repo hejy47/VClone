@@ -1,0 +1,26 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@203:219@HdlStmProcess
+assign src_last_beat = src_beat & src_mem_data_last;
+assign src_waddr = {src_id_reduced,src_beat_counter};
+
+assign src_data_request_id = src_dest_id;
+
+always @(*) begin
+  if (src_last_beat == 1'b1) begin
+    src_id_next <= inc_id(src_id);
+  end else begin
+    src_id_next <= src_id;
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_reset == 1'b1) begin
+    src_id <= 'h00;
+    src_id_reduced_msb <= 1'b0;
+
+Diff Content:
+- 210     src_id_next <= inc_id(src_id);
+- 212     src_id_next <= src_id;
++ 210     src_id_next = inc_id(src_id);
++ 212     src_id_next = src_id;
+
+Clone Blocks:

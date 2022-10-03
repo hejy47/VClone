@@ -1,0 +1,198 @@
+Source Block: hdl/projects/fmcjesdadc1/common/fmcjesdadc1_spi.v@81:104@HdlStmProcess
+
+  // check on rising edge and change on falling edge
+
+  assign spi_enable_s = spi_enable & ~spi_csn;
+
+  always @(posedge spi_clk or posedge spi_csn) begin
+    if (spi_csn == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count <= 6'd7) begin
+        spi_devid <= {spi_devid[6:0], spi_mosi};
+      end
+      if (spi_count == 6'd8) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
+  end
+
+  always @(negedge spi_clk or posedge spi_csn) begin
+    if (spi_csn == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+
+Diff Content:
++ 88       spi_devid <= 8'd0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/ad9671_fmc/common/ad9671_fmc_spi.v@82:102
+  // check on rising edge and change on falling edge
+
+  assign spi_csn_s = spi_ad9553_csn & spi_ad9516_csn & spi_ad9671_csn;
+  assign spi_enable_s = spi_enable & ~spi_csn_s;
+
+  always @(posedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count == 6'd0) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
+  end
+
+  always @(negedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+
+Clone Blocks 2:
+hdl/projects/ad9467_fmc/common/ad9467_spi.v@71:91
+  // check on rising edge and change on falling edge
+
+  assign spi_csn_s = & spi_csn;
+  assign spi_enable_s = spi_enable & ~spi_csn_s;
+
+  always @(posedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count == 6'd0) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
+  end
+
+  always @(negedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+
+Clone Blocks 3:
+hdl/projects/ad9625x2_fmc/common/ad9625x2_fmc_spi.v@76:96
+
+  assign spi_csn_s = spi_csn_0 & spi_csn_1;
+  assign spi_dirn = ~spi_enable_s;
+  assign spi_enable_s = spi_enable & ~spi_csn_s;
+
+  always @(posedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count == 6'd0) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
+  end
+
+  always @(negedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+
+Clone Blocks 4:
+hdl/projects/ad9680_eval/common/ad9680_eval_spi.v@71:91
+  // check on rising edge and change on falling edge
+
+  assign spi_csn_s = spi_csn;
+  assign spi_enable_s = spi_enable & ~spi_csn_s;
+
+  always @(posedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count == 6'd0) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
+  end
+
+  always @(negedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+
+Clone Blocks 5:
+hdl/projects/daq2/common/daq2_spi.v@71:91
+  // check on rising edge and change on falling edge
+
+  assign spi_csn_s = & spi_csn;
+  assign spi_enable_s = spi_enable & ~spi_csn_s;
+
+  always @(posedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count == 6'd0) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
+  end
+
+  always @(negedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+
+Clone Blocks 6:
+hdl/projects/ad9625_fmc/common/ad9625_fmc_spi.v@77:97
+  // check on rising edge and change on falling edge
+
+  assign spi_csn_s = spi_adc_csn & spi_clk_csn;
+  assign spi_enable_s = spi_enable & ~spi_csn_s;
+
+  always @(posedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count == 6'd0) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
+  end
+
+  always @(negedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+
+Clone Blocks 7:
+hdl/projects/usdrx1/common/usdrx1_spi.v@86:106
+  assign spi_csn_3_s[1] = & spi_afe_csn;
+  assign spi_csn_3_s[0] = spi_clk_csn;
+  assign spi_csn_s = & spi_csn_3_s;
+  assign spi_enable_s = spi_enable & ~spi_csn_s;
+
+  always @(posedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_count <= 6'd0;
+      spi_rd_wr_n <= 1'd0;
+    end else begin
+      spi_count <= spi_count + 1'b1;
+      if (spi_count == 6'd0) begin
+        spi_rd_wr_n <= spi_mosi;
+      end
+    end
+  end
+
+  always @(negedge spi_clk or posedge spi_csn_s) begin
+    if (spi_csn_s == 1'b1) begin
+      spi_enable <= 1'b0;
+    end else begin
+

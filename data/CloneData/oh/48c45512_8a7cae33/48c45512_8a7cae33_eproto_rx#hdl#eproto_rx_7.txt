@@ -1,0 +1,60 @@
+Source Block: oh/eproto_rx/hdl/eproto_rx.v@274:311@HdlStmProcess
+        end
+      endcase
+   end // always @ ( posedge rxlclk_p )
+   
+   // 3rd cycle
+   always @( posedge rxlclk_p ) begin
+
+      // default pass-throughs
+      ctrlmode_2    <= ctrlmode_1;
+      dstaddr_2     <= dstaddr_1;
+      datamode_2    <= datamode_1;
+      write_2       <= write_1;
+      access_2      <= access_1 & rxactive_1;  // avoid random non-frame data
+      data_2        <= data_1;
+      srcaddr_2 <= srcaddr_1;
+         
+      case( rxalign_1 )
+        // 7-5: Full packet is complete in 2nd cycle
+        3'd4:
+          srcaddr_2[7:0]  <= rxdata_in[63:56];
+        3'd3:
+          srcaddr_2[15:0] <= rxdata_in[63:48];
+        3'd2:
+          srcaddr_2[23:0] <= rxdata_in[63:40];
+        3'd1:
+          srcaddr_2[31:0] <= rxdata_in[63:32];
+        3'd0: begin
+           data_2[7:0]     <= rxdata_in[63:56];
+           srcaddr_2[31:0] <= rxdata_in[55:24];
+        end
+      endcase // case ( rxalign_1 )
+
+   end // always @ ( posedge rxlclk_p )
+   
+/*  The spec says reads use the 'data' slot for src address, but apparently
+    the silicon has not read this spec.
+      if( write_1 ) begin
+
+
+Diff Content:
+- 282       ctrlmode_2    <= ctrlmode_1;
+- 283       dstaddr_2     <= dstaddr_1;
+- 284       datamode_2    <= datamode_1;
+- 285       write_2       <= write_1;
+- 286       access_2      <= access_1 & rxactive_1;  // avoid random non-frame data
+- 288       srcaddr_2 <= srcaddr_1;
++ 286       if(~stream_2) begin
++ 286          ctrlmode_2    <= ctrlmode_1;
++ 286          dstaddr_2     <= dstaddr_1;
++ 286          datamode_2    <= datamode_1;
++ 286          write_2       <= write_1;
++ 286          access_2      <= access_1 & rxactive_1;
++ 286       end else begin
++ 286          dstaddr_2     <= dstaddr_2 + 32'h00000008;
++ 286       end
++ 288       srcaddr_2     <= srcaddr_1;
++ 288       stream_2      <= stream_1;
+
+Clone Blocks:

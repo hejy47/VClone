@@ -1,0 +1,31 @@
+Source Block: hdl/projects/daq2/a10gx/system_top.v@238:248@HdlStmAssign
+    .outclocken (1'b1),
+    .aclr (eth_tx_reset_s),
+    .outclock (eth_tx_clk),
+    .dataout (eth_tx_clk_out));
+
+  assign eth_tx_reset_s = ~sys_pll_locked_s;
+
+  always @(posedge rx_clk) begin
+    rx_sysref_m1 <= rx_sysref_s;
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+
+Diff Content:
+- 243   assign eth_tx_reset_s = ~sys_pll_locked_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcjesdadc1/a5gt/system_top.v@238:248
+    .outclocken (1'b1),
+    .aclr (eth_tx_reset_s),
+    .outclock (eth_tx_clk),
+    .dataout (eth_tx_clk_out));
+
+  assign eth_tx_reset_s = ~sys_pll_locked_s;
+
+  always @(posedge rx_clk) begin
+    rx_sysref_m1 <= rx_sysref_s;
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+

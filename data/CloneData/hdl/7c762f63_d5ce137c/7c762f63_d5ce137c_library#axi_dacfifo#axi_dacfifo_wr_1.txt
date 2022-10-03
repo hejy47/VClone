@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_wr.v@410:438@HdlStmProcess
+                           (MEM_RATIO == 8) ? axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):3] :
+                                              axi_mem_waddr[(DMA_MEM_ADDRESS_WIDTH-1):4];
+
+  assign axi_mem_addr_diff_s = {1'b1, axi_mem_waddr_s} - axi_mem_raddr;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_mem_read_en <= 1'b0;
+      axi_mem_read_en_d <= 1'b0;
+      axi_mem_addr_diff <= 'b0;
+    end else begin
+      axi_mem_addr_diff <= axi_mem_addr_diff_s[(AXI_MEM_ADDRESS_WIDTH-1):0];
+      // If there is a valid request and there is enough data in the memory or it's the end of the dma transaction
+      if ((axi_xfer_req_m[2] == 1'b1) && (axi_mem_read_en == 1'b0) && (axi_wr_active == 1'b0)) begin
+        if (((axi_mem_addr_diff > AXI_LENGTH) && (axi_last_transaction == 1'b0)) ||
+             (axi_last_transaction == 1'b1) && (axi_last_transaction_d == 1'b0)) begin
+          axi_mem_read_en <= 1'b1;
+        end
+      end else if (axi_mem_last_s == 1'b1) begin
+        axi_mem_read_en <= 1'b0;
+      end
+      axi_mem_read_en_d <= axi_mem_read_en;
+    end
+  end
+
+  // If there is enough data and the AXI interface is ready, we can start to read
+  // out data from the memory
+
+  assign axi_mem_eot_s = axi_last_transaction_d & ~axi_last_transaction;
+
+Diff Content:
+- 423       if ((axi_xfer_req_m[2] == 1'b1) && (axi_mem_read_en == 1'b0) && (axi_wr_active == 1'b0)) begin
+- 424         if (((axi_mem_addr_diff > AXI_LENGTH) && (axi_last_transaction == 1'b0)) ||
++ 424       if (axi_mem_read_en == 1'b0) begin
++ 424         if (((axi_xfer_req_m[2] == 1'b1) && (axi_mem_addr_diff > AXI_LENGTH) && (axi_last_transaction_d == 1'b0)) ||
+
+Clone Blocks:

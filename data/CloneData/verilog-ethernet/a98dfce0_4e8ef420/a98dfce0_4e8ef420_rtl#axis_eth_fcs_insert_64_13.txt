@@ -1,0 +1,407 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_insert_64.v@275:532@HdlStmProcess
+            fcs_output_tkeep_1 = 0;
+        end
+    endcase
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    last_cycle_tdata_next = last_cycle_tdata_reg;
+    last_cycle_tkeep_next = last_cycle_tkeep_reg;
+
+    input_axis_tready_next = 0;
+
+    fcs_input_tdata = 0;
+    fcs_input_tkeep = 0;
+
+    output_axis_tdata_int = 0;
+    output_axis_tkeep_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            input_axis_tready_next = output_axis_tready_int_early;
+            frame_ptr_next = 0;
+            reset_crc = 1;
+
+            output_axis_tdata_int = input_axis_tdata_masked;
+            output_axis_tkeep_int = input_axis_tkeep;
+            output_axis_tvalid_int = input_axis_tvalid;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            fcs_input_tdata = input_axis_tdata_masked;
+            fcs_input_tkeep = input_axis_tkeep;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                reset_crc = 0;
+                update_crc = 1;
+                frame_ptr_next = keep2count(input_axis_tkeep);
+                if (input_axis_tlast) begin
+                    if (input_axis_tuser) begin
+                        output_axis_tlast_int = 1;
+                        output_axis_tuser_int = 1;
+                        reset_crc = 1;
+                        frame_ptr_next = 0;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        if (ENABLE_PADDING && frame_ptr_next < MIN_FRAME_LENGTH-4) begin
+                            output_axis_tkeep_int = 8'hff;
+                            fcs_input_tkeep = 8'hff;
+                            frame_ptr_next = frame_ptr_reg + 8;
+
+                            if (frame_ptr_next < MIN_FRAME_LENGTH-4) begin
+                                input_axis_tready_next = 0;
+                                state_next = STATE_PAD;
+                            end else begin
+                                output_axis_tkeep_int = 8'hff >> (8-((MIN_FRAME_LENGTH-4) & 7));
+                                fcs_input_tkeep = 8'hff >> (8-((MIN_FRAME_LENGTH-4) & 7));
+
+                                output_axis_tdata_int = fcs_output_tdata_0;
+                                last_cycle_tdata_next = fcs_output_tdata_1;
+                                output_axis_tkeep_int = fcs_output_tkeep_0;
+                                last_cycle_tkeep_next = fcs_output_tkeep_1;
+
+                                reset_crc = 1;
+
+                                if (fcs_output_tkeep_1 == 0) begin
+                                    output_axis_tlast_int = 1;
+                                    input_axis_tready_next = output_axis_tready_int_early;
+                                    frame_ptr_next = 0;
+                                    state_next = STATE_IDLE;
+                                end else begin
+                                    input_axis_tready_next = 0;
+                                    state_next = STATE_FCS;
+                                end
+                            end
+                        end else begin
+                            output_axis_tdata_int = fcs_output_tdata_0;
+                            last_cycle_tdata_next = fcs_output_tdata_1;
+                            output_axis_tkeep_int = fcs_output_tkeep_0;
+                            last_cycle_tkeep_next = fcs_output_tkeep_1;
+
+                            reset_crc = 1;
+
+                            if (fcs_output_tkeep_1 == 0) begin
+                                output_axis_tlast_int = 1;
+                                input_axis_tready_next = output_axis_tready_int_early;
+                                frame_ptr_next = 0;
+                                state_next = STATE_IDLE;
+                            end else begin
+                                input_axis_tready_next = 0;
+                                state_next = STATE_FCS;
+                            end
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // transfer payload
+            input_axis_tready_next = output_axis_tready_int_early;
+
+            output_axis_tdata_int = input_axis_tdata_masked;
+            output_axis_tkeep_int = input_axis_tkeep;
+            output_axis_tvalid_int = input_axis_tvalid;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            fcs_input_tdata = input_axis_tdata_masked;
+            fcs_input_tkeep = input_axis_tkeep;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                update_crc = 1;
+                frame_ptr_next = frame_ptr_reg + keep2count(input_axis_tkeep);
+                if (input_axis_tlast) begin
+                    if (input_axis_tuser) begin
+                        output_axis_tlast_int = 1;
+                        output_axis_tuser_int = 1;
+                        reset_crc = 1;
+                        frame_ptr_next = 0;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        if (ENABLE_PADDING && frame_ptr_next < MIN_FRAME_LENGTH-4) begin
+                            output_axis_tkeep_int = 8'hff;
+                            fcs_input_tkeep = 8'hff;
+                            frame_ptr_next = frame_ptr_reg + 8;
+
+                            if (frame_ptr_next < MIN_FRAME_LENGTH-4) begin
+                                input_axis_tready_next = 0;
+                                state_next = STATE_PAD;
+                            end else begin
+                                output_axis_tkeep_int = 8'hff >> (8-((MIN_FRAME_LENGTH-4) & 7));
+                                fcs_input_tkeep = 8'hff >> (8-((MIN_FRAME_LENGTH-4) & 7));
+
+                                output_axis_tdata_int = fcs_output_tdata_0;
+                                last_cycle_tdata_next = fcs_output_tdata_1;
+                                output_axis_tkeep_int = fcs_output_tkeep_0;
+                                last_cycle_tkeep_next = fcs_output_tkeep_1;
+
+                                reset_crc = 1;
+
+                                if (fcs_output_tkeep_1 == 0) begin
+                                    output_axis_tlast_int = 1;
+                                    input_axis_tready_next = output_axis_tready_int_early;
+                                    frame_ptr_next = 0;
+                                    state_next = STATE_IDLE;
+                                end else begin
+                                    input_axis_tready_next = 0;
+                                    state_next = STATE_FCS;
+                                end
+                            end
+                        end else begin
+                            output_axis_tdata_int = fcs_output_tdata_0;
+                            last_cycle_tdata_next = fcs_output_tdata_1;
+                            output_axis_tkeep_int = fcs_output_tkeep_0;
+                            last_cycle_tkeep_next = fcs_output_tkeep_1;
+
+                            reset_crc = 1;
+
+                            if (fcs_output_tkeep_1 == 0) begin
+                                output_axis_tlast_int = 1;
+                                input_axis_tready_next = output_axis_tready_int_early;
+                                frame_ptr_next = 0;
+                                state_next = STATE_IDLE;
+                            end else begin
+                                input_axis_tready_next = 0;
+                                state_next = STATE_FCS;
+                            end
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_PAD: begin
+            input_axis_tready_next = 0;
+
+            output_axis_tdata_int = 0;
+            output_axis_tkeep_int = 8'hff;
+            output_axis_tvalid_int = 1;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            fcs_input_tdata = 0;
+            fcs_input_tkeep = 8'hff;
+
+            if (output_axis_tready_int) begin
+                update_crc = 1;
+                frame_ptr_next = frame_ptr_reg + 8;
+
+                if (frame_ptr_next < MIN_FRAME_LENGTH-4) begin
+                    state_next = STATE_PAD;
+                end else begin
+                    output_axis_tkeep_int = 8'hff >> (8-((MIN_FRAME_LENGTH-4) & 7));
+                    fcs_input_tkeep = 8'hff >> (8-((MIN_FRAME_LENGTH-4) & 7));
+
+                    output_axis_tdata_int = fcs_output_tdata_0;
+                    last_cycle_tdata_next = fcs_output_tdata_1;
+                    output_axis_tkeep_int = fcs_output_tkeep_0;
+                    last_cycle_tkeep_next = fcs_output_tkeep_1;
+
+                    reset_crc = 1;
+
+                    if (fcs_output_tkeep_1 == 0) begin
+                        output_axis_tlast_int = 1;
+                        input_axis_tready_next = output_axis_tready_int_early;
+                        frame_ptr_next = 0;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        input_axis_tready_next = 0;
+                        state_next = STATE_FCS;
+                    end
+                end
+            end else begin
+                state_next = STATE_PAD;
+            end
+        end
+        STATE_FCS: begin
+            // last cycle
+            input_axis_tready_next = 0;
+
+            output_axis_tdata_int = last_cycle_tdata_reg;
+            output_axis_tkeep_int = last_cycle_tkeep_reg;
+            output_axis_tvalid_int = 1;
+            output_axis_tlast_int = 1;
+            output_axis_tuser_int = 0;
+
+            if (output_axis_tready_int) begin
+                reset_crc = 1;
+                input_axis_tready_next = output_axis_tready_int_early;
+                frame_ptr_next = 0;
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_FCS;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        
+
+Diff Content:
+- 283     reset_crc = 0;
+- 284     update_crc = 0;
+- 291     input_axis_tready_next = 0;
+- 293     fcs_input_tdata = 0;
+- 294     fcs_input_tkeep = 0;
+- 296     output_axis_tdata_int = 0;
+- 297     output_axis_tkeep_int = 0;
+- 298     output_axis_tvalid_int = 0;
+- 299     output_axis_tlast_int = 0;
+- 300     output_axis_tuser_int = 0;
+- 306             frame_ptr_next = 0;
+- 307             reset_crc = 1;
+- 312             output_axis_tlast_int = 0;
+- 313             output_axis_tuser_int = 0;
+- 319                 reset_crc = 0;
+- 320                 update_crc = 1;
+- 324                         output_axis_tlast_int = 1;
+- 325                         output_axis_tuser_int = 1;
+- 326                         reset_crc = 1;
+- 327                         frame_ptr_next = 0;
+- 333                             frame_ptr_next = frame_ptr_reg + 8;
+- 336                                 input_axis_tready_next = 0;
+- 347                                 reset_crc = 1;
+- 349                                 if (fcs_output_tkeep_1 == 0) begin
+- 350                                     output_axis_tlast_int = 1;
+- 352                                     frame_ptr_next = 0;
+- 355                                     input_axis_tready_next = 0;
+- 365                             reset_crc = 1;
+- 367                             if (fcs_output_tkeep_1 == 0) begin
+- 368                                 output_axis_tlast_int = 1;
+- 370                                 frame_ptr_next = 0;
+- 373                                 input_axis_tready_next = 0;
+- 392             output_axis_tlast_int = 0;
+- 393             output_axis_tuser_int = 0;
+- 399                 update_crc = 1;
+- 403                         output_axis_tlast_int = 1;
+- 404                         output_axis_tuser_int = 1;
+- 405                         reset_crc = 1;
+- 406                         frame_ptr_next = 0;
+- 412                             frame_ptr_next = frame_ptr_reg + 8;
+- 415                                 input_axis_tready_next = 0;
+- 426                                 reset_crc = 1;
+- 428                                 if (fcs_output_tkeep_1 == 0) begin
+- 429                                     output_axis_tlast_int = 1;
+- 431                                     frame_ptr_next = 0;
+- 434                                     input_axis_tready_next = 0;
+- 444                             reset_crc = 1;
+- 446                             if (fcs_output_tkeep_1 == 0) begin
+- 447                                 output_axis_tlast_int = 1;
+- 449                                 frame_ptr_next = 0;
+- 452                                 input_axis_tready_next = 0;
+- 465             input_axis_tready_next = 0;
+- 467             output_axis_tdata_int = 0;
+- 469             output_axis_tvalid_int = 1;
+- 470             output_axis_tlast_int = 0;
+- 471             output_axis_tuser_int = 0;
+- 473             fcs_input_tdata = 0;
+- 476             if (output_axis_tready_int) begin
+- 477                 update_crc = 1;
+- 478                 frame_ptr_next = frame_ptr_reg + 8;
+- 491                     reset_crc = 1;
+- 493                     if (fcs_output_tkeep_1 == 0) begin
+- 494                         output_axis_tlast_int = 1;
+- 496                         frame_ptr_next = 0;
+- 499                         input_axis_tready_next = 0;
+- 509             input_axis_tready_next = 0;
+- 513             output_axis_tvalid_int = 1;
+- 514             output_axis_tlast_int = 1;
+- 515             output_axis_tuser_int = 0;
+- 517             if (output_axis_tready_int) begin
+- 518                 reset_crc = 1;
+- 520                 frame_ptr_next = 0;
++ 284     reset_crc = 1'b0;
++ 284     update_crc = 1'b0;
++ 291     input_axis_tready_next = 1'b0;
++ 294     fcs_input_tdata = 64'd0;
++ 294     fcs_input_tkeep = 8'd0;
++ 300     output_axis_tdata_int = 64'd0;
++ 300     output_axis_tkeep_int = 8'd0;
++ 300     output_axis_tvalid_int = 1'b0;
++ 300     output_axis_tlast_int = 1'b0;
++ 300     output_axis_tuser_int = 1'b0;
++ 307             frame_ptr_next = 16'd0;
++ 307             reset_crc = 1'b1;
++ 313             output_axis_tlast_int = 1'b0;
++ 313             output_axis_tuser_int = 1'b0;
++ 320                 reset_crc = 1'b0;
++ 320                 update_crc = 1'b1;
++ 327                         output_axis_tlast_int = 1'b1;
++ 327                         output_axis_tuser_int = 1'b1;
++ 327                         reset_crc = 1'b1;
++ 327                         frame_ptr_next = 16'd0;
++ 333                             frame_ptr_next = frame_ptr_reg + 16'd8;
++ 336                                 input_axis_tready_next = 1'b0;
++ 347                                 reset_crc = 1'b1;
++ 350                                 if (fcs_output_tkeep_1 == 8'd0) begin
++ 350                                     output_axis_tlast_int = 1'b1;
++ 352                                     frame_ptr_next = 1'b0;
++ 355                                     input_axis_tready_next = 1'b0;
++ 365                             reset_crc = 1'b1;
++ 368                             if (fcs_output_tkeep_1 == 8'd0) begin
++ 368                                 output_axis_tlast_int = 1'b1;
++ 370                                 frame_ptr_next = 16'd0;
++ 373                                 input_axis_tready_next = 1'b0;
++ 393             output_axis_tlast_int = 1'b0;
++ 393             output_axis_tuser_int = 1'b0;
++ 399                 update_crc = 1'b1;
++ 406                         output_axis_tlast_int = 1'b1;
++ 406                         output_axis_tuser_int = 1'b1;
++ 406                         reset_crc = 1'b1;
++ 406                         frame_ptr_next = 16'd0;
++ 412                             frame_ptr_next = frame_ptr_reg + 16'd8;
++ 415                                 input_axis_tready_next = 1'b0;
++ 426                                 reset_crc = 1'b1;
++ 429                                 if (fcs_output_tkeep_1 == 8'd0) begin
++ 429                                     output_axis_tlast_int = 1'b1;
++ 431                                     frame_ptr_next = 16'd0;
++ 434                                     input_axis_tready_next = 1'b0;
++ 444                             reset_crc = 1'b1;
++ 447                             if (fcs_output_tkeep_1 == 8'd0) begin
++ 447                                 output_axis_tlast_int = 1'b1;
++ 449                                 frame_ptr_next = 16'd0;
++ 452                                 input_axis_tready_next = 1'b0;
++ 465             input_axis_tready_next = 1'b0;
++ 467             output_axis_tdata_int = 64'd0;
++ 471             output_axis_tvalid_int = 1'b1;
++ 471             output_axis_tlast_int = 1'b0;
++ 471             output_axis_tuser_int = 1'b0;
++ 473             fcs_input_tdata = 64'd0;
++ 478             if (output_axis_tready_int_reg) begin
++ 478                 update_crc = 1'b1;
++ 478                 frame_ptr_next = frame_ptr_reg + 16'd8;
++ 491                     reset_crc = 1'b1;
++ 494                     if (fcs_output_tkeep_1 == 8'd0) begin
++ 494                         output_axis_tlast_int = 1'b1;
++ 496                         frame_ptr_next = 16'd0;
++ 499                         input_axis_tready_next = 1'b0;
++ 509             input_axis_tready_next = 1'b0;
++ 515             output_axis_tvalid_int = 1'b1;
++ 515             output_axis_tlast_int = 1'b1;
++ 515             output_axis_tuser_int = 1'b0;
++ 518             if (output_axis_tready_int_reg) begin
++ 518                 reset_crc = 1'b1;
++ 520                 frame_ptr_next = 1'b0;
+
+Clone Blocks:

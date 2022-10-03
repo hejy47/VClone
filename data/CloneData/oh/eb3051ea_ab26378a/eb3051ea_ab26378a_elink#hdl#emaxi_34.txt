@@ -1,0 +1,84 @@
+Source Block: oh/elink/hdl/emaxi.v@346:356@HdlStmAssign
+
+   assign    m_axi_araddr[31:0]   = emrq_dstaddr[31:0];
+   assign    m_axi_arsize[2:0]    = {1'b0, emrq_datamode[1:0]};
+   assign    m_axi_arlen[7:0]     = 8'd0;
+   assign    m_axi_arvalid        = emrq_access & ~readinfo_full;
+   assign    emrq_rd_en           = m_axi_arvalid & m_axi_arready;
+   
+   //--------------------------------
+   // read data (and response) channel
+   //--------------------------------
+
+
+Diff Content:
+- 351    assign    emrq_rd_en           = m_axi_arvalid & m_axi_arready;
++ 351       .wr_en                            (rxrd_access & ~readinfo_full),
++ 351       .rd_en                            (~txrr_wait & m_axi_rvalid)
++ 351       );
++ 351    assign txrr_datamode[1:0]  = readinfo_out[1:0];
++ 351    assign txrr_ctrlmode[3:0]  = readinfo_out[5:2];
++ 351    assign txrr_dstaddr[31:0]  = readinfo_out[40:9];
++ 351    assign    m_axi_araddr[31:0]   = rxrd_dstaddr[31:0];
++ 351    assign    m_axi_arsize[2:0]    = {1'b0, rxrd_datamode[1:0]};
++ 351    assign    m_axi_arlen[7:0]     = 8'd0;
++ 351    assign    m_axi_arvalid        = rxrd_access & ~readinfo_full;
++ 351    assign    rxrd_wait            = ~(m_axi_arvalid & m_axi_arready);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/emaxi.v@342:352
+	                                                                        
+   //----------------------------
+   // read address channel
+   //----------------------------
+
+   assign    m_axi_araddr[31:0]   = emrq_dstaddr[31:0];
+   assign    m_axi_arsize[2:0]    = {1'b0, emrq_datamode[1:0]};
+   assign    m_axi_arlen[7:0]     = 8'd0;
+   assign    m_axi_arvalid        = emrq_access & ~readinfo_full;
+   assign    emrq_rd_en           = m_axi_arvalid & m_axi_arready;
+   
+
+Clone Blocks 2:
+oh/elink/hdl/emaxi.v@343:353
+   //----------------------------
+   // read address channel
+   //----------------------------
+
+   assign    m_axi_araddr[31:0]   = emrq_dstaddr[31:0];
+   assign    m_axi_arsize[2:0]    = {1'b0, emrq_datamode[1:0]};
+   assign    m_axi_arlen[7:0]     = 8'd0;
+   assign    m_axi_arvalid        = emrq_access & ~readinfo_full;
+   assign    emrq_rd_en           = m_axi_arvalid & m_axi_arready;
+   
+   //--------------------------------
+
+Clone Blocks 3:
+oh/elink/hdl/emaxi.v@345:355
+   //----------------------------
+
+   assign    m_axi_araddr[31:0]   = emrq_dstaddr[31:0];
+   assign    m_axi_arsize[2:0]    = {1'b0, emrq_datamode[1:0]};
+   assign    m_axi_arlen[7:0]     = 8'd0;
+   assign    m_axi_arvalid        = emrq_access & ~readinfo_full;
+   assign    emrq_rd_en           = m_axi_arvalid & m_axi_arready;
+   
+   //--------------------------------
+   // read data (and response) channel
+   //--------------------------------
+
+Clone Blocks 4:
+oh/elink/hdl/emaxi.v@344:354
+   // read address channel
+   //----------------------------
+
+   assign    m_axi_araddr[31:0]   = emrq_dstaddr[31:0];
+   assign    m_axi_arsize[2:0]    = {1'b0, emrq_datamode[1:0]};
+   assign    m_axi_arlen[7:0]     = 8'd0;
+   assign    m_axi_arvalid        = emrq_access & ~readinfo_full;
+   assign    emrq_rd_en           = m_axi_arvalid & m_axi_arready;
+   
+   //--------------------------------
+   // read data (and response) channel
+

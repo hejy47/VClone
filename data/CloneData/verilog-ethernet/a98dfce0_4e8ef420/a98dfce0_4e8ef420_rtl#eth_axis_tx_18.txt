@@ -1,0 +1,65 @@
+Source Block: verilog-ethernet/rtl/eth_axis_tx.v@199:237@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        input_eth_hdr_ready_reg <= 0;
+        input_eth_payload_tready_reg <= 0;
+        eth_dest_mac_reg <= 0;
+        eth_src_mac_reg <= 0;
+        eth_type_reg <= 0;
+        busy_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_eth_hdr_ready_reg <= input_eth_hdr_ready_next;
+
+        input_eth_payload_tready_reg <= input_eth_payload_tready_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // datapath
+        if (store_eth_hdr) begin
+            eth_dest_mac_reg <= input_eth_dest_mac;
+            eth_src_mac_reg <= input_eth_src_mac;
+            eth_type_reg <= input_eth_type;
+        end
+    end
+end
+
+// output datapath logic
+reg [7:0]  output_axis_tdata_reg = 0;
+reg        output_axis_tvalid_reg = 0;
+reg        output_axis_tlast_reg = 0;
+
+Diff Content:
+- 207         frame_ptr_reg <= 0;
+- 208         input_eth_hdr_ready_reg <= 0;
+- 209         input_eth_payload_tready_reg <= 0;
+- 210         eth_dest_mac_reg <= 0;
+- 211         eth_src_mac_reg <= 0;
+- 212         eth_type_reg <= 0;
+- 213         busy_reg <= 0;
+- 226         if (store_eth_hdr) begin
+- 227             eth_dest_mac_reg <= input_eth_dest_mac;
+- 228             eth_src_mac_reg <= input_eth_src_mac;
+- 229             eth_type_reg <= input_eth_type;
+- 230         end
++ 213         frame_ptr_reg <= 8'd0;
++ 213         input_eth_hdr_ready_reg <= 1'b0;
++ 213         input_eth_payload_tready_reg <= 1'b0;
++ 213         busy_reg <= 1'b0;
++ 223     end
++ 230     if (store_eth_hdr) begin
++ 230         eth_dest_mac_reg <= input_eth_dest_mac;
++ 230         eth_src_mac_reg <= input_eth_src_mac;
++ 230         eth_type_reg <= input_eth_type;
+
+Clone Blocks:

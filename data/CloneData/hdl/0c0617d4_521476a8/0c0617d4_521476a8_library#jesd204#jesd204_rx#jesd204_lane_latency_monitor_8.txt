@@ -1,0 +1,39 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_lane_latency_monitor.v@75:96@HdlStmFor
+end
+
+generate
+genvar i;
+
+for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      lane_latency_mem[i] <= 'h00;
+      lane_captured[i] <= 1'b0;
+    end else if (lane_ready[i] == 1'b1 && lane_captured[i] == 1'b0) begin
+      lane_latency_mem[i] <= beat_counter;
+      lane_captured[i] <= 1'b1;
+    end
+  end
+
+  assign lane_latency[i*14+13:i*14] = {lane_latency_mem[i],lane_frame_align[(i*3)+DPW_LOG2-1:i*3]};
+  assign lane_latency_ready[i] = lane_captured[i];
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 80 for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+- 83       lane_latency_mem[i] <= 'h00;
+- 84       lane_captured[i] <= 1'b0;
+- 85     end else if (lane_ready[i] == 1'b1 && lane_captured[i] == 1'b0) begin
+- 86       lane_latency_mem[i] <= beat_counter;
+- 87       lane_captured[i] <= 1'b1;
+- 91   assign lane_latency[i*14+13:i*14] = {lane_latency_mem[i],lane_frame_align[(i*3)+DPW_LOG2-1:i*3]};
+- 92   assign lane_latency_ready[i] = lane_captured[i];
+- 93 end
++ 87       beat_counter <= 'h0;
++ 87     end else if (beat_counter != {BEAT_CNT_WIDTH{1'b1}}) begin
++ 87       beat_counter <= beat_counter + 1'b1;
+
+Clone Blocks:

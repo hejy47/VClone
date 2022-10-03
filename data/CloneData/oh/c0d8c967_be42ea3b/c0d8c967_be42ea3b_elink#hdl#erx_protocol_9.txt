@@ -1,0 +1,32 @@
+Source Block: oh/elink/hdl/erx_protocol.v@70:80@HdlIdDef
+   reg [31:0]     data_2;
+   reg [31:0]     srcaddr_2;
+   reg            stream_2;
+
+
+   wire 	  ecfg_rx_enable_sync;
+   wire 	  gated_access;
+   
+   // Here we handle any alignment of the frame within an 8-cycle group,
+   // though in theory frames should only start on rising edges??
+
+
+Diff Content:
+- 75    wire 	  ecfg_rx_enable_sync;
++ 75    wire 	  rx_enable_sync;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_protocol.v@71:81
+   reg [31:0]     srcaddr_2;
+   reg            stream_2;
+
+
+   wire 	  ecfg_rx_enable_sync;
+   wire 	  gated_access;
+   
+   // Here we handle any alignment of the frame within an 8-cycle group,
+   // though in theory frames should only start on rising edges??
+
+   always @( posedge rx_lclk_div4 or posedge reset) 
+

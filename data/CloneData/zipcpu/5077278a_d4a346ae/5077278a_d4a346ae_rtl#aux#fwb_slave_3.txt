@@ -1,0 +1,69 @@
+Source Block: zipcpu/rtl/aux/fwb_slave.v@257:285@HdlStmIf
+		always @(posedge i_clk)
+			if (i_wb_cyc)
+				assert(f_stall_count < F_MAX_STALL);
+	end endgenerate
+
+	generate if (F_MAX_ACK_DELAY > 0)
+	begin : MXWAIT
+		//
+		// Assume the slave will respond within F_MAX_ACK_DELAY cycles,
+		// counted either from the end of the last request, or from the
+		// last ACK received
+		//
+		reg	[(DLYBITS-1):0]		f_ackwait_count;
+
+		initial	f_ackwait_count = 0;
+		always @(posedge i_clk)
+			if ((!i_reset)&&(i_wb_cyc)&&(!i_wb_stb)
+					&&(!i_wb_ack)&&(!i_wb_err))
+			begin
+				f_ackwait_count <= f_ackwait_count + 1'b1;
+				assert(f_ackwait_count < F_MAX_ACK_DELAY);
+			end else
+				f_ackwait_count <= 0;
+	end endgenerate
+
+	//
+	// Count the number of requests that have been received
+	//
+	initial	f_nreqs = 0;
+
+Diff Content:
+- 274 					&&(!i_wb_ack)&&(!i_wb_err))
++ 274 					&&(!i_wb_ack)&&(!i_wb_err)
++ 274 					&&(f_outstanding > 0))
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/aux/fwb_master.v@267:295
+		always @(posedge i_clk)
+			if (i_wb_cyc)
+				assume(f_stall_count < F_MAX_STALL);
+	end endgenerate
+
+	generate if (F_MAX_ACK_DELAY > 0)
+	begin : MXWAIT
+		//
+		// Assume the slave will respond within F_MAX_ACK_DELAY cycles,
+		// counted either from the end of the last request, or from the
+		// last ACK received
+		//
+		reg	[(DLYBITS-1):0]		f_ackwait_count;
+
+		initial	f_ackwait_count = 0;
+		always @(posedge i_clk)
+			if ((!i_reset)&&(i_wb_cyc)&&(!i_wb_stb)
+					&&(!i_wb_ack)&&(!i_wb_err))
+			begin
+				f_ackwait_count <= f_ackwait_count + 1'b1;
+				assume(f_ackwait_count < F_MAX_ACK_DELAY);
+			end else
+				f_ackwait_count <= 0;
+	end endgenerate
+
+	//
+	// Count the number of requests that have been made
+	//
+	initial	f_nreqs = 0;
+

@@ -1,0 +1,36 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_gearbox.v@99:109@HdlStmAssign
+  if (mem_wr_en) begin
+    mem[in_addr] <= device_data;
+  end
+end
+
+assign mem_rd_en = output_ready&unpacker_ready[0];
+
+always @(posedge link_clk) begin
+  if (mem_rd_en) begin
+    mem_rd_data <= mem[out_addr];
+  end
+
+Diff Content:
+- 104 assign mem_rd_en = output_ready&unpacker_ready[0];
++ 104   assign mem_rd_en = output_ready&unpacker_ready[0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx_gearbox.v@93:107
+  end else if (mem_wr_en) begin
+    in_addr <= in_addr + 1;
+  end
+end
+
+always @(posedge device_clk) begin
+  if (mem_wr_en) begin
+    mem[in_addr] <= device_data;
+  end
+end
+
+assign mem_rd_en = output_ready&unpacker_ready[0];
+
+always @(posedge link_clk) begin
+  if (mem_rd_en) begin
+

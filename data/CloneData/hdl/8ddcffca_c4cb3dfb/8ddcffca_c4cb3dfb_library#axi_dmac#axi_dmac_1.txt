@@ -1,0 +1,22 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@270:282@HdlIdDef
+  (BYTES_PER_BURST_LIMIT_DEST < BYTES_PER_BURST_LIMIT_SRC) ?
+  BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
+
+/* Make sure the requested MAX_BYTES_PER_BURST does not exceed what the
+   interfaces can support. Limit the value if necessary. */
+localparam REAL_MAX_BYTES_PER_BURST =
+  BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
+    BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
+
+// ID signals from the DMAC, just for debugging
+wire [ID_WIDTH-1:0] dest_request_id;
+wire [ID_WIDTH-1:0] dest_data_id;
+wire [ID_WIDTH-1:0] dest_address_id;
+
+Diff Content:
++ 277 /* Align to the length to the wider interface */
++ 277 localparam DMA_LENGTH_ALIGN =
++ 277   BYTES_PER_BEAT_WIDTH_DEST < BYTES_PER_BEAT_WIDTH_SRC ?
++ 277     BYTES_PER_BEAT_WIDTH_SRC : BYTES_PER_BEAT_WIDTH_DEST;
+
+Clone Blocks:

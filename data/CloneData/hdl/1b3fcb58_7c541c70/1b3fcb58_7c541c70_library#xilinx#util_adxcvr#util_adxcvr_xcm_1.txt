@@ -1,0 +1,204 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xcm.v@115:182@HdlStmIf
+  end
+
+  // instantiations
+
+  generate
+  if (XCVR_TYPE == 0) begin
+  GTXE2_COMMON #(
+    .SIM_RESET_SPEEDUP ("TRUE"),
+    .SIM_QPLLREFCLK_SEL (3'b001),
+    .SIM_VERSION ("3.0"),
+    .BIAS_CFG (64'h0000040000001000),
+    .COMMON_CFG (32'h00000000),
+    .QPLL_CFG (QPLL_CFG),
+    .QPLL_CLKOUT_CFG (4'b0000),
+    .QPLL_COARSE_FREQ_OVRD (6'b010000),
+    .QPLL_COARSE_FREQ_OVRD_EN (1'b0),
+    .QPLL_CP (10'b0000011111),
+    .QPLL_CP_MONITOR_EN (1'b0),
+    .QPLL_DMONITOR_SEL (1'b0),
+    .QPLL_FBDIV (QPLL_FBDIV),
+    .QPLL_FBDIV_MONITOR_EN (1'b0),
+    .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
+    .QPLL_INIT_CFG (24'h000006),
+    .QPLL_LOCK_CFG (16'h21E8),
+    .QPLL_LPF (4'b1111),
+    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV))
+  i_gtxe2_common (
+    .DRPCLK (up_clk),
+    .DRPEN (up_enb_int),
+    .DRPADDR (up_addr_int[7:0]),
+    .DRPWE (up_wr_int),
+    .DRPDI (up_wdata_int),
+    .DRPDO (up_rdata_s),
+    .DRPRDY (up_ready_s),
+    .GTGREFCLK (1'd0),
+    .GTNORTHREFCLK0 (1'd0),
+    .GTNORTHREFCLK1 (1'd0),
+    .GTREFCLK0 (qpll_ref_clk),
+    .GTREFCLK1 (1'd0),
+    .GTSOUTHREFCLK0 (1'd0),
+    .GTSOUTHREFCLK1 (1'd0),
+    .QPLLDMONITOR (),
+    .QPLLOUTCLK (qpll2ch_clk),
+    .QPLLOUTREFCLK (qpll2ch_ref_clk),
+    .REFCLKOUTMONITOR (),
+    .QPLLFBCLKLOST (),
+    .QPLLLOCK (qpll2ch_locked),
+    .QPLLLOCKDETCLK (up_clk),
+    .QPLLLOCKEN (1'd1),
+    .QPLLOUTRESET (1'd0),
+    .QPLLPD (1'd0),
+    .QPLLREFCLKLOST (),
+    .QPLLREFCLKSEL (3'b001),
+    .QPLLRESET (up_qpll_rst),
+    .QPLLRSVD1 (16'b0000000000000000),
+    .QPLLRSVD2 (5'b11111),
+    .BGBYPASSB (1'd1),
+    .BGMONITORENB (1'd1),
+    .BGPDB (1'd1),
+    .BGRCALOVRD (5'b00000),
+    .PMARSVD (8'b00000000),
+    .RCALENB (1'd1));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 1) begin
+  GTHE3_COMMON #(
+
+Diff Content:
+- 122     .SIM_RESET_SPEEDUP ("TRUE"),
+- 123     .SIM_QPLLREFCLK_SEL (3'b001),
+- 124     .SIM_VERSION ("3.0"),
+- 140     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV))
+- 142     .DRPCLK (up_clk),
+- 143     .DRPEN (up_enb_int),
+- 145     .DRPWE (up_wr_int),
+- 149     .GTGREFCLK (1'd0),
+- 150     .GTNORTHREFCLK0 (1'd0),
+- 151     .GTNORTHREFCLK1 (1'd0),
+- 153     .GTREFCLK1 (1'd0),
+- 154     .GTSOUTHREFCLK0 (1'd0),
+- 155     .GTSOUTHREFCLK1 (1'd0),
+- 156     .QPLLDMONITOR (),
+- 157     .QPLLOUTCLK (qpll2ch_clk),
+- 158     .QPLLOUTREFCLK (qpll2ch_ref_clk),
+- 159     .REFCLKOUTMONITOR (),
+- 160     .QPLLFBCLKLOST (),
+- 163     .QPLLLOCKEN (1'd1),
+- 164     .QPLLOUTRESET (1'd0),
+- 165     .QPLLPD (1'd0),
+- 167     .QPLLREFCLKSEL (3'b001),
+- 169     .QPLLRSVD1 (16'b0000000000000000),
+- 170     .QPLLRSVD2 (5'b11111),
+- 171     .BGBYPASSB (1'd1),
+- 172     .BGMONITORENB (1'd1),
+- 173     .BGPDB (1'd1),
+- 174     .BGRCALOVRD (5'b00000),
+- 175     .PMARSVD (8'b00000000),
+- 176     .RCALENB (1'd1));
++ 126     .IS_DRPCLK_INVERTED (1'b0),
++ 126     .IS_GTGREFCLK_INVERTED (1'b0),
++ 126     .IS_QPLLLOCKDETCLK_INVERTED (1'b0),
++ 140     .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
++ 140     .SIM_QPLLREFCLK_SEL (3'b001),
++ 140     .SIM_RESET_SPEEDUP ("TRUE"),
++ 140     .SIM_VERSION ("4.0"))
++ 143     .BGBYPASSB (1'h1),
++ 143     .BGMONITORENB (1'h1),
++ 143     .BGPDB (1'h1),
++ 143     .BGRCALOVRD (5'h1f),
++ 145     .DRPCLK (up_clk),
++ 147     .DRPEN (up_enb_int),
++ 151     .DRPWE (up_wr_int),
++ 151     .GTGREFCLK (1'h0),
++ 151     .GTNORTHREFCLK0 (1'h0),
++ 151     .GTNORTHREFCLK1 (1'h0),
++ 160     .GTREFCLK1 (1'h0),
++ 160     .GTSOUTHREFCLK0 (1'h0),
++ 160     .GTSOUTHREFCLK1 (1'h0),
++ 160     .PMARSVD (8'h0),
++ 165     .QPLLLOCKEN (1'h1),
++ 165     .QPLLOUTCLK (qpll2ch_clk),
++ 165     .QPLLOUTREFCLK (qpll2ch_ref_clk),
++ 165     .QPLLOUTRESET (1'h0),
++ 165     .QPLLPD (1'h0),
++ 167     .QPLLREFCLKSEL (3'h1),
++ 176     .QPLLRSVD1 (16'h0),
++ 176     .QPLLRSVD2 (5'h1f),
++ 176     .RCALENB (1'h1));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_gt_common.v@94:161
+  assign qpll_locked = 1'd0;
+  assign up_drp_rdata = 16'd0;
+  assign up_drp_ready = 1'd0;
+  end
+
+  if ((QPLL_ENABLE == 1) && (GTH_OR_GTX_N == 0)) begin
+  GTXE2_COMMON #(
+    .SIM_RESET_SPEEDUP ("TRUE"),
+    .SIM_QPLLREFCLK_SEL (3'b001),
+    .SIM_VERSION ("3.0"),
+    .BIAS_CFG (64'h0000040000001000),
+    .COMMON_CFG (32'h00000000),
+    .QPLL_CFG (QPLL_CFG),
+    .QPLL_CLKOUT_CFG (4'b0000),
+    .QPLL_COARSE_FREQ_OVRD (6'b010000),
+    .QPLL_COARSE_FREQ_OVRD_EN (1'b0),
+    .QPLL_CP (10'b0000011111),
+    .QPLL_CP_MONITOR_EN (1'b0),
+    .QPLL_DMONITOR_SEL (1'b0),
+    .QPLL_FBDIV (QPLL_FBDIV),
+    .QPLL_FBDIV_MONITOR_EN (1'b0),
+    .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
+    .QPLL_INIT_CFG (24'h000006),
+    .QPLL_LOCK_CFG (16'h21E8),
+    .QPLL_LPF (4'b1111),
+    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV))
+  i_gtxe2_common (
+    .DRPCLK (up_clk),
+    .DRPEN (up_drp_sel),
+    .DRPADDR (up_drp_addr[7:0]),
+    .DRPWE (up_drp_wr),
+    .DRPDI (up_drp_wdata),
+    .DRPDO (up_drp_rdata),
+    .DRPRDY (up_drp_ready),
+    .GTGREFCLK (1'd0),
+    .GTNORTHREFCLK0 (1'd0),
+    .GTNORTHREFCLK1 (1'd0),
+    .GTREFCLK0 (qpll_ref_clk_in),
+    .GTREFCLK1 (1'd0),
+    .GTSOUTHREFCLK0 (1'd0),
+    .GTSOUTHREFCLK1 (1'd0),
+    .QPLLDMONITOR (),
+    .QPLLOUTCLK (qpll_clk),
+    .QPLLOUTREFCLK (qpll_ref_clk),
+    .REFCLKOUTMONITOR (),
+    .QPLLFBCLKLOST (),
+    .QPLLLOCK (qpll_locked),
+    .QPLLLOCKDETCLK (up_clk),
+    .QPLLLOCKEN (1'd1),
+    .QPLLOUTRESET (1'd0),
+    .QPLLPD (1'd0),
+    .QPLLREFCLKLOST (),
+    .QPLLREFCLKSEL (3'b001),
+    .QPLLRESET (qpll_rst),
+    .QPLLRSVD1 (16'b0000000000000000),
+    .QPLLRSVD2 (5'b11111),
+    .BGBYPASSB (1'd1),
+    .BGMONITORENB (1'd1),
+    .BGPDB (1'd1),
+    .BGRCALOVRD (5'b00000),
+    .PMARSVD (8'b00000000),
+    .RCALENB (1'd1));
+  end
+
+  if ((QPLL_ENABLE == 1) && (GTH_OR_GTX_N == 1)) begin
+  GTHE3_COMMON #(
+    .SIM_RESET_SPEEDUP ("TRUE"),
+    .SIM_VERSION (2),
+

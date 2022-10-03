@@ -1,0 +1,141 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1656:1670@HdlStmProcess
+     if(reset)
+       fifo_read <= 1'b0;
+     else
+       fifo_read <= ~(fifo_empty | stop_fifo_read);
+
+   always @(posedge rxi_lclk or posedge reset)
+     if(reset)
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+Diff Content:
+- 1661    always @(posedge rxi_lclk or posedge reset)
+- 1662      if(reset)
+- 1663        rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+- 1664      else if(fifo_read)
+- 1665        rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
++ 1665    link_rxi_wr link_rxi_wr(/*AUTOINST*/
++ 1665 			   .rxi_wr_wait		(rxi_wr_wait),
++ 1665 			   .c0_emesh_frame_out	(c0_emesh_frame_out),
++ 1665 			   .c0_emesh_tran_out	(c0_emesh_tran_out[2*LW-1:0]),
++ 1665 			   .c3_emesh_frame_out	(c3_emesh_frame_out),
++ 1665 			   .c3_emesh_tran_out	(c3_emesh_tran_out[2*LW-1:0]),
++ 1665 			   .c0_mesh_access_out	(c0_mesh_access_out),
++ 1665 			   .c0_mesh_write_out	(c0_mesh_write_out),
++ 1665 			   .c0_mesh_dstaddr_out	(c0_mesh_dstaddr_out[AW-1:0]),
++ 1665 			   .c0_mesh_srcaddr_out	(c0_mesh_srcaddr_out[AW-1:0]),
++ 1665 			   .c0_mesh_data_out	(c0_mesh_data_out[DW-1:0]),
++ 1665 			   .c0_mesh_datamode_out(c0_mesh_datamode_out[1:0]),
++ 1665 			   .c0_mesh_ctrlmode_out(c0_mesh_ctrlmode_out[3:0]),
++ 1665 			   .c3_mesh_access_out	(c3_mesh_access_out),
++ 1665 			   .c3_mesh_write_out	(c3_mesh_write_out),
++ 1665 			   .c3_mesh_dstaddr_out	(c3_mesh_dstaddr_out[AW-1:0]),
++ 1665 			   .c3_mesh_srcaddr_out	(c3_mesh_srcaddr_out[AW-1:0]),
++ 1665 			   .c3_mesh_data_out	(c3_mesh_data_out[DW-1:0]),
++ 1665 			   .c3_mesh_datamode_out(c3_mesh_datamode_out[1:0]),
++ 1665 			   .c3_mesh_ctrlmode_out(c3_mesh_ctrlmode_out[3:0]),
++ 1665 			   .reset		(reset),
++ 1665 			   .ext_yid_k		(ext_yid_k[3:0]),
++ 1665 			   .ext_xid_k		(ext_xid_k[3:0]),
++ 1665 			   .vertical_k		(vertical_k),
++ 1665 			   .who_am_i		(who_am_i[3:0]),
++ 1665 			   .cfg_extcomp_dis	(cfg_extcomp_dis),
++ 1665 			   .rxi_data		(rxi_data[LW-1:0]),
++ 1665 			   .rxi_lclk		(rxi_lclk),
++ 1665 			   .rxi_frame		(rxi_frame),
++ 1665 			   .c0_clk_in		(c0_clk_in),
++ 1665 			   .c3_clk_in		(c3_clk_in),
++ 1665 			   .c0_emesh_wait_in	(c0_emesh_wait_in),
++ 1665 			   .c3_emesh_wait_in	(c3_emesh_wait_in),
++ 1665 			   .c0_mesh_wait_in	(c0_mesh_wait_in),
++ 1665 			   .c3_mesh_wait_in	(c3_mesh_wait_in));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2266:2287
+
+   //#############################
+   //# FIFO Read State Machine
+   //#############################
+    
+   always @(posedge cclk or posedge reset)
+     if(reset)
+       begin
+	  rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+	  rd_gray_pointer[FAD:0]    <= {(FAD+1){1'b0}};
+       end
+     else if(cclk_en)
+       if(fifo_read)
+	 begin
+	    rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+	    rd_gray_pointer[FAD:0]    <= rd_gray_next[FAD:0];	  
+	 end
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1662:1672
+     if(reset)
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1663:1673
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+   //# Transaction assembly and distribution
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@1662:1672
+     if(reset)
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@1663:1673
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+   //# Transaction assembly and distribution
+

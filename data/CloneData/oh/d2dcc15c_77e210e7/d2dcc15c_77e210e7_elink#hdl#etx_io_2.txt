@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/etx_io.v@91:105@HdlStmProcess
+   //# Frame Signal
+   //#############################  
+   //TODO: cleanup
+   assign tx_io_wait = tx_access & ~tx_burst & ~tx_io_wait_reg;
+      
+   always @ (posedge tx_lclk_div4 or posedge ioreset)
+     if(ioreset)
+       tx_io_wait_reg <= 1'b0;
+     else	 
+       tx_io_wait_reg <= tx_io_wait;
+   
+   //#############################
+   //# Frame Signal
+   //#############################  
+   always @ (posedge tx_lclk or posedge ioreset)
+
+Diff Content:
+- 96    always @ (posedge tx_lclk_div4 or posedge ioreset)
+- 97      if(ioreset)
++ 97    always @ (posedge tx_lclk_div4 or posedge reset)
++ 97      if(reset)
+
+Clone Blocks:

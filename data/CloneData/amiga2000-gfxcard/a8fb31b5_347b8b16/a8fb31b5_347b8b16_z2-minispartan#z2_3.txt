@@ -1,0 +1,31 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@233:243@HdlIdDef
+reg rec_doe [0:rec_depth-1];
+reg recording = 1;
+
+reg [6:0] rec_idx; // up to rec_depth
+reg [6:0] trigger_idx;
+reg read_fetched = 0;
+
+always @(posedge z_sample_clk) begin
+
+  // synchronizers (inspired by https://github.com/endofexclusive/greta/blob/master/hdl/bus_interface/bus_interface.vhdl)
+  znUDS_sync  <= {znUDS_sync[1:0],znUDS};
+
+Diff Content:
++ 238 */
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@232:242
+reg rec_read [0:rec_depth-1];
+reg rec_doe [0:rec_depth-1];
+reg recording = 1;
+
+reg [6:0] rec_idx; // up to rec_depth
+reg [6:0] trigger_idx;
+reg read_fetched = 0;
+
+always @(posedge z_sample_clk) begin
+
+  // synchronizers (inspired by https://github.com/endofexclusive/greta/blob/master/hdl/bus_interface/bus_interface.vhdl)
+

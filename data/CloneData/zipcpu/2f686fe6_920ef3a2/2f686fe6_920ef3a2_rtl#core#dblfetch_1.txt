@@ -1,0 +1,67 @@
+Source Block: zipcpu/rtl/core/dblfetch.v@93:149@HdlStmProcess
+	reg	cache_read_addr, cache_write_addr;
+	reg	[1:0]		cache_valid;
+
+	initial	o_wb_cyc = 1'b0;
+	initial	o_wb_stb = 1'b0;
+	always @(posedge i_clk)
+		if ((i_rst)||(i_wb_err))
+		begin
+			o_wb_cyc <= 1'b0;
+			o_wb_stb <= 1'b0;
+			// last_stb <= 1'b0;
+			// last_ack <= 1'b0;
+		end else if (o_wb_cyc)
+		begin
+			if ((o_wb_stb)&&(!i_wb_stall))
+			begin
+				// last_stb <= 1'b1;
+				o_wb_stb <= !last_stb;
+			end
+			// if (i_wb_ack)
+			//	last_ack <= 1'b1;
+			if ((i_new_pc)||(invalid_bus_cycle))
+				o_wb_stb <= 1'b0;
+
+			if ((i_wb_ack)&&(
+				// Relase the bus on the second ack
+				(last_ack)
+				// Or on the first ACK, if we've been told
+				// we have an invalid bus cycle
+				||((o_wb_stb)&&(i_wb_stall)&&(last_stb)&&(
+					(i_new_pc)||(invalid_bus_cycle)))
+				))
+			begin
+				o_wb_cyc <= 1'b0;
+				o_wb_stb <= 1'b0;
+			end
+
+			if ((!last_stb)&&(i_wb_stall)&&((i_new_pc)||(invalid_bus_cycle)))
+				// Also release the bus with no acks, if we
+				// haven't made any requests
+			begin
+				o_wb_cyc <= 1'b0;
+				o_wb_stb <= 1'b0;
+			end
+		end else if ((invalid_bus_cycle)
+			||((o_v)&&(i_stall_n)&&(cache_read_addr))) // Initiate a bus cycle
+		begin
+			o_wb_cyc <= 1'b1;
+			o_wb_stb <= 1'b1;
+			// last_stb <= 1'b0;
+			// last_ack <= 1'b0;
+		end
+
+	initial	last_stb = 1'b0;
+	always @(posedge i_clk)
+		if ((o_wb_cyc)&&(o_wb_stb)&&(!i_wb_stall))
+			last_stb <= 1'b1;
+
+Diff Content:
+- 108 			begin
+- 111 			end
+- 130 			if ((!last_stb)&&(i_wb_stall)&&((i_new_pc)||(invalid_bus_cycle)))
++ 130 			if ((!last_stb)&&(i_wb_stall)
++ 130 					&&((i_new_pc)||(invalid_bus_cycle)))
+
+Clone Blocks:

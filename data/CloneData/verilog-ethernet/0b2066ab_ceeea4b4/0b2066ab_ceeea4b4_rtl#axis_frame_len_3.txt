@@ -1,0 +1,53 @@
+Source Block: verilog-ethernet/rtl/axis_frame_len.v@67:106@HdlStmProcess
+assign frame_len = frame_len_reg;
+assign frame_len_valid = frame_len_valid_reg;
+
+integer offset, i, bit_cnt;
+
+always @* begin
+    frame_len_next = frame_len_reg;
+    frame_len_valid_next = 1'b0;
+    frame_next = frame_reg;
+
+    if (monitor_axis_tready && monitor_axis_tvalid) begin
+        // valid transfer cycle
+
+        if (monitor_axis_tlast) begin
+            // end of frame
+            frame_len_valid_next = 1'b1;
+            frame_next = 1'b0;
+        end else if (!frame_reg) begin
+            // first word after end of frame
+            frame_len_next = 0;
+            frame_next = 1'b1;
+        end
+
+        // increment frame length by number of words transferred
+        if (KEEP_ENABLE) begin
+            bit_cnt = 0;
+            for (i = 0; i <= KEEP_WIDTH; i = i + 1) begin
+                if (monitor_axis_tkeep == ({KEEP_WIDTH{1'b1}}) >> (KEEP_WIDTH-i)) bit_cnt = i;
+            end
+            frame_len_next = frame_len_next + bit_cnt;
+        end else begin
+            frame_len_next = frame_len_next + 1;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        frame_len_reg <= 0;
+        frame_len_valid_reg <= 0;
+
+Diff Content:
+- 75     frame_next = frame_reg;
+- 83             frame_next = 1'b0;
+- 84         end else if (!frame_reg) begin
+- 86             frame_len_next = 0;
+- 87             frame_next = 1'b1;
++ 75     if (frame_len_valid_reg) begin
++ 75         frame_len_next = 0;
++ 75     end
+
+Clone Blocks:

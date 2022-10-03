@@ -1,0 +1,274 @@
+Source Block: verilog-ethernet/rtl/axis_adapter.v@118:340@HdlStmProcess
+wire                        output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    cycle_count_next = cycle_count_reg;
+
+    temp_tdata_next = temp_tdata_reg;
+    temp_tkeep_next = temp_tkeep_reg;
+    temp_tlast_next = temp_tlast_reg;
+    temp_tuser_next = temp_tuser_reg;
+
+    output_axis_tdata_int = 0;
+    output_axis_tkeep_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    input_axis_tready_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - no data in registers
+            if (CYCLE_COUNT == 1) begin
+                // output and input same width - just act like a register
+
+                // accept data next cycle if output register ready next cycle
+                input_axis_tready_next = output_axis_tready_int_early;
+
+                // transfer through
+                output_axis_tdata_int = input_axis_tdata;
+                output_axis_tkeep_int = input_axis_tkeep;
+                output_axis_tvalid_int = input_axis_tvalid;
+                output_axis_tlast_int = input_axis_tlast;
+                output_axis_tuser_int = input_axis_tuser;
+
+                state_next = STATE_IDLE;
+            end else if (EXPAND_BUS) begin
+                // output bus is wider
+
+                // accept new data
+                input_axis_tready_next = 1;
+
+                if (input_axis_tvalid) begin
+                    // word transfer in - store it in data register
+                    
+                    // pass complete input word, zero-extended to temp register
+                    temp_tdata_next = input_axis_tdata;
+                    temp_tkeep_next = input_axis_tkeep;
+                    temp_tlast_next = input_axis_tlast;
+                    temp_tuser_next = input_axis_tuser;
+
+                    // first input cycle complete
+                    cycle_count_next = 1;
+
+                    if (input_axis_tlast) begin
+                        // got last signal on first cycle, so output it
+                        input_axis_tready_next = 0;
+                        state_next = STATE_TRANSFER_OUT;
+                    end else begin
+                        // otherwise, transfer in the rest of the words
+                        input_axis_tready_next = 1;
+                        state_next = STATE_TRANSFER_IN;
+                    end
+                end else begin
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                // output bus is narrower
+
+                // accept new data
+                input_axis_tready_next = 1;
+
+                if (input_axis_tvalid) begin
+                    // word transfer in - store it in data register
+                    cycle_count_next = 0;
+
+                    // pass complete input word, zero-extended to temp register
+                    temp_tdata_next = input_axis_tdata;
+                    temp_tkeep_next = input_axis_tkeep;
+                    temp_tlast_next = input_axis_tlast;
+                    temp_tuser_next = input_axis_tuser;
+
+                    // short-circuit and get first word out the door
+                    output_axis_tdata_int = input_axis_tdata;
+                    output_axis_tkeep_int = input_axis_tkeep;
+                    output_axis_tvalid_int = 1;
+                    output_axis_tlast_int = input_axis_tlast & ((CYCLE_COUNT == 1) | (input_axis_tkeep[CYCLE_KEEP_WIDTH-1:0] != {CYCLE_KEEP_WIDTH{1'b1}}));
+                    output_axis_tuser_int = input_axis_tuser & ((CYCLE_COUNT == 1) | (input_axis_tkeep[CYCLE_KEEP_WIDTH-1:0] != {CYCLE_KEEP_WIDTH{1'b1}}));
+
+                    if (output_axis_tready_int) begin
+                        // if output register is ready for first word, then move on to the next one
+                        cycle_count_next = 1;
+                    end
+
+                    // continue outputting words
+                    input_axis_tready_next = 0;
+                    state_next = STATE_TRANSFER_OUT;
+                end else begin
+                    state_next = STATE_IDLE;
+                end
+            end
+        end
+        STATE_TRANSFER_IN: begin
+            // transfer word to temp registers
+            // only used when output is wider
+
+            // accept new data
+            input_axis_tready_next = 1;
+
+            if (input_axis_tvalid) begin
+                // word transfer in - store in data register
+                
+                temp_tdata_next[cycle_count_reg*CYCLE_DATA_WIDTH +: CYCLE_DATA_WIDTH] = input_axis_tdata;
+                temp_tkeep_next[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] = input_axis_tkeep;
+                temp_tlast_next = input_axis_tlast;
+                temp_tuser_next = input_axis_tuser;
+
+                cycle_count_next = cycle_count_reg + 1;
+                
+                if ((cycle_count_reg == CYCLE_COUNT-1) | input_axis_tlast) begin
+                    // terminated by counter or tlast signal, output complete word
+                    // read input word next cycle if output will be ready
+                    input_axis_tready_next = output_axis_tready_int_early;
+                    state_next = STATE_TRANSFER_OUT;
+                end else begin
+                    // more words to read
+                    input_axis_tready_next = 1;
+                    state_next = STATE_TRANSFER_IN;
+                end
+            end else begin
+                state_next = STATE_TRANSFER_IN;
+            end
+        end
+        STATE_TRANSFER_OUT: begin
+            // transfer word to output registers
+
+            if (EXPAND_BUS) begin
+                // output bus is wider
+                
+                // do not accept new data
+                input_axis_tready_next = 0;
+
+                // single-cycle output of entire stored word (output wider)
+                output_axis_tdata_int = temp_tdata_reg;
+                output_axis_tkeep_int = temp_tkeep_reg;
+                output_axis_tvalid_int = 1;
+                output_axis_tlast_int = temp_tlast_reg;
+                output_axis_tuser_int = temp_tuser_reg;
+            
+                if (output_axis_tready_int) begin
+                    // word transfer out
+
+                    if (input_axis_tready & input_axis_tvalid) begin
+                        // word transfer in
+
+                        // pass complete input word, zero-extended to temp register
+                        temp_tdata_next = input_axis_tdata;
+                        temp_tkeep_next = input_axis_tkeep;
+                        temp_tlast_next = input_axis_tlast;
+                        temp_tuser_next = input_axis_tuser;
+
+                        // first input cycle complete
+                        cycle_count_next = 1;
+
+                        if (input_axis_tlast) begin
+                            // got last signal on first cycle, so output it
+                            input_axis_tready_next = 0;
+                            state_next = STATE_TRANSFER_OUT;
+                        end else begin
+                            // otherwise, transfer in the rest of the words
+                            input_axis_tready_next = 1;
+                            state_next = STATE_TRANSFER_IN;
+                        end
+                    end else begin
+                        input_axis_tready_next = 1;
+                        state_next = STATE_IDLE;
+                    end
+                end else begin
+                    state_next = STATE_TRANSFER_OUT;
+                end
+            end else begin
+                // output bus is narrower
+
+                // do not accept new data
+                input_axis_tready_next = 0;
+
+                // output current part of stored word (output narrower)
+                output_axis_tdata_int = temp_tdata_reg[cycle_count_reg*CYCLE_DATA_WIDTH +: CYCLE_DATA_WIDTH];
+                output_axis_tkeep_int = temp_tkeep_reg[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH];
+                output_axis_tvalid_int = 1;
+                output_axis_tlast_int = temp_tlast_reg & ((cycle_count_reg == CYCLE_COUNT-1) | (temp_tkeep_reg[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] != {CYCLE_KEEP_WIDTH{1'b1}}));
+                output_axis_tuser_int = temp_tuser_reg & ((cycle_count_reg == CYCLE_COUNT-1) | (temp_tkeep_reg[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] != {CYCLE_KEEP_WIDTH{1'b1}}));
+
+                if (output_axis_tready_int) begin
+                    // word transfer out
+
+                    cycle_count_next = cycle_count_reg + 1;
+
+                    if ((cycle_count_reg == CYCLE_COUNT-1) | (temp_tkeep_reg[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] != {CYCLE_KEEP_WIDTH{1'b1}})) begin
+                        // terminated by counter or tlast signal
+                        
+                        input_axis_tready_next = 1;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        // more words to write
+                        state_next = STATE_TRANSFER_OUT;
+                    end
+                end else begin
+                    state_next = STATE_TRANSFER_OUT;
+                end 
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        cycle_count_reg <= 0;
+
+Diff Content:
+- 164                 if (input_axis_tvalid) begin
+- 194                 if (input_axis_tvalid) begin
+- 205                     output_axis_tdata_int = input_axis_tdata;
+- 206                     output_axis_tkeep_int = input_axis_tkeep;
+- 208                     output_axis_tlast_int = input_axis_tlast & ((CYCLE_COUNT == 1) | (input_axis_tkeep[CYCLE_KEEP_WIDTH-1:0] != {CYCLE_KEEP_WIDTH{1'b1}}));
+- 209                     output_axis_tuser_int = input_axis_tuser & ((CYCLE_COUNT == 1) | (input_axis_tkeep[CYCLE_KEEP_WIDTH-1:0] != {CYCLE_KEEP_WIDTH{1'b1}}));
+- 217                     input_axis_tready_next = 0;
+- 218                     state_next = STATE_TRANSFER_OUT;
+- 231             if (input_axis_tvalid) begin
+- 312                 output_axis_tlast_int = temp_tlast_reg & ((cycle_count_reg == CYCLE_COUNT-1) | (temp_tkeep_reg[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] != {CYCLE_KEEP_WIDTH{1'b1}}));
+- 313                 output_axis_tuser_int = temp_tuser_reg & ((cycle_count_reg == CYCLE_COUNT-1) | (temp_tkeep_reg[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] != {CYCLE_KEEP_WIDTH{1'b1}}));
+- 320                     if ((cycle_count_reg == CYCLE_COUNT-1) | (temp_tkeep_reg[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] != {CYCLE_KEEP_WIDTH{1'b1}})) begin
++ 164                 if (input_axis_tready & input_axis_tvalid) begin
++ 194                 if (input_axis_tready & input_axis_tvalid) begin
++ 196                     if (CYCLE_COUNT == 1) begin
++ 196                         last_cycle = 1;
++ 196                     end else if (input_axis_tkeep[CYCLE_KEEP_WIDTH-1:0] != {CYCLE_KEEP_WIDTH{1'b1}}) begin
++ 196                         last_cycle = 1;
++ 196                     end else if (input_axis_tkeep[(CYCLE_KEEP_WIDTH*2)-1:CYCLE_KEEP_WIDTH] == {CYCLE_KEEP_WIDTH{1'b0}}) begin
++ 196                         last_cycle = 1;
++ 196                     end else begin
++ 196                         last_cycle = 0;
++ 196                     end
++ 206                     output_axis_tdata_int = input_axis_tdata[CYCLE_DATA_WIDTH-1:0];
++ 206                     output_axis_tkeep_int = input_axis_tkeep[CYCLE_KEEP_WIDTH-1:0];
++ 209                     output_axis_tlast_int = input_axis_tlast & last_cycle;
++ 209                     output_axis_tuser_int = input_axis_tuser & last_cycle;
++ 218                     if (!last_cycle || !output_axis_tready_int) begin
++ 218                         input_axis_tready_next = 0;
++ 218                         state_next = STATE_TRANSFER_OUT;
++ 218                     end else begin
++ 218                         state_next = STATE_IDLE;
++ 218                     end
++ 231             if (input_axis_tready & input_axis_tvalid) begin
++ 306                 if (cycle_count_reg == CYCLE_COUNT-1) begin
++ 306                     last_cycle = 1;
++ 306                 end else if (temp_tkeep_reg[cycle_count_reg*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] != {CYCLE_KEEP_WIDTH{1'b1}}) begin
++ 306                     last_cycle = 1;
++ 306                 end else if (temp_tkeep_reg[(cycle_count_reg+1)*CYCLE_KEEP_WIDTH +: CYCLE_KEEP_WIDTH] == {CYCLE_KEEP_WIDTH{1'b0}}) begin
++ 306                     last_cycle = 1;
++ 306                 end else begin
++ 306                     last_cycle = 0;
++ 306                 end
++ 313                 output_axis_tlast_int = temp_tlast_reg & last_cycle;
++ 313                 output_axis_tuser_int = temp_tuser_reg & last_cycle;
++ 320                     if (last_cycle) begin
+
+Clone Blocks:

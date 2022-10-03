@@ -1,0 +1,51 @@
+Source Block: hdl/library/util_pmod_adc/util_pmod_adc.v@148:158@HdlStmAssign
+  reg             adc_spi_clk       = 1'b0;
+
+  // Assign/Always Blocks
+
+  assign adc_sclk   = adc_spi_clk & adc_clk_en;
+  assign adc_enable = 1'b1;
+
+  // spi clock generation
+  always @(posedge clk) begin
+    adc_clk_cnt <= adc_clk_cnt + 1;
+    if (adc_clk_cnt == ((ADC_CLK_DIVIDE/2)-1)) begin 
+
+Diff Content:
+- 153   assign adc_enable = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_pmod_adc/util_pmod_adc.v@147:157
+  reg             data_rd_ready     = 1'b0;
+  reg             adc_spi_clk       = 1'b0;
+
+  // Assign/Always Blocks
+
+  assign adc_sclk   = adc_spi_clk & adc_clk_en;
+  assign adc_enable = 1'b1;
+
+  // spi clock generation
+  always @(posedge clk) begin
+    adc_clk_cnt <= adc_clk_cnt + 1;
+
+Clone Blocks 2:
+hdl/library/util_pmod_adc/util_pmod_adc.v@151:167
+
+  assign adc_sclk   = adc_spi_clk & adc_clk_en;
+  assign adc_enable = 1'b1;
+
+  // spi clock generation
+  always @(posedge clk) begin
+    adc_clk_cnt <= adc_clk_cnt + 1;
+    if (adc_clk_cnt == ((ADC_CLK_DIVIDE/2)-1)) begin 
+      adc_clk_cnt <= 0;
+      adc_spi_clk <= ~adc_spi_clk;
+    end
+  end
+
+  // update the ADC timing counters
+
+  always @(posedge clk)
+  begin
+

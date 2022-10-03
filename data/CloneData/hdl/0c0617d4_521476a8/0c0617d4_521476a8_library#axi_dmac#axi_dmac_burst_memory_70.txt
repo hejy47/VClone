@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@243:253@HdlStmAssign
+assign dest_beat = dest_valid & dest_ready;
+assign dest_last_beat = dest_last & dest_beat;
+assign dest_raddr = {dest_id_reduced,dest_beat_counter};
+
+assign dest_burst_valid = dest_data_request_id != dest_id_next;
+assign dest_burst_ready = ~dest_valid | dest_last_beat;
+
+/*
+ * The data valid signal for the destination side is asserted if there are one
+ * or more pending bursts. It is de-asserted if there are no more pending burst
+ * and it is the last beat of the current burst
+
+Diff Content:
+- 248 assign dest_burst_ready = ~dest_valid | dest_last_beat;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@242:252
+
+assign dest_beat = dest_valid & dest_ready;
+assign dest_last_beat = dest_last & dest_beat;
+assign dest_raddr = {dest_id_reduced,dest_beat_counter};
+
+assign dest_burst_valid = dest_data_request_id != dest_id_next;
+assign dest_burst_ready = ~dest_valid | dest_last_beat;
+
+/*
+ * The data valid signal for the destination side is asserted if there are one
+ * or more pending bursts. It is de-asserted if there are no more pending burst
+

@@ -1,0 +1,19 @@
+Source Block: oh/elink/hdl/etx_io.v@157:168@HdlStmProcess
+	`CYCLE7 : tx_data16[15:0]  <= srcaddr[15:0];       
+	default  tx_data16[15:0] <= 16'b0;
+      endcase // case (tx_state[2:0])
+ 	           
+   //Create frame signal
+   always @ (posedge tx_lclk_io)
+     tx_frame   <= (|tx_state[2:0]); 
+      
+   //##############################################
+   //# Wait signal synchronization
+   //##############################################
+
+
+Diff Content:
+- 162    always @ (posedge tx_lclk_io)
+- 163      tx_frame   <= (|tx_state[2:0]); 
+
+Clone Blocks:

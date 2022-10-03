@@ -1,0 +1,45 @@
+Source Block: hdl/library/common/up_gt.v@360:384@HdlStmProcess
+  assign up_tx_rst_done_s = & up_tx_rst_done;
+  assign up_tx_pll_locked_s = & up_tx_pll_locked;
+
+  // resets
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_gt_pll_preset <= 1'b1;
+      up_gt_rx_preset <= 1'b1;
+      up_gt_tx_preset <= 1'b1;
+      up_rx_preset <= 1'b1;
+      up_tx_preset <= 1'b1;
+    end else begin
+      up_gt_pll_preset <= ~up_gt_pll_resetn;
+      up_gt_rx_preset <= ~(up_gt_pll_resetn & up_gt_rx_resetn & up_rx_pll_locked_s);
+      up_gt_tx_preset <= ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_pll_locked_s);
+      up_rx_preset <= ~(up_gt_pll_resetn & up_gt_rx_resetn & up_rx_resetn & up_rx_pll_locked_s & up_rx_rst_done_s);
+      up_tx_preset <= ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_resetn & up_tx_pll_locked_s & up_tx_rst_done_s);
+    end
+  end
+
+  // up clock domain reset done
+
+  assign rx_rst_done_up  = up_rx_rst_done_s;
+  assign tx_rst_done_up  = up_tx_rst_done_s;
+
+Diff Content:
+- 365   always @(negedge up_rstn or posedge up_clk) begin
+- 366     if (up_rstn == 0) begin
+- 367       up_gt_pll_preset <= 1'b1;
+- 368       up_gt_rx_preset <= 1'b1;
+- 369       up_gt_tx_preset <= 1'b1;
+- 370       up_rx_preset <= 1'b1;
+- 371       up_tx_preset <= 1'b1;
+- 372     end else begin
+- 373       up_gt_pll_preset <= ~up_gt_pll_resetn;
+- 374       up_gt_rx_preset <= ~(up_gt_pll_resetn & up_gt_rx_resetn & up_rx_pll_locked_s);
+- 375       up_gt_tx_preset <= ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_pll_locked_s);
+- 376       up_rx_preset <= ~(up_gt_pll_resetn & up_gt_rx_resetn & up_rx_resetn & up_rx_pll_locked_s & up_rx_rst_done_s);
+- 377       up_tx_preset <= ~(up_gt_pll_resetn & up_gt_tx_resetn & up_tx_resetn & up_tx_pll_locked_s & up_tx_rst_done_s);
+- 378     end
+- 379   end
+
+Clone Blocks:

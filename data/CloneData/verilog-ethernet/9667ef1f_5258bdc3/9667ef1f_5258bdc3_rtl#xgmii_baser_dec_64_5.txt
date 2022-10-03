@@ -1,0 +1,37 @@
+Source Block: verilog-ethernet/rtl/xgmii_baser_dec_64.v@338:350@HdlStmProcess
+        xgmii_rxc_next = 8'hff;
+        rx_bad_block_next = 1'b1;
+    end
+end
+
+always @(posedge clk) begin
+    xgmii_rxd_reg <= xgmii_rxd_next;
+    xgmii_rxc_reg <= xgmii_rxc_next;
+
+    rx_bad_block_reg <= rx_bad_block_next;
+end
+
+endmodule
+
+Diff Content:
++ 347     rx_sequence_error_reg <= rx_sequence_error_next;
++ 347     frame_reg <= frame_next;
++ 347     if (rst) begin
++ 347         frame_reg <= 1'b0;
++ 347     end
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/xgmii_baser_dec_64.v@137:147
+assign xgmii_rxd = xgmii_rxd_reg;
+assign xgmii_rxc = xgmii_rxc_reg;
+
+assign rx_bad_block = rx_bad_block_reg;
+
+integer i;
+
+always @* begin
+    xgmii_rxd_next = {8{XGMII_ERROR}};
+    xgmii_rxc_next = 8'hff;
+    rx_bad_block_next = 1'b0;
+

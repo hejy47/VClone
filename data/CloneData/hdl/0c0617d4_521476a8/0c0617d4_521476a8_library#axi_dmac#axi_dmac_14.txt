@@ -1,0 +1,21 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@284:296@HdlIdDef
+    1024;
+localparam BYTES_PER_BURST_LIMIT_SRC =
+    BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
+
+/* The smaller bus limits the maximum bytes per burst. */
+localparam BYTES_PER_BURST_LIMIT =
+  (BYTES_PER_BURST_LIMIT_DEST < BYTES_PER_BURST_LIMIT_SRC) ?
+  BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
+
+/* Make sure the requested MAX_BYTES_PER_BURST does not exceed what the
+   interfaces can support. Limit the value if necessary. */
+localparam REAL_MAX_BYTES_PER_BURST =
+  BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
+
+Diff Content:
+- 289 localparam BYTES_PER_BURST_LIMIT =
+- 290   (BYTES_PER_BURST_LIMIT_DEST < BYTES_PER_BURST_LIMIT_SRC) ?
+- 291   BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
+
+Clone Blocks:

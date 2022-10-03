@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@120:130@HdlStmAssign
+             cfg_header_mode == 3 ? cmd3 : 'b0;
+
+assign fec = {sync_word[31:10],sync_word[8:5]};
+
+
+assign eomb  = sync_word[4:0] == 5'b00001;
+assign eoemb = sync_word[9] & eomb;
+
+
+always @(posedge clk) begin
+  if (next_state[BIT_EMB_INIT] || sh_count == cfg_beats_per_multiframe) begin
+
+Diff Content:
+- 125 assign eomb  = sync_word[4:0] == 5'b00001;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@121:131
+
+assign fec = {sync_word[31:10],sync_word[8:5]};
+
+
+assign eomb  = sync_word[4:0] == 5'b00001;
+assign eoemb = sync_word[9] & eomb;
+
+
+always @(posedge clk) begin
+  if (next_state[BIT_EMB_INIT] || sh_count == cfg_beats_per_multiframe) begin
+    sh_count <= 'h0;
+

@@ -1,0 +1,49 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@95:105@HdlStmAssign
+wire       goto_next_state_s;
+
+assign cgs_reset = cgs_rst;
+assign ifs_reset = ifs_rst;
+assign sync = sync_n;
+assign phy_en_char_align = en_align;
+
+assign status_state = state;
+
+always @(posedge clk) begin
+  case (state)
+
+Diff Content:
+- 100 assign phy_en_char_align = en_align;
++ 100   assign cgs_reset = cgs_rst;
++ 100   assign ifs_reset = ifs_rst;
++ 100   assign sync = sync_n;
++ 100   assign phy_en_char_align = en_align;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@94:104
+wire       good_cnt_limit_reached_s;
+wire       goto_next_state_s;
+
+assign cgs_reset = cgs_rst;
+assign ifs_reset = ifs_rst;
+assign sync = sync_n;
+assign phy_en_char_align = en_align;
+
+assign status_state = state;
+
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@97:107
+assign cgs_reset = cgs_rst;
+assign ifs_reset = ifs_rst;
+assign sync = sync_n;
+assign phy_en_char_align = en_align;
+
+assign status_state = state;
+
+always @(posedge clk) begin
+  case (state)
+  STATE_RESET: begin
+    cgs_rst <= {NUM_LANES{1'b1}};
+

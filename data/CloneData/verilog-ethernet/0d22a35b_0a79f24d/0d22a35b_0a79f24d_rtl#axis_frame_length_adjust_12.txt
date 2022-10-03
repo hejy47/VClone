@@ -1,0 +1,171 @@
+Source Block: verilog-ethernet/rtl/axis_frame_length_adjust.v@107:117@HdlIdDef
+reg [DATA_WIDTH-1:0] last_word_data_reg = 0;
+reg [KEEP_WIDTH-1:0] last_word_keep_reg = 0;
+
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+
+Diff Content:
+- 112 reg status_valid_reg = 0, status_valid_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@107:117
+reg [DATA_WIDTH-1:0] last_word_data_reg = 0;
+reg [KEEP_WIDTH-1:0] last_word_keep_reg = 0;
+
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@108:118
+reg [KEEP_WIDTH-1:0] last_word_keep_reg = 0;
+
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+// internal datapath
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@110:120
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_int;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@111:121
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                  output_axis_tvalid_int;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@105:115
+reg [15:0] long_counter_reg = 0, long_counter_next = 0;
+
+reg [DATA_WIDTH-1:0] last_word_data_reg = 0;
+reg [KEEP_WIDTH-1:0] last_word_keep_reg = 0;
+
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@105:115
+reg [15:0] long_counter_reg = 0, long_counter_next = 0;
+
+reg [DATA_WIDTH-1:0] last_word_data_reg = 0;
+reg [KEEP_WIDTH-1:0] last_word_keep_reg = 0;
+
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@109:119
+
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@110:120
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_int;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@111:121
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                  output_axis_tvalid_int;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@109:119
+
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@108:118
+reg [KEEP_WIDTH-1:0] last_word_keep_reg = 0;
+
+reg last_cycle_tuser_reg = 0, last_cycle_tuser_next;
+
+reg status_valid_reg = 0, status_valid_next;
+reg status_frame_pad_reg = 0, status_frame_pad_next;
+reg status_frame_truncate_reg = 0, status_frame_truncate_next;
+reg [15:0] status_frame_length_reg = 0, status_frame_length_next;
+reg [15:0] status_frame_original_length_reg = 0, status_frame_original_length_next;
+
+// internal datapath
+

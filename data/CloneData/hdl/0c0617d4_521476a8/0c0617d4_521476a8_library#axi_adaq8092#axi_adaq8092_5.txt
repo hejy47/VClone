@@ -1,0 +1,134 @@
+Source Block: hdl/library/axi_adaq8092/axi_adaq8092.v@148:170@HdlStmProcess
+  assign up_rstn = s_axi_aresetn;
+  assign adc_valid = 1'b1;
+ 
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_status_or <= 'd0;
+      up_rdata <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
+    end else begin
+      up_status_or <= up_status_or_s[0] | up_status_or_s[1];
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3];
+      up_rack <=   up_rack_s[0] | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3];
+      up_wack <=   up_wack_s[0] | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3]; 
+    end
+  end
+
+  // ADC channel 1  
+
+  axi_adaq8092_channel #(
+    .CHANNEL_ID(0),
+
+Diff Content:
+- 162       up_rack <=   up_rack_s[0] | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3];
+- 163       up_wack <=   up_wack_s[0] | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3]; 
++ 163       up_rack  <=  up_rack_s[0] | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3];
++ 163       up_wack  <=  up_wack_s[0] | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ltc2387/axi_ltc2387.v@139:159
+  assign up_rstn = s_axi_aresetn;
+  assign adc_clk = ref_clk;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 32'd0;
+      up_rack <= 1'd0;
+      up_wack <= 1'd0;
+    end else begin
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
+    end
+  end
+
+  // main (device interface)
+
+  axi_ltc2387_if #(
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+
+Clone Blocks 2:
+hdl/library/axi_ad9684/axi_ad9684.v@149:169
+  assign up_rstn = s_axi_aresetn;
+  assign adc_valid = 1'b1;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 32'd0;
+      up_rack <= 1'd0;
+      up_wack <= 1'd0;
+    end else begin
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3];
+    end
+  end
+
+  // device interface instance
+
+  axi_ad9684_if #(
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+
+Clone Blocks 3:
+hdl/library/axi_ad9467/axi_ad9467.v@131:151
+  assign up_rstn = s_axi_aresetn;
+  assign adc_valid = 1'b1;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 32'd0;
+      up_rack <= 1'd0;
+      up_wack <= 1'd0;
+    end else begin
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
+    end
+  end
+
+  // main (device interface)
+
+  axi_ad9467_if #(
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+
+Clone Blocks 4:
+hdl/library/axi_ad9265/axi_ad9265.v@133:159
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_status_pn_err <= 'd0;
+      up_status_pn_oos <= 'd0;
+      up_status_or <= 'd0;
+      up_rdata <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
+    end else begin
+      up_status_pn_err <= up_status_pn_err_s;
+      up_status_pn_oos <= up_status_pn_oos_s;
+      up_status_or <= up_status_or_s;
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
+    end
+  end
+
+  // channel
+
+  axi_ad9265_channel #(
+    .CHANNEL_ID(0),
+

@@ -1,0 +1,45 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@84:94@HdlStmAssign
+   assign     rd_ready = ~txrd_fifo_empty & ~etx_rd_wait & ~wr_ready;
+   assign     rr_ready = ~txrr_fifo_empty & ~etx_wr_wait & ~wr_ready & ~rd_ready;//lowest
+   
+   // FIFO read enables (one hot)
+   // Hold until transaction has been accepted by IO
+   assign     txrr_fifo_read = rr_ready & (~etx_access | etx_wait);
+   assign     txrd_fifo_read = rd_ready & (~etx_access | etx_wait);
+   assign     txwr_fifo_read = wr_ready & (~etx_access | etx_wait);
+   
+   //Selecting control mode on slave transcations
+   assign txrd_ctrlmode[3:0] =  ecfg_tx_ctrlmode_bp ? ecfg_tx_ctrlmode[3:0] : 
+
+Diff Content:
+- 89    assign     txrr_fifo_read = rr_ready & (~etx_access | etx_wait);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_arbiter.v@85:95
+   assign     rr_ready = ~txrr_fifo_empty & ~etx_wr_wait & ~wr_ready & ~rd_ready;//lowest
+   
+   // FIFO read enables (one hot)
+   // Hold until transaction has been accepted by IO
+   assign     txrr_fifo_read = rr_ready & (~etx_access | etx_wait);
+   assign     txrd_fifo_read = rd_ready & (~etx_access | etx_wait);
+   assign     txwr_fifo_read = wr_ready & (~etx_access | etx_wait);
+   
+   //Selecting control mode on slave transcations
+   assign txrd_ctrlmode[3:0] =  ecfg_tx_ctrlmode_bp ? ecfg_tx_ctrlmode[3:0] : 
+				                      txrd_fifo_packet[7:4];
+
+Clone Blocks 2:
+oh/elink/hdl/etx_arbiter.v@80:90
+   //Current implementation can deadlock!! (move rd below rr)   
+   
+   // priority-based ready signals
+   assign     wr_ready = ~txwr_fifo_empty & ~etx_wr_wait;                        //highest
+   assign     rd_ready = ~txrd_fifo_empty & ~etx_rd_wait & ~wr_ready;
+   assign     rr_ready = ~txrr_fifo_empty & ~etx_wr_wait & ~wr_ready & ~rd_ready;//lowest
+   
+   // FIFO read enables (one hot)
+   // Hold until transaction has been accepted by IO
+   assign     txrr_fifo_read = rr_ready & (~etx_access | etx_wait);
+   assign     txrd_fifo_read = rd_ready & (~etx_access | etx_wait);
+

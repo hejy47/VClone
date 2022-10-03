@@ -1,0 +1,94 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tdd.v@209:220@HdlStmAssign
+                                    (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
+  assign  tdd_tx_valid_q0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
+  assign  tdd_tx_valid_i1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
+  assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+
+  assign  tdd_rx_valid_i0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
+  assign  tdd_rx_valid_q0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q0 & tdd_rx_rf_en) : rx_valid_q0;
+
+Diff Content:
+- 214   assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
++ 214   assign  tdd_tx_valid_q1 = ((tdd_enable_synced_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_tdd.v@205:216
+
+  // tx/rx data flow control
+
+  assign  tdd_tx_valid_i0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
+  assign  tdd_tx_valid_q0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
+  assign  tdd_tx_valid_i1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
+  assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+
+
+Clone Blocks 2:
+hdl/library/axi_ad9361/axi_ad9361_tdd.v@203:214
+  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_tx_dp_en_s,
+                    tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
+
+  // tx/rx data flow control
+
+  assign  tdd_tx_valid_i0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
+  assign  tdd_tx_valid_q0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
+  assign  tdd_tx_valid_i1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
+  assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+
+Clone Blocks 3:
+hdl/library/axi_ad9361/axi_ad9361_tdd.v@207:218
+
+  assign  tdd_tx_valid_i0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
+  assign  tdd_tx_valid_q0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q0 & tdd_tx_dp_en_s) : tx_valid_q0;
+  assign  tdd_tx_valid_i1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
+  assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+
+  assign  tdd_rx_valid_i0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
+
+Clone Blocks 4:
+hdl/library/axi_ad9361/axi_ad9361_tdd.v@212:223
+  assign  tdd_tx_valid_i1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i1 & tdd_tx_dp_en_s) : tx_valid_i1;
+  assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+
+  assign  tdd_rx_valid_i0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
+  assign  tdd_rx_valid_q0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q0 & tdd_rx_rf_en) : rx_valid_q0;
+  assign  tdd_rx_valid_i1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
+  assign  tdd_rx_valid_q1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+
+Clone Blocks 5:
+hdl/library/axi_ad9361/axi_ad9361_tdd.v@214:225
+  assign  tdd_tx_valid_q1 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_q1 & tdd_tx_dp_en_s) : tx_valid_q1;
+
+  assign  tdd_rx_valid_i0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
+  assign  tdd_rx_valid_q0 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q0 & tdd_rx_rf_en) : rx_valid_q0;
+  assign  tdd_rx_valid_i1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
+  assign  tdd_rx_valid_q1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
+
+

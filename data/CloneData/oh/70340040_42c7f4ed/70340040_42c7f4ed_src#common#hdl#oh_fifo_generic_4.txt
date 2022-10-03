@@ -1,0 +1,24 @@
+Source Block: oh/src/common/hdl/oh_fifo_generic.v@87:101@HdlStmProcess
+   
+   //###########################
+   //#read side state machine
+   //###########################
+
+   always @ ( posedge rd_clk or negedge nreset) 
+     if(!nreset) 
+       rd_addr[AW:0] <= 'd0;   
+     else if(rd_en) 
+       rd_addr[AW:0] <= rd_addr[AW:0] + 'd1;
+   
+   oh_bin2gray #(.DW(AW+1))
+   rd_b2g (.gray  (rd_addr_gray[AW:0]),
+	   .bin	  (rd_addr[AW:0]));
+   
+
+Diff Content:
+- 92    always @ ( posedge rd_clk or negedge nreset) 
+- 93      if(!nreset) 
++ 93    always @ ( posedge rd_clk or negedge rd_nreset) 
++ 93      if(!rd_nreset) 
+
+Clone Blocks:

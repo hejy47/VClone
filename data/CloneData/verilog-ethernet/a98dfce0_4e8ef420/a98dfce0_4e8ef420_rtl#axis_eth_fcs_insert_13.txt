@@ -1,0 +1,96 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_insert.v@244:281@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        
+        frame_ptr_reg <= 0;
+        
+        input_axis_tready_reg <= 0;
+
+        busy_reg <= 0;
+
+        crc_state <= 32'hFFFFFFFF;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_axis_tready_reg <= input_axis_tready_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+        end else if (update_crc) begin
+            crc_state <= crc_next;
+        end
+    end
+end
+
+// output datapath logic
+reg [7:0]  output_axis_tdata_reg = 0;
+reg        output_axis_tvalid_reg = 0;
+reg        output_axis_tlast_reg = 0;
+
+Diff Content:
+- 253         frame_ptr_reg <= 0;
+- 255         input_axis_tready_reg <= 0;
+- 257         busy_reg <= 0;
++ 253         frame_ptr_reg <= 1'b0;
++ 255         input_axis_tready_reg <= 1'b0;
++ 257         busy_reg <= 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_eth_fcs_insert_64.v@524:567
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        
+        frame_ptr_reg <= 0;
+
+        last_cycle_tdata_reg <= 0;
+        last_cycle_tkeep_reg <= 0;
+        
+        input_axis_tready_reg <= 0;
+
+        busy_reg <= 0;
+
+        crc_state <= 32'hFFFFFFFF;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        last_cycle_tdata_reg <= last_cycle_tdata_next;
+        last_cycle_tkeep_reg <= last_cycle_tkeep_next;
+
+        input_axis_tready_reg <= input_axis_tready_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+        end else if (update_crc) begin
+            crc_state <= crc_next7;
+        end
+    end
+end
+
+// output datapath logic
+reg [63:0] output_axis_tdata_reg = 0;
+reg [7:0]  output_axis_tkeep_reg = 0;
+reg        output_axis_tvalid_reg = 0;
+

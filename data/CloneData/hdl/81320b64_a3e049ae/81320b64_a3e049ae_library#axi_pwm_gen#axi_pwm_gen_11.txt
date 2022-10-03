@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_pwm_gen/axi_pwm_gen.v@173:195@HdlStmProcess
+    .load_config (load_config_s),
+    .sync (sync_0),
+    .pulse (pwm_0),
+    .pulse_counter (pwm_counter[0]));
+
+  always @(posedge clk) begin
+    if (pwm_gen_resetn == 1'b0) begin
+      sync_active_0 <= 1'b1;
+      sync_0 <= 1'b1;
+    end else begin
+      sync_active_0 <= PWM_0_EXT_SYNC;
+      if (sync_active_0) begin
+        sync_0 <= ext_sync_s;
+      end else begin
+        sync_0 <= 1'b0;
+      end
+    end
+  end
+
+  generate
+
+    reg ext_sync_m0 = 1'b1;
+    reg ext_sync_m1 = 1'b1;
+
+Diff Content:
+- 180       sync_active_0 <= 1'b1;
+- 183       sync_active_0 <= PWM_0_EXT_SYNC;
+- 184       if (sync_active_0) begin
+- 185         sync_0 <= ext_sync_s;
+- 186       end else begin
+- 187         sync_0 <= 1'b0;
+- 188       end
++ 188       sync_0 <= (offset_cnt == pwm_offset_s[31:0]) ? 1'b0 : 1'b1;
+
+Clone Blocks:

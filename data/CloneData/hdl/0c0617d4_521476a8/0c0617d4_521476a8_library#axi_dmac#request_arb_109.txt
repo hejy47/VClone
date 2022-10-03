@@ -1,0 +1,52 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@912:932@HdlStmProcess
+ * Make sure that we do not request more data than what fits into the
+ * store-and-forward burst memory.
+ * Throttler must be blocked during rewind since it does not tolerate
+ * a decrement of the request ID.
+ */
+always @(posedge src_clk) begin
+  if (src_resetn == 1'b0) begin
+    src_throttled_request_id <= 'h00;
+  end else if (rewind_req_valid) begin
+    src_throttled_request_id <= rewind_req_data[ID_WIDTH-1:0];
+  end else if (src_throttled_request_id != src_request_id &&
+               compare_id(src_throttled_request_id, src_data_request_id) &&
+               src_throttler_enabled) begin
+    src_throttled_request_id <= inc_id(src_throttled_request_id);
+  end
+end
+
+sync_bits #(
+  .NUM_OF_BITS(ID_WIDTH),
+  .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+) i_sync_req_response_id (
+
+Diff Content:
+- 917 always @(posedge src_clk) begin
+- 918   if (src_resetn == 1'b0) begin
+- 919     src_throttled_request_id <= 'h00;
+- 920   end else if (rewind_req_valid) begin
+- 921     src_throttled_request_id <= rewind_req_data[ID_WIDTH-1:0];
+- 922   end else if (src_throttled_request_id != src_request_id &&
+- 923                compare_id(src_throttled_request_id, src_data_request_id) &&
+- 924                src_throttler_enabled) begin
+- 925     src_throttled_request_id <= inc_id(src_throttled_request_id);
+- 927 end
++ 925   /*
++ 925    * Make sure that we do not request more data than what fits into the
++ 925    * store-and-forward burst memory.
++ 925    * Throttler must be blocked during rewind since it does not tolerate
++ 925    * a decrement of the request ID.
++ 925    */
++ 925   always @(posedge src_clk) begin
++ 925     if (src_resetn == 1'b0) begin
++ 925       src_throttled_request_id <= 'h00;
++ 925     end else if (rewind_req_valid) begin
++ 925       src_throttled_request_id <= rewind_req_data[ID_WIDTH-1:0];
++ 925     end else if (src_throttled_request_id != src_request_id &&
++ 925                  compare_id(src_throttled_request_id, src_data_request_id) &&
++ 925                  src_throttler_enabled) begin
++ 925       src_throttled_request_id <= inc_id(src_throttled_request_id);
++ 925     end
+
+Clone Blocks:

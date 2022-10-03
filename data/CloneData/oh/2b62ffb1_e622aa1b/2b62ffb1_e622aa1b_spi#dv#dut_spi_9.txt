@@ -1,0 +1,87 @@
+Source Block: oh/spi/dv/dut_spi.v@54:64@HdlStmAssign
+   //######################################################################
+   //DUT
+   //######################################################################
+
+   assign gpio_in[AW-1:0] = 32'h87654321;
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+
+
+Diff Content:
+- 59    assign wait_out[N-1:0] = 'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/dv/dut_spi.v@55:65
+   //DUT
+   //######################################################################
+
+   assign gpio_in[AW-1:0] = 32'h87654321;
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+
+   emesh2packet e2p (// Outputs
+
+Clone Blocks 2:
+oh/gpio/dv/dut_gpio.v@57:67
+   //DUT
+   //######################################################################
+
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   assign clkout          = clk1;
+   assign clk             = clk1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+
+
+Clone Blocks 3:
+oh/spi/dv/dut_spi.v@53:63
+
+   //######################################################################
+   //DUT
+   //######################################################################
+
+   assign gpio_in[AW-1:0] = 32'h87654321;
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+
+Clone Blocks 4:
+oh/gpio/dv/dut_gpio.v@58:68
+   //######################################################################
+
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   assign clkout          = clk1;
+   assign clk             = clk1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+
+   emesh2packet e2p (// Outputs
+
+Clone Blocks 5:
+oh/gpio/dv/dut_gpio.v@56:66
+   //######################################################################
+   //DUT
+   //######################################################################
+
+   assign wait_out[N-1:0] = 'b0;
+   assign dut_active      = 1'b1;
+   assign clkout          = clk1;
+   assign clk             = clk1;
+   
+   always @ (posedge clk)
+     access_out[0] <= access_in[0] & ~packet_in[0];
+

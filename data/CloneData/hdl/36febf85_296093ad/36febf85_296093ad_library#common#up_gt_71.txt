@@ -1,0 +1,57 @@
+Source Block: hdl/library/common/up_gt.v@639:669@HdlStmProcess
+  ad_rst i_tx_rst_reg     (.preset(up_tx_preset),     .clk(tx_clk),   .rst(tx_rst));
+  ad_rst i_j_tx_rst_reg   (.preset(up_tx_preset),     .clk(up_clk),   .rst(tx_jesd_rst));
+
+  // reset done & pll locked
+  
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rx_rst_done_m1 <= 'd0;
+      up_rx_pll_locked_m1 <= 'd0;
+      up_tx_rst_done_m1 <= 'd0;
+      up_tx_pll_locked_m1 <= 'd0;
+      up_rx_rst_done <= 'd0;
+      up_rx_pll_locked <= 'd0;
+      up_tx_rst_done <= 'd0;
+      up_tx_pll_locked <= 'd0;
+    end else begin
+      up_rx_rst_done_m1 <= rx_rst_done;
+      up_rx_pll_locked_m1 <= rx_pll_locked;
+      up_tx_rst_done_m1 <= tx_rst_done;
+      up_tx_pll_locked_m1 <= tx_pll_locked;
+      up_rx_rst_done <= up_rx_rst_done_m1;
+      up_rx_pll_locked <= up_rx_pll_locked_m1;
+      up_tx_rst_done <= up_tx_rst_done_m1;
+      up_tx_pll_locked <= up_tx_pll_locked_m1;
+    end
+  end
+
+  // rx sysref & sync
+
+  assign rx_sysref_s = (up_rx_sysref_sel == 1'b1) ? rx_ext_sysref : up_rx_sysref;
+
+
+Diff Content:
+- 644   always @(negedge up_rstn or posedge up_clk) begin
+- 645     if (up_rstn == 0) begin
+- 646       up_rx_rst_done_m1 <= 'd0;
+- 647       up_rx_pll_locked_m1 <= 'd0;
+- 648       up_tx_rst_done_m1 <= 'd0;
+- 649       up_tx_pll_locked_m1 <= 'd0;
+- 650       up_rx_rst_done <= 'd0;
+- 651       up_rx_pll_locked <= 'd0;
+- 652       up_tx_rst_done <= 'd0;
+- 653       up_tx_pll_locked <= 'd0;
+- 654     end else begin
+- 655       up_rx_rst_done_m1 <= rx_rst_done;
+- 656       up_rx_pll_locked_m1 <= rx_pll_locked;
+- 657       up_tx_rst_done_m1 <= tx_rst_done;
+- 658       up_tx_pll_locked_m1 <= tx_pll_locked;
+- 659       up_rx_rst_done <= up_rx_rst_done_m1;
+- 660       up_rx_pll_locked <= up_rx_pll_locked_m1;
+- 661       up_tx_rst_done <= up_tx_rst_done_m1;
+- 662       up_tx_pll_locked <= up_tx_pll_locked_m1;
+- 663     end
+- 664   end
+
+Clone Blocks:

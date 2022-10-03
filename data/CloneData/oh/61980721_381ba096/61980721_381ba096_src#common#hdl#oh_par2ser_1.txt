@@ -1,0 +1,32 @@
+Source Block: oh/src/common/hdl/oh_par2ser.v@25:35@HdlIdDef
+ 
+   // parameters  
+   parameter CW   = $clog2(PW/SW);  // serialization factor (for counter)      
+
+   reg [PW-1:0]    shiftreg;
+   reg [CW-1:0]    count;
+
+   // start serialization   
+   assign start_transfer = load &  ~wait_in & ~busy;
+
+   //transfer counter
+
+Diff Content:
++ 30    wire 	   start_transfer;
++ 30    wire 	   busy;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_par2ser.v@24:34
+    );
+ 
+   // parameters  
+   parameter CW   = $clog2(PW/SW);  // serialization factor (for counter)      
+
+   reg [PW-1:0]    shiftreg;
+   reg [CW-1:0]    count;
+
+   // start serialization   
+   assign start_transfer = load &  ~wait_in & ~busy;
+
+

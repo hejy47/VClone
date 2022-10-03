@@ -1,0 +1,117 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_frame_align.v@110:148@HdlStmFor
+  .eomf                       (eomf)
+);
+
+genvar ii;
+generate
+for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_k_char
+  always @(*) begin
+    char_is_a[ii] = 1'b0;
+    char_is_f[ii] = 1'b0;
+
+    if(charisk28[ii]) begin
+      if(data[ii*8+7:ii*8+5] == 3'd3) begin
+        char_is_a[ii] = 1'b1;
+      end
+      if(data[ii*8+7:ii*8+5] == 3'd7) begin
+        char_is_f[ii] = 1'b1;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if(reset) begin
+      eomf_err[ii] <= 1'b0;
+      eomf_good[ii] <= 1'b0;
+      eof_err[ii] <= 1'b0;
+      eof_good[ii] <= 1'b0;
+    end else begin
+      eomf_err[ii]  <= char_is_a[ii] && !eomf[ii];
+      eomf_good[ii] <= char_is_a[ii] && eomf[ii];
+      eof_err[ii]   <= char_is_f[ii] && !eof[ii];
+      eof_good[ii]  <= char_is_f[ii] && eof[ii];
+    end
+  end
+end
+endgenerate
+
+always @(posedge clk) begin
+  if(reset) begin
+    align_good <= 1'b0;
+
+Diff Content:
+- 115 for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_k_char
+- 116   always @(*) begin
+- 117     char_is_a[ii] = 1'b0;
+- 118     char_is_f[ii] = 1'b0;
+- 120     if(charisk28[ii]) begin
+- 121       if(data[ii*8+7:ii*8+5] == 3'd3) begin
+- 122         char_is_a[ii] = 1'b1;
+- 124       if(data[ii*8+7:ii*8+5] == 3'd7) begin
+- 125         char_is_f[ii] = 1'b1;
+- 132       eomf_err[ii] <= 1'b0;
+- 133       eomf_good[ii] <= 1'b0;
+- 134       eof_err[ii] <= 1'b0;
+- 135       eof_good[ii] <= 1'b0;
+- 136     end else begin
+- 137       eomf_err[ii]  <= char_is_a[ii] && !eomf[ii];
+- 138       eomf_good[ii] <= char_is_a[ii] && eomf[ii];
+- 139       eof_err[ii]   <= char_is_f[ii] && !eof[ii];
+- 140       eof_good[ii]  <= char_is_f[ii] && eof[ii];
+- 141     end
+- 142   end
+- 143 end
++ 122   endfunction
++ 122   reg  [DATA_PATH_WIDTH-1:0]        char_is_a;
++ 122   reg  [DATA_PATH_WIDTH-1:0]        char_is_f;
++ 122   wire [DATA_PATH_WIDTH-1:0]        eof;
++ 122   wire [DATA_PATH_WIDTH-1:0]        eomf;
++ 122   reg  [DATA_PATH_WIDTH-1:0]        eof_err;
++ 122   reg  [DATA_PATH_WIDTH-1:0]        eof_good;
++ 122   reg  [DATA_PATH_WIDTH-1:0]        eomf_err;
++ 122   reg  [DATA_PATH_WIDTH-1:0]        eomf_good;
++ 122   reg                               align_good;
++ 122   reg                               align_err;
++ 122   reg  [DPW_LOG2*2:0]               cur_align_err_cnt;
++ 122   wire [8:0]                        align_err_cnt_next;
++ 122   wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe>>DPW_LOG2;
++ 122   jesd204_frame_mark #(
++ 122     .DATA_PATH_WIDTH (DATA_PATH_WIDTH)
++ 122   ) i_frame_mark (
++ 122     .clk (clk),
++ 122     .reset (reset),
++ 122     .cfg_octets_per_multiframe (cfg_octets_per_multiframe),
++ 122     .cfg_beats_per_multiframe (cfg_beats_per_multiframe),
++ 122     .cfg_octets_per_frame (cfg_octets_per_frame),
++ 122     .sof (),
++ 122     .eof (eof),
++ 122     .somf (),
++ 122     .eomf (eomf));
++ 122   genvar ii;
++ 122   generate
++ 122   for (ii = 0; ii < DATA_PATH_WIDTH; ii = ii + 1) begin: gen_k_char
++ 122     always @(*) begin
++ 122       char_is_a[ii] = 1'b0;
++ 122       char_is_f[ii] = 1'b0;
++ 122       if(charisk28[ii]) begin
++ 122         if(data[ii*8+7:ii*8+5] == 3'd3) begin
++ 122           char_is_a[ii] = 1'b1;
++ 122         end
++ 122         if(data[ii*8+7:ii*8+5] == 3'd7) begin
++ 122           char_is_f[ii] = 1'b1;
++ 122         end
++ 125     end
++ 125     always @(posedge clk) begin
++ 125       if(reset) begin
++ 125         eomf_err[ii] <= 1'b0;
++ 125         eomf_good[ii] <= 1'b0;
++ 125         eof_err[ii] <= 1'b0;
++ 125         eof_good[ii] <= 1'b0;
++ 125       end else begin
++ 125         eomf_err[ii]  <= char_is_a[ii] && !eomf[ii];
++ 125         eomf_good[ii] <= char_is_a[ii] && eomf[ii];
++ 125         eof_err[ii]   <= char_is_f[ii] && !eof[ii];
++ 125         eof_good[ii]  <= char_is_f[ii] && eof[ii];
++ 128   endgenerate
+
+Clone Blocks:

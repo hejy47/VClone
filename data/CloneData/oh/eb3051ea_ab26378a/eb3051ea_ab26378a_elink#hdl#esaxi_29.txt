@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/esaxi.v@446:456@HdlStmAssign
+          emwr_dstaddr[31:0]  <= emwr_dstaddr_reg[31:0];	  
+	  emwr_ctrlmode[3:0]  <= emwr_ctrlmode_reg[3:0];	  
+          emwr_datamode[1:0]  <= emwr_datamode_reg[1:0];	  
+       end // else: !if(~s_axi_aresetn)
+
+   assign emwr_access=emwr_access_all & ~(emwr_dstaddr[31:20]==elinkid[11:0]);
+   
+   
+   //###################################################
+   //#READ REQUEST (DATA CHANNEL)
+   //###################################################  
+
+Diff Content:
+- 451    assign emwr_access=emwr_access_all & ~(emwr_dstaddr[31:20]==elinkid[11:0]);
+
+Clone Blocks:

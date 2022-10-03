@@ -1,0 +1,33 @@
+Source Block: oh/emesh/hdl/emesh2packet.v@43:66@HdlStmIf
+   assign packet_out[0]       = write_out;   
+   assign packet_out[2:1]     = datamode_out[1:0];
+   assign packet_out[7:3]     = ctrlmode_out[4:0];
+     
+   generate   
+      if(AW==64)
+	begin
+	   assign packet_out[39:8]    = dstaddr_out[AW/2-1:0];
+	   assign packet_out[71:40]   = data_out[AW/2-1:0];
+	   assign packet_out[103:72]  = srcaddr_out[AW/2-1:0];   
+	   assign packet_out[135:104] = srcaddr_out[AW-1:AW/2];
+	   assign packet_out[167:136] = dstaddr_out[AW-1:AW/2];
+	end
+      else
+	begin	  
+	   assign packet_out[39:8]    = dstaddr_out[AW-1:0];
+	   assign packet_out[71:40]   = data_out[AW-1:0];
+	   assign packet_out[103:72]  = srcaddr_out[AW-1:0];
+	end      
+   endgenerate
+
+
+endmodule // emesh2packet
+
+
+Diff Content:
+- 49 	begin
+- 57 	begin	  
++ 49 	begin : packet64
++ 57 	begin : packet32
+
+Clone Blocks:

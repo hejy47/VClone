@@ -1,0 +1,42 @@
+Source Block: hdl/library/jesd204/jesd204_rx/align_mux.v@72:79@HdlStmAssign
+assign charisk = {in_charisk, in_charisk_d1};
+
+assign align_int = align[DPW_LOG2-1:0];
+
+assign out_data = data[align_int*8 +: (DATA_PATH_WIDTH*8)];
+assign out_charisk = charisk[align_int +: DATA_PATH_WIDTH];
+
+endmodule
+
+Diff Content:
+- 77 assign out_charisk = charisk[align_int +: DATA_PATH_WIDTH];
++ 77   assign out_data = data[align_int*8 +: (DATA_PATH_WIDTH*8)];
++ 77   assign out_charisk = charisk[align_int +: DATA_PATH_WIDTH];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/align_mux.v@71:79
+assign data = {in_data, in_data_d1};
+assign charisk = {in_charisk, in_charisk_d1};
+
+assign align_int = align[DPW_LOG2-1:0];
+
+assign out_data = data[align_int*8 +: (DATA_PATH_WIDTH*8)];
+assign out_charisk = charisk[align_int +: DATA_PATH_WIDTH];
+
+endmodule
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_rx/align_mux.v@69:79
+end
+
+assign data = {in_data, in_data_d1};
+assign charisk = {in_charisk, in_charisk_d1};
+
+assign align_int = align[DPW_LOG2-1:0];
+
+assign out_data = data[align_int*8 +: (DATA_PATH_WIDTH*8)];
+assign out_charisk = charisk[align_int +: DATA_PATH_WIDTH];
+
+endmodule
+

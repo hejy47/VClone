@@ -1,0 +1,63 @@
+Source Block: hdl/library/intel/util_clkdiv/util_clkdiv.v@48:58@HdlIdDef
+  output  clk_out,
+  output  reset_out
+ );
+
+reg enable;
+reg reset_d1;
+
+assign reset_out = reset | reset_d1;
+
+always @(posedge clk) begin
+  reset_d1 <= reset;
+
+Diff Content:
+- 53 reg reset_d1;
++ 53   reg enable;
++ 53   reg reset_d1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/intel/util_clkdiv/util_clkdiv.v@47:57
+  input   reset,
+  output  clk_out,
+  output  reset_out
+ );
+
+reg enable;
+reg reset_d1;
+
+assign reset_out = reset | reset_d1;
+
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/intel/util_clkdiv/util_clkdiv.v@52:64
+reg enable;
+reg reset_d1;
+
+assign reset_out = reset | reset_d1;
+
+always @(posedge clk) begin
+  reset_d1 <= reset;
+end
+
+always @(posedge clk) begin
+  enable <= ~enable;
+end
+
+
+Clone Blocks 3:
+hdl/library/intel/util_clkdiv/util_clkdiv.v@50:60
+ );
+
+reg enable;
+reg reset_d1;
+
+assign reset_out = reset | reset_d1;
+
+always @(posedge clk) begin
+  reset_d1 <= reset;
+end
+
+

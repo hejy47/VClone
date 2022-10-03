@@ -1,0 +1,31 @@
+Source Block: zipcpu/rtl/core/idecode.v@416:426@HdlStmProcess
+			// also cause an illegal instruction error
+			if ((!OPT_LOCK)&&(w_lock))
+				o_illegal <= 1'b1;
+		end
+
+	initial	o_gie = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+		o_gie <= i_gie;
+	else if (OPT_CIS)
+	begin
+
+Diff Content:
+- 421 	initial	o_gie = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/div.v@142:152
+	// Primary among them is that o_busy needs to (possibly) be true
+	// for an extra clock after r_busy clears.  This would be that extra
+	// clock where we negate the result (assuming a signed divide, and that
+	// the result is supposed to be negative.)  Otherwise, the two are
+	// identical.
+	initial	o_busy = 1'b0;
+	always @(posedge i_clk)
+		if (i_reset)
+			o_busy <= 1'b0;
+		else if (i_wr)
+			o_busy <= 1'b1;
+

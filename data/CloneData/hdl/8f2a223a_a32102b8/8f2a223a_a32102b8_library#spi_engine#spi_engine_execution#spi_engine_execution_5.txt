@@ -1,0 +1,45 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@396:409@HdlIdDef
+  trigger_rx_d1 <= trigger_rx;
+  trigger_rx_d2 <= trigger_rx_d1;
+  trigger_rx_d3 <= trigger_rx_d2;
+end
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+
+always @(posedge clk) begin
+  if (inst_d1 == CMD_CHIPSELECT) begin
+    data_sdi_shift <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_1 <= {DATA_WIDTH{1'b0}};
+
+Diff Content:
+- 401 wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+- 402                     (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+- 403                     (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+- 404                     (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
++ 404 wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx_d[1] :
++ 404                     (SDI_DELAY == 2'b01) ? trigger_rx_d[2] :
++ 404                     (SDI_DELAY == 2'b10) ? trigger_rx_d[3] :
++ 404                     (SDI_DELAY == 2'b11) ? trigger_rx_d[4] : trigger_rx_d[1];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@390:404
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+always @(posedge clk) begin
+  trigger_rx_d1 <= trigger_rx;
+  trigger_rx_d2 <= trigger_rx_d1;
+  trigger_rx_d3 <= trigger_rx_d2;
+end
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+

@@ -1,0 +1,18 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tx_channel.v@272:282@HdlStmAssign
+    .iqcor_coeff_1 (dac_iqcor_coeff_1_s),
+    .iqcor_coeff_2 (dac_iqcor_coeff_2_s));
+
+  // dac mux
+
+  assign dac_data_out = (DISABLE == 1) ? 'd0 : dac_data_out_int;
+
+  always @(posedge dac_clk) begin
+    case (dac_data_sel_s)
+      4'h9: dac_data_out_int <= dac_pn_data;
+      4'h8: dac_data_out_int <= adc_data;
+
+Diff Content:
+- 277   assign dac_data_out = (DISABLE == 1) ? 'd0 : dac_data_out_int;
++ 277   assign dac_data_out = (DISABLE == 1) ? 12'd0 : dac_data_out_int;
+
+Clone Blocks:

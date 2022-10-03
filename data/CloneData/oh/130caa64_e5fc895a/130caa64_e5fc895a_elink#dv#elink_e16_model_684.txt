@@ -1,0 +1,119 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4993:5003@HdlStmAssign
+   assign launcher_sel[1] = (mesh_pointer[2:0] == 3'b001);
+   assign launcher_sel[2] = (mesh_pointer[2:0] == 3'b010);
+   assign launcher_sel[3] = (mesh_pointer[2:0] == 3'b011);
+   assign launcher_sel[4] = (mesh_pointer[2:0] == 3'b100);
+   assign launcher_sel[5] = (mesh_pointer[2:0] == 3'b101);
+   assign launcher_sel[6] = (mesh_pointer[2:0] == 3'b110);
+
+   assign mesh_frame      =   mesh_req & ~mesh_last_tran;
+   assign mesh_rotate_dis = |(mesh_pointer[2:0]);
+
+   //#############################
+
+Diff Content:
+- 4998    assign launcher_sel[6] = (mesh_pointer[2:0] == 3'b110);
++ 4998    assign byte_odd_mux[LW-1:0] = sel_ref_byte1 ? {ref_ctrlmode[3:0],ref_dstaddr[31:28]} :
++ 4998 				 sel_ref_byte3 ? ref_dstaddr[19:12] :
++ 4998 	      sel_ref_byte5 ? {ref_dstaddr[3:0],ref_datamode[1:0],ref_write,ref_access} :
++ 4998 				                 fifo_out[LW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4989:4999
+       if (mesh_ack)
+	 mesh_pointer[2:0] <= mesh_pointer_incr[2:0];
+
+   assign launcher_sel[0] = (mesh_pointer[2:0] == 3'b000);
+   assign launcher_sel[1] = (mesh_pointer[2:0] == 3'b001);
+   assign launcher_sel[2] = (mesh_pointer[2:0] == 3'b010);
+   assign launcher_sel[3] = (mesh_pointer[2:0] == 3'b011);
+   assign launcher_sel[4] = (mesh_pointer[2:0] == 3'b100);
+   assign launcher_sel[5] = (mesh_pointer[2:0] == 3'b101);
+   assign launcher_sel[6] = (mesh_pointer[2:0] == 3'b110);
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4987:4997
+       mesh_pointer[2:0] <= 3'b000;
+     else if(cclk_en)
+       if (mesh_ack)
+	 mesh_pointer[2:0] <= mesh_pointer_incr[2:0];
+
+   assign launcher_sel[0] = (mesh_pointer[2:0] == 3'b000);
+   assign launcher_sel[1] = (mesh_pointer[2:0] == 3'b001);
+   assign launcher_sel[2] = (mesh_pointer[2:0] == 3'b010);
+   assign launcher_sel[3] = (mesh_pointer[2:0] == 3'b011);
+   assign launcher_sel[4] = (mesh_pointer[2:0] == 3'b100);
+   assign launcher_sel[5] = (mesh_pointer[2:0] == 3'b101);
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@4991:5001
+
+   assign launcher_sel[0] = (mesh_pointer[2:0] == 3'b000);
+   assign launcher_sel[1] = (mesh_pointer[2:0] == 3'b001);
+   assign launcher_sel[2] = (mesh_pointer[2:0] == 3'b010);
+   assign launcher_sel[3] = (mesh_pointer[2:0] == 3'b011);
+   assign launcher_sel[4] = (mesh_pointer[2:0] == 3'b100);
+   assign launcher_sel[5] = (mesh_pointer[2:0] == 3'b101);
+   assign launcher_sel[6] = (mesh_pointer[2:0] == 3'b110);
+
+   assign mesh_frame      =   mesh_req & ~mesh_last_tran;
+   assign mesh_rotate_dis = |(mesh_pointer[2:0]);
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@4992:5002
+   assign launcher_sel[0] = (mesh_pointer[2:0] == 3'b000);
+   assign launcher_sel[1] = (mesh_pointer[2:0] == 3'b001);
+   assign launcher_sel[2] = (mesh_pointer[2:0] == 3'b010);
+   assign launcher_sel[3] = (mesh_pointer[2:0] == 3'b011);
+   assign launcher_sel[4] = (mesh_pointer[2:0] == 3'b100);
+   assign launcher_sel[5] = (mesh_pointer[2:0] == 3'b101);
+   assign launcher_sel[6] = (mesh_pointer[2:0] == 3'b110);
+
+   assign mesh_frame      =   mesh_req & ~mesh_last_tran;
+   assign mesh_rotate_dis = |(mesh_pointer[2:0]);
+
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@4990:5000
+	 mesh_pointer[2:0] <= mesh_pointer_incr[2:0];
+
+   assign launcher_sel[0] = (mesh_pointer[2:0] == 3'b000);
+   assign launcher_sel[1] = (mesh_pointer[2:0] == 3'b001);
+   assign launcher_sel[2] = (mesh_pointer[2:0] == 3'b010);
+   assign launcher_sel[3] = (mesh_pointer[2:0] == 3'b011);
+   assign launcher_sel[4] = (mesh_pointer[2:0] == 3'b100);
+   assign launcher_sel[5] = (mesh_pointer[2:0] == 3'b101);
+   assign launcher_sel[6] = (mesh_pointer[2:0] == 3'b110);
+
+   assign mesh_frame      =   mesh_req & ~mesh_last_tran;
+
+Clone Blocks 6:
+oh/elink/dv/elink_e16_model.v@4988:4998
+     else if(cclk_en)
+       if (mesh_ack)
+	 mesh_pointer[2:0] <= mesh_pointer_incr[2:0];
+
+   assign launcher_sel[0] = (mesh_pointer[2:0] == 3'b000);
+   assign launcher_sel[1] = (mesh_pointer[2:0] == 3'b001);
+   assign launcher_sel[2] = (mesh_pointer[2:0] == 3'b010);
+   assign launcher_sel[3] = (mesh_pointer[2:0] == 3'b011);
+   assign launcher_sel[4] = (mesh_pointer[2:0] == 3'b100);
+   assign launcher_sel[5] = (mesh_pointer[2:0] == 3'b101);
+   assign launcher_sel[6] = (mesh_pointer[2:0] == 3'b110);
+
+Clone Blocks 7:
+oh/elink/dv/elink_e16_model.v@4995:5005
+   assign launcher_sel[3] = (mesh_pointer[2:0] == 3'b011);
+   assign launcher_sel[4] = (mesh_pointer[2:0] == 3'b100);
+   assign launcher_sel[5] = (mesh_pointer[2:0] == 3'b101);
+   assign launcher_sel[6] = (mesh_pointer[2:0] == 3'b110);
+
+   assign mesh_frame      =   mesh_req & ~mesh_last_tran;
+   assign mesh_rotate_dis = |(mesh_pointer[2:0]);
+
+   //#############################
+   //# mesh transaction 7:1 mux
+   //#############################
+

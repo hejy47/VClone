@@ -1,0 +1,20 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4140:4151@HdlStmAssign
+
+   // #################################
+   // # Dual data rate implementation
+   // #################################
+
+   assign txo_data[LW-1:0] = txo_lclk ? data_even_lsh[LW-1:0]://stable high data
+                                        data_odd_lsl[LW-1:0]; //stable low data
+
+
+endmodule // link_txo_interface
+module link_txo_launcher (/*AUTOARG*/
+   // Outputs
+
+Diff Content:
+- 4145    assign txo_data[LW-1:0] = txo_lclk ? data_even_lsh[LW-1:0]://stable high data
+- 4146                                         data_odd_lsl[LW-1:0]; //stable low data
++ 4146 endmodule // link_txo_channel
+
+Clone Blocks:

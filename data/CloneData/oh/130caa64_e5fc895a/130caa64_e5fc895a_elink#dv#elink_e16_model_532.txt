@@ -1,0 +1,30 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4298:4314@HdlStmProcess
+   assign txo_op_ack_first = txo_launch_ack_del1 & ~txo_launch_ack_del2;
+
+   //# Request and rotate disable
+   //# On the first cycle of the acknowledge the launch count is not incremented
+   //# yet, therefore we have to force request and rotate disable "artificially"
+   always @ (posedge txo_lclk or posedge reset)
+     if (reset)
+       txo_launch_init_req <= 1'b0;
+     else if(start_new_read)
+       txo_launch_init_req <= 1'b1;
+     else if(txo_launch_ack)
+       txo_launch_init_req <= 1'b0;
+
+   assign txo_launch_req = txo_launch_init_req | 
+			    txo_op_ack_first | (|(txo_launch_cnt[2:0]));
+
+   assign txo_rotate_dis = ~txo_launch_init_req & 
+
+Diff Content:
+- 4303    always @ (posedge txo_lclk or posedge reset)
+- 4304      if (reset)
+- 4305        txo_launch_init_req <= 1'b0;
+- 4306      else if(start_new_read)
+- 4307        txo_launch_init_req <= 1'b1;
+- 4308      else if(txo_launch_ack)
+- 4309        txo_launch_init_req <= 1'b0;
++ 4309    assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
+
+Clone Blocks:

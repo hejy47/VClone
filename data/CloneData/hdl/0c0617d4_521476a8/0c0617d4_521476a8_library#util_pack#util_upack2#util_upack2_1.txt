@@ -1,0 +1,17 @@
+Source Block: hdl/library/util_pack/util_upack2/util_upack2.v@181:191@HdlIdDef
+  input s_axis_valid,
+  output s_axis_ready,
+  input [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] s_axis_data
+);
+
+localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
+/*
+ * Round up to the next power of two and zero out the additional channels
+ * internally.
+ */
+localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
+
+Diff Content:
+- 186 localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
+
+Clone Blocks:

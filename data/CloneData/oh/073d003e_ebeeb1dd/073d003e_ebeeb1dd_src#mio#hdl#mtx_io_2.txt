@@ -1,0 +1,39 @@
+Source Block: oh/src/mio/hdl/mtx_io.v@96:108@HdlStmAssign
+     tx_packet_sdr[IOW-1:0] <= shiftreg[IOW-1:0];
+      
+   // ddr circuit (one stage pipeline delay!)
+   assign ddr_data_even[IOW/2-1:0] = shiftreg[IOW/2-1:0];
+
+   assign ddr_data_odd[IOW/2-1:0] = (iowidth[1:0]==2'b00) ? shiftreg[15:8]  :
+				    (iowidth[1:0]==2'b01) ? shiftreg[31:16] :
+				                            shiftreg[63:32];
+   
+   oh_oddr#(.DW(IOW/2))
+   data_oddr (.out	(tx_packet_ddr[IOW/2-1:0]),
+              .clk	(io_clk),
+	      .din1	(ddr_data_even[IOW/2-1:0]),
+
+Diff Content:
+- 101    assign ddr_data_odd[IOW/2-1:0] = (iowidth[1:0]==2'b00) ? shiftreg[15:8]  :
+- 102 				    (iowidth[1:0]==2'b01) ? shiftreg[31:16] :
+- 103 				                            shiftreg[63:32];
++ 103    assign ddr_data_odd[IOW/2-1:0] = (iowidth[1:0]==2'b00) ? shiftreg[7:4]   : //byte
++ 103 				    (iowidth[1:0]==2'b01) ? shiftreg[15:8]  : //short
++ 103     				    (iowidth[1:0]==2'b10) ? shiftreg[31:16] : //word
++ 103 				                            shiftreg[63:32];  //double
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mtx_io.v@94:104
+   // pipeline sdr to compensate for ddr
+   always @ (posedge io_clk)
+     tx_packet_sdr[IOW-1:0] <= shiftreg[IOW-1:0];
+      
+   // ddr circuit (one stage pipeline delay!)
+   assign ddr_data_even[IOW/2-1:0] = shiftreg[IOW/2-1:0];
+
+   assign ddr_data_odd[IOW/2-1:0] = (iowidth[1:0]==2'b00) ? shiftreg[15:8]  :
+				    (iowidth[1:0]==2'b01) ? shiftreg[31:16] :
+				                            shiftreg[63:32];
+   
+

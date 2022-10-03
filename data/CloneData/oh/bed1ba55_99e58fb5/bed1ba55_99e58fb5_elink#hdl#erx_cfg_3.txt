@@ -1,0 +1,58 @@
+Source Block: oh/elink/hdl/erx_cfg.v@224:247@HdlStmProcess
+   //###############################
+   //# FORWARD PACKET TO OUTPUT
+   //###############################
+   
+   //pipeline
+   always @ (posedge clk)
+     begin
+	ecfg_access       <= erx_cfg_access & ~ecfg_write;//read or "tx readback"
+	datamode_out[1:0] <= datamode_in[1:0];
+	ctrlmode_out[4:0] <= ctrlmode_in[3:0];
+	write_out         <= 1'b1;	
+	dstaddr_out[31:0] <= ecfg_read ? srcaddr_in[31:0] : dstaddr_in[31:0];
+	data_out[31:0]    <= data_in[31:0];
+	srcaddr_out[31:0] <= srcaddr_in[31:0];
+	rx_sel            <= ~ecfg_read;
+	dma_sel           <= dma_access;
+	mailbox_sel       <= mailbox_access;
+	tx_sel            <= erx_cfg_access & ecfg_write;
+     end
+
+      
+   //readback mux (should be one hot!)
+   oh_mux4 #(.DW(32))
+   mux4(.out (data_mux[31:0]),
+
+Diff Content:
+- 231 	ecfg_access       <= erx_cfg_access & ~ecfg_write;//read or "tx readback"
+- 241 	tx_sel            <= erx_cfg_access & ecfg_write;
++ 231 	ecfg_access       <= ecfg_read | ecfg_tx_read;
++ 241 	tx_sel            <= ecfg_tx_read;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_cfg.v@196:217
+   //###########################
+   //# FORWARD PACKET TO RX
+   //###########################
+
+   //pipeline
+   always @ (posedge clk)
+     if(~etx_wait)
+       begin
+	  etx_cfg_access    <= cfg_access;	  
+	  datamode_out[1:0] <= datamode_in[1:0];
+	  ctrlmode_out[4:0] <= {1'b0,ctrlmode_in[3:0]};
+	  write_out         <= ecfg_read | write_in;	  
+	  dstaddr_out[31:0] <= ecfg_read ? srcaddr_in[31:0] : dstaddr_in[31:0];
+	  data_out[31:0]    <= data_in[31:0];	  
+	  srcaddr_out[31:0] <= srcaddr_in[31:0];
+	  read_sel          <= ecfg_read;	  
+       end
+
+   assign data_mux[31:0] = read_sel ? cfg_dout[31:0] :
+			              data_out[31:0];
+   
+   //Create packet
+

@@ -1,0 +1,64 @@
+Source Block: oh/memory/hdl/fifo_async.v@106:129@HdlStmIf
+                                         .reset		(rd_rst),
+					 .clk		(rd_clk));
+   
+`elsif TARGET_XILINX   
+   generate
+      if((WIDTH==104) & (DEPTH==16))
+	fifo_async_104x16 fifo_async_104x16 (
+					     .wr_clk(wr_clk),
+					     .wr_rst(wr_rst),
+					     .rd_clk(rd_clk),
+					     .rd_rst(rd_rst),
+					     .din(din[WIDTH-1:0]),
+					     .wr_en(wr_en),
+					     .rd_en(rd_en),
+					     .dout(dout[WIDTH-1:0]),
+					     .full(full),
+					     .empty(empty),
+					     .valid(valid)
+					     );	   
+   endgenerate
+   
+      
+`endif // !`elsif TARGET_XILINX
+   
+
+Diff Content:
+- 111       if((WIDTH==104) & (DEPTH==16))
+- 112 	fifo_async_104x16 fifo_async_104x16 (
+- 113 					     .wr_clk(wr_clk),
+- 114 					     .wr_rst(wr_rst),
+- 115 					     .rd_clk(rd_clk),
+- 116 					     .rd_rst(rd_rst),
+- 117 					     .din(din[WIDTH-1:0]),
+- 118 					     .wr_en(wr_en),
+- 119 					     .rd_en(rd_en),
+- 120 					     .dout(dout[WIDTH-1:0]),
+- 121 					     .full(full),
+- 122 					     .empty(empty),
+- 123 					     .valid(valid)
+- 124 					     );	   
++ 124 						.wr_en		(wr_en),
++ 124 						.din		(din[DW-1:0]),
++ 124 						.rd_en		(rd_en));	   
++ 124 	end
++ 124       else if((DW==104) & (DEPTH==32))
++ 124 	begin
++ 124 	   fifo_async_104x32 fifo_async_104x32 (.full		(),
++ 124 						.prog_full	(prog_full),
++ 124 						.almost_full	(full),
++ 124 						/*AUTOINST*/
++ 124 						.dout		(dout[DW-1:0]),
++ 124 						.empty		(empty),
++ 124 						.valid		(valid),
++ 124 						.wr_rst		(wr_rst),
++ 124 						.rd_rst		(rd_rst),
++ 124 						.wr_clk		(wr_clk),
++ 124 						.rd_clk		(rd_clk),
++ 124 						.wr_en		(wr_en),
++ 124 						.din		(din[DW-1:0]),
++ 124 						.rd_en		(rd_en));
++ 124 	end   
+
+Clone Blocks:

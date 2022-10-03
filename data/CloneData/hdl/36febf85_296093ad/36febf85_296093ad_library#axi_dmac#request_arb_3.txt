@@ -1,0 +1,49 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@167:178@HdlIdDef
+localparam DMA_TYPE_FIFO = 2;
+
+localparam DMA_ADDR_WIDTH_DEST = 32 - C_BYTES_PER_BEAT_WIDTH_DEST;
+localparam DMA_ADDR_WIDTH_SRC = 32 - C_BYTES_PER_BEAT_WIDTH_SRC;
+
+localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
+	C_DMA_DATA_WIDTH_DEST : C_DMA_DATA_WIDTH_SRC;
+
+
+
+// Bytes per burst is the same for both dest and src, but bytes per beat may
+// differ, so beats per burst may also differ
+
+Diff Content:
+- 172 localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
+- 173 	C_DMA_DATA_WIDTH_DEST : C_DMA_DATA_WIDTH_SRC;
++ 173 localparam DMA_DATA_WIDTH = DMA_DATA_WIDTH_SRC < DMA_DATA_WIDTH_DEST ?
++ 173 	DMA_DATA_WIDTH_DEST : DMA_DATA_WIDTH_SRC;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_arb.v@165:175
+localparam DMA_TYPE_MM_AXI = 0;
+localparam DMA_TYPE_STREAM_AXI = 1;
+localparam DMA_TYPE_FIFO = 2;
+
+localparam DMA_ADDR_WIDTH_DEST = 32 - C_BYTES_PER_BEAT_WIDTH_DEST;
+localparam DMA_ADDR_WIDTH_SRC = 32 - C_BYTES_PER_BEAT_WIDTH_SRC;
+
+localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
+	C_DMA_DATA_WIDTH_DEST : C_DMA_DATA_WIDTH_SRC;
+
+
+
+Clone Blocks 2:
+hdl/library/axi_dmac/request_arb.v@164:174
+
+localparam DMA_TYPE_MM_AXI = 0;
+localparam DMA_TYPE_STREAM_AXI = 1;
+localparam DMA_TYPE_FIFO = 2;
+
+localparam DMA_ADDR_WIDTH_DEST = 32 - C_BYTES_PER_BEAT_WIDTH_DEST;
+localparam DMA_ADDR_WIDTH_SRC = 32 - C_BYTES_PER_BEAT_WIDTH_SRC;
+
+localparam DMA_DATA_WIDTH = C_DMA_DATA_WIDTH_SRC < C_DMA_DATA_WIDTH_DEST ?
+	C_DMA_DATA_WIDTH_DEST : C_DMA_DATA_WIDTH_SRC;
+
+

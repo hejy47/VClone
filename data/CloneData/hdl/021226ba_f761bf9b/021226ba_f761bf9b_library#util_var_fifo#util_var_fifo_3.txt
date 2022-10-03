@@ -1,0 +1,31 @@
+Source Block: hdl/library/util_var_fifo/util_var_fifo.v@95:116@HdlStmProcess
+  assign din_w = data_in;
+  assign en_r = fifo_active;
+  assign addr_r = addrb;
+  assign data_out_s = dout_r;
+
+  always @(posedge clk) begin
+    depth_d1 <= depth;
+    if (depth == 32'h0) begin
+      fifo_active = 0;
+    end else begin
+      fifo_active = 1;
+    end
+    if (data_in_valid == 1'b1 && fifo_active == 1'b0) begin
+      data_in_d1 <= data_in;
+      data_in_d2 <= data_in_d1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(reset == 1'b1 || fifo_active == 1'b0) begin
+      addra <= 0;
+      addrb <= 0;
+
+Diff Content:
+- 103       fifo_active = 0;
+- 105       fifo_active = 1;
++ 103       fifo_active <= 0;
++ 105       fifo_active <= 1;
+
+Clone Blocks:

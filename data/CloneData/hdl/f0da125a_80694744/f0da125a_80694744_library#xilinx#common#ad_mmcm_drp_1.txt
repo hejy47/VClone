@@ -1,0 +1,210 @@
+Source Block: hdl/library/xilinx/common/ad_mmcm_drp.v@110:180@HdlStmIf
+  end
+
+  // instantiations
+
+  generate
+  if (MMCM_DEVICE_TYPE == MMCM_DEVICE_VIRTEX6) begin
+  MMCM_ADV #(
+    .BANDWIDTH ("OPTIMIZED"),
+    .CLKOUT4_CASCADE ("FALSE"),
+    .CLOCK_HOLD ("FALSE"),
+    .COMPENSATION ("ZHOLD"),
+    .STARTUP_WAIT ("FALSE"),
+    .DIVCLK_DIVIDE (MMCM_VCO_DIV),
+    .CLKFBOUT_MULT_F (MMCM_VCO_MUL),
+    .CLKFBOUT_PHASE (0.000),
+    .CLKFBOUT_USE_FINE_PS ("FALSE"),
+    .CLKOUT0_DIVIDE_F (MMCM_CLK0_DIV),
+    .CLKOUT0_PHASE (MMCM_CLK0_PHASE),
+    .CLKOUT0_DUTY_CYCLE (0.500),
+    .CLKOUT0_USE_FINE_PS ("FALSE"),
+    .CLKOUT1_DIVIDE (MMCM_CLK1_DIV),
+    .CLKOUT1_PHASE (MMCM_CLK1_PHASE),
+    .CLKOUT1_DUTY_CYCLE (0.500),
+    .CLKOUT1_USE_FINE_PS ("FALSE"),
+    .CLKOUT2_DIVIDE (MMCM_CLK2_DIV),
+    .CLKOUT2_PHASE (MMCM_CLK2_PHASE),
+    .CLKOUT2_DUTY_CYCLE (0.500),
+    .CLKOUT2_USE_FINE_PS ("FALSE"),
+    .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
+    .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
+    .REF_JITTER1 (0.010))
+  i_mmcm (
+    .CLKIN1 (clk),
+    .CLKFBIN (bufg_fb_clk_s),
+    .CLKFBOUT (mmcm_fb_clk_s),
+    .CLKOUT0 (mmcm_clk_0_s),
+    .CLKOUT1 (mmcm_clk_1_s),
+    .CLKOUT2 (mmcm_clk_2_s),
+    .LOCKED (mmcm_locked_s),
+    .DCLK (up_clk),
+    .DEN (up_drp_sel),
+    .DADDR (up_drp_addr[6:0]),
+    .DWE (up_drp_wr),
+    .DI (up_drp_wdata),
+    .DO (up_drp_rdata_s),
+    .DRDY (up_drp_ready_s),
+    .CLKFBOUTB (),
+    .CLKOUT0B (),
+    .CLKOUT1B (),
+    .CLKOUT2B (),
+    .CLKOUT3 (),
+    .CLKOUT3B (),
+    .CLKOUT4 (),
+    .CLKOUT5 (),
+    .CLKOUT6 (),
+    .CLKIN2 (clk2),
+    .CLKINSEL (clk_sel),
+    .PSCLK (1'b0),
+    .PSEN (1'b0),
+    .PSINCDEC (1'b0),
+    .PSDONE (),
+    .CLKINSTOPPED (),
+    .CLKFBSTOPPED (),
+    .PWRDWN (1'b0),
+    .RST (mmcm_rst));
+  end
+
+  if (MMCM_DEVICE_TYPE == MMCM_DEVICE_7SERIES) begin
+  MMCME2_ADV #(
+    .BANDWIDTH ("OPTIMIZED"),
+    .CLKOUT4_CASCADE ("FALSE"),
+
+Diff Content:
+- 115   if (MMCM_DEVICE_TYPE == MMCM_DEVICE_VIRTEX6) begin
+- 116   MMCM_ADV #(
+- 117     .BANDWIDTH ("OPTIMIZED"),
+- 118     .CLKOUT4_CASCADE ("FALSE"),
+- 119     .CLOCK_HOLD ("FALSE"),
+- 120     .COMPENSATION ("ZHOLD"),
+- 121     .STARTUP_WAIT ("FALSE"),
+- 122     .DIVCLK_DIVIDE (MMCM_VCO_DIV),
+- 123     .CLKFBOUT_MULT_F (MMCM_VCO_MUL),
+- 124     .CLKFBOUT_PHASE (0.000),
+- 125     .CLKFBOUT_USE_FINE_PS ("FALSE"),
+- 126     .CLKOUT0_DIVIDE_F (MMCM_CLK0_DIV),
+- 127     .CLKOUT0_PHASE (MMCM_CLK0_PHASE),
+- 128     .CLKOUT0_DUTY_CYCLE (0.500),
+- 129     .CLKOUT0_USE_FINE_PS ("FALSE"),
+- 130     .CLKOUT1_DIVIDE (MMCM_CLK1_DIV),
+- 131     .CLKOUT1_PHASE (MMCM_CLK1_PHASE),
+- 132     .CLKOUT1_DUTY_CYCLE (0.500),
+- 133     .CLKOUT1_USE_FINE_PS ("FALSE"),
+- 134     .CLKOUT2_DIVIDE (MMCM_CLK2_DIV),
+- 135     .CLKOUT2_PHASE (MMCM_CLK2_PHASE),
+- 136     .CLKOUT2_DUTY_CYCLE (0.500),
+- 137     .CLKOUT2_USE_FINE_PS ("FALSE"),
+- 138     .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
+- 139     .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
+- 140     .REF_JITTER1 (0.010))
+- 141   i_mmcm (
+- 142     .CLKIN1 (clk),
+- 143     .CLKFBIN (bufg_fb_clk_s),
+- 144     .CLKFBOUT (mmcm_fb_clk_s),
+- 145     .CLKOUT0 (mmcm_clk_0_s),
+- 146     .CLKOUT1 (mmcm_clk_1_s),
+- 147     .CLKOUT2 (mmcm_clk_2_s),
+- 148     .LOCKED (mmcm_locked_s),
+- 149     .DCLK (up_clk),
+- 150     .DEN (up_drp_sel),
+- 151     .DADDR (up_drp_addr[6:0]),
+- 152     .DWE (up_drp_wr),
+- 153     .DI (up_drp_wdata),
+- 154     .DO (up_drp_rdata_s),
+- 155     .DRDY (up_drp_ready_s),
+- 156     .CLKFBOUTB (),
+- 157     .CLKOUT0B (),
+- 158     .CLKOUT1B (),
+- 159     .CLKOUT2B (),
+- 160     .CLKOUT3 (),
+- 161     .CLKOUT3B (),
+- 162     .CLKOUT4 (),
+- 163     .CLKOUT5 (),
+- 164     .CLKOUT6 (),
+- 165     .CLKIN2 (clk2),
+- 166     .CLKINSEL (clk_sel),
+- 167     .PSCLK (1'b0),
+- 168     .PSEN (1'b0),
+- 169     .PSINCDEC (1'b0),
+- 170     .PSDONE (),
+- 171     .CLKINSTOPPED (),
+- 172     .CLKFBSTOPPED (),
+- 173     .PWRDWN (1'b0),
+- 174     .RST (mmcm_rst));
+- 175   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/common/ad_mmcm_drp.v@172:241
+    .CLKFBSTOPPED (),
+    .PWRDWN (1'b0),
+    .RST (mmcm_rst));
+  end
+
+  if (MMCM_DEVICE_TYPE == MMCM_DEVICE_7SERIES) begin
+  MMCME2_ADV #(
+    .BANDWIDTH ("OPTIMIZED"),
+    .CLKOUT4_CASCADE ("FALSE"),
+    .COMPENSATION ("ZHOLD"),
+    .STARTUP_WAIT ("FALSE"),
+    .DIVCLK_DIVIDE (MMCM_VCO_DIV),
+    .CLKFBOUT_MULT_F (MMCM_VCO_MUL),
+    .CLKFBOUT_PHASE (0.000),
+    .CLKFBOUT_USE_FINE_PS ("FALSE"),
+    .CLKOUT0_DIVIDE_F (MMCM_CLK0_DIV),
+    .CLKOUT0_PHASE (MMCM_CLK0_PHASE),
+    .CLKOUT0_DUTY_CYCLE (0.500),
+    .CLKOUT0_USE_FINE_PS ("FALSE"),
+    .CLKOUT1_DIVIDE (MMCM_CLK1_DIV),
+    .CLKOUT1_PHASE (MMCM_CLK1_PHASE),
+    .CLKOUT1_DUTY_CYCLE (0.500),
+    .CLKOUT1_USE_FINE_PS ("FALSE"),
+    .CLKOUT2_DIVIDE (MMCM_CLK2_DIV),
+    .CLKOUT2_PHASE (MMCM_CLK2_PHASE),
+    .CLKOUT2_DUTY_CYCLE (0.500),
+    .CLKOUT2_USE_FINE_PS ("FALSE"),
+    .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
+    .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
+    .REF_JITTER1 (0.010))
+  i_mmcm (
+    .CLKIN1 (clk),
+    .CLKFBIN (bufg_fb_clk_s),
+    .CLKFBOUT (mmcm_fb_clk_s),
+    .CLKOUT0 (mmcm_clk_0_s),
+    .CLKOUT1 (mmcm_clk_1_s),
+    .CLKOUT2 (mmcm_clk_2_s),
+    .LOCKED (mmcm_locked_s),
+    .DCLK (up_clk),
+    .DEN (up_drp_sel),
+    .DADDR (up_drp_addr[6:0]),
+    .DWE (up_drp_wr),
+    .DI (up_drp_wdata),
+    .DO (up_drp_rdata_s),
+    .DRDY (up_drp_ready_s),
+    .CLKFBOUTB (),
+    .CLKOUT0B (),
+    .CLKOUT1B (),
+    .CLKOUT2B (),
+    .CLKOUT3 (),
+    .CLKOUT3B (),
+    .CLKOUT4 (),
+    .CLKOUT5 (),
+    .CLKOUT6 (),
+    .CLKIN2 (clk2),
+    .CLKINSEL (clk_sel),
+    .PSCLK (1'b0),
+    .PSEN (1'b0),
+    .PSINCDEC (1'b0),
+    .PSDONE (),
+    .CLKINSTOPPED (),
+    .CLKFBSTOPPED (),
+    .PWRDWN (1'b0),
+    .RST (mmcm_rst));
+  end
+  endgenerate
+
+  BUFG i_fb_clk_bufg  (.I (mmcm_fb_clk_s),  .O (bufg_fb_clk_s));
+  BUFG i_clk_0_bufg   (.I (mmcm_clk_0_s),   .O (mmcm_clk_0)); 
+  BUFG i_clk_1_bufg   (.I (mmcm_clk_1_s),   .O (mmcm_clk_1));
+

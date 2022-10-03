@@ -1,0 +1,32 @@
+Source Block: oh/src/common/hdl/oh_memory_ram.v@19:29@HdlIdDef
+    input [AW-1:0]  wr_addr, // address
+    input [DW-1:0]  wr_wem, // write enable vector    
+    input [DW-1:0]  wr_din // data input
+    );
+
+   localparam AW      = $clog2(DEPTH);  // address bus width  
+   
+   reg [DW-1:0]        ram    [DEPTH-1:0];  
+   reg [DW-1:0]        rd_dout;
+   integer 	       i;
+      
+
+Diff Content:
+- 24    localparam AW      = $clog2(DEPTH);  // address bus width  
++ 24    parameter AW      = $clog2(DEPTH);  // address bus width  
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_memory_ram.v@21:31
+    input [DW-1:0]  wr_din // data input
+    );
+
+   localparam AW      = $clog2(DEPTH);  // address bus width  
+   
+   reg [DW-1:0]        ram    [DEPTH-1:0];  
+   reg [DW-1:0]        rd_dout;
+   integer 	       i;
+      
+   //registered read port
+   always @ (posedge rd_clk)
+

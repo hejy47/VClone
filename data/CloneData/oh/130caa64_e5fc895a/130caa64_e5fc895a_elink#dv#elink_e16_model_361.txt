@@ -1,0 +1,21 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3288:3298@HdlIdDef
+
+   // #######
+   // # REGS
+   // #######
+
+   reg [3:0]   grants_reg;
+
+   // ############
+   // # WIRES
+   // ############
+
+
+Diff Content:
+- 3293    reg [3:0]   grants_reg;
++ 3293    assign north_south_corner_tran = (~(dst_x_k[3:0] == ext_xid_k[3:0]) &
++ 3293 				      (dst_y_k[3:0] == ext_yid_k[3:0]));
++ 3293    assign corner_tran[3:0] = {north_south_corner_tran, west_east_corner_tran,
++ 3293                               north_south_corner_tran, west_east_corner_tran};
+
+Clone Blocks:

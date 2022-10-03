@@ -1,0 +1,48 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3952:3962@HdlStmAssign
+   
+   assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
+   assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},wr_write};
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign wr_gray_next[FAD:0] = {1'b0,wr_binary_next[FAD:1]} ^ wr_binary_next[FAD:0];
+
+   //# FIFO full indication
+   assign wr_fifo_full_next = (wr_gray_next[FAD-2:0] == rd_gray_pointer[FAD-2:0]) &
+                              (wr_gray_next[FAD]     ^  rd_gray_pointer[FAD])     &
+                              (wr_gray_next[FAD-1]   ^  rd_gray_pointer[FAD-1]);
+
+Diff Content:
+- 3957    assign wr_gray_next[FAD:0] = {1'b0,wr_binary_next[FAD:1]} ^ wr_binary_next[FAD:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2247:2258
+   assign wr_addr_rlc[FAD-1:0]       = wr_binary_pointer_rlc[FAD-1:0];
+   assign wr_binary_next_rlc[FAD:0]  = wr_binary_pointer_rlc[FAD:0] + 
+				       {{(FAD){1'b0}},wr_write_rlc};
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign wr_gray_next_rlc[FAD:0] = {1'b0,wr_binary_next_rlc[FAD:1]} ^ 
+				    wr_binary_next_rlc[FAD:0];
+
+   //# FIFO full indication
+   assign fifo_full_next_rlc = 
+			   (wr_gray_next_rlc[FAD-2:0] == rd_gray_pointer_rlc[FAD-2:0]) &
+                           (wr_gray_next_rlc[FAD]     ^  rd_gray_pointer_rlc[FAD])     &
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@3955:3967
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign wr_gray_next[FAD:0] = {1'b0,wr_binary_next[FAD:1]} ^ wr_binary_next[FAD:0];
+
+   //# FIFO full indication
+   assign wr_fifo_full_next = (wr_gray_next[FAD-2:0] == rd_gray_pointer[FAD-2:0]) &
+                              (wr_gray_next[FAD]     ^  rd_gray_pointer[FAD])     &
+                              (wr_gray_next[FAD-1]   ^  rd_gray_pointer[FAD-1]);
+			      
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+       wr_fifo_full <= 1'b0;
+     else if(cclk_en)
+

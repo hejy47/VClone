@@ -1,0 +1,39 @@
+Source Block: hdl/library/util_rfifo/util_rfifo.v@126:140@HdlStmProcess
+  // read is non-destructive
+
+  assign fifo_rd = m_rd;
+  assign m_runf_s = s_runf | fifo_runf;
+
+  always @(posedge m_clk) begin
+    m_runf_m1 <= m_runf_s;
+    m_runf_m2 <= m_runf_m1;
+    m_runf <= m_runf_m2;
+  end
+  
+  genvar m;
+  generate
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_rdata
+  assign m_rdata[m] = fifo_rdata[(M_DATA_WIDTH-1)-m];
+
+Diff Content:
+- 131   always @(posedge m_clk) begin
+- 132     m_runf_m1 <= m_runf_s;
+- 133     m_runf_m2 <= m_runf_m1;
+- 134     m_runf <= m_runf_m2;
+- 135   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_rfifo/util_rfifo.v@132:142
+    m_runf_m1 <= m_runf_s;
+    m_runf_m2 <= m_runf_m1;
+    m_runf <= m_runf_m2;
+  end
+  
+  genvar m;
+  generate
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_rdata
+  assign m_rdata[m] = fifo_rdata[(M_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+

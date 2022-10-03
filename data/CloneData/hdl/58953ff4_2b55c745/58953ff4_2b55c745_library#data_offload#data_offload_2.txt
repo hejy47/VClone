@@ -1,0 +1,46 @@
+Source Block: hdl/library/data_offload/data_offload.v@256:266@HdlStmAssign
+    end
+    assign dst_mem_valid_int_s = dst_mem_valid_d;
+  end
+  endgenerate
+
+  assign fifo_dst_ready_int_s = fifo_dst_ready & m_axis_ready;
+
+  assign fifo_src_wdata = s_axis_data;
+  assign fifo_dst_ren = dst_mem_valid_s;
+
+  ad_axis_inf_rx #(
+
+Diff Content:
+- 261   assign fifo_dst_ready_int_s = fifo_dst_ready & m_axis_ready;
++ 261   assign fifo_dst_ready_int_s = fifo_dst_ready & int_not_full;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/data_offload/data_offload.v@259:269
+  endgenerate
+
+  assign fifo_dst_ready_int_s = fifo_dst_ready & m_axis_ready;
+
+  assign fifo_src_wdata = s_axis_data;
+  assign fifo_dst_ren = dst_mem_valid_s;
+
+  ad_axis_inf_rx #(
+    .DATA_WIDTH (DST_DATA_WIDTH))
+  i_rx_axis_inf (
+    .clk (m_axis_aclk),
+
+Clone Blocks 2:
+hdl/library/data_offload/data_offload.v@258:268
+  end
+  endgenerate
+
+  assign fifo_dst_ready_int_s = fifo_dst_ready & m_axis_ready;
+
+  assign fifo_src_wdata = s_axis_data;
+  assign fifo_dst_ren = dst_mem_valid_s;
+
+  ad_axis_inf_rx #(
+    .DATA_WIDTH (DST_DATA_WIDTH))
+  i_rx_axis_inf (
+

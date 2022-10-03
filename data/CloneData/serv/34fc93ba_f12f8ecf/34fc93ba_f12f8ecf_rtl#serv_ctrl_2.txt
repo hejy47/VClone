@@ -1,0 +1,60 @@
+Source Block: serv/rtl/serv_ctrl.v@30:40@HdlStmAssign
+   wire       offset_a;
+
+   assign plus_4        = en_2r & !en_3r;
+
+   assign o_ibus_adr[0] = pc;
+   assign o_bad_pc = pc_plus_offset;
+
+   ser_add ser_add_pc_plus_4
+     (
+      .clk (clk),
+      .a   (pc),
+
+Diff Content:
+- 35    assign o_bad_pc = pc_plus_offset;
++ 35    assign o_bad_pc = pc_plus_offset_aligned;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_ctrl.v@29:39
+
+   wire       offset_a;
+
+   assign plus_4        = en_2r & !en_3r;
+
+   assign o_ibus_adr[0] = pc;
+   assign o_bad_pc = pc_plus_offset;
+
+   ser_add ser_add_pc_plus_4
+     (
+      .clk (clk),
+
+Clone Blocks 2:
+serv/rtl/serv_ctrl.v@25:35
+
+   wire       pc;
+
+   wire       new_pc;
+
+   wire       offset_a;
+
+   assign plus_4        = en_2r & !en_3r;
+
+   assign o_ibus_adr[0] = pc;
+   assign o_bad_pc = pc_plus_offset;
+
+Clone Blocks 3:
+serv/rtl/serv_ctrl.v@27:37
+
+   wire       new_pc;
+
+   wire       offset_a;
+
+   assign plus_4        = en_2r & !en_3r;
+
+   assign o_ibus_adr[0] = pc;
+   assign o_bad_pc = pc_plus_offset;
+
+   ser_add ser_add_pc_plus_4
+

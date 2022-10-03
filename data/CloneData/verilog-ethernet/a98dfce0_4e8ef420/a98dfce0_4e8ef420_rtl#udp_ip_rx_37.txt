@@ -1,0 +1,437 @@
+Source Block: verilog-ethernet/rtl/udp_ip_rx.v@192:202@HdlIdDef
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [7:0]  output_udp_payload_tdata_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+
+Diff Content:
+- 197 reg        output_udp_payload_tready_int = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip_demux_4.v@195:205
+reg [31:0] output_ip_dest_ip_reg = 0, output_ip_dest_ip_next;
+
+// internal datapath
+reg [7:0] output_ip_payload_tdata_int;
+reg       output_ip_payload_tvalid_int;
+reg       output_ip_payload_tready_int = 0;
+reg       output_ip_payload_tlast_int;
+reg       output_ip_payload_tuser_int;
+wire      output_ip_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/udp_ip_rx_64.v@189:199
+
+// internal datapath
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/udp_demux_64_4.v@227:237
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_udp_hdr_ready = input_udp_hdr_ready_reg;
+assign input_udp_payload_tready = input_udp_payload_tready_reg;
+
+
+Clone Blocks 4:
+verilog-ethernet/rtl/udp_ip_rx.v@190:200
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [7:0]  output_udp_payload_tdata_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/udp_demux_4.v@219:229
+reg [15:0] output_udp_checksum_reg = 0, output_udp_checksum_next;
+
+// internal datapath
+reg [7:0] output_udp_payload_tdata_int;
+reg       output_udp_payload_tvalid_int;
+reg       output_udp_payload_tready_int = 0;
+reg       output_udp_payload_tlast_int;
+reg       output_udp_payload_tuser_int;
+wire      output_udp_payload_tready_int_early;
+
+assign input_udp_hdr_ready = input_udp_hdr_ready_reg;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/udp_demux_4.v@220:230
+
+// internal datapath
+reg [7:0] output_udp_payload_tdata_int;
+reg       output_udp_payload_tvalid_int;
+reg       output_udp_payload_tready_int = 0;
+reg       output_udp_payload_tlast_int;
+reg       output_udp_payload_tuser_int;
+wire      output_udp_payload_tready_int_early;
+
+assign input_udp_hdr_ready = input_udp_hdr_ready_reg;
+assign input_udp_payload_tready = input_udp_payload_tready_reg;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/udp_ip_tx.v@180:190
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [7:0] output_ip_payload_tdata_int;
+reg       output_ip_payload_tvalid_int;
+reg       output_ip_payload_tready_int = 0;
+reg       output_ip_payload_tlast_int;
+reg       output_ip_payload_tuser_int;
+wire      output_ip_payload_tready_int_early;
+
+
+Clone Blocks 8:
+verilog-ethernet/rtl/udp_ip_rx_64.v@190:200
+// internal datapath
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+assign input_ip_payload_tready = input_ip_payload_tready_reg;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/udp_ip_rx.v@193:203
+
+// internal datapath
+reg [7:0]  output_udp_payload_tdata_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+assign input_ip_payload_tready = input_ip_payload_tready_reg;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/udp_mux_4.v@223:233
+reg [15:0] output_udp_checksum_reg = 0, output_udp_checksum_next;
+
+// internal datapath
+reg [7:0] output_udp_payload_tdata_int;
+reg       output_udp_payload_tvalid_int;
+reg       output_udp_payload_tready_int = 0;
+reg       output_udp_payload_tlast_int;
+reg       output_udp_payload_tuser_int;
+wire      output_udp_payload_tready_int_early;
+
+assign input_0_udp_hdr_ready = input_0_udp_hdr_ready_reg;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/udp_ip_tx_64.v@184:194
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [63:0] output_ip_payload_tdata_int;
+reg [7:0]  output_ip_payload_tkeep_int;
+reg        output_ip_payload_tvalid_int;
+reg        output_ip_payload_tready_int = 0;
+reg        output_ip_payload_tlast_int;
+reg        output_ip_payload_tuser_int;
+wire       output_ip_payload_tready_int_early;
+
+
+Clone Blocks 12:
+verilog-ethernet/rtl/udp_ip_tx.v@179:189
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [7:0] output_ip_payload_tdata_int;
+reg       output_ip_payload_tvalid_int;
+reg       output_ip_payload_tready_int = 0;
+reg       output_ip_payload_tlast_int;
+reg       output_ip_payload_tuser_int;
+wire      output_ip_payload_tready_int_early;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/udp_ip_rx.v@191:201
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [7:0]  output_udp_payload_tdata_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+
+Clone Blocks 14:
+verilog-ethernet/rtl/udp_ip_rx_64.v@187:197
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+Clone Blocks 15:
+verilog-ethernet/rtl/udp_ip_rx_64.v@192:202
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+assign input_ip_payload_tready = input_ip_payload_tready_reg;
+
+assign output_udp_hdr_valid = output_udp_hdr_valid_reg;
+
+Clone Blocks 16:
+verilog-ethernet/rtl/udp_demux_4.v@221:231
+// internal datapath
+reg [7:0] output_udp_payload_tdata_int;
+reg       output_udp_payload_tvalid_int;
+reg       output_udp_payload_tready_int = 0;
+reg       output_udp_payload_tlast_int;
+reg       output_udp_payload_tuser_int;
+wire      output_udp_payload_tready_int_early;
+
+assign input_udp_hdr_ready = input_udp_hdr_ready_reg;
+assign input_udp_payload_tready = input_udp_payload_tready_reg;
+
+
+Clone Blocks 17:
+verilog-ethernet/rtl/ip_eth_tx.v@152:162
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [7:0]  output_eth_payload_tdata_int;
+reg        output_eth_payload_tvalid_int;
+reg        output_eth_payload_tready_int = 0;
+reg        output_eth_payload_tlast_int;
+reg        output_eth_payload_tuser_int;
+wire       output_eth_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+
+Clone Blocks 18:
+verilog-ethernet/rtl/ip_demux_64_4.v@201:211
+
+// internal datapath
+reg [63:0] output_ip_payload_tdata_int;
+reg [7:0]  output_ip_payload_tkeep_int;
+reg        output_ip_payload_tvalid_int;
+reg        output_ip_payload_tready_int = 0;
+reg        output_ip_payload_tlast_int;
+reg        output_ip_payload_tuser_int;
+wire       output_ip_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+
+Clone Blocks 19:
+verilog-ethernet/rtl/udp_ip_tx_64.v@183:193
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [63:0] output_ip_payload_tdata_int;
+reg [7:0]  output_ip_payload_tkeep_int;
+reg        output_ip_payload_tvalid_int;
+reg        output_ip_payload_tready_int = 0;
+reg        output_ip_payload_tlast_int;
+reg        output_ip_payload_tuser_int;
+wire       output_ip_payload_tready_int_early;
+
+Clone Blocks 20:
+verilog-ethernet/rtl/udp_ip_rx_64.v@188:198
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+
+Clone Blocks 21:
+verilog-ethernet/rtl/udp_ip_rx.v@195:205
+reg [7:0]  output_udp_payload_tdata_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+assign input_ip_payload_tready = input_ip_payload_tready_reg;
+
+assign output_udp_hdr_valid = output_udp_hdr_valid_reg;
+
+Clone Blocks 22:
+verilog-ethernet/rtl/udp_mux_64_4.v@230:240
+// internal datapath
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_0_udp_hdr_ready = input_0_udp_hdr_ready_reg;
+assign input_1_udp_hdr_ready = input_1_udp_hdr_ready_reg;
+
+Clone Blocks 23:
+verilog-ethernet/rtl/udp_demux_64_4.v@225:235
+
+// internal datapath
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_udp_hdr_ready = input_udp_hdr_ready_reg;
+
+Clone Blocks 24:
+verilog-ethernet/rtl/udp_mux_4.v@224:234
+
+// internal datapath
+reg [7:0] output_udp_payload_tdata_int;
+reg       output_udp_payload_tvalid_int;
+reg       output_udp_payload_tready_int = 0;
+reg       output_udp_payload_tlast_int;
+reg       output_udp_payload_tuser_int;
+wire      output_udp_payload_tready_int_early;
+
+assign input_0_udp_hdr_ready = input_0_udp_hdr_ready_reg;
+assign input_1_udp_hdr_ready = input_1_udp_hdr_ready_reg;
+
+Clone Blocks 25:
+verilog-ethernet/rtl/udp_ip_rx_64.v@191:201
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+assign input_ip_payload_tready = input_ip_payload_tready_reg;
+
+
+Clone Blocks 26:
+verilog-ethernet/rtl/udp_demux_4.v@222:232
+reg [7:0] output_udp_payload_tdata_int;
+reg       output_udp_payload_tvalid_int;
+reg       output_udp_payload_tready_int = 0;
+reg       output_udp_payload_tlast_int;
+reg       output_udp_payload_tuser_int;
+wire      output_udp_payload_tready_int_early;
+
+assign input_udp_hdr_ready = input_udp_hdr_ready_reg;
+assign input_udp_payload_tready = input_udp_payload_tready_reg;
+
+assign output_0_udp_hdr_valid = output_0_udp_hdr_valid_reg;
+
+Clone Blocks 27:
+verilog-ethernet/rtl/udp_ip_rx.v@194:204
+// internal datapath
+reg [7:0]  output_udp_payload_tdata_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_ip_hdr_ready = input_ip_hdr_ready_reg;
+assign input_ip_payload_tready = input_ip_payload_tready_reg;
+
+
+Clone Blocks 28:
+verilog-ethernet/rtl/udp_ip_tx.v@181:191
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+reg [7:0] output_ip_payload_tdata_int;
+reg       output_ip_payload_tvalid_int;
+reg       output_ip_payload_tready_int = 0;
+reg       output_ip_payload_tlast_int;
+reg       output_ip_payload_tuser_int;
+wire      output_ip_payload_tready_int_early;
+
+assign input_udp_hdr_ready = input_udp_hdr_ready_reg;
+
+Clone Blocks 29:
+verilog-ethernet/rtl/udp_demux_64_4.v@226:236
+// internal datapath
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_udp_hdr_ready = input_udp_hdr_ready_reg;
+assign input_udp_payload_tready = input_udp_payload_tready_reg;
+
+Clone Blocks 30:
+verilog-ethernet/rtl/udp_mux_64_4.v@229:239
+
+// internal datapath
+reg [63:0] output_udp_payload_tdata_int;
+reg [7:0]  output_udp_payload_tkeep_int;
+reg        output_udp_payload_tvalid_int;
+reg        output_udp_payload_tready_int = 0;
+reg        output_udp_payload_tlast_int;
+reg        output_udp_payload_tuser_int;
+wire       output_udp_payload_tready_int_early;
+
+assign input_0_udp_hdr_ready = input_0_udp_hdr_ready_reg;
+

@@ -1,0 +1,27 @@
+Source Block: oh/elink/hdl/erx_io.v@285:300@HdlStmProcess
+//# GPIO mode inputs
+//#############
+reg [8:0] datain_reg;
+reg [8:0] ecfg_rx_datain;
+
+   always @ (posedge rx_lclk_div4) 
+     begin
+      datain_reg[8]       <= rx_frame_par[0];
+      datain_reg[7:0]     <= rx_data[7:0];
+      ecfg_rx_datain[8:0] <= datain_reg[8:0];      
+   end
+
+   //#############
+   //# Wait signals (asynchronous)
+   //#############
+
+
+Diff Content:
+- 290    always @ (posedge rx_lclk_div4) 
+- 291      begin
+- 292       datain_reg[8]       <= rx_frame_par[0];
+- 293       datain_reg[7:0]     <= rx_data[7:0];
+- 294       ecfg_rx_datain[8:0] <= datain_reg[8:0];      
+- 295    end
+
+Clone Blocks:

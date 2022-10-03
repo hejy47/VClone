@@ -1,0 +1,46 @@
+Source Block: hdl/library/axi_ad9122/axi_ad9122_core.v@202:212@HdlStmAssign
+  assign dac_valid_0 = 1'b1;
+  assign dac_valid_1 = 1'b1;
+
+  // master/slave (clocks must be synchronous)
+
+  assign dac_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 207   assign dac_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
++ 207   assign dac_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9122/axi_ad9122_core.v@197:207
+  wire            up_rack_s;
+  wire            up_wack_s;
+
+  // defaults
+
+  assign dac_valid_0 = 1'b1;
+  assign dac_valid_1 = 1'b1;
+
+  // master/slave (clocks must be synchronous)
+
+  assign dac_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
+
+Clone Blocks 2:
+hdl/library/axi_ad9122/axi_ad9122_core.v@198:208
+  wire            up_wack_s;
+
+  // defaults
+
+  assign dac_valid_0 = 1'b1;
+  assign dac_valid_1 = 1'b1;
+
+  // master/slave (clocks must be synchronous)
+
+  assign dac_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
+
+

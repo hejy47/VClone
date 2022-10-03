@@ -1,0 +1,88 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@317:327@HdlStmAssign
+assign znCINH = 1; //1'bZ; //0; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout | dataout_z3) ? data : 16'bzzzz_zzzz_zzzz_zzzz; // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+reg z_confdone = 0;
+assign znCFGOUT = (~z_confdone)?1'bZ:1'b0; // inspired by z3sdram
+
+
+Diff Content:
+- 322 assign zD  = (dataout | dataout_z3) ? data : 16'bzzzz_zzzz_zzzz_zzzz; // data = Z2: full 16 bit or Z3: upper 16 bit
++ 322 assign zD  = (dataout_z3) ? data_z3_hi16 : (dataout ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@314:324
+
+reg z_ready = 'b1;
+assign zXRDY  = z_ready?1'bZ:1'b0; //works only if bZ?
+assign znCINH = 1; //1'bZ; //0; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout | dataout_z3) ? data : 16'bzzzz_zzzz_zzzz_zzzz; // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@318:328
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout | dataout_z3) ? data : 16'bzzzz_zzzz_zzzz_zzzz; // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+reg z_confdone = 0;
+assign znCFGOUT = (~z_confdone)?1'bZ:1'b0; // inspired by z3sdram
+
+// zorro synchronizers
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@315:325
+reg z_ready = 'b1;
+assign zXRDY  = z_ready?1'bZ:1'b0; //works only if bZ?
+assign znCINH = 1; //1'bZ; //0; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout | dataout_z3) ? data : 16'bzzzz_zzzz_zzzz_zzzz; // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+reg z_confdone = 0;
+
+Clone Blocks 4:
+amiga2000-gfxcard/z2-minispartan/z2.v@312:322
+assign zDIR3     = dataout_z3; // a16-a23 <- input
+assign zDIR4     = dataout_z3; // a8-a15 <- input
+
+reg z_ready = 'b1;
+assign zXRDY  = z_ready?1'bZ:1'b0; //works only if bZ?
+assign znCINH = 1; //1'bZ; //0; // Z2 = /OVR
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout | dataout_z3) ? data : 16'bzzzz_zzzz_zzzz_zzzz; // data = Z2: full 16 bit or Z3: upper 16 bit
+
+Clone Blocks 5:
+amiga2000-gfxcard/z2-minispartan/z2.v@320:330
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout | dataout_z3) ? data : 16'bzzzz_zzzz_zzzz_zzzz; // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+reg z_confdone = 0;
+assign znCFGOUT = (~z_confdone)?1'bZ:1'b0; // inspired by z3sdram
+
+// zorro synchronizers
+// (inspired by https://github.com/endofexclusive/greta/blob/master/hdl/bus_interface/bus_interface.vhdl)
+
+

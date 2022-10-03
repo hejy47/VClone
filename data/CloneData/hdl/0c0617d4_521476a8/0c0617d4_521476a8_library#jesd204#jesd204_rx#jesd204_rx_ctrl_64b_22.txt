@@ -1,0 +1,34 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl_64b.v@134:150@HdlStmProcess
+  end else begin
+    good_cnt <= good_cnt + 1;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    state <= STATE_RESET;
+  end else begin
+    state <= next_state;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    event_unexpected_lane_state_error <= 1'b0;
+  end else begin
+
+Diff Content:
+- 139 always @(posedge clk) begin
+- 140   if (reset == 1'b1) begin
+- 141     state <= STATE_RESET;
+- 142   end else begin
+- 143     state <= next_state;
+- 145 end
++ 143   always @(posedge clk) begin
++ 143     if (reset == 1'b1) begin
++ 143       state <= STATE_RESET;
++ 143     end else begin
++ 143       state <= next_state;
++ 143     end
+
+Clone Blocks:

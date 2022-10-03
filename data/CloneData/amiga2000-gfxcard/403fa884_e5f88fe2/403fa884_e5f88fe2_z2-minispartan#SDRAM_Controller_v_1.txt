@@ -1,0 +1,61 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/SDRAM_Controller_v.v@80:90@HdlStmAssign
+
+   //reg [15:0] iob_data_next = 16'b0;
+   output [15:0] data_out;    assign data_out       = data_out_reg;
+
+   reg data_out_ready_reg;
+   output data_out_ready;     assign data_out_ready = data_out_ready_reg;
+
+   output SDRAM_CLK;          // Assigned by a primative
+   output SDRAM_CKE;          assign SDRAM_CKE = iob_cke;
+   output SDRAM_CS;           assign SDRAM_CS   = iob_command[3];
+   output SDRAM_RAS;          assign SDRAM_RAS  = iob_command[2];
+
+Diff Content:
++ 85    reg data_out_queue_empty_reg = 1;
++ 85    output data_out_queue_empty; 
++ 85    assign data_out_queue_empty = data_out_queue_empty_reg;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/attic/PapPro-sdram_verilog_v0.1/SDRAM_Controller_v.v@78:88
+   //synthesis attribute IOB of iob_bank    is "TRUE" 
+
+   reg [15:0] iob_data_next = 16'b0;
+   output [31:0] data_out;    assign data_out       = data_out_reg;
+
+   reg data_out_ready_reg;
+   output data_out_ready;     assign data_out_ready = data_out_ready_reg;
+
+   output SDRAM_CLK;          // Assigned by a primative
+   output SDRAM_CKE;          assign SDRAM_CKE = iob_cke;
+   output SDRAM_CS;           assign SDRAM_CS   = iob_command[3];
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/SDRAM_Controller_v.v@79:89
+   //synthesis attribute IOB of iob_bank    is "TRUE" 
+
+   //reg [15:0] iob_data_next = 16'b0;
+   output [15:0] data_out;    assign data_out       = data_out_reg;
+
+   reg data_out_ready_reg;
+   output data_out_ready;     assign data_out_ready = data_out_ready_reg;
+
+   output SDRAM_CLK;          // Assigned by a primative
+   output SDRAM_CKE;          assign SDRAM_CKE = iob_cke;
+   output SDRAM_CS;           assign SDRAM_CS   = iob_command[3];
+
+Clone Blocks 3:
+amiga2000-gfxcard/attic/PapPro-sdram_verilog_v0.1/SDRAM_Controller_v.v@79:89
+
+   reg [15:0] iob_data_next = 16'b0;
+   output [31:0] data_out;    assign data_out       = data_out_reg;
+
+   reg data_out_ready_reg;
+   output data_out_ready;     assign data_out_ready = data_out_ready_reg;
+
+   output SDRAM_CLK;          // Assigned by a primative
+   output SDRAM_CKE;          assign SDRAM_CKE = iob_cke;
+   output SDRAM_CS;           assign SDRAM_CS   = iob_command[3];
+   output SDRAM_RAS;          assign SDRAM_RAS  = iob_command[2];
+

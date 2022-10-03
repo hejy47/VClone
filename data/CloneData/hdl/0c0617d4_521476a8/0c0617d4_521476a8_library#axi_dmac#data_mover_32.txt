@@ -1,0 +1,21 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@199:211@HdlStmAssign
+// In case early tlast happens accept the new descriptor only when the rewind
+// request got accepted.
+// In case the data mover is not active accept a new descriptor only when the
+// upstream logic incremented its id (pending_burst is set).
+assign last_load = m_axi_valid && last_eot && eot;
+assign req_ready = (last_load && ~early_tlast) ||
+                   ((~active && ~transfer_abort_s) && pending_burst) ||
+                   (transfer_abort_s && rewind_req_ready);
+
+always @(posedge clk) begin
+  if (req_ready) begin
+    last_eot <= req_last_burst_length == 'h0;
+    last_non_eot <= 1'b0;
+
+Diff Content:
+- 204 assign req_ready = (last_load && ~early_tlast) ||
+- 205                    ((~active && ~transfer_abort_s) && pending_burst) ||
+- 206                    (transfer_abort_s && rewind_req_ready);
+
+Clone Blocks:

@@ -1,0 +1,54 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@143:153@HdlStmAssign
+    dac_lastaddr_d <= dma_lastaddr;
+    dac_lastaddr_2d <= dac_lastaddr_d;
+    dac_xfer_out_m <= {dac_xfer_out_m[1:0], dma_xfer_out};
+  end
+
+  assign dac_xfer_out = dac_xfer_out_m[2];
+
+  // generate dac read address
+
+  always @(posedge dac_clk) begin
+    if(dac_valid == 1'b1) begin
+
+Diff Content:
+- 148   assign dac_xfer_out = dac_xfer_out_m[2];
++ 148   always @(posedge dac_clk) begin
++ 148     if (dac_rst == 1'b1) begin
++ 148       dac_lastaddr_m1 <= 1'b0;
++ 148       dac_lastaddr_m2 <= 1'b0;
++ 148       dac_xfer_out_fifo_m1 <= 1'b0;
++ 148       dac_xfer_out_fifo <= 1'b0;
++ 148       dac_xfer_out_bypass_m1 <= 1'b0;
++ 148       dac_xfer_out_bypass <= 1'b0;
++ 148     end else begin
++ 148       dac_lastaddr_m1 <= dma_lastaddr_g;
++ 148       dac_lastaddr_m2 <= dac_lastaddr_m1;
++ 148       dac_lastaddr <= g2b(dac_lastaddr_m2);
++ 148       dac_xfer_out_fifo_m1 <= dma_xfer_out_fifo;
++ 148       dac_xfer_out_fifo <= dac_xfer_out_fifo_m1;
++ 148       dac_xfer_out_bypass_m1 <= dma_xfer_out_bypass;
++ 148       dac_xfer_out_bypass <= dac_xfer_out_bypass_m1;
++ 148     end
++ 148   end
++ 148   assign dac_mem_ren_s = (dac_bypass == 1'b1) ? (dac_valid & dac_mem_ready) : (dac_valid & dac_xfer_out_fifo);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_dacfifo/util_dacfifo.v@137:151
+
+  assign dma_wren = dma_valid & dma_xfer_req;
+
+  // sync lastaddr to dac clock domain
+
+  always @(posedge dac_clk) begin
+    dac_lastaddr_d <= dma_lastaddr;
+    dac_lastaddr_2d <= dac_lastaddr_d;
+    dac_xfer_out_m <= {dac_xfer_out_m[1:0], dma_xfer_out};
+  end
+
+  assign dac_xfer_out = dac_xfer_out_m[2];
+
+  // generate dac read address
+
+

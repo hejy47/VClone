@@ -1,0 +1,299 @@
+Source Block: oh/src/elink/hdl/etx_clocks.v@169:288@HdlStmIf
+		     .clk		(tx_lclk_div4),
+		     .nrst_in		(tx_nreset));
+   
+
+  generate
+      if(TARGET=="XILINX")
+	begin
+   
+   //###########################
+   // MMCM FOR TXCLK + CCLK
+   //###########################
+   MMCME2_ADV
+     #(
+       .BANDWIDTH("OPTIMIZED"),          
+       .CLKFBOUT_MULT_F(MMCM_VCO_MULT),
+       .CLKFBOUT_PHASE(0.0),
+       .CLKIN1_PERIOD(SYSCLK_PERIOD),   
+       .CLKOUT0_DIVIDE_F(CCLK_DIVIDE),   //cclk_c
+       .CLKOUT1_DIVIDE(TXCLK_DIVIDE),    //tx_lclk
+       .CLKOUT2_DIVIDE(TXCLK_DIVIDE),    //tx_lclk90
+       .CLKOUT3_DIVIDE(TXCLK_DIVIDE*4),  //tx_lclk_div4
+       .CLKOUT4_DIVIDE(128),             //N/A
+       .CLKOUT5_DIVIDE(128),             //N/A
+       .CLKOUT6_DIVIDE(128),             //N/A
+       .CLKOUT0_DUTY_CYCLE(0.5),         
+       .CLKOUT1_DUTY_CYCLE(0.5),
+       .CLKOUT2_DUTY_CYCLE(0.5),
+       .CLKOUT3_DUTY_CYCLE(0.5),
+       .CLKOUT4_DUTY_CYCLE(0.5),
+       .CLKOUT5_DUTY_CYCLE(0.5),
+       .CLKOUT6_DUTY_CYCLE(0.5),
+       .CLKOUT0_PHASE(0.0),
+       .CLKOUT1_PHASE(0.0),
+       .CLKOUT2_PHASE(TXCLK_PHASE),
+       .CLKOUT3_PHASE(0.0),
+       .CLKOUT4_PHASE(0.0),
+       .CLKOUT5_PHASE(0.0),
+       .CLKOUT6_PHASE(0.0),
+       .DIVCLK_DIVIDE(1.0), 
+       .REF_JITTER1(0.01), 
+       .STARTUP_WAIT("FALSE") 
+       ) mmcm_cclk
+       (
+        .CLKOUT0(cclk_mmcm),
+	.CLKOUT0B(),
+        .CLKOUT1(tx_lclk_mmcm),
+	.CLKOUT1B(),
+        .CLKOUT2(tx_lclk90_mmcm),//goes directly to IO
+	.CLKOUT2B(),
+        .CLKOUT3(tx_lclk_div4_mmcm),
+	.CLKOUT3B(),
+        .CLKOUT4(),
+        .CLKOUT5(),
+	.CLKOUT6(),
+	.PWRDWN(1'b0),
+        .RST(mmcm_reset),     //reset
+        .CLKFBIN(cclk_fb),
+        .CLKFBOUT(cclk_fb),  //feedback clock
+	.CLKFBOUTB(),        //inverted output feedback clock     
+        .CLKIN1(sys_clk),    //input clock
+	.CLKIN2(1'b0),
+	.CLKINSEL(1'b1),      
+	.DADDR(7'b0),
+        .DCLK(1'b0),
+	.DEN(1'b0),
+	.DI(16'b0),
+	.DWE(1'b0),
+	.DRDY(),
+	.DO(), 
+	.LOCKED(mmcm_locked), //locked indicator
+	.PSCLK(1'b0),
+	.PSEN(1'b0),
+	.PSDONE(),
+	.PSINCDEC(1'b0),
+	.CLKFBSTOPPED(),
+	.CLKINSTOPPED()
+        );
+        
+
+   //Tx clock buffers
+   BUFG i_lclk_bufg      (.I(tx_lclk_mmcm),     .O(tx_lclk_io));   //300MHz
+   BUFG i_lclk_div4_bufg (.I(tx_lclk_div4_mmcm),.O(tx_lclk_div4)); //75MHz
+   BUFG i_lclk90_bufg    (.I(tx_lclk90_mmcm),   .O(tx_lclk90));    //300MHz 90deg clock
+//   BUFG i_fb_buf           (.I(cclk_fb_out), .O(cclk_fb_in));    //FB
+
+   //###########################
+   // CCLK
+   //###########################
+
+   //CCLK bufio
+   BUFIO bufio_cclk(.O(cclk_bufio), .I(cclk_mmcm));
+
+   //CCLK oddr 
+   ODDRE1
+   oddr_lclk (
+              .Q  (cclk_oddr),
+              .C  (cclk_bufio),
+              .D1 (1'b1),
+              .D2 (1'b0));
+	    
+   //CCLK differential buffer
+   OBUFDS  cclk_obuf (.O   (cclk_p),
+                      .OB  (cclk_n),
+                      .I   (cclk_oddr)
+                      );
+
+	end // if (TARGET=="XILINX")
+      else
+	begin
+	   assign cclk_p       = sys_clk;
+	   assign cclk_n       = sys_clk;
+	   assign tx_lclk_io   = sys_clk;
+	   assign tx_lclk_div4 = sys_clk;
+	   assign tx_lclk90    = sys_clk;
+	end
+  endgenerate
+   
+	   
+ 
+
+
+Diff Content:
+- 180    MMCME2_ADV
+- 181      #(
+- 182        .BANDWIDTH("OPTIMIZED"),          
+- 183        .CLKFBOUT_MULT_F(MMCM_VCO_MULT),
+- 184        .CLKFBOUT_PHASE(0.0),
+- 185        .CLKIN1_PERIOD(SYSCLK_PERIOD),   
+- 186        .CLKOUT0_DIVIDE_F(CCLK_DIVIDE),   //cclk_c
+- 187        .CLKOUT1_DIVIDE(TXCLK_DIVIDE),    //tx_lclk
+- 188        .CLKOUT2_DIVIDE(TXCLK_DIVIDE),    //tx_lclk90
+- 189        .CLKOUT3_DIVIDE(TXCLK_DIVIDE*4),  //tx_lclk_div4
+- 190        .CLKOUT4_DIVIDE(128),             //N/A
+- 191        .CLKOUT5_DIVIDE(128),             //N/A
+- 192        .CLKOUT6_DIVIDE(128),             //N/A
+- 193        .CLKOUT0_DUTY_CYCLE(0.5),         
+- 194        .CLKOUT1_DUTY_CYCLE(0.5),
+- 195        .CLKOUT2_DUTY_CYCLE(0.5),
+- 196        .CLKOUT3_DUTY_CYCLE(0.5),
+- 197        .CLKOUT4_DUTY_CYCLE(0.5),
+- 198        .CLKOUT5_DUTY_CYCLE(0.5),
+- 199        .CLKOUT6_DUTY_CYCLE(0.5),
+- 200        .CLKOUT0_PHASE(0.0),
+- 201        .CLKOUT1_PHASE(0.0),
+- 202        .CLKOUT2_PHASE(TXCLK_PHASE),
+- 203        .CLKOUT3_PHASE(0.0),
+- 204        .CLKOUT4_PHASE(0.0),
+- 205        .CLKOUT5_PHASE(0.0),
+- 206        .CLKOUT6_PHASE(0.0),
+- 207        .DIVCLK_DIVIDE(1.0), 
+- 208        .REF_JITTER1(0.01), 
+- 209        .STARTUP_WAIT("FALSE") 
+- 210        ) mmcm_cclk
+- 211        (
+- 212         .CLKOUT0(cclk_mmcm),
+- 213 	.CLKOUT0B(),
+- 214         .CLKOUT1(tx_lclk_mmcm),
+- 215 	.CLKOUT1B(),
+- 216         .CLKOUT2(tx_lclk90_mmcm),//goes directly to IO
+- 217 	.CLKOUT2B(),
+- 218         .CLKOUT3(tx_lclk_div4_mmcm),
+- 219 	.CLKOUT3B(),
+- 220         .CLKOUT4(),
+- 221         .CLKOUT5(),
+- 222 	.CLKOUT6(),
+- 223 	.PWRDWN(1'b0),
+- 224         .RST(mmcm_reset),     //reset
+- 225         .CLKFBIN(cclk_fb),
+- 226         .CLKFBOUT(cclk_fb),  //feedback clock
+- 227 	.CLKFBOUTB(),        //inverted output feedback clock     
+- 228         .CLKIN1(sys_clk),    //input clock
+- 229 	.CLKIN2(1'b0),
+- 230 	.CLKINSEL(1'b1),      
+- 231 	.DADDR(7'b0),
+- 232         .DCLK(1'b0),
+- 233 	.DEN(1'b0),
+- 234 	.DI(16'b0),
+- 235 	.DWE(1'b0),
+- 236 	.DRDY(),
+- 237 	.DO(), 
+- 238 	.LOCKED(mmcm_locked), //locked indicator
+- 239 	.PSCLK(1'b0),
+- 240 	.PSEN(1'b0),
+- 241 	.PSDONE(),
+- 242 	.PSINCDEC(1'b0),
+- 243 	.CLKFBSTOPPED(),
+- 244 	.CLKINSTOPPED()
+- 245         );
+- 249    BUFG i_lclk_bufg      (.I(tx_lclk_mmcm),     .O(tx_lclk_io));   //300MHz
+- 250    BUFG i_lclk_div4_bufg (.I(tx_lclk_div4_mmcm),.O(tx_lclk_div4)); //75MHz
+- 251    BUFG i_lclk90_bufg    (.I(tx_lclk90_mmcm),   .O(tx_lclk90));    //300MHz 90deg clock
+- 259    BUFIO bufio_cclk(.O(cclk_bufio), .I(cclk_mmcm));
+- 262    ODDRE1
+- 263    oddr_lclk (
+- 264               .Q  (cclk_oddr),
+- 265               .C  (cclk_bufio),
+- 266               .D1 (1'b1),
+- 267               .D2 (1'b0));
+- 270    OBUFDS  cclk_obuf (.O   (cclk_p),
+- 271                       .OB  (cclk_n),
+- 272                       .I   (cclk_oddr)
+- 273                       );
++ 259 	   MMCME2_ADV
++ 259 	     #(
++ 259 	       .BANDWIDTH("OPTIMIZED"),          
++ 259 	       .CLKFBOUT_MULT_F(MMCM_VCO_MULT),
++ 259 	       .CLKFBOUT_PHASE(0.0),
++ 259 	       .CLKIN1_PERIOD(SYSCLK_PERIOD),   
++ 259 	       .CLKOUT0_DIVIDE_F(CCLK_DIVIDE),   //cclk_c
++ 259 	       .CLKOUT1_DIVIDE(TXCLK_DIVIDE),    //tx_lclk
++ 259 	       .CLKOUT2_DIVIDE(TXCLK_DIVIDE),    //tx_lclk90
++ 259 	       .CLKOUT3_DIVIDE(TXCLK_DIVIDE*4),  //tx_lclk_div4
++ 259 	       .CLKOUT4_DIVIDE(128),             //N/A
++ 259 	       .CLKOUT5_DIVIDE(128),             //N/A
++ 259 	       .CLKOUT6_DIVIDE(128),             //N/A
++ 259 	       .CLKOUT0_DUTY_CYCLE(0.5),         
++ 259 	       .CLKOUT1_DUTY_CYCLE(0.5),
++ 259 	       .CLKOUT2_DUTY_CYCLE(0.5),
++ 259 	       .CLKOUT3_DUTY_CYCLE(0.5),
++ 259 	       .CLKOUT4_DUTY_CYCLE(0.5),
++ 259 	       .CLKOUT5_DUTY_CYCLE(0.5),
++ 259 	       .CLKOUT6_DUTY_CYCLE(0.5),
++ 259 	       .CLKOUT0_PHASE(0.0),
++ 259 	       .CLKOUT1_PHASE(0.0),
++ 259 	       .CLKOUT2_PHASE(TXCLK_PHASE),
++ 259 	       .CLKOUT3_PHASE(0.0),
++ 259 	       .CLKOUT4_PHASE(0.0),
++ 259 	       .CLKOUT5_PHASE(0.0),
++ 259 	       .CLKOUT6_PHASE(0.0),
++ 259 	       .DIVCLK_DIVIDE(1.0), 
++ 259 	       .REF_JITTER1(0.01), 
++ 259 	       .STARTUP_WAIT("FALSE") 
++ 259 	       ) mmcm_cclk
++ 259 	       (
++ 259 		.CLKOUT0(cclk_mmcm),
++ 259 		.CLKOUT0B(),
++ 259 		.CLKOUT1(tx_lclk_mmcm),
++ 259 		.CLKOUT1B(),
++ 259 		.CLKOUT2(tx_lclk90_mmcm),//goes directly to IO
++ 259 		.CLKOUT2B(),
++ 259 		.CLKOUT3(tx_lclk_div4_mmcm),
++ 259 		.CLKOUT3B(),
++ 259 		.CLKOUT4(),
++ 259 		.CLKOUT5(),
++ 259 		.CLKOUT6(),
++ 259 		.PWRDWN(1'b0),
++ 259 		.RST(mmcm_reset),     //reset
++ 259 		.CLKFBIN(cclk_fb),
++ 259 		.CLKFBOUT(cclk_fb),  //feedback clock
++ 259 		.CLKFBOUTB(),        //inverted output feedback clock     
++ 259 		.CLKIN1(sys_clk),    //input clock
++ 259 		.CLKIN2(1'b0),
++ 259 		.CLKINSEL(1'b1),      
++ 259 		.DADDR(7'b0),
++ 259 		.DCLK(1'b0),
++ 259 		.DEN(1'b0),
++ 259 		.DI(16'b0),
++ 259 		.DWE(1'b0),
++ 259 		.DRDY(),
++ 259 		.DO(), 
++ 259 		.LOCKED(mmcm_locked), //locked indicator
++ 259 		.PSCLK(1'b0),
++ 259 		.PSEN(1'b0),
++ 259 		.PSDONE(),
++ 259 		.PSINCDEC(1'b0),
++ 259 		.CLKFBSTOPPED(),
++ 259 		.CLKINSTOPPED()
++ 259 		);
++ 273 	   BUFG i_lclk_bufg      (.I(tx_lclk_mmcm),     .O(tx_lclk_io));   //300MHz
++ 273 	   BUFG i_lclk_div4_bufg (.I(tx_lclk_div4_mmcm),.O(tx_lclk_div4)); //75MHz
++ 273 	   BUFG i_lclk90_bufg    (.I(tx_lclk90_mmcm),   .O(tx_lclk90));    //300MHz 90deg clock
++ 273 	   BUFIO bufio_cclk(.O(cclk_bufio), .I(cclk_mmcm));
++ 273 	   if(PLATFORM=="ULTRASCALE")
++ 273 	     begin : gen_ultrascale
++ 273 		ODDRE1 oddr_lclk (
++ 273 				  .Q  (cclk_oddr),
++ 273 				  .C  (cclk_bufio),
++ 273 				  .D1 (1'b1),
++ 273 				  .D2 (1'b0));
++ 273 	     end
++ 273 	   else
++ 273 	     begin : gen_zynq
++ 273 		ODDR #(.DDR_CLK_EDGE  ("SAME_EDGE"), .SRTYPE("ASYNC"))
++ 273 		oddr_lclk (
++ 273 			   .Q  (cclk_oddr),
++ 273 			   .C  (cclk_bufio),
++ 273 			   .CE (1'b1),
++ 273 			   .D1 (1'b1),
++ 273 			   .D2 (1'b0),
++ 273 			   .R  (1'b0),
++ 273 			   .S  (1'b0));	
++ 273 	     end
++ 273 	   OBUFDS  cclk_obuf (.O   (cclk_p),
++ 273 			      .OB  (cclk_n),
++ 273 			      .I   (cclk_oddr)
++ 273 			      );
+
+Clone Blocks:

@@ -1,0 +1,50 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@89:103@HdlStmProcess
+     if(~rx_frame)
+       byte0_sel <= 1'b1;
+     else if (~ddr_mode)
+       byte0_sel <= rx_frame ^ byte0_sel;
+   
+   always @ (posedge rx_clk)
+     if(byte0_sel)
+       sdr_data[NMIO-1:0]  <= rx_packet[NMIO-1:0];
+     else
+       sdr_data[2*NMIO-1:NMIO] <= rx_packet[NMIO-1:0];
+
+   //########################################
+   //# HANDL DDR/SDR
+   //########################################
+   
+
+Diff Content:
+- 94    always @ (posedge rx_clk)
+- 95      if(byte0_sel)
+- 96        sdr_data[NMIO-1:0]  <= rx_packet[NMIO-1:0];
+- 98        sdr_data[2*NMIO-1:NMIO] <= rx_packet[NMIO-1:0];
++ 96    always @ (posedge rx_clk or negedge io_nreset)
++ 96      if(!io_nreset)
++ 96        rx_access_reg[1:0] <= 1'b0;
++ 98        rx_access_reg[1:0] <= {rx_access_reg[0],rx_access};
++ 98    assign io_frame = ddr_mode ? rx_access_reg[1] :
++ 98                                 rx_access_reg[0];
++ 98    assign data_select[7:0] = reload ? valid_input[7:0] :
++ 98 			              valid_next[7:0] & ~io_valid[7:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mrx_io.v@83:97
+   //########################################
+   //# DATA (SDR) 
+   //########################################
+   //select 2nd byte (stall on this signal)
+
+   always @ (posedge rx_clk)
+     if(~rx_frame)
+       byte0_sel <= 1'b1;
+     else if (~ddr_mode)
+       byte0_sel <= rx_frame ^ byte0_sel;
+   
+   always @ (posedge rx_clk)
+     if(byte0_sel)
+       sdr_data[NMIO-1:0]  <= rx_packet[NMIO-1:0];
+     else
+

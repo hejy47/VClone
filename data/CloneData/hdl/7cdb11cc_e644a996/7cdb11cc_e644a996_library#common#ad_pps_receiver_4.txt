@@ -1,0 +1,30 @@
+Source Block: hdl/library/common/ad_pps_receiver.v@90:110@HdlStmProcess
+    end else if (pps_posedge_s == 1'b1) begin
+      pps_toggle <= ~pps_toggle;
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_pps_m <= 3'b0;
+      up_pps_rcounter <= 1'b0;
+    end else begin
+      up_pps_m <= {up_pps_m[1:0], pps_toggle};
+      if ((up_pps_m[2] ^ up_pps_m[1]) == 1'b1) begin
+        up_pps_rcounter <= pps_rcounter;
+      end
+    end
+  end
+  assign up_pps_posedge_s = ~up_pps_m[2] & up_pps_m[1];
+
+  // IRQ generation
+
+  always @(posedge up_clk) begin
+
+Diff Content:
++ 98       up_pps_status_m <= 1'b1;
++ 98       up_pps_status <= 1'b1;
++ 100       up_pps_status_m <= pps_status;
++ 100       up_pps_status <= up_pps_status_m;
+
+Clone Blocks:

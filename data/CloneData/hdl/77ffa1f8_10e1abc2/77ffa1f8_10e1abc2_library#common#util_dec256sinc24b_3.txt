@@ -1,0 +1,30 @@
+Source Block: hdl/library/common/util_dec256sinc24b.v@114:134@HdlStmProcess
+
+  /* Differentiator (including decimation stage)
+   * Perform the differentiation stage (FIR) at a lower speed.
+   * Z = one sample delay WORD_EN = output word rate */
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      acc3_d <= 37'd0;
+      diff1_d <= 37'd0;
+      diff2_d <= 37'd0;
+    end else if (word_en == 1'b1) begin
+      acc3_d  <= acc3;
+      diff1_d <= diff1_s;
+      diff2_d <= diff2_s;
+    end
+  end
+  assign diff1_s = acc3 - acc3_d;
+  assign diff2_s = diff1_s - diff1_d;
+  assign diff3_s = diff2_s - diff2_d;
+
+  /* Clock the Sinc output into an output register
+
+Diff Content:
+- 121       acc3_d <= 37'd0;
+- 125       acc3_d  <= acc3;
++ 123       acc3_d <= 37'b0;
++ 125       acc3_d <= acc3;
+
+Clone Blocks:

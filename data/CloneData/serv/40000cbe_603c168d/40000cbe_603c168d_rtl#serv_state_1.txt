@@ -1,0 +1,74 @@
+Source Block: serv/rtl/serv_state.v@47:57@HdlStmAssign
+   wire running;
+
+   assign o_cnt_done = cnt_done;
+
+   //Update PC in RUN or TRAP states
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+
+   assign o_csr_imm = (o_cnt < 5) ? i_rs1_addr[o_cnt[2:0]] : 1'b0;
+   assign o_alu_shamt_en = (o_cnt < 5) & (state == INIT);
+
+   assign o_mem_bytecnt = o_cnt[4:3];
+
+Diff Content:
+- 52    assign o_ctrl_pc_en  = running | o_ctrl_trap;
++ 52    assign o_ctrl_pc_en  = running | (state == TRAP);
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_state.v@54:64
+   assign o_csr_imm = (o_cnt < 5) ? i_rs1_addr[o_cnt[2:0]] : 1'b0;
+   assign o_alu_shamt_en = (o_cnt < 5) & (state == INIT);
+
+   assign o_mem_bytecnt = o_cnt[4:3];
+
+   assign cnt_en = (state != IDLE);
+   assign o_cnt_en   = cnt_en;
+
+   assign o_init = (state == INIT);
+
+   assign running = (state == RUN);
+
+Clone Blocks 2:
+serv/rtl/serv_state.v@52:62
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+
+   assign o_csr_imm = (o_cnt < 5) ? i_rs1_addr[o_cnt[2:0]] : 1'b0;
+   assign o_alu_shamt_en = (o_cnt < 5) & (state == INIT);
+
+   assign o_mem_bytecnt = o_cnt[4:3];
+
+   assign cnt_en = (state != IDLE);
+   assign o_cnt_en   = cnt_en;
+
+   assign o_init = (state == INIT);
+
+Clone Blocks 3:
+serv/rtl/serv_state.v@50:60
+
+   //Update PC in RUN or TRAP states
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+
+   assign o_csr_imm = (o_cnt < 5) ? i_rs1_addr[o_cnt[2:0]] : 1'b0;
+   assign o_alu_shamt_en = (o_cnt < 5) & (state == INIT);
+
+   assign o_mem_bytecnt = o_cnt[4:3];
+
+   assign cnt_en = (state != IDLE);
+   assign o_cnt_en   = cnt_en;
+
+Clone Blocks 4:
+serv/rtl/serv_state.v@49:59
+   assign o_cnt_done = cnt_done;
+
+   //Update PC in RUN or TRAP states
+   assign o_ctrl_pc_en  = running | o_ctrl_trap;
+
+   assign o_csr_imm = (o_cnt < 5) ? i_rs1_addr[o_cnt[2:0]] : 1'b0;
+   assign o_alu_shamt_en = (o_cnt < 5) & (state == INIT);
+
+   assign o_mem_bytecnt = o_cnt[4:3];
+
+   assign cnt_en = (state != IDLE);
+

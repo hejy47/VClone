@@ -1,0 +1,283 @@
+Source Block: hdl/projects/ad9265_fmc/zc706/system_top.v@99:109@HdlStmAssign
+wire            spi1_mosi;
+wire            spi1_miso;
+
+// instantiations
+
+assign spi_csn_adc = spi0_csn[0];
+assign spi_csn_clk = spi0_csn[1];
+assign spi_clk = spi0_clk;
+assign spi_mosi = spi0_mosi;
+assign spi0_miso = spi_miso;
+
+
+Diff Content:
+- 104 assign spi_csn_adc = spi0_csn[0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/ad9081_fmca_ebz/vcu128/system_top.v@196:206
+  );
+  // spi
+
+  assign spi0_csb   = spi_csn[0];
+  assign spi0_mosi  = spi_mosi;
+  assign spi0_sclk  = spi_clk;
+
+  assign spi1_csb   = spi_csn[1];
+  assign spi1_sclk  = spi_clk;
+
+  assign spi_miso = ~spi_csn[0] ? spi0_miso :
+
+Clone Blocks 2:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@99:109
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_clk;
+
+  assign spi_csn = spi0_csn[0];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+
+Clone Blocks 3:
+hdl/projects/ad9083_evb/zcu102/system_top.v@93:103
+
+  assign spi_csn_adc = spi0_csn[0];
+  assign spi_csn_clk = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+  IBUFDS IBUFDS_inst (
+    .O(rx_ref_core_clk0_s),
+
+Clone Blocks 4:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@105:115
+  // assignments
+
+  assign spi_csn_clk = spi0_csn[0];
+  assign spi_csn_dac = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(15)) i_iobuf_bd (
+
+Clone Blocks 5:
+hdl/projects/ad9083_evb/zcu102/system_top.v@92:102
+  assign gpio_bd_o = gpio_o[7:0];
+
+  assign spi_csn_adc = spi0_csn[0];
+  assign spi_csn_clk = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+  IBUFDS IBUFDS_inst (
+
+Clone Blocks 6:
+hdl/projects/ad9081_fmca_ebz/vcu128/system_top.v@198:208
+
+  assign spi0_csb   = spi_csn[0];
+  assign spi0_mosi  = spi_mosi;
+  assign spi0_sclk  = spi_clk;
+
+  assign spi1_csb   = spi_csn[1];
+  assign spi1_sclk  = spi_clk;
+
+  assign spi_miso = ~spi_csn[0] ? spi0_miso :
+                    ~spi_csn[1] ? spi1_miso : 1'b0;
+
+
+Clone Blocks 7:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@98:108
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_clk;
+
+  assign spi_csn = spi0_csn[0];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+Clone Blocks 8:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@102:112
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // assignments
+
+  assign spi_csn_clk = spi0_csn[0];
+  assign spi_csn_dac = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+
+Clone Blocks 9:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@103:113
+  wire            spi1_miso;
+
+  // assignments
+
+  assign spi_csn_clk = spi0_csn[0];
+  assign spi_csn_dac = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+Clone Blocks 10:
+hdl/projects/adaq8092_fmc/zed/system_top.v@128:138
+  wire    [ 1:0]  iic_mux_sda_o_s;
+  wire            iic_mux_sda_t_s;
+  
+  // instantiations
+  
+  assign spi_csn    = spi0_csn[0];
+  assign spi_clk    = spi0_clk;
+  assign spi_mosi   = spi0_mosi;
+  assign spi0_miso  = spi_miso;
+
+  assign gpio_i[32] = adc_par_ser;
+
+Clone Blocks 11:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@104:114
+
+  // assignments
+
+  assign spi_csn_clk = spi0_csn[0];
+  assign spi_csn_dac = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+
+Clone Blocks 12:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@100:110
+  wire            spi1_miso;
+  wire            rx_clk;
+
+  assign spi_csn = spi0_csn[0];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+  IBUFDS_GTE2 i_ibufds_rx_ref_clk (
+
+Clone Blocks 13:
+hdl/projects/m2k/standalone/system_top.v@98:108
+  wire    [ 1:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+
+  assign ad9963_csn = spi0_csn[0];
+  assign adf4360_cs = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+
+Clone Blocks 14:
+hdl/projects/ad9265_fmc/zc706/system_top.v@100:110
+wire            spi1_miso;
+
+// instantiations
+
+assign spi_csn_adc = spi0_csn[0];
+assign spi_csn_clk = spi0_csn[1];
+assign spi_clk = spi0_clk;
+assign spi_mosi = spi0_mosi;
+assign spi0_miso = spi_miso;
+
+ad_iobuf #(.DATA_WIDTH(15)) iobuf_gpio_bd (
+
+Clone Blocks 15:
+hdl/projects/ad9081_fmca_ebz/vcu118/system_top.v@209:219
+  );
+  // spi
+
+  assign spi0_csb   = spi_csn[0];
+  assign spi0_mosi  = spi_mosi;
+  assign spi0_sclk  = spi_clk;
+
+  assign spi1_csb   = spi_csn[1];
+  assign spi1_sclk  = spi_clk;
+
+  assign spi_miso = ~spi_csn[0] ? spi0_miso :
+
+Clone Blocks 16:
+hdl/projects/ad9081_fmca_ebz/vcu118/system_top.v@211:221
+
+  assign spi0_csb   = spi_csn[0];
+  assign spi0_mosi  = spi_mosi;
+  assign spi0_sclk  = spi_clk;
+
+  assign spi1_csb   = spi_csn[1];
+  assign spi1_sclk  = spi_clk;
+
+  assign spi_miso = ~spi_csn[0] ? spi0_miso :
+                    ~spi_csn[1] ? spi1_miso : 1'b0;
+
+
+Clone Blocks 17:
+hdl/projects/m2k/standalone/system_top.v@99:109
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+
+  assign ad9963_csn = spi0_csn[0];
+  assign adf4360_cs = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+Clone Blocks 18:
+hdl/projects/m2k/standalone/system_top.v@100:110
+  wire            spi0_mosi;
+  wire            spi0_miso;
+
+  assign ad9963_csn = spi0_csn[0];
+  assign adf4360_cs = spi0_csn[1];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+
+Clone Blocks 19:
+hdl/projects/ad9265_fmc/zc706/system_top.v@95:105
+wire            spi0_mosi;
+wire            spi0_miso;
+wire    [ 2:0]  spi1_csn;
+wire            spi1_clk;
+wire            spi1_mosi;
+wire            spi1_miso;
+
+// instantiations
+
+assign spi_csn_adc = spi0_csn[0];
+assign spi_csn_clk = spi0_csn[1];
+

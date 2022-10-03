@@ -1,0 +1,86 @@
+Source Block: hdl/library/xilinx/common/ad_data_in.v@147:181@HdlStmIf
+    .CNTVALUEOUT (up_drdata));
+  end
+  endgenerate
+
+  generate
+  if ((IODELAY_FPGA_TECHNOLOGY == ULTRASCALE) || (IODELAY_FPGA_TECHNOLOGY == ULTRASCALE_PLUS)) begin
+  assign up_drdata = up_drdata_s[8:4];
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYE3 #(
+    .SIM_DEVICE (IODELAY_SIM_DEVICE),
+    .DELAY_SRC ("IDATAIN"),
+    .DELAY_TYPE ("VAR_LOAD"),
+    .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
+    .DELAY_FORMAT ("COUNT"))
+  i_rx_data_idelay (
+    .CASC_RETURN (1'b0),
+    .CASC_IN (1'b0),
+    .CASC_OUT (),
+    .CE (1'b0),
+    .CLK (up_clk),
+    .INC (1'b0),
+    .LOAD (up_dld),
+    .CNTVALUEIN ({up_dwdata, 4'd0}),
+    .CNTVALUEOUT (up_drdata_s),
+    .DATAIN (1'b0),
+    .IDATAIN (rx_data_ibuf_s),
+    .DATAOUT (rx_data_idelay_s),
+    .RST (1'b0),
+    .EN_VTC (~up_dld));
+  end
+  endgenerate
+
+  generate
+  if (IODELAY_FPGA_TECHNOLOGY == NONE) begin
+  assign rx_data_idelay_s = rx_data_ibuf_s;
+
+Diff Content:
+- 153   assign up_drdata = up_drdata_s[8:4];
+- 154   (* IODELAY_GROUP = IODELAY_GROUP *)
+- 155   IDELAYE3 #(
+- 156     .SIM_DEVICE (IODELAY_SIM_DEVICE),
+- 157     .DELAY_SRC ("IDATAIN"),
+- 158     .DELAY_TYPE ("VAR_LOAD"),
+- 159     .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
+- 160     .DELAY_FORMAT ("COUNT"))
+- 161   i_rx_data_idelay (
+- 162     .CASC_RETURN (1'b0),
+- 163     .CASC_IN (1'b0),
+- 164     .CASC_OUT (),
+- 165     .CE (1'b0),
+- 166     .CLK (up_clk),
+- 167     .INC (1'b0),
+- 168     .LOAD (up_dld),
+- 169     .CNTVALUEIN ({up_dwdata, 4'd0}),
+- 170     .CNTVALUEOUT (up_drdata_s),
+- 171     .DATAIN (1'b0),
+- 172     .IDATAIN (rx_data_ibuf_s),
+- 173     .DATAOUT (rx_data_idelay_s),
+- 174     .RST (1'b0),
+- 175     .EN_VTC (~up_dld));
++ 175     assign up_drdata = up_drdata_s[8:4];
++ 175     (* IODELAY_GROUP = IODELAY_GROUP *)
++ 175     IDELAYE3 #(
++ 175       .SIM_DEVICE (IODELAY_SIM_DEVICE),
++ 175       .DELAY_SRC ("IDATAIN"),
++ 175       .DELAY_TYPE ("VAR_LOAD"),
++ 175       .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
++ 175       .DELAY_FORMAT ("COUNT")
++ 175     ) i_rx_data_idelay (
++ 175       .CASC_RETURN (1'b0),
++ 175       .CASC_IN (1'b0),
++ 175       .CASC_OUT (),
++ 175       .CE (1'b0),
++ 175       .CLK (up_clk),
++ 175       .INC (1'b0),
++ 175       .LOAD (up_dld),
++ 175       .CNTVALUEIN ({up_dwdata, 4'd0}),
++ 175       .CNTVALUEOUT (up_drdata_s),
++ 175       .DATAIN (1'b0),
++ 175       .IDATAIN (rx_data_ibuf_s),
++ 175       .DATAOUT (rx_data_idelay_s),
++ 175       .RST (1'b0),
++ 175       .EN_VTC (~up_dld));
+
+Clone Blocks:

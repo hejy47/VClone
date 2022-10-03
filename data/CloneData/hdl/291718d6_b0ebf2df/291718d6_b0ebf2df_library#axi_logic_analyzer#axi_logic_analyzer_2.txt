@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@138:148@HdlStmAssign
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
+  assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
+
+  generate
+  for (i = 0 ; i < 16; i = i + 1) begin
+    assign data_t[i] = od_pp_n[i] ? io_selection[i] & !data_o[i] : io_selection[i];
+    always @(posedge clk_out) begin
+
+Diff Content:
++ 143  always @(posedge clk_out) begin
++ 143     if (sample_valid_la == 1'b1 && trigger_out_s == 1'b1) begin
++ 143       up_triggered_set <= 1'b1;
++ 143     end else if (up_triggered_reset == 1'b1) begin
++ 143       up_triggered_set <= 1'b0;
++ 143     end
++ 143     up_triggered_reset_d1 <= up_triggered;
++ 143     up_triggered_reset_d2 <= up_triggered_reset_d1;
++ 143     up_triggered_reset    <= up_triggered_reset_d2;
++ 143   end
++ 143   always @(posedge up_clk) begin
++ 143     up_triggered_d1 <= up_triggered_set;
++ 143     up_triggered_d2 <= up_triggered_d1;
++ 143     up_triggered    <= up_triggered_d2;
++ 143   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@137:147
+  // signal name changes
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  assign trigger_out = trigger_delay == 32'h0 ? trigger_out_s : trigger_out_delayed;
+  assign trigger_out_delayed = delay_counter == 32'h0 ? 1 : 0;
+
+  generate
+  for (i = 0 ; i < 16; i = i + 1) begin
+    assign data_t[i] = od_pp_n[i] ? io_selection[i] & !data_o[i] : io_selection[i];
+

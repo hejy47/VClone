@@ -1,0 +1,61 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4441:4451@HdlStmAssign
+   //###########################################################
+
+   assign burst_req_denied = burst_req   & ~txo_op_ack;
+   assign burst_backup_inc = freeze_fifo &  txo_op_ack;
+
+   assign burst_backup_inc_cnt[1:0]  = burst_backup_cnt[1:0] + 2'b01;
+
+   assign burst_backup_next_cnt[1:0] = burst_req_denied ? 2'b01 :
+				       burst_backup_inc ? burst_backup_inc_cnt[1:0] :
+				                          burst_backup_cnt[1:0];
+
+
+Diff Content:
+- 4446    assign burst_backup_inc_cnt[1:0]  = burst_backup_cnt[1:0] + 2'b01;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4443:4455
+   assign burst_req_denied = burst_req   & ~txo_op_ack;
+   assign burst_backup_inc = freeze_fifo &  txo_op_ack;
+
+   assign burst_backup_inc_cnt[1:0]  = burst_backup_cnt[1:0] + 2'b01;
+
+   assign burst_backup_next_cnt[1:0] = burst_req_denied ? 2'b01 :
+				       burst_backup_inc ? burst_backup_inc_cnt[1:0] :
+				                          burst_backup_cnt[1:0];
+
+   always @ (posedge txo_lclk or posedge reset)
+     if(reset)
+       burst_backup_cnt[1:0] <= 2'b00;
+     else
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4439:4449
+   //# FIFO read pointers won't advance and the data out
+   //# will be selected from the reference controls and address
+   //###########################################################
+
+   assign burst_req_denied = burst_req   & ~txo_op_ack;
+   assign burst_backup_inc = freeze_fifo &  txo_op_ack;
+
+   assign burst_backup_inc_cnt[1:0]  = burst_backup_cnt[1:0] + 2'b01;
+
+   assign burst_backup_next_cnt[1:0] = burst_req_denied ? 2'b01 :
+				       burst_backup_inc ? burst_backup_inc_cnt[1:0] :
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@4438:4448
+   //# When burst_backup_cnt[1:0] is not zero, the counter and
+   //# FIFO read pointers won't advance and the data out
+   //# will be selected from the reference controls and address
+   //###########################################################
+
+   assign burst_req_denied = burst_req   & ~txo_op_ack;
+   assign burst_backup_inc = freeze_fifo &  txo_op_ack;
+
+   assign burst_backup_inc_cnt[1:0]  = burst_backup_cnt[1:0] + 2'b01;
+
+   assign burst_backup_next_cnt[1:0] = burst_req_denied ? 2'b01 :
+

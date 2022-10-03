@@ -1,0 +1,292 @@
+Source Block: verilog-ethernet/rtl/eth_axis_rx.v@141:285@HdlStmProcess
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+assign busy = busy_reg;
+assign frame_error = frame_error_reg;
+
+always @* begin
+    state_next = 2'bz;
+
+    transfer_in_out = 0;
+    transfer_in_temp = 0;
+    transfer_temp_out = 0;
+
+    store_eth_dest_mac_0 = 0;
+    store_eth_dest_mac_1 = 0;
+    store_eth_dest_mac_2 = 0;
+    store_eth_dest_mac_3 = 0;
+    store_eth_dest_mac_4 = 0;
+    store_eth_dest_mac_5 = 0;
+    store_eth_src_mac_0 = 0;
+    store_eth_src_mac_1 = 0;
+    store_eth_src_mac_2 = 0;
+    store_eth_src_mac_3 = 0;
+    store_eth_src_mac_4 = 0;
+    store_eth_src_mac_5 = 0;
+    store_eth_type_0 = 0;
+    store_eth_type_1 = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_eth_hdr_valid_next = output_eth_hdr_valid_reg & ~output_eth_hdr_ready;
+
+    frame_error_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                frame_ptr_next = 1;
+                store_eth_dest_mac_5 = 1;
+                state_next = STATE_READ_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header state
+            if (input_axis_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+1;
+                state_next = STATE_READ_HEADER;
+                case (frame_ptr_reg)
+                    8'h00: store_eth_dest_mac_5 = 1;
+                    8'h01: store_eth_dest_mac_4 = 1;
+                    8'h02: store_eth_dest_mac_3 = 1;
+                    8'h03: store_eth_dest_mac_2 = 1;
+                    8'h04: store_eth_dest_mac_1 = 1;
+                    8'h05: store_eth_dest_mac_0 = 1;
+                    8'h06: store_eth_src_mac_5 = 1;
+                    8'h07: store_eth_src_mac_4 = 1;
+                    8'h08: store_eth_src_mac_3 = 1;
+                    8'h09: store_eth_src_mac_2 = 1;
+                    8'h0A: store_eth_src_mac_1 = 1;
+                    8'h0B: store_eth_src_mac_0 = 1;
+                    8'h0C: store_eth_type_1 = 1;
+                    8'h0D: begin
+                        store_eth_type_0 = 1;
+                        output_eth_hdr_valid_next = 1;
+                        state_next = STATE_READ_PAYLOAD_IDLE;
+                    end
+                endcase
+                if (input_axis_tlast) begin
+                    state_next = STATE_IDLE;
+                    frame_error_next = 1;
+                end
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_READ_PAYLOAD_IDLE: begin
+            // idle; no data in registers
+            if (input_axis_tvalid) begin
+                // word transfer in - store it in output register
+                transfer_in_out = 1;
+                if (input_axis_tlast) begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_IDLE;
+            end
+        end
+        STATE_READ_PAYLOAD_TRANSFER: begin
+            // read payload; data in output register
+            if (input_axis_tvalid & output_eth_payload_tready) begin
+                // word transfer through - update output register
+                transfer_in_out = 1;
+                if (input_axis_tlast) begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER;
+                end
+            end else if (~input_axis_tvalid & output_eth_payload_tready) begin
+                // word transfer out - go back to idle
+                state_next = STATE_READ_PAYLOAD_IDLE;
+            end else if (input_axis_tvalid & ~output_eth_payload_tready) begin
+                // word transfer in - store in temp
+                transfer_in_temp = 1;
+                state_next = STATE_READ_PAYLOAD_TRANSFER_WAIT;
+            end else begin
+                state_next = STATE_READ_PAYLOAD_TRANSFER;
+            end
+        end
+        STATE_READ_PAYLOAD_TRANSFER_WAIT: begin
+            // read payload; data in both output and temp registers
+            if (output_eth_payload_tready) begin
+                // transfer out - move temp to output
+                transfer_temp_out = 1;
+                if (temp_eth_payload_tlast_reg) begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_TRANSFER_WAIT;
+            end
+        end
+        STATE_READ_PAYLOAD_TRANSFER_LAST: begin
+            // read last payload word; data in output register; do not accept new data
+            if (output_eth_payload_tready) begin
+                // word transfer out - done
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 172     frame_error_next = 0;
+- 215                     frame_error_next = 1;
++ 172     error_header_early_termination_next = 0;
++ 215                     error_header_early_termination_next = 1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_axis_rx_64.v@141:275
+assign output_eth_payload_tuser = output_eth_payload_tuser_reg;
+
+assign busy = busy_reg;
+assign frame_error = frame_error_reg;
+
+always @* begin
+    state_next = 2'bz;
+
+    transfer_in_save = 0;
+    transfer_save_out = 0;
+    transfer_in_out = 0;
+    transfer_in_temp = 0;
+    transfer_temp_out = 0;
+
+    store_hdr_word_0 = 0;
+    store_hdr_word_1 = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_eth_hdr_valid_next = output_eth_hdr_valid_reg & ~output_eth_hdr_ready;
+
+    frame_error_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                frame_ptr_next = 8;
+                store_hdr_word_0 = 1;
+                transfer_in_save = 1;
+                state_next = STATE_READ_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header state
+            if (input_axis_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+8;
+                transfer_in_save = 1;
+                state_next = STATE_READ_HEADER;
+                case (frame_ptr_reg)
+                    8'h00: store_hdr_word_0 = 1;
+                    8'h08: begin
+                        store_hdr_word_1 = 1;
+                        output_eth_hdr_valid_next = 1;
+                        state_next = STATE_READ_PAYLOAD_IDLE;
+                    end
+                endcase
+                if (input_axis_tlast) begin
+                    state_next = STATE_IDLE;
+                    frame_error_next = 1;
+                end
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_READ_PAYLOAD_IDLE: begin
+            // idle; no data in registers
+            if (input_axis_tvalid) begin
+                // word transfer in - store it in output register
+                transfer_in_out = 1;
+                transfer_in_save = 1;
+                if (input_axis_tlast) begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_IDLE;
+            end
+        end
+        STATE_READ_PAYLOAD_TRANSFER: begin
+            // read payload; data in output register
+            if (input_axis_tvalid & output_eth_payload_tready) begin
+                // word transfer through - update output register
+                transfer_in_out = 1;
+                transfer_in_save = 1;
+                if (input_axis_tlast) begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER;
+                end
+            end else if (~input_axis_tvalid & output_eth_payload_tready) begin
+                // word transfer out - go back to idle
+                state_next = STATE_READ_PAYLOAD_IDLE;
+            end else if (input_axis_tvalid & ~output_eth_payload_tready) begin
+                // word transfer in - store in temp
+                transfer_in_temp = 1;
+                transfer_in_save = 1;
+                state_next = STATE_READ_PAYLOAD_TRANSFER_WAIT;
+            end else begin
+                state_next = STATE_READ_PAYLOAD_TRANSFER;
+            end
+        end
+        STATE_READ_PAYLOAD_TRANSFER_WAIT: begin
+            // read payload; data in both output and temp registers
+            if (output_eth_payload_tready) begin
+                // transfer out - move temp to output
+                transfer_temp_out = 1;
+                if (temp_eth_payload_tlast_reg | (save_axis_tlast_reg & save_axis_tkeep_reg[7:6] != 0)) begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_TRANSFER;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_TRANSFER_WAIT;
+            end
+        end
+        STATE_READ_PAYLOAD_TRANSFER_LAST: begin
+            // read last payload word; data in output register; do not accept new data
+            if (output_eth_payload_tready) begin
+                // word transfer out
+                if (save_axis_tkeep_reg[7:6]) begin
+                    // part of word in save register
+                    transfer_save_out = 1;
+                    state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+                end else begin
+                    // nothing in save register; done
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_TRANSFER_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+

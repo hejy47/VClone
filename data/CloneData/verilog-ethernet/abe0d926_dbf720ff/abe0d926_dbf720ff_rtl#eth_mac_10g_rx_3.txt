@@ -1,0 +1,130 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_rx.v@298:420@HdlStmProcess
+    for (j = 0; j < 8; j = j + 1) begin
+        xgmii_rxd_masked[j*8 +: 8] = xgmii_rxc_d0[j] ? 8'd0 : xgmii_rxd_d0[j*8 +: 8];
+    end
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+
+    last_cycle_tkeep_next = last_cycle_tkeep_reg;
+    last_cycle_tuser_next = last_cycle_tuser_reg;
+
+    output_axis_tdata_next = 0;
+    output_axis_tkeep_next = 0;
+    output_axis_tvalid_next = 0;
+    output_axis_tlast_next = 0;
+    output_axis_tuser_next = 0;
+
+    error_bad_frame_next = 0;
+    error_bad_fcs_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for packet
+            reset_crc = 1;
+
+            if (xgmii_rxc_d1[0] && xgmii_rxd_d1[7:0] == 8'hfb) begin
+                // start condition
+                if (detect_error_masked) begin
+                    // error in first data word
+                    output_axis_tdata_next = 0;
+                    output_axis_tkeep_next = 1;
+                    output_axis_tvalid_next = 1;
+                    output_axis_tlast_next = 1;
+                    output_axis_tuser_next = 1;
+                    error_bad_frame_next = 1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    reset_crc = 0;
+                    update_crc = 1;
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // read payload
+            update_crc = 1;
+
+            output_axis_tdata_next = xgmii_rxd_d1;
+            output_axis_tkeep_next = ~xgmii_rxc_d1;
+            output_axis_tvalid_next = 1;
+            output_axis_tlast_next = 0;
+            output_axis_tuser_next = 0;
+
+            if (xgmii_rxc_d1[0] && xgmii_rxd_d1[7:0] == 8'hfb) begin
+                // start condition in packet - flag as bad and restart
+                output_axis_tlast_next = 1;
+                output_axis_tuser_next = 1;
+                error_bad_frame_next = 1;
+                reset_crc = 1;
+                state_next = STATE_PAYLOAD;
+            end else if (detect_error_masked) begin
+                // error condition
+                output_axis_tlast_next = 1;
+                output_axis_tuser_next = 1;
+                error_bad_frame_next = 1;
+                reset_crc = 1;
+                state_next = STATE_IDLE;
+            end else if (detect_term) begin
+                if (detect_term[4:0]) begin
+                    // end this cycle
+                    reset_crc = 1;
+                    output_axis_tkeep_next = fcs_output_tkeep_0;
+                    output_axis_tlast_next = 1;
+                    if (xgmii_rxd_masked != fcs_output_tdata_1 || xgmii_rxd_d1 != fcs_output_tdata_0) begin
+                        output_axis_tuser_next = 1;
+                        error_bad_frame_next = 1;
+                        error_bad_fcs_next = 1;
+                    end
+                    state_next = STATE_IDLE;
+                end else begin
+                    // need extra cycle
+                    last_cycle_tkeep_next = fcs_output_tkeep_0;
+                    last_cycle_tuser_next = 0;
+                    if (xgmii_rxd_masked != fcs_output_tdata_0) begin
+                        error_bad_frame_next = 1;
+                        error_bad_fcs_next = 1;
+                        last_cycle_tuser_next = 1;
+                    end
+                    state_next = STATE_LAST;
+                end
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_LAST: begin
+            // last cycle of packet
+            output_axis_tdata_next = xgmii_rxd_d1;
+            output_axis_tkeep_next = last_cycle_tkeep_reg;
+            output_axis_tvalid_next = 1;
+            output_axis_tlast_next = 1;
+            output_axis_tuser_next = last_cycle_tuser_reg;
+
+            reset_crc = 1;
+
+            if (xgmii_rxc_d1[0] && xgmii_rxd_d1[7:0] == 8'hfb) begin
+                // start condition
+                state_next = STATE_PAYLOAD;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+
+Diff Content:
+- 363             end else if (detect_error_masked) begin
++ 363             end else if (control_masked) begin
+
+Clone Blocks:

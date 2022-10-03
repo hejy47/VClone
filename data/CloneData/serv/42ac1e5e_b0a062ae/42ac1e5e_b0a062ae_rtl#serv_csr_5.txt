@@ -1,0 +1,48 @@
+Source Block: serv/rtl/serv_csr.v@70:108@HdlStmProcess
+
+   assign mcause = (i_cnt[4:2] == 3'd0) ? mcause3_0[0] : //[3:0]
+		   ((i_cnt[4:2] == 3'd7) & i_cnt_r[3]) ? mcause31 //[31]
+		   : 1'b0;
+
+   always @(posedge i_clk) begin
+      if (i_mstatus_en & (i_cnt[4:2] == 3'd0) & i_cnt_r[3])
+	mstatus_mie <= csr_in;
+
+      if (i_mie_en & (i_cnt[4:2] == 3'd1) & i_cnt_r[3])
+	mie_mtie <= csr_in;
+
+      mstatus <= (i_cnt[4:2] == 0) & i_cnt_r[2] & mstatus_mie;
+
+      if (i_trap) begin
+	 mcause31  <= i_mtip & o_timer_irq_en;
+	 mcause3_0 <= (i_mtip & o_timer_irq_en) ? 4'd7 : i_mcause[3:0];
+      end
+      if (i_mscratch_en)
+	mscratch <= {csr_in, mscratch[31:1]};
+
+      if (i_mtvec_en)
+	mtvec <= {csr_in, mtvec[31:1]};
+
+      if (i_mepc_en | i_trap)
+	mepc <= {i_trap ? i_pc : csr_in, mepc[31:1]};
+
+      if (i_mcause_en) begin
+	 if (i_cnt[4:2] == 3'd0)
+	   mcause3_0 <= {csr_in, mcause3_0[3:1]};
+	 if ((i_cnt[4:2] == 3'd7) & i_cnt_r[3])
+	   mcause31 <= csr_in;
+      end
+
+      if (i_mtval_en | i_trap)
+	mtval <= {i_trap ? i_mtval : csr_in, mtval[31:1]};
+   end
+
+endmodule
+
+Diff Content:
+- 88       if (i_mscratch_en)
+- 89 	mscratch <= {csr_in, mscratch[31:1]};
+- 91       if (i_mtvec_en)
+- 92 	mtvec <= {csr_in, mtvec[31:1]};
+
+Clone Blocks:

@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/ecfg_if.v@108:120@HdlStmAssign
+		      (dstaddr[10:8]==3'h5)  & 
+		      (dstaddr[5]==RX);
+   
+
+   //mmu select
+   assign mi_mmu_en = mi_match & 
+		      (dstaddr[19:16]==4'hE) &
+		      (dstaddr[15]==RX);
+
+
+   //read/write indicator
+   assign mi_rd = ~write & (mi_mmu_en | mi_cfg_en | mi_dma_en);   
+   assign mi_we = write  & (mi_mmu_en | mi_cfg_en | mi_dma_en); 
+
+Diff Content:
+- 115 		      (dstaddr[15]==RX);
++ 115 		      (dstaddr[15]==rx_sel);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/ecfg_if.v@114:124
+		      (dstaddr[19:16]==4'hE) &
+		      (dstaddr[15]==RX);
+
+
+   //read/write indicator
+   assign mi_rd = ~write & (mi_mmu_en | mi_cfg_en | mi_dma_en);   
+   assign mi_we = write  & (mi_mmu_en | mi_cfg_en | mi_dma_en); 
+   
+   //ADDR
+   assign mi_addr[14:0] = dstaddr[14:0];
+   
+

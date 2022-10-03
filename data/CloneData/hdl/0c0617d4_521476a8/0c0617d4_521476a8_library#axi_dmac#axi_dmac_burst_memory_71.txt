@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@250:268@HdlStmProcess
+/*
+ * The data valid signal for the destination side is asserted if there are one
+ * or more pending bursts. It is de-asserted if there are no more pending burst
+ * and it is the last beat of the current burst
+ */
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_valid <= 1'b0;
+  end else if (dest_burst_valid == 1'b1) begin
+    dest_valid <= 1'b1;
+  end else if (dest_last_beat == 1'b1) begin
+    dest_valid <= 1'b0;
+  end
+end
+
+/*
+ * The output register of the memory creates a extra clock cycle of latency on
+ * the data path. We need to handle this more the handshaking signals. If data
+ * is available in the memory it will be available one clock cycle later in the
+
+Diff Content:
+- 255 always @(posedge dest_clk) begin
+- 256   if (dest_reset == 1'b1) begin
+- 257     dest_valid <= 1'b0;
+- 258   end else if (dest_burst_valid == 1'b1) begin
+- 259     dest_valid <= 1'b1;
+- 260   end else if (dest_last_beat == 1'b1) begin
+- 261     dest_valid <= 1'b0;
+- 262   end
+- 263 end
+
+Clone Blocks:

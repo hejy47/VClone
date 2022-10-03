@@ -1,0 +1,39 @@
+Source Block: hdl/library/axi_hdmi_rx/axi_hdmi_rx_core.v@274:303@HdlStmIf
+  // use iddr if interfacing off-chip (keeps iob)
+  // use same edge (or register falling edge again)
+
+  genvar n;
+  generate
+  if (IO_INTERFACE == 0) begin
+  for (n = 0; n < 16; n = n + 1) begin: g_hdmi_data
+  IDDR #(
+    .DDR_CLK_EDGE ("SAME_EDGE_PIPELINED"),
+    .INIT_Q1 (1'b0),
+    .INIT_Q2 (1'b0),
+    .SRTYPE ("ASYNC"))
+  i_rx_data_iddr (
+    .CE (1'b1),
+    .R (1'b0),
+    .S (1'b0),
+    .C (hdmi_clk),
+    .D (hdmi_data[n]),
+    .Q1 (hdmi_data_p_s[n]),
+    .Q2 (hdmi_data_n_s[n]));
+  end
+  end else begin
+  assign hdmi_data_p_s = hdmi_data;
+  assign hdmi_data_n_s = hdmi_data;
+  end
+  endgenerate
+
+  always @(posedge hdmi_clk) begin
+    if (hdmi_edge_sel == 1'b1) begin
+      hdmi_data_p <= hdmi_data_n_s;
+
+Diff Content:
+- 285     .SRTYPE ("ASYNC"))
+- 286   i_rx_data_iddr (
++ 286     .SRTYPE ("ASYNC")
++ 286   ) i_rx_data_iddr (
+
+Clone Blocks:

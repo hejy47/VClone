@@ -1,0 +1,103 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3955:3967@HdlStmAssign
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign wr_gray_next[FAD:0] = {1'b0,wr_binary_next[FAD:1]} ^ wr_binary_next[FAD:0];
+
+   //# FIFO full indication
+   assign wr_fifo_full_next = (wr_gray_next[FAD-2:0] == rd_gray_pointer[FAD-2:0]) &
+                              (wr_gray_next[FAD]     ^  rd_gray_pointer[FAD])     &
+                              (wr_gray_next[FAD-1]   ^  rd_gray_pointer[FAD-1]);
+			      
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+       wr_fifo_full <= 1'b0;
+     else if(cclk_en)
+
+Diff Content:
+- 3960    assign wr_fifo_full_next = (wr_gray_next[FAD-2:0] == rd_gray_pointer[FAD-2:0]) &
+- 3961                               (wr_gray_next[FAD]     ^  rd_gray_pointer[FAD])     &
+- 3962                               (wr_gray_next[FAD-1]   ^  rd_gray_pointer[FAD-1]);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2283:2293
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign rd_gray_next[FAD:0]  = {1'b0,rd_binary_next[FAD:1]} ^ rd_binary_next[FAD:0];
+
+   //# FIFO empty indication
+   assign fifo_empty_next = (rd_gray_next[FAD:0]==wr_gray_pointer[FAD:0]);
+
+   always @ (posedge cclk or posedge reset)
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@3941:3956
+   //# While for the actual address calculation we use [FAD-1:0] bits only,
+   //# the bit FAD of the counter is needed in order to distinguish
+   //# between the fifo entry currently being written and the one
+   //# written in the previous "round" (FAD is a carry-out bit and is
+   //# switched every "round")
+   always @(posedge cclk or posedge reset)
+     if(reset)
+       wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
+     else if(cclk_en)
+       if(wr_write)
+	 wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
+   
+   assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
+   assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},wr_write};
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@3952:3962
+   
+   assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
+   assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},wr_write};
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign wr_gray_next[FAD:0] = {1'b0,wr_binary_next[FAD:1]} ^ wr_binary_next[FAD:0];
+
+   //# FIFO full indication
+   assign wr_fifo_full_next = (wr_gray_next[FAD-2:0] == rd_gray_pointer[FAD-2:0]) &
+                              (wr_gray_next[FAD]     ^  rd_gray_pointer[FAD])     &
+                              (wr_gray_next[FAD-1]   ^  rd_gray_pointer[FAD-1]);
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@2251:2264
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign wr_gray_next_rlc[FAD:0] = {1'b0,wr_binary_next_rlc[FAD:1]} ^ 
+				    wr_binary_next_rlc[FAD:0];
+
+   //# FIFO full indication
+   assign fifo_full_next_rlc = 
+			   (wr_gray_next_rlc[FAD-2:0] == rd_gray_pointer_rlc[FAD-2:0]) &
+                           (wr_gray_next_rlc[FAD]     ^  rd_gray_pointer_rlc[FAD])     &
+                           (wr_gray_next_rlc[FAD-1]   ^  rd_gray_pointer_rlc[FAD-1]);
+			      
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       fifo_full_rlc <= 1'b0;
+     else 
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@3959:3973
+   //# FIFO full indication
+   assign wr_fifo_full_next = (wr_gray_next[FAD-2:0] == rd_gray_pointer[FAD-2:0]) &
+                              (wr_gray_next[FAD]     ^  rd_gray_pointer[FAD])     &
+                              (wr_gray_next[FAD-1]   ^  rd_gray_pointer[FAD-1]);
+			      
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+       wr_fifo_full <= 1'b0;
+     else if(cclk_en)
+       wr_fifo_full <=wr_fifo_full_next;
+
+   //#############################
+   //# FIFO Read State Machine
+   //#############################
+    
+

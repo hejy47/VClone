@@ -1,0 +1,203 @@
+Source Block: verilog-ethernet/rtl/ip_eth_tx.v@180:373@HdlStmProcess
+        t = a+b;
+        add1c16b = t[15:0] + t[16];
+    end
+endfunction
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    s_ip_hdr_ready_next = 1'b0;
+    s_ip_payload_axis_tready_next = 1'b0;
+
+    store_ip_hdr = 1'b0;
+
+    store_last_word = 1'b0;
+
+    hdr_ptr_next = hdr_ptr_reg;
+    word_count_next = word_count_reg;
+
+    hdr_sum_next = hdr_sum_reg;
+
+    m_eth_hdr_valid_next = m_eth_hdr_valid_reg && !m_eth_hdr_ready;
+
+    error_payload_early_termination_next = 1'b0;
+
+    m_eth_payload_axis_tdata_int = 8'd0;
+    m_eth_payload_axis_tvalid_int = 1'b0;
+    m_eth_payload_axis_tlast_int = 1'b0;
+    m_eth_payload_axis_tuser_int = 1'b0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            hdr_ptr_next = 6'd0;
+            s_ip_hdr_ready_next = !m_eth_hdr_valid_next;
+
+            if (s_ip_hdr_ready && s_ip_hdr_valid) begin
+                store_ip_hdr = 1'b1;
+                s_ip_hdr_ready_next = 1'b0;
+                m_eth_hdr_valid_next = 1'b1;
+                if (m_eth_payload_axis_tready_int_reg) begin
+                    m_eth_payload_axis_tvalid_int = 1'b1;
+                    m_eth_payload_axis_tdata_int = {4'd4, 4'd5}; // ip_version, ip_ihl
+                    hdr_ptr_next = 6'd1;
+                end
+                state_next = STATE_WRITE_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_WRITE_HEADER: begin
+            // write header
+            word_count_next = ip_length_reg - 5*4;
+
+            if (m_eth_payload_axis_tready_int_reg) begin
+                hdr_ptr_next = hdr_ptr_reg + 6'd1;
+                m_eth_payload_axis_tvalid_int = 1;
+                state_next = STATE_WRITE_HEADER;
+                case (hdr_ptr_reg)
+                    6'h00: begin
+                        m_eth_payload_axis_tdata_int = {4'd4, 4'd5}; // ip_version, ip_ihl
+                    end
+                    6'h01: begin
+                        m_eth_payload_axis_tdata_int = {ip_dscp_reg, ip_ecn_reg};
+                        hdr_sum_next = {4'd4, 4'd5, ip_dscp_reg, ip_ecn_reg};
+                    end
+                    6'h02: begin
+                        m_eth_payload_axis_tdata_int = ip_length_reg[15: 8];
+                        hdr_sum_next = add1c16b(hdr_sum_reg, ip_length_reg);
+                    end
+                    6'h03: begin
+                        m_eth_payload_axis_tdata_int = ip_length_reg[ 7: 0];
+                        hdr_sum_next = add1c16b(hdr_sum_reg, ip_identification_reg);
+                    end
+                    6'h04: begin
+                        m_eth_payload_axis_tdata_int = ip_identification_reg[15: 8];
+                        hdr_sum_next = add1c16b(hdr_sum_reg, {ip_flags_reg, ip_fragment_offset_reg});
+                    end
+                    6'h05: begin
+                        m_eth_payload_axis_tdata_int = ip_identification_reg[ 7: 0];
+                        hdr_sum_next = add1c16b(hdr_sum_reg, {ip_ttl_reg, ip_protocol_reg});
+                    end
+                    6'h06: begin
+                        m_eth_payload_axis_tdata_int = {ip_flags_reg, ip_fragment_offset_reg[12:8]};
+                        hdr_sum_next = add1c16b(hdr_sum_reg, ip_source_ip_reg[31:16]);
+                    end
+                    6'h07: begin
+                        m_eth_payload_axis_tdata_int = ip_fragment_offset_reg[ 7: 0];
+                        hdr_sum_next = add1c16b(hdr_sum_reg, ip_source_ip_reg[15:0]);
+                    end
+                    6'h08: begin
+                        m_eth_payload_axis_tdata_int = ip_ttl_reg;
+                        hdr_sum_next = add1c16b(hdr_sum_reg, ip_dest_ip_reg[31:16]);
+                    end
+                    6'h09: begin
+                        m_eth_payload_axis_tdata_int = ip_protocol_reg;
+                        hdr_sum_next = add1c16b(hdr_sum_reg, ip_dest_ip_reg[15:0]);
+                    end
+                    6'h0A: m_eth_payload_axis_tdata_int = ~hdr_sum_reg[15: 8];
+                    6'h0B: m_eth_payload_axis_tdata_int = ~hdr_sum_reg[ 7: 0];
+                    6'h0C: m_eth_payload_axis_tdata_int = ip_source_ip_reg[31:24];
+                    6'h0D: m_eth_payload_axis_tdata_int = ip_source_ip_reg[23:16];
+                    6'h0E: m_eth_payload_axis_tdata_int = ip_source_ip_reg[15: 8];
+                    6'h0F: m_eth_payload_axis_tdata_int = ip_source_ip_reg[ 7: 0];
+                    6'h10: m_eth_payload_axis_tdata_int = ip_dest_ip_reg[31:24];
+                    6'h11: m_eth_payload_axis_tdata_int = ip_dest_ip_reg[23:16];
+                    6'h12: m_eth_payload_axis_tdata_int = ip_dest_ip_reg[15: 8];
+                    6'h13: begin
+                        m_eth_payload_axis_tdata_int = ip_dest_ip_reg[ 7: 0];
+                        s_ip_payload_axis_tready_next = m_eth_payload_axis_tready_int_early;
+                        state_next = STATE_WRITE_PAYLOAD;
+                    end
+                endcase
+            end else begin
+                state_next = STATE_WRITE_HEADER;
+            end
+        end
+        STATE_WRITE_PAYLOAD: begin
+            // write payload
+            s_ip_payload_axis_tready_next = m_eth_payload_axis_tready_int_early;
+
+            m_eth_payload_axis_tdata_int = s_ip_payload_axis_tdata;
+            m_eth_payload_axis_tvalid_int = s_ip_payload_axis_tvalid;
+            m_eth_payload_axis_tlast_int = s_ip_payload_axis_tlast;
+            m_eth_payload_axis_tuser_int = s_ip_payload_axis_tuser;
+
+            if (s_ip_payload_axis_tready && s_ip_payload_axis_tvalid) begin
+                // word transfer through
+                word_count_next = word_count_reg - 6'd1;
+                if (s_ip_payload_axis_tlast) begin
+                    if (word_count_reg != 16'd1) begin
+                        // end of frame, but length does not match
+                        m_eth_payload_axis_tuser_int = 1'b1;
+                        error_payload_early_termination_next = 1'b1;
+                    end
+                    s_ip_hdr_ready_next = !m_eth_hdr_valid_next;
+                    s_ip_payload_axis_tready_next = 1'b0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    if (word_count_reg == 16'd1) begin
+                        store_last_word = 1'b1;
+                        m_eth_payload_axis_tvalid_int = 1'b0;
+                        state_next = STATE_WRITE_PAYLOAD_LAST;
+                    end else begin
+                        state_next = STATE_WRITE_PAYLOAD;
+                    end
+                end
+            end else begin
+                state_next = STATE_WRITE_PAYLOAD;
+            end
+        end
+        STATE_WRITE_PAYLOAD_LAST: begin
+            // read and discard until end of frame
+            s_ip_payload_axis_tready_next = m_eth_payload_axis_tready_int_early;
+
+            m_eth_payload_axis_tdata_int = last_word_data_reg;
+            m_eth_payload_axis_tvalid_int = s_ip_payload_axis_tvalid && s_ip_payload_axis_tlast;
+            m_eth_payload_axis_tlast_int = s_ip_payload_axis_tlast;
+            m_eth_payload_axis_tuser_int = s_ip_payload_axis_tuser;
+
+            if (s_ip_payload_axis_tready && s_ip_payload_axis_tvalid) begin
+                if (s_ip_payload_axis_tlast) begin
+                    s_ip_hdr_ready_next = !m_eth_hdr_valid_next;
+                    s_ip_payload_axis_tready_next = 1'b0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WRITE_PAYLOAD_LAST;
+                end
+            end else begin
+                state_next = STATE_WRITE_PAYLOAD_LAST;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // read and discard until end of frame
+            s_ip_payload_axis_tready_next = 1'b1;
+
+            if (s_ip_payload_axis_tready && s_ip_payload_axis_tvalid) begin
+                if (s_ip_payload_axis_tlast) begin
+                    s_ip_hdr_ready_next = !m_eth_hdr_valid_next;
+                    s_ip_payload_axis_tready_next = 1'b0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT_LAST;
+                end
+            end else begin
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        s_ip_hdr_ready_reg <= 1'b0;
+
+Diff Content:
+- 301             m_eth_payload_axis_tvalid_int = s_ip_payload_axis_tvalid;
+- 335             m_eth_payload_axis_tvalid_int = s_ip_payload_axis_tvalid && s_ip_payload_axis_tlast;
++ 307                 m_eth_payload_axis_tvalid_int = 1'b1;
++ 342                     m_eth_payload_axis_tvalid_int = 1'b1;
+
+Clone Blocks:

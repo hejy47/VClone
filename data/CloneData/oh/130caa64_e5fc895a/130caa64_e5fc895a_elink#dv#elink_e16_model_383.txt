@@ -1,0 +1,43 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3446:3459@HdlStmAssign
+   assign txo_data_even[LW-1:0] = c0_tran_byte_even_tlc[LW-1:0] |
+				  c1_tran_byte_even_tlc[LW-1:0] |
+				  c2_tran_byte_even_tlc[LW-1:0] |
+				  c3_tran_byte_even_tlc[LW-1:0];
+
+   assign txo_data_odd[LW-1:0] = c0_tran_byte_odd_tlc[LW-1:0] |
+				 c1_tran_byte_odd_tlc[LW-1:0] |
+				 c2_tran_byte_odd_tlc[LW-1:0] |
+				 c3_tran_byte_odd_tlc[LW-1:0];
+
+endmodule // link_txo_buffer
+
+
+
+
+Diff Content:
+- 3451    assign txo_data_odd[LW-1:0] = c0_tran_byte_odd_tlc[LW-1:0] |
+- 3452 				 c1_tran_byte_odd_tlc[LW-1:0] |
+- 3453 				 c2_tran_byte_odd_tlc[LW-1:0] |
+- 3454 				 c3_tran_byte_odd_tlc[LW-1:0];
++ 3454    /********************************************/
++ 3454    /*Address Decoding                          */
++ 3454    /********************************************/
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3441:3454
+   //###########################################
+
+   assign txo_frame = c0_tran_frame_tlc | c1_tran_frame_tlc |
+		      c2_tran_frame_tlc | c3_tran_frame_tlc;
+
+   assign txo_data_even[LW-1:0] = c0_tran_byte_even_tlc[LW-1:0] |
+				  c1_tran_byte_even_tlc[LW-1:0] |
+				  c2_tran_byte_even_tlc[LW-1:0] |
+				  c3_tran_byte_even_tlc[LW-1:0];
+
+   assign txo_data_odd[LW-1:0] = c0_tran_byte_odd_tlc[LW-1:0] |
+				 c1_tran_byte_odd_tlc[LW-1:0] |
+				 c2_tran_byte_odd_tlc[LW-1:0] |
+				 c3_tran_byte_odd_tlc[LW-1:0];
+

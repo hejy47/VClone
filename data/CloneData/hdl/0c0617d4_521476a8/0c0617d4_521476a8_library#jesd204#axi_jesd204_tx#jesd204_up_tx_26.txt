@@ -1,0 +1,92 @@
+Source Block: hdl/library/jesd204/axi_jesd204_tx/jesd204_up_tx.v@199:245@HdlStmProcess
+
+/* Per lane ILAS data */
+reg [4:0] up_cfg_ilas_data_lid[0:NUM_LANES-1];
+reg [7:0] up_cfg_ilas_data_fchk[0:NUM_LANES-1];
+
+always @(*) begin
+  for (i = 0; i < NUM_LANES; i = i + 1) begin
+    up_cfg_ilas_data[i][0] = {
+      4'b0000,
+      up_cfg_ilas_data_bid,
+      up_cfg_ilas_data_did,
+      16'h00
+    };
+    up_cfg_ilas_data[i][1] = {
+      3'b000,
+      up_cfg_ilas_data_k,
+      up_cfg_ilas_data_f,
+      up_cfg_ilas_data_scr,
+      2'b00,
+      up_cfg_ilas_data_l,
+      3'b000,
+      up_cfg_ilas_data_lid[i]
+    };
+    up_cfg_ilas_data[i][2] = {
+      up_cfg_ilas_data_jesdv,
+      up_cfg_ilas_data_s,
+      up_cfg_ilas_data_subclassv,
+      up_cfg_ilas_data_np,
+      up_cfg_ilas_data_cs,
+      1'b0,
+      up_cfg_ilas_data_n,
+      up_cfg_ilas_data_m
+    };
+    up_cfg_ilas_data[i][3] = {
+      up_cfg_ilas_data_fchk[i],
+      16'h0000,
+      up_cfg_ilas_data_hd,
+      2'b00,
+      up_cfg_ilas_data_cf
+    };
+  end
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_cfg_ilas_data_did <= 'h00;
+    up_cfg_ilas_data_bid <= 'h00;
+
+Diff Content:
+- 204 always @(*) begin
+- 205   for (i = 0; i < NUM_LANES; i = i + 1) begin
+- 206     up_cfg_ilas_data[i][0] = {
+- 207       4'b0000,
+- 208       up_cfg_ilas_data_bid,
+- 209       up_cfg_ilas_data_did,
+- 210       16'h00
+- 211     };
+- 212     up_cfg_ilas_data[i][1] = {
+- 213       3'b000,
+- 214       up_cfg_ilas_data_k,
+- 215       up_cfg_ilas_data_f,
+- 216       up_cfg_ilas_data_scr,
+- 217       2'b00,
+- 218       up_cfg_ilas_data_l,
+- 219       3'b000,
+- 220       up_cfg_ilas_data_lid[i]
+- 221     };
+- 222     up_cfg_ilas_data[i][2] = {
+- 223       up_cfg_ilas_data_jesdv,
+- 224       up_cfg_ilas_data_s,
+- 225       up_cfg_ilas_data_subclassv,
+- 226       up_cfg_ilas_data_np,
+- 227       up_cfg_ilas_data_cs,
+- 228       1'b0,
+- 229       up_cfg_ilas_data_n,
+- 230       up_cfg_ilas_data_m
+- 231     };
+- 232     up_cfg_ilas_data[i][3] = {
+- 233       up_cfg_ilas_data_fchk[i],
+- 234       16'h0000,
+- 235       up_cfg_ilas_data_hd,
+- 236       2'b00,
+- 237       up_cfg_ilas_data_cf
+- 238     };
+- 239   end
+- 240 end
++ 240   /* Per lane ILAS data */
++ 240   reg [4:0] up_cfg_ilas_data_lid[0:NUM_LANES-1];
++ 240   reg [7:0] up_cfg_ilas_data_fchk[0:NUM_LANES-1];
+
+Clone Blocks:

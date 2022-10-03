@@ -1,0 +1,50 @@
+Source Block: oh/elink/hdl/etx_io.v@112:140@HdlStmProcess
+   
+   //#############################
+   //# SELECTING DATA PER CYCLE
+   //#############################  
+   //optimize later...
+   always @ (negedge tx_lclk)
+     case(tx_pointer[6:0])
+       //Cycle0
+       7'b0000001: tx_data16[15:0] <= {ctrlmode[3:0],dstaddr[31:28],~write,7'b0};
+       //Cycle1
+       7'b0000010: tx_data16[15:0] <= {dstaddr[19:12],dstaddr[27:20]};
+       //Cycle2
+       7'b0000100: tx_data16[15:0] <= {dstaddr[3:0],datamode[1:0],write,access,
+				        dstaddr[11:4]};       
+       //Cycle3
+       7'b0001000: tx_data16[15:0] <= {data[23:16],data[31:24]};
+       //Cycle4				      
+       7'b0010000: tx_data16[15:0] <= {data[7:0],data[15:8]};            
+       //Cycle5
+       7'b0100000: tx_data16[15:0] <= {srcaddr[23:16],srcaddr[31:24]};
+       //Cycle6
+       7'b1000000: tx_data16[15:0] <= {srcaddr[7:0],srcaddr[15:8]};
+       default  tx_data16[15:0]    <= 16'b0;
+     endcase // case (tx_pointer[7:0])
+             
+   //#############################
+   //# DATA (DDR)
+   //#############################  
+   always @ (negedge tx_lclk)
+
+Diff Content:
+- 118      case(tx_pointer[6:0])
+- 120        7'b0000001: tx_data16[15:0] <= {ctrlmode[3:0],dstaddr[31:28],~write,7'b0};
+- 122        7'b0000010: tx_data16[15:0] <= {dstaddr[19:12],dstaddr[27:20]};
+- 124        7'b0000100: tx_data16[15:0] <= {dstaddr[3:0],datamode[1:0],write,access,
+- 127        7'b0001000: tx_data16[15:0] <= {data[23:16],data[31:24]};
+- 129        7'b0010000: tx_data16[15:0] <= {data[7:0],data[15:8]};            
+- 131        7'b0100000: tx_data16[15:0] <= {srcaddr[23:16],srcaddr[31:24]};
+- 133        7'b1000000: tx_data16[15:0] <= {srcaddr[7:0],srcaddr[15:8]};
++ 118      case({tx_access,tx_pointer[6:0]})
++ 120        8'b10000001: tx_data16[15:0] <= {ctrlmode[3:0],dstaddr[31:28],~write,7'b0};
++ 122        8'b10000010: tx_data16[15:0] <= {dstaddr[19:12],dstaddr[27:20]};
++ 124        8'b10000100: tx_data16[15:0] <= {dstaddr[3:0],datamode[1:0],write,access,
++ 127        8'b10001000: tx_data16[15:0] <= {data[23:16],data[31:24]};
++ 129        8'b10010000: tx_data16[15:0] <= {data[7:0],data[15:8]};            
++ 131        8'b10100000: tx_data16[15:0] <= {srcaddr[23:16],srcaddr[31:24]};
++ 133        8'b11000000: tx_data16[15:0] <= {srcaddr[7:0],srcaddr[15:8]};
+
+Clone Blocks:

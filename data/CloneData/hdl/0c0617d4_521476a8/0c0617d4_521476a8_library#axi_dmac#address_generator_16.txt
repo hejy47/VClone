@@ -1,0 +1,63 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@117:136@HdlStmProcess
+  if (bl_valid == 1'b1 && bl_ready == 1'b1) begin
+    last_burst_len <= measured_last_burst_length;
+  end
+end
+
+always @(posedge clk) begin
+  if (addr_valid == 1'b0) begin
+    last <= eot;
+    if (eot == 1'b1) begin
+      length <= last_burst_len;
+    end else begin
+      length <= MAX_LENGTH;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (req_ready == 1'b1) begin
+    address <= req_address;
+  end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
+
+Diff Content:
+- 122 always @(posedge clk) begin
+- 123   if (addr_valid == 1'b0) begin
+- 124     last <= eot;
+- 125     if (eot == 1'b1) begin
+- 126       length <= last_burst_len;
+- 127     end else begin
+- 128       length <= MAX_LENGTH;
+- 131 end
++ 128   always @(posedge clk) begin
++ 128     if (addr_valid == 1'b0) begin
++ 128       last <= eot;
++ 128       if (eot == 1'b1) begin
++ 128         length <= last_burst_len;
++ 128       end else begin
++ 128         length <= MAX_LENGTH;
++ 128       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@101:119
+reg addr_valid_d1;
+reg last = 1'b0;
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+// we can disable the address generator.
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+  end else if (enable == 1'b1) begin
+    enabled <= 1'b1;
+  end else if (addr_valid == 1'b0) begin
+    enabled <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (bl_valid == 1'b1 && bl_ready == 1'b1) begin
+    last_burst_len <= measured_last_burst_length;
+  end
+

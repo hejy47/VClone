@@ -1,0 +1,18 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@191:201@HdlStmAssign
+  end else begin
+    state <= next_state;
+  end
+end
+
+assign emb_lock = next_state[BIT_EMB_LOCK];
+
+// Status & error events
+assign status_lane_emb_state = state;
+
+always @(posedge clk) begin
+
+Diff Content:
+- 196 assign emb_lock = next_state[BIT_EMB_LOCK];
++ 196   assign emb_lock = next_state[BIT_EMB_LOCK];
+
+Clone Blocks:

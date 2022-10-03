@@ -1,0 +1,17 @@
+Source Block: miaow/src/verilog/rtl/lsu/lsu.v@126:136@HdlStmAssign
+   wire [11:0] router_dest_reg;
+   wire [31:0] rd_opcode;
+   wire [31:0] rd_instr_pc;
+   wire load_src_a, shift_src_a;
+
+   assign exec_rd_wfid = issue_wfid;
+
+//////////////CHANGE
+   // added write enable controlled by freez signal
+   // in order to prevent undesired write to the reg pipeline (front end)
+   PS_flops_issue_lsu flops_issue_lsu(
+
+Diff Content:
+- 131    assign exec_rd_wfid = issue_wfid;
+
+Clone Blocks:

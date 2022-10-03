@@ -1,0 +1,38 @@
+Source Block: oh/elink/hdl/etx_protocol.v@112:125@HdlStmAssign
+   assign current_match     = tx_access & 
+			       tx_write &
+		              (tx_datamode[1:0]==2'b11) &		       
+			      (tx_ctrlmode[3:0]==4'b0000);
+
+   assign next_match       =  etx_access &
+			      etx_write &
+		              (etx_datamode[1:0]==2'b11) &		       
+			      (etx_ctrlmode[3:0]==4'b0000);
+     
+   assign tx_burst        =  ~tx_wait         &
+		   	      current_match    &
+			      next_match       &
+			      burst_addr_match;
+
+Diff Content:
+- 117    assign next_match       =  etx_access &
++ 117    assign next_match       =  etx_access & //BUG: should be valid? 
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@107:120
+   //# Burst Detection
+   //#############################
+
+   assign burst_addr_match  = ((tx_dstaddr[31:0]+32'h8) == etx_dstaddr[31:0]);
+
+   assign current_match     = tx_access & 
+			       tx_write &
+		              (tx_datamode[1:0]==2'b11) &		       
+			      (tx_ctrlmode[3:0]==4'b0000);
+
+   assign next_match       =  etx_access &
+			      etx_write &
+		              (etx_datamode[1:0]==2'b11) &		       
+			      (etx_ctrlmode[3:0]==4'b0000);
+

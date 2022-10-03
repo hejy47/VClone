@@ -1,0 +1,82 @@
+Source Block: oh/elink/hdl/erx_protocol.v@291:334@HdlStmProcess
+        end
+      endcase
+   end // always @ ( posedge rx_lclk_div4 )
+   
+   // 3rd cycle
+   always @( posedge rx_lclk_div4 ) begin
+
+      // default pass-throughs
+      if(~stream_2) begin
+         ctrlmode_2    <= ctrlmode_1;
+         dstaddr_2     <= dstaddr_1;
+         datamode_2    <= datamode_1;
+         write_2       <= write_1;
+         access_2      <= access_1 & rxactive_1;
+      end else begin
+         dstaddr_2     <= dstaddr_2 + 32'h00000008;
+      end
+
+      data_2        <= data_1;
+      srcaddr_2     <= srcaddr_1;
+      stream_2      <= stream_1;
+
+      case( rxalign_1 )
+        // 7-5: Full packet is complete in 2nd cycle
+        3'd4:
+          srcaddr_2[7:0]  <= rx_data_in[63:56];
+        3'd3:
+          srcaddr_2[15:0] <= rx_data_in[63:48];
+        3'd2:
+          srcaddr_2[23:0] <= rx_data_in[63:40];
+        3'd1:
+          srcaddr_2[31:0] <= rx_data_in[63:32];
+        3'd0: begin
+           data_2[7:0]     <= rx_data_in[63:56];
+           srcaddr_2[31:0] <= rx_data_in[55:24];
+        end
+      endcase // case ( rxalign_1 )
+
+   end // always @ ( posedge rx_lclk_div4 )
+   
+/*  The spec says reads use the 'data' slot for src address, but apparently
+    the silicon has not read this spec.
+      if( write_1 ) begin
+
+
+Diff Content:
+- 299       if(~stream_2) begin
+- 300          ctrlmode_2    <= ctrlmode_1;
+- 301          dstaddr_2     <= dstaddr_1;
+- 302          datamode_2    <= datamode_1;
+- 303          write_2       <= write_1;
+- 304          access_2      <= access_1 & rxactive_1;
+- 305       end else begin
+- 306          dstaddr_2     <= dstaddr_2 + 32'h00000008;
+- 307       end
+- 313       case( rxalign_1 )
+- 323         3'd0: begin
+- 324            data_2[7:0]     <= rx_data_in[63:56];
+- 325            srcaddr_2[31:0] <= rx_data_in[55:24];
+- 326         end
++ 307       if(~stream_2) 
++ 307 	begin
++ 307            ctrlmode_2    <= ctrlmode_1;
++ 307            dstaddr_2     <= dstaddr_1;
++ 307            datamode_2    <= datamode_1;
++ 307            write_2       <= write_1;
++ 307            access_2      <= access_1 & rxactive_1;
++ 307 	end 
++ 307       else 
++ 307 	begin
++ 307            dstaddr_2     <= dstaddr_2 + 32'h00000008;
++ 307 	end
++ 313       case( rxalign_1[2:0] )
++ 326         3'd0: 
++ 326 	  begin
++ 326              data_2[7:0]     <= rx_data_in[63:56];
++ 326              srcaddr_2[31:0] <= rx_data_in[55:24];
++ 326           end
++ 326 	default:;//TODO: include error message
+
+Clone Blocks:

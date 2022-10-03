@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616_control.v@136:146@HdlStmAssign
+  assign up_rreq_s = (up_raddr[13:8] == 6'h01) ? up_rreq : 1'b0;
+
+  // the up_[read/write]_data interfaces are valid just in parallel mode
+
+  assign up_read_valid_s = (IF_TYPE == PARALLEL) ? up_read_valid : 1'b1;
+  assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : 32'hDEAD;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 141   assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : 32'hDEAD;
++ 141   assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : {2{16'hDEAD}};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad7616/axi_ad7616_control.v@135:145
+  assign up_wreq_s = (up_waddr[13:8] == 6'h01) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h01) ? up_rreq : 1'b0;
+
+  // the up_[read/write]_data interfaces are valid just in parallel mode
+
+  assign up_read_valid_s = (IF_TYPE == PARALLEL) ? up_read_valid : 1'b1;
+  assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : 32'hDEAD;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+

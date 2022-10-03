@@ -1,0 +1,89 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@215:241@HdlStmProcess
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+// Request ID and Request done bitmap handling
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+    up_transfer_id <= 2'h0;
+    up_transfer_id_eot <= 2'h0;
+    up_transfer_done_bitmap <= 4'h0;
+  end else begin
+    if (up_sot == 1'b1) begin
+      up_transfer_id <= up_transfer_id + 1'b1;
+      up_transfer_done_bitmap[up_transfer_id] <= 1'b0;
+    end
+
+    if (up_eot == 1'b1) begin
+      up_transfer_id_eot <= up_transfer_id_eot + 1'b1;
+      up_transfer_done_bitmap[up_transfer_id_eot] <= 1'b1;
+    end
+  end
+end
+
+assign up_tlf_rd = up_rreq && up_raddr == 'h114;
+assign up_bl_partial = response_valid & response_ready & response_partial & up_dma_enable_tlen_reporting;
+
+always @(posedge clk) begin
+
+Diff Content:
+- 220 always @(posedge clk) begin
+- 221   if (ctrl_enable == 1'b0) begin
+- 222     up_transfer_id <= 2'h0;
+- 223     up_transfer_id_eot <= 2'h0;
+- 224     up_transfer_done_bitmap <= 4'h0;
+- 225   end else begin
+- 226     if (up_sot == 1'b1) begin
+- 227       up_transfer_id <= up_transfer_id + 1'b1;
+- 228       up_transfer_done_bitmap[up_transfer_id] <= 1'b0;
+- 231     if (up_eot == 1'b1) begin
+- 232       up_transfer_id_eot <= up_transfer_id_eot + 1'b1;
+- 233       up_transfer_done_bitmap[up_transfer_id_eot] <= 1'b1;
+- 236 end
++ 228   generate
++ 228   if (DMA_2D_TRANSFER == 1) begin
++ 228     reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
++ 228     reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
++ 228     reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
++ 228     always @(posedge clk) begin
++ 228       if (reset == 1'b1) begin
++ 228         up_dma_y_length <= 'h00;
++ 228         up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= 'h00;
++ 228         up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= 'h00;
++ 228       end else if (up_wreq == 1'b1) begin
++ 228         case (up_waddr)
++ 228         9'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
++ 228         9'h108: up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= up_wdata[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
++ 228         9'h109: up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= up_wdata[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
++ 228         endcase
++ 228       end
++ 229     assign request_y_length = up_dma_y_length;
++ 229     assign request_dest_stride = up_dma_dest_stride;
++ 229     assign request_src_stride = up_dma_src_stride;
++ 229   end else begin
++ 229     assign request_y_length = 'h0;
++ 229     assign request_dest_stride = 'h0;
++ 229     assign request_src_stride = 'h0;
++ 229   end
++ 229   endgenerate
++ 229   assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
++ 229   assign up_eot = up_dma_cyclic ? 1'b0 : response_eot & response_valid & response_ready;
++ 229   assign request_valid = up_dma_req_valid;
++ 229   assign up_dma_req_ready = request_ready;
++ 229   always @(posedge clk) begin
++ 229     if (ctrl_enable == 1'b0) begin
++ 229       up_transfer_id <= 2'h0;
++ 229       up_transfer_id_eot <= 2'h0;
++ 229       up_transfer_done_bitmap <= 4'h0;
++ 229     end else begin
++ 229       if (up_sot == 1'b1) begin
++ 229         up_transfer_id <= up_transfer_id + 1'b1;
++ 229         up_transfer_done_bitmap[up_transfer_id] <= 1'b0;
++ 229       end
++ 233       if (up_eot == 1'b1) begin
++ 233         up_transfer_id_eot <= up_transfer_id_eot + 1'b1;
++ 233         up_transfer_done_bitmap[up_transfer_id_eot] <= 1'b1;
++ 233       end
+
+Clone Blocks:

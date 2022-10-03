@@ -1,0 +1,33 @@
+Source Block: oh/spi/hdl/spi_slave_regs.v@123:135@HdlStmProcess
+  
+   //#####################################
+   //# USER SPACE REGISTERS
+   //#####################################
+
+   always @ (posedge spi_clk)
+     if(spi_user_write)
+       user_regs[spi_addr[5:0]] <= spi_wdata[7:0]; 
+
+   //#####################################
+   //# READBACK
+   //#####################################
+
+
+Diff Content:
+- 128    always @ (posedge spi_clk)
+- 130        user_regs[spi_addr[5:0]] <= spi_wdata[7:0]; 
++ 128    always @ (negedge spi_clk)
++ 130        user_regs[spi_addr[4:0]] <= spi_wdata[7:0]; 
++ 130    always @*
++ 130      begin
++ 130 	spi_regs[7:0]   = spi_config[7:0];
++ 130 	spi_regs[15:8]  = spi_status[7:0];
++ 130 	spi_regs[63:16] = 'b0;
++ 130 	spi_regs[127:64] = core_regs[63:0];
++ 130 	spi_regs[255:128] = 'b0;
++ 130 	for(i=0;i<32;i=i+1)
++ 130 	  spi_regs[256+8*i+:8] = user_regs[i];
++ 130      end
++ 130    assign spi_rdata[7:0] = spi_regs[8*spi_addr[5:0]+:8];
+
+Clone Blocks:

@@ -1,0 +1,45 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3930:3940@HdlStmAssign
+                                      traninfo2_tlc[2*LW-1:4]};
+
+   assign next_datamode_tlc[1:0] = traninfo2_tlc[3:2];
+
+   assign next_write_tlc  = traninfo2_tlc[1];
+   assign next_access_tlc = traninfo2_tlc[0];
+
+   //#####################################
+   //# FIFO Write State Machine
+   //#####################################
+
+
+Diff Content:
+- 3935    assign next_access_tlc = traninfo2_tlc[0];
++ 3935    input       c0_txo_launch_req_tlc; // Launch request
++ 3935    input       c0_txo_rotate_dis;     // Arbiter's rotate disable 
++ 3935    input       c1_txo_launch_req_tlc; // Launch request
++ 3935    input       c1_txo_rotate_dis;     // Arbiter's rotate disable 
++ 3935    input       c2_txo_launch_req_tlc; // Launch request
++ 3935    input       c2_txo_rotate_dis;     // Arbiter's rotate disable 
++ 3935    input       c3_txo_launch_req_tlc; // Launch request
++ 3935    input       c3_txo_rotate_dis;     // Arbiter's rotate disable 
++ 3935    output      txo_launch_req_tlc;
++ 3935    output      txo_rotate_dis_tlc;
++ 3935    output      c0_txo_launch_ack_tlc;
++ 3935    output      c1_txo_launch_ack_tlc;
++ 3935    output      c2_txo_launch_ack_tlc;
++ 3935    output      c3_txo_launch_ack_tlc;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3929:3939
+                                      traninfo1_tlc[2*LW-1:0],
+                                      traninfo2_tlc[2*LW-1:4]};
+
+   assign next_datamode_tlc[1:0] = traninfo2_tlc[3:2];
+
+   assign next_write_tlc  = traninfo2_tlc[1];
+   assign next_access_tlc = traninfo2_tlc[0];
+
+   //#####################################
+   //# FIFO Write State Machine
+   //#####################################
+

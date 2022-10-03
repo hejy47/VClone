@@ -1,0 +1,32 @@
+Source Block: hdl/library/util_dac_unpack/util_dac_unpack.v@119:129@HdlIdDef
+  input                             fifo_valid;
+  output                            dma_rd;
+  input   [CHANNELS*DATA_WIDTH-1:0] dma_data;
+
+
+  localparam DMA_WIDTH = CHANNELS*DATA_WIDTH;
+
+  wire [CHANNELS-1:0]            dac_enable;
+  wire [CHANNELS-1:0]            dac_valid;
+
+  wire [DATA_WIDTH-1:0]          data_array[0:CHANNELS-1];
+
+Diff Content:
+- 124   localparam DMA_WIDTH = CHANNELS*DATA_WIDTH;
++ 124   localparam DMA_DATA_WIDTH = NUM_OF_CHANNELS*DATA_WIDTH;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_dac_unpack/util_dac_unpack.v@121:131
+  input   [CHANNELS*DATA_WIDTH-1:0] dma_data;
+
+
+  localparam DMA_WIDTH = CHANNELS*DATA_WIDTH;
+
+  wire [CHANNELS-1:0]            dac_enable;
+  wire [CHANNELS-1:0]            dac_valid;
+
+  wire [DATA_WIDTH-1:0]          data_array[0:CHANNELS-1];
+
+  wire [$clog2(CHANNELS)-1:0]    offset [0:CHANNELS-1];
+

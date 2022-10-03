@@ -1,0 +1,74 @@
+Source Block: hdl/projects/daq1/cpld/daq1_cpld.v@175:185@HdlStmAssign
+  assign sdio = cpld_to_fpga ? 1'bZ : fmc_spi_sdio;
+  assign fmc_spi_sdio = cpld_to_fpga ? cpld_rdata_s : 1'bZ ;
+  assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
+  assign rdnwr = fmc_cpld_addr[7];
+
+  assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
+
+  always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
+    if (fmc_spi_csn == 1'b1) begin
+      fmc_spi_counter <= 6'h0;
+      cpld_to_fpga <= 1'b0;
+
+Diff Content:
+- 180   assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
++ 180   assign sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/daq1/cpld/daq1_cpld.v@170:180
+  assign clk_spicsn = (fmc_spi_dev_sel == FMC_SPI_SEL_AD9523) ? (fmc_spi_csn | fmc_spi_csn_enb) : 1'b1;
+  assign cpld_spicsn = (fmc_spi_dev_sel == FMC_SPI_SEL_CPLD) ? (fmc_spi_csn | fmc_spi_csn_enb) : 1'b1;
+
+  // SPI control and data
+
+  assign sdio = cpld_to_fpga ? 1'bZ : fmc_spi_sdio;
+  assign fmc_spi_sdio = cpld_to_fpga ? cpld_rdata_s : 1'bZ ;
+  assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
+  assign rdnwr = fmc_cpld_addr[7];
+
+  assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
+
+Clone Blocks 2:
+hdl/projects/daq1/cpld/daq1_cpld.v@172:182
+
+  // SPI control and data
+
+  assign sdio = cpld_to_fpga ? 1'bZ : fmc_spi_sdio;
+  assign fmc_spi_sdio = cpld_to_fpga ? cpld_rdata_s : 1'bZ ;
+  assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
+  assign rdnwr = fmc_cpld_addr[7];
+
+  assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
+
+  always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
+
+Clone Blocks 3:
+hdl/projects/daq1/cpld/daq1_cpld.v@171:181
+  assign cpld_spicsn = (fmc_spi_dev_sel == FMC_SPI_SEL_CPLD) ? (fmc_spi_csn | fmc_spi_csn_enb) : 1'b1;
+
+  // SPI control and data
+
+  assign sdio = cpld_to_fpga ? 1'bZ : fmc_spi_sdio;
+  assign fmc_spi_sdio = cpld_to_fpga ? cpld_rdata_s : 1'bZ ;
+  assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
+  assign rdnwr = fmc_cpld_addr[7];
+
+  assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
+
+
+Clone Blocks 4:
+hdl/projects/daq1/cpld/daq1_cpld.v@173:183
+  // SPI control and data
+
+  assign sdio = cpld_to_fpga ? 1'bZ : fmc_spi_sdio;
+  assign fmc_spi_sdio = cpld_to_fpga ? cpld_rdata_s : 1'bZ ;
+  assign cpld_rdata_s = cpld_spicsn ? sdio : cpld_rdata_bit;
+  assign rdnwr = fmc_cpld_addr[7];
+
+  assign    sclk = (~(fmc_spi_csn | fmc_spi_csn_enb)) ? fmc_spi_sclk : 1'b0;
+
+  always @(negedge fmc_spi_sclk or posedge fmc_spi_csn) begin
+    if (fmc_spi_csn == 1'b1) begin
+

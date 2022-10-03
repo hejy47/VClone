@@ -1,0 +1,74 @@
+Source Block: hdl/library/data_offload/data_offload_fsm.v@280:346@HdlStmProcess
+      end
+    end
+  end
+
+  // Mealy state machine for read control
+  always @(posedge rd_clk) begin
+    if (rd_resetn_in == 1'b0) begin
+      rd_fsm_state <= RD_IDLE;
+    end else begin
+      case (rd_fsm_state)
+
+        RD_IDLE: begin
+          if (((!TX_OR_RXN_PATH) & rd_isfull_s) || (rd_wr_last_s)) begin
+            if (TX_OR_RXN_PATH) begin
+              rd_fsm_state <= RD_SYNC;
+            end else begin
+              rd_fsm_state <= RD_READ_FROM_MEM;
+            end
+          end else begin
+            rd_fsm_state <= RD_IDLE;
+          end
+        end
+
+        RD_SYNC : begin
+          // do not lock the FSM if something goes wrong
+          if (!TX_OR_RXN_PATH) begin
+            rd_fsm_state <= RD_READ_FROM_MEM;
+          end else begin // TX_OR_RXN_PATH
+            case (sync_config)
+              AUTOMATIC: begin
+                rd_fsm_state <= RD_READ_FROM_MEM;
+              end
+              HARDWARE: begin
+                if (rd_sync_external_s) begin
+                  rd_fsm_state <= RD_READ_FROM_MEM;
+                end
+              end
+              SOFTWARE: begin
+                if (rd_sync_internal_s) begin
+                  rd_fsm_state <= RD_READ_FROM_MEM;
+                end
+              end
+              default: begin
+                rd_fsm_state <= RD_READ_FROM_MEM;
+              end
+            endcase
+          end
+        end
+
+        // read until empty or next init_req
+        RD_READ_FROM_MEM : begin
+          if ((rd_empty_s && (rd_init_req_s || (rd_oneshot && rd_last)) && rd_ready)) begin
+            rd_fsm_state <= RD_IDLE;
+          end else begin
+            rd_fsm_state <= RD_READ_FROM_MEM;
+          end
+        end
+
+        default : rd_fsm_state <= RD_IDLE;
+      endcase
+    end
+  end
+
+  // the initialization interface (init_req) is edge sensitive
+  // TODO: This should be redefined! Will work only of init_req is active
+  // during the whole DMA transfer (use xfer_req for driving init_req)
+  always @(posedge rd_clk) begin
+
+Diff Content:
+- 318                 if (rd_sync_internal_s) begin
++ 318                 if (sync_internal) begin
+
+Clone Blocks:

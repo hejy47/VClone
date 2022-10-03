@@ -1,0 +1,56 @@
+Source Block: oh/gpio/hdl/gpio.v@101:117@HdlStmProcess
+   //################################
+   //# OUTPUT CONTROL REGISTERS
+   //################################ 
+
+   //ODATA
+   always @ (posedge clk)
+     if(odata_write)
+       odata_reg[N-1:0] <= data_in[N-1:0];
+     else if(odataand_write)
+       odata_reg[N-1:0] <= data_in[N-1:0] & odata_reg[N-1:0];
+     else if(odataorr_write)
+       odata_reg[N-1:0] <= data_in[N-1:0] | odata_reg[N-1:0];
+   
+   assign gpio_out[N-1:0] = odata_reg[N-1:0];
+
+   //OEN
+   always @ (posedge clk)
+
+Diff Content:
+- 106    always @ (posedge clk)
+- 107      if(odata_write)
+- 108        odata_reg[N-1:0] <= data_in[N-1:0];
+- 109      else if(odataand_write)
+- 110        odata_reg[N-1:0] <= data_in[N-1:0] & odata_reg[N-1:0];
+- 111      else if(odataorr_write)
+- 112        odata_reg[N-1:0] <= data_in[N-1:0] | odata_reg[N-1:0];
++ 112    always @ (posedge clk or negedge nreset)
++ 112      if(!nreset)
++ 112        oen_reg[63:0] <= 'b0;   
++ 112      else if(oen_write & reg_double)
++ 112        oen_reg[63:0] <= reg_wdata[63:0];
++ 112      else if(oen_write)
++ 112        oen_reg[31:0] <= reg_wdata[31:0];
++ 112    assign gpio_oen[N-1:0] = oen_reg[N-1:0];
++ 112    always @ (posedge clk)
++ 112      if(odata_write & reg_double)
++ 112        odata_reg[63:0] <= reg_wdata[63:0];
++ 112      else if(odata_write)
++ 112        odata_reg[31:0] <= reg_wdata[31:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/gpio/hdl/gpio.v@109:119
+     else if(odataand_write)
+       odata_reg[N-1:0] <= data_in[N-1:0] & odata_reg[N-1:0];
+     else if(odataorr_write)
+       odata_reg[N-1:0] <= data_in[N-1:0] | odata_reg[N-1:0];
+   
+   assign gpio_out[N-1:0] = odata_reg[N-1:0];
+
+   //OEN
+   always @ (posedge clk)
+     if(oen_write)
+       oen_reg[N-1:0] <= data_in[N-1:0];
+

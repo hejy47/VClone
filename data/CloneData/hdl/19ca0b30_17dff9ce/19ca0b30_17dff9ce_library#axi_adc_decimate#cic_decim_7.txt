@@ -1,0 +1,37 @@
+Source Block: hdl/library/axi_adc_decimate/cic_decim.v@132:153@HdlStmProcess
+    .data_out(data_stage[12])
+  );
+
+  assign data_final_stage = data_stage[2*NUM_STAGES];
+
+  always @(posedge clk) begin
+    if (ce_comb == 1'b1) begin
+      case (rate_sel)
+      'h1: data_out <= {{14{data_final_stage[105]}},data_final_stage[105:14]};
+      'h2: data_out <= {{34{data_final_stage[105]}},data_final_stage[105:34]};
+      'h3: data_out <= {{54{data_final_stage[105]}},data_final_stage[105:54]};
+      'h6: data_out <= {{74{data_final_stage[105]}},data_final_stage[105:74]};
+      default: data_out <= {{94{data_final_stage[105]}},data_final_stage[105:94]};
+      endcase
+    end
+    ce_out_reg <= ce_comb;
+  end
+
+  assign ce_out = ce_out_reg;
+  assign filter_out = data_out;
+
+endmodule  // cic_decim
+
+Diff Content:
+- 140       'h1: data_out <= {{14{data_final_stage[105]}},data_final_stage[105:14]};
+- 141       'h2: data_out <= {{34{data_final_stage[105]}},data_final_stage[105:34]};
+- 142       'h3: data_out <= {{54{data_final_stage[105]}},data_final_stage[105:54]};
+- 143       'h6: data_out <= {{74{data_final_stage[105]}},data_final_stage[105:74]};
+- 144       default: data_out <= {{94{data_final_stage[105]}},data_final_stage[105:94]};
++ 144       'h1: data_out <= data_final_stage[25:14];
++ 144       'h2: data_out <= data_final_stage[45:34];
++ 144       'h3: data_out <= data_final_stage[65:54];
++ 144       'h6: data_out <= data_final_stage[85:74];
++ 144       default: data_out <= data_final_stage[105:94];
+
+Clone Blocks:

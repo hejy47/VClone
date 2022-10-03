@@ -1,0 +1,31 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4374:4390@HdlStmAssign
+   assign next_ctrl[7:0] = {next_ctrlmode[3:0],next_datamode[1:0],next_write,next_access};
+
+   assign type_match = (ref_ctrl[7:0] == next_ctrl[7:0]);
+
+   //# burst mode determination
+   assign burst_tran = ~cfg_burst_dis  & // bursting is enabled by user
+		        start_new_read & // valid cycle
+		        tran_read      & // only continuous burst is supported
+		        type_match     & // type match
+		        double_write   & // double write transaction
+		        ((next_inc8_match  & ~byte0_inc0) |  // address match
+			 (next_inc0_match  &  byte0_inc0));
+
+   always @ (posedge txo_lclk or posedge reset)
+     if (reset)
+       burst_req    <= 1'b0;
+     else
+
+Diff Content:
+- 4379    assign burst_tran = ~cfg_burst_dis  & // bursting is enabled by user
+- 4380 		        start_new_read & // valid cycle
+- 4381 		        tran_read      & // only continuous burst is supported
+- 4382 		        type_match     & // type match
+- 4383 		        double_write   & // double write transaction
+- 4384 		        ((next_inc8_match  & ~byte0_inc0) |  // address match
+- 4385 			 (next_inc0_match  &  byte0_inc0));
++ 4385    assign rd_addr_tlc[FAD-1:0]       = rd_binary_pointer_tlc[FAD-1:0];
++ 4385    assign rd_binary_next_tlc[FAD:0]  = rd_binary_pointer_tlc[FAD:0] + rd_read_tlc[FAD:0];
+
+Clone Blocks:

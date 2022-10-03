@@ -1,0 +1,45 @@
+Source Block: miaow/src/verilog/rtl/lsu/lsu.v@70:80@HdlIdDef
+   ///////////////////////////////////////////////CHANGE
+   wire [2047:0]    vgpr_source1_data_i;
+
+   //////////////////////////////////////////////CHANGE
+   // create a ff for holding the issue_stall signal
+   reg freez;
+   wire set_freez, clr_freez;
+   always @ (posedge clk, posedge rst) begin
+     if(rst) begin
+       freez <= 0;
+     end
+
+Diff Content:
+- 75    reg freez;
+
+Clone Blocks:
+Clone Blocks 1:
+miaow/src/verilog/rtl/lsu/lsu.v@71:81
+   wire [2047:0]    vgpr_source1_data_i;
+
+   //////////////////////////////////////////////CHANGE
+   // create a ff for holding the issue_stall signal
+   reg freez;
+   wire set_freez, clr_freez;
+   always @ (posedge clk, posedge rst) begin
+     if(rst) begin
+       freez <= 0;
+     end
+     else if(set_freez) begin
+
+Clone Blocks 2:
+miaow/src/verilog/rtl/lsu/lsu.v@71:81
+   wire [2047:0]    vgpr_source1_data_i;
+
+   //////////////////////////////////////////////CHANGE
+   // create a ff for holding the issue_stall signal
+   reg freez;
+   wire set_freez, clr_freez;
+   always @ (posedge clk, posedge rst) begin
+     if(rst) begin
+       freez <= 0;
+     end
+     else if(set_freez) begin
+

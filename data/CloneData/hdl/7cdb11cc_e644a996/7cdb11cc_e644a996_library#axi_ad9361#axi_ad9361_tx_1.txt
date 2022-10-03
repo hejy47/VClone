@@ -1,0 +1,24 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tx.v@110:124@HdlIdDef
+  output  [31:0]  up_rdata,
+  output          up_rack);
+
+  // configuration settings
+
+  localparam  CONFIG =  (DDS_DISABLE * 64) +
+                        (DELAYCNTRL_DISABLE * 32) +
+                        (MODE_1R1T * 16) +
+                        (USERPORTS_DISABLE * 8) +
+                        (IQCORRECTION_DISABLE * 1);
+
+  // internal registers
+
+  reg             dac_data_sync = 'd0;
+  reg     [15:0]  dac_rate_cnt = 'd0;
+
+Diff Content:
+- 115   localparam  CONFIG =  (DDS_DISABLE * 64) +
++ 115   localparam  CONFIG =  (PPS_RECEIVER_ENABLE * 256) +
++ 115                         (CMOS_OR_LVDS_N * 128) +
++ 115                         (DDS_DISABLE * 64) +
+
+Clone Blocks:

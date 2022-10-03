@@ -1,0 +1,37 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v@310:330@HdlStmProcess
+end
+
+assign disparity4b_in = in_disparity ^ disparity6b;
+assign out_disparity = disparity4b_in ^ disparity4b;
+
+always @(*) begin
+  if (in_disparity == 1'b0 && may_invert6b == 1'b1) begin
+    out6b = ~data6b;
+  end else begin
+    out6b = data6b;
+  end
+  if (disparity4b_in == 1'b0 && may_invert4b == 1'b1) begin
+    out4b = ~data4b;
+  end else begin
+    out4b = data4b;
+  end
+end
+
+assign out_char = {out4b,out6b};
+
+endmodule
+
+Diff Content:
+- 315 always @(*) begin
+- 316   if (in_disparity == 1'b0 && may_invert6b == 1'b1) begin
+- 317     out6b = ~data6b;
+- 318   end else begin
+- 319     out6b = data6b;
+- 320   end
+- 321   if (disparity4b_in == 1'b0 && may_invert4b == 1'b1) begin
+- 322     out4b = ~data4b;
+- 323   end else begin
+- 324     out4b = data4b;
+- 326 end
+
+Clone Blocks:

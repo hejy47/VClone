@@ -1,0 +1,18 @@
+Source Block: hdl/library/common/up_clock_mon.v@81:91@HdlStmAssign
+    end
+  end
+
+  // device free running
+
+  assign d_count_toggle_s = d_count_toggle_m3 ^ d_count_toggle_m2;
+
+  always @(posedge d_clk or posedge d_rst) begin
+    if (d_rst == 1'b1) begin
+      d_count_toggle_m1 <= 'd0;
+      d_count_toggle_m2 <= 'd0;
+
+Diff Content:
+- 86   assign d_count_toggle_s = d_count_toggle_m3 ^ d_count_toggle_m2;
++ 86   assign d_count_reset_s = d_count_run_m3 == 1'b0 && d_count_run_m2 == 1'b1;
+
+Clone Blocks:

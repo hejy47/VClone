@@ -1,0 +1,21 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@263:272@HdlStmProcess
+  end else begin
+    id <= id_next;
+  end
+end
+
+always @(posedge clk) begin
+  pending_burst <= id_next != request_id;
+end
+
+endmodule
+
+Diff Content:
+- 268 always @(posedge clk) begin
+- 269   pending_burst <= id_next != request_id;
+- 270 end
++ 270   always @(posedge clk) begin
++ 270     pending_burst <= id_next != request_id;
++ 270   end
+
+Clone Blocks:

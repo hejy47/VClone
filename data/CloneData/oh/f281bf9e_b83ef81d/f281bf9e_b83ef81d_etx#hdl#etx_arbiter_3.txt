@@ -1,0 +1,76 @@
+Source Block: oh/etx/hdl/etx_arbiter.v@104:114@HdlStmAssign
+   assign     wr_ready = ~emwr_empty & ~e_tx_wr_wait & ~rr_ready & ~rq_ready;
+
+   // FIFO read enables, when we're idle or done with the current datum
+   assign     emrr_rd_en = rr_ready & (~ready | emtx_ack);
+   assign     emrq_rd_en = rq_ready & (~ready | emtx_ack);
+   assign     emwr_rd_en = wr_ready & (~ready | emtx_ack);
+   
+   always @ (posedge clk) begin
+      if( reset ) begin
+
+         ready     <= 1'b0;
+
+Diff Content:
+- 109    assign     emwr_rd_en = wr_ready & (~ready | emtx_ack);
++ 109    assign     emrr_rd_en = rr_ready & (~ready | e_tx_ack);
++ 109    assign     emrq_rd_en = rq_ready & (~ready | e_tx_ack);
++ 109    assign     emwr_rd_en = wr_ready & (~ready | e_tx_ack);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/etx/hdl/etx_arbiter.v@98:108
+   //# Arbitrate & forward
+   //############
+
+   // priority-based ready signals
+   assign     rr_ready = ~emrr_empty & ~e_tx_wr_wait;
+   assign     rq_ready = ~emrq_empty & ~e_tx_rd_wait & ~rr_ready;
+   assign     wr_ready = ~emwr_empty & ~e_tx_wr_wait & ~rr_ready & ~rq_ready;
+
+   // FIFO read enables, when we're idle or done with the current datum
+   assign     emrr_rd_en = rr_ready & (~ready | emtx_ack);
+   assign     emrq_rd_en = rq_ready & (~ready | emtx_ack);
+
+Clone Blocks 2:
+oh/etx/hdl/etx_arbiter.v@102:112
+   assign     rr_ready = ~emrr_empty & ~e_tx_wr_wait;
+   assign     rq_ready = ~emrq_empty & ~e_tx_rd_wait & ~rr_ready;
+   assign     wr_ready = ~emwr_empty & ~e_tx_wr_wait & ~rr_ready & ~rq_ready;
+
+   // FIFO read enables, when we're idle or done with the current datum
+   assign     emrr_rd_en = rr_ready & (~ready | emtx_ack);
+   assign     emrq_rd_en = rq_ready & (~ready | emtx_ack);
+   assign     emwr_rd_en = wr_ready & (~ready | emtx_ack);
+   
+   always @ (posedge clk) begin
+      if( reset ) begin
+
+Clone Blocks 3:
+oh/etx/hdl/etx_arbiter.v@103:113
+   assign     rq_ready = ~emrq_empty & ~e_tx_rd_wait & ~rr_ready;
+   assign     wr_ready = ~emwr_empty & ~e_tx_wr_wait & ~rr_ready & ~rq_ready;
+
+   // FIFO read enables, when we're idle or done with the current datum
+   assign     emrr_rd_en = rr_ready & (~ready | emtx_ack);
+   assign     emrq_rd_en = rq_ready & (~ready | emtx_ack);
+   assign     emwr_rd_en = wr_ready & (~ready | emtx_ack);
+   
+   always @ (posedge clk) begin
+      if( reset ) begin
+
+
+Clone Blocks 4:
+oh/etx/hdl/etx_arbiter.v@99:109
+   //############
+
+   // priority-based ready signals
+   assign     rr_ready = ~emrr_empty & ~e_tx_wr_wait;
+   assign     rq_ready = ~emrq_empty & ~e_tx_rd_wait & ~rr_ready;
+   assign     wr_ready = ~emwr_empty & ~e_tx_wr_wait & ~rr_ready & ~rq_ready;
+
+   // FIFO read enables, when we're idle or done with the current datum
+   assign     emrr_rd_en = rr_ready & (~ready | emtx_ack);
+   assign     emrq_rd_en = rq_ready & (~ready | emtx_ack);
+   assign     emwr_rd_en = wr_ready & (~ready | emtx_ack);
+

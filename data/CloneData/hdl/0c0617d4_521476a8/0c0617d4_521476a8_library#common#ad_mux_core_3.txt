@@ -1,0 +1,54 @@
+Source Block: hdl/library/common/ad_mux_core.v@48:66@HdlStmIf
+
+wire [CH_W-1:0] data_out_loc;
+
+assign data_out_loc = data_in >> CH_W*ch_sel;
+
+generate if (EN_REG) begin
+  reg [CH_W-1:0] data_out_reg;
+  always @(posedge clk) begin
+    data_out_reg <= data_out_loc;
+  end
+  assign data_out = data_out_reg;
+end else begin
+  assign data_out = data_out_loc;
+end
+endgenerate
+
+endmodule
+
+
+
+Diff Content:
+- 53 generate if (EN_REG) begin
+- 54   reg [CH_W-1:0] data_out_reg;
+- 55   always @(posedge clk) begin
+- 56     data_out_reg <= data_out_loc;
+- 58   assign data_out = data_out_reg;
+- 59 end else begin
+- 60   assign data_out = data_out_loc;
+- 61 end
++ 56   generate if (EN_REG) begin
++ 56     reg [CH_W-1:0] data_out_reg;
++ 56     always @(posedge clk) begin
++ 56       data_out_reg <= data_out_loc;
++ 56     end
++ 56     assign data_out = data_out_reg;
++ 56   end else begin
++ 56     assign data_out = data_out_loc;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_mux_core.v@46:56
+  output [CH_W-1:0] data_out
+);
+
+wire [CH_W-1:0] data_out_loc;
+
+assign data_out_loc = data_in >> CH_W*ch_sel;
+
+generate if (EN_REG) begin
+  reg [CH_W-1:0] data_out_reg;
+  always @(posedge clk) begin
+    data_out_reg <= data_out_loc;
+

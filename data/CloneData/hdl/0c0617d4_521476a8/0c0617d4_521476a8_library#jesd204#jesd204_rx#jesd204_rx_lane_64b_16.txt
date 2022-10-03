@@ -1,0 +1,17 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@135:145@HdlIdDef
+  .init(eomb),
+  .data_in(phy_data),
+  .crc12(crc12_calculated)
+);
+
+reg crc12_on = 'b0;
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    crc12_on <= 1'b0;
+  end else if (eomb) begin
+    crc12_on <= 1'b1;
+
+Diff Content:
+- 140 reg crc12_on = 'b0;
+
+Clone Blocks:

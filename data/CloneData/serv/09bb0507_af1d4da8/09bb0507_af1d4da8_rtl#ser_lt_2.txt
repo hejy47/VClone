@@ -1,0 +1,46 @@
+Source Block: serv/rtl/ser_lt.v@7:17@HdlIdDef
+   input wire i_clr,
+   output reg o_q);
+
+   reg        lt_r = 1'b0;
+
+   wire       lt = (~i_a & i_b) | ((i_a == i_b) & lt_r);
+   always @(posedge i_clk) begin
+      lt_r <= lt & ~i_clr;
+      if (~i_clr)
+        o_q <= lt;
+   end
+
+Diff Content:
+- 12    wire       lt = (~i_a & i_b) | ((i_a == i_b) & lt_r);
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/ser_lt.v@5:15
+   input wire i_a,
+   input wire i_b,
+   input wire i_clr,
+   output reg o_q);
+
+   reg        lt_r = 1'b0;
+
+   wire       lt = (~i_a & i_b) | ((i_a == i_b) & lt_r);
+   always @(posedge i_clk) begin
+      lt_r <= lt & ~i_clr;
+      if (~i_clr)
+
+Clone Blocks 2:
+serv/rtl/ser_lt.v@8:19
+   output reg o_q);
+
+   reg        lt_r = 1'b0;
+
+   wire       lt = (~i_a & i_b) | ((i_a == i_b) & lt_r);
+   always @(posedge i_clk) begin
+      lt_r <= lt & ~i_clr;
+      if (~i_clr)
+        o_q <= lt;
+   end
+
+endmodule
+

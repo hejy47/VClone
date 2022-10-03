@@ -1,0 +1,410 @@
+Source Block: verilog-ethernet/rtl/axis_rate_limit.v@69:79@HdlIdDef
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+Diff Content:
+- 74 reg [23:0] acc_reg = 0, acc_next;
++ 74 reg [23:0] acc_reg = 24'd0, acc_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@120:130
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+assign status_valid = status_valid_reg;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_adapter.v@117:127
+reg                         output_axis_tready_int = 0;
+reg                         output_axis_tlast_int;
+reg                         output_axis_tuser_int;
+wire                        output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_rate_limit.v@71:81
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_rate_limit_64.v@75:85
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_rate_limit.v@67:77
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_rate_limit_64.v@71:81
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@122:132
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+assign status_valid = status_valid_reg;
+assign status_frame_pad = status_frame_pad_reg;
+assign status_frame_truncate = status_frame_truncate_reg;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_rate_limit_64.v@75:85
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+
+Clone Blocks 9:
+verilog-ethernet/rtl/axis_rate_limit_64.v@74:84
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_demux_4.v@84:94
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_frame_join_4.v@112:122
+reg input_2_axis_tready_reg = 0, input_2_axis_tready_next;
+reg input_3_axis_tready_reg = 0, input_3_axis_tready_next;
+
+// internal datapath
+reg [7:0] output_axis_tdata_int;
+reg       output_axis_tvalid_int;
+reg       output_axis_tready_int = 0;
+reg       output_axis_tlast_int;
+reg       output_axis_tuser_int;
+wire      output_axis_tready_int_early;
+
+
+Clone Blocks 12:
+verilog-ethernet/rtl/axis_rate_limit_64.v@73:83
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/axis_adapter.v@117:127
+reg                         output_axis_tready_int = 0;
+reg                         output_axis_tlast_int;
+reg                         output_axis_tuser_int;
+wire                        output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+
+Clone Blocks 14:
+verilog-ethernet/rtl/axis_rate_limit.v@71:81
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+
+Clone Blocks 15:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@118:128
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+Clone Blocks 16:
+verilog-ethernet/rtl/axis_rate_limit.v@69:79
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/axis_demux_4.v@86:96
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+assign input_axis_tready = input_axis_tready_reg;
+
+Clone Blocks 18:
+verilog-ethernet/rtl/axis_adapter.v@114:124
+reg [OUTPUT_DATA_WIDTH-1:0] output_axis_tdata_int;
+reg [OUTPUT_KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                         output_axis_tvalid_int;
+reg                         output_axis_tready_int = 0;
+reg                         output_axis_tlast_int;
+reg                         output_axis_tuser_int;
+wire                        output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+
+Clone Blocks 19:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@119:129
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+
+Clone Blocks 20:
+verilog-ethernet/rtl/axis_rate_limit_64.v@73:83
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+Clone Blocks 21:
+verilog-ethernet/rtl/axis_rate_limit.v@66:76
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+Clone Blocks 22:
+verilog-ethernet/rtl/axis_adapter.v@115:125
+reg [OUTPUT_KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                         output_axis_tvalid_int;
+reg                         output_axis_tready_int = 0;
+reg                         output_axis_tlast_int;
+reg                         output_axis_tuser_int;
+wire                        output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+
+Clone Blocks 23:
+verilog-ethernet/rtl/axis_mux_4.v@88:98
+reg input_2_axis_tready_reg = 0, input_2_axis_tready_next;
+reg input_3_axis_tready_reg = 0, input_3_axis_tready_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+
+Clone Blocks 24:
+verilog-ethernet/rtl/axis_frame_length_adjust.v@122:132
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+assign status_valid = status_valid_reg;
+assign status_frame_pad = status_frame_pad_reg;
+assign status_frame_truncate = status_frame_truncate_reg;
+
+Clone Blocks 25:
+verilog-ethernet/rtl/axis_frame_join_4.v@113:123
+reg input_3_axis_tready_reg = 0, input_3_axis_tready_next;
+
+// internal datapath
+reg [7:0] output_axis_tdata_int;
+reg       output_axis_tvalid_int;
+reg       output_axis_tready_int = 0;
+reg       output_axis_tlast_int;
+reg       output_axis_tuser_int;
+wire      output_axis_tready_int_early;
+
+assign input_0_axis_tready = input_0_axis_tready_reg;
+
+Clone Blocks 26:
+verilog-ethernet/rtl/axis_mux_4.v@89:99
+reg input_3_axis_tready_reg = 0, input_3_axis_tready_next;
+
+// internal datapath
+reg [DATA_WIDTH-1:0] output_axis_tdata_int;
+reg                  output_axis_tvalid_int;
+reg                  output_axis_tready_int = 0;
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+assign input_0_axis_tready = input_0_axis_tready_reg;
+
+Clone Blocks 27:
+verilog-ethernet/rtl/axis_adapter.v@113:123
+// internal datapath
+reg [OUTPUT_DATA_WIDTH-1:0] output_axis_tdata_int;
+reg [OUTPUT_KEEP_WIDTH-1:0] output_axis_tkeep_int;
+reg                         output_axis_tvalid_int;
+reg                         output_axis_tready_int = 0;
+reg                         output_axis_tlast_int;
+reg                         output_axis_tuser_int;
+wire                        output_axis_tready_int_early;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+Clone Blocks 28:
+verilog-ethernet/rtl/axis_rate_limit.v@70:80
+reg                  output_axis_tlast_int;
+reg                  output_axis_tuser_int;
+wire                 output_axis_tready_int_early;
+
+reg [23:0] acc_reg = 0, acc_next;
+reg pause;
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+

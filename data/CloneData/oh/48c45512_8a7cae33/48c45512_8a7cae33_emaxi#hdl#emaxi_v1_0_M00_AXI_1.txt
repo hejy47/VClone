@@ -1,0 +1,31 @@
+Source Block: oh/emaxi/hdl/emaxi_v1_0_M00_AXI.v@281:291@HdlIdDef
+
+   //--------------------
+   //Write Address Channel
+   //--------------------
+
+   reg            aw_wait;
+   reg            w_wait;
+   
+   assign emwr_rd_en = ( ~emwr_empty & ~axi_awvalid & ~axi_wvalid )
+      | ( ~emwr_empty & axi_awvalid & M_AXI_AWREADY & axi_wvalid & M_AXI_WREADY)
+      | ( ~emwr_empty & axi_awvalid & M_AXI_AWREADY & w_wait )
+
+Diff Content:
+- 286    reg            aw_wait;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emaxi/hdl/emaxi_v1_0_M00_AXI.v@282:292
+   //--------------------
+   //Write Address Channel
+   //--------------------
+
+   reg            aw_wait;
+   reg            w_wait;
+   
+   assign emwr_rd_en = ( ~emwr_empty & ~axi_awvalid & ~axi_wvalid )
+      | ( ~emwr_empty & axi_awvalid & M_AXI_AWREADY & axi_wvalid & M_AXI_WREADY)
+      | ( ~emwr_empty & axi_awvalid & M_AXI_AWREADY & w_wait )
+      | ( ~emwr_empty & axi_wvalid  & M_AXI_WREADY & aw_wait );
+

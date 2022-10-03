@@ -1,0 +1,703 @@
+Source Block: hdl/projects/ad9265_fmc/zc706/system_top.v@94:104@HdlIdDef
+wire            spi0_clk;
+wire            spi0_mosi;
+wire            spi0_miso;
+wire    [ 2:0]  spi1_csn;
+wire            spi1_clk;
+wire            spi1_mosi;
+wire            spi1_miso;
+
+// instantiations
+
+assign spi_csn_adc = spi0_csn[0];
+
+Diff Content:
+- 99 wire            spi1_mosi;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/daq3/zc706/system_top.v@141:151
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            trig;
+  wire            rx_ref_clk;
+  wire            rx_sysref;
+  wire            rx_sync;
+
+Clone Blocks 2:
+hdl/projects/fmcomms5/zc702/system_top.v@145:155
+  wire    [ 63:0] gpio_o;
+  wire    [ 63:0] gpio_t;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+
+Clone Blocks 3:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@96:106
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_clk;
+
+  assign spi_csn = spi0_csn[0];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+Clone Blocks 4:
+hdl/projects/fmcomms5/zcu102/system_top.v@117:127
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+  always @(posedge ref_clk or negedge sys_100m_resetn) begin
+    if (sys_100m_resetn == 1'b0) begin
+
+Clone Blocks 5:
+hdl/projects/fmcomms5/zc706/system_top.v@148:158
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+  always @(posedge ref_clk or negedge sys_100m_resetn) begin
+
+Clone Blocks 6:
+hdl/projects/adaq8092_fmc/zed/system_top.v@111:121
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+
+Clone Blocks 7:
+hdl/projects/fmcomms11/zc706/system_top.v@133:143
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_sync;
+  wire            trx_ref_clk;
+  wire            tx_sync;
+  wire            usr_clk;
+
+
+Clone Blocks 8:
+hdl/projects/daq2/zc706/system_top.v@139:149
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            trig;
+  wire            rx_ref_clk;
+  wire            rx_sysref;
+
+Clone Blocks 9:
+hdl/projects/adaq8092_fmc/zed/system_top.v@112:122
+  wire    [63:0]  gpio_t;
+  
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+Clone Blocks 10:
+hdl/projects/fmcomms5/zcu102/system_top.v@116:126
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+  always @(posedge ref_clk or negedge sys_100m_resetn) begin
+
+Clone Blocks 11:
+hdl/projects/ad9265_fmc/zc706/system_top.v@92:102
+wire    [63:0]  gpio_t;
+wire    [ 2:0]  spi0_csn;
+wire            spi0_clk;
+wire            spi0_mosi;
+wire            spi0_miso;
+wire    [ 2:0]  spi1_csn;
+wire            spi1_clk;
+wire            spi1_mosi;
+wire            spi1_miso;
+
+// instantiations
+
+Clone Blocks 12:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@92:102
+  wire            rx_ref_clk;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_clk;
+
+
+Clone Blocks 13:
+hdl/projects/ad9434_fmc/zc706/system_top.v@91:101
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire            spi_miso;
+  wire            spi_mosi;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // assignments
+
+
+Clone Blocks 14:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@97:107
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // assignments
+
+  assign spi_csn_clk = spi0_csn[0];
+
+Clone Blocks 15:
+hdl/projects/fmcomms5/zcu102/system_top.v@114:124
+  wire            gpio_sync;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+Clone Blocks 16:
+hdl/projects/fmcadc2/zc706/system_top.v@124:134
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_ref_clk;
+  wire            rx_sync;
+  wire            rx_clk;
+
+Clone Blocks 17:
+hdl/projects/fmcomms5/zcu102/system_top.v@113:123
+  wire    [ 94:0] gpio_o;
+  wire            gpio_sync;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+
+Clone Blocks 18:
+hdl/projects/fmcomms5/zcu102/system_top.v@115:125
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+
+Clone Blocks 19:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@95:105
+  wire    [63:0]  gpio_t;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // assignments
+
+Clone Blocks 20:
+hdl/projects/ad6676evb/zc706/system_top.v@106:116
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_ref_clk;
+  wire            rx_sync;
+  wire            rx_sysref;
+
+Clone Blocks 21:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@98:108
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_clk;
+
+  assign spi_csn = spi0_csn[0];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // instantiations
+
+Clone Blocks 22:
+hdl/projects/fmcomms5/zc706/system_top.v@147:157
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+
+Clone Blocks 23:
+hdl/projects/adaq8092_fmc/zed/system_top.v@116:126
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+  wire            iic_mux_scl_t_s;
+
+Clone Blocks 24:
+hdl/projects/fmcomms11/zc706/system_top.v@134:144
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_sync;
+  wire            trx_ref_clk;
+  wire            tx_sync;
+  wire            usr_clk;
+
+  // instantiations
+
+Clone Blocks 25:
+hdl/projects/ad6676evb/zc706/system_top.v@107:117
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_ref_clk;
+  wire            rx_sync;
+  wire            rx_sysref;
+  wire            rx_clk;  
+
+Clone Blocks 26:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@95:105
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_clk;
+
+  assign spi_csn = spi0_csn[0];
+  assign spi_clk = spi0_clk;
+  assign spi_mosi = spi0_mosi;
+
+Clone Blocks 27:
+hdl/projects/fmcomms5/zc706/system_top.v@149:159
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+  always @(posedge ref_clk or negedge sys_100m_resetn) begin
+    if (sys_100m_resetn == 1'b0) begin
+
+Clone Blocks 28:
+hdl/projects/daq2/zc706/system_top.v@140:150
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            trig;
+  wire            rx_ref_clk;
+  wire            rx_sysref;
+  wire            rx_sync;
+
+Clone Blocks 29:
+hdl/projects/ad6676evb/zc706/system_top.v@108:118
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_ref_clk;
+  wire            rx_sync;
+  wire            rx_sysref;
+  wire            rx_clk;  
+
+
+Clone Blocks 30:
+hdl/projects/adaq8092_fmc/zed/system_top.v@115:125
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  
+  wire    [ 1:0]  iic_mux_scl_i_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
+
+Clone Blocks 31:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@94:104
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_clk;
+
+  assign spi_csn = spi0_csn[0];
+  assign spi_clk = spi0_clk;
+
+Clone Blocks 32:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@93:103
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_clk;
+
+  assign spi_csn = spi0_csn[0];
+
+Clone Blocks 33:
+hdl/projects/fmcomms11/zc706/system_top.v@131:141
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_sync;
+  wire            trx_ref_clk;
+  wire            tx_sync;
+
+Clone Blocks 34:
+hdl/projects/fmcomms5/zc706/system_top.v@146:156
+  wire    [ 63:0] gpio_t;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+Clone Blocks 35:
+hdl/projects/fmcomms5/zc702/system_top.v@147:157
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+
+Clone Blocks 36:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@98:108
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // assignments
+
+  assign spi_csn_clk = spi0_csn[0];
+  assign spi_csn_dac = spi0_csn[1];
+
+Clone Blocks 37:
+hdl/projects/ad9265_fmc/zc706/system_top.v@93:103
+wire    [ 2:0]  spi0_csn;
+wire            spi0_clk;
+wire            spi0_mosi;
+wire            spi0_miso;
+wire    [ 2:0]  spi1_csn;
+wire            spi1_clk;
+wire            spi1_mosi;
+wire            spi1_miso;
+
+// instantiations
+
+
+Clone Blocks 38:
+hdl/projects/fmcomms5/zc702/system_top.v@149:159
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+  always @(posedge ref_clk or negedge sys_100m_resetn) begin
+    if (sys_100m_resetn == 1'b0) begin
+
+Clone Blocks 39:
+hdl/projects/fmcomms5/zc702/system_top.v@146:156
+  wire    [ 63:0] gpio_t;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+Clone Blocks 40:
+hdl/projects/adaq8092_fmc/zed/system_top.v@114:124
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  
+  wire    [ 1:0]  iic_mux_scl_i_s;
+
+Clone Blocks 41:
+hdl/projects/fmcomms5/zc702/system_top.v@148:158
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // multi-chip synchronization
+
+  always @(posedge ref_clk or negedge sys_100m_resetn) begin
+
+Clone Blocks 42:
+hdl/projects/ad9265_fmc/zc706/system_top.v@91:101
+wire    [63:0]  gpio_o;
+wire    [63:0]  gpio_t;
+wire    [ 2:0]  spi0_csn;
+wire            spi0_clk;
+wire            spi0_mosi;
+wire            spi0_miso;
+wire    [ 2:0]  spi1_csn;
+wire            spi1_clk;
+wire            spi1_mosi;
+wire            spi1_miso;
+
+
+Clone Blocks 43:
+hdl/projects/fmcomms5/zc706/system_top.v@145:155
+  wire    [ 63:0] gpio_o;
+  wire    [ 63:0] gpio_t;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+
+Clone Blocks 44:
+hdl/projects/fmcadc2/zc706/system_top.v@125:135
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_ref_clk;
+  wire            rx_sync;
+  wire            rx_clk;
+  wire            rx_sysref;
+
+Clone Blocks 45:
+hdl/projects/daq3/zc706/system_top.v@140:150
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            trig;
+  wire            rx_ref_clk;
+  wire            rx_sysref;
+
+Clone Blocks 46:
+hdl/projects/ad9265_fmc/zc706/system_top.v@95:105
+wire            spi0_mosi;
+wire            spi0_miso;
+wire    [ 2:0]  spi1_csn;
+wire            spi1_clk;
+wire            spi1_mosi;
+wire            spi1_miso;
+
+// instantiations
+
+assign spi_csn_adc = spi0_csn[0];
+assign spi_csn_clk = spi0_csn[1];
+
+Clone Blocks 47:
+hdl/projects/fmcomms11/zc706/system_top.v@132:142
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+  wire            rx_sync;
+  wire            trx_ref_clk;
+  wire            tx_sync;
+  wire            usr_clk;
+
+Clone Blocks 48:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@94:104
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+
+Clone Blocks 49:
+hdl/projects/ad9739a_fmc/zc706/system_top.v@96:106
+  wire    [ 2:0]  spi0_csn;
+  wire            spi0_clk;
+  wire            spi0_mosi;
+  wire            spi0_miso;
+  wire    [ 2:0]  spi1_csn;
+  wire            spi1_clk;
+  wire            spi1_mosi;
+  wire            spi1_miso;
+
+  // assignments
+
+

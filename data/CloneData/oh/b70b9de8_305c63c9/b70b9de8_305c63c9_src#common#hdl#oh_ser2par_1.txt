@@ -1,0 +1,32 @@
+Source Block: oh/src/common/hdl/oh_ser2par.v@14:24@HdlIdDef
+    output [PW-1:0] dout, // parallel data  
+    input 	    lsbfirst, // lsb first order
+    input 	    shift      // shift the shifter
+    );
+ 
+   localparam CW   = $clog2(PW/SW);  // serialization factor (for counter)
+   
+   reg [PW-1:0]    dout;
+   reg [CW-1:0]    count;
+   wire [PW-1:0]   shiftdata;
+
+
+Diff Content:
+- 19    localparam CW   = $clog2(PW/SW);  // serialization factor (for counter)
++ 19    parameter CW   = $clog2(PW/SW);  // serialization factor (for counter)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_ser2par.v@17:27
+    );
+ 
+   localparam CW   = $clog2(PW/SW);  // serialization factor (for counter)
+   
+   reg [PW-1:0]    dout;
+   reg [CW-1:0]    count;
+   wire [PW-1:0]   shiftdata;
+
+   always @ (posedge clk)
+     if(shift & lsbfirst)
+       dout[PW-1:0] <= {din[SW-1:0],dout[PW-1:SW]};
+

@@ -1,0 +1,33 @@
+Source Block: hdl/projects/adv7511/kcu105/system_top.v@160:178@HdlStmProcess
+
+  // assign sys_reset_req = mdm_reset | mig_reset | ~mig_ready;
+  // assign sys_reset_req = mdm_reset;
+  assign sys_reset_req = 1'b0;
+
+  always @(posedge sys_cpu_clk) begin
+    if (sys_reset_req == 1'b1) begin
+      sys_reset_m <= {32{1'b1}};
+    end else begin
+      sys_reset_m <= {sys_reset_m[30:0], 1'b0};
+    end
+    sys_cpu_rst <= sys_reset_m[31];
+    sys_cpu_rstn <= ~sys_reset_m[31];
+  end
+
+  // instantiations
+
+  system_wrapper i_system_wrapper (
+    .c0_ddr4_act_n (ddr4_act_n),
+
+Diff Content:
+- 165   always @(posedge sys_cpu_clk) begin
+- 166     if (sys_reset_req == 1'b1) begin
+- 167       sys_reset_m <= {32{1'b1}};
+- 168     end else begin
+- 169       sys_reset_m <= {sys_reset_m[30:0], 1'b0};
+- 170     end
+- 171     sys_cpu_rst <= sys_reset_m[31];
+- 172     sys_cpu_rstn <= ~sys_reset_m[31];
+- 173   end
+
+Clone Blocks:

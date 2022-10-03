@@ -1,0 +1,87 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4959:4969@HdlStmAssign
+   assign route_east  = multicast_tran ? route_east_multicast  : route_east_normal;
+   assign route_west  = multicast_tran ? route_west_multicast  : route_west_normal;
+   assign route_south = multicast_tran ? route_south_multicast : route_south_normal;
+   assign route_north = multicast_tran ? route_north_multicast : route_north_normal;
+
+   assign route_sides[3:0] = {route_north,route_east,route_south,route_west};
+   assign route_out = |(who_am_i[3:0] & route_sides[3:0]);
+
+   //# Request
+   assign mesh_req = access_reg & route_out & ((multicast_tran & ~cfg_multicast_dis) |
+					       ~multicast_tran);
+
+Diff Content:
+- 4964    assign route_sides[3:0] = {route_north,route_east,route_south,route_west};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4960:4970
+   assign route_west  = multicast_tran ? route_west_multicast  : route_west_normal;
+   assign route_south = multicast_tran ? route_south_multicast : route_south_normal;
+   assign route_north = multicast_tran ? route_north_multicast : route_north_normal;
+
+   assign route_sides[3:0] = {route_north,route_east,route_south,route_west};
+   assign route_out = |(who_am_i[3:0] & route_sides[3:0]);
+
+   //# Request
+   assign mesh_req = access_reg & route_out & ((multicast_tran & ~cfg_multicast_dis) |
+					       ~multicast_tran);
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4955:4965
+   assign route_south_multicast =  ext_ylt | ext_yzero;
+   assign route_north_multicast =  ext_ygt | ext_yzero;
+
+   //# normal-multicast selection
+   assign route_east  = multicast_tran ? route_east_multicast  : route_east_normal;
+   assign route_west  = multicast_tran ? route_west_multicast  : route_west_normal;
+   assign route_south = multicast_tran ? route_south_multicast : route_south_normal;
+   assign route_north = multicast_tran ? route_north_multicast : route_north_normal;
+
+   assign route_sides[3:0] = {route_north,route_east,route_south,route_west};
+   assign route_out = |(who_am_i[3:0] & route_sides[3:0]);
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@4956:4966
+   assign route_north_multicast =  ext_ygt | ext_yzero;
+
+   //# normal-multicast selection
+   assign route_east  = multicast_tran ? route_east_multicast  : route_east_normal;
+   assign route_west  = multicast_tran ? route_west_multicast  : route_west_normal;
+   assign route_south = multicast_tran ? route_south_multicast : route_south_normal;
+   assign route_north = multicast_tran ? route_north_multicast : route_north_normal;
+
+   assign route_sides[3:0] = {route_north,route_east,route_south,route_west};
+   assign route_out = |(who_am_i[3:0] & route_sides[3:0]);
+
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@4954:4964
+   assign route_west_multicast  = (ext_xgt | ext_xzero) & ext_yzero;
+   assign route_south_multicast =  ext_ylt | ext_yzero;
+   assign route_north_multicast =  ext_ygt | ext_yzero;
+
+   //# normal-multicast selection
+   assign route_east  = multicast_tran ? route_east_multicast  : route_east_normal;
+   assign route_west  = multicast_tran ? route_west_multicast  : route_west_normal;
+   assign route_south = multicast_tran ? route_south_multicast : route_south_normal;
+   assign route_north = multicast_tran ? route_north_multicast : route_north_normal;
+
+   assign route_sides[3:0] = {route_north,route_east,route_south,route_west};
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@4957:4967
+
+   //# normal-multicast selection
+   assign route_east  = multicast_tran ? route_east_multicast  : route_east_normal;
+   assign route_west  = multicast_tran ? route_west_multicast  : route_west_normal;
+   assign route_south = multicast_tran ? route_south_multicast : route_south_normal;
+   assign route_north = multicast_tran ? route_north_multicast : route_north_normal;
+
+   assign route_sides[3:0] = {route_north,route_east,route_south,route_west};
+   assign route_out = |(who_am_i[3:0] & route_sides[3:0]);
+
+   //# Request
+

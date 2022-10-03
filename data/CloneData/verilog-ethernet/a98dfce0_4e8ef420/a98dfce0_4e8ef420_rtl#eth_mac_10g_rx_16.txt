@@ -1,0 +1,353 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_rx.v@83:93@HdlIdDef
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+reg [31:0] crc_state3 = 32'hFFFFFFFF;
+
+
+Diff Content:
+- 88 reg error_bad_frame_reg = 0, error_bad_frame_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@80:90
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@86:96
+reg gmii_rx_er_d4 = 0;
+
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@83:93
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+reg [31:0] crc_state3 = 32'hFFFFFFFF;
+
+
+Clone Blocks 4:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@86:96
+reg gmii_rx_er_d4 = 0;
+
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@85:95
+reg gmii_rx_er_d3 = 0;
+reg gmii_rx_er_d4 = 0;
+
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+
+Clone Blocks 6:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@81:91
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@84:94
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+reg [31:0] crc_state3 = 32'hFFFFFFFF;
+
+wire [31:0] crc_next0;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@83:93
+reg gmii_rx_er_d1 = 0;
+reg gmii_rx_er_d2 = 0;
+reg gmii_rx_er_d3 = 0;
+reg gmii_rx_er_d4 = 0;
+
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@88:98
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+wire [31:0] crc_next;
+
+
+Clone Blocks 10:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@83:93
+reg gmii_rx_er_d1 = 0;
+reg gmii_rx_er_d2 = 0;
+reg gmii_rx_er_d3 = 0;
+reg gmii_rx_er_d4 = 0;
+
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@79:89
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+Clone Blocks 12:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@79:89
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@78:88
+
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+
+Clone Blocks 14:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@84:94
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+reg [31:0] crc_state3 = 32'hFFFFFFFF;
+
+wire [31:0] crc_next0;
+
+Clone Blocks 15:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@84:94
+reg gmii_rx_er_d2 = 0;
+reg gmii_rx_er_d3 = 0;
+reg gmii_rx_er_d4 = 0;
+
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+Clone Blocks 16:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@84:94
+reg gmii_rx_er_d2 = 0;
+reg gmii_rx_er_d3 = 0;
+reg gmii_rx_er_d4 = 0;
+
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@89:99
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+wire [31:0] crc_next;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+
+Clone Blocks 18:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@81:91
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+
+Clone Blocks 19:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@89:99
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+wire [31:0] crc_next;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+
+Clone Blocks 20:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@85:95
+reg gmii_rx_er_d3 = 0;
+reg gmii_rx_er_d4 = 0;
+
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+
+Clone Blocks 21:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@88:98
+reg [7:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+wire [31:0] crc_next;
+
+
+Clone Blocks 22:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@80:90
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+
+Clone Blocks 23:
+verilog-ethernet/rtl/eth_mac_10g_rx.v@78:88
+
+reg [7:0] xgmii_rxc_d0 = 8'b11111111;
+reg [7:0] xgmii_rxc_d1 = 8'b11111111;
+
+reg [63:0] output_axis_tdata_reg = 0, output_axis_tdata_next;
+reg [7:0] output_axis_tkeep_reg = 0, output_axis_tkeep_next;
+reg output_axis_tvalid_reg = 0, output_axis_tvalid_next;
+reg output_axis_tlast_reg = 0, output_axis_tlast_next;
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+
+Clone Blocks 24:
+verilog-ethernet/rtl/eth_mac_1g_rx.v@91:101
+reg output_axis_tuser_reg = 0, output_axis_tuser_next;
+
+reg error_bad_frame_reg = 0, error_bad_frame_next;
+reg error_bad_fcs_reg = 0, error_bad_fcs_next;
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+wire [31:0] crc_next;
+
+assign output_axis_tdata = output_axis_tdata_reg;
+assign output_axis_tvalid = output_axis_tvalid_reg;
+assign output_axis_tlast = output_axis_tlast_reg;
+

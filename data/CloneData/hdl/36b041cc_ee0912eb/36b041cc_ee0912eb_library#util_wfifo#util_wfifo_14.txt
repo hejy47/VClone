@@ -1,0 +1,22 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@138:150@HdlStmProcess
+  // read is non-destructive
+
+  assign s_wready_s = (S_READY_ENABLE == 0) ? 1'b1 : s_wready;
+  assign fifo_rd = ~fifo_rempty & s_wready_s;
+
+  always @(posedge s_clk) begin
+    s_wr_int <= fifo_rd;
+  end
+  
+  genvar s;
+  generate
+  for (s = 0; s < S_DATA_WIDTH; s = s + 1) begin: g_rdata
+  assign s_wdata_s[s] = fifo_rdata[(S_DATA_WIDTH-1)-s];
+
+Diff Content:
+- 143   always @(posedge s_clk) begin
+- 144     s_wr_int <= fifo_rd;
++ 144   always @(posedge dma_clk) begin
++ 144     dma_wr_int <= fifo_rd;
+
+Clone Blocks:

@@ -1,0 +1,33 @@
+Source Block: zipcpu/rtl/peripherals/wbdmac.v@434:444@HdlIdDef
+				(nracks== { 1'b0, cfg_blocklen_sub_one})
+				||(bus_nracks == cfg_len-1);
+	end else
+		last_read_request <= 1'b0;
+
+	wire	[LGMEMLEN:0]	next_nread = nread + 1'b1;
+	initial	last_read_ack = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		last_read_ack <= 0;
+	else if (dma_state == `DMA_READ_REQ)
+
+Diff Content:
+- 439 	wire	[LGMEMLEN:0]	next_nread = nread + 1'b1;
++ 439 	wire	[(LGMEMLEN):0]	next_nread;
++ 439 	assign	next_nread = nread + 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/wbdmac.v@435:445
+				||(bus_nracks == cfg_len-1);
+	end else
+		last_read_request <= 1'b0;
+
+	wire	[LGMEMLEN:0]	next_nread = nread + 1'b1;
+	initial	last_read_ack = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		last_read_ack <= 0;
+	else if (dma_state == `DMA_READ_REQ)
+	begin
+

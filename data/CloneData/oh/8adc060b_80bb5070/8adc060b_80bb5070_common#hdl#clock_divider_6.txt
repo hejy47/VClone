@@ -1,0 +1,82 @@
+Source Block: oh/common/hdl/clock_divider.v@52:69@HdlStmProcess
+   
+   //Divide by two special case
+   assign div2_sel = divcfg[3:0]==4'b0001;
+   assign div1_sel = divcfg[3:0]==4'b0000;
+    
+   always @ (posedge clkin or posedge reset)
+     if(reset)
+       counter[7:0] <= 8'b000001;
+     else      
+       if(posedge_match)
+	 counter[7:0] <= 8'b000001;// Self resetting
+       else
+	 counter[7:0] <= (counter[7:0] + 8'b000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+
+Diff Content:
+- 61        if(posedge_match)
++ 61        if(posedge_match | divcfg_change)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/clock_divider.v@64:75
+	 counter[7:0] <= (counter[7:0] + 8'b000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+					     {1'b0,divcfg_dec[7:1]})); 
+			      
+   always @ (posedge clkin or posedge reset)
+     if(reset)
+       clkout_reg <= 1'b0;   
+     else if(posedge_match)
+
+Clone Blocks 2:
+oh/common/hdl/clock_divider.v@61:71
+       if(posedge_match)
+	 counter[7:0] <= 8'b000001;// Self resetting
+       else
+	 counter[7:0] <= (counter[7:0] + 8'b000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+					     {1'b0,divcfg_dec[7:1]})); 
+			      
+
+Clone Blocks 3:
+oh/common/hdl/clock_divider.v@62:72
+	 counter[7:0] <= 8'b000001;// Self resetting
+       else
+	 counter[7:0] <= (counter[7:0] + 8'b000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+					     {1'b0,divcfg_dec[7:1]})); 
+			      
+   always @ (posedge clkin or posedge reset)
+
+Clone Blocks 4:
+oh/common/hdl/clock_divider.v@63:73
+       else
+	 counter[7:0] <= (counter[7:0] + 8'b000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+					     {1'b0,divcfg_dec[7:1]})); 
+			      
+   always @ (posedge clkin or posedge reset)
+     if(reset)
+

@@ -1,0 +1,83 @@
+Source Block: hdl/library/util_var_fifo/util_var_fifo.v@91:101@HdlStmAssign
+  assign en_w = fifo_active;
+  assign addr_w = addra;
+  assign din_w = data_in;
+  assign en_r = fifo_active;
+  assign addr_r = addrb;
+  assign data_out_s = dout_r;
+
+  always @(posedge clk) begin
+    depth_d1 <= depth;
+    if (depth == 32'h0) begin
+      fifo_active <= 0;
+
+Diff Content:
+- 96   assign data_out_s = dout_r;
++ 96   assign data_out_s = interpolation_on ? (interpolation_by_2 ? data_out_d2 : data_out_d3) : dout_r;
++ 96   always @(posedge clk) begin
++ 96     data_in_valid_d1 <= data_in_valid;
++ 96     data_in_valid_d2 <= data_in_valid_d1;
++ 96     interpolation_on_d1 = interpolation_on;
++ 96     interpolation_by_2_d1 = interpolation_by_2;
++ 96     if  (data_in_valid == 1'b1) begin
++ 96       if (data_in_valid_d1 == 1'b1) begin
++ 96         interpolation_on <= 1'b0;
++ 96       end else begin
++ 96         interpolation_on <= 1'b1;
++ 96         if (data_in_valid_d2 == 1'b1) begin
++ 96           interpolation_by_2 <= 1'b1;
++ 96         end else begin
++ 96           interpolation_by_2 <= 1'b0;
++ 96         end
++ 96       end
++ 96     end
++ 96     if(data_out_valid == 1'b1) begin
++ 96       data_out_d1 <= dout_r;
++ 96       data_out_d2 <= data_out_d1;
++ 96       data_out_d3 <= data_out_d2;
++ 96     end
++ 96   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_var_fifo/util_var_fifo.v@90:100
+  assign wea_w = data_in_valid & fifo_active;
+  assign en_w = fifo_active;
+  assign addr_w = addra;
+  assign din_w = data_in;
+  assign en_r = fifo_active;
+  assign addr_r = addrb;
+  assign data_out_s = dout_r;
+
+  always @(posedge clk) begin
+    depth_d1 <= depth;
+    if (depth == 32'h0) begin
+
+Clone Blocks 2:
+hdl/library/util_var_fifo/util_var_fifo.v@88:98
+  assign data_out_valid = fifo_active ? data_out_valid_s : data_in_valid;
+
+  assign wea_w = data_in_valid & fifo_active;
+  assign en_w = fifo_active;
+  assign addr_w = addra;
+  assign din_w = data_in;
+  assign en_r = fifo_active;
+  assign addr_r = addrb;
+  assign data_out_s = dout_r;
+
+  always @(posedge clk) begin
+
+Clone Blocks 3:
+hdl/library/util_var_fifo/util_var_fifo.v@89:99
+
+  assign wea_w = data_in_valid & fifo_active;
+  assign en_w = fifo_active;
+  assign addr_w = addra;
+  assign din_w = data_in;
+  assign en_r = fifo_active;
+  assign addr_r = addrb;
+  assign data_out_s = dout_r;
+
+  always @(posedge clk) begin
+    depth_d1 <= depth;
+

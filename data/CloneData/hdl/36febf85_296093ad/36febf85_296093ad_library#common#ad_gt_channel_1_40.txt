@@ -1,0 +1,17 @@
+Source Block: hdl/library/common/ad_gt_channel_1.v@231:241@HdlStmAssign
+  assign rx_cgs_k[1]  = (rx_data[15: 8] == 8'hbc) ? rx_valid_k_s[1] : 1'b0;
+  assign rx_cgs_k[0]  = (rx_data[ 7: 0] == 8'hbc) ? rx_valid_k_s[0] : 1'b0;
+
+  // validate all characters
+
+  assign rx_valid_k_s = rx_charisk & (~rx_disperr) & (~rx_notintable);
+
+  // rate 
+
+  assign rx_rate_p_s = 0;
+  assign rx_rate_s =  (rx_rate_p_s == 3'd0) ? RX_OUT_DIV :
+
+Diff Content:
+- 236   assign rx_valid_k_s = rx_charisk & (~rx_disperr) & (~rx_notintable);
+
+Clone Blocks:

@@ -1,0 +1,29 @@
+Source Block: hdl/library/data_offload/data_offload_fsm.v@240:260@HdlStmProcess
+    end else begin
+      wr_last_addr <= (wr_valid_out) ? wr_addr : wr_last_addr;
+    end
+  end
+
+  always @(posedge wr_clk) begin
+    if (wr_resetn_in == 1'b0) begin
+      wr_last_keep <= {WR_DATA_WIDTH/8{1'b1}};
+    end else begin
+      if (wr_last) begin
+        // if the SOURCE is at back-end, the interface is FIFO, set the tkeep
+        // to its default
+        wr_last_keep <= (TX_OR_RXN_PATH) ? wr_tkeep : {WR_DATA_WIDTH/8{1'b1}};
+      end
+    end
+  end
+
+  // flush out the DMA if the transfer is bigger than the storage size
+  assign wr_ready = ((wr_fsm_state == WR_WRITE_TO_MEM) ||
+                     ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in)) ? 1'b1 : 1'b0;
+
+
+Diff Content:
++ 255   always @(posedge wr_clk) begin
++ 255     wr_ready_d <= wr_ready;
++ 255   end
+
+Clone Blocks:

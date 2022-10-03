@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v@67:77@HdlIdDef
+  data <= INVERT_OUTPUTS ? ~data_s : data_s;
+end
+
+generate
+genvar lane;
+genvar i;
+for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
+  assign disparity_chain[lane][0] = disparity[lane];
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+
+Diff Content:
+- 72 genvar i;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v@66:76
+always @(posedge clk) begin
+  data <= INVERT_OUTPUTS ? ~data_s : data_s;
+end
+
+generate
+genvar lane;
+genvar i;
+for (lane = 0; lane < NUM_LANES; lane = lane + 1) begin: gen_lane
+  assign disparity_chain[lane][0] = disparity[lane];
+
+  always @(posedge clk) begin
+

@@ -1,0 +1,30 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@102:116@HdlStmProcess
+			      dmode16 ? {(4){io_data[15:0]}} :
+			      dmode32 ? {(2){io_data[31:0]}} :
+			                    io_data[IOW-1:0];
+   
+   // pipeline access signal
+     always @ (posedge rx_clk or negedge io_nreset)
+       if(!io_nreset)
+       io_frame <= 1'b0;
+     else
+       io_frame <= rx_access;
+ 
+   //########################################
+   //# PACKETIZER
+   //########################################
+
+
+Diff Content:
+- 107      always @ (posedge rx_clk or negedge io_nreset)
+- 108        if(!io_nreset)
+- 109        io_frame <= 1'b0;
+- 111        io_frame <= rx_access;
++ 109    always @ (posedge rx_clk or negedge io_nreset)
++ 109      if(!io_nreset)
++ 109        rx_access_reg[1:0] <= 1'b0;
++ 111        rx_access_reg[1:0] <= {rx_access_reg[0],rx_access};
++ 111    assign io_frame = ddr_mode ? rx_access_reg[1] :
++ 111                                 rx_access_reg[0];
+
+Clone Blocks:

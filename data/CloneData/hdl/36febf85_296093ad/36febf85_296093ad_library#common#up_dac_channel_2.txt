@@ -1,0 +1,75 @@
+Source Block: hdl/library/common/up_dac_channel.v@192:202@HdlStmAssign
+  endfunction
+
+  // decode block select
+
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h11) && (up_waddr[7:4] == PCORE_DAC_CHID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h11) && (up_raddr[7:4] == PCORE_DAC_CHID)) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 197   assign up_rreq_s = ((up_raddr[13:8] == 6'h11) && (up_raddr[7:4] == PCORE_DAC_CHID)) ? up_rreq : 1'b0;
++ 197   assign up_wreq_s = ((up_waddr[13:8] == 6'h11) && (up_waddr[7:4] == DAC_CHANNEL_ID)) ? up_wreq : 1'b0;
++ 197   assign up_rreq_s = ((up_raddr[13:8] == 6'h11) && (up_raddr[7:4] == DAC_CHANNEL_ID)) ? up_rreq : 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_tdd_cntrl.v@193:203
+  wire    [ 7:0]  up_tdd_status_s;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == 6'h20) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h20) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 2:
+hdl/library/common/up_adc_channel.v@210:220
+  endfunction
+
+  // decode block select
+
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h01) && (up_waddr[7:4] == PCORE_ADC_CHID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h01) && (up_raddr[7:4] == PCORE_ADC_CHID)) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Clone Blocks 3:
+hdl/library/common/up_dac_channel.v@191:201
+    end
+  endfunction
+
+  // decode block select
+
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h11) && (up_waddr[7:4] == PCORE_DAC_CHID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h11) && (up_raddr[7:4] == PCORE_DAC_CHID)) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Clone Blocks 4:
+hdl/library/common/up_adc_channel.v@209:219
+    end
+  endfunction
+
+  // decode block select
+
+  assign up_wreq_s = ((up_waddr[13:8] == 6'h01) && (up_waddr[7:4] == PCORE_ADC_CHID)) ? up_wreq : 1'b0;
+  assign up_rreq_s = ((up_raddr[13:8] == 6'h01) && (up_raddr[7:4] == PCORE_ADC_CHID)) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+

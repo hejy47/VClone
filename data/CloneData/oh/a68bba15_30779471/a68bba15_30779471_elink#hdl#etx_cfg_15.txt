@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/etx_cfg.v@130:142@HdlStmProcess
+       tx_status_reg[15:0]<= tx_status_reg[15:0] | {tx_status_sync[15:0]};
+
+   //###########################
+   //# GPIO DATA
+   //###########################
+   always @ (posedge clk)
+     if (tx_gpio_write)
+       tx_gpio_reg[8:0] <= mi_din[8:0];
+
+   assign gpio_data[8:0] = tx_gpio_reg[8:0];
+   
+   //###########################
+   //# VERSION
+
+Diff Content:
+- 137        tx_gpio_reg[8:0] <= mi_din[8:0];
++ 137        tx_gpio_reg[8:0] <= data_in[8:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_cfg.v@134:144
+   //###########################
+   always @ (posedge clk)
+     if (tx_gpio_write)
+       tx_gpio_reg[8:0] <= mi_din[8:0];
+
+   assign gpio_data[8:0] = tx_gpio_reg[8:0];
+   
+   //###########################
+   //# VERSION
+   //###########################
+   always @ (posedge clk)
+

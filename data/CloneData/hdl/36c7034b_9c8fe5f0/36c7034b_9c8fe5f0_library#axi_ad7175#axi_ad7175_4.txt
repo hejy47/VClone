@@ -1,0 +1,51 @@
+Source Block: hdl/library/axi_ad7175/axi_ad7175.v@190:210@HdlStmProcess
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
+    end else begin      
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] | up_rdata_s[4];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3] | up_rack_s[4];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3] | up_wack_s[4];
+    end
+  end
+
+  // channel
+
+  axi_ad7175_channel #(
+    .CHID(0),
+
+Diff Content:
++ 203 	  adc_valid_d1 <= adc_valid_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_tx.v@197:217
+    dac_valid_q1 <= dac_valid & ~dac_r1_mode;
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
+    end else begin
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] | up_rdata_s[4];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2] | up_rack_s[3] | up_rack_s[4];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2] | up_wack_s[3] | up_wack_s[4];
+    end
+  end
+
+  // dac channel
+  
+  axi_ad9361_tx_channel #(
+    .CHID (0),
+

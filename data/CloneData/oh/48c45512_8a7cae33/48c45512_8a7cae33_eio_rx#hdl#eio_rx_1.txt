@@ -1,0 +1,31 @@
+Source Block: oh/eio_rx/hdl/eio_rx.v@334:344@HdlIdDef
+
+   //#############
+   //# Wait signals (asynchronous)
+   //#############
+
+   wire wr_wait = rxgpio ? ecfg_dataout[9]  : rx_wr_wait;
+   wire rd_wait = rxgpio ? ecfg_dataout[10] : rx_rd_wait;
+
+   OBUFDS 
+     #(
+       .IOSTANDARD(IOSTD_ELINK),
+
+Diff Content:
+- 339    wire wr_wait = rxgpio ? ecfg_dataout[9]  : rx_wr_wait;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/eio_rx/hdl/eio_rx.v@335:345
+   //#############
+   //# Wait signals (asynchronous)
+   //#############
+
+   wire wr_wait = rxgpio ? ecfg_dataout[9]  : rx_wr_wait;
+   wire rd_wait = rxgpio ? ecfg_dataout[10] : rx_rd_wait;
+
+   OBUFDS 
+     #(
+       .IOSTANDARD(IOSTD_ELINK),
+       .SLEW("SLOW")
+

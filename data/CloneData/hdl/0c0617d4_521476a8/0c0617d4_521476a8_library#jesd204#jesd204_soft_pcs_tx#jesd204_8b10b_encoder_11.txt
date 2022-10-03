@@ -1,0 +1,567 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v@67:247@HdlStmProcess
+reg may_invert4b;
+reg disparity4b;
+wire disparity4b_in;
+reg alt7;
+
+always @(*) begin
+  if (in_charisk == 1'b1) begin
+    // Assume K28.x
+    data6b = 6'b000011;
+    may_invert6b = 1'b1;
+    disparity6b = 1'b1;
+  end else begin
+    case (in_char[4:0])
+    5'd00: begin
+      data6b = 6'b000110;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd01: begin
+      data6b = 6'b010001;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd02: begin
+      data6b = 6'b010010;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd03: begin
+      data6b = 6'b100011;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd04: begin
+      data6b = 6'b010100;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd05: begin
+      data6b = 6'b100101;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd06: begin
+      data6b = 6'b100110;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd07: begin
+      data6b = 6'b111000;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b0;
+    end
+    5'd08: begin
+      data6b = 6'b011000;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd09: begin
+      data6b = 6'b101001;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd10: begin
+      data6b = 6'b101010;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd11: begin
+      data6b = 6'b001011;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd12: begin
+      data6b = 6'b101100;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd13: begin
+      data6b = 6'b001101;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd14: begin
+      data6b = 6'b001110;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd15: begin
+      data6b = 6'b000101;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd16: begin
+      data6b = 6'b001001;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd17: begin
+      data6b = 6'b110001;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd18: begin
+      data6b = 6'b110010;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd19: begin
+      data6b = 6'b010011;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd20: begin
+      data6b = 6'b110100;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd21: begin
+      data6b = 6'b010101;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd22: begin
+      data6b = 6'b010110;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd23: begin
+      data6b = 6'b101000;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd24: begin
+      data6b = 6'b001100;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd25: begin
+      data6b = 6'b011001;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd26: begin
+      data6b = 6'b011010;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd27: begin
+      data6b = 6'b100100;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd28: begin
+      data6b = 6'b011100;
+      may_invert6b = 1'b0;
+      disparity6b = 1'b0;
+    end
+    5'd29: begin
+      data6b = 6'b100010;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    5'd30: begin
+      data6b = 6'b100001;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    default: begin
+      data6b = 6'b001010;
+      may_invert6b = 1'b1;
+      disparity6b = 1'b1;
+    end
+    endcase
+  end
+end
+
+always @(*) begin
+  if (in_charisk == 1'b1) begin
+    alt7 = 1'b1;
+  end else begin
+
+Diff Content:
+- 72 always @(*) begin
+- 73   if (in_charisk == 1'b1) begin
+- 75     data6b = 6'b000011;
+- 76     may_invert6b = 1'b1;
+- 77     disparity6b = 1'b1;
+- 78   end else begin
+- 79     case (in_char[4:0])
+- 80     5'd00: begin
+- 81       data6b = 6'b000110;
+- 85     5'd01: begin
+- 86       data6b = 6'b010001;
+- 87       may_invert6b = 1'b1;
+- 88       disparity6b = 1'b1;
+- 89     end
+- 90     5'd02: begin
+- 91       data6b = 6'b010010;
+- 92       may_invert6b = 1'b1;
+- 93       disparity6b = 1'b1;
+- 94     end
+- 95     5'd03: begin
+- 96       data6b = 6'b100011;
+- 97       may_invert6b = 1'b0;
+- 98       disparity6b = 1'b0;
+- 99     end
+- 100     5'd04: begin
+- 101       data6b = 6'b010100;
+- 102       may_invert6b = 1'b1;
+- 103       disparity6b = 1'b1;
+- 104     end
+- 105     5'd05: begin
+- 106       data6b = 6'b100101;
+- 107       may_invert6b = 1'b0;
+- 108       disparity6b = 1'b0;
+- 109     end
+- 110     5'd06: begin
+- 111       data6b = 6'b100110;
+- 112       may_invert6b = 1'b0;
+- 113       disparity6b = 1'b0;
+- 114     end
+- 115     5'd07: begin
+- 116       data6b = 6'b111000;
+- 117       may_invert6b = 1'b1;
+- 118       disparity6b = 1'b0;
+- 119     end
+- 120     5'd08: begin
+- 121       data6b = 6'b011000;
+- 122       may_invert6b = 1'b1;
+- 123       disparity6b = 1'b1;
+- 124     end
+- 125     5'd09: begin
+- 126       data6b = 6'b101001;
+- 127       may_invert6b = 1'b0;
+- 128       disparity6b = 1'b0;
+- 129     end
+- 130     5'd10: begin
+- 131       data6b = 6'b101010;
+- 132       may_invert6b = 1'b0;
+- 133       disparity6b = 1'b0;
+- 134     end
+- 135     5'd11: begin
+- 136       data6b = 6'b001011;
+- 137       may_invert6b = 1'b0;
+- 138       disparity6b = 1'b0;
+- 139     end
+- 140     5'd12: begin
+- 141       data6b = 6'b101100;
+- 142       may_invert6b = 1'b0;
+- 143       disparity6b = 1'b0;
+- 144     end
+- 145     5'd13: begin
+- 146       data6b = 6'b001101;
+- 147       may_invert6b = 1'b0;
+- 148       disparity6b = 1'b0;
+- 149     end
+- 150     5'd14: begin
+- 151       data6b = 6'b001110;
+- 152       may_invert6b = 1'b0;
+- 153       disparity6b = 1'b0;
+- 154     end
+- 155     5'd15: begin
+- 156       data6b = 6'b000101;
+- 157       may_invert6b = 1'b1;
+- 158       disparity6b = 1'b1;
+- 159     end
+- 160     5'd16: begin
+- 161       data6b = 6'b001001;
+- 162       may_invert6b = 1'b1;
+- 163       disparity6b = 1'b1;
+- 164     end
+- 165     5'd17: begin
+- 166       data6b = 6'b110001;
+- 167       may_invert6b = 1'b0;
+- 168       disparity6b = 1'b0;
+- 169     end
+- 170     5'd18: begin
+- 171       data6b = 6'b110010;
+- 172       may_invert6b = 1'b0;
+- 173       disparity6b = 1'b0;
+- 174     end
+- 175     5'd19: begin
+- 176       data6b = 6'b010011;
+- 177       may_invert6b = 1'b0;
+- 178       disparity6b = 1'b0;
+- 179     end
+- 180     5'd20: begin
+- 181       data6b = 6'b110100;
+- 182       may_invert6b = 1'b0;
+- 183       disparity6b = 1'b0;
+- 184     end
+- 185     5'd21: begin
+- 186       data6b = 6'b010101;
+- 187       may_invert6b = 1'b0;
+- 188       disparity6b = 1'b0;
+- 189     end
+- 190     5'd22: begin
+- 191       data6b = 6'b010110;
+- 192       may_invert6b = 1'b0;
+- 193       disparity6b = 1'b0;
+- 194     end
+- 195     5'd23: begin
+- 196       data6b = 6'b101000;
+- 197       may_invert6b = 1'b1;
+- 198       disparity6b = 1'b1;
+- 199     end
+- 200     5'd24: begin
+- 201       data6b = 6'b001100;
+- 202       may_invert6b = 1'b1;
+- 203       disparity6b = 1'b1;
+- 204     end
+- 205     5'd25: begin
+- 206       data6b = 6'b011001;
+- 207       may_invert6b = 1'b0;
+- 208       disparity6b = 1'b0;
+- 209     end
+- 210     5'd26: begin
+- 211       data6b = 6'b011010;
+- 212       may_invert6b = 1'b0;
+- 213       disparity6b = 1'b0;
+- 214     end
+- 215     5'd27: begin
+- 216       data6b = 6'b100100;
+- 217       may_invert6b = 1'b1;
+- 218       disparity6b = 1'b1;
+- 219     end
+- 220     5'd28: begin
+- 221       data6b = 6'b011100;
+- 222       may_invert6b = 1'b0;
+- 223       disparity6b = 1'b0;
+- 224     end
+- 225     5'd29: begin
+- 226       data6b = 6'b100010;
+- 227       may_invert6b = 1'b1;
+- 228       disparity6b = 1'b1;
+- 230     5'd30: begin
+- 231       data6b = 6'b100001;
+- 232       may_invert6b = 1'b1;
+- 233       disparity6b = 1'b1;
+- 236       data6b = 6'b001010;
+- 237       may_invert6b = 1'b1;
+- 238       disparity6b = 1'b1;
+- 242 end
++ 81   always @(*) begin
++ 81     if (in_charisk == 1'b1) begin
++ 81       data6b = 6'b000011;
++ 83     end else begin
++ 83       case (in_char[4:0])
++ 83       5'd00: begin
++ 83         data6b = 6'b000110;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd01: begin
++ 83         data6b = 6'b010001;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd02: begin
++ 83         data6b = 6'b010010;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd03: begin
++ 83         data6b = 6'b100011;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd04: begin
++ 83         data6b = 6'b010100;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd05: begin
++ 83         data6b = 6'b100101;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd06: begin
++ 83         data6b = 6'b100110;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd07: begin
++ 83         data6b = 6'b111000;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd08: begin
++ 83         data6b = 6'b011000;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd09: begin
++ 83         data6b = 6'b101001;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd10: begin
++ 83         data6b = 6'b101010;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd11: begin
++ 83         data6b = 6'b001011;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd12: begin
++ 83         data6b = 6'b101100;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd13: begin
++ 83         data6b = 6'b001101;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd14: begin
++ 83         data6b = 6'b001110;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd15: begin
++ 83         data6b = 6'b000101;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd16: begin
++ 83         data6b = 6'b001001;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd17: begin
++ 83         data6b = 6'b110001;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd18: begin
++ 83         data6b = 6'b110010;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd19: begin
++ 83         data6b = 6'b010011;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd20: begin
++ 83         data6b = 6'b110100;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd21: begin
++ 83         data6b = 6'b010101;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd22: begin
++ 83         data6b = 6'b010110;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd23: begin
++ 83         data6b = 6'b101000;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd24: begin
++ 83         data6b = 6'b001100;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd25: begin
++ 83         data6b = 6'b011001;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd26: begin
++ 83         data6b = 6'b011010;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd27: begin
++ 83         data6b = 6'b100100;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd28: begin
++ 83         data6b = 6'b011100;
++ 83         may_invert6b = 1'b0;
++ 83         disparity6b = 1'b0;
++ 83       end
++ 83       5'd29: begin
++ 83         data6b = 6'b100010;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       5'd30: begin
++ 83         data6b = 6'b100001;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       default: begin
++ 83         data6b = 6'b001010;
++ 83         may_invert6b = 1'b1;
++ 83         disparity6b = 1'b1;
++ 83       end
++ 83       endcase
++ 228   end
++ 228   always @(*) begin
++ 228     if (in_charisk == 1'b1) begin
++ 228       alt7 = 1'b1;
++ 228     end else begin
++ 228         case ({may_invert6b,data6b[5:4]})
++ 228         3'b000: alt7 = in_disparity;
++ 228         3'b011: alt7 = ~in_disparity;
++ 228         default: alt7 = 1'b0;
++ 228         endcase
++ 233   end
++ 233   always @(*) begin
++ 233     case (in_char[7:5])
++ 233     3'd0: begin
++ 233       data4b = 4'b0010;
++ 233       may_invert4b = 1'b1;
++ 233       disparity4b = 1'b1;
++ 233     end
++ 233     3'd1: begin
++ 233       data4b = 4'b1001;
++ 233       may_invert4b = in_charisk;
++ 233       disparity4b = 1'b0;
++ 233     end
++ 233     3'd2: begin
++ 233       data4b = 4'b1010;
++ 233       may_invert4b = in_charisk;
++ 233       disparity4b = 1'b0;
++ 233     end
++ 233     3'd3: begin
++ 233       data4b = 4'b1100;
++ 233       may_invert4b = 1'b1;
++ 233       disparity4b = 1'b0;
++ 233     end
++ 233     3'd4: begin
++ 233       data4b = 4'b0100;
++ 233       may_invert4b = 1'b1;
++ 233       disparity4b = 1'b1;
++ 233     end
++ 233     3'd5: begin
++ 233       data4b = 4'b0101;
++ 233       may_invert4b = in_charisk;
++ 233       disparity4b = 1'b0;
++ 233     end
++ 233     3'd6: begin
++ 233       data4b = 4'b0110;
++ 233       may_invert4b = in_charisk;
++ 233       disparity4b = 1'b0;
++ 238       if (alt7 == 1'b1) begin
++ 238         data4b = 4'b0001;
++ 238       end else begin
++ 238         data4b = 4'b1000;
++ 238       end
++ 238       may_invert4b = 1'b1;
++ 238       disparity4b = 1'b1;
+
+Clone Blocks:

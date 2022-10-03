@@ -1,0 +1,353 @@
+Source Block: verilog-ethernet/rtl/eth_axis_rx_64.v@98:108@HdlIdDef
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+Diff Content:
+- 103 reg [47:0] output_eth_dest_mac_reg = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_axis_rx_64.v@95:105
+reg flush_save;
+reg transfer_in_save;
+
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_axis_rx_64.v@100:110
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+reg [63:0] save_axis_tdata_reg = 0;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/ip_eth_tx_64.v@151:161
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+
+Clone Blocks 4:
+verilog-ethernet/rtl/eth_axis_rx.v@104:114
+
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/ip_eth_tx_64.v@152:162
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+reg [63:0] save_ip_payload_tdata_reg = 0;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/eth_axis_rx.v@110:120
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+// internal datapath
+reg [7:0] output_eth_payload_tdata_int;
+reg       output_eth_payload_tvalid_int;
+reg       output_eth_payload_tready_int = 0;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/eth_axis_rx.v@107:117
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+// internal datapath
+
+Clone Blocks 8:
+verilog-ethernet/rtl/ip_eth_tx.v@144:154
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+// internal datapath
+
+Clone Blocks 9:
+verilog-ethernet/rtl/eth_axis_rx.v@104:114
+
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/eth_axis_rx.v@110:120
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+// internal datapath
+reg [7:0] output_eth_payload_tdata_int;
+reg       output_eth_payload_tvalid_int;
+reg       output_eth_payload_tready_int = 0;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/eth_axis_rx_64.v@97:107
+
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+
+Clone Blocks 12:
+verilog-ethernet/rtl/eth_axis_rx.v@102:112
+reg store_eth_type_0;
+reg store_eth_type_1;
+
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/eth_axis_rx_64.v@95:105
+reg flush_save;
+reg transfer_in_save;
+
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 14:
+verilog-ethernet/rtl/ip_eth_tx_64.v@154:164
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+reg [63:0] save_ip_payload_tdata_reg = 0;
+reg [7:0] save_ip_payload_tkeep_reg = 0;
+reg save_ip_payload_tlast_reg = 0;
+
+Clone Blocks 15:
+verilog-ethernet/rtl/ip_eth_tx.v@142:152
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+Clone Blocks 16:
+verilog-ethernet/rtl/eth_axis_rx.v@105:115
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/eth_axis_rx_64.v@99:109
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+
+Clone Blocks 18:
+verilog-ethernet/rtl/eth_axis_rx.v@102:112
+reg store_eth_type_0;
+reg store_eth_type_1;
+
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+Clone Blocks 19:
+verilog-ethernet/rtl/eth_axis_rx_64.v@97:107
+
+reg [7:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+
+Clone Blocks 20:
+verilog-ethernet/rtl/ip_eth_tx_64.v@150:160
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+Clone Blocks 21:
+verilog-ethernet/rtl/eth_axis_rx_64.v@102:112
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+reg [63:0] save_axis_tdata_reg = 0;
+reg [7:0] save_axis_tkeep_reg = 0;
+reg save_axis_tlast_reg = 0;
+
+Clone Blocks 22:
+verilog-ethernet/rtl/eth_axis_rx.v@106:116
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+
+Clone Blocks 23:
+verilog-ethernet/rtl/ip_eth_tx.v@143:153
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+reg input_ip_payload_tready_reg = 0, input_ip_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+
+Clone Blocks 24:
+verilog-ethernet/rtl/eth_axis_rx.v@109:119
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+// internal datapath
+reg [7:0] output_eth_payload_tdata_int;
+reg       output_eth_payload_tvalid_int;
+

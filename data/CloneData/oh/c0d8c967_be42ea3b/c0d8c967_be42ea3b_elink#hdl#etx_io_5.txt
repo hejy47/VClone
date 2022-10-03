@@ -1,0 +1,55 @@
+Source Block: oh/elink/hdl/etx_io.v@66:95@HdlStmProcess
+   //#############################  
+   assign         txenb = txenb_sync[0];   
+   assign         txgpio = txgpio_sync[0];
+
+   // Sync these control bits into our domain
+   always @ (posedge tx_lclk_div4) 
+     begin
+	txenb_sync[1:0]  <= {ecfg_tx_enable, txenb_sync[1]};
+	txgpio_sync[1:0] <= {ecfg_tx_gpio_enable, txgpio_sync[1]};      
+	if(txgpio) 
+	  begin
+             pframe <= {8{ecfg_dataout[8]}};           
+             for(n=0; n<8; n=n+1)
+               pdata[n*8+7 -: 8] <= ecfg_dataout[7:0];	   
+	  end else if(txenb) 
+	    begin
+               pframe[7:0]  <= tx_frame_par[7:0];
+               pdata[63:0]  <= tx_data_par[63:0];         
+	    end 
+	  else 
+	    begin	   
+               pframe[7:0] <= 8'd0;
+               pdata[63:0] <= 64'd0;	   
+	    end
+     end
+   
+
+   //FRAME SERDES
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+
+Diff Content:
+- 71    always @ (posedge tx_lclk_div4) 
+- 72      begin
+- 73 	txenb_sync[1:0]  <= {ecfg_tx_enable, txenb_sync[1]};
+- 74 	txgpio_sync[1:0] <= {ecfg_tx_gpio_enable, txgpio_sync[1]};      
+- 75 	if(txgpio) 
+- 76 	  begin
+- 77              pframe <= {8{ecfg_dataout[8]}};           
+- 78              for(n=0; n<8; n=n+1)
+- 79                pdata[n*8+7 -: 8] <= ecfg_dataout[7:0];	   
+- 80 	  end else if(txenb) 
+- 81 	    begin
+- 82                pframe[7:0]  <= tx_frame_par[7:0];
+- 83                pdata[63:0]  <= tx_data_par[63:0];         
+- 84 	    end 
+- 85 	  else 
+- 86 	    begin	   
+- 87                pframe[7:0] <= 8'd0;
+- 88                pdata[63:0] <= 64'd0;	   
+- 89 	    end
+- 90      end
+
+Clone Blocks:

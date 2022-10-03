@@ -1,0 +1,27 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@1086:1101@HdlStmProcess
+  .m_axis_empty()
+);
+
+// Save the descriptor in the source clock domain since the submission to
+// destination is delayed.
+always @(posedge src_clk) begin
+  if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
+    src_req_dest_address_cur <= src_req_dest_address;
+    src_req_xlast_cur <= src_req_xlast;
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_resetn == 1'b0) begin
+    src_dest_valid_hs <= 1'b0;
+  end else if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
+
+Diff Content:
+- 1091 always @(posedge src_clk) begin
+- 1092   if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
+- 1093     src_req_dest_address_cur <= src_req_dest_address;
+- 1094     src_req_xlast_cur <= src_req_xlast;
+- 1095   end
+- 1096 end
+
+Clone Blocks:

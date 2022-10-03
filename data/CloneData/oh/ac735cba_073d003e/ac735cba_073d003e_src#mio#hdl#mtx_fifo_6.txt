@@ -1,0 +1,39 @@
+Source Block: oh/src/mio/hdl/mtx_fifo.v@87:100@HdlStmAssign
+        	       (~emode & datamode_in[1:0]==2'b01) ? 8'h03 : //word
+         	       (~emode & datamode_in[1:0]==2'b10) ? 8'h0F : //short	 
+                                                            8'hFF;  //default
+			   
+   // folding data for fifo
+   assign fifo_data_in[63:0] = ~emode          ? data_wide[63:0]       :
+                                emesh_cycle[0] ? packet_wide[127:64]   :
+      		                emesh_cycle[1] ? packet_wide[191:128]  :
+		                                 packet_wide[63:0];
+
+   assign fifo_packet_in[71:0] = {fifo_data_in[63:0], valid[7:0]};
+   
+   // fifo access
+   assign fifo_access_in = access_in | (|emesh_cycle[1:0]);
+
+Diff Content:
+- 93                                 emesh_cycle[0] ? packet_wide[127:64]   :
+- 94       		                emesh_cycle[1] ? packet_wide[191:128]  :
+- 95 		                                 packet_wide[63:0];
++ 95                                 emesh_cycle[0] ? packet_buffer[127:64]   :
++ 95       		                emesh_cycle[1] ? packet_buffer[191:128]  :
++ 95 		                                  packet_in[63:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mtx_fifo.v@92:102
+   assign fifo_data_in[63:0] = ~emode          ? data_wide[63:0]       :
+                                emesh_cycle[0] ? packet_wide[127:64]   :
+      		                emesh_cycle[1] ? packet_wide[191:128]  :
+		                                 packet_wide[63:0];
+
+   assign fifo_packet_in[71:0] = {fifo_data_in[63:0], valid[7:0]};
+   
+   // fifo access
+   assign fifo_access_in = access_in | (|emesh_cycle[1:0]);
+      
+   // pushback wait while emesh transaction is active or while fifo is half-full
+

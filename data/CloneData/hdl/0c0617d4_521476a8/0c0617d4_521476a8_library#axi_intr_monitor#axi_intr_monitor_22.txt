@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_intr_monitor/axi_intr_monitor.v@100:110@HdlStmAssign
+
+//------------------------------------------------------------------------------
+//----------- Assign/Always Blocks ---------------------------------------------
+//------------------------------------------------------------------------------
+
+assign irq = interrupt;
+
+always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0 || control[0] == 1'b0) begin
+    counter_to_interrupt_cnt <= 0;
+    counter_interrupt_handling <= 'd0;
+
+Diff Content:
+- 105 assign irq = interrupt;
+
+Clone Blocks:

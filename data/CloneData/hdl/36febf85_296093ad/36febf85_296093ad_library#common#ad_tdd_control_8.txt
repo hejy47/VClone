@@ -1,0 +1,26 @@
+Source Block: hdl/library/common/ad_tdd_control.v@186:204@HdlStmProcess
+
+  // ***************************************************************************
+  // tdd counter (state machine)
+  // ***************************************************************************
+
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      tdd_cstate <= OFF;
+      tdd_enable_d <= 0;
+    end else begin
+      tdd_cstate <= tdd_cstate_next;
+      tdd_enable_d <= tdd_enable;
+    end
+  end
+
+  always @* begin
+    tdd_cstate_next <= tdd_cstate;
+
+    case (tdd_cstate)
+
+Diff Content:
+- 194       tdd_enable_d <= 0;
+- 197       tdd_enable_d <= tdd_enable;
+
+Clone Blocks:

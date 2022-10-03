@@ -1,0 +1,23 @@
+Source Block: oh/src/spi/hdl/spi_master_regs.v@168:184@HdlStmProcess
+	 `SPI_RX0    : reg_rdata[31:0] <= rx_reg[31:0];
+	 `SPI_RX1    : reg_rdata[31:0] <= rx_reg[63:32];	 
+	 default : reg_rdata[31:0] <= 32'hDEADBEEF;	 
+       endcase // case (dstaddr_in[5:0])
+
+   always @ (posedge clk)
+     begin
+	access_out          <= reg_read;
+	dstaddr_out[AW-1:0] <= srcaddr_in[AW-1:0];
+	ctrlmode_out[4:0]   <= ctrlmode_in[4:0];
+	datamode_out[1:0]   <= datamode_in[1:0];
+     end
+   
+   //create a pulse on register reads
+   oh_edge2pulse 
+     e2pulse (.out (wait_pulse),
+   	      .clk (clk),
+
+Diff Content:
+- 175 	access_out          <= reg_read;
+
+Clone Blocks:

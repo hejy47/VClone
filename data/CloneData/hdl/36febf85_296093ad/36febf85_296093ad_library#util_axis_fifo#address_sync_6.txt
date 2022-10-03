@@ -1,0 +1,35 @@
+Source Block: hdl/library/util_axis_fifo/address_sync.v@93:116@HdlStmProcess
+		level_next <= level + 1'b1;
+	else
+		level_next <= level;
+end
+
+always @(posedge clk)
+begin
+	if (resetn == 1'b0) begin
+		m_axis_valid <= 1'b0;
+		s_axis_ready <= 1'b0;
+		level <= 'h00;
+		room <= 2**C_ADDRESS_WIDTH;
+		s_axis_empty <= 'h00;
+	end else begin
+		level <= level_next;
+		room <= 2**C_ADDRESS_WIDTH - level_next;
+		m_axis_valid <= level_next != 0;
+		s_axis_ready <= level_next != 2**C_ADDRESS_WIDTH;
+		s_axis_empty <= level_next == 0;
+	end
+end
+
+endmodule
+
+
+Diff Content:
+- 104 		room <= 2**C_ADDRESS_WIDTH;
+- 108 		room <= 2**C_ADDRESS_WIDTH - level_next;
+- 110 		s_axis_ready <= level_next != 2**C_ADDRESS_WIDTH;
++ 104 		room <= 2**ADDRESS_WIDTH;
++ 108 		room <= 2**ADDRESS_WIDTH - level_next;
++ 110 		s_axis_ready <= level_next != 2**ADDRESS_WIDTH;
+
+Clone Blocks:

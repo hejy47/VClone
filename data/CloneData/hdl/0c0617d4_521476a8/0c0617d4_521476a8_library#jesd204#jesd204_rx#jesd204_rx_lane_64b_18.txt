@@ -1,0 +1,37 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@144:154@HdlIdDef
+  end else if (eomb) begin
+    crc12_on <= 1'b1;
+  end
+end
+
+reg crc12_rdy = 'b0;
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    crc12_rdy <= 1'b0;
+  end else if (crc12_on && eomb) begin
+    crc12_rdy <= 1'b1;
+
+Diff Content:
+- 149 reg crc12_rdy = 'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@145:161
+    crc12_on <= 1'b1;
+  end
+end
+
+reg crc12_rdy = 'b0;
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    crc12_rdy <= 1'b0;
+  end else if (crc12_on && eomb) begin
+    crc12_rdy <= 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (eomb) begin
+    crc12_calculated_prev <= crc12_calculated;
+  end
+

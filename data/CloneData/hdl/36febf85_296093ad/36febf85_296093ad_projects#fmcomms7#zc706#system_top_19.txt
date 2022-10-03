@@ -1,0 +1,163 @@
+Source Block: hdl/projects/fmcomms7/zc706/system_top.v@408:462@HdlStmProcess
+        dac_ddata_3 <= 64'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_1, adc_enable_0})
+      2'b11: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_1 & adc_valid_0;
+        adc_ddata[127:112] <= adc_data_1[63:48];
+        adc_ddata[111: 96] <= adc_data_0[63:48];
+        adc_ddata[ 95: 80] <= adc_data_1[47:32];
+        adc_ddata[ 79: 64] <= adc_data_0[47:32];
+        adc_ddata[ 63: 48] <= adc_data_1[31:16];
+        adc_ddata[ 47: 32] <= adc_data_0[31:16];
+        adc_ddata[ 31: 16] <= adc_data_1[15: 0];
+        adc_ddata[ 15:  0] <= adc_data_0[15: 0];
+      end
+      2'b10: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_1 & ~adc_dwr;
+        adc_ddata[127:112] <= adc_data_1[63:48];
+        adc_ddata[111: 96] <= adc_data_1[47:32];
+        adc_ddata[ 95: 80] <= adc_data_1[31:16];
+        adc_ddata[ 79: 64] <= adc_data_1[15: 0];
+        adc_ddata[ 63: 48] <= adc_ddata[127:112];
+        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+      end
+      2'b01: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_0 & ~adc_dwr;
+        adc_ddata[127:112] <= adc_data_0[63:48];
+        adc_ddata[111: 96] <= adc_data_0[47:32];
+        adc_ddata[ 95: 80] <= adc_data_0[31:16];
+        adc_ddata[ 79: 64] <= adc_data_0[15: 0];
+        adc_ddata[ 63: 48] <= adc_ddata[127:112];
+        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+      end
+      default: begin
+        adc_dsync <= 1'b0;
+        adc_dwr <= 1'b0;
+        adc_ddata <= 128'd0;
+      end
+    endcase
+  end
+
+  // spi
+
+  assign spi_csn_adc = spi0_csn[2];
+  assign spi_csn_dac = spi0_csn[1];
+
+Diff Content:
+- 413   always @(posedge adc_clk) begin
+- 414     case ({adc_enable_1, adc_enable_0})
+- 415       2'b11: begin
+- 416         adc_dsync <= 1'b1;
+- 417         adc_dwr <= adc_valid_1 & adc_valid_0;
+- 418         adc_ddata[127:112] <= adc_data_1[63:48];
+- 419         adc_ddata[111: 96] <= adc_data_0[63:48];
+- 420         adc_ddata[ 95: 80] <= adc_data_1[47:32];
+- 421         adc_ddata[ 79: 64] <= adc_data_0[47:32];
+- 422         adc_ddata[ 63: 48] <= adc_data_1[31:16];
+- 423         adc_ddata[ 47: 32] <= adc_data_0[31:16];
+- 424         adc_ddata[ 31: 16] <= adc_data_1[15: 0];
+- 425         adc_ddata[ 15:  0] <= adc_data_0[15: 0];
+- 426       end
+- 427       2'b10: begin
+- 428         adc_dsync <= 1'b1;
+- 429         adc_dwr <= adc_valid_1 & ~adc_dwr;
+- 430         adc_ddata[127:112] <= adc_data_1[63:48];
+- 431         adc_ddata[111: 96] <= adc_data_1[47:32];
+- 432         adc_ddata[ 95: 80] <= adc_data_1[31:16];
+- 433         adc_ddata[ 79: 64] <= adc_data_1[15: 0];
+- 434         adc_ddata[ 63: 48] <= adc_ddata[127:112];
+- 435         adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+- 436         adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+- 437         adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+- 438       end
+- 439       2'b01: begin
+- 440         adc_dsync <= 1'b1;
+- 441         adc_dwr <= adc_valid_0 & ~adc_dwr;
+- 442         adc_ddata[127:112] <= adc_data_0[63:48];
+- 443         adc_ddata[111: 96] <= adc_data_0[47:32];
+- 444         adc_ddata[ 95: 80] <= adc_data_0[31:16];
+- 445         adc_ddata[ 79: 64] <= adc_data_0[15: 0];
+- 446         adc_ddata[ 63: 48] <= adc_ddata[127:112];
+- 447         adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+- 448         adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+- 449         adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+- 450       end
+- 451       default: begin
+- 452         adc_dsync <= 1'b0;
+- 453         adc_dwr <= 1'b0;
+- 454         adc_ddata <= 128'd0;
+- 455       end
+- 456     endcase
+- 457   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/daq3/zc706/system_top.v@324:378
+        dac_ddata_1 <= 64'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_1, adc_enable_0})
+      2'b11: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_1 & adc_valid_0;
+        adc_ddata[127:112] <= adc_data_1[63:48];
+        adc_ddata[111: 96] <= adc_data_0[63:48];
+        adc_ddata[ 95: 80] <= adc_data_1[47:32];
+        adc_ddata[ 79: 64] <= adc_data_0[47:32];
+        adc_ddata[ 63: 48] <= adc_data_1[31:16];
+        adc_ddata[ 47: 32] <= adc_data_0[31:16];
+        adc_ddata[ 31: 16] <= adc_data_1[15: 0];
+        adc_ddata[ 15:  0] <= adc_data_0[15: 0];
+      end
+      2'b10: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_1 & ~adc_dwr;
+        adc_ddata[127:112] <= adc_data_1[63:48];
+        adc_ddata[111: 96] <= adc_data_1[47:32];
+        adc_ddata[ 95: 80] <= adc_data_1[31:16];
+        adc_ddata[ 79: 64] <= adc_data_1[15: 0];
+        adc_ddata[ 63: 48] <= adc_ddata[127:112];
+        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+      end
+      2'b01: begin
+        adc_dsync <= 1'b1;
+        adc_dwr <= adc_valid_0 & ~adc_dwr;
+        adc_ddata[127:112] <= adc_data_0[63:48];
+        adc_ddata[111: 96] <= adc_data_0[47:32];
+        adc_ddata[ 95: 80] <= adc_data_0[31:16];
+        adc_ddata[ 79: 64] <= adc_data_0[15: 0];
+        adc_ddata[ 63: 48] <= adc_ddata[127:112];
+        adc_ddata[ 47: 32] <= adc_ddata[111: 96];
+        adc_ddata[ 31: 16] <= adc_ddata[ 95: 80];
+        adc_ddata[ 15:  0] <= adc_ddata[ 79: 64];
+      end
+      default: begin
+        adc_dsync <= 1'b0;
+        adc_dwr <= 1'b0;
+        adc_ddata <= 128'd0;
+      end
+    endcase
+  end
+
+  // spi
+
+  assign spi_csn_adc = spi0_csn[2];
+  assign spi_csn_dac = spi0_csn[1];
+

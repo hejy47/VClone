@@ -1,0 +1,80 @@
+Source Block: oh/common/hdl/oh_iddr.v@30:42@HdlStmProcess
+   reg [DW-1:0]     q1_sl;
+   reg [DW-1:0]     q2_sh;
+   reg [DW-1:0]     q2_sl;
+   
+   // sample on rising edge
+   always @ (posedge clk)
+     if(ce)
+       q1_sl[DW-1:0] <= #0.2  din[DW-1:0];
+   
+   // sampling on falling edge
+   always @ (negedge clk)
+     if(ce)
+       q2_sh[DW-1:0] <= #0.2  din[DW-1:0];
+
+Diff Content:
+- 37        q1_sl[DW-1:0] <= #0.2  din[DW-1:0];
++ 37        q1_sl[DW-1:0] <= din[DW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_iddr.v@27:37
+   output [DW-1:0]  q2;     // iddr falling edge sampled data
+   
+   //regs("sl"=stable low, "sh"=stable high)
+   reg [DW-1:0]     q1_sl;
+   reg [DW-1:0]     q2_sh;
+   reg [DW-1:0]     q2_sl;
+   
+   // sample on rising edge
+   always @ (posedge clk)
+     if(ce)
+       q1_sl[DW-1:0] <= #0.2  din[DW-1:0];
+
+Clone Blocks 2:
+oh/common/hdl/oh_oddr.v@25:35
+   output [DW-1:0] out;   // ddr output
+
+   //regs("sl"=stable low, "sh"=stable high)
+   reg [DW-1:0]    q1_sl;   
+   reg [DW-1:0]    q2_sl;
+   reg [DW-1:0]    q2_sh;
+      
+   //Generate different logic based on parameters
+   always @ (posedge clk)
+     begin
+	q1_sl[DW-1:0] <= #(0.1) din1[DW-1:0];
+
+Clone Blocks 3:
+oh/common/hdl/oh_iddr.v@40:52
+   always @ (negedge clk)
+     if(ce)
+       q2_sh[DW-1:0] <= #0.2  din[DW-1:0];
+              
+   // same phase sampling the negedge
+   always @ (posedge clk)
+     if(ce)
+       q2_sl[DW-1:0] <= #0.2 q2_sh[DW-1:0];
+
+   // driving vectors
+   assign q1[DW-1:0] = q1_sl[DW-1:0];   
+   assign q2[DW-1:0] = q2_sl[DW-1:0];
+            
+
+Clone Blocks 4:
+oh/common/hdl/oh_iddr.v@35:47
+   always @ (posedge clk)
+     if(ce)
+       q1_sl[DW-1:0] <= #0.2  din[DW-1:0];
+   
+   // sampling on falling edge
+   always @ (negedge clk)
+     if(ce)
+       q2_sh[DW-1:0] <= #0.2  din[DW-1:0];
+              
+   // same phase sampling the negedge
+   always @ (posedge clk)
+     if(ce)
+       q2_sl[DW-1:0] <= #0.2 q2_sh[DW-1:0];
+

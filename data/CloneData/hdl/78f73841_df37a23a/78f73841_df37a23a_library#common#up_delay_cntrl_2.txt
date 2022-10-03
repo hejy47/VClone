@@ -1,0 +1,50 @@
+Source Block: hdl/library/common/up_delay_cntrl.v@169:194@HdlStmFor
+  end
+
+  // write does not hold- read back what goes into effect. 
+
+  generate
+  for (n = 0; n < DATA_WIDTH; n = n + 1) begin: g_dwr
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_dld[n] <= 'd0;
+      up_dwdata[((n*5)+4):(n*5)] <= 'd0;
+    end else begin
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == n)) begin
+        up_dld[n] <= 1'd1;
+        up_dwdata[((n*5)+4):(n*5)] <= up_wdata[4:0];
+      end else begin
+        up_dld[n] <= 1'd0;
+        up_dwdata[((n*5)+4):(n*5)] <= up_dwdata[((n*5)+4):(n*5)];
+      end
+    end
+  end
+  end
+  endgenerate
+
+  // resets
+
+  ad_rst i_delay_rst_reg (
+
+Diff Content:
+- 177       up_dld[n] <= 'd0;
+- 178       up_dwdata[((n*5)+4):(n*5)] <= 'd0;
+- 180       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == n)) begin
+- 181         up_dld[n] <= 1'd1;
+- 182         up_dwdata[((n*5)+4):(n*5)] <= up_wdata[4:0];
+- 183       end else begin
+- 184         up_dld[n] <= 1'd0;
+- 185         up_dwdata[((n*5)+4):(n*5)] <= up_dwdata[((n*5)+4):(n*5)];
+- 189   end
++ 174   assign up_dld_s[n] = (up_waddr[7:0] == n) ? up_wreq_s : 1'b0;
++ 174   assign up_dwdata_s[((n*5)+4):(n*5)] = (up_waddr[7:0] == n) ?
++ 174     up_wdata[4:0] : up_dwdata[((n*5)+4):(n*5)];
++ 174   end
++ 174   endgenerate
++ 178       up_dld <= 'd0;
++ 178       up_dwdata <= 'd0;
++ 185       up_dld <= up_dld_s;
++ 185       if (up_wreq_s == 1'b1) begin
++ 185         up_dwdata <= up_dwdata_s;
+
+Clone Blocks:

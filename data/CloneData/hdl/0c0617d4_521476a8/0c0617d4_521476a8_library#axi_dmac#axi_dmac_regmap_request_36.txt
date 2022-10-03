@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@233:243@HdlStmAssign
+      up_transfer_done_bitmap[up_transfer_id_eot] <= 1'b1;
+    end
+  end
+end
+
+assign up_tlf_rd = up_rreq && up_raddr == 'h114;
+assign up_bl_partial = response_valid & response_ready & response_partial & up_dma_enable_tlen_reporting;
+
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+    up_partial_length_valid <= 1'b0;
+
+Diff Content:
+- 238 assign up_tlf_rd = up_rreq && up_raddr == 'h114;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_regmap_request.v@234:244
+    end
+  end
+end
+
+assign up_tlf_rd = up_rreq && up_raddr == 'h114;
+assign up_bl_partial = response_valid & response_ready & response_partial & up_dma_enable_tlen_reporting;
+
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+    up_partial_length_valid <= 1'b0;
+  end else begin
+

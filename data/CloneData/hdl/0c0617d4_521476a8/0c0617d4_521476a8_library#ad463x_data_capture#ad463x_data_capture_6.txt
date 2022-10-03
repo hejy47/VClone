@@ -1,0 +1,31 @@
+Source Block: hdl/library/ad463x_data_capture/ad463x_data_capture.v@70:80@HdlIdDef
+// CSN positive edge validates the output data
+// WARNING: there isn't any buffering for data, if the sink module is not
+// ready, the data will be discarded
+assign m_axis_valid = csn & ~csn_d & m_axis_ready;
+
+genvar i, j;
+generate
+if (DDR_EN) // Double Data Rate mode
+begin
+
+  for (i=0; i<NUM_OF_LANES; i=i+1) begin
+
+Diff Content:
+- 75 genvar i, j;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/ad463x_data_capture/ad463x_data_capture.v@70:80
+// CSN positive edge validates the output data
+// WARNING: there isn't any buffering for data, if the sink module is not
+// ready, the data will be discarded
+assign m_axis_valid = csn & ~csn_d & m_axis_ready;
+
+genvar i, j;
+generate
+if (DDR_EN) // Double Data Rate mode
+begin
+
+  for (i=0; i<NUM_OF_LANES; i=i+1) begin
+

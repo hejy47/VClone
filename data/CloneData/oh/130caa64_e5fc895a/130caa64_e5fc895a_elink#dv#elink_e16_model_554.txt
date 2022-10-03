@@ -1,0 +1,46 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4426:4436@HdlStmAssign
+   //# single write will jump 3 entries to the end of the transaction
+   assign jump_3entries_write = single_write & (txo_launch_cnt[2:0] == 3'b100); 
+   //# read transaction will jump 3 entries over the data part of that transaction
+   //assign jump_3entries_read = ~ref_write & (txo_launch_cnt[2:0] == 3'b010);
+   //# read jump over data feature is disabled because of the test-and-set instr.
+   assign jump_3entries_read = 1'b0;
+   //# single jump when acknowledged and no other jumps and no freeze control
+   assign jump_1entry = ~(jump_4entries | jump_3entries | freeze_fifo) & txo_op_ack;
+
+   //###########################################################
+   //# Counter/FIFO Read Pointer increment prevention mechanism
+
+Diff Content:
+- 4431    assign jump_3entries_read = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4419:4430
+
+   //# 4 entries jump on burst transaction (counter comparison is redundant but used
+   //# here to underline the mutex between different jumps)
+   assign jump_4entries = burst_tran & (txo_launch_cnt[2:0] == 3'b110);
+   //# 3 entries jump on single write or read
+   assign jump_3entries = jump_3entries_write | 
+			  jump_3entries_read;
+   //# single write will jump 3 entries to the end of the transaction
+   assign jump_3entries_write = single_write & (txo_launch_cnt[2:0] == 3'b100); 
+   //# read transaction will jump 3 entries over the data part of that transaction
+   //assign jump_3entries_read = ~ref_write & (txo_launch_cnt[2:0] == 3'b010);
+   //# read jump over data feature is disabled because of the test-and-set instr.
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4417:4427
+   //#            --------------------------------------------
+   //####################################################################
+
+   //# 4 entries jump on burst transaction (counter comparison is redundant but used
+   //# here to underline the mutex between different jumps)
+   assign jump_4entries = burst_tran & (txo_launch_cnt[2:0] == 3'b110);
+   //# 3 entries jump on single write or read
+   assign jump_3entries = jump_3entries_write | 
+			  jump_3entries_read;
+   //# single write will jump 3 entries to the end of the transaction
+   assign jump_3entries_write = single_write & (txo_launch_cnt[2:0] == 3'b100); 
+

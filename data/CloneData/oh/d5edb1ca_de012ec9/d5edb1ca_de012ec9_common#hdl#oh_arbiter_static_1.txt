@@ -1,0 +1,30 @@
+Source Block: oh/common/hdl/oh_arbiter_static.v@26:35@HdlStmAssign
+     end
+   endgenerate
+
+   //grant circuit
+   assign grants[N-1:0] = requests[N-1:0] & ~waitmask[N-1:0];
+   assign waits[N-1:0]  = requests[N-1:0] & ~grants[N-1:0];
+   
+endmodule // oh_arbiter_priority
+
+
+
+Diff Content:
+- 31    assign waits[N-1:0]  = requests[N-1:0] & ~grants[N-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_arbiter_static.v@25:35
+	assign waitmask[j] = |requests[j-1:0];
+     end
+   endgenerate
+
+   //grant circuit
+   assign grants[N-1:0] = requests[N-1:0] & ~waitmask[N-1:0];
+   assign waits[N-1:0]  = requests[N-1:0] & ~grants[N-1:0];
+   
+endmodule // oh_arbiter_priority
+
+
+

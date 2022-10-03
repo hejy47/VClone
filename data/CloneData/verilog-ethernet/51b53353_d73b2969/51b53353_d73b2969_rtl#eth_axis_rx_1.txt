@@ -1,0 +1,131 @@
+Source Block: verilog-ethernet/rtl/eth_axis_rx.v@130:253@HdlStmProcess
+assign output_eth_type = output_eth_type_reg;
+
+assign busy = busy_reg;
+assign error_header_early_termination = error_header_early_termination_reg;
+
+always @* begin
+    state_next = 2'bz;
+
+    input_axis_tready_next = 0;
+
+    store_eth_dest_mac_0 = 0;
+    store_eth_dest_mac_1 = 0;
+    store_eth_dest_mac_2 = 0;
+    store_eth_dest_mac_3 = 0;
+    store_eth_dest_mac_4 = 0;
+    store_eth_dest_mac_5 = 0;
+    store_eth_src_mac_0 = 0;
+    store_eth_src_mac_1 = 0;
+    store_eth_src_mac_2 = 0;
+    store_eth_src_mac_3 = 0;
+    store_eth_src_mac_4 = 0;
+    store_eth_src_mac_5 = 0;
+    store_eth_type_0 = 0;
+    store_eth_type_1 = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_eth_hdr_valid_next = output_eth_hdr_valid_reg & ~output_eth_hdr_ready;
+
+    error_header_early_termination_next = 0;
+
+    output_eth_payload_tdata_int = 0;
+    output_eth_payload_tvalid_int = 0;
+    output_eth_payload_tlast_int = 0;
+    output_eth_payload_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+            input_axis_tready_next = ~output_eth_hdr_valid_reg;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                // got first word of packet
+                if (input_axis_tlast) begin
+                    // tlast asserted on first word
+                    error_header_early_termination_next = 1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    // move to read header state
+                    frame_ptr_next = 1;
+                    store_eth_dest_mac_5 = 1;
+                    state_next = STATE_READ_HEADER;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header
+            input_axis_tready_next = 1;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+1;
+                state_next = STATE_READ_HEADER;
+                case (frame_ptr_reg)
+                    8'h00: store_eth_dest_mac_5 = 1;
+                    8'h01: store_eth_dest_mac_4 = 1;
+                    8'h02: store_eth_dest_mac_3 = 1;
+                    8'h03: store_eth_dest_mac_2 = 1;
+                    8'h04: store_eth_dest_mac_1 = 1;
+                    8'h05: store_eth_dest_mac_0 = 1;
+                    8'h06: store_eth_src_mac_5 = 1;
+                    8'h07: store_eth_src_mac_4 = 1;
+                    8'h08: store_eth_src_mac_3 = 1;
+                    8'h09: store_eth_src_mac_2 = 1;
+                    8'h0A: store_eth_src_mac_1 = 1;
+                    8'h0B: store_eth_src_mac_0 = 1;
+                    8'h0C: store_eth_type_1 = 1;
+                    8'h0D: begin
+                        store_eth_type_0 = 1;
+                        output_eth_hdr_valid_next = 1;
+                        input_axis_tready_next = output_eth_payload_tready_int_early;
+                        state_next = STATE_READ_PAYLOAD;
+                    end
+                endcase
+                if (input_axis_tlast) begin
+                    error_header_early_termination_next = 1;
+                    input_axis_tready_next = ~output_eth_hdr_valid_reg;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_READ_PAYLOAD: begin
+            // read payload
+            input_axis_tready_next = output_eth_payload_tready_int_early;
+
+            output_eth_payload_tdata_int = input_axis_tdata;
+            output_eth_payload_tvalid_int = input_axis_tvalid;
+            output_eth_payload_tlast_int = input_axis_tlast;
+            output_eth_payload_tuser_int = input_axis_tuser;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                // word transfer through
+                if (input_axis_tlast) begin
+                    input_axis_tready_next = ~output_eth_hdr_valid_reg;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 136     state_next = 2'bz;
++ 136     state_next = STATE_IDLE;
+
+Clone Blocks:

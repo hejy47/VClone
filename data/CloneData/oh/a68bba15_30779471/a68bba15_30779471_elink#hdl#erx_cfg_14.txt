@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/erx_cfg.v@140:154@HdlStmProcess
+   assign remap_base[31:0] = rx_offset_reg[31:0];
+
+   //###########################1
+   //# IDELAY TAP VALUES
+   //###########################
+   always @ (posedge clk) 
+     if (rx_idelay0_write)
+       idelay[31:0]  <= mi_din[31:0];
+     else if(rx_idelay1_write)
+       idelay[44:32] <= mi_din[12:0];
+
+   //Construct delay for io (5*9 bits)   
+   assign idelay_value[44:0] = {idelay[44],idelay[35:32],//frame
+				idelay[43],idelay[31:28],//d7
+				idelay[42],idelay[27:24],//d6
+
+Diff Content:
+- 147        idelay[31:0]  <= mi_din[31:0];
+- 149        idelay[44:32] <= mi_din[12:0];
++ 147        idelay[31:0]  <= data_in[31:0];
++ 149        idelay[44:32] <= data_in[12:0];
+
+Clone Blocks:

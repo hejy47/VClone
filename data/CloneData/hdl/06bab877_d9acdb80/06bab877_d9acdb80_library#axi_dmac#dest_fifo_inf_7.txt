@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_dmac/dest_fifo_inf.v@142:158@HdlStmProcess
+    underflow <= underflow_s;
+    xfer_req <= xfer_req_s;
+  end
+end
+
+always @(posedge clk) begin
+  if ((resetn == 1'b0) || (valid_s == 1'b0)) begin
+    dout <= {DATA_WIDTH{1'b0}};
+  end else begin
+    dout <= dout_s;
+  end
+end
+
+dmac_response_generator # (
+  .ID_WIDTH(ID_WIDTH)
+) i_response_generator (
+  .clk(clk),
+
+Diff Content:
+- 147 always @(posedge clk) begin
+- 148   if ((resetn == 1'b0) || (valid_s == 1'b0)) begin
+- 151     dout <= dout_s;
++ 148   if ((resetn == 1'b0) || (data_enabled == 1'b0)) begin
++ 151     if (data_valid) begin
++ 151       dout <= dout_s;
++ 151     end
+
+Clone Blocks:

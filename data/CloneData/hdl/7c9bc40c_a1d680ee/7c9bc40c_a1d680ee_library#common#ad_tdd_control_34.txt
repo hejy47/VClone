@@ -1,0 +1,123 @@
+Source Block: hdl/library/common/ad_tdd_control.v@344:368@HdlStmProcess
+      tdd_rx_vco_en <= 1'b0;
+    end
+  end
+
+  // start/stop tx vco
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (tdd_counter == (tdd_vco_tx_on_1_d - 1)) begin
+        tdd_tx_vco_en <= 1'b1;
+      end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_vco_tx_on_2_d - 1))) begin
+        tdd_tx_vco_en <= 1'b1;
+      end else if (tdd_counter == (tdd_vco_tx_off_1_d - 1)) begin
+        tdd_tx_vco_en <= 1'b0;
+      end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_vco_tx_off_2_d - 1))) begin
+        tdd_tx_vco_en <= 1'b0;
+      end
+    end else begin
+      tdd_tx_vco_en <= 1'b0;
+    end
+  end
+
+  // start/stop rx rf path
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (tdd_counter == (tdd_rx_on_1_d - 1)) begin
+
+Diff Content:
+- 351       if (tdd_counter == (tdd_vco_tx_on_1_d - 1)) begin
+- 352         tdd_tx_vco_en <= 1'b1;
+- 353       end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_vco_tx_on_2_d - 1))) begin
+- 355       end else if (tdd_counter == (tdd_vco_tx_off_1_d - 1)) begin
+- 356         tdd_tx_vco_en <= 1'b0;
+- 357       end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_vco_tx_off_2_d - 1))) begin
++ 353       if (counter_at_tdd_vco_tx_on_1 || counter_at_tdd_vco_tx_on_2) begin
++ 357       end
++ 357       else if (counter_at_tdd_vco_tx_off_1 || counter_at_tdd_vco_tx_off_2) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_tdd_control.v@378:402
+      tdd_rx_rf_en <= 1'b0;
+    end
+  end
+
+  // start/stop tx rf path
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (tdd_counter == (tdd_tx_on_1_d - 1)) begin
+        tdd_tx_rf_en <= 1'b1;
+      end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_tx_on_2_d - 1))) begin
+        tdd_tx_rf_en <= 1'b1;
+      end else if (tdd_counter == (tdd_tx_off_1_d - 1)) begin
+        tdd_tx_rf_en <= 1'b0;
+      end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_tx_off_2_d - 1))) begin
+        tdd_tx_rf_en <= 1'b0;
+      end
+    end else begin
+      tdd_tx_rf_en <= 1'b0;
+    end
+  end
+
+  // start/stop tx data path
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (tdd_counter == (tdd_tx_dp_on_1_d - tdd_tx_dp_delay_d)) begin
+
+Clone Blocks 2:
+hdl/library/common/ad_tdd_control.v@327:351
+  // ***************************************************************************
+  // generate control signals
+  // ***************************************************************************
+
+  // start/stop rx vco
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (tdd_counter == (tdd_vco_rx_on_1_d - 1)) begin
+        tdd_rx_vco_en <= 1'b1;
+      end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_vco_rx_on_2_d - 1))) begin
+        tdd_rx_vco_en <= 1'b1;
+      end else if (tdd_counter == (tdd_vco_rx_off_1_d - 1)) begin
+        tdd_rx_vco_en <= 1'b0;
+      end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_vco_rx_off_2_d - 1))) begin
+        tdd_rx_vco_en <= 1'b0;
+      end
+    end else begin
+      tdd_rx_vco_en <= 1'b0;
+    end
+  end
+
+  // start/stop tx vco
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (tdd_counter == (tdd_vco_tx_on_1_d - 1)) begin
+
+Clone Blocks 3:
+hdl/library/common/ad_tdd_control.v@361:385
+      tdd_tx_vco_en <= 1'b0;
+    end
+  end
+
+  // start/stop rx rf path
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (tdd_counter == (tdd_rx_on_1_d - 1)) begin
+        tdd_rx_rf_en <= 1'b1;
+      end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_rx_on_2_d - 1))) begin
+        tdd_rx_rf_en <= 1'b1;
+      end else if (tdd_counter == (tdd_rx_off_1_d - 1)) begin
+        tdd_rx_rf_en <= 1'b0;
+      end else if ((tdd_secondary_d == 1'b1) && (tdd_counter == (tdd_rx_off_2_d - 1))) begin
+        tdd_rx_rf_en <= 1'b0;
+      end
+    end else begin
+      tdd_rx_rf_en <= 1'b0;
+    end
+  end
+
+  // start/stop tx rf path
+  always @(posedge clk) begin
+    if(tdd_counter_state == ON) begin
+      if (tdd_counter == (tdd_tx_on_1_d - 1)) begin
+

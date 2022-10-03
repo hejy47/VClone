@@ -1,0 +1,54 @@
+Source Block: oh/elink/hdl/etx_protocol.v@125:138@HdlStmAssign
+     end     
+*/
+   
+   assign burst_addr_match  = ((tx_dstaddr[31:0]+32'h8) == etx_dstaddr[31:0]);
+
+   assign current_match     = tx_access &
+			      tx_write &
+		              (tx_datamode[1:0]==2'b11) &		       
+			      (tx_ctrlmode[3:0]==4'b0000);
+
+   assign next_match       =  etx_access &
+			      etx_write &
+		              (etx_datamode[1:0]==2'b11) &		       
+			      (etx_ctrlmode[3:0]==4'b0000);
+
+Diff Content:
+- 130    assign current_match     = tx_access &
+- 131 			      tx_write &
++ 131    assign current_match     = tx_access & 
++ 131 			       tx_write &
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@130:143
+   assign current_match     = tx_access &
+			      tx_write &
+		              (tx_datamode[1:0]==2'b11) &		       
+			      (tx_ctrlmode[3:0]==4'b0000);
+
+   assign next_match       =  etx_access &
+			      etx_write &
+		              (etx_datamode[1:0]==2'b11) &		       
+			      (etx_ctrlmode[3:0]==4'b0000);
+     
+   assign tx_burst_in =  ~tx_wr_wait      &
+			 current_match    &
+			 next_match       &
+			 burst_addr_match;
+
+Clone Blocks 2:
+oh/elink/hdl/etx_protocol.v@123:133
+	access_old         <= tx_access;
+	ctrlmode_old[3:0]  <= tx_ctrlmode[3:0];	
+     end     
+*/
+   
+   assign burst_addr_match  = ((tx_dstaddr[31:0]+32'h8) == etx_dstaddr[31:0]);
+
+   assign current_match     = tx_access &
+			      tx_write &
+		              (tx_datamode[1:0]==2'b11) &		       
+			      (tx_ctrlmode[3:0]==4'b0000);
+

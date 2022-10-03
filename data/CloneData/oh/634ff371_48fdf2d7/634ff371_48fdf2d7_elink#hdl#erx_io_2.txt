@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/erx_io.v@218:228@HdlStmAssign
+
+   //###################################
+   //#IDELAY CIRCUIT
+   //###################################
+
+   assign  rxi_delay_in[8:0] ={rxi_frame,rxi_data[7:0]};
+   
+   //Do these need parameters?
+   IDELAYCTRL idelayctrl_inst (.RDY(),
+			       .REFCLK(rx_ref_clk),//200MHz clk (78ps tap delay)
+			       .RST(1'b0)
+
+Diff Content:
++ 223    BUFG bufg_rx_ref_clk( .I(rx_ref_clk), .O(rx_ref_clk_idlyctrl));
+
+Clone Blocks:

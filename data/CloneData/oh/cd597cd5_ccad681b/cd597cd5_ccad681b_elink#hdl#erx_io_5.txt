@@ -1,0 +1,64 @@
+Source Block: oh/elink/hdl/erx_io.v@130:146@HdlStmProcess
+	  access       <= rx_pointer[6];
+	  valid_packet <= access;//data pipeline
+       end
+
+   reg burst_detect;   
+   always @ (posedge rx_lclk or posedge reset)
+     if(reset)
+       burst_detect <= 1'b0;   
+     else if(access & rx_frame)
+       burst_detect <= 1'b1;
+     else if(~rx_frame)
+       burst_detect <= 1'b0;
+      
+   //###################################
+   //#SAMPLE AND HOLD DATA
+   //###################################
+
+
+Diff Content:
+- 135    always @ (posedge rx_lclk or posedge reset)
+- 136      if(reset)
++ 136    always @ (posedge rx_lclk or posedge exr_io_reset)
++ 136      if(exr_io_reset)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_io.v@129:139
+       begin     
+	  access       <= rx_pointer[6];
+	  valid_packet <= access;//data pipeline
+       end
+
+   reg burst_detect;   
+   always @ (posedge rx_lclk or posedge reset)
+     if(reset)
+       burst_detect <= 1'b0;   
+     else if(access & rx_frame)
+       burst_detect <= 1'b1;
+
+Clone Blocks 2:
+oh/elink/hdl/erx_io.v@117:137
+   //#####################  
+   //#DATA VALID SIGNAL 
+   //####################
+
+
+   always @ (posedge rx_lclk or posedge reset)
+     if(reset)
+       begin
+	  access       <= 1'b0;
+	  valid_packet <= 1'b0;	  
+       end
+     else
+       begin     
+	  access       <= rx_pointer[6];
+	  valid_packet <= access;//data pipeline
+       end
+
+   reg burst_detect;   
+   always @ (posedge rx_lclk or posedge reset)
+     if(reset)
+       burst_detect <= 1'b0;   
+

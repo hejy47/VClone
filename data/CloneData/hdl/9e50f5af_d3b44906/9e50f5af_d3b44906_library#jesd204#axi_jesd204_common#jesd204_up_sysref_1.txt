@@ -1,0 +1,51 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_sysref.v@63:73@HdlIdDef
+
+  input core_event_sysref_alignment_error
+);
+
+reg up_status_sysref_alignment_error = 1'b0;
+wire up_status_sysref_captured;
+
+always @(*) begin
+  case (up_raddr)
+  /* JESD SYSREF configuraton */
+  12'h040: up_rdata <= {
+
+Diff Content:
++ 68 reg [1:0] up_sysref_status;
++ 68 reg [1:0] up_sysref_status_clear;
++ 68 wire [1:0] up_sysref_event;
++ 68 sync_event #(
++ 68   .NUM_OF_EVENTS(2)
++ 68 ) i_sysref_event_sync (
++ 68   .in_clk(core_clk),
++ 68   .in_event({
++ 68     core_event_sysref_alignment_error,
++ 68     core_event_sysref_edge
++ 68   }),
++ 68   .out_clk(up_clk),
++ 68   .out_event(up_sysref_event)
++ 68 );
++ 68 always @(posedge up_clk) begin
++ 68   if (up_reset == 1'b1) begin
++ 68     up_sysref_status <= 2'b00;
++ 68   end else begin
++ 68     up_sysref_status <= (up_sysref_status & ~up_sysref_status_clear) | up_sysref_event;
++ 68   end
++ 68 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_common/jesd204_up_sysref.v@62:72
+  output reg up_cfg_sysref_disable,
+
+  input core_event_sysref_alignment_error
+);
+
+reg up_status_sysref_alignment_error = 1'b0;
+wire up_status_sysref_captured;
+
+always @(*) begin
+  case (up_raddr)
+  /* JESD SYSREF configuraton */
+

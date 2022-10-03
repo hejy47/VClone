@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_aligner8.v@53:79@HdlStmProcess
+    end
+    ivalid_d <= ivalid;
+  end
+
+  reg [2:0] phase = 'h0;
+  always @(posedge clk) begin
+    if (ivalid) begin
+      if ((strobe != 'b1111_1111) && (strobe != 'b0000_0000)) begin
+        casex (strobe)
+          'b1xxx_xxxx : phase <= 0;
+          'b01xx_xxxx : phase <= 1;
+          'b001x_xxxx : phase <= 2;
+          'b0001_xxxx : phase <= 3;
+          'b0000_1xxx : phase <= 4;
+          'b0000_01xx : phase <= 5;
+          'b0000_001x : phase <= 6;
+          'b0000_0001 : phase <= 7;
+          default     : phase <= phase;
+        endcase
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    case (phase)
+      0 : odata <= idata_d;
+      1 : odata <= {idata_d[6:0],idata[7:7]};
+
+Diff Content:
+- 59     if (ivalid) begin
++ 59     if (rst) begin
++ 59       phase <= 0;
++ 59     end if (ivalid) begin
+
+Clone Blocks:

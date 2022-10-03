@@ -1,0 +1,38 @@
+Source Block: hdl/library/prcfg/default/prcfg_adc.v@82:93@HdlStmProcess
+  reg     [31:0]    dst_adc_ddata;
+  reg               src_adc_dovf;
+
+  assign status = {24'h0, RP_ID};
+
+  always @(posedge clk) begin
+    dst_adc_dwr    <= src_adc_dwr;
+    dst_adc_dsync  <= src_adc_dsync;
+    dst_adc_ddata  <= src_adc_ddata;
+    src_adc_dovf   <= dst_adc_dovf;
+  end
+endmodule
+
+Diff Content:
+- 88     dst_adc_dwr    <= src_adc_dwr;
+- 89     dst_adc_dsync  <= src_adc_dsync;
+- 90     dst_adc_ddata  <= src_adc_ddata;
+- 91     src_adc_dovf   <= dst_adc_dovf;
++ 91     dst_adc_enable <= src_adc_enable;
++ 91     dst_adc_valid <= src_adc_valid;
++ 91     dst_adc_data <= src_adc_data;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/default/prcfg_adc.v@80:90
+  reg               dst_adc_dwr;
+  reg               dst_adc_dsync;
+  reg     [31:0]    dst_adc_ddata;
+  reg               src_adc_dovf;
+
+  assign status = {24'h0, RP_ID};
+
+  always @(posedge clk) begin
+    dst_adc_dwr    <= src_adc_dwr;
+    dst_adc_dsync  <= src_adc_dsync;
+    dst_adc_ddata  <= src_adc_ddata;
+

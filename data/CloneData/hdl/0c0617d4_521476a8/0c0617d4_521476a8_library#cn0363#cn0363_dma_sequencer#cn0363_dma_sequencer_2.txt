@@ -1,0 +1,45 @@
+Source Block: hdl/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v@72:82@HdlStmAssign
+  output processing_resetn
+);
+
+reg [3:0] count = 'h00;
+
+assign overflow = dma_wr_overflow;
+assign processing_resetn = dma_wr_xfer_req;
+
+always @(posedge clk) begin
+  if (processing_resetn == 1'b0) begin
+    count <= 'h0;
+
+Diff Content:
+- 77 assign overflow = dma_wr_overflow;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v@70:80
+  input [13:0] channel_enable,
+
+  output processing_resetn
+);
+
+reg [3:0] count = 'h00;
+
+assign overflow = dma_wr_overflow;
+assign processing_resetn = dma_wr_xfer_req;
+
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v@73:83
+);
+
+reg [3:0] count = 'h00;
+
+assign overflow = dma_wr_overflow;
+assign processing_resetn = dma_wr_xfer_req;
+
+always @(posedge clk) begin
+  if (processing_resetn == 1'b0) begin
+    count <= 'h0;
+  end else begin
+

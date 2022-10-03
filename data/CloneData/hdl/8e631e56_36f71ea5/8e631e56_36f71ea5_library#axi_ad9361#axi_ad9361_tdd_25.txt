@@ -1,0 +1,48 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tdd.v@206:216@HdlStmAssign
+  assign  tdd_rx_valid_i1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
+  assign  tdd_rx_valid_q1 = ((tdd_enable_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
+
+  assign  tdd_enable = tdd_enable_s;
+
+  // instantiations
+
+  up_tdd_cntrl i_up_tdd_cntrl(
+    .clk(clk),
+
+Diff Content:
+- 211   assign  tdd_enable = tdd_enable_s;
++ 211   assign tdd_sync_t = tdd_terminal_type_s;
++ 211   always @(posedge clk) begin
++ 211     if (rst == 1'b1) begin
++ 211       tdd_slave_synced <= 1'b0;
++ 211     end else begin
++ 211       if(tdd_sync_i == 1) begin
++ 211         tdd_slave_synced <= 1'b1;
++ 211       end else begin
++ 211         tdd_slave_synced <= tdd_slave_synced & tdd_enable_s;
++ 211       end
++ 211     end
++ 211   end
++ 211   always @(posedge clk) begin
++ 211     if (rst == 1'b1) begin
++ 211       tdd_sync_o <= 1'b0;
++ 211     end else begin
++ 211       if(~tdd_enable & tdd_enable_s == 1'b1) begin
++ 211         tdd_sync_o <= 1'b1;
++ 211       end else begin
++ 211         tdd_sync_o <= 1'b0;
++ 211       end
++ 211     end
++ 211   end
++ 211   always @(posedge clk) begin
++ 211     if (rst == 1'b1) begin
++ 211       tdd_enable <= 1'b0;
++ 211     end else begin
++ 211       tdd_enable <= (tdd_terminal_type_s == 1'b1) ? tdd_enable_s :
++ 211                                                     (tdd_enable_s & tdd_slave_synced);
++ 211     end
++ 211   end
+
+Clone Blocks:

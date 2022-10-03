@@ -1,0 +1,56 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane.v@257:287@HdlStmIf
+      charisk28_aligned
+    })
+);
+
+generate
+if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align
+jesd204_rx_frame_align #(
+  .DATA_PATH_WIDTH  (DATA_PATH_WIDTH),
+  .ENABLE_CHAR_REPLACE (ENABLE_CHAR_REPLACE)
+) i_frame_align (
+  .clk                          (clk),
+  .reset                        (buffer_ready_n_s),
+  .cfg_octets_per_multiframe    (cfg_octets_per_multiframe),
+  .cfg_octets_per_frame         (cfg_octets_per_frame),
+  .cfg_disable_char_replacement (cfg_disable_char_replacement),
+  .cfg_disable_scrambler        (cfg_disable_scrambler),
+  .charisk28                    (charisk28_aligned),
+  .data                         (data_aligned),
+  .data_replaced                (data_replaced),
+  .align_err_cnt                (status_frame_align_err_cnt)
+);
+
+end else begin : gen_no_frame_align_monitor
+  assign status_frame_align_err_cnt = 32'd0;
+  assign data_replaced = data_aligned;
+end
+endgenerate
+
+jesd204_scrambler #(
+  .WIDTH(DATA_PATH_WIDTH*8),
+  .DESCRAMBLE(1)
+
+Diff Content:
+- 262 if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align
+- 263 jesd204_rx_frame_align #(
+- 264   .DATA_PATH_WIDTH  (DATA_PATH_WIDTH),
+- 265   .ENABLE_CHAR_REPLACE (ENABLE_CHAR_REPLACE)
+- 266 ) i_frame_align (
+- 267   .clk                          (clk),
+- 268   .reset                        (buffer_ready_n_s),
+- 269   .cfg_octets_per_multiframe    (cfg_octets_per_multiframe),
+- 270   .cfg_octets_per_frame         (cfg_octets_per_frame),
+- 271   .cfg_disable_char_replacement (cfg_disable_char_replacement),
+- 272   .cfg_disable_scrambler        (cfg_disable_scrambler),
+- 273   .charisk28                    (charisk28_aligned),
+- 274   .data                         (data_aligned),
+- 275   .data_replaced                (data_replaced),
+- 276   .align_err_cnt                (status_frame_align_err_cnt)
+- 277 );
+- 279 end else begin : gen_no_frame_align_monitor
+- 280   assign status_frame_align_err_cnt = 32'd0;
+- 281   assign data_replaced = data_aligned;
+- 282 end
+
+Clone Blocks:

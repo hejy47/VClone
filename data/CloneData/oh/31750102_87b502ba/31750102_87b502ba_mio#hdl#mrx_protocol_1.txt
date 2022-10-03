@@ -1,0 +1,22 @@
+Source Block: oh/mio/hdl/mrx_protocol.v@65:79@HdlStmProcess
+   
+   assign transfer_done = (mrx_count[CW-1:0]==1'b1) & (mrx_state[2:0]==`MRX_BUSY);
+   assign shift         = (mrx_state[2:0]==`MRX_BUSY);
+   
+   //pipeline access signal
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       fifo_access <= 'b0;
+     else
+       fifo_access <= transfer_done;
+   
+   //##########################
+   //# SHIFT REGISTER
+   //##########################
+
+
+Diff Content:
+- 70    always @ (posedge clk or negedge nreset)
++ 70    always @ (posedge rx_clk or negedge nreset)
+
+Clone Blocks:

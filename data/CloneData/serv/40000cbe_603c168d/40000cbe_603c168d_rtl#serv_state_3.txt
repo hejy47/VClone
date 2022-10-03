@@ -1,0 +1,47 @@
+Source Block: serv/rtl/serv_state.v@69:79@HdlIdDef
+   //slt*, branch/jump, shift, load/store
+   wire two_stage_op = i_slt_op | i_mem_op | i_branch_op | i_shift_op;
+
+   reg 	stage_two_pending;
+
+   reg 	pending_irq;
+
+   assign o_dbus_cyc = (state == IDLE) & stage_two_pending & i_mem_op & !i_mem_misalign;
+
+   wire trap_pending = (o_ctrl_jump & i_ctrl_misalign) | i_mem_misalign;
+
+
+Diff Content:
+- 74    reg 	pending_irq;
++ 74    reg 	irq_sync;
++ 74    reg 	misalign_trap_sync;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_state.v@67:77
+   assign o_ctrl_trap = (state == TRAP);
+
+   //slt*, branch/jump, shift, load/store
+   wire two_stage_op = i_slt_op | i_mem_op | i_branch_op | i_shift_op;
+
+   reg 	stage_two_pending;
+
+   reg 	pending_irq;
+
+   assign o_dbus_cyc = (state == IDLE) & stage_two_pending & i_mem_op & !i_mem_misalign;
+
+
+Clone Blocks 2:
+serv/rtl/serv_state.v@71:81
+
+   reg 	stage_two_pending;
+
+   reg 	pending_irq;
+
+   assign o_dbus_cyc = (state == IDLE) & stage_two_pending & i_mem_op & !i_mem_misalign;
+
+   wire trap_pending = (o_ctrl_jump & i_ctrl_misalign) | i_mem_misalign;
+
+   //Prepare RF for reads when a new instruction is fetched
+   // or when stage one caused an exception (rreq implies a write request too)
+

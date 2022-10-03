@@ -1,0 +1,70 @@
+Source Block: hdl/library/axi_hdmi_tx/axi_hdmi_tx_core.v@505:551@HdlStmProcess
+
+  // hdmi clipping
+
+  assign hdmi_clip_data_s = hdmi_24_csc_data;
+
+  always @(posedge hdmi_clk) begin
+    hdmi_clip_hs_d <= hdmi_24_csc_hsync;
+    hdmi_clip_vs_d <= hdmi_24_csc_vsync;
+    hdmi_clip_hs_de_d <= hdmi_24_csc_hsync_data_e;
+    hdmi_clip_vs_de_d <= hdmi_24_csc_vsync_data_e;
+    hdmi_clip_de_d <= hdmi_24_csc_data_e;
+
+    // Cr (red-diff) / red
+
+    if (hdmi_clip_data_s[23:16] > hdmi_clip_max[23:16]) begin
+      hdmi_clip_data[23:16] <= hdmi_clip_max[23:16];
+    end else if (hdmi_clip_data_s[23:16] < hdmi_clip_min[23:16]) begin
+      hdmi_clip_data[23:16] <= hdmi_clip_min[23:16];
+    end else begin
+      hdmi_clip_data[23:16] <= hdmi_clip_data_s[23:16];
+    end
+
+    // Y (luma) / green
+
+    if (hdmi_clip_data_s[15:8] > hdmi_clip_max[15:8]) begin
+      hdmi_clip_data[15:8] <= hdmi_clip_max[15:8];
+    end else if (hdmi_clip_data_s[15:8] < hdmi_clip_min[15:8]) begin
+      hdmi_clip_data[15:8] <= hdmi_clip_min[15:8];
+    end else begin
+      hdmi_clip_data[15:8] <= hdmi_clip_data_s[15:8];
+    end
+
+    // Cb (blue-diff) / blue
+
+    if (hdmi_clip_data_s[7:0] > hdmi_clip_max[7:0]) begin
+      hdmi_clip_data[7:0] <= hdmi_clip_max[7:0];
+    end else if (hdmi_clip_data_s[7:0] < hdmi_clip_min[7:0]) begin
+      hdmi_clip_data[7:0] <= hdmi_clip_min[7:0];
+    end else begin
+      hdmi_clip_data[7:0] <= hdmi_clip_data_s[7:0];
+    end
+  end
+
+  // hdmi csc 16, 24 and 36 outputs
+
+  always @(posedge hdmi_clk) begin
+
+
+Diff Content:
+- 519     if (hdmi_clip_data_s[23:16] > hdmi_clip_max[23:16]) begin
+- 521     end else if (hdmi_clip_data_s[23:16] < hdmi_clip_min[23:16]) begin
+- 524       hdmi_clip_data[23:16] <= hdmi_clip_data_s[23:16];
+- 529     if (hdmi_clip_data_s[15:8] > hdmi_clip_max[15:8]) begin
+- 531     end else if (hdmi_clip_data_s[15:8] < hdmi_clip_min[15:8]) begin
+- 534       hdmi_clip_data[15:8] <= hdmi_clip_data_s[15:8];
+- 539     if (hdmi_clip_data_s[7:0] > hdmi_clip_max[7:0]) begin
+- 541     end else if (hdmi_clip_data_s[7:0] < hdmi_clip_min[7:0]) begin
+- 544       hdmi_clip_data[7:0] <= hdmi_clip_data_s[7:0];
++ 519     if (hdmi_24_csc_data[23:16] > hdmi_clip_max[23:16]) begin
++ 521     end else if (hdmi_24_csc_data[23:16] < hdmi_clip_min[23:16]) begin
++ 524       hdmi_clip_data[23:16] <= hdmi_24_csc_data[23:16];
++ 529     if (hdmi_24_csc_data[15:8] > hdmi_clip_max[15:8]) begin
++ 531     end else if (hdmi_24_csc_data[15:8] < hdmi_clip_min[15:8]) begin
++ 534       hdmi_clip_data[15:8] <= hdmi_24_csc_data[15:8];
++ 539     if (hdmi_24_csc_data[7:0] > hdmi_clip_max[7:0]) begin
++ 541     end else if (hdmi_24_csc_data[7:0] < hdmi_clip_min[7:0]) begin
++ 544       hdmi_clip_data[7:0] <= hdmi_24_csc_data[7:0];
+
+Clone Blocks:

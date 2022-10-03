@@ -1,0 +1,71 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/util_dacfifo_bypass.v@192:202@HdlStmAssign
+                                 (MEM_RATIO == 2) ? ({dma_mem_raddr, 1'b0}) :
+                                 (MEM_RATIO == 4) ? ({dma_mem_raddr, 2'b0}) : ({dma_mem_raddr, 3'b0}));
+
+
+  // relative address offset on dac domain
+  assign dac_address_diff_s = {1'b1, dac_mem_raddr} - dac_mem_waddr_s;
+  assign dac_mem_waddr_s = (DAC_DATA_WIDTH>DMA_DATA_WIDTH) ?
+                                ((MEM_RATIO == 1) ? (dac_mem_waddr) :
+                                 (MEM_RATIO == 2) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):1]) :
+                                 (MEM_RATIO == 4) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):2]) : (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):3])) :
+                                ((MEM_RATIO == 1) ? (dac_mem_waddr) :
+
+Diff Content:
+- 197   assign dac_address_diff_s = {1'b1, dac_mem_raddr} - dac_mem_waddr_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/axi_dacfifo/util_dacfifo_bypass.v@193:209
+                                 (MEM_RATIO == 4) ? ({dma_mem_raddr, 2'b0}) : ({dma_mem_raddr, 3'b0}));
+
+
+  // relative address offset on dac domain
+  assign dac_address_diff_s = {1'b1, dac_mem_raddr} - dac_mem_waddr_s;
+  assign dac_mem_waddr_s = (DAC_DATA_WIDTH>DMA_DATA_WIDTH) ?
+                                ((MEM_RATIO == 1) ? (dac_mem_waddr) :
+                                 (MEM_RATIO == 2) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):1]) :
+                                 (MEM_RATIO == 4) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):2]) : (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):3])) :
+                                ((MEM_RATIO == 1) ? (dac_mem_waddr) :
+                                 (MEM_RATIO == 2) ? ({dac_mem_waddr, 1'b0}) :
+                                 (MEM_RATIO == 4) ? ({dac_mem_waddr, 2'b0}) : ({dac_mem_waddr, 3'b0}));
+
+  // Read address generation for the asymmetric memory
+
+  assign dac_mem_rea_s = dac_valid & dac_mem_ready;
+
+
+Clone Blocks 2:
+hdl/library/altera/avl_dacfifo/util_dacfifo_bypass.v@188:204
+                                 (MEM_RATIO == 4) ? ({dma_mem_raddr, 2'b0}) : ({dma_mem_raddr, 3'b0}));
+
+
+  // relative address offset on dac domain
+  assign dac_address_diff_s = {1'b1, dac_mem_raddr} - dac_mem_waddr_s;
+  assign dac_mem_waddr_s = (DAC_DATA_WIDTH>DMA_DATA_WIDTH) ?
+                                ((MEM_RATIO == 1) ? (dac_mem_waddr) :
+                                 (MEM_RATIO == 2) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):1]) :
+                                 (MEM_RATIO == 4) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):2]) : (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):3])) :
+                                ((MEM_RATIO == 1) ? (dac_mem_waddr) :
+                                 (MEM_RATIO == 2) ? ({dac_mem_waddr, 1'b0}) :
+                                 (MEM_RATIO == 4) ? ({dac_mem_waddr, 2'b0}) : ({dac_mem_waddr, 3'b0}));
+
+  // Read address generation for the asymmetric memory
+
+  assign dac_mem_rea_s = dac_valid & dac_mem_ready;
+
+
+Clone Blocks 3:
+hdl/library/altera/avl_dacfifo/util_dacfifo_bypass.v@187:197
+                                 (MEM_RATIO == 2) ? ({dma_mem_raddr, 1'b0}) :
+                                 (MEM_RATIO == 4) ? ({dma_mem_raddr, 2'b0}) : ({dma_mem_raddr, 3'b0}));
+
+
+  // relative address offset on dac domain
+  assign dac_address_diff_s = {1'b1, dac_mem_raddr} - dac_mem_waddr_s;
+  assign dac_mem_waddr_s = (DAC_DATA_WIDTH>DMA_DATA_WIDTH) ?
+                                ((MEM_RATIO == 1) ? (dac_mem_waddr) :
+                                 (MEM_RATIO == 2) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):1]) :
+                                 (MEM_RATIO == 4) ? (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):2]) : (dac_mem_waddr[(DMA_ADDRESS_WIDTH-1):3])) :
+                                ((MEM_RATIO == 1) ? (dac_mem_waddr) :
+

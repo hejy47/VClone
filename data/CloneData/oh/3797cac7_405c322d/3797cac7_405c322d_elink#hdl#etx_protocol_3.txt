@@ -1,0 +1,19 @@
+Source Block: oh/elink/hdl/etx_protocol.v@82:93@HdlStmProcess
+   
+
+   reg 		 tx_io_wait_reg;
+   
+   //Pipeline the io wait to improve timing
+   always @ (posedge clk)
+     tx_io_wait_reg <= tx_io_wait;
+
+   //Prepare transaction / with burst
+   always @ (posedge clk)
+     if(!nreset)
+       begin
+
+Diff Content:
+- 87    always @ (posedge clk)
+- 88      tx_io_wait_reg <= tx_io_wait;
+
+Clone Blocks:

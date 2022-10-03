@@ -1,0 +1,109 @@
+Source Block: serv/rtl/serv_mpram.v@50:60@HdlIdDef
+
+   assign wdata = wcnt_lo[0] ? wdata0[3:0] : wdata1[3:0];
+
+   assign wen = !wgo_r & |(wen_r & wcnt_lo[1:0]);
+
+   reg [4:0] 	     rd_waddr;
+
+   //port 0 rd mtval
+   //port 1 csr mepc
+   //mepc  100010
+   //mtval 100011
+
+Diff Content:
+- 55    reg [4:0] 	     rd_waddr;
++ 55    wire 	     wdata0 = i_trap ? i_mtval : i_rd;
++ 55    wire 	     wdata1 = i_trap ? i_mepc : i_csr;
++ 55    reg 		     wdata0_r;
++ 55    reg 		     wdata1_r;
++ 55    reg 		     wdata1_2r;
++ 55    wire [1:0] 	     wdata = !wport ?
++ 55 		     {wdata0  , wdata0_r} :
++ 55 		     {wdata1_r, wdata1_2r};
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_mpram.v@46:56
+
+   reg            trap_r;
+   reg            trap_2r;
+   reg            trap_3r;
+
+   assign wdata = wcnt_lo[0] ? wdata0[3:0] : wdata1[3:0];
+
+   assign wen = !wgo_r & |(wen_r & wcnt_lo[1:0]);
+
+   reg [4:0] 	     rd_waddr;
+
+
+Clone Blocks 2:
+serv/rtl/serv_mpram.v@48:58
+   reg            trap_2r;
+   reg            trap_3r;
+
+   assign wdata = wcnt_lo[0] ? wdata0[3:0] : wdata1[3:0];
+
+   assign wen = !wgo_r & |(wen_r & wcnt_lo[1:0]);
+
+   reg [4:0] 	     rd_waddr;
+
+   //port 0 rd mtval
+   //port 1 csr mepc
+
+Clone Blocks 3:
+serv/rtl/serv_mpram.v@38:48
+   wire [3:0] 	     wdata;
+
+   wire 	     wen;
+   reg [1:0] 	     wen_r;
+
+   reg [3:0] 	     wcnt_lo;
+   reg [2:0] 	     wcnt_hi;
+   reg 		     wgo_r;
+
+   reg            trap_r;
+   reg            trap_2r;
+
+Clone Blocks 4:
+serv/rtl/serv_mpram.v@44:54
+   reg [2:0] 	     wcnt_hi;
+   reg 		     wgo_r;
+
+   reg            trap_r;
+   reg            trap_2r;
+   reg            trap_3r;
+
+   assign wdata = wcnt_lo[0] ? wdata0[3:0] : wdata1[3:0];
+
+   assign wen = !wgo_r & |(wen_r & wcnt_lo[1:0]);
+
+
+Clone Blocks 5:
+serv/rtl/serv_mpram.v@36:46
+   reg [5:0] 	     wdata1;
+
+   wire [3:0] 	     wdata;
+
+   wire 	     wen;
+   reg [1:0] 	     wen_r;
+
+   reg [3:0] 	     wcnt_lo;
+   reg [2:0] 	     wcnt_hi;
+   reg 		     wgo_r;
+
+
+Clone Blocks 6:
+serv/rtl/serv_mpram.v@35:45
+   reg [4:0] 	     wdata0;
+   reg [5:0] 	     wdata1;
+
+   wire [3:0] 	     wdata;
+
+   wire 	     wen;
+   reg [1:0] 	     wen_r;
+
+   reg [3:0] 	     wcnt_lo;
+   reg [2:0] 	     wcnt_hi;
+   reg 		     wgo_r;
+

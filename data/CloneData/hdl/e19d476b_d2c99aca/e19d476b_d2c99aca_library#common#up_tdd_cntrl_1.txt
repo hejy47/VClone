@@ -1,0 +1,155 @@
+Source Block: hdl/library/common/up_tdd_cntrl.v@200:327@HdlStmProcess
+  assign up_wreq_s = (up_waddr[13:8] == 6'h20) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h20) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 1'h0;
+      up_scratch <= 32'h0;
+      up_tdd_enable <= 1'h0;
+      up_tdd_secondary <= 1'h0;
+      up_tdd_rx_only <= 1'h0;
+      up_tdd_tx_only <= 1'h0;
+      up_tdd_gated_tx_dmapath <= 1'h0;
+      up_tdd_gated_rx_dmapath <= 1'h0;
+      up_tdd_terminal_type <= 1'h0;
+      up_tdd_sync_enable <= 1'h0;
+      up_tdd_counter_init <= 24'h0;
+      up_tdd_frame_length <= 24'h0;
+      up_tdd_burst_count <= 8'h0;
+      up_tdd_vco_rx_on_1 <= 24'h0;
+      up_tdd_vco_rx_off_1 <= 24'h0;
+      up_tdd_vco_tx_on_1 <= 24'h0;
+      up_tdd_vco_tx_off_1 <= 24'h0;
+      up_tdd_rx_on_1 <= 24'h0;
+      up_tdd_rx_off_1 <= 24'h0;
+      up_tdd_tx_on_1 <= 24'h0;
+      up_tdd_tx_off_1 <= 24'h0;
+      up_tdd_tx_dp_on_1 <= 24'h0;
+      up_tdd_vco_rx_on_2 <= 24'h0;
+      up_tdd_vco_rx_off_2 <= 24'h0;
+      up_tdd_vco_tx_on_2 <= 24'h0;
+      up_tdd_vco_tx_off_2 <= 24'h0;
+      up_tdd_rx_on_2 <= 24'h0;
+      up_tdd_rx_off_2 <= 24'h0;
+      up_tdd_tx_on_2 <= 24'h0;
+      up_tdd_tx_off_2 <= 24'h0;
+      up_tdd_tx_dp_on_2 <= 24'h0;
+    end else begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+        up_tdd_enable <= up_wdata[0];
+        up_tdd_secondary <= up_wdata[1];
+        up_tdd_rx_only <= up_wdata[2];
+        up_tdd_tx_only <= up_wdata[3];
+        up_tdd_gated_rx_dmapath <= up_wdata[4];
+        up_tdd_gated_tx_dmapath <= up_wdata[5];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+        up_tdd_burst_count <= up_wdata[7:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
+        up_tdd_counter_init <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
+        up_tdd_frame_length <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
+        up_tdd_terminal_type <= up_wdata[1];
+        up_tdd_sync_enable <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
+        up_tdd_vco_rx_on_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+        up_tdd_vco_rx_off_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+        up_tdd_vco_tx_on_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+        up_tdd_vco_tx_off_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h24)) begin
+        up_tdd_rx_on_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h25)) begin
+        up_tdd_rx_off_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h26)) begin
+        up_tdd_tx_on_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h27)) begin
+        up_tdd_tx_off_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+        up_tdd_tx_dp_on_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
+        up_tdd_tx_dp_off_1 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
+        up_tdd_vco_rx_on_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
+        up_tdd_vco_rx_off_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+        up_tdd_vco_tx_on_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+        up_tdd_vco_tx_off_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
+        up_tdd_rx_on_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
+        up_tdd_rx_off_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h34)) begin
+        up_tdd_tx_on_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h35)) begin
+        up_tdd_tx_off_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h36)) begin
+        up_tdd_tx_dp_on_2 <= up_wdata[23:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h37)) begin
+        up_tdd_tx_dp_off_2 <= up_wdata[23:0];
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 264       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+- 291       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
+- 294       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
+- 297       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+- 300       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+- 303       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
+- 306       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
+- 309       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h34)) begin
+- 312       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h35)) begin
+- 315       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h36)) begin
+- 318       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h37)) begin
++ 264       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
++ 291       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h30)) begin
++ 294       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h31)) begin
++ 297       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
++ 300       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
++ 303       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h34)) begin
++ 306       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h35)) begin
++ 309       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h36)) begin
++ 312       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h37)) begin
++ 315       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h38)) begin
++ 318       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h39)) begin
+
+Clone Blocks:

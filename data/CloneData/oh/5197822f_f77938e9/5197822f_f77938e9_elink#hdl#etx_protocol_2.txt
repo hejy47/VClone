@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/etx_protocol.v@70:86@HdlStmProcess
+		      .data_out		(),
+		      .srcaddr_out	(),
+		      .packet_in	(etx_packet[PW-1:0]));//input
+
+   //Creates a one cycle wait whenever there is no burst
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       tx_io_wait <= 1'b0;         
+     else if (tx_io_wait)
+       tx_io_wait <= 1'b0;   
+     else
+       tx_io_wait <= etx_access & ~tx_burst;        
+     
+   //Hold transaction while waiting
+   //This transaction should be flushed out on wait????
+   always @ (posedge clk)
+     if(!nreset)
+
+Diff Content:
+- 81        tx_io_wait <= etx_access & ~tx_burst;        
++ 81        tx_io_wait <= etx_access & ~tx_burst_in;        
+
+Clone Blocks:

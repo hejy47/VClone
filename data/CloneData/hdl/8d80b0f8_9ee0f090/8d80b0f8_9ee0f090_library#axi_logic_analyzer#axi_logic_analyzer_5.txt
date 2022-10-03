@@ -1,0 +1,61 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@294:304@HdlStmAssign
+      3'd1:    adc_data_delay <= 5'd3; // 10MSPS
+      default: adc_data_delay <= 5'd1; // <= 1MSPS
+    endcase
+  end
+
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+
+Diff Content:
+- 299   assign up_data_delay = data_delay_control[4:0];
++ 299   assign up_data_delay = data_delay_control[3:0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@298:308
+
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+                         external_decimation_en ? 5'd0 : adc_data_delay;
+
+  always @(posedge clk_out) begin
+    if (sample_valid_la == 1'b1) begin
+
+Clone Blocks 2:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@299:310
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+                         external_decimation_en ? 5'd0 : adc_data_delay;
+
+  always @(posedge clk_out) begin
+    if (sample_valid_la == 1'b1) begin
+      adc_data <= adc_data_mn;
+    end
+
+Clone Blocks 3:
+hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@295:305
+      default: adc_data_delay <= 5'd1; // <= 1MSPS
+    endcase
+  end
+
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+  assign master_delay_ctrl = data_delay_control[9];
+  assign in_data_delay = master_delay_ctrl ? up_data_delay :
+                         external_decimation_en ? 5'd0 : adc_data_delay;
+

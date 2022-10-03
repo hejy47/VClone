@@ -1,0 +1,107 @@
+Source Block: hdl/library/axi_ad9265/axi_ad9265_if.v@95:124@HdlStmFor
+  end
+
+  // data interface
+
+  generate
+  for (l_inst = 0; l_inst <= 7; l_inst = l_inst + 1) begin : g_adc_if
+  ad_data_in #(
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_adc_data (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (adc_data_in_p[l_inst]),
+    .rx_data_in_n (adc_data_in_n[l_inst]),
+    .rx_data_p (adc_data_p_s[l_inst]),
+    .rx_data_n (adc_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_dld[l_inst]),
+    .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // over-range interface
+
+  ad_data_in #(
+
+Diff Content:
+- 105     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+- 106   i_adc_data (
++ 106     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
++ 106   ) i_adc_data (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9963/axi_ad9963_if.v@166:197
+      );
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  generate
+  for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin: g_rx_data
+  ad_data_in #(
+    .SINGLE_ENDED (1),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .IODELAY_ENABLE (ADC_IODELAY_ENABLE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_rx_data (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (trx_data[l_inst]),
+    .rx_data_in_n (1'b0),
+    .rx_data_p (rx_data_p_s[l_inst]),
+    .rx_data_n (rx_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_adc_dld[l_inst]),
+    .up_dwdata (up_adc_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_adc_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // receive iq interface, ibuf -> idelay -> iddr
+
+  ad_data_in #(
+
+Clone Blocks 2:
+hdl/library/axi_ad9467/axi_ad9467_if.v@125:154
+  end
+
+  // data interface
+
+  generate
+  for (l_inst = 0; l_inst <= 7; l_inst = l_inst + 1) begin : g_adc_if
+  ad_data_in #(
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_adc_data (
+    .rx_clk (adc_clk),
+    .rx_data_in_p (adc_data_in_p[l_inst]),
+    .rx_data_in_n (adc_data_in_n[l_inst]),
+    .rx_data_p (adc_data_p_s[l_inst]),
+    .rx_data_n (adc_data_n_s[l_inst]),
+    .up_clk (up_clk),
+    .up_dld (up_dld[l_inst]),
+    .up_dwdata (up_dwdata[((l_inst*5)+4):(l_inst*5)]),
+    .up_drdata (up_drdata[((l_inst*5)+4):(l_inst*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // over-range interface
+
+  ad_data_in #(
+

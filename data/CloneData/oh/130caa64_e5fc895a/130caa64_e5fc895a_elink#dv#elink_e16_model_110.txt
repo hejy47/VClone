@@ -1,0 +1,58 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1370:1384@HdlStmProcess
+
+   assign rxi_assemble_cnt_next[2:0] = burst_tran           ? 3'b100 :
+				       tran_assembled       ? 3'b000 :
+				       read_jump            ? 3'b101 :
+				                              rxi_assemble_cnt_inc[2:0];
+   always @ (posedge rxi_lclk or posedge reset)
+     if (reset)
+       rxi_assemble_cnt[2:0] <= 3'b000;
+     else if(fifo_data_val)
+       rxi_assemble_cnt[2:0] <= rxi_assemble_cnt_next[2:0];
+
+   //# single write transaction completion
+//   assign single_write = access & write & ~(&(datamode[1:0]));
+   assign single_write = 1'b0; // no special treatment for single writes
+   assign single_write_complete = single_write & (rxi_assemble_cnt[2:0] == 3'b100);
+
+Diff Content:
+- 1375    always @ (posedge rxi_lclk or posedge reset)
+- 1376      if (reset)
+- 1377        rxi_assemble_cnt[2:0] <= 3'b000;
+- 1378      else if(fifo_data_val)
+- 1379        rxi_assemble_cnt[2:0] <= rxi_assemble_cnt_next[2:0];
++ 1379    reg [DW-1:0] sync_reg0;
++ 1379    reg [DW-1:0] sync_reg1;
++ 1379    reg [DW-1:0] out;
++ 1379    always @ (posedge clk or posedge reset)
++ 1379      if(reset)
++ 1379        begin
++ 1379 	  sync_reg0[DW-1:0] <= {(DW){1'b0}};
++ 1379 	  sync_reg1[DW-1:0] <= {(DW){1'b0}};
++ 1379 	  out[DW-1:0]       <= {(DW){1'b0}};
++ 1379        end
++ 1379      else
++ 1379        begin
++ 1379 	  sync_reg0[DW-1:0] <= in[DW-1:0];
++ 1379 	  sync_reg1[DW-1:0] <= sync_reg0[DW-1:0];
++ 1379 	  out[DW-1:0]       <= sync_reg1[DW-1:0];
++ 1379        end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1366:1379
+   assign srcaddr_1500_en  = (rxi_assemble_cnt[2:0] == 3'b110);
+
+   //# Assemble counter
+   assign rxi_assemble_cnt_inc[2:0]  = rxi_assemble_cnt[2:0] + 3'b001;
+
+   assign rxi_assemble_cnt_next[2:0] = burst_tran           ? 3'b100 :
+				       tran_assembled       ? 3'b000 :
+				       read_jump            ? 3'b101 :
+				                              rxi_assemble_cnt_inc[2:0];
+   always @ (posedge rxi_lclk or posedge reset)
+     if (reset)
+       rxi_assemble_cnt[2:0] <= 3'b000;
+     else if(fifo_data_val)
+       rxi_assemble_cnt[2:0] <= rxi_assemble_cnt_next[2:0];
+

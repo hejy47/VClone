@@ -1,0 +1,55 @@
+Source Block: hdl/library/axi_dmac/request_generator.v@248:258@HdlStmAssign
+  end
+end
+assign completion_req_last = cur_req_xlast;
+assign completion_transfer_id = rew_transfer_id;
+
+assign rewind_state = (state == STATE_REWIND_ID);
+assign rewind_req_ready = completion_req_ready;
+
+assign abort_req = (state == STATE_REWIND_ID) && !rew_req_xlast && !cur_req_xlast;
+
+endmodule
+
+Diff Content:
+- 253 assign rewind_state = (state == STATE_REWIND_ID);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_generator.v@251:258
+assign completion_transfer_id = rew_transfer_id;
+
+assign rewind_state = (state == STATE_REWIND_ID);
+assign rewind_req_ready = completion_req_ready;
+
+assign abort_req = (state == STATE_REWIND_ID) && !rew_req_xlast && !cur_req_xlast;
+
+endmodule
+
+Clone Blocks 2:
+hdl/library/axi_dmac/request_generator.v@249:258
+end
+assign completion_req_last = cur_req_xlast;
+assign completion_transfer_id = rew_transfer_id;
+
+assign rewind_state = (state == STATE_REWIND_ID);
+assign rewind_req_ready = completion_req_ready;
+
+assign abort_req = (state == STATE_REWIND_ID) && !rew_req_xlast && !cur_req_xlast;
+
+endmodule
+
+Clone Blocks 3:
+hdl/library/axi_dmac/request_generator.v@246:256
+  end else begin
+    completion_req_valid <= nx_completion_req_valid;
+  end
+end
+assign completion_req_last = cur_req_xlast;
+assign completion_transfer_id = rew_transfer_id;
+
+assign rewind_state = (state == STATE_REWIND_ID);
+assign rewind_req_ready = completion_req_ready;
+
+assign abort_req = (state == STATE_REWIND_ID) && !rew_req_xlast && !cur_req_xlast;
+

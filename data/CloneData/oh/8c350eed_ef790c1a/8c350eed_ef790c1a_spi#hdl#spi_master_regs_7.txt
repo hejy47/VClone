@@ -1,0 +1,41 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@123:134@HdlStmAssign
+   assign irq_en     = config_reg[1];   // enable interrupt
+   assign cpol       = config_reg[2];   // cpol
+   assign cpha       = config_reg[3];   // cpha
+   assign auto_mode  = config_reg[4];   // auto starts transfer on tx write
+   
+   assign tx_access  = auto_mode ? tx_autostart :
+  		                   tx_manualstart;
+      
+   //####################################
+   //# STATUS
+   //####################################
+
+
+Diff Content:
+- 128    assign tx_access  = auto_mode ? tx_autostart :
+- 129   		                   tx_manualstart;
++ 129    assign spi_en       = config_reg[0];  // enable spi
++ 129    assign irq_en       = config_reg[1];  // enable interrupt
++ 129    assign cpol         = config_reg[2];  // cpol
++ 129    assign cpha         = config_reg[3];  // cpha
++ 129    assign lsbfirst     = config_reg[4];  // send lsb first
++ 129    assign manual_ss    = config_reg[5];  // manually control ss pin
++ 129    assign rxauto_mode  = config_reg[6];  // rx auto return mode
++ 129    assign emode        = config_reg[7];  // emesh transfer mode
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_master_regs.v@121:131
+   
+   assign spi_en     = config_reg[0];   // enable spi
+   assign irq_en     = config_reg[1];   // enable interrupt
+   assign cpol       = config_reg[2];   // cpol
+   assign cpha       = config_reg[3];   // cpha
+   assign auto_mode  = config_reg[4];   // auto starts transfer on tx write
+   
+   assign tx_access  = auto_mode ? tx_autostart :
+  		                   tx_manualstart;
+      
+   //####################################
+

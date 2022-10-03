@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tdd.v@198:209@HdlStmAssign
+
+  wire    [23:0]    tdd_counter_status;
+
+  wire              tdd_tx_dp_en_s;
+
+  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_tx_dp_en_s,
+                    tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
+
+  // tx/rx data flow control
+
+  assign  tdd_tx_valid_i0 = ((tdd_enable_s & tdd_gated_tx_dmapath_s) == 1'b1) ?
+                                    (tx_valid_i0 & tdd_tx_dp_en_s) : tx_valid_i0;
+
+Diff Content:
+- 203   assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_tx_dp_en_s,
++ 203   assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_sync, tdd_tx_dp_en_s,
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_tdd.v@194:204
+  wire    [23:0]    tdd_tx_on_2_s;
+  wire    [23:0]    tdd_tx_off_2_s;
+  wire    [23:0]    tdd_tx_dp_on_2_s;
+  wire    [23:0]    tdd_tx_dp_off_2_s;
+
+  wire    [23:0]    tdd_counter_status;
+
+  wire              tdd_tx_dp_en_s;
+
+  assign tdd_dbg = {tdd_counter_status, tdd_enable_s, tdd_tx_dp_en_s,
+                    tdd_rx_vco_en, tdd_tx_vco_en, tdd_rx_rf_en, tdd_tx_rf_en};
+

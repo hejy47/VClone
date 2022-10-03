@@ -1,0 +1,62 @@
+Source Block: hdl/library/axi_dac_interpolate/axi_dac_interpolate_filter.v@113:139@HdlStmProcess
+    end else begin
+      cic_change_rate <= 1'b0;
+    end
+  end
+
+  always @(posedge dac_clk) begin
+    if (interpolation_ratio == 0 || interpolation_ratio == 1) begin
+      dac_int_valid <= dac_filt_int_valid;
+    end else begin
+      if (dac_filt_int_valid == 1'b1) begin
+        if (interpolation_counter  < interpolation_ratio) begin
+          interpolation_counter <= interpolation_counter + 1;
+          dac_int_valid <= 1'b0;
+        end else begin
+          interpolation_counter <= 0;
+          dac_int_valid <= 1'b1;
+        end
+      end else begin
+        dac_int_valid <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge dac_clk) begin
+    case (filter_mask)
+      3'b000: filter_enable <= 1'b0;
+      default: filter_enable <= 1'b1;
+
+Diff Content:
+- 120       dac_int_valid <= dac_filt_int_valid;
+- 122       if (dac_filt_int_valid == 1'b1) begin
+- 123         if (interpolation_counter  < interpolation_ratio) begin
+- 125           dac_int_valid <= 1'b0;
+- 128           dac_int_valid <= 1'b1;
+- 131         dac_int_valid <= 1'b0;
++ 120       dac_int_valid_d <= dac_filt_int_valid;
++ 123       if (dac_filt_int_valid &
++ 123           (!start_sync_channels | !dma_data_valid |
++ 123            (dma_data_valid & dma_data_valid_adjacent))) begin
++ 123         if (interpolation_counter < interpolation_ratio) begin
++ 125           dac_int_valid_d <= 1'b0;
++ 128           dac_int_valid_d <= 1'b1;
++ 131         dac_int_valid_d <= 1'b0;
++ 131         interpolation_counter <= 0;
++ 134   always @(posedge dac_clk) begin
++ 134     if (dma_transfer_suspend) begin
++ 134       dma_data_valid <= 1'b0;
++ 134       dma_data_valid_adjacent <=  1'b0;
++ 134     end else begin
++ 134       dma_data_valid <= dma_valid ? 1'b1 : dma_data_valid;
++ 134       dma_data_valid_adjacent <= dma_valid_adjacent ? 1'b1 : dma_data_valid_adjacent;
++ 134     end
++ 134     if (start_sync_channels == 1'b0) begin
++ 134       transmit_valid <= 1'b1;
++ 134     end else begin
++ 134       transmit_valid <= (dma_data_valid & dma_data_valid_adjacent) ? 1'b1 : ~dma_data_valid;
++ 134     end
++ 134   end
++ 134   assign dac_int_valid = transmit_valid ? dac_int_valid_d : 1'b0;
+
+Clone Blocks:

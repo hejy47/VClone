@@ -1,0 +1,34 @@
+Source Block: hdl/library/jesd204/jesd204_common/sync_header_align.v@79:95@HdlStmProcess
+reg [LOG2_RX_THRESH_SH_ERR:0] header_icnt = 'h0;
+
+wire valid_header;
+assign valid_header = ^o_header;
+
+always @(posedge clk) begin
+  if (reset | ~valid_header) begin
+    header_vcnt <= 'b0;
+  end else if (state[BIT_SH_HUNT] & ~header_vcnt[7]) begin
+    header_vcnt <= header_vcnt + 'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset | valid_header) begin
+    header_icnt <= 'b0;
+  end else if (state[BIT_SH_LOCK] & ~header_icnt[LOG2_RX_THRESH_SH_ERR]) begin
+
+Diff Content:
+- 84 always @(posedge clk) begin
+- 85   if (reset | ~valid_header) begin
+- 86     header_vcnt <= 'b0;
+- 87   end else if (state[BIT_SH_HUNT] & ~header_vcnt[7]) begin
+- 88     header_vcnt <= header_vcnt + 'b1;
+- 90 end
++ 88   always @(posedge clk) begin
++ 88     if (reset | ~valid_header) begin
++ 88       header_vcnt <= 'b0;
++ 88     end else if (state[BIT_SH_HUNT] & ~header_vcnt[7]) begin
++ 88       header_vcnt <= header_vcnt + 'b1;
++ 88     end
+
+Clone Blocks:

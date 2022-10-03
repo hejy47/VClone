@@ -1,0 +1,44 @@
+Source Block: oh/ecfg/hdl/ecfg.v@297:307@HdlStmAssign
+	ecfg_reset_reg <= 1'b0;   
+      else if (ecfg_reset_write)
+	ecfg_reset_reg <= mi_din[0];  
+
+   assign ecfg_reset    = ecfg_reset_reg | hw_reset;
+   assign ecfg_resetb   = ~ecfg_reset;
+   
+   //###############################
+   //# DATA READBACK MUX
+   //###############################
+
+
+Diff Content:
+- 302    assign ecfg_resetb   = ~ecfg_reset;
++ 302    assign ecfg_debug_vector[31:0]= {//other debug signals
++ 302 				    embox_not_empty,
++ 302 				    ecfg_rx_debug[15:3],
++ 302 				    ecfg_tx_debug[15:3],
++ 302 				    ecfg_rx_debug[2:0],
++ 302 				    ecfg_tx_debug[2:0],
++ 302 				    embox_full
++ 302 				    };
++ 302    always @ (posedge clk)
++ 302      if(hw_reset)
++ 302        ecfg_debug_reg[7:0] <= 8'd0;
++ 302      else
++ 302        ecfg_debug_reg[7:0] <=ecfg_debug_reg[7:0] | ecfg_debug_vector[7:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/ecfg/hdl/ecfg.v@296:306
+      if(hw_reset)
+	ecfg_reset_reg <= 1'b0;   
+      else if (ecfg_reset_write)
+	ecfg_reset_reg <= mi_din[0];  
+
+   assign ecfg_reset    = ecfg_reset_reg | hw_reset;
+   assign ecfg_resetb   = ~ecfg_reset;
+   
+   //###############################
+   //# DATA READBACK MUX
+   //###############################
+

@@ -1,0 +1,60 @@
+Source Block: hdl/library/util_hbm/util_hbm.v@176:186@HdlIdDef
+
+// Size bursts to the max possible size
+//  AXI 3 1 burst is 16 beats
+//  AXI 4 1 burst is 256 beats
+// Limit one burst to 4096 bytes
+localparam MAX_BYTES_PER_BURST = (AXI_PROTOCOL ? 16 : 256) * AXI_DATA_WIDTH/8;
+localparam MAX_BYTES_PER_BURST_LMT = MAX_BYTES_PER_BURST >= 4096 ? 4096 :
+                                     MAX_BYTES_PER_BURST;
+localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST_LMT);
+
+localparam AXI_ALEN = (8-(4*AXI_PROTOCOL));
+
+Diff Content:
+- 181 localparam MAX_BYTES_PER_BURST = (AXI_PROTOCOL ? 16 : 256) * AXI_DATA_WIDTH/8;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_hbm/util_hbm.v@181:191
+localparam MAX_BYTES_PER_BURST = (AXI_PROTOCOL ? 16 : 256) * AXI_DATA_WIDTH/8;
+localparam MAX_BYTES_PER_BURST_LMT = MAX_BYTES_PER_BURST >= 4096 ? 4096 :
+                                     MAX_BYTES_PER_BURST;
+localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST_LMT);
+
+localparam AXI_ALEN = (8-(4*AXI_PROTOCOL));
+
+localparam NUM_M_LOG2 = $clog2(NUM_M);
+
+genvar i;
+
+
+Clone Blocks 2:
+hdl/library/util_hbm/util_hbm.v@179:189
+//  AXI 4 1 burst is 256 beats
+// Limit one burst to 4096 bytes
+localparam MAX_BYTES_PER_BURST = (AXI_PROTOCOL ? 16 : 256) * AXI_DATA_WIDTH/8;
+localparam MAX_BYTES_PER_BURST_LMT = MAX_BYTES_PER_BURST >= 4096 ? 4096 :
+                                     MAX_BYTES_PER_BURST;
+localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST_LMT);
+
+localparam AXI_ALEN = (8-(4*AXI_PROTOCOL));
+
+localparam NUM_M_LOG2 = $clog2(NUM_M);
+
+
+Clone Blocks 3:
+hdl/library/util_hbm/util_hbm.v@177:188
+// Size bursts to the max possible size
+//  AXI 3 1 burst is 16 beats
+//  AXI 4 1 burst is 256 beats
+// Limit one burst to 4096 bytes
+localparam MAX_BYTES_PER_BURST = (AXI_PROTOCOL ? 16 : 256) * AXI_DATA_WIDTH/8;
+localparam MAX_BYTES_PER_BURST_LMT = MAX_BYTES_PER_BURST >= 4096 ? 4096 :
+                                     MAX_BYTES_PER_BURST;
+localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST_LMT);
+
+localparam AXI_ALEN = (8-(4*AXI_PROTOCOL));
+
+localparam NUM_M_LOG2 = $clog2(NUM_M);
+

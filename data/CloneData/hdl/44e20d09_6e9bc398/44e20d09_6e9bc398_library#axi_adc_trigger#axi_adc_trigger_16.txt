@@ -1,0 +1,98 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@144:154@HdlIdDef
+  reg               passthrough_high_b; // trigger when rising through the limit
+  reg               passthrough_low_b;  // trigger when fallingh thorugh the limit
+  reg               low_b;   // signal was under the limit, so if it goes through, assert rising
+  reg               high_b;   // signal was over the limit, so if it passes through, assert falling
+  reg               comp_high_b;  // signal is over the limit
+  reg               comp_low_b;   // signal is under the limit
+
+  reg               trigger_pin_a;
+  reg               trigger_pin_b;
+
+  reg               trigger_adc_a;
+
+Diff Content:
+- 149   reg               comp_low_b;   // signal is under the limit
++ 149   reg               old_comp_high_a;   // t + 1 version of comp_high_a
++ 149   reg               first_a_h_trigger; // valid hysteresis range on passthrough high trigger limit
++ 149   reg               first_a_l_trigger; // valid hysteresis range on passthrough low trigger limit
++ 149   reg  signed   [15-SIGN_BITS:0]    hyst_a_high_limit;
++ 149   reg  signed   [15-SIGN_BITS:0]    hyst_a_low_limit;
++ 149   reg               comp_high_b;       // signal is over the limit
++ 149   reg               old_comp_high_b;   // t + 1 version of comp_high_b
++ 149   reg               first_b_h_trigger; // valid hysteresis range on passthrough high trigger limit
++ 149   reg               first_b_l_trigger; // valid hysteresis range on passthrough low trigger limit
++ 149   reg  signed   [15-SIGN_BITS:0]    hyst_b_high_limit;
++ 149   reg  signed   [15-SIGN_BITS:0]    hyst_b_low_limit;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@142:152
+  reg               comp_high_a;  // signal is over the limit
+  reg               comp_low_a;   // signal is under the limit
+  reg               passthrough_high_b; // trigger when rising through the limit
+  reg               passthrough_low_b;  // trigger when fallingh thorugh the limit
+  reg               low_b;   // signal was under the limit, so if it goes through, assert rising
+  reg               high_b;   // signal was over the limit, so if it passes through, assert falling
+  reg               comp_high_b;  // signal is over the limit
+  reg               comp_low_b;   // signal is under the limit
+
+  reg               trigger_pin_a;
+  reg               trigger_pin_b;
+
+Clone Blocks 2:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@141:151
+  reg               high_a; // signal was over the limit, so if it passes through, assert falling
+  reg               comp_high_a;  // signal is over the limit
+  reg               comp_low_a;   // signal is under the limit
+  reg               passthrough_high_b; // trigger when rising through the limit
+  reg               passthrough_low_b;  // trigger when fallingh thorugh the limit
+  reg               low_b;   // signal was under the limit, so if it goes through, assert rising
+  reg               high_b;   // signal was over the limit, so if it passes through, assert falling
+  reg               comp_high_b;  // signal is over the limit
+  reg               comp_low_b;   // signal is under the limit
+
+  reg               trigger_pin_a;
+
+Clone Blocks 3:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@147:157
+  reg               high_b;   // signal was over the limit, so if it passes through, assert falling
+  reg               comp_high_b;  // signal is over the limit
+  reg               comp_low_b;   // signal is under the limit
+
+  reg               trigger_pin_a;
+  reg               trigger_pin_b;
+
+  reg               trigger_adc_a;
+  reg               trigger_adc_b;
+
+  reg               trigger_a;
+
+Clone Blocks 4:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@143:153
+  reg               comp_low_a;   // signal is under the limit
+  reg               passthrough_high_b; // trigger when rising through the limit
+  reg               passthrough_low_b;  // trigger when fallingh thorugh the limit
+  reg               low_b;   // signal was under the limit, so if it goes through, assert rising
+  reg               high_b;   // signal was over the limit, so if it passes through, assert falling
+  reg               comp_high_b;  // signal is over the limit
+  reg               comp_low_b;   // signal is under the limit
+
+  reg               trigger_pin_a;
+  reg               trigger_pin_b;
+
+
+Clone Blocks 5:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@146:156
+  reg               low_b;   // signal was under the limit, so if it goes through, assert rising
+  reg               high_b;   // signal was over the limit, so if it passes through, assert falling
+  reg               comp_high_b;  // signal is over the limit
+  reg               comp_low_b;   // signal is under the limit
+
+  reg               trigger_pin_a;
+  reg               trigger_pin_b;
+
+  reg               trigger_adc_a;
+  reg               trigger_adc_b;
+
+

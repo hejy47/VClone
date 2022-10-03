@@ -1,0 +1,33 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_channel.v@62:72@HdlIdDef
+  output reg dac_enable = 1'b0
+);
+
+  // internal signals
+
+  wire [DATA_PATH_WIDTH*16-1:0] dac_dds_data_s;
+
+  // dac data select
+
+  always @(posedge clk) begin
+    dac_enable <= (dac_data_sel == 4'h2) ? 1'b1 : 1'b0;
+
+Diff Content:
++ 67   wire [DATA_PATH_WIDTH*16-1:0] dac_pat_data_s;
++ 67   generate
++ 67     if (DATA_PATH_WIDTH > 1) begin
++ 67       assign dac_pat_data_s = {DATA_PATH_WIDTH/2{dac_pat_data_1,dac_pat_data_0}};
++ 67     end else begin
++ 67       reg dac_pat_data_sel = 1'b0;
++ 67       always @(posedge clk) begin
++ 67         if (dac_data_sync == 1'b1) begin
++ 67           dac_pat_data_sel <= 1'b0;
++ 67         end else begin
++ 67           dac_pat_data_sel <= ~dac_pat_data_sel;
++ 67         end
++ 67       end
++ 67       assign dac_pat_data_s = dac_pat_data_sel == 1'b0 ?
++ 67         dac_pat_data_0 : dac_pat_data_1;
++ 67     end
++ 67   endgenerate
+
+Clone Blocks:

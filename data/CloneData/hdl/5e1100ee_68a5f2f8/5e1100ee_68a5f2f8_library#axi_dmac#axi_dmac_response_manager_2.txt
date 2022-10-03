@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@174:221@HdlStmProcess
+  end else if (state == STATE_ACC) begin
+    measured_burst_length <= req_response_dest_data_burst_length;
+  end
+end
+
+always @(*) begin
+  nx_state = state;
+  case (state)
+    STATE_IDLE: begin
+      if (response_dest_valid == 1'b1) begin
+        nx_state = STATE_ACC;
+      end else if (|to_complete_count) begin
+        if (transfer_id == completion_transfer_id)
+          nx_state = STATE_ZERO_COMPL;
+      end
+    end
+    STATE_ACC: begin
+      nx_state = STATE_WRITE_RESPR;
+    end
+    STATE_WRITE_RESPR: begin
+      if (response_ready == 1'b1) begin
+        nx_state = STATE_IDLE;
+      end
+    end
+    STATE_ZERO_COMPL: begin
+      if (|to_complete_count) begin
+        nx_state = STATE_WRITE_ZRCMPL;
+      end else begin
+        if (completion_req_last_found == 1'b1) begin
+          nx_state = STATE_IDLE;
+        end
+      end
+    end
+    STATE_WRITE_ZRCMPL:begin
+      if (response_ready == 1'b1) begin
+        nx_state = STATE_ZERO_COMPL;
+      end
+    end
+    default: begin
+      nx_state = STATE_IDLE;
+    end
+  endcase
+end
+
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    state <= STATE_IDLE;
+  end else begin
+
+Diff Content:
+- 195         nx_state = STATE_IDLE;
++ 195         if (|to_complete_count && transfer_id == completion_transfer_id) begin
++ 195           nx_state = STATE_ZERO_COMPL;
++ 195         end else begin
++ 195           nx_state = STATE_IDLE;
++ 195         end
+
+Clone Blocks:

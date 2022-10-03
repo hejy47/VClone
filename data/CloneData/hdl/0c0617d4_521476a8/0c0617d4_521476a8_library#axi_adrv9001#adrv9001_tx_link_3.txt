@@ -1,0 +1,15 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_tx_link.v@213:220@HdlStmAssign
+      valid_gen <= 4'b1000;
+    end else begin
+      valid_gen <= {valid_gen[2:0],valid_gen[3]};
+    end
+  end
+ assign ld_next = (CLK_DIV_IS_FAST_CLK == 0) ? 1'b1 : valid_gen[2];
+
+endmodule
+
+Diff Content:
+- 218  assign ld_next = (CLK_DIV_IS_FAST_CLK == 0) ? 1'b1 : valid_gen[2];
++ 218   assign ld_next = (CLK_DIV_IS_FAST_CLK == 0) ? 1'b1 : valid_gen[2];
+
+Clone Blocks:

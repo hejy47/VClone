@@ -1,0 +1,77 @@
+Source Block: hdl/library/axi_dmac/src_axi_mm.v@203:213@HdlStmAssign
+
+/*
+ * We won't be receiving data before we've requested it and we won't request
+ * data unless there is room in the store-and-forward memory.
+ */
+assign m_axi_rready = 1'b1;
+
+/*
+ * We need to complete all bursts for which an address has been put onto the
+ * AXI-MM interface.
+ */
+
+Diff Content:
+- 208 assign m_axi_rready = 1'b1;
++ 208   splitter #(
++ 208     .NUM_M(3)
++ 208   ) i_req_splitter (
++ 208     .clk(m_axi_aclk),
++ 208     .resetn(m_axi_aresetn),
++ 208     .s_valid(req_valid),
++ 208     .s_ready(req_ready),
++ 208     .m_valid({
++ 208       bl_valid,
++ 208       bl_valid_ag,
++ 208       req_valid_ag}),
++ 208     .m_ready({
++ 208       bl_ready,
++ 208       bl_ready_ag,
++ 208       req_ready_ag}));
++ 208   address_generator #(
++ 208     .ID_WIDTH(ID_WIDTH),
++ 208     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
++ 208     .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
++ 208     .DMA_DATA_WIDTH(DMA_DATA_WIDTH),
++ 208     .LENGTH_WIDTH(AXI_LENGTH_WIDTH),
++ 208     .DMA_ADDR_WIDTH(DMA_ADDR_WIDTH)
++ 208   ) i_addr_gen (
++ 208     .clk(m_axi_aclk),
++ 208     .resetn(m_axi_aresetn),
++ 208     .enable(enable),
++ 208     .enabled(address_enabled),
++ 208     .request_id(request_id),
++ 208     .id(address_id),
++ 208     .req_valid(req_valid_ag),
++ 208     .req_ready(req_ready_ag),
++ 208     .req_address(req_address),
++ 208     .bl_valid(bl_valid_ag),
++ 208     .bl_ready(bl_ready_ag),
++ 208     .measured_last_burst_length(req_last_burst_length),
++ 208     .eot(address_eot),
++ 208     .addr_ready(m_axi_arready),
++ 208     .addr_valid(m_axi_arvalid),
++ 208     .addr(m_axi_araddr),
++ 208     .len(m_axi_arlen),
++ 208     .size(m_axi_arsize),
++ 208     .burst(m_axi_arburst),
++ 208     .prot(m_axi_arprot),
++ 208     .cache(m_axi_arcache));
++ 208   assign fifo_valid = m_axi_rvalid;
++ 208   assign fifo_data = m_axi_rdata;
++ 208   assign fifo_last = m_axi_rlast;
++ 208   /*
++ 208    * There is a requirement that data_id <= address_id (modulo 2**ID_WIDTH).  We
++ 208    * know that we will never receive data before we have requested it so there is
++ 208    * an implicit dependency between data_id and address_id and no need to
++ 208    * explicitly track it.
++ 208    */
++ 208   always @(posedge m_axi_aclk) begin
++ 208     if (m_axi_aresetn == 1'b0) begin
++ 208       id <= 'h00;
++ 208     end else if (m_axi_rvalid == 1'b1 && m_axi_rlast == 1'b1) begin
++ 208       id <= inc_id(id);
++ 208     end
++ 208   end
+
+Clone Blocks:

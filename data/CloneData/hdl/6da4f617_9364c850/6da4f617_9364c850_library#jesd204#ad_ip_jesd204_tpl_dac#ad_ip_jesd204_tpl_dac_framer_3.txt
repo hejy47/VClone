@@ -1,0 +1,132 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_framer.v@90:101@HdlIdDef
+   */
+
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+  localparam SAMPLES_PER_BEAT = DAC_DATA_WIDTH / CONVERTER_RESOLUTION;
+  localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam TAIL_BITS = BITS_PER_SAMPLE - CONVERTER_RESOLUTION;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+  wire [LINK_DATA_WIDTH-1:0] dac_data_msb;
+
+Diff Content:
++ 96   localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
++ 96   localparam SAMPLES_PER_BEAT = DAC_DATA_WIDTH / CONVERTER_RESOLUTION;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v@46:57
+ );
+
+
+  localparam SAMPLES_PER_BEAT = ADC_DATA_WIDTH / CONVERTER_RESOLUTION;
+  localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_s;
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+
+Clone Blocks 2:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v@50:60
+  localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_s;
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+  wire [LINK_DATA_WIDTH-1:0] adc_data_msb;
+
+  // data multiplex
+
+Clone Blocks 3:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_framer.v@94:104
+  localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam TAIL_BITS = BITS_PER_SAMPLE - CONVERTER_RESOLUTION;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+  wire [LINK_DATA_WIDTH-1:0] dac_data_msb;
+
+  generate
+    genvar i;
+
+Clone Blocks 4:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_framer.v@89:99
+   * ordered in either case. That means lower bits are in the LSBs.
+   */
+
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+  localparam SAMPLES_PER_BEAT = DAC_DATA_WIDTH / CONVERTER_RESOLUTION;
+  localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam TAIL_BITS = BITS_PER_SAMPLE - CONVERTER_RESOLUTION;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+
+Clone Blocks 5:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v@51:61
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_s;
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+  wire [LINK_DATA_WIDTH-1:0] adc_data_msb;
+
+  // data multiplex
+
+
+Clone Blocks 6:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v@48:58
+
+  localparam SAMPLES_PER_BEAT = ADC_DATA_WIDTH / CONVERTER_RESOLUTION;
+  localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_s;
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+  wire [LINK_DATA_WIDTH-1:0] adc_data_msb;
+
+Clone Blocks 7:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_framer.v@95:105
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam TAIL_BITS = BITS_PER_SAMPLE - CONVERTER_RESOLUTION;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+  wire [LINK_DATA_WIDTH-1:0] dac_data_msb;
+
+  generate
+    genvar i;
+    genvar j;
+
+Clone Blocks 8:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_framer.v@92:102
+  localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
+  localparam SAMPLES_PER_BEAT = DAC_DATA_WIDTH / CONVERTER_RESOLUTION;
+  localparam BITS_PER_CHANNEL_PER_FRAME = BITS_PER_SAMPLE * SAMPLES_PER_FRAME;
+  localparam BITS_PER_LANE_PER_FRAME = BITS_PER_CHANNEL_PER_FRAME *
+                                       NUM_CHANNELS / NUM_LANES;
+  localparam TAIL_BITS = BITS_PER_SAMPLE - CONVERTER_RESOLUTION;
+
+  wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_s;
+  wire [LINK_DATA_WIDTH-1:0] dac_data_msb;
+
+

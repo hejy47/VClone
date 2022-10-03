@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_mc_speed/debouncer.v@76:102@HdlStmProcess
+
+//------------------------------------------------------------------------------
+//----------- Assign/Always Blocks ---------------------------------------------
+//------------------------------------------------------------------------------
+
+always @(posedge clk_i)
+begin
+    if(rst_i == 1)
+    begin
+        shift_reg   <= 0;
+        sig_o       <= 0;
+    end
+    else
+    begin
+        shift_reg <= {shift_reg[DEBOUNCER_LEN-2:0], sig_i};
+        if(shift_reg == {DEBOUNCER_LEN{1'b1}})
+        begin
+            sig_o <= 1'b1;
+        end
+        else if(shift_reg == {DEBOUNCER_LEN{1'b0}})
+        begin
+            sig_o <= 1'b0;
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 90         shift_reg <= {shift_reg[DEBOUNCER_LEN-2:0], sig_i};
+- 91         if(shift_reg == {DEBOUNCER_LEN{1'b1}})
+- 95         else if(shift_reg == {DEBOUNCER_LEN{1'b0}})
++ 91         shift_reg <= {shift_reg[DEBOUNCER_LENGTH-2:0], sig_i};
++ 91         if(shift_reg == {DEBOUNCER_LENGTH{1'b1}})
++ 95         else if(shift_reg == {DEBOUNCER_LENGTH{1'b0}})
+
+Clone Blocks:

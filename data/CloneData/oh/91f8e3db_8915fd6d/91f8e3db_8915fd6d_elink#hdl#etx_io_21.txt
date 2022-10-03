@@ -1,0 +1,32 @@
+Source Block: oh/elink/hdl/etx_io.v@87:102@HdlStmProcess
+			.slowclk	(tx_lclk_div4)
+			);
+      
+   //Sample on aligned edge
+   reg 		  tx_burst_reg;   
+   always @ (posedge tx_lclk_io)
+     if(firstedge)
+       begin
+	  tx_access_reg    <= tx_access & ~tx_wait;
+	  tx_burst_reg     <= tx_burst;	  //need early indicator for first cycle
+       end
+   //Pushback on wait
+   always @ (posedge tx_lclk_io)
+     if(firstedge & ~tx_wait & ~(~tx_burst_reg & tx_state[2:0]==`CYCLE3))
+       tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];	 
+
+
+Diff Content:
+- 93      if(firstedge)
+- 95 	  tx_access_reg    <= tx_access & ~tx_wait;
+- 96 	  tx_burst_reg     <= tx_burst;	  //need early indicator for first cycle
++ 93      if(firstedge) //"load"
++ 96 	  tx_data[63:0]   <= tx_data_slow[63:0]; //changes every 4 cycles
++ 96 	  tx_frame[3:0]   <= tx_frame_slow[3:0];	
++ 96        end
++ 96      else //"shift"
++ 96        begin
++ 96 	  tx_data[63:0]   <= {16'b0,tx_data[63:16]};
++ 96 	  tx_frame[3:0]   <= {tx_frame[2:0],1'b0};	  
+
+Clone Blocks:

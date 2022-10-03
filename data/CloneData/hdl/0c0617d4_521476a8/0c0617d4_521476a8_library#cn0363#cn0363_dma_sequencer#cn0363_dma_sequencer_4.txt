@@ -1,0 +1,60 @@
+Source Block: hdl/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v@75:106@HdlStmProcess
+reg [3:0] count = 'h00;
+
+assign overflow = dma_wr_overflow;
+assign processing_resetn = dma_wr_xfer_req;
+
+always @(posedge clk) begin
+  if (processing_resetn == 1'b0) begin
+    count <= 'h0;
+  end else begin
+    case (count)
+    'h0: if (phase_valid) count <= count + 1;
+    'h1: if (data_valid) count <= count + 1;
+    'h2: if (data_filtered_valid) count <= count + 1;
+    'h3: if (i_q_valid) count <= count + 1;
+    'h4: if (i_q_valid) count <= count + 1;
+    'h5: if (i_q_filtered_valid) count <= count + 1;
+    'h6: if (i_q_filtered_valid) count <= count + 1;
+    'h7: if (phase_valid) count <= count + 1;
+    'h8: if (data_valid) count <= count + 1;
+    'h9: if (data_filtered_valid) count <= count + 1;
+    'ha: if (i_q_valid) count <= count + 1;
+    'hb: if (i_q_valid) count <= count + 1;
+    'hc: if (i_q_filtered_valid) count <= count + 1;
+    'hd: if (i_q_filtered_valid) count <= 'h00;
+    endcase
+  end
+end
+
+always @(posedge clk) begin
+  case (count)
+  'h0: dma_wr_data <= phase;
+  'h1: dma_wr_data <= {8'h00,data[23:0]};
+
+Diff Content:
+- 80 always @(posedge clk) begin
+- 81   if (processing_resetn == 1'b0) begin
+- 82     count <= 'h0;
+- 83   end else begin
+- 85     'h0: if (phase_valid) count <= count + 1;
+- 86     'h1: if (data_valid) count <= count + 1;
+- 87     'h2: if (data_filtered_valid) count <= count + 1;
+- 88     'h3: if (i_q_valid) count <= count + 1;
+- 89     'h4: if (i_q_valid) count <= count + 1;
+- 90     'h5: if (i_q_filtered_valid) count <= count + 1;
+- 91     'h6: if (i_q_filtered_valid) count <= count + 1;
+- 92     'h7: if (phase_valid) count <= count + 1;
+- 93     'h8: if (data_valid) count <= count + 1;
+- 94     'h9: if (data_filtered_valid) count <= count + 1;
+- 95     'ha: if (i_q_valid) count <= count + 1;
+- 96     'hb: if (i_q_valid) count <= count + 1;
+- 97     'hc: if (i_q_filtered_valid) count <= count + 1;
+- 98     'hd: if (i_q_filtered_valid) count <= 'h00;
+- 101 end
++ 83   always @(*) begin
++ 98       'h0: phase_ready <= 1'b1;
++ 98       'h7: phase_ready <= 1'b1;
++ 98       default: phase_ready <= 1'b0;
+
+Clone Blocks:

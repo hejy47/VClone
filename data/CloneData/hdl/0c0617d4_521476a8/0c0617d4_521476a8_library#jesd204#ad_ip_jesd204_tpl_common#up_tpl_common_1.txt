@@ -1,0 +1,28 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_common/up_tpl_common.v@82:102@HdlStmProcess
+
+  // processor write interface
+
+  assign up_wack = up_wack_int;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack_int <= 'd0;
+      up_profile_sel <= 'd0;
+   end else begin
+      up_wack_int <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h00)) begin
+        up_profile_sel <= up_wdata[$clog2(NUM_PROFILES):0];
+      end
+    end
+  end
+
+  // processor read interface
+
+  assign up_rack = up_rack_int;
+  assign up_rdata = up_rdata_int;
+
+Diff Content:
+- 91    end else begin
++ 91     end else begin
+
+Clone Blocks:

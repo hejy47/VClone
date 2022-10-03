@@ -1,0 +1,35 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2214:2226@HdlStmProcess
+   //#################################
+   //# FIFO data
+   //#################################
+ 
+   //# Write
+   always @ (posedge rxi_lclk)
+     if (wr_write_rlc)
+       fifo_mem[wr_addr_rlc[FAD-1:0]] <= rxi_assembled_tran_rlc[14*LW-1:0];
+   
+   //# Read (for dispatch)
+   assign fifo_tran_out[14*LW-1:0] = fifo_mem[rd_addr[FAD-1:0]];
+
+   //#####################################
+
+Diff Content:
+- 2219    always @ (posedge rxi_lclk)
+- 2220      if (wr_write_rlc)
+- 2221        fifo_mem[wr_addr_rlc[FAD-1:0]] <= rxi_assembled_tran_rlc[14*LW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2219:2229
+   always @ (posedge rxi_lclk)
+     if (wr_write_rlc)
+       fifo_mem[wr_addr_rlc[FAD-1:0]] <= rxi_assembled_tran_rlc[14*LW-1:0];
+   
+   //# Read (for dispatch)
+   assign fifo_tran_out[14*LW-1:0] = fifo_mem[rd_addr[FAD-1:0]];
+
+   //#####################################
+   //# FIFO Write State Machine
+   //#####################################
+
+

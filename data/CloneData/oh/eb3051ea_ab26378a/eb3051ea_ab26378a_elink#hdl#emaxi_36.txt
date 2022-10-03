@@ -1,0 +1,33 @@
+Source Block: oh/elink/hdl/emaxi.v@353:363@HdlStmAssign
+   //--------------------------------
+   // read data (and response) channel
+   //--------------------------------
+
+   assign m_axi_rready  = ~emrr_progfull;
+   assign readinfo_rden = ~emrr_progfull & m_axi_rvalid;
+
+
+   assign emrr_write  = 1'b1;
+   
+   always @( posedge m_axi_aclk )
+
+Diff Content:
+- 358    assign readinfo_rden = ~emrr_progfull & m_axi_rvalid;
++ 358    assign m_axi_rready  = ~txrr_wait;
++ 358    assign readinfo_rden = ~txrr_wait & m_axi_rvalid;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/emaxi.v@352:362
+   
+   //--------------------------------
+   // read data (and response) channel
+   //--------------------------------
+
+   assign m_axi_rready  = ~emrr_progfull;
+   assign readinfo_rden = ~emrr_progfull & m_axi_rvalid;
+
+
+   assign emrr_write  = 1'b1;
+   
+

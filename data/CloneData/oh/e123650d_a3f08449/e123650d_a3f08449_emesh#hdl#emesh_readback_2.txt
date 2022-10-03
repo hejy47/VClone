@@ -1,0 +1,60 @@
+Source Block: oh/emesh/hdl/emesh_readback.v@61:75@HdlStmProcess
+   //########################################
+   //# Pipeline
+   //#######################################   
+
+   //access
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       access_out <= 1'b0;
+     else if(~wait_in)
+       access_out <= access_in & ~write_in;
+
+   //packet
+   always @ (posedge clk)
+     if(~wait_in & access_in & ~write_in)
+       begin	  
+
+Diff Content:
+- 69      else if(~wait_in)
++ 69      else if(ready_in)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@462:477
+
+   //##########################
+   //# mesh output busses  
+   //##########################
+
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       access_out <= 1'b0;
+     else if(clk_en)
+       if(!wait_in)
+	 access_out <= access;
+
+   always @ (posedge clk)
+     if (clk_en)
+       if(!wait_in & access)
+	 begin
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@439:454
+
+   //##########################
+   //# mesh input busses
+   //##########################
+
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       access_reg <= 1'b0;
+     else if(clk_en)
+       if(~wait_int)
+	 access_reg <= access_in;
+      
+   always @ (posedge clk)
+     if(clk_en)
+       if(~wait_int & access_in)
+	 begin
+

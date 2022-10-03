@@ -1,0 +1,28 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_channel.v@110:128@HdlStmProcess
+    endcase
+  end
+
+  // pn registers
+
+  always @(posedge clk) begin
+    if (dac_data_sync == 1'b1) begin
+      dac_pn15_data <= {DW+1{1'd1}};
+      dac_pn7_data <= {DW+1{1'd1}};
+    end else begin
+      dac_pn15_data <= pn15;
+      dac_pn7_data <= pn7;
+    end
+  end
+
+  // dds
+
+    ad_dds #(
+    .DISABLE (DATAPATH_DISABLE),
+
+Diff Content:
+- 117       dac_pn15_data <= {DW+1{1'd1}};
+- 118       dac_pn7_data <= {DW+1{1'd1}};
++ 118       dac_pn15_data <= pn15_reset;
++ 118       dac_pn7_data <= pn7_reset;
+
+Clone Blocks:

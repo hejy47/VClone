@@ -1,0 +1,49 @@
+Source Block: hdl/library/util_cic/cic_int.v@51:61@HdlIdDef
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+genvar i;
+
+for (i = 0; i < NUM_STAGES; i = i + 1) begin
+  localparam j = NUM_STAGES - i - 1;
+  localparam H = DATA_WIDTH - STAGE_WIDTH * i - 1;
+  localparam L = j == 0 ? 0 : DATA_WIDTH - STAGE_WIDTH * (i+1);
+
+Diff Content:
+- 56 genvar i;
++ 56   assign data_out = state;
++ 56   assign sum = (data_in & mask) + (state & mask);
++ 56   generate
++ 56   genvar i;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_cic/cic_int.v@48:58
+
+reg [DATA_WIDTH-1:0] state = 'h00;
+wire [DATA_WIDTH-1:0] sum;
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+genvar i;
+
+for (i = 0; i < NUM_STAGES; i = i + 1) begin
+
+Clone Blocks 2:
+hdl/library/util_cic/cic_int.v@49:59
+reg [DATA_WIDTH-1:0] state = 'h00;
+wire [DATA_WIDTH-1:0] sum;
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+genvar i;
+
+for (i = 0; i < NUM_STAGES; i = i + 1) begin
+  localparam j = NUM_STAGES - i - 1;
+

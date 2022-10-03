@@ -1,0 +1,76 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@219:229@HdlIdDef
+    rd_addr <= rd_addr + 1;
+end
+
+// Delay read enable with latency cycles
+// <TODO> make this depend on parameter
+reg rd_valid_l1 = 1'b0;
+reg rd_valid_l2 = 1'b0;
+reg rd_last_l1 = 1'b0;
+reg rd_last_l2 = 1'b0;
+always @(posedge m_axis_aclk) begin
+  rd_valid_l1 <= rd_enable;
+
+Diff Content:
+- 224 reg rd_valid_l1 = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_do_ram/util_do_ram.v@223:236
+// <TODO> make this depend on parameter
+reg rd_valid_l1 = 1'b0;
+reg rd_valid_l2 = 1'b0;
+reg rd_last_l1 = 1'b0;
+reg rd_last_l2 = 1'b0;
+always @(posedge m_axis_aclk) begin
+  rd_valid_l1 <= rd_enable;
+  rd_last_l1 <= rd_last_beat;
+end
+
+// Extra pipeline to be sucked in by the BRAM/URAM output stage
+always @(posedge m_axis_aclk) begin
+  if (rd_valid_l1)
+    rd_data_l2 <= rd_data;
+
+Clone Blocks 2:
+hdl/library/util_do_ram/util_do_ram.v@220:230
+end
+
+// Delay read enable with latency cycles
+// <TODO> make this depend on parameter
+reg rd_valid_l1 = 1'b0;
+reg rd_valid_l2 = 1'b0;
+reg rd_last_l1 = 1'b0;
+reg rd_last_l2 = 1'b0;
+always @(posedge m_axis_aclk) begin
+  rd_valid_l1 <= rd_enable;
+  rd_last_l1 <= rd_last_beat;
+
+Clone Blocks 3:
+hdl/library/util_do_ram/util_do_ram.v@221:231
+
+// Delay read enable with latency cycles
+// <TODO> make this depend on parameter
+reg rd_valid_l1 = 1'b0;
+reg rd_valid_l2 = 1'b0;
+reg rd_last_l1 = 1'b0;
+reg rd_last_l2 = 1'b0;
+always @(posedge m_axis_aclk) begin
+  rd_valid_l1 <= rd_enable;
+  rd_last_l1 <= rd_last_beat;
+end
+
+Clone Blocks 4:
+hdl/library/util_do_ram/util_do_ram.v@222:232
+// Delay read enable with latency cycles
+// <TODO> make this depend on parameter
+reg rd_valid_l1 = 1'b0;
+reg rd_valid_l2 = 1'b0;
+reg rd_last_l1 = 1'b0;
+reg rd_last_l2 = 1'b0;
+always @(posedge m_axis_aclk) begin
+  rd_valid_l1 <= rd_enable;
+  rd_last_l1 <= rd_last_beat;
+end
+
+

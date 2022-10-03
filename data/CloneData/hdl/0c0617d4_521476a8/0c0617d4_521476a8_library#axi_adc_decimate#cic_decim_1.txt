@@ -1,0 +1,30 @@
+Source Block: hdl/library/axi_adc_decimate/cic_decim.v@99:120@HdlStmFor
+
+  assign data_stage[0] = $signed(filter_input_stage);
+
+  generate
+    genvar i;
+    for (i = 0; i < NUM_STAGES; i = i + 1) begin
+      cic_int #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .NUM_STAGES(5),
+        .STAGE_WIDTH(20)
+      ) i_int (
+        .clk(clk),
+        .ce(enable),
+        .data_in(data_stage[i]),
+        .data_out(data_stage[i+1])
+      );
+    end
+  endgenerate
+
+  cic_comb #(
+    .DATA_WIDTH(DATA_WIDTH),
+    .SEQ(5),
+
+Diff Content:
+- 113         .data_out(data_stage[i+1])
+- 114       );
++ 114         .data_out(data_stage[i+1]));
+
+Clone Blocks:

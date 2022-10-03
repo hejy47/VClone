@@ -1,0 +1,22 @@
+Source Block: oh/src/spi/hdl/spi_slave_io.v@70:84@HdlStmProcess
+	 `SPI_CMD_STATE  :  spi_state[1:0] <= byte_done ? `SPI_DATA_STATE : `SPI_CMD_STATE;
+	 `SPI_DATA_STATE :  spi_state[1:0] <= `SPI_DATA_STATE;
+       endcase // case (spi_state[1:0])
+   
+   //bit counter
+   always @ (posedge sclk or posedge ss)
+     if(ss)
+       bit_count[7:0] <= 'b0;
+     else
+       bit_count[7:0] <=  bit_count[7:0] + 1'b1;
+   
+   assign byte_done  = (spi_state[1:0]!=`SPI_IDLE_STATE) &
+		       (bit_count[2:0]==3'b000);
+        
+   // command/address register
+
+Diff Content:
++ 79    assign next_byte   = (spi_state[1:0]!=`SPI_IDLE_STATE) &
++ 79 			(bit_count[2:0]==3'b000);
+
+Clone Blocks:

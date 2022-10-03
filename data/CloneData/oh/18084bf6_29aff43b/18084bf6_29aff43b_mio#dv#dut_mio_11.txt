@@ -1,0 +1,45 @@
+Source Block: oh/mio/dv/dut_mio.v@65:75@HdlIdDef
+   wire			tx_clk;			// From oh_clockdiv of oh_clockdiv.v
+   wire			tx_empty;		// From mio of mio.v
+   wire			tx_en;			// From mio_regs of mio_regs.v
+   wire			tx_full;		// From mio of mio.v
+   wire [NMIO-1:0]	tx_packet;		// From mio of mio.v
+   wire			tx_prog_full;		// From mio of mio.v
+   // End of automatics
+      
+   assign dut_active       = 1'b1;
+   assign datasize[CW-1:0] = PW/(2*NMIO);
+   assign divcfg           = 4'b1;   
+
+Diff Content:
+- 70    wire			tx_prog_full;		// From mio of mio.v
+
+Clone Blocks:
+Clone Blocks 1:
+oh/mio/dv/dut_mio.v@64:74
+   wire			tx_access;		// From mio of mio.v
+   wire			tx_clk;			// From oh_clockdiv of oh_clockdiv.v
+   wire			tx_empty;		// From mio of mio.v
+   wire			tx_en;			// From mio_regs of mio_regs.v
+   wire			tx_full;		// From mio of mio.v
+   wire [NMIO-1:0]	tx_packet;		// From mio of mio.v
+   wire			tx_prog_full;		// From mio of mio.v
+   // End of automatics
+      
+   assign dut_active       = 1'b1;
+   assign datasize[CW-1:0] = PW/(2*NMIO);
+
+Clone Blocks 2:
+oh/mio/dv/dut_mio.v@68:78
+   wire			tx_full;		// From mio of mio.v
+   wire [NMIO-1:0]	tx_packet;		// From mio of mio.v
+   wire			tx_prog_full;		// From mio of mio.v
+   // End of automatics
+      
+   assign dut_active       = 1'b1;
+   assign datasize[CW-1:0] = PW/(2*NMIO);
+   assign divcfg           = 4'b1;   
+   assign clkout           = clk1;
+
+   /*
+

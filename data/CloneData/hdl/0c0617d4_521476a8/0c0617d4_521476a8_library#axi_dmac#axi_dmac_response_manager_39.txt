@@ -1,0 +1,37 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@267:282@HdlStmProcess
+    transfer_id <= transfer_id + 1;
+  end
+end
+
+// Count how many transfers we need to complete
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    to_complete_count <= 'h0;
+  end else if (completion_req & ~do_compl) begin
+    to_complete_count <= to_complete_count + 1;
+  end else if (~completion_req & do_compl) begin
+    to_complete_count <= to_complete_count - 1;
+  end
+end
+
+endmodule
+
+Diff Content:
+- 272 always @(posedge req_clk) begin
+- 273   if (req_resetn == 1'b0) begin
+- 274     to_complete_count <= 'h0;
+- 275   end else if (completion_req & ~do_compl) begin
+- 276     to_complete_count <= to_complete_count + 1;
+- 277   end else if (~completion_req & do_compl) begin
+- 278     to_complete_count <= to_complete_count - 1;
+- 280 end
++ 278   always @(posedge req_clk) begin
++ 278     if (req_resetn == 1'b0) begin
++ 278       to_complete_count <= 'h0;
++ 278     end else if (completion_req & ~do_compl) begin
++ 278       to_complete_count <= to_complete_count + 1;
++ 278     end else if (~completion_req & do_compl) begin
++ 278       to_complete_count <= to_complete_count - 1;
++ 278     end
+
+Clone Blocks:

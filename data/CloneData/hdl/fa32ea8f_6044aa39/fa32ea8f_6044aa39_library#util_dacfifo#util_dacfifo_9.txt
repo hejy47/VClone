@@ -1,0 +1,33 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@210:235@HdlStmProcess
+    .din (dac_waddr_m2),
+    .dout (dac_waddr_g2b_s));
+
+  // sync lastaddr to dac clock domain
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_lastaddr_m1 <= 1'b0;
+      dac_lastaddr_m2 <= 1'b0;
+      dac_xfer_out_fifo_m1 <= 1'b0;
+      dac_xfer_out_fifo <= 1'b0;
+      dac_xfer_out_fifo_d <= 1'b0;
+    end else begin
+      dac_lastaddr_m1 <= dma_lastaddr_g;
+      dac_lastaddr_m2 <= dac_lastaddr_m1;
+      dac_lastaddr <= dac_lastaddr_g2b_s;
+      dac_xfer_out_fifo_m1 <= dma_xfer_out_fifo;
+      dac_xfer_out_fifo <= dac_xfer_out_fifo_m1;
+      dac_xfer_out_fifo_d <= dac_xfer_out_fifo;    // read consume at least one clock cycle
+    end
+  end
+
+  ad_g2b #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dac_lastaddr_g2b (
+    .din (dac_lastaddr_m2),
+
+Diff Content:
+- 216     if (dac_rst == 1'b1) begin
++ 216     if (dac_rst_int_s == 1'b1) begin
+
+Clone Blocks:

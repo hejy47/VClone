@@ -1,0 +1,66 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4130:4144@HdlStmProcess
+ 	  data_even_lsl[LW-1:0]  <= data_even_in[LW-1:0];
+	  data_odd_lsl[LW-1:0]   <= data_odd_in[LW-1:0];
+       end
+
+   // # Creating data that is stable high
+   always @ (negedge txo_lclk or posedge reset)
+     if (reset)
+       data_even_lsh[LW-1:0] <= {(LW){1'b0}};
+     else
+       data_even_lsh[LW-1:0]  <= data_even_lsl[LW-1:0];
+
+   // #################################
+   // # Dual data rate implementation
+   // #################################
+
+
+Diff Content:
+- 4135    always @ (negedge txo_lclk or posedge reset)
+- 4136      if (reset)
+- 4137        data_even_lsh[LW-1:0] <= {(LW){1'b0}};
+- 4138      else
+- 4139        data_even_lsh[LW-1:0]  <= data_even_lsl[LW-1:0];
++ 4139 module link_txo_channel (/*AUTOARG*/
++ 4139    emesh_wait_out, txo_launch_req_tlc, txo_rotate_dis, tran_frame_tlc,
++ 4139    tran_byte_even_tlc, tran_byte_odd_tlc,
++ 4139    cclk, cclk_en, txo_lclk, reset, txo_rd, txo_cid, cfg_burst_dis,
++ 4139    emesh_tran_in, emesh_frame_in, txo_launch_ack_tlc
++ 4139    );
++ 4139    parameter AW   = `CFG_AW  ;//address width
++ 4139    parameter DW   = `CFG_DW  ;//data width  
++ 4139    parameter LW   = `CFG_LW  ;//lvds tranceiver pairs per side
++ 4139    parameter FW   = `CFG_NW*`CFG_LW;
++ 4139    parameter FAD  = 5; // Number of bits to access all the entries (2^FAD + 1) > AE*PE
++ 4139    input 	  cclk;     // clock of the score the emesh comes from
++ 4139    input 	  cclk_en;  // clock enable 
++ 4139    input 	  txo_lclk; // clock of the link transmitter
++ 4139    input          reset;
++ 4139    input 	  txo_rd;  // this is read transactions channel
++ 4139    input [1:0] 	  txo_cid; // transmitter channel ID
++ 4139    input 	  cfg_burst_dis; // control register bursting disable
++ 4139    input [2*LW-1:0] emesh_tran_in;  // serialized transaction
++ 4139    input 	    emesh_frame_in; // transaction frame
++ 4139    input 	    txo_launch_ack_tlc;
++ 4139    output 	    emesh_wait_out; // wait to the emesh   
++ 4139    output 	    txo_launch_req_tlc; // Launch request
++ 4139    output 	    txo_rotate_dis; // Arbiter's rotate disable 
++ 4139    output 	    tran_frame_tlc;       // Frame of the transaction
++ 4139    output [LW-1:0]  tran_byte_even_tlc;  // Even byte of the transaction
++ 4139    output [LW-1:0]  tran_byte_odd_tlc;   // Odd byte of the transaction
++ 4139    /*AUTOINPUT*/
++ 4139    /*AUTOWIRE*/
++ 4139    wire			check_next_dstaddr_tlc;	// From link_txo_launcher of link_txo_launcher.v
++ 4139    wire [2*LW-1:0]	fifo_out_tlc;		// From link_txo_fifo of link_txo_fifo.v
++ 4139    wire			frame_in;		// From emesh_interface of emesh_interface.v
++ 4139    wire			next_access_tlc;	// From link_txo_fifo of link_txo_fifo.v
++ 4139    wire [3:0]		next_ctrlmode_tlc;	// From link_txo_fifo of link_txo_fifo.v
++ 4139    wire [1:0]		next_datamode_tlc;	// From link_txo_fifo of link_txo_fifo.v
++ 4139    wire [AW-1:0]	next_dstaddr_tlc;	// From link_txo_fifo of link_txo_fifo.v
++ 4139    wire			next_write_tlc;		// From link_txo_fifo of link_txo_fifo.v
++ 4139    wire [FAD:0]		rd_read_tlc;		// From link_txo_launcher of link_txo_launcher.v
++ 4139    wire [2*LW-1:0]	tran_in;		// From emesh_interface of emesh_interface.v
++ 4139    wire			tran_written_tlc;	// From link_txo_fifo of link_txo_fifo.v
++ 4139    wire			wr_fifo_full;		// From link_txo_fifo of link_txo_fifo.v
+
+Clone Blocks:

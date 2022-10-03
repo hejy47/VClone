@@ -1,0 +1,36 @@
+Source Block: hdl/library/util_rfifo/util_rfifo.v@134:146@HdlStmFor
+    m_runf <= m_runf_m2;
+  end
+  
+  genvar m;
+  generate
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_rdata
+  assign m_rdata[m] = fifo_rdata[(M_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 139   for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_rdata
+- 140   assign m_rdata[m] = fifo_rdata[(M_DATA_WIDTH-1)-m];
++ 140   for (m = 0; m < DAC_DATA_WIDTH; m = m + 1) begin: g_rdata
++ 140   assign dac_rdata[m] = fifo_rdata[(DAC_DATA_WIDTH-1)-m];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_rfifo/util_rfifo.v@132:142
+    m_runf_m1 <= m_runf_s;
+    m_runf_m2 <= m_runf_m1;
+    m_runf <= m_runf_m2;
+  end
+  
+  genvar m;
+  generate
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_rdata
+  assign m_rdata[m] = fifo_rdata[(M_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+

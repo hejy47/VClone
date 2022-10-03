@@ -1,0 +1,157 @@
+Source Block: hdl/library/common/ad_serdes_in.v@133:217@HdlStmIf
+    .O(data_in_ibuf_s),
+    .I(data_in_p),
+    .IB(data_in_n)
+  );
+
+  if(DEVICE_TYPE == DEVICE_7SERIES) begin
+    (* IODELAY_GROUP = IODELAY_GROUP *)
+
+    IDELAYE2 #(
+      .CINVCTRL_SEL ("FALSE"),
+      .DELAY_SRC ("IDATAIN"),
+      .HIGH_PERFORMANCE_MODE ("FALSE"),
+      .IDELAY_TYPE ("VAR_LOAD"),
+      .IDELAY_VALUE (0),
+      .REFCLK_FREQUENCY (200.0),
+      .PIPE_SEL ("FALSE"),
+      .SIGNAL_PATTERN ("DATA"))
+    i_rx_data_idelay (
+      .CE (1'b0),
+      .INC (1'b0),
+      .DATAIN (1'b0),
+      .LDPIPEEN (1'b0),
+      .CINVCTRL (1'b0),
+      .REGRST (1'b0),
+      .C (delay_clk),
+      .IDATAIN (data_in_ibuf_s),
+      .DATAOUT (data_in_idelay_s),
+      .LD (delay_ld),
+      .CNTVALUEIN (delay_wdata),
+      .CNTVALUEOUT (delay_rdata));
+
+      ISERDESE2 #(
+        .DATA_RATE("DDR"),
+        .DATA_WIDTH(8),
+        .DYN_CLKDIV_INV_EN("FALSE"),
+        .DYN_CLK_INV_EN("FALSE"),
+        .INIT_Q1(1'b0),
+        .INIT_Q2(1'b0),
+        .INIT_Q3(1'b0),
+        .INIT_Q4(1'b0),
+        .INTERFACE_TYPE("NETWORKING"),
+        .IOBDELAY("NONE"),
+        .NUM_CE(1),
+        .OFB_USED("FALSE"),
+        .SERDES_MODE("MASTER"),
+        .SRVAL_Q1(1'b0),
+        .SRVAL_Q2(1'b0),
+        .SRVAL_Q3(1'b0),
+        .SRVAL_Q4(1'b0))
+      ISERDESE2_inst (
+        .O(),
+        .Q1(data_s0),
+        .Q2(data_s1),
+        .Q3(data_s2),
+        .Q4(data_s3),
+        .Q5(data_s4),
+        .Q6(data_s5),
+        .Q7(data_s6),
+        .Q8(data_s7),
+        .SHIFTOUT1(),
+        .SHIFTOUT2(),
+        .BITSLIP(1'b0),
+        .CE1(1'b1),
+        .CE2(1'b0),
+        .CLKDIVP(1'b0),
+        .CLK(clk),
+        .CLKB(1'b0),
+        .CLKDIV(div_clk),
+        .OCLK(1'b0),
+        .DYNCLKDIVSEL(1'b0),
+        .DYNCLKSEL(1'b0),
+        .D(data_in_idelay_s),
+        .DDLY(1'b0),
+        .OFB(1'b0),
+        .OCLKB(1'b0),
+        .RST(rst),
+        .SHIFTIN1(1'b0),
+        .SHIFTIN2(1'b0)
+      );
+      end
+
+    if(DEVICE_TYPE == DEVICE_6SERIES) begin
+      (* IODELAY_GROUP = IODELAY_GROUP *)
+      IODELAYE1 #(
+        .CINVCTRL_SEL ("FALSE"),
+
+Diff Content:
+- 166         .DATA_WIDTH(8),
+- 174         .IOBDELAY("NONE"),
+- 175         .NUM_CE(1),
+- 196         .CE2(1'b0),
+- 199         .CLKB(1'b0),
+- 204         .D(data_in_idelay_s),
+- 205         .DDLY(1'b0),
+- 212       end
++ 162     if(IF_TYPE == SDR) begin
++ 162       ISERDESE2 #(
++ 162         .DATA_RATE("SDR"),
++ 162         .DATA_WIDTH(PARALLEL_WIDTH),
++ 162         .DYN_CLKDIV_INV_EN("FALSE"),
++ 162         .DYN_CLK_INV_EN("FALSE"),
++ 162         .INIT_Q1(1'b0),
++ 162         .INIT_Q2(1'b0),
++ 162         .INIT_Q3(1'b0),
++ 162         .INIT_Q4(1'b0),
++ 162         .INTERFACE_TYPE("NETWORKING"),
++ 162         .IOBDELAY("IFD"),
++ 162         .NUM_CE(2),
++ 162         .OFB_USED("FALSE"),
++ 162         .SERDES_MODE("MASTER"),
++ 162         .SRVAL_Q1(1'b0),
++ 162         .SRVAL_Q2(1'b0),
++ 162         .SRVAL_Q3(1'b0),
++ 162         .SRVAL_Q4(1'b0))
++ 162       ISERDESE2_inst (
++ 162         .O(),
++ 162         .Q1(data_s0),
++ 162         .Q2(data_s1),
++ 162         .Q3(data_s2),
++ 162         .Q4(data_s3),
++ 162         .Q5(data_s4),
++ 162         .Q6(data_s5),
++ 162         .Q7(data_s6),
++ 162         .Q8(data_s7),
++ 162         .SHIFTOUT1(),
++ 162         .SHIFTOUT2(),
++ 162         .BITSLIP(1'b0),
++ 162         .CE1(1'b1),
++ 162         .CE2(1'b1),
++ 162         .CLKDIVP(1'b0),
++ 162         .CLK(clk),
++ 162         .CLKB(~clk),
++ 162         .CLKDIV(div_clk),
++ 162         .OCLK(1'b0),
++ 162         .DYNCLKDIVSEL(1'b0),
++ 162         .DYNCLKSEL(1'b0),
++ 162         .D(1'b0),
++ 162         .DDLY(data_in_idelay_s),
++ 162         .OFB(1'b0),
++ 162         .OCLKB(1'b0),
++ 162         .RST(rst),
++ 162         .SHIFTIN1(1'b0),
++ 162         .SHIFTIN2(1'b0)
++ 162       );
++ 162     end else begin
++ 166         .DATA_WIDTH(PARALLEL_WIDTH),
++ 175         .IOBDELAY("IFD"),
++ 175         .NUM_CE(2),
++ 196         .CE2(1'b1),
++ 199         .CLKB(~clk),
++ 205         .D(1'b0),
++ 205         .DDLY(data_in_idelay_s),
++ 212     end
++ 212   end
+
+Clone Blocks:

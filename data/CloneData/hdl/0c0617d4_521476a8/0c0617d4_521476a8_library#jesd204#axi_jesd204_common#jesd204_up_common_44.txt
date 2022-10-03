@@ -1,0 +1,112 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@241:292@HdlStmIf
+/* Count link enable */
+wire [8*16-1:0] up_irq_event_cnt_bus;
+wire [15:0] up_link_enable_cnt_s;
+
+genvar i;
+generate if (ENABLE_LINK_STATS == 1) begin : g_link_stats
+
+  reg [15:0] up_link_enable_cnt = 'h0;
+  reg up_reset_core_d1 = 'b1;
+
+  wire up_stat_clear;
+
+  assign up_stat_clear = (up_waddr == 12'h0b0 && up_wreq && up_wdata[0]);
+
+  always @(posedge up_clk) begin
+    up_reset_core_d1 <= up_reset_core;
+    if (up_stat_clear) begin
+      up_link_enable_cnt <= 'h0;
+    end else begin
+      if (~up_reset_core & up_reset_core_d1) begin
+        up_link_enable_cnt <= up_link_enable_cnt + 16'd1;
+      end
+    end
+  end
+  assign up_link_enable_cnt_s = up_link_enable_cnt;
+
+  /* Count IRQ events for max 8 interrupt sources */
+
+  for (i = 0; i < NUM_IRQS; i=i+1) begin : irq_cnt
+
+    reg [15:0] up_irq_event_cnt = 'h0;
+
+    always @(posedge up_clk) begin
+      if (up_stat_clear) begin
+        up_irq_event_cnt <= 'h0;
+      end else if (up_irq_trigger[i]) begin
+        up_irq_event_cnt <= up_irq_event_cnt + 16'd1;
+      end
+    end
+
+    assign up_irq_event_cnt_bus[i*16 +: 16] = up_irq_event_cnt;
+
+  end
+end else begin : g_no_link_stats
+  assign up_irq_event_cnt_bus = 'h0;
+  assign up_link_enable_cnt_s = 'h0;
+end
+endgenerate
+
+wire [20:0] clk_mon_count;
+wire [20:0] device_clk_mon_count;
+
+
+Diff Content:
+- 246 generate if (ENABLE_LINK_STATS == 1) begin : g_link_stats
+- 248   reg [15:0] up_link_enable_cnt = 'h0;
+- 249   reg up_reset_core_d1 = 'b1;
+- 251   wire up_stat_clear;
+- 253   assign up_stat_clear = (up_waddr == 12'h0b0 && up_wreq && up_wdata[0]);
+- 256     up_reset_core_d1 <= up_reset_core;
+- 257     if (up_stat_clear) begin
+- 258       up_link_enable_cnt <= 'h0;
+- 260       if (~up_reset_core & up_reset_core_d1) begin
+- 261         up_link_enable_cnt <= up_link_enable_cnt + 16'd1;
+- 262       end
+- 265   assign up_link_enable_cnt_s = up_link_enable_cnt;
+- 267   /* Count IRQ events for max 8 interrupt sources */
+- 269   for (i = 0; i < NUM_IRQS; i=i+1) begin : irq_cnt
+- 271     reg [15:0] up_irq_event_cnt = 'h0;
+- 275         up_irq_event_cnt <= 'h0;
+- 276       end else if (up_irq_trigger[i]) begin
+- 277         up_irq_event_cnt <= up_irq_event_cnt + 16'd1;
+- 281     assign up_irq_event_cnt_bus[i*16 +: 16] = up_irq_event_cnt;
+- 283   end
+- 284 end else begin : g_no_link_stats
+- 285   assign up_irq_event_cnt_bus = 'h0;
+- 286   assign up_link_enable_cnt_s = 'h0;
+- 287 end
++ 249   /* Interupt handling */
++ 249   reg [NUM_IRQS-1:0] up_irq_enable = {NUM_IRQS{1'b0}};
++ 249   reg [NUM_IRQS-1:0] up_irq_source = 'h00;
++ 249   reg [NUM_IRQS-1:0] up_irq_clear;
++ 249   wire [NUM_IRQS-1:0] up_irq_pending;
++ 251   assign up_irq_pending = up_irq_source & up_irq_enable;
++ 253   always @(posedge up_clk) begin
++ 253     if (up_reset == 1'b1) begin
++ 253       irq <= 1'b0;
++ 253     end else begin
++ 253       irq <= |up_irq_pending;
++ 253     end
++ 253   end
++ 258     if (up_reset == 1'b1) begin
++ 258       up_irq_source <= 'h00;
++ 262       up_irq_source <= (up_irq_source & ~up_irq_clear) | up_irq_trigger;
++ 267   /* Count link enable */
++ 267   wire [8*16-1:0] up_irq_event_cnt_bus;
++ 267   wire [15:0] up_link_enable_cnt_s;
++ 267   genvar i;
++ 267   generate if (ENABLE_LINK_STATS == 1) begin : g_link_stats
++ 269     reg [15:0] up_link_enable_cnt = 'h0;
++ 269     reg up_reset_core_d1 = 'b1;
++ 271     wire up_stat_clear;
++ 271     assign up_stat_clear = (up_waddr == 12'h0b0 && up_wreq && up_wdata[0]);
++ 273       up_reset_core_d1 <= up_reset_core;
++ 277         up_link_enable_cnt <= 'h0;
++ 277       end else begin
++ 277         if (~up_reset_core & up_reset_core_d1) begin
++ 277           up_link_enable_cnt <= up_link_enable_cnt + 16'd1;
++ 277         end
+
+Clone Blocks:

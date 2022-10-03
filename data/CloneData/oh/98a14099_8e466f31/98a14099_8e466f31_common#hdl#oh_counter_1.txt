@@ -1,0 +1,31 @@
+Source Block: oh/common/hdl/oh_counter.v@29:43@HdlStmProcess
+   //###############################################################
+   //# Interface
+   //###############################################################
+   reg [DW-1:0]    count;
+   
+   always @(posedge clk)
+     if(load)
+       count[DW-1:0] = wdata[DW-1:0];
+     else if (en)
+       count[DW-1:0] = count_in[DW-1:0];
+             
+   generate
+      if(TYPE=="BINARY")
+	begin
+	   assign count_in[DW-1:0] = count[DW-1:0] + in;
+
+Diff Content:
+- 36        count[DW-1:0] = wdata[DW-1:0];
+- 38        count[DW-1:0] = count_in[DW-1:0];
++ 36        begin
++ 36 	  carry         <= 1'b0;	  
++ 36 	  count[DW-1:0] <= load_data[DW-1:0];
++ 36        end
++ 38        begin
++ 38 	  carry         <= carry_in;
++ 38 	  count[DW-1:0] <= count_in[DW-1:0];
++ 38        end
++ 38    assign zero = ~(count[DW-1:0]);
+
+Clone Blocks:

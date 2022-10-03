@@ -1,0 +1,31 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2780:2790@HdlStmAssign
+   assign request_cvre         = ~fifo_empty_cvre;
+   
+   /********************************************/
+   /*Only Doing FIFO read when granted         */
+   /********************************************/
+   assign fifo_read_cvre       = (request_cvre  & ~wait_in);
+   
+   
+   /********************************************/
+   /*DISTRIBUTING TO ALL AGENTS                */
+   /********************************************/
+
+Diff Content:
+- 2785    assign fifo_read_cvre       = (request_cvre  & ~wait_in);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2775:2785
+   /********************************************/
+   /*Address Decoding                          */
+   /********************************************/
+   //Requests
+   //How to 
+   assign request_cvre         = ~fifo_empty_cvre;
+   
+   /********************************************/
+   /*Only Doing FIFO read when granted         */
+   /********************************************/
+   assign fifo_read_cvre       = (request_cvre  & ~wait_in);
+

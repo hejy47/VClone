@@ -1,0 +1,52 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616_pif.v@177:215@HdlStmProcess
+    end
+  end
+
+  // FSM next state logic
+
+  always @(*) begin
+    case (transfer_state)
+      IDLE : begin
+        transfer_state_next <= (start_transfer == 1'b1) ? CS_LOW : IDLE;
+      end
+      CS_LOW : begin
+        transfer_state_next <= CNTRL0_LOW;
+      end
+      CNTRL0_LOW : begin
+        transfer_state_next <= (counter != 2'b11) ? CNTRL0_LOW : CNTRL0_HIGH;
+      end
+      CNTRL0_HIGH : begin
+        transfer_state_next <= (counter != 2'b11) ? CNTRL0_HIGH :
+                               ((wr_req_d == 1'b1) || (rd_req_d == 1'b1)) ? CS_HIGH : CNTRL1_LOW;
+      end
+      CNTRL1_LOW : begin
+        transfer_state_next <= (counter != 2'b11) ? CNTRL1_LOW : CNTRL1_HIGH;
+      end
+      CNTRL1_HIGH : begin
+        transfer_state_next <= (counter != 2'b11) ? CNTRL1_HIGH : CS_HIGH;
+      end
+      CS_HIGH : begin
+        transfer_state_next <= (burst_length == burst_counter) ? IDLE : CNTRL0_LOW;
+      end
+      default : begin
+        transfer_state_next <= IDLE;
+      end
+    endcase
+  end
+
+  // data valid for the register access and m_axis interface
+
+  assign rd_db_valid = ((counter == 2'b0) && ((transfer_state == CNTRL0_HIGH) || (transfer_state == CNTRL1_HIGH))) ? 1'b1 : 1'b0;
+
+
+Diff Content:
+- 191         transfer_state_next <= (counter != 2'b11) ? CNTRL0_LOW : CNTRL0_HIGH;
+- 194         transfer_state_next <= (counter != 2'b11) ? CNTRL0_HIGH :
+- 198         transfer_state_next <= (counter != 2'b11) ? CNTRL1_LOW : CNTRL1_HIGH;
+- 201         transfer_state_next <= (counter != 2'b11) ? CNTRL1_HIGH : CS_HIGH;
++ 191         transfer_state_next <= (width_counter != 2'b11) ? CNTRL0_LOW : CNTRL0_HIGH;
++ 194         transfer_state_next <= (width_counter != 2'b11) ? CNTRL0_HIGH :
++ 198         transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_LOW : CNTRL1_HIGH;
++ 201         transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_HIGH : CS_HIGH;
+
+Clone Blocks:

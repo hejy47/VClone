@@ -1,0 +1,30 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616_pif.v@234:242@HdlStmAssign
+    if (end_of_conv == 1'b1)
+      xfer_req_d <= m_axis_xfer_req;
+  end
+
+  assign m_axis_tdata = rd_data;
+  assign m_axis_tvalid = xfer_req_d & rd_db_valid & rd_db_valid_div2;
+
+endmodule
+
+
+Diff Content:
+- 239   assign m_axis_tvalid = xfer_req_d & rd_db_valid & rd_db_valid_div2;
++ 239   assign m_axis_tdata = {data_out_b, data_out_a};
++ 239   assign m_axis_tvalid = xfer_req_d & rd_valid & rd_db_valid_div2;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad7616/axi_ad7616_pif.v@233:242
+  always @(negedge clk) begin
+    if (end_of_conv == 1'b1)
+      xfer_req_d <= m_axis_xfer_req;
+  end
+
+  assign m_axis_tdata = rd_data;
+  assign m_axis_tvalid = xfer_req_d & rd_db_valid & rd_db_valid_div2;
+
+endmodule
+
+

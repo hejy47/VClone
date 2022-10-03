@@ -1,0 +1,17 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1555:1565@HdlStmAssign
+   //# the transactions of one type only.
+   //# The indication of the type of the transaction
+   //# is sent in the byte0 of the transaction.
+   //##################################################
+
+   assign my_tran = ~(rd_tran ^ rxi_rd);
+   always @ (posedge rxi_lclk)
+     if(~frame_reg)            //will stop sampling when byte0 is received
+       rd_tran <= rxi_data[7];
+
+   //# frame rising edge detection
+
+Diff Content:
+- 1560    assign my_tran = ~(rd_tran ^ rxi_rd);
+
+Clone Blocks:

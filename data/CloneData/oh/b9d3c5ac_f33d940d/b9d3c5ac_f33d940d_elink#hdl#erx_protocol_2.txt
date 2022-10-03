@@ -1,0 +1,177 @@
+Source Block: oh/elink/hdl/erx_protocol.v@147:215@HdlStmProcess
+             rxactive_in <= 3'd0;  // No edge
+	  end	        
+   end // always @ ( posedge rx_lclk_div4 )
+
+   // 1st cycle
+   always @( posedge rx_lclk_div4 ) begin
+
+      rxactive_0 <= rxactive_in;
+      rxalign_0  <= rxalign_in;
+      stream_0   <= 1'b0;
+            
+      case(rxalign_in)
+        3'd7: begin
+           ctrlmode_0       <= rx_data_in[55:52];
+           dstaddr_0[31:0]  <= rx_data_in[51:20];
+           datamode_0       <= rx_data_in[19:18];
+           write_0          <= rx_data_in[17];
+           access_0         <= rx_data_in[16];
+           data_0[31:16]    <= rx_data_in[15:0];
+           stream_0         <= rx_frame_par[1] & (rxactive_in | stream_0);
+        end
+        
+        3'd6: begin
+           ctrlmode_0       <= rx_data_in[47:44];
+           dstaddr_0[31:0]  <= rx_data_in[43:12];
+           datamode_0       <= rx_data_in[11:10];
+           write_0          <= rx_data_in[9];
+           access_0         <= rx_data_in[8];
+           data_0[31:24]    <= rx_data_in[7:0];
+           stream_0         <= rx_frame_par[0] & (rxactive_in | stream_0);
+        end
+
+        3'd5: begin
+           ctrlmode_0       <= rx_data_in[39:36];
+           dstaddr_0[31:0]  <= rx_data_in[35:4];
+           datamode_0       <= rx_data_in[3:2];
+           write_0          <= rx_data_in[1];
+           access_0         <= rx_data_in[0];
+        end
+
+        3'd4: begin
+           ctrlmode_0       <= rx_data_in[31:28];
+           dstaddr_0[31:4]  <= rx_data_in[27:0];
+        end
+
+        3'd3: begin
+           ctrlmode_0       <= rx_data_in[23:20];
+           dstaddr_0[31:12] <= rx_data_in[19:0];
+        end
+
+        3'd2: begin
+           ctrlmode_0       <= rx_data_in[15:12];
+           dstaddr_0[31:20] <= rx_data_in[11:0];
+        end
+
+        3'd1: begin
+           ctrlmode_0       <= rx_data_in[7:4];
+           dstaddr_0[31:28] <= rx_data_in[3:0];
+        end
+        
+         // if align == 0 then only the tran byte is present, ignore
+      endcase // case (rxalign_in)
+      
+   end // always @ ( posedge rx_lclk_div4 )
+
+   // 2nd cycle
+   always @( posedge rx_lclk_div4 ) begin
+
+      rxactive_1 <= rxactive_0;
+
+Diff Content:
+- 152    always @( posedge rx_lclk_div4 ) begin
+- 154       rxactive_0 <= rxactive_in;
+- 155       rxalign_0  <= rxalign_in;
+- 156       stream_0   <= 1'b0;
+- 158       case(rxalign_in)
+- 159         3'd7: begin
+- 160            ctrlmode_0       <= rx_data_in[55:52];
+- 161            dstaddr_0[31:0]  <= rx_data_in[51:20];
+- 162            datamode_0       <= rx_data_in[19:18];
+- 163            write_0          <= rx_data_in[17];
+- 164            access_0         <= rx_data_in[16];
+- 165            data_0[31:16]    <= rx_data_in[15:0];
+- 166            stream_0         <= rx_frame_par[1] & (rxactive_in | stream_0);
+- 167         end
+- 169         3'd6: begin
+- 170            ctrlmode_0       <= rx_data_in[47:44];
+- 171            dstaddr_0[31:0]  <= rx_data_in[43:12];
+- 172            datamode_0       <= rx_data_in[11:10];
+- 173            write_0          <= rx_data_in[9];
+- 174            access_0         <= rx_data_in[8];
+- 175            data_0[31:24]    <= rx_data_in[7:0];
+- 176            stream_0         <= rx_frame_par[0] & (rxactive_in | stream_0);
+- 177         end
+- 179         3'd5: begin
+- 180            ctrlmode_0       <= rx_data_in[39:36];
+- 181            dstaddr_0[31:0]  <= rx_data_in[35:4];
+- 182            datamode_0       <= rx_data_in[3:2];
+- 183            write_0          <= rx_data_in[1];
+- 184            access_0         <= rx_data_in[0];
+- 185         end
+- 187         3'd4: begin
+- 188            ctrlmode_0       <= rx_data_in[31:28];
+- 189            dstaddr_0[31:4]  <= rx_data_in[27:0];
+- 190         end
+- 192         3'd3: begin
+- 193            ctrlmode_0       <= rx_data_in[23:20];
+- 194            dstaddr_0[31:12] <= rx_data_in[19:0];
+- 195         end
+- 197         3'd2: begin
+- 198            ctrlmode_0       <= rx_data_in[15:12];
+- 199            dstaddr_0[31:20] <= rx_data_in[11:0];
+- 200         end
+- 202         3'd1: begin
+- 203            ctrlmode_0       <= rx_data_in[7:4];
+- 204            dstaddr_0[31:28] <= rx_data_in[3:0];
+- 205         end
+- 208       endcase // case (rxalign_in)
++ 208    always @( posedge rx_lclk_div4 ) 
++ 208      begin
++ 208 	rxactive_0 <= rxactive_in;
++ 208 	rxalign_0  <= rxalign_in;
++ 208 	stream_0   <= 1'b0;        
++ 208 	case(rxalign_in[2:0])
++ 208           3'd7: 
++ 208 	    begin
++ 208                ctrlmode_0[3:0]  <= rx_data_in[55:52];
++ 208                dstaddr_0[31:0]  <= rx_data_in[51:20];
++ 208                datamode_0       <= rx_data_in[19:18];
++ 208                write_0          <= rx_data_in[17];
++ 208                access_0         <= rx_data_in[16];
++ 208                data_0[31:16]    <= rx_data_in[15:0];
++ 208                stream_0         <= rx_frame_par[1] & (rxactive_in | stream_0);
++ 208             end        
++ 208           3'd6: 
++ 208 	    begin
++ 208                ctrlmode_0[3:0]  <= rx_data_in[47:44];
++ 208                dstaddr_0[31:0]  <= rx_data_in[43:12];
++ 208                datamode_0       <= rx_data_in[11:10];
++ 208                write_0          <= rx_data_in[9];
++ 208                access_0         <= rx_data_in[8];
++ 208                data_0[31:24]    <= rx_data_in[7:0];
++ 208                stream_0         <= rx_frame_par[0] & (rxactive_in | stream_0);
++ 208             end
++ 208           3'd5: 
++ 208 	    begin
++ 208                ctrlmode_0       <= rx_data_in[39:36];
++ 208                dstaddr_0[31:0]  <= rx_data_in[35:4];
++ 208                datamode_0       <= rx_data_in[3:2];
++ 208                write_0          <= rx_data_in[1];
++ 208                access_0         <= rx_data_in[0];
++ 208             end
++ 208           3'd4: 
++ 208 	    begin
++ 208                ctrlmode_0       <= rx_data_in[31:28];
++ 208                dstaddr_0[31:4]  <= rx_data_in[27:0];
++ 208             end
++ 208           3'd3: 
++ 208 	    begin
++ 208                ctrlmode_0       <= rx_data_in[23:20];
++ 208                dstaddr_0[31:12] <= rx_data_in[19:0];
++ 208             end
++ 208           3'd2: 
++ 208 	    begin
++ 208                ctrlmode_0       <= rx_data_in[15:12];
++ 208                dstaddr_0[31:20] <= rx_data_in[11:0];
++ 208             end
++ 208           3'd1: 
++ 208 	    begin
++ 208                ctrlmode_0       <= rx_data_in[7:4];
++ 208                dstaddr_0[31:28] <= rx_data_in[3:0];
++ 208             end
++ 208 	  default: ;
++ 208       endcase // case (rxalign_in[2:0])
+
+Clone Blocks:

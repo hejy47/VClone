@@ -1,0 +1,118 @@
+Source Block: zipcpu/rtl/zipsystem.v@863:874@HdlStmProcess
+	//	CPU-DBG-DATA	internal register responses from within the CPU
+	//	sys	Responses from the front-side bus here in the ZipSystem
+	assign	dbg_odata = (!dbg_addr) ? cmd_data
+				:((!cmd_addr[5])?cpu_dbg_data : sys_idata);
+	initial dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		dbg_ack <= (dbg_cyc)&&(dbg_stb)&&(!dbg_stall);
+	assign	dbg_stall=(dbg_cyc)&&((!sys_dbg_cyc)||(sys_stall))&&(dbg_addr);
+
+	// Now for the external wishbone bus
+	//	Need to arbitrate between the flash cache and the CPU
+	// The way this works, though, the CPU will stall once the flash 
+
+Diff Content:
+- 869 		dbg_ack <= (dbg_cyc)&&(dbg_stb)&&(!dbg_stall);
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipsystem.v@865:875
+	assign	dbg_odata = (!dbg_addr) ? cmd_data
+				:((!cmd_addr[5])?cpu_dbg_data : sys_idata);
+	initial dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		dbg_ack <= (dbg_cyc)&&(dbg_stb)&&(!dbg_stall);
+	assign	dbg_stall=(dbg_cyc)&&((!sys_dbg_cyc)||(sys_stall))&&(dbg_addr);
+
+	// Now for the external wishbone bus
+	//	Need to arbitrate between the flash cache and the CPU
+	// The way this works, though, the CPU will stall once the flash 
+	// cache gets access to the bus--the CPU will be stuck until the 
+
+Clone Blocks 2:
+zipcpu/rtl/zipbones.v@227:237
+	// Return debug response values
+	assign	dbg_odata = (!dbg_addr)?cmd_data :cpu_dbg_data;
+	initial dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		dbg_ack <= (dbg_stb)&&(!o_dbg_stall);
+	assign	dbg_stall= (cpu_dbg_stall)&&(dbg_addr);
+
+	assign	o_ext_int = (cmd_halt) && (!i_wb_stall);
+
+
+	// Make verilator happy
+
+Clone Blocks 3:
+zipcpu/rtl/zipsystem.v@860:871
+	// Return debug response values
+	// A return from one of three busses:
+	//	CMD	giving command instructions to the CPU (step, halt, etc)
+	//	CPU-DBG-DATA	internal register responses from within the CPU
+	//	sys	Responses from the front-side bus here in the ZipSystem
+	assign	dbg_odata = (!dbg_addr) ? cmd_data
+				:((!cmd_addr[5])?cpu_dbg_data : sys_idata);
+	initial dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		dbg_ack <= (dbg_cyc)&&(dbg_stb)&&(!dbg_stall);
+	assign	dbg_stall=(dbg_cyc)&&((!sys_dbg_cyc)||(sys_stall))&&(dbg_addr);
+
+
+Clone Blocks 4:
+zipcpu/rtl/zipbones.v@224:234
+`endif
+			);
+
+	// Return debug response values
+	assign	dbg_odata = (!dbg_addr)?cmd_data :cpu_dbg_data;
+	initial dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		dbg_ack <= (dbg_stb)&&(!o_dbg_stall);
+	assign	dbg_stall= (cpu_dbg_stall)&&(dbg_addr);
+
+	assign	o_ext_int = (cmd_halt) && (!i_wb_stall);
+
+Clone Blocks 5:
+zipcpu/rtl/zipbones.v@225:236
+			);
+
+	// Return debug response values
+	assign	dbg_odata = (!dbg_addr)?cmd_data :cpu_dbg_data;
+	initial dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		dbg_ack <= (dbg_stb)&&(!o_dbg_stall);
+	assign	dbg_stall= (cpu_dbg_stall)&&(dbg_addr);
+
+	assign	o_ext_int = (cmd_halt) && (!i_wb_stall);
+
+
+
+Clone Blocks 6:
+zipcpu/rtl/zipsystem.v@862:872
+	//	CMD	giving command instructions to the CPU (step, halt, etc)
+	//	CPU-DBG-DATA	internal register responses from within the CPU
+	//	sys	Responses from the front-side bus here in the ZipSystem
+	assign	dbg_odata = (!dbg_addr) ? cmd_data
+				:((!cmd_addr[5])?cpu_dbg_data : sys_idata);
+	initial dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		dbg_ack <= (dbg_cyc)&&(dbg_stb)&&(!dbg_stall);
+	assign	dbg_stall=(dbg_cyc)&&((!sys_dbg_cyc)||(sys_stall))&&(dbg_addr);
+
+	// Now for the external wishbone bus
+
+Clone Blocks 7:
+zipcpu/rtl/zipbones.v@223:233
+			, o_cpu_debug
+`endif
+			);
+
+	// Return debug response values
+	assign	dbg_odata = (!dbg_addr)?cmd_data :cpu_dbg_data;
+	initial dbg_ack = 1'b0;
+	always @(posedge i_clk)
+		dbg_ack <= (dbg_stb)&&(!o_dbg_stall);
+	assign	dbg_stall= (cpu_dbg_stall)&&(dbg_addr);
+
+

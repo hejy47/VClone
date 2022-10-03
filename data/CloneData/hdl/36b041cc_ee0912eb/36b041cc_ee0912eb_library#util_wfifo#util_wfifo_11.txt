@@ -1,0 +1,35 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@122:141@HdlStmProcess
+  for (m = 0; m < M_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = m_wdata[(M_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+
+  always @(posedge m_clk) begin
+    if (rstn == 1'b0) begin
+      m_wovf_m1 <= 1'b0;
+      m_wovf_m2 <= 1'b0;
+    end else begin
+      m_wovf_m1 <= m_wovf_s;
+      m_wovf_m2 <= m_wovf_m1;
+      m_wovf    <= m_wovf_m2;
+    end
+  end
+
+  // read is non-destructive
+
+  assign s_wready_s = (S_READY_ENABLE == 0) ? 1'b1 : s_wready;
+  assign fifo_rd = ~fifo_rempty & s_wready_s;
+
+Diff Content:
+- 127   always @(posedge m_clk) begin
+- 128     if (rstn == 1'b0) begin
+- 129       m_wovf_m1 <= 1'b0;
+- 130       m_wovf_m2 <= 1'b0;
+- 131     end else begin
+- 132       m_wovf_m1 <= m_wovf_s;
+- 133       m_wovf_m2 <= m_wovf_m1;
+- 134       m_wovf    <= m_wovf_m2;
+- 135     end
+- 136   end
+
+Clone Blocks:

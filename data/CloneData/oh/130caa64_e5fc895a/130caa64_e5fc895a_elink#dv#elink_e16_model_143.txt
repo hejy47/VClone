@@ -1,0 +1,170 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1501:1511@HdlIdDef
+   reg [FAD:0] 	   rd_binary_pointer;
+   reg 		   fifo_read;
+   reg 		   rxi_wait;
+   reg 		   start_tran;
+   reg 		   fifo_data_val;
+   reg [2*LW-1:0]  fifo_data_reg;
+
+   // #########
+   // # Wires
+   // #########
+
+
+Diff Content:
+- 1506    reg [2*LW-1:0]  fifo_data_reg;
++ 1506    wire		c0_emesh_wait_in=1'b0;
++ 1506    wire		c0_rdmesh_wait_in=1'b0;
++ 1506    wire		c1_rdmesh_wait_in=1'b0;
++ 1506    wire		c2_rdmesh_wait_in=1'b0;
++ 1506    wire		c3_emesh_wait_in=1'b0;
++ 1506    wire		c3_mesh_wait_in=1'b0;
++ 1506    wire		c3_rdmesh_wait_in=1'b0;
++ 1506    wire [5:0] 	txo_cfg_reg=6'b0;
++ 1506    link_port link_port (.c3_mesh_access_in(1'b0),
++ 1506 			.c3_mesh_write_in(1'b0),
++ 1506 			.c3_mesh_dstaddr_in(32'b0),
++ 1506 			.c3_mesh_srcaddr_in(32'b0),
++ 1506 			.c3_mesh_data_in(32'b0),
++ 1506 			.c3_mesh_datamode_in(2'b0),
++ 1506 			.c3_mesh_ctrlmode_in(4'b0),
++ 1506 			/*AUTOINST*/
++ 1506 			.rxi_rd_wait	(rxi_rd_wait),
++ 1506 			.rxi_wr_wait	(rxi_wr_wait),
++ 1506 			.txo_data	(txo_data[LW-1:0]),
++ 1506 			.txo_lclk	(txo_lclk),
++ 1506 			.txo_frame	(txo_frame),
++ 1506 			.c0_emesh_frame_out(c0_emesh_frame_out),
++ 1506 			.c0_emesh_tran_out(c0_emesh_tran_out[2*LW-1:0]),
++ 1506 			.c3_emesh_frame_out(c3_emesh_frame_out),
++ 1506 			.c3_emesh_tran_out(c3_emesh_tran_out[2*LW-1:0]),
++ 1506 			.c0_rdmesh_frame_out(c0_rdmesh_frame_out),
++ 1506 			.c0_rdmesh_tran_out(c0_rdmesh_tran_out[2*LW-1:0]),
++ 1506 			.c1_rdmesh_frame_out(c1_rdmesh_frame_out),
++ 1506 			.c1_rdmesh_tran_out(c1_rdmesh_tran_out[2*LW-1:0]),
++ 1506 			.c2_rdmesh_frame_out(c2_rdmesh_frame_out),
++ 1506 			.c2_rdmesh_tran_out(c2_rdmesh_tran_out[2*LW-1:0]),
++ 1506 			.c3_rdmesh_frame_out(c3_rdmesh_frame_out),
++ 1506 			.c3_rdmesh_tran_out(c3_rdmesh_tran_out[2*LW-1:0]),
++ 1506 			.c0_mesh_access_out(c0_mesh_access_out),
++ 1506 			.c0_mesh_write_out(c0_mesh_write_out),
++ 1506 			.c0_mesh_dstaddr_out(c0_mesh_dstaddr_out[AW-1:0]),
++ 1506 			.c0_mesh_srcaddr_out(c0_mesh_srcaddr_out[AW-1:0]),
++ 1506 			.c0_mesh_data_out(c0_mesh_data_out[DW-1:0]),
++ 1506 			.c0_mesh_datamode_out(c0_mesh_datamode_out[1:0]),
++ 1506 			.c0_mesh_ctrlmode_out(c0_mesh_ctrlmode_out[3:0]),
++ 1506 			.c3_mesh_access_out(c3_mesh_access_out),
++ 1506 			.c3_mesh_write_out(c3_mesh_write_out),
++ 1506 			.c3_mesh_dstaddr_out(c3_mesh_dstaddr_out[AW-1:0]),
++ 1506 			.c3_mesh_srcaddr_out(c3_mesh_srcaddr_out[AW-1:0]),
++ 1506 			.c3_mesh_data_out(c3_mesh_data_out[DW-1:0]),
++ 1506 			.c3_mesh_datamode_out(c3_mesh_datamode_out[1:0]),
++ 1506 			.c3_mesh_ctrlmode_out(c3_mesh_ctrlmode_out[3:0]),
++ 1506 			.c0_emesh_wait_out(c0_emesh_wait_out),
++ 1506 			.c1_emesh_wait_out(c1_emesh_wait_out),
++ 1506 			.c2_emesh_wait_out(c2_emesh_wait_out),
++ 1506 			.c3_emesh_wait_out(c3_emesh_wait_out),
++ 1506 			.c0_rdmesh_wait_out(c0_rdmesh_wait_out),
++ 1506 			.c1_rdmesh_wait_out(c1_rdmesh_wait_out),
++ 1506 			.c2_rdmesh_wait_out(c2_rdmesh_wait_out),
++ 1506 			.c3_rdmesh_wait_out(c3_rdmesh_wait_out),
++ 1506 			.c0_mesh_wait_out(c0_mesh_wait_out),
++ 1506 			.c3_mesh_wait_out(c3_mesh_wait_out),
++ 1506 			.reset		(reset),
++ 1506 			.ext_yid_k	(ext_yid_k[3:0]),
++ 1506 			.ext_xid_k	(ext_xid_k[3:0]),
++ 1506 			.txo_cfg_reg	(txo_cfg_reg[5:0]),
++ 1506 			.vertical_k	(vertical_k),
++ 1506 			.who_am_i	(who_am_i[3:0]),
++ 1506 			.cfg_extcomp_dis(cfg_extcomp_dis),
++ 1506 			.rxi_data	(rxi_data[LW-1:0]),
++ 1506 			.rxi_lclk	(rxi_lclk),
++ 1506 			.rxi_frame	(rxi_frame),
++ 1506 			.txo_rd_wait	(txo_rd_wait),
++ 1506 			.txo_wr_wait	(txo_wr_wait),
++ 1506 			.c0_clk_in	(c0_clk_in),
++ 1506 			.c1_clk_in	(c1_clk_in),
++ 1506 			.c2_clk_in	(c2_clk_in),
++ 1506 			.c3_clk_in	(c3_clk_in),
++ 1506 			.c0_emesh_tran_in(16'b0),		 // Templated
++ 1506 			.c0_emesh_frame_in(1'b0),		 // Templated
++ 1506 			.c1_emesh_tran_in(16'b0),		 // Templated
++ 1506 			.c1_emesh_frame_in(1'b0),		 // Templated
++ 1506 			.c2_emesh_tran_in(16'b0),		 // Templated
++ 1506 			.c2_emesh_frame_in(1'b0),		 // Templated
++ 1506 			.c3_emesh_tran_in(16'b0),		 // Templated
++ 1506 			.c3_emesh_frame_in(1'b0),		 // Templated
++ 1506 			.c0_rdmesh_tran_in(16'b0),		 // Templated
++ 1506 			.c0_rdmesh_frame_in(1'b0),		 // Templated
++ 1506 			.c1_rdmesh_tran_in(16'b0),		 // Templated
++ 1506 			.c1_rdmesh_frame_in(1'b0),		 // Templated
++ 1506 			.c2_rdmesh_tran_in(16'b0),		 // Templated
++ 1506 			.c2_rdmesh_frame_in(1'b0),		 // Templated
++ 1506 			.c3_rdmesh_tran_in(16'b0),		 // Templated
++ 1506 			.c3_rdmesh_frame_in(1'b0),		 // Templated
++ 1506 			.c0_mesh_access_in(c0_mesh_access_in),
++ 1506 			.c0_mesh_write_in(c0_mesh_write_in),
++ 1506 			.c0_mesh_dstaddr_in(c0_mesh_dstaddr_in[AW-1:0]),
++ 1506 			.c0_mesh_srcaddr_in(c0_mesh_srcaddr_in[AW-1:0]),
++ 1506 			.c0_mesh_data_in(c0_mesh_data_in[DW-1:0]),
++ 1506 			.c0_mesh_datamode_in(c0_mesh_datamode_in[1:0]),
++ 1506 			.c0_mesh_ctrlmode_in(c0_mesh_ctrlmode_in[3:0]),
++ 1506 			.c0_emesh_wait_in(c0_emesh_wait_in),
++ 1506 			.c3_emesh_wait_in(c3_emesh_wait_in),
++ 1506 			.c0_mesh_wait_in(c0_mesh_wait_in),
++ 1506 			.c3_mesh_wait_in(c3_mesh_wait_in),
++ 1506 			.c0_rdmesh_wait_in(c0_rdmesh_wait_in),
++ 1506 			.c1_rdmesh_wait_in(c1_rdmesh_wait_in),
++ 1506 			.c2_rdmesh_wait_in(c2_rdmesh_wait_in),
++ 1506 			.c3_rdmesh_wait_in(c3_rdmesh_wait_in));
++ 1506 endmodule // elink_e16
++ 1506 module link_port(/*AUTOARG*/
++ 1506    rxi_rd_wait, rxi_wr_wait, txo_data, txo_lclk, txo_frame,
++ 1506    c0_emesh_frame_out, c0_emesh_tran_out, c3_emesh_frame_out,
++ 1506    c3_emesh_tran_out, c0_rdmesh_frame_out, c0_rdmesh_tran_out,
++ 1506    c1_rdmesh_frame_out, c1_rdmesh_tran_out, c2_rdmesh_frame_out,
++ 1506    c2_rdmesh_tran_out, c3_rdmesh_frame_out, c3_rdmesh_tran_out,
++ 1506    c0_mesh_access_out, c0_mesh_write_out, c0_mesh_dstaddr_out,
++ 1506    c0_mesh_srcaddr_out, c0_mesh_data_out, c0_mesh_datamode_out,
++ 1506    c0_mesh_ctrlmode_out, c3_mesh_access_out, c3_mesh_write_out,
++ 1506    c3_mesh_dstaddr_out, c3_mesh_srcaddr_out, c3_mesh_data_out,
++ 1506    c3_mesh_datamode_out, c3_mesh_ctrlmode_out, c0_emesh_wait_out,
++ 1506    c1_emesh_wait_out, c2_emesh_wait_out, c3_emesh_wait_out,
++ 1506    c0_rdmesh_wait_out, c1_rdmesh_wait_out, c2_rdmesh_wait_out,
++ 1506    c3_rdmesh_wait_out, c0_mesh_wait_out, c3_mesh_wait_out,
++ 1506    reset, ext_yid_k, ext_xid_k, txo_cfg_reg, vertical_k, who_am_i,
++ 1506    cfg_extcomp_dis, rxi_data, rxi_lclk, rxi_frame, txo_rd_wait,
++ 1506    txo_wr_wait, c0_clk_in, c1_clk_in, c2_clk_in, c3_clk_in,
++ 1506    c0_emesh_tran_in, c0_emesh_frame_in, c1_emesh_tran_in,
++ 1506    c1_emesh_frame_in, c2_emesh_tran_in, c2_emesh_frame_in,
++ 1506    c3_emesh_tran_in, c3_emesh_frame_in, c0_rdmesh_tran_in,
++ 1506    c0_rdmesh_frame_in, c1_rdmesh_tran_in, c1_rdmesh_frame_in,
++ 1506    c2_rdmesh_tran_in, c2_rdmesh_frame_in, c3_rdmesh_tran_in,
++ 1506    c3_rdmesh_frame_in, c0_mesh_access_in, c0_mesh_write_in,
++ 1506    c0_mesh_dstaddr_in, c0_mesh_srcaddr_in, c0_mesh_data_in,
++ 1506    c0_mesh_datamode_in, c0_mesh_ctrlmode_in, c3_mesh_access_in,
++ 1506    c3_mesh_write_in, c3_mesh_dstaddr_in, c3_mesh_srcaddr_in,
++ 1506    c3_mesh_data_in, c3_mesh_datamode_in, c3_mesh_ctrlmode_in,
++ 1506    c0_emesh_wait_in, c3_emesh_wait_in, c0_mesh_wait_in,
++ 1506    c3_mesh_wait_in, c0_rdmesh_wait_in, c1_rdmesh_wait_in,
++ 1506    c2_rdmesh_wait_in, c3_rdmesh_wait_in
++ 1506    );
++ 1506    parameter DW   = `CFG_DW  ;//data width  
++ 1506    parameter AW   = `CFG_AW  ;//address width
++ 1506    parameter LW   = `CFG_LW  ;//lvds tranceiver pairs per side
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1500:1510
+   reg [FAD:0] 	   wr_binary_pointer;
+   reg [FAD:0] 	   rd_binary_pointer;
+   reg 		   fifo_read;
+   reg 		   rxi_wait;
+   reg 		   start_tran;
+   reg 		   fifo_data_val;
+   reg [2*LW-1:0]  fifo_data_reg;
+
+   // #########
+   // # Wires
+   // #########
+

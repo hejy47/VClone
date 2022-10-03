@@ -1,0 +1,24 @@
+Source Block: hdl/library/common/ad_dds.v@71:85@HdlStmProcess
+  wire    [15:0]  dds_data_0_s;
+  wire    [15:0]  dds_data_1_s;
+
+  // dds channel output
+
+  always @(posedge clk) begin
+    dds_data_int <= dds_data_0_s + dds_data_1_s;
+    dds_data[15:15] <= dds_data_int[15] ^ dds_format;
+    dds_data[14: 0] <= dds_data_int[14:0];
+  end
+
+  // dds-1
+
+  ad_dds_1 i_dds_1_0 (
+    .clk (clk),
+
+Diff Content:
++ 80   always @(posedge clk) begin
++ 80     dds_scale_0_r <= dds_scale_0;
++ 80     dds_scale_1_r <= dds_scale_1;
++ 80   end
+
+Clone Blocks:

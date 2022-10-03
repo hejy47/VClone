@@ -1,0 +1,42 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@221:237@HdlStmProcess
+      nx_state = STATE_IDLE;
+    end
+  endcase
+end
+
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    state <= STATE_IDLE;
+  end else begin
+    state <= nx_state;
+  end
+end
+
+assign do_compl = (state == STATE_WRITE_ZRCMPL) && response_ready;
+
+// Once the last completion request from request generator is received
+// we can wait for completions from the destination side
+
+Diff Content:
+- 226 always @(posedge req_clk) begin
+- 227   if (req_resetn == 1'b0) begin
+- 228     state <= STATE_IDLE;
+- 229   end else begin
+- 230     state <= nx_state;
+- 232 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_response_manager.v@229:239
+  end else begin
+    state <= nx_state;
+  end
+end
+
+assign do_compl = (state == STATE_WRITE_ZRCMPL) && response_ready;
+
+// Once the last completion request from request generator is received
+// we can wait for completions from the destination side
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+

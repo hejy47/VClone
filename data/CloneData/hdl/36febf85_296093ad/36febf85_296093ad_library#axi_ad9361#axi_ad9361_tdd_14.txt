@@ -1,0 +1,37 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tdd.v@239:259@HdlStmProcess
+      end
+    end
+  end
+
+  // generate sync signal
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      tdd_sync_o <= 1'b0;
+    end else begin
+      if(~tdd_enable & tdd_enable_s == 1'b1) begin
+        tdd_sync_o <= 1'b1;
+      end else begin
+        tdd_sync_o <= 1'b0;
+      end
+    end
+  end
+
+  // generate tdd enable in function of the terminal type
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      tdd_enable <= 1'b0;
+
+Diff Content:
+- 244   always @(posedge clk) begin
+- 245     if (rst == 1'b1) begin
+- 246       tdd_sync_o <= 1'b0;
+- 247     end else begin
+- 248       if(~tdd_enable & tdd_enable_s == 1'b1) begin
+- 249         tdd_sync_o <= 1'b1;
+- 250       end else begin
+- 251         tdd_sync_o <= 1'b0;
+- 252       end
+- 253     end
+- 254   end
+
+Clone Blocks:

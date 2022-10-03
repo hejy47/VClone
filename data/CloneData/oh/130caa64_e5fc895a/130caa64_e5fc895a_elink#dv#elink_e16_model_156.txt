@@ -1,0 +1,61 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1540:1551@HdlStmProcess
+	  frame_reg     <= rxi_frame;
+	  frame_reg_del <= frame_reg;
+       end
+
+   //# even bytes
+   always @ (posedge rxi_lclk)
+     data_even_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+   //# odd bytes
+   always @ (negedge rxi_lclk)
+     data_odd_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+
+Diff Content:
+- 1545    always @ (posedge rxi_lclk)
+- 1546      data_even_reg[LW-1:0] <= rxi_data[LW-1:0];
++ 1546    input   [LW-1:0]  rxi_data;        // Byte word
++ 1546    input             rxi_lclk;        // receive clock (adjusted to the frame/data)
++ 1546    input             rxi_frame;       // indicates new transmission
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1527:1547
+   // # while the negative edge FFs can be disabled
+   // # by the state of the detected frame (to save power)  
+   // ####################################################     
+
+   //# frame
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       begin
+	  frame_reg     <= 1'b0;
+	  frame_reg_del <= 1'b0;
+       end
+     else
+       begin
+	  frame_reg     <= rxi_frame;
+	  frame_reg_del <= frame_reg;
+       end
+
+   //# even bytes
+   always @ (posedge rxi_lclk)
+     data_even_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1544:1555
+   //# even bytes
+   always @ (posedge rxi_lclk)
+     data_even_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+   //# odd bytes
+   always @ (negedge rxi_lclk)
+     data_odd_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+   //##################################################
+   //# We should differentiate between read and write
+   //# transactions since link_rxi_buffer can accept
+   //# the transactions of one type only.
+

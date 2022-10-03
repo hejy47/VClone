@@ -1,0 +1,46 @@
+Source Block: hdl/library/util_axis_fifo/address_sync.v@51:61@HdlIdDef
+  output [ADDRESS_WIDTH:0] s_axis_room
+);
+
+parameter ADDRESS_WIDTH = 4;
+
+reg [ADDRESS_WIDTH:0] room = 2**ADDRESS_WIDTH;
+reg [ADDRESS_WIDTH:0] level = 'h00;
+reg [ADDRESS_WIDTH:0] level_next;
+
+assign s_axis_room = room;
+assign m_axis_level = level;
+
+Diff Content:
+- 56 reg [ADDRESS_WIDTH:0] room = 2**ADDRESS_WIDTH;
++ 56 reg [ADDRESS_WIDTH:0] room = MAX_ROOM;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/address_sync.v@52:62
+);
+
+parameter ADDRESS_WIDTH = 4;
+
+reg [ADDRESS_WIDTH:0] room = 2**ADDRESS_WIDTH;
+reg [ADDRESS_WIDTH:0] level = 'h00;
+reg [ADDRESS_WIDTH:0] level_next;
+
+assign s_axis_room = room;
+assign m_axis_level = level;
+
+
+Clone Blocks 2:
+hdl/library/util_axis_fifo/address_sync.v@53:63
+
+parameter ADDRESS_WIDTH = 4;
+
+reg [ADDRESS_WIDTH:0] room = 2**ADDRESS_WIDTH;
+reg [ADDRESS_WIDTH:0] level = 'h00;
+reg [ADDRESS_WIDTH:0] level_next;
+
+assign s_axis_room = room;
+assign m_axis_level = level;
+
+wire read = m_axis_ready & m_axis_valid;
+

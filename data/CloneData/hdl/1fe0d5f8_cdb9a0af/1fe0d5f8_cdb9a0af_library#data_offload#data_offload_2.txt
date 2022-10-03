@@ -1,0 +1,36 @@
+Source Block: hdl/library/data_offload/data_offload.v@407:415@HdlStmAssign
+    end
+  end
+end
+// transfer length is in bytes, but counter monitors the source data beats
+assign src_wr_last_beat_s = (src_transfer_length_s == 'h0) ? MEM_SIZE[33:SRC_BEAT_BYTE]-1 : src_transfer_length_s[33:SRC_BEAT_BYTE]-1;
+assign src_wr_last_int_s = (src_data_counter == src_wr_last_beat_s) ?  1'b1 : 1'b0;
+
+endmodule
+
+
+Diff Content:
+- 412 assign src_wr_last_int_s = (src_data_counter == src_wr_last_beat_s) ?  1'b1 : 1'b0;
++ 412 always @ (posedge src_clk) begin
++ 412     if (src_data_counter == (src_wr_last_beat_s - 'h1)) begin
++ 412         src_wr_last_int_s <= 1'b1;
++ 412     end
++ 412     else begin
++ 412         src_wr_last_int_s <= 1'b0;
++ 412     end
++ 412 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/data_offload/data_offload.v@406:415
+      src_data_counter <= src_data_counter + 1'b1;
+    end
+  end
+end
+// transfer length is in bytes, but counter monitors the source data beats
+assign src_wr_last_beat_s = (src_transfer_length_s == 'h0) ? MEM_SIZE[33:SRC_BEAT_BYTE]-1 : src_transfer_length_s[33:SRC_BEAT_BYTE]-1;
+assign src_wr_last_int_s = (src_data_counter == src_wr_last_beat_s) ?  1'b1 : 1'b0;
+
+endmodule
+
+

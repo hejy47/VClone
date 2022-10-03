@@ -1,0 +1,41 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@144:154@HdlStmAssign
+   assign access_in = (txwr_grant & ~txwr_wait) |
+		      (txrd_grant & ~txrd_wait) |
+		      (txrr_grant & ~txrr_wait);
+
+   //Pipeline + stall
+   assign write_in = etx_mux[1];
+
+   //access
+    always @ (posedge clk)
+      if (!nreset)
+	begin
+
+Diff Content:
+- 149    assign write_in = etx_mux[1];
++ 149    packet2emesh p2e (// Outputs
++ 149 		     .write_out		(write_in),
++ 149 		     .datamode_out	(),
++ 149 		     .ctrlmode_out	(),
++ 149 		     .data_out		(),
++ 149 		     .dstaddr_out	(),
++ 149 		     .srcaddr_out	(),
++ 149 		     .packet_in		(etx_mux[PW-1:0]));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_arbiter.v@139:151
+		      txrr_arb_wait;
+ 
+   //#####################################################################
+   //# Pipeline stage (arbiter+mux takes time..)
+   //#####################################################################
+   assign access_in = (txwr_grant & ~txwr_wait) |
+		      (txrd_grant & ~txrd_wait) |
+		      (txrr_grant & ~txrr_wait);
+
+   //Pipeline + stall
+   assign write_in = etx_mux[1];
+
+   //access
+

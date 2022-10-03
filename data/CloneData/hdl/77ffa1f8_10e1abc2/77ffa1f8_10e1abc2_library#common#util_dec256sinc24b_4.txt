@@ -1,0 +1,46 @@
+Source Block: hdl/library/common/util_dec256sinc24b.v@125:135@HdlStmAssign
+      acc3_d  <= acc3;
+      diff1_d <= diff1_s;
+      diff2_d <= diff2_s;
+    end
+  end
+  assign diff1_s = acc3 - acc3_d;
+  assign diff2_s = diff1_s - diff1_d;
+  assign diff3_s = diff2_s - diff2_d;
+
+  /* Clock the Sinc output into an output register
+   * WORD_EN = output word rate */
+
+Diff Content:
+- 130   assign diff1_s = acc3 - acc3_d;
++ 130   assign diff1_s = acc3_s - acc3;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/util_dec256sinc24b.v@126:136
+      diff1_d <= diff1_s;
+      diff2_d <= diff2_s;
+    end
+  end
+  assign diff1_s = acc3 - acc3_d;
+  assign diff2_s = diff1_s - diff1_d;
+  assign diff3_s = diff2_s - diff2_d;
+
+  /* Clock the Sinc output into an output register
+   * WORD_EN = output word rate */
+
+
+Clone Blocks 2:
+hdl/library/common/util_dec256sinc24b.v@127:137
+      diff2_d <= diff2_s;
+    end
+  end
+  assign diff1_s = acc3 - acc3_d;
+  assign diff2_s = diff1_s - diff1_d;
+  assign diff3_s = diff2_s - diff2_d;
+
+  /* Clock the Sinc output into an output register
+   * WORD_EN = output word rate */
+
+  always @(posedge clk) begin
+

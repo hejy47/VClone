@@ -1,0 +1,84 @@
+Source Block: hdl/library/xilinx/common/ad_data_in.v@90:108@HdlStmIf
+  wire        [ 8:0]  up_drdata_s;
+
+  // delay controller
+
+  generate
+  if (IODELAY_CTRL_ENABLED == 0) begin
+  assign delay_locked = 1'b1;
+  end else begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL #(.SIM_DEVICE (IODELAY_CTRL_SIM_DEVICE)) i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end
+  endgenerate
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  generate
+
+Diff Content:
+- 96   assign delay_locked = 1'b1;
+- 98   (* IODELAY_GROUP = IODELAY_GROUP *)
+- 99   IDELAYCTRL #(.SIM_DEVICE (IODELAY_CTRL_SIM_DEVICE)) i_delay_ctrl (
+- 100     .RST (delay_rst),
+- 101     .REFCLK (delay_clk),
+- 102     .RDY (delay_locked));
++ 96     assign delay_locked = 1'b1;
++ 102     (* IODELAY_GROUP = IODELAY_GROUP *)
++ 102     IDELAYCTRL #(
++ 102       .SIM_DEVICE (IODELAY_CTRL_SIM_DEVICE)
++ 102     ) i_delay_ctrl (
++ 102       .RST (delay_rst),
++ 102       .REFCLK (delay_clk),
++ 102       .RDY (delay_locked));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/common/ad_serdes_in.v@105:125
+  wire    [(DATA_WIDTH-1):0]      data_shift2_s;
+
+  // delay controller
+
+  generate
+  if (IODELAY_CTRL == 1) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL #(
+    .SIM_DEVICE(SIM_DEVICE_IDELAYCTRL)
+  ) i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end else begin
+  assign delay_locked = 1'b1;
+  end
+  endgenerate
+
+  // received data interface: ibuf -> idelay -> iserdes
+  genvar l_inst;
+  generate
+
+Clone Blocks 2:
+hdl/library/xilinx/common/ad_data_out.v@85:103
+  wire                tx_data_odelay_s;
+
+  // delay controller
+
+  generate
+  if (IODELAY_CTRL_ENABLED == 0) begin
+  assign delay_locked = 1'b1;
+  end else begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL #(.SIM_DEVICE (IODELAY_CTRL_SIM_DEVICE)) i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end
+  endgenerate
+
+  // transmit data interface, oddr -> odelay -> obuf
+
+  generate
+

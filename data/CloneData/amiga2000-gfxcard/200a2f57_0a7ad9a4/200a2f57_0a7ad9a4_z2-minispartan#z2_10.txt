@@ -1,0 +1,172 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@2208:2356@HdlStmProcess
+reg [1:0] counter_scanout_words = 1;
+reg [1:0] max_repeat = 0;
+reg counter_vscale = 0;
+reg aligned_row_mode = 1;
+
+always @(posedge vga_clk) begin
+  x_safe_area <= ((counter_scanout > safe_x2) || (counter_scanout < safe_x1));
+  
+  if (counter_x > vga_h_max) begin
+    counter_x <= 0;
+    if (counter_y > vga_v_max) begin
+      counter_y <= 0;
+    end else begin
+      counter_y <= counter_y + 1'b1;
+    end
+  end else begin
+    counter_x <= counter_x + 1'b1;
+  end
+  
+  if (counter_x>=vga_h_sync_start && counter_x<vga_h_sync_end)
+    dvi_hsync <= 1;
+  else
+    dvi_hsync <= 0;
+    
+  if (counter_y>=vga_v_sync_start && counter_y<vga_v_sync_end)
+    dvi_vsync <= 1;
+  else
+    dvi_vsync <= 0;
+      
+  if (counter_x<vga_h_rez && counter_y<vga_v_rez) begin
+    dvi_blank <= 0;
+  end else begin
+    dvi_blank <= 1;
+  end
+  
+  if (vga_colormode==0)
+    if (vga_scalemode_h==1)
+      max_repeat <= 3;
+    else
+      max_repeat <= 1;
+  else
+    if (vga_scalemode_h==1)
+      max_repeat <= 1;
+    else
+      max_repeat <= 0;
+  
+  if (vga_colormode==2)
+    counter_scanout_words <= 2;
+  else
+    counter_scanout_words <= 1;
+
+  if ((counter_y < vga_screen_h) || ((counter_x > vga_h_max) && counter_y>vga_v_max)) begin
+    if ((counter_x < vga_h_rez-1) || ((counter_x > vga_h_max) && counter_y!=vga_screen_h-1)) begin
+      display_pixels <= 1;
+    
+      if (counter_repeat == max_repeat) begin
+        counter_repeat <= 0;
+        counter_px <= (counter_px + counter_scanout_words);
+        
+        if (counter_vscale==0) begin
+          counter_scanout <= (counter_scanout + counter_scanout_words);
+          if (counter_scanout == fetch_preroll)
+            need_row_fetch_y <= need_row_fetch_y+1'b1;
+        end
+      end else
+        counter_repeat <= counter_repeat+1'b1;
+      
+    end else begin
+      counter_px <= 0;
+      if (aligned_row_mode)
+        counter_scanout <= 0;
+      display_pixels <= 0;
+    end
+    
+    if ((counter_x == vga_h_rez) && (vga_scalemode_v==1)) begin
+      counter_vscale <= ~counter_vscale;
+    end
+  end else begin
+    need_row_fetch_y <= 0;
+    display_pixels <= 0;
+    
+    counter_scanout <= 0;
+    counter_vscale <= 0;
+    counter_px <= 0;
+    counter_repeat <= 0;
+  end
+
+  counter_repeat_delayed <= counter_repeat;
+  
+  if (vga_scalemode_v == 0 || counter_vscale == 0) begin
+    rgb  <= fetch_buffer[counter_scanout];
+    rgb2 <= fetch_buffer[counter_scanout+1'b1];
+    
+    if (counter_x<=vga_h_rez)
+      scale_buffer[counter_x] <= {rgb2[15:8],rgb};
+      //scale_buffer[counter_px] <= rgb2;
+    if (counter_x==0)
+      sb0 <= rgb;
+  end else begin
+    if (counter_x<vga_h_rez) begin
+      rgb  <= scale_buffer[counter_px][15:0];
+      rgb2 <= {scale_buffer[counter_px][23:16],8'b00000000};
+    end else
+      rgb <= sb0;
+  end
+  
+  if (!display_pixels) begin
+    red_p   <= 0;
+    green_p <= 0;
+    blue_p  <= 0;
+  end else if (vga_colormode==0) begin
+    // 8 bit palette indexed
+    // 0: +0a +0b +1a
+    // 1: +0b +1a +1b
+    
+    /*if (preheat) begin
+      red_p <= 0;
+      green_p <= 0;
+      blue_p <= 0;
+      preheat <= 0;
+    end else*/ 
+    if (counter_repeat_delayed[vga_scalemode_h]==1) begin
+      red_p   <= palette_r[rgb[7:0]];
+      green_p <= palette_g[rgb[7:0]];
+      blue_p  <= palette_b[rgb[7:0]];
+    end else begin
+      red_p   <= palette_r[rgb[15:8]];
+      green_p <= palette_g[rgb[15:8]];
+      blue_p  <= palette_b[rgb[15:8]];
+    end
+  end else if (vga_colormode==1) begin
+    // decode 16 to 24 bit color
+    red_p   <= {rgb[4:0],  rgb[4:2]};
+    green_p <= {rgb[10:5], rgb[10:9]};
+    blue_p  <= {rgb[15:11],rgb[15:13]};
+    
+  end else if (vga_colormode==2) begin
+    // true color
+    blue_p   <= rgb2[15:8];
+    green_p <= rgb[7:0];
+    red_p  <= rgb[15:8];
+  end else begin
+    red_p   <= 0;
+    green_p <= 0;
+    blue_p  <= 0;
+  end
+end
+
+endmodule
+
+Diff Content:
+- 2216   if (counter_x > vga_h_max) begin
+- 2259   if ((counter_y < vga_screen_h) || ((counter_x > vga_h_max) && counter_y>vga_v_max)) begin
+- 2308       rgb  <= scale_buffer[counter_px][15:0];
+- 2309       rgb2 <= {scale_buffer[counter_px][23:16],8'b00000000};
++ 2216   if (vga_reset) begin
++ 2216     counter_x <= 0;
++ 2216     counter_y <= 0;
++ 2216     need_row_fetch_y <= 0;
++ 2216     display_pixels <= 0;
++ 2216     counter_scanout <= 0;
++ 2216     counter_vscale <= 0;
++ 2216     counter_px <= 0;
++ 2216     counter_repeat <= 0;
++ 2216   end else if (counter_x > vga_h_max) begin
++ 2259   if (/*!vga_reset && */
++ 2259       ((counter_y < vga_screen_h) || ((counter_x > vga_h_max) && counter_y>vga_v_max))) begin
++ 2309       rgb  <= scale_buffer[counter_x+1'b1][15:0];
++ 2309       rgb2 <= {scale_buffer[counter_x+1'b1][23:16],8'b00000000};
+
+Clone Blocks:

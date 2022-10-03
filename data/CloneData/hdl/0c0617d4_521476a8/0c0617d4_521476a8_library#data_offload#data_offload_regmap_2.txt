@@ -1,0 +1,50 @@
+Source Block: hdl/library/data_offload/data_offload_regmap.v@390:420@HdlStmIf
+
+  always @(posedge dst_clk) begin
+    dst_sw_resetn <= dst_sw_resetn_s;
+  end
+
+  generate if (TX_OR_RXN_PATH == 0) begin
+    sync_event #(
+      .NUM_OF_EVENTS (1),
+      .ASYNC_CLK (1))
+    i_wr_overflow_sync (
+      .in_clk (src_clk),
+      .in_event (src_overflow),
+      .out_clk (up_clk),
+      .out_event (up_src_overflow_set_s)
+    );
+    assign up_dst_underflow_set_s = 1'b0;
+  end else begin
+    sync_event #(
+      .NUM_OF_EVENTS (1),
+      .ASYNC_CLK (1))
+    i_rd_underflow_sync (
+      .in_clk (dst_clk),
+      .in_event (dst_underflow),
+      .out_clk (up_clk),
+      .out_event (up_dst_underflow_set_s)
+    );
+    assign up_src_overflow_set_s = 1'b0;
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 398       .ASYNC_CLK (1))
+- 399     i_wr_overflow_sync (
+- 403       .out_event (up_src_overflow_set_s)
+- 404     );
+- 409       .ASYNC_CLK (1))
+- 410     i_rd_underflow_sync (
+- 414       .out_event (up_dst_underflow_set_s)
+- 415     );
++ 399       .ASYNC_CLK (1)
++ 399     ) i_wr_overflow_sync (
++ 404       .out_event (up_src_overflow_set_s));
++ 410       .ASYNC_CLK (1)
++ 410     ) i_rd_underflow_sync (
++ 415       .out_event (up_dst_underflow_set_s));
+
+Clone Blocks:

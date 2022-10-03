@@ -1,0 +1,19 @@
+Source Block: oh/axi/hdl/emaxi_v1_0_M00_AXI.v@435:445@HdlStmAssign
+   
+   //--------------------------------
+   // Read Data (and Response) Channel
+   //--------------------------------
+
+   assign axi_rready = ~emrr_full;
+   
+   always @( posedge M_AXI_ACLK ) begin
+	  if( ~M_AXI_ARESETN ) begin
+
+         emrr_wr_data <= 'd0;
+
+Diff Content:
+- 440    assign axi_rready = ~emrr_full;
++ 440    assign axi_rready = ~emrr_prog_full;
++ 440    assign readinfo_rden = axi_rready & M_AXI_RVALID;
+
+Clone Blocks:

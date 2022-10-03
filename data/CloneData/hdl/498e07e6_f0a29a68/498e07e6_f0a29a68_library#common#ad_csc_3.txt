@@ -1,0 +1,36 @@
+Source Block: hdl/library/common/ad_csc.v@117:145@HdlStmIf
+    s_data_3 <= s_data_2 + data_3;
+  end
+
+  generate
+    // in RGB to YCbCr there are no overflows or underflows
+    if (YCbCr_2_RGB) begin
+      // output registers, output is unsigned (0 if sum is < 0) and saturated.
+      // the inputs are expected to be 1.4.20 format (output is 8bits).
+
+      always @(posedge clk) begin
+        if (s_data_3[27] == 1'b1) begin
+          csc_data_d <= 8'h0;
+        end else if (s_data_3[26:24] != 3'b0) begin
+          csc_data_d <= 8'hff;
+        end else begin
+          csc_data_d <= s_data_3[22:15];
+        end
+      end
+      assign csc_data = csc_data_d;
+      assign csc_sync = sync_5_m;
+    end else begin
+      assign csc_data = s_data_3[23:16];
+      assign csc_sync = sync_4_m;
+    end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
++ 122       reg  [DELAY_DW-1:0]  sync_5_m;
++ 133         sync_5_m <= sync_4_m;
+
+Clone Blocks:

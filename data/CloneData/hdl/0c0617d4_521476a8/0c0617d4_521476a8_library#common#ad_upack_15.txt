@@ -1,0 +1,73 @@
+Source Block: hdl/library/common/ad_upack.v@91:101@HdlStmAssign
+wire [SH_W-1:0] in_use_nx;
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+wire                  ovalid_s;
+
+assign unit_valid = (in_use | inmask);
+assign in_use_nx = unit_valid >> O_W;
+
+always @(posedge clk) begin
+  if (reset) begin
+    in_use <= 'h0;
+
+Diff Content:
+- 96 assign unit_valid = (in_use | inmask);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_upack.v@92:102
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+wire                  ovalid_s;
+
+assign unit_valid = (in_use | inmask);
+assign in_use_nx = unit_valid >> O_W;
+
+always @(posedge clk) begin
+  if (reset) begin
+    in_use <= 'h0;
+  end else if (ovalid_s) begin
+
+Clone Blocks 2:
+hdl/library/common/ad_upack.v@88:98
+reg [SH_W-1:0] inmask;
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+wire [SH_W-1:0] in_use_nx;
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+wire                  ovalid_s;
+
+assign unit_valid = (in_use | inmask);
+assign in_use_nx = unit_valid >> O_W;
+
+
+Clone Blocks 3:
+hdl/library/common/ad_upack.v@87:97
+reg [SH_W-1:0] in_use = 'h0;
+reg [SH_W-1:0] inmask;
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+wire [SH_W-1:0] in_use_nx;
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+wire                  ovalid_s;
+
+assign unit_valid = (in_use | inmask);
+assign in_use_nx = unit_valid >> O_W;
+
+Clone Blocks 4:
+hdl/library/common/ad_upack.v@89:99
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+wire [SH_W-1:0] in_use_nx;
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+wire                  ovalid_s;
+
+assign unit_valid = (in_use | inmask);
+assign in_use_nx = unit_valid >> O_W;
+
+always @(posedge clk) begin
+

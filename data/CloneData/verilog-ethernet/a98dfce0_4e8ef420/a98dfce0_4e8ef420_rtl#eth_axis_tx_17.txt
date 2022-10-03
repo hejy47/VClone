@@ -1,0 +1,139 @@
+Source Block: verilog-ethernet/rtl/eth_axis_tx.v@110:207@HdlStmProcess
+assign input_eth_hdr_ready = input_eth_hdr_ready_reg;
+assign input_eth_payload_tready = input_eth_payload_tready_reg;
+
+assign busy = busy_reg;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_eth_hdr_ready_next = 0;
+    input_eth_payload_tready_next = 0;
+
+    store_eth_hdr = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_axis_tdata_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+            input_eth_hdr_ready_next = 1;
+
+            if (input_eth_hdr_ready & input_eth_hdr_valid) begin
+                store_eth_hdr = 1;
+                input_eth_hdr_ready_next = 0;
+                if (output_axis_tready_int) begin
+                    output_axis_tvalid_int = 1;
+                    output_axis_tdata_int = input_eth_dest_mac[47:40];
+                    frame_ptr_next = 1;
+                end
+                state_next = STATE_WRITE_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_WRITE_HEADER: begin
+            // write header
+            if (output_axis_tready_int) begin
+                frame_ptr_next = frame_ptr_reg+1;
+                output_axis_tvalid_int = 1;
+                state_next = STATE_WRITE_HEADER;
+                case (frame_ptr_reg)
+                    8'h00: output_axis_tdata_int = eth_dest_mac_reg[47:40];
+                    8'h01: output_axis_tdata_int = eth_dest_mac_reg[39:32];
+                    8'h02: output_axis_tdata_int = eth_dest_mac_reg[31:24];
+                    8'h03: output_axis_tdata_int = eth_dest_mac_reg[23:16];
+                    8'h04: output_axis_tdata_int = eth_dest_mac_reg[15: 8];
+                    8'h05: output_axis_tdata_int = eth_dest_mac_reg[ 7: 0];
+                    8'h06: output_axis_tdata_int = eth_src_mac_reg[47:40];
+                    8'h07: output_axis_tdata_int = eth_src_mac_reg[39:32];
+                    8'h08: output_axis_tdata_int = eth_src_mac_reg[31:24];
+                    8'h09: output_axis_tdata_int = eth_src_mac_reg[23:16];
+                    8'h0A: output_axis_tdata_int = eth_src_mac_reg[15: 8];
+                    8'h0B: output_axis_tdata_int = eth_src_mac_reg[ 7: 0];
+                    8'h0C: output_axis_tdata_int = eth_type_reg[15: 8];
+                    8'h0D: begin
+                        output_axis_tdata_int = eth_type_reg[ 7: 0];
+                        input_eth_payload_tready_next = output_axis_tready_int_early;
+                        state_next = STATE_WRITE_PAYLOAD;
+                    end
+                endcase
+            end else begin
+                state_next = STATE_WRITE_HEADER;
+            end
+        end
+        STATE_WRITE_PAYLOAD: begin
+            // write payload
+            input_eth_payload_tready_next = output_axis_tready_int_early;
+
+            output_axis_tdata_int = input_eth_payload_tdata;
+            output_axis_tvalid_int = input_eth_payload_tvalid;
+            output_axis_tlast_int = input_eth_payload_tlast;
+            output_axis_tuser_int = input_eth_payload_tuser;
+
+            if (input_eth_payload_tready & input_eth_payload_tvalid) begin
+                // word transfer through
+                if (input_eth_payload_tlast) begin
+                    input_eth_payload_tready_next = 0;
+                    input_eth_hdr_ready_next = 1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WRITE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_WRITE_PAYLOAD;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 118     input_eth_hdr_ready_next = 0;
+- 119     input_eth_payload_tready_next = 0;
+- 121     store_eth_hdr = 0;
+- 125     output_axis_tdata_int = 0;
+- 126     output_axis_tvalid_int = 0;
+- 127     output_axis_tlast_int = 0;
+- 128     output_axis_tuser_int = 0;
+- 133             frame_ptr_next = 0;
+- 134             input_eth_hdr_ready_next = 1;
+- 137                 store_eth_hdr = 1;
+- 138                 input_eth_hdr_ready_next = 0;
+- 139                 if (output_axis_tready_int) begin
+- 140                     output_axis_tvalid_int = 1;
+- 142                     frame_ptr_next = 1;
+- 151             if (output_axis_tready_int) begin
+- 153                 output_axis_tvalid_int = 1;
+- 191                     input_eth_payload_tready_next = 0;
+- 192                     input_eth_hdr_ready_next = 1;
++ 119     input_eth_hdr_ready_next = 1'b0;
++ 119     input_eth_payload_tready_next = 1'b0;
++ 121     store_eth_hdr = 1'b0;
++ 128     output_axis_tdata_int = 8'd0;
++ 128     output_axis_tvalid_int = 1'b0;
++ 128     output_axis_tlast_int = 1'b0;
++ 128     output_axis_tuser_int = 1'b0;
++ 134             frame_ptr_next = 8'd0;
++ 134             input_eth_hdr_ready_next = 1'b1;
++ 140                 store_eth_hdr = 1'b1;
++ 140                 input_eth_hdr_ready_next = 1'b0;
++ 140                 if (output_axis_tready_int_reg) begin
++ 140                     output_axis_tvalid_int = 1'b1;
++ 142                     frame_ptr_next = 1'b1;
++ 151             if (output_axis_tready_int_reg) begin
++ 153                 output_axis_tvalid_int = 1'b1;
++ 192                     input_eth_payload_tready_next = 1'b0;
++ 192                     input_eth_hdr_ready_next = 1'b1;
+
+Clone Blocks:

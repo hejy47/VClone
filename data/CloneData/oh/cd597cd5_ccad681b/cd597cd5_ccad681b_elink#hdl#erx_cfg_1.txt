@@ -1,0 +1,33 @@
+Source Block: oh/elink/hdl/erx_cfg.v@134:144@HdlStmAssign
+     else if (ecfg_idelay0_write)
+       ecfg_idelay_reg[31:0]  <= mi_din[31:0];
+     else if(ecfg_idelay1_write)
+       ecfg_idelay_reg[63:32] <= mi_din[31:0];
+
+   assign idelay_value[39:0] = {ecfg_idelay_reg[41:32],ecfg_idelay_reg[29:0]};
+
+   always @ (posedge clk)
+     load_taps <= ecfg_idelay1_write;
+      
+   //###############################
+
+Diff Content:
+- 139    assign idelay_value[39:0] = {ecfg_idelay_reg[41:32],ecfg_idelay_reg[29:0]};
++ 139    assign idelay_value[44:0] = {ecfg_idelay_reg[46:32],ecfg_idelay_reg[29:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_cfg.v@136:147
+     else if(ecfg_idelay1_write)
+       ecfg_idelay_reg[63:32] <= mi_din[31:0];
+
+   assign idelay_value[39:0] = {ecfg_idelay_reg[41:32],ecfg_idelay_reg[29:0]};
+
+   always @ (posedge clk)
+     load_taps <= ecfg_idelay1_write;
+      
+   //###############################
+   //# DATA READBACK MUX
+   //###############################
+
+

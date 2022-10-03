@@ -1,0 +1,37 @@
+Source Block: serv/bench/serv_mux.v@56:83@HdlStmIf
+   assign o_wb_timer_dat = i_wb_cpu_dat;
+   assign o_wb_timer_we  = i_wb_cpu_we;
+   assign o_wb_timer_cyc = i_wb_cpu_cyc & s[1];
+
+   generate
+      if (sim) begin
+	 wire sig_en = (i_wb_cpu_adr[31:28] == 8'h8) & i_wb_cpu_cyc & o_wb_cpu_ack;
+	 wire halt_en = (i_wb_cpu_adr[31:28] == 8'h9) & i_wb_cpu_cyc & o_wb_cpu_ack;
+
+	 reg [1023:0] signature_file;
+	 integer      f = 0;
+
+	 initial
+	   if ($value$plusargs("signature=%s", signature_file)) begin
+	      $display("Writing signature to %0s", signature_file);
+	      f = $fopen(signature_file, "w");
+	   end
+
+	 always @(posedge i_clk)
+	    if (sig_en & (f != 0))
+	      $fwrite(f, "%c", i_wb_cpu_dat[7:0]);
+	    else if(halt_en) begin
+	       $display("Test complete");
+	       $finish;
+	    end
+      end
+   endgenerate
+endmodule
+
+Diff Content:
+- 62 	 wire sig_en = (i_wb_cpu_adr[31:28] == 8'h8) & i_wb_cpu_cyc & o_wb_cpu_ack;
+- 63 	 wire halt_en = (i_wb_cpu_adr[31:28] == 8'h9) & i_wb_cpu_cyc & o_wb_cpu_ack;
++ 63 	 wire sig_en = (i_wb_cpu_adr[31:28] == 4'h8) & i_wb_cpu_cyc & o_wb_cpu_ack;
++ 63 	 wire halt_en = (i_wb_cpu_adr[31:28] == 4'h9) & i_wb_cpu_cyc & o_wb_cpu_ack;
+
+Clone Blocks:

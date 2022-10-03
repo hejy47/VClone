@@ -1,0 +1,32 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@238:262@HdlStmProcess
+  // generate dac read address
+
+  assign dac_mem_ren_s = (dac_bypass == 1'b1) ? (dac_valid & dac_mem_ready) :
+                                                (dac_valid & dac_xfer_out_fifo);
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_raddr <= 'b0;
+      dac_raddr_g <= 'b0;
+    end else begin
+      if (dac_mem_ren_s == 1'b1) begin
+        if (dac_lastaddr == 'b0 || dac_raddr != dac_lastaddr) begin
+          dac_raddr <= dac_raddr + 1'b1;
+        end else begin
+          dac_raddr <= 'b0;
+        end
+      end
+      dac_raddr_g <= dac_raddr_b2g_s;
+    end
+  end
+
+  ad_b2g #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dac_raddr_b2g (
+    .din (dac_raddr),
+
+Diff Content:
+- 244     if (dac_rst == 1'b1) begin
++ 244     if (dac_rst_int_s == 1'b1) begin
+
+Clone Blocks:

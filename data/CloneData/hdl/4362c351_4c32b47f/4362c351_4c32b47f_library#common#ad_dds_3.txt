@@ -1,0 +1,41 @@
+Source Block: hdl/library/common/ad_dds.v@73:86@HdlStmProcess
+    dds_data_int <= dds_data_0_s + dds_data_1_s;
+    dds_data_out[15:15] <= dds_data_int[15] ^ dds_format;
+    dds_data_out[14: 0] <= dds_data_int[14:0];
+  end
+
+  always @(posedge clk) begin
+    dds_scale_0_d <= dds_scale_0;
+    dds_scale_1_d <= dds_scale_1;
+  end
+  // dds-1
+
+  ad_dds_1 i_dds_1_0 (
+    .clk (clk),
+    .angle (dds_phase_0),
+
+Diff Content:
+- 78   always @(posedge clk) begin
+- 79     dds_scale_0_d <= dds_scale_0;
+- 80     dds_scale_1_d <= dds_scale_1;
+- 81   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_dds.v@67:81
+
+  assign dds_data = (DISABLE == 1) ? 16'd0 : dds_data_out;
+
+  // dds channel output
+
+  always @(posedge clk) begin
+    dds_data_int <= dds_data_0_s + dds_data_1_s;
+    dds_data_out[15:15] <= dds_data_int[15] ^ dds_format;
+    dds_data_out[14: 0] <= dds_data_int[14:0];
+  end
+
+  always @(posedge clk) begin
+    dds_scale_0_d <= dds_scale_0;
+    dds_scale_1_d <= dds_scale_1;
+  end
+

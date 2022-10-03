@@ -1,0 +1,35 @@
+Source Block: oh/common/hdl/oh_counter.v@36:59@HdlStmIf
+       count[DW-1:0] = wdata[DW-1:0];
+     else if (en)
+       count[DW-1:0] = count_in[DW-1:0];
+             
+   generate
+      if(TYPE=="BINARY")
+	begin
+	   assign count_in[DW-1:0] = count[DW-1:0] + in;
+	end
+      else if (TYPE=="GRAY")
+	begin
+	   initial
+	     $display ("NOT IMPLEMENTED");	   
+	end
+      else if (TYPE=="LFSR")
+	begin
+	   initial
+	     $display ("NOT IMPLEMENTED");	   
+	end      
+   endgenerate
+   
+   
+endmodule // oh_counter
+
+
+Diff Content:
+- 41       if(TYPE=="BINARY")
++ 41       if(TYPE=="INCREMENT")
++ 41 	begin
++ 41 	   assign {carry_in,count_in[DW-1:0]} = count[DW-1:0] + in;
++ 41 	end
++ 41       else if(TYPE=="DECREMENT")
+
+Clone Blocks:

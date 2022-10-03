@@ -1,0 +1,166 @@
+Source Block: hdl/library/prcfg/common/prcfg_top.v@116:198@HdlStmFor
+  wire    [(NUM_CHANNEL - 1):0]     dac_gpio_out_s_inv[31:0];
+
+  genvar l_inst;
+
+  generate
+    for(l_inst = 0; l_inst < NUM_CHANNEL; l_inst = l_inst + 1) begin: tx_rx_data_path
+      if(ADC_EN == ENABELED) begin
+        if(l_inst == 0) begin
+          prcfg_adc #(
+            .CHANNEL_ID(l_inst)
+          ) i_prcfg_adc_1 (
+            .clk(clk),
+            .control(adc_gpio_input),
+            .status(adc_gpio_out_s[l_inst]),
+            .src_adc_dwr(core_adc_dwr),
+            .src_adc_dsync(core_adc_dsync),
+            .src_adc_ddata(core_adc_ddata[(DATA_WIDTH - 1):0]),
+            .src_adc_dovf(core_adc_ovf),
+            .dst_adc_dwr(dma_adc_dwr),
+            .dst_adc_dsync(dma_adc_dsync),
+            .dst_adc_ddata(dma_adc_ddata[(DATA_WIDTH - 1):0]),
+            .dst_adc_dovf(dma_adc_ovf)
+          );
+        end else begin
+           prcfg_adc #(
+            .CHANNEL_ID(l_inst)
+          ) i_prcfg_adc_i (
+            .clk(clk),
+            .control(adc_gpio_input),
+            .status(adc_gpio_out_s[l_inst]),
+            .src_adc_dwr(core_adc_dwr),
+            .src_adc_dsync(core_adc_dsync),
+            .src_adc_ddata(core_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+            .src_adc_dovf(),
+            .dst_adc_dwr(),
+            .dst_adc_dsync(),
+            .dst_adc_ddata(dma_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+            .dst_adc_dovf(dma_adc_ovf)
+          );
+        end
+      end
+      if(DAC_EN == ENABELED) begin
+        if(l_inst == 0) begin
+          prcfg_dac #(
+            .CHANNEL_ID(l_inst)
+          ) i_prcfg_dac_1 (
+            .clk(clk),
+            .control(dac_gpio_input),
+            .status(dac_gpio_out_s[l_inst]),
+            .src_dac_en(dma_dac_en),
+            .src_dac_ddata(dma_dac_ddata[(DATA_WIDTH - 1):0]),
+            .src_dac_dunf(dma_dac_dunf),
+            .src_dac_dvalid(dma_dac_dvalid),
+            .dst_dac_en(core_dac_en),
+            .dst_dac_ddata(core_dac_ddata[(DATA_WIDTH - 1):0]),
+            .dst_dac_dunf(core_dac_dunf),
+            .dst_dac_dvalid(core_dac_dvalid)
+          );
+        end else begin
+          prcfg_dac #(
+            .CHANNEL_ID(l_inst)
+          ) i_prcfg_dac_i (
+            .clk(clk),
+            .control(dac_gpio_input),
+            .status(dac_gpio_out_s[l_inst]),
+            .src_dac_en(),
+            .src_dac_ddata(dma_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+            .src_dac_dunf(dma_dac_dunf),
+            .src_dac_dvalid(dma_dac_dvalid),
+            .dst_dac_en(core_dac_en),
+            .dst_dac_ddata(core_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+            .dst_dac_dunf(),
+            .dst_dac_dvalid()
+          );
+        end
+      end
+
+    end
+  endgenerate
+
+  genvar i;
+  genvar j;
+
+
+Diff Content:
+- 123         if(l_inst == 0) begin
+- 126           ) i_prcfg_adc_1 (
+- 127             .clk(clk),
+- 128             .control(adc_gpio_input),
+- 129             .status(adc_gpio_out_s[l_inst]),
+- 130             .src_adc_dwr(core_adc_dwr),
+- 131             .src_adc_dsync(core_adc_dsync),
+- 132             .src_adc_ddata(core_adc_ddata[(DATA_WIDTH - 1):0]),
+- 133             .src_adc_dovf(core_adc_ovf),
+- 134             .dst_adc_dwr(dma_adc_dwr),
+- 135             .dst_adc_dsync(dma_adc_dsync),
+- 136             .dst_adc_ddata(dma_adc_ddata[(DATA_WIDTH - 1):0]),
+- 137             .dst_adc_dovf(dma_adc_ovf)
+- 138           );
+- 139         end else begin
+- 140            prcfg_adc #(
+- 141             .CHANNEL_ID(l_inst)
+- 146             .src_adc_dwr(core_adc_dwr),
+- 147             .src_adc_dsync(core_adc_dsync),
+- 148             .src_adc_ddata(core_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+- 149             .src_adc_dovf(),
+- 150             .dst_adc_dwr(),
+- 151             .dst_adc_dsync(),
+- 152             .dst_adc_ddata(dma_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+- 153             .dst_adc_dovf(dma_adc_ovf)
+- 155         end
+- 158         if(l_inst == 0) begin
+- 159           prcfg_dac #(
+- 160             .CHANNEL_ID(l_inst)
+- 161           ) i_prcfg_dac_1 (
+- 162             .clk(clk),
+- 163             .control(dac_gpio_input),
+- 164             .status(dac_gpio_out_s[l_inst]),
+- 165             .src_dac_en(dma_dac_en),
+- 166             .src_dac_ddata(dma_dac_ddata[(DATA_WIDTH - 1):0]),
+- 167             .src_dac_dunf(dma_dac_dunf),
+- 168             .src_dac_dvalid(dma_dac_dvalid),
+- 169             .dst_dac_en(core_dac_en),
+- 170             .dst_dac_ddata(core_dac_ddata[(DATA_WIDTH - 1):0]),
+- 171             .dst_dac_dunf(core_dac_dunf),
+- 172             .dst_dac_dvalid(core_dac_dvalid)
+- 173           );
+- 174         end else begin
+- 175           prcfg_dac #(
+- 176             .CHANNEL_ID(l_inst)
+- 177           ) i_prcfg_dac_i (
+- 178             .clk(clk),
+- 179             .control(dac_gpio_input),
+- 180             .status(dac_gpio_out_s[l_inst]),
+- 181             .src_dac_en(),
+- 182             .src_dac_ddata(dma_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+- 183             .src_dac_dunf(dma_dac_dunf),
+- 184             .src_dac_dvalid(dma_dac_dvalid),
+- 185             .dst_dac_en(core_dac_en),
+- 186             .dst_dac_ddata(core_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+- 187             .dst_dac_dunf(),
+- 188             .dst_dac_dvalid()
+- 189           );
+- 190         end
++ 153             .src_adc_enable(core_adc_enable_s[l_inst]),
++ 153             .src_adc_valid(core_adc_valid_s[l_inst]),
++ 153             .src_adc_data(core_adc_data_s[l_inst]),
++ 153             .dst_adc_enable(dma_adc_enable_s[l_inst]),
++ 153             .dst_adc_valid(dma_adc_valid_s[l_inst]),
++ 153             .dst_adc_data(dma_adc_data_s[l_inst])
++ 190         prcfg_dac #(
++ 190           .CHANNEL_ID(l_inst)
++ 190         ) i_prcfg_dac_i (
++ 190           .clk(clk),
++ 190           .control(dac_gpio_input),
++ 190           .status(dac_gpio_out_s[l_inst]),
++ 190           .src_dac_enable(dma_dac_enable_s[l_inst]),
++ 190           .src_dac_data(dma_dac_data_s[l_inst]),
++ 190           .src_dac_valid(dma_dac_valid_s[l_inst]),
++ 190           .dst_dac_enable(core_dac_enable_s[l_inst]),
++ 190           .dst_dac_data(core_dac_data_s[l_inst]),
++ 190           .dst_dac_valid(core_dac_valid_s[l_inst])
++ 190         );
+
+Clone Blocks:

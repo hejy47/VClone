@@ -1,0 +1,139 @@
+Source Block: oh/elink/dv/elink_e16_model.v@292:306@HdlStmProcess
+   //Counter For Generating Toggling Edges
+   //always @ (posedge clk_in or posedge reset)
+   //if(reset)
+   //counter[5:0] <= 6'b000001;// Reset value
+
+   always @ (posedge clk_in)
+     if(posedge_match)
+       counter[5:0] <= 6'b000001;// Self resetting
+     else
+       counter[5:0] <= (counter[5:0]+6'b000001);
+   
+   assign posedge_match    = (counter[5:0]==div_cfg_dec[5:0]);
+   assign negedge_match    = (counter[5:0]=={1'b0,div_cfg_dec[5:1]}); 
+   assign posedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}));
+   assign negedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}+{1'b0,div_cfg_dec[5:1]})); 
+
+Diff Content:
+- 297    always @ (posedge clk_in)
+- 298      if(posedge_match)
++ 298    always @ (posedge clk_in or posedge reset)
++ 298      if (reset)
++ 298        counter[5:0] <= 6'b000001;   
++ 298      else if(posedge_match)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/clock_divider.v@70:80
+       else
+	 counter[7:0] <= (counter[7:0] + 8'b00000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+					     {1'b0,divcfg_dec[7:1]})); 
+			      
+   always @ (posedge clkin or posedge reset)
+     if(reset)
+
+Clone Blocks 2:
+oh/common/hdl/clock_divider.v@69:79
+	 counter[7:0] <= 8'b000001;// Self resetting
+       else
+	 counter[7:0] <= (counter[7:0] + 8'b00000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+					     {1'b0,divcfg_dec[7:1]})); 
+			      
+   always @ (posedge clkin or posedge reset)
+
+Clone Blocks 3:
+oh/common/hdl/clock_divider.v@68:78
+     else if(posedge_match | divcfg_change)
+	 counter[7:0] <= 8'b000001;// Self resetting
+       else
+	 counter[7:0] <= (counter[7:0] + 8'b00000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+					     {1'b0,divcfg_dec[7:1]})); 
+			      
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@299:309
+       counter[5:0] <= 6'b000001;// Self resetting
+     else
+       counter[5:0] <= (counter[5:0]+6'b000001);
+   
+   assign posedge_match    = (counter[5:0]==div_cfg_dec[5:0]);
+   assign negedge_match    = (counter[5:0]=={1'b0,div_cfg_dec[5:1]}); 
+   assign posedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}));
+   assign negedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}+{1'b0,div_cfg_dec[5:1]})); 
+			      
+   //Divided clock
+   //always @ (posedge clk_in or posedge reset)
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@300:310
+     else
+       counter[5:0] <= (counter[5:0]+6'b000001);
+   
+   assign posedge_match    = (counter[5:0]==div_cfg_dec[5:0]);
+   assign negedge_match    = (counter[5:0]=={1'b0,div_cfg_dec[5:1]}); 
+   assign posedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}));
+   assign negedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}+{1'b0,div_cfg_dec[5:1]})); 
+			      
+   //Divided clock
+   //always @ (posedge clk_in or posedge reset)
+   //if(reset)
+
+Clone Blocks 6:
+oh/elink/dv/elink_e16_model.v@301:311
+       counter[5:0] <= (counter[5:0]+6'b000001);
+   
+   assign posedge_match    = (counter[5:0]==div_cfg_dec[5:0]);
+   assign negedge_match    = (counter[5:0]=={1'b0,div_cfg_dec[5:1]}); 
+   assign posedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}));
+   assign negedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}+{1'b0,div_cfg_dec[5:1]})); 
+			      
+   //Divided clock
+   //always @ (posedge clk_in or posedge reset)
+   //if(reset)
+   //clk_out_reg <= 1'b0;   
+
+Clone Blocks 7:
+oh/common/hdl/clock_divider.v@71:82
+	 counter[7:0] <= (counter[7:0] + 8'b00000001);
+   
+   assign posedge_match    = (counter[7:0]==divcfg_dec[7:0]);
+   assign negedge_match    = (counter[7:0]=={1'b0,divcfg_dec[7:1]}); 
+   assign posedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]}));
+   assign negedge90_match  = (counter[7:0]==({2'b00,divcfg_dec[7:2]} + 
+					     {1'b0,divcfg_dec[7:1]})); 
+			      
+   always @ (posedge clkin or posedge reset)
+     if(reset)
+       clkout_reg <= 1'b0;   
+     else if(posedge_match)
+
+Clone Blocks 8:
+oh/elink/dv/elink_e16_model.v@298:308
+     if(posedge_match)
+       counter[5:0] <= 6'b000001;// Self resetting
+     else
+       counter[5:0] <= (counter[5:0]+6'b000001);
+   
+   assign posedge_match    = (counter[5:0]==div_cfg_dec[5:0]);
+   assign negedge_match    = (counter[5:0]=={1'b0,div_cfg_dec[5:1]}); 
+   assign posedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}));
+   assign negedge90_match  = (counter[5:0]==({2'b00,div_cfg_dec[5:2]}+{1'b0,div_cfg_dec[5:1]})); 
+			      
+   //Divided clock
+

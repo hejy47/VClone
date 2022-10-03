@@ -1,0 +1,45 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@129:139@HdlIdDef
+  MAX_BEATS_PER_MULTIFRAME > 16 ? 5 :
+  MAX_BEATS_PER_MULTIFRAME > 8 ? 4 :
+  MAX_BEATS_PER_MULTIFRAME > 4 ? 3 :
+  MAX_BEATS_PER_MULTIFRAME > 2 ? 2 : 1;
+
+localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
+localparam CW = DATA_PATH_WIDTH * NUM_LANES;
+localparam HW = 2 * NUM_LANES;
+
+wire [DW-1:0] phy_data_r;
+wire [CW-1:0] phy_charisk_r;
+
+Diff Content:
+- 134 localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx.v@130:140
+  MAX_BEATS_PER_MULTIFRAME > 8 ? 4 :
+  MAX_BEATS_PER_MULTIFRAME > 4 ? 3 :
+  MAX_BEATS_PER_MULTIFRAME > 2 ? 2 : 1;
+
+localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
+localparam CW = DATA_PATH_WIDTH * NUM_LANES;
+localparam HW = 2 * NUM_LANES;
+
+wire [DW-1:0] phy_data_r;
+wire [CW-1:0] phy_charisk_r;
+wire [HW-1:0] phy_header_r;
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_tx/jesd204_tx.v@131:141
+  MAX_BEATS_PER_MULTIFRAME > 4 ? 3 :
+  MAX_BEATS_PER_MULTIFRAME > 2 ? 2 : 1;
+
+localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
+localparam CW = DATA_PATH_WIDTH * NUM_LANES;
+localparam HW = 2 * NUM_LANES;
+
+wire [DW-1:0] phy_data_r;
+wire [CW-1:0] phy_charisk_r;
+wire [HW-1:0] phy_header_r;
+
+

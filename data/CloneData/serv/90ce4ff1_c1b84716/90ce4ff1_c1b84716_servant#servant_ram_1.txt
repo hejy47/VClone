@@ -1,0 +1,22 @@
+Source Block: serv/servant/servant_ram.v@17:28@HdlStmProcess
+
+   reg [31:0] 		mem [0:depth/4-1] /* verilator public */;
+
+   wire [aw-3:0] 	addr = i_wb_adr[aw-1:2];
+
+   always @(posedge i_wb_clk)
+     o_wb_ack <= i_wb_cyc & !o_wb_ack;
+
+   always @(posedge i_wb_clk) begin
+      if (we[0]) mem[addr][7:0]   <= i_wb_dat[7:0];
+      if (we[1]) mem[addr][15:8]  <= i_wb_dat[15:8];
+      if (we[2]) mem[addr][23:16] <= i_wb_dat[23:16];
+
+Diff Content:
+- 23      o_wb_ack <= i_wb_cyc & !o_wb_ack;
++ 23      if (i_wb_rst & (RESET_STRATEGY != "NONE"))
++ 23        o_wb_ack <= 1'b0;
++ 23      else
++ 23        o_wb_ack <= i_wb_cyc & !o_wb_ack;
+
+Clone Blocks:

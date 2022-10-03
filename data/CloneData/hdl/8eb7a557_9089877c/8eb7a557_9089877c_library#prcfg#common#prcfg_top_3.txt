@@ -1,0 +1,102 @@
+Source Block: hdl/library/prcfg/common/prcfg_top.v@107:185@HdlStmFor
+  wire    [31:0]                    dac_status_s[(NUM_CHANNEL - 1):0];
+
+  genvar l_inst;
+
+  generate
+    for(l_inst = 0; l_inst < NUM_CHANNEL; l_inst = l_inst + 1) begin: tx_rx_data_path
+      if(ADC_EN == ENABELED) begin
+        if(l_inst == 0) begin
+          prcfg_adc #(
+            .CHANNEL_ID(l_inst)
+          ) i_prcfg_adc_1 (
+            .clk(clk),
+            .control(gpio_input),
+            .status(adc_status_s[l_inst]),
+            .src_adc_dwr(core_adc_dwr),
+            .src_adc_dsync(core_adc_dsync),
+            .src_adc_ddata(core_adc_ddata[(DATA_WIDTH - 1):0]),
+            .src_adc_dovf(core_adc_ovf),
+            .dst_adc_dwr(dma_adc_dwr),
+            .dst_adc_dsync(dma_adc_dsync),
+            .dst_adc_ddata(dma_adc_ddata[(DATA_WIDTH - 1):0]),
+            .dst_adc_dovf(dma_adc_ovf)
+          );
+        end else begin
+           prcfg_adc #(
+            .CHANNEL_ID(l_inst)
+          ) i_prcfg_adc_1 (
+            .clk(clk),
+            .control(gpio_input),
+            .status(adc_status_s[l_inst]),
+            .src_adc_dwr(core_adc_dwr),
+            .src_adc_dsync(core_adc_dsync),
+            .src_adc_ddata(core_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+            .src_adc_dovf(),
+            .dst_adc_dwr(),
+            .dst_adc_dsync(),
+            .dst_adc_ddata(dma_adc_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+            .dst_adc_dovf(dma_adc_ovf)
+          );
+        end
+      end
+      if(DAC_EN == ENABELED) begin
+        if(l_inst == 0) begin
+          prcfg_dac #(
+            .CHANNEL_ID(l_inst)
+          ) i_prcfg_dac_1 (
+            .clk(clk),
+            .control(gpio_input),
+            .status(dac_status_s[l_inst]),
+            .src_dac_drd(dma_dac_drd),
+            .src_dac_ddata(dma_dac_ddata[(DATA_WIDTH - 1):0]),
+            .src_dac_dunf(dma_dac_dunf),
+            .dst_dac_drd(core_dac_drd),
+            .dst_dac_ddata(core_dac_ddata[(DATA_WIDTH - 1):0]),
+            .dst_dac_dunf(core_dac_dunf)
+          );
+        end else begin
+          prcfg_dac #(
+            .CHANNEL_ID(l_inst)
+          ) i_prcfg_dac_1 (
+            .clk(clk),
+            .control(gpio_input),
+            .status(dac_status_s[l_inst]),
+            .src_dac_drd(),
+            .src_dac_ddata(dma_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+            .src_dac_dunf(dma_dac_dunf),
+            .dst_dac_drd(core_dac_drd),
+            .dst_dac_ddata(core_dac_ddata[((DATA_WIDTH * (l_inst + 1)) - 1):(DATA_WIDTH * l_inst)]),
+            .dst_dac_dunf()
+          );
+        end
+      end
+      always @(posedge clk) begin
+        gpio_output <= gpio_output | adc_status_s[l_inst] | dac_status_s[l_inst];
+      end
+    end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 179       always @(posedge clk) begin
+- 180         gpio_output <= gpio_output | adc_status_s[l_inst] | dac_status_s[l_inst];
+- 181       end
++ 181       assign gpio_output_s[l_inst] = adc_status_s[l_inst] | dac_status_s[l_inst];
++ 181     end
++ 181   endgenerate
++ 181   genvar i;
++ 181   genvar j;
++ 181   generate
++ 181   for(i = 0; i < 32; i = i + 1) begin
++ 181     for(j = 0; j < NUM_CHANNEL; j = j + 1) begin
++ 181       assign gpio_output_s_inv[i][j] = gpio_output_s[j][i];
++ 182   end
++ 182   endgenerate
++ 182   generate
++ 182   for(i = 0; i < 32; i = i + 1) begin
++ 182     assign gpio_output[i] = |gpio_output_s_inv[i];
++ 182   end
+
+Clone Blocks:

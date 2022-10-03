@@ -1,0 +1,39 @@
+Source Block: oh/emmu/hdl/emmu.v@113:125@HdlStmAssign
+   
+   always @ (posedge clk)
+     if(emesh_access_in)   
+       emmu_packet_reg[PW-1:0]  <= emesh_packet_in[PW-1:0];	  
+   
+   assign emmu_dstaddr_out[63:0] = mmu_en ? {emmu_lookup_data[43:0],
+					     emmu_packet_reg[27:8]} :      //20 bits
+				             {32'b0,emmu_packet_reg[39:8]};//ugly
+      
+
+   //Concatenating output packet
+   assign emmu_packet_out[PW-1:0] = {emmu_packet_reg[PW-1:40],
+                                     emmu_dstaddr_out[31:0],
+
+Diff Content:
+- 118    assign emmu_dstaddr_out[63:0] = mmu_en ? {emmu_lookup_data[43:0],
+- 119 					     emmu_packet_reg[27:8]} :      //20 bits
+- 120 				             {32'b0,emmu_packet_reg[39:8]};//ugly
++ 120    assign emesh_dstaddr_out[63:0] = (mmu_en & ~mmu_bp) ? {emmu_lookup_data[43:0], emesh_packet_reg[27:8]} :
++ 120 				                        {32'b0,emesh_packet_reg[39:8]}; 
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/hdl/emmu.v@109:121
+     if(reset)
+       emmu_access_out <= 1'b0;
+     else
+       emmu_access_out               <= emesh_access_in;
+   
+   always @ (posedge clk)
+     if(emesh_access_in)   
+       emmu_packet_reg[PW-1:0]  <= emesh_packet_in[PW-1:0];	  
+   
+   assign emmu_dstaddr_out[63:0] = mmu_en ? {emmu_lookup_data[43:0],
+					     emmu_packet_reg[27:8]} :      //20 bits
+				             {32'b0,emmu_packet_reg[39:8]};//ugly
+      
+

@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@89:99@HdlIdDef
+  DEST_SRC_RATIO > 4 ? 3 :
+  DEST_SRC_RATIO > 2 ? 2 :
+  DEST_SRC_RATIO > 1 ? 1 : 0;
+
+localparam BYTES_PER_BEAT_WIDTH = DEST_SRC_RATIO_WIDTH + BYTES_PER_BEAT_WIDTH_SRC;
+localparam BURST_LEN_WIDTH = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH;
+
+wire do_acc_st;
+wire do_compl;
+reg req_eot = 1'b0;
+reg req_response_partial = 1'b0;
+
+Diff Content:
+- 94 localparam BURST_LEN_WIDTH = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_response_manager.v@88:98
+  DEST_SRC_RATIO > 8 ? 4 :
+  DEST_SRC_RATIO > 4 ? 3 :
+  DEST_SRC_RATIO > 2 ? 2 :
+  DEST_SRC_RATIO > 1 ? 1 : 0;
+
+localparam BYTES_PER_BEAT_WIDTH = DEST_SRC_RATIO_WIDTH + BYTES_PER_BEAT_WIDTH_SRC;
+localparam BURST_LEN_WIDTH = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH;
+
+wire do_acc_st;
+wire do_compl;
+reg req_eot = 1'b0;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_response_manager.v@91:101
+  DEST_SRC_RATIO > 1 ? 1 : 0;
+
+localparam BYTES_PER_BEAT_WIDTH = DEST_SRC_RATIO_WIDTH + BYTES_PER_BEAT_WIDTH_SRC;
+localparam BURST_LEN_WIDTH = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH;
+
+wire do_acc_st;
+wire do_compl;
+reg req_eot = 1'b0;
+reg req_response_partial = 1'b0;
+reg [BYTES_PER_BURST_WIDTH-1:0] req_response_dest_data_burst_length = 'h0;
+
+

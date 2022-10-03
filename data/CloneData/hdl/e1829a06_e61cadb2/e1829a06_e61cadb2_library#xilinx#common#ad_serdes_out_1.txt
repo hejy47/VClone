@@ -1,0 +1,37 @@
+Source Block: hdl/library/xilinx/common/ad_serdes_out.v@84:94@HdlStmAssign
+  wire    [(DATA_WIDTH-1):0]  data_t;
+  wire    buffer_disable;
+
+  assign data_out_se =  data_out_s;
+
+  assign buffer_disable = ~data_oe;
+  // instantiations
+
+  genvar l_inst;
+  generate
+  for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
+
+Diff Content:
++ 89   reg [6:0] serdes_rst_seq;
++ 89   wire      serdes_rst     = serdes_rst_seq [6];
++ 89   always @ (posedge div_clk)
++ 89   begin
++ 89       if   (rst) serdes_rst_seq [6:0] <= 7'b0001110;
++ 89       else       serdes_rst_seq [6:0] <= {serdes_rst_seq [5:0], 1'b0};
++ 89   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/common/ad_serdes_out.v@87:97
+  assign data_out_se =  data_out_s;
+
+  assign buffer_disable = ~data_oe;
+  // instantiations
+
+  genvar l_inst;
+  generate
+  for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
+
+    if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+      OSERDESE2  #(
+

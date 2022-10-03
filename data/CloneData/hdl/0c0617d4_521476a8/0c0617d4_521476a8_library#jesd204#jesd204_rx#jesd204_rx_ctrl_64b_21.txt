@@ -1,0 +1,53 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl_64b.v@126:142@HdlStmProcess
+      end
+  endcase
+end
+
+// Wait n consecutive valid cycles before jumping into next state
+always @(posedge clk) begin
+  if (reset || rst_good_cnt) begin
+    good_cnt <= 'h0;
+  end else begin
+    good_cnt <= good_cnt + 1;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    state <= STATE_RESET;
+  end else begin
+
+Diff Content:
+- 131 always @(posedge clk) begin
+- 132   if (reset || rst_good_cnt) begin
+- 133     good_cnt <= 'h0;
+- 134   end else begin
+- 135     good_cnt <= good_cnt + 1;
+- 137 end
++ 135       STATE_BLOCK_SYNC:
++ 135         if (~all_block_sync) begin
++ 135           next_state = STATE_WAIT_BS;
++ 135         end else if (all_emb_lock & ~buffer_release_d_n) begin
++ 135           rst_good_cnt = 1'b0;
++ 135           if (&good_cnt) begin
++ 135             next_state = STATE_DATA;
++ 135           end
++ 135         end
++ 135       STATE_DATA:
++ 135         if (~all_block_sync) begin
++ 135           next_state = STATE_WAIT_BS;
++ 135           event_unexpected_lane_state_error_nx = 1'b1;
++ 135         end else if (~all_emb_lock | buffer_release_d_n) begin
++ 135           next_state = STATE_BLOCK_SYNC;
++ 135           event_unexpected_lane_state_error_nx = 1'b1;
++ 135         end
++ 135     endcase
++ 135   end
++ 135   always @(posedge clk) begin
++ 135     if (reset || rst_good_cnt) begin
++ 135       good_cnt <= 'h0;
++ 135     end else begin
++ 135       good_cnt <= good_cnt + 1;
++ 135     end
+
+Clone Blocks:

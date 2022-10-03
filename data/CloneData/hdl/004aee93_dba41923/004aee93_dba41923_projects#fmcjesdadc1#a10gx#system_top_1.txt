@@ -1,0 +1,17 @@
+Source Block: hdl/projects/fmcjesdadc1/a10gx/system_top.v@105:115@HdlStmAssign
+  wire                    spi_mosi;
+  wire        [  7:0]     spi_csn_s;
+
+  // gpio in & out are separate cores
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+
+  // board stuff
+
+  assign eth_resetn = ~eth_reset;
+  assign eth_mdio_i = eth_mdio;
+
+Diff Content:
+- 110   assign gpio_i[63:32] = gpio_o[63:32];
+
+Clone Blocks:

@@ -1,0 +1,34 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1262:1272@HdlStmAssign
+	  ctrlmode[3:0]       <= fifo_data_reg[7:4];
+       end
+
+   //# byte0 decode
+   //# bit[2] is the only one in use for now
+   assign byte0_inc8   = ~tran_byte0[2];
+
+   //##########################
+   //# Transaction assembly
+   //##########################
+
+
+Diff Content:
+- 1267    assign byte0_inc8   = ~tran_byte0[2];
++ 1267    wire   intoggle;
++ 1267    wire   insync;
++ 1267    pulse2toggle    pulse2toggle(
++ 1267 				.out		(intoggle),
++ 1267 				.clk		(inclk),
++ 1267 				.in		(in),
++ 1267 				.reset		(reset));
++ 1267    synchronizer #(1) synchronizer(
++ 1267 				  .out			(insync),
++ 1267 				  .in			(intoggle),
++ 1267 				  .clk			(outclk),
++ 1267 				  .reset		(reset));
++ 1267    toggle2pulse toggle2pulse(
++ 1267 			     .out		(out),
++ 1267 			     .clk		(outclk),
++ 1267 			     .in		(insync),
++ 1267 			     .reset		(reset));
+
+Clone Blocks:

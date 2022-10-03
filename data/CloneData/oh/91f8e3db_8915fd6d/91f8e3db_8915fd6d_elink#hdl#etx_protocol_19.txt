@@ -1,0 +1,31 @@
+Source Block: oh/elink/hdl/etx_protocol.v@101:111@HdlIdDef
+   //# Checking for transaction "done"
+   //#############################################################
+   //if burst, you get immediate "ack"
+   //otherwise you get ack in one cycle (since it takes 2 clocks for trans to exit IO)  
+   reg 		 done;
+   wire 	 tx_io_wait;
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       done <= 1'b0;                 
+     else
+
+Diff Content:
+- 106    wire 	 tx_io_wait;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@100:110
+   //############################################################
+   //# Checking for transaction "done"
+   //#############################################################
+   //if burst, you get immediate "ack"
+   //otherwise you get ack in one cycle (since it takes 2 clocks for trans to exit IO)  
+   reg 		 done;
+   wire 	 tx_io_wait;
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       done <= 1'b0;                 
+

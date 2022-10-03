@@ -1,0 +1,89 @@
+Source Block: hdl/library/common/ad_mux.v@55:65@HdlIdDef
+);
+
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
+
+
+
+Diff Content:
+- 60 localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
++ 60 localparam NUM_STAGES = ($clog2(CH_CNT) / $clog2(MUX_SZ)) + // divide and round up
++ 60                        |($clog2(CH_CNT) % $clog2(MUX_SZ));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_mux.v@52:62
+  input [DW-1:0] data_in,
+  input [$clog2(CH_CNT)-1:0] ch_sel,
+  output [CH_W-1:0] data_out
+);
+
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+
+Clone Blocks 2:
+hdl/library/common/ad_mux.v@57:67
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
+
+
+assign mux_in[DW-1:0] = data_in;
+assign ch_sel_pln[CLOG2_CH_CNT-1:0] = ch_sel;
+
+Clone Blocks 3:
+hdl/library/common/ad_mux.v@54:64
+  output [CH_W-1:0] data_out
+);
+
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
+
+
+Clone Blocks 4:
+hdl/library/common/ad_mux.v@53:63
+  input [$clog2(CH_CNT)-1:0] ch_sel,
+  output [CH_W-1:0] data_out
+);
+
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
+
+Clone Blocks 5:
+hdl/library/common/ad_mux.v@58:68
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = $clog2(CH_CNT) / $clog2(MUX_SZ);
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
+
+
+assign mux_in[DW-1:0] = data_in;
+assign ch_sel_pln[CLOG2_CH_CNT-1:0] = ch_sel;
+
+

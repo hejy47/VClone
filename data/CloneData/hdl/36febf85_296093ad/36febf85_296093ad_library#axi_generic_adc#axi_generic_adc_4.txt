@@ -1,0 +1,28 @@
+Source Block: hdl/library/axi_generic_adc/axi_generic_adc.v@53:73@HdlStmProcess
+
+assign up_clk = s_axi_aclk;
+assign up_rstn = s_axi_aresetn;
+
+integer j;
+always @(*)
+begin
+	up_rdata_r = 'h00;
+	up_rack_r = 'h00;
+	up_wack_r = 'h00;
+	for (j = 0; j <= NUM_CHANNELS; j=j+1) begin
+		up_rack_r = up_rack_r | up_rack_s[j];
+		up_wack_r = up_wack_r | up_wack_s[j];
+		up_rdata_r = up_rdata_r | up_rdata_s[j];
+	end
+end
+
+always @(negedge up_rstn or posedge up_clk) begin
+	if (up_rstn == 0) begin
+		up_rdata <= 'd0;
+		up_rack <= 'd0;
+
+Diff Content:
+- 63 	for (j = 0; j <= NUM_CHANNELS; j=j+1) begin
++ 63 	for (j = 0; j <= NUM_OF_CHANNELS; j=j+1) begin
+
+Clone Blocks:

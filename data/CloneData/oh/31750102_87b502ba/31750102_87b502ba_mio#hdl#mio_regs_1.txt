@@ -1,0 +1,36 @@
+Source Block: oh/mio/hdl/mio_regs.v@115:137@HdlStmProcess
+   
+   //################################
+   //# CONFIG
+   //################################ 
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       begin
+	  config_reg[0]    <= DEF_EN;
+	  config_reg[1]    <= DEF_EN;
+	  config_reg[3:2]  <= DEF_MODE;   
+	  config_reg[11:4] <= DEF_SIZE;
+	  config_reg[12]   <= DEF_DDR;
+	  config_reg[13]   <= DEF_MSB;   
+	  config_reg[18:14]<= 'b0;
+       end
+     else if(config_write)
+       config_reg[18:0] <= data_in[18:0];
+
+   assign tx_en         = config_reg[0];          // tx enable
+   assign rx_en         = config_reg[1];          // rx disable
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // pure data mode (streaming)
+
+Diff Content:
+- 123 	  config_reg[0]    <= DEF_EN;
+- 124 	  config_reg[1]    <= DEF_EN;
+- 125 	  config_reg[3:2]  <= DEF_MODE;   
+- 126 	  config_reg[11:4] <= DEF_SIZE;
+- 127 	  config_reg[12]   <= DEF_DDR;
+- 128 	  config_reg[13]   <= DEF_MSB;   
+- 129 	  config_reg[18:14]<= 'b0;
++ 129 	  config_reg[18:0] <= DEF_CFG;
+
+Clone Blocks:

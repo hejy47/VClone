@@ -1,0 +1,71 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@258:320@HdlStmFor
+    .up_rack (up_rack_s[0])
+  );
+
+  generate
+  genvar i;
+  for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
+    up_dac_channel #(
+      .COMMON_ID(6'h1 + i/16),
+      .CHANNEL_ID (i % 16),
+      .CHANNEL_NUMBER (i),
+      .USERPORTS_DISABLE (1),
+      .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+      .XBAR_ENABLE (XBAR_ENABLE)
+    ) i_up_dac_channel (
+      .dac_clk (link_clk),
+      .dac_rst (dac_rst),
+      .dac_dds_scale_1 (dac_dds_scale_0[16*i+:16]),
+      .dac_dds_init_1 (dac_dds_init_0[16*i+:16]),
+      .dac_dds_incr_1 (dac_dds_incr_0[16*i+:16]),
+      .dac_dds_scale_2 (dac_dds_scale_1[16*i+:16]),
+      .dac_dds_init_2 (dac_dds_init_1[16*i+:16]),
+      .dac_dds_incr_2 (dac_dds_incr_1[16*i+:16]),
+      .dac_pat_data_1 (dac_pat_data_0[16*i+:16]),
+      .dac_pat_data_2 (dac_pat_data_1[16*i+:16]),
+      .dac_data_sel (dac_data_sel[4*i+:4]),
+      .dac_mask_enable (dac_mask_enable[i]),
+      .dac_iq_mode (),
+      .dac_iqcor_enb (dac_iqcor_enb[i]),
+      .dac_iqcor_coeff_1 (dac_iqcor_coeff_1[16*i+:16]),
+      .dac_iqcor_coeff_2 (dac_iqcor_coeff_2[16*i+:16]),
+      .dac_src_chan_sel (dac_src_chan_sel[8*i+:8]),
+      .up_usr_datatype_be (),
+      .up_usr_datatype_signed (),
+      .up_usr_datatype_shift (),
+      .up_usr_datatype_total_bits (),
+      .up_usr_datatype_bits (),
+      .up_usr_interpolation_m (),
+      .up_usr_interpolation_n (),
+      .dac_usr_datatype_be (1'b0),
+      .dac_usr_datatype_signed (1'b1),
+      .dac_usr_datatype_shift (8'd0),
+      .dac_usr_datatype_total_bits (8'd16),
+      .dac_usr_datatype_bits (8'd16),
+      .dac_usr_interpolation_m (16'd1),
+      .dac_usr_interpolation_n (16'd1),
+
+      .up_clk (up_clk),
+      .up_rstn (up_rstn),
+      .up_wreq (up_wreq_s),
+      .up_waddr ({3'b0,up_waddr_s}),
+      .up_wdata (up_wdata_s),
+      .up_wack (up_wack_s[i+1]),
+      .up_rreq (up_rreq_s),
+      .up_raddr ({3'b0,up_raddr_s}),
+      .up_rdata (up_rdata_s[i+1]),
+      .up_rack (up_rack_s[i+1])
+    );
+  end
+  endgenerate
+
+  up_tpl_common #(
+     .COMMON_ID(2'h0),            // Offset of regmap
+     .NUM_PROFILES(NUM_PROFILES)  // Number of JESD profiles
+
+Diff Content:
+- 313       .up_rack (up_rack_s[i+1])
+- 314     );
++ 314       .up_rack (up_rack_s[i+1]));
+
+Clone Blocks:

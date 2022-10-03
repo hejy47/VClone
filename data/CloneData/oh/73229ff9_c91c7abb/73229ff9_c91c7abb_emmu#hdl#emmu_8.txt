@@ -1,0 +1,50 @@
+Source Block: oh/emmu/hdl/emmu.v@113:125@HdlStmAssign
+   //write controls
+   assign mi_write_low  = (mi_en & mi_we[0] & (mi_addr[2:0]==3'b000));
+   assign mi_write_high = (mi_en & mi_we[0] & (mi_addr[2:0]==3'b100));
+   
+   //Enabling lower/upper 32 bit data write 
+   assign mi_wr_en[7:0] =  mi_write_low  ? 8'b11110000 :
+	                   mi_write_high ? 8'b00001111 :
+			                   8'b00000000 ;
+   
+
+`ifdef TARGET_XILINX
+   memory_dp_48x4096 memory_dp_48x4096(
+				       //write (portA)
+
+Diff Content:
+- 118    assign mi_wr_en[7:0] =  mi_write_low  ? 8'b11110000 :
+- 119 	                   mi_write_high ? 8'b00001111 :
+- 120 			                   8'b00000000 ;
++ 120    assign emmu_wr_data[63:0] = {mi_din[31:0], mi_din[31:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emmu/hdl/emmu.v@109:119
+
+   //write data
+   assign mi_wr_data[63:0] = {mi_din[31:0], mi_din[31:0]};
+   
+   //write controls
+   assign mi_write_low  = (mi_en & mi_we[0] & (mi_addr[2:0]==3'b000));
+   assign mi_write_high = (mi_en & mi_we[0] & (mi_addr[2:0]==3'b100));
+   
+   //Enabling lower/upper 32 bit data write 
+   assign mi_wr_en[7:0] =  mi_write_low  ? 8'b11110000 :
+	                   mi_write_high ? 8'b00001111 :
+
+Clone Blocks 2:
+oh/emmu/hdl/emmu.v@110:120
+   //write data
+   assign mi_wr_data[63:0] = {mi_din[31:0], mi_din[31:0]};
+   
+   //write controls
+   assign mi_write_low  = (mi_en & mi_we[0] & (mi_addr[2:0]==3'b000));
+   assign mi_write_high = (mi_en & mi_we[0] & (mi_addr[2:0]==3'b100));
+   
+   //Enabling lower/upper 32 bit data write 
+   assign mi_wr_en[7:0] =  mi_write_low  ? 8'b11110000 :
+	                   mi_write_high ? 8'b00001111 :
+			                   8'b00000000 ;
+

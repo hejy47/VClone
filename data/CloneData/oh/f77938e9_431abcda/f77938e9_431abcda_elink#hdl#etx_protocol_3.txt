@@ -1,0 +1,25 @@
+Source Block: oh/elink/hdl/etx_protocol.v@98:112@HdlStmProcess
+       end
+   
+   //#############################
+   //# Burst Detection
+   //#############################
+   always @ (posedge clk)
+     if(!nreset)
+       tx_burst <= 1'b0;   
+     else       
+       tx_burst          <= burst_in;
+
+   packet2emesh p2m1 (
+		     .write_out		(last_write),
+		     .datamode_out	(last_datamode[1:0]),
+		     .ctrlmode_out	(last_ctrlmode[3:0]),
+
+Diff Content:
+- 103    always @ (posedge clk)
+- 104      if(!nreset)
+- 105        tx_burst <= 1'b0;   
+- 106      else       
+- 107        tx_burst          <= burst_in;
+
+Clone Blocks:

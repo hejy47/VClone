@@ -1,0 +1,46 @@
+Source Block: hdl/library/axi_dmac/splitter.v@47:57@HdlIdDef
+
+  output [NUM_M-1:0] m_valid,
+  input [NUM_M-1:0] m_ready
+);
+
+reg [NUM_M-1:0] acked;
+
+assign s_ready = &(m_ready | acked);
+assign m_valid = s_valid ? ~acked : {NUM_M{1'b0}};
+
+always @(posedge clk)
+
+Diff Content:
+- 52 reg [NUM_M-1:0] acked;
++ 52   reg [NUM_M-1:0] acked;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/splitter.v@50:60
+);
+
+reg [NUM_M-1:0] acked;
+
+assign s_ready = &(m_ready | acked);
+assign m_valid = s_valid ? ~acked : {NUM_M{1'b0}};
+
+always @(posedge clk)
+begin
+  if (resetn == 1'b0) begin
+    acked <= {NUM_M{1'b0}};
+
+Clone Blocks 2:
+hdl/library/axi_dmac/splitter.v@49:59
+  input [NUM_M-1:0] m_ready
+);
+
+reg [NUM_M-1:0] acked;
+
+assign s_ready = &(m_ready | acked);
+assign m_valid = s_valid ? ~acked : {NUM_M{1'b0}};
+
+always @(posedge clk)
+begin
+  if (resetn == 1'b0) begin
+

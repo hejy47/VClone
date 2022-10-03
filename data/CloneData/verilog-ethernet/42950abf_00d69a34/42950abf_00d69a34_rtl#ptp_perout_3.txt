@@ -1,0 +1,92 @@
+Source Block: verilog-ethernet/rtl/ptp_perout.v@244:329@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    state_reg <= state_next;
+
+    time_s_reg <= input_ts_96[95:48];
+    time_ns_reg <= input_ts_96[45:16];
+    if (FNS_ENABLE) begin
+        time_fns_reg <= input_ts_96[15:0];
+    end
+
+    if (input_start_valid) begin
+        start_s_reg <= input_start[95:48];
+        start_ns_reg <= input_start[45:16];
+        if (FNS_ENABLE) begin
+            start_fns_reg <= input_start[15:0];
+        end
+    end
+
+    if (input_period_valid) begin
+        period_s_reg <= input_period[95:48];
+        period_ns_reg <= input_period[45:16];
+        if (FNS_ENABLE) begin
+            period_fns_reg <= input_period[15:0];
+        end
+    end
+
+    if (input_width_valid) begin
+        width_s_reg <= input_width[95:48];
+        width_ns_reg <= input_width[45:16];
+        if (FNS_ENABLE) begin
+            width_fns_reg <= input_width[15:0];
+        end
+    end
+
+    next_rise_s_reg <= next_rise_s_next;
+    next_rise_ns_reg <= next_rise_ns_next;
+    if (FNS_ENABLE) begin
+        next_rise_fns_reg <= next_rise_fns_next;
+    end
+
+    next_fall_s_reg <= next_fall_s_next;
+    next_fall_ns_reg <= next_fall_ns_next;
+    if (FNS_ENABLE) begin
+        next_fall_fns_reg <= next_fall_fns_next;
+    end
+
+    ts_96_ns_inc_reg <= ts_96_ns_inc_next;
+    if (FNS_ENABLE) begin
+        ts_96_fns_inc_reg <= ts_96_fns_inc_next;
+    end
+
+    ts_96_ns_ovf_reg <= ts_96_ns_ovf_next;
+    if (FNS_ENABLE) begin
+        ts_96_fns_ovf_reg <= ts_96_fns_ovf_next;
+    end
+
+    locked_reg <= locked_next;
+    level_reg <= level_next;
+    output_reg <= output_next;
+
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+        start_s_reg <= OUT_START_S;
+        start_ns_reg <= OUT_START_NS;
+        start_fns_reg <= OUT_START_FNS;
+
+        period_s_reg <= OUT_PERIOD_S;
+        period_ns_reg <= OUT_PERIOD_NS;
+        period_fns_reg <= OUT_PERIOD_FNS;
+
+        width_s_reg <= OUT_WIDTH_S;
+        width_ns_reg <= OUT_WIDTH_NS;
+        width_fns_reg <= OUT_WIDTH_FNS;
+
+        locked_reg <= 1'b0;
+        error_reg <= 1'b0;
+        output_reg <= 1'b0;
+    end
+end
+
+endmodule
+
+Diff Content:
++ 304     error_reg <= error_next;
+
+Clone Blocks:

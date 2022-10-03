@@ -1,0 +1,45 @@
+Source Block: serv/rtl/serv_top.v@224:234@HdlIdDef
+      .o_rd_csr_en        (rd_csr_en),
+      .o_rd_alu_en        (rd_alu_en),
+      .o_rd_mem_en        (rd_mem_en));
+
+   wire [1:0] 	 lsb;
+   wire [31:0] 	 bufreg_out;
+   assign o_dbus_adr = {bufreg_out[31:2], 2'b00};
+
+   serv_bufreg bufreg
+     (
+      .i_clk    (clk),
+
+Diff Content:
+- 229    wire [31:0] 	 bufreg_out;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_top.v@225:235
+      .o_rd_alu_en        (rd_alu_en),
+      .o_rd_mem_en        (rd_mem_en));
+
+   wire [1:0] 	 lsb;
+   wire [31:0] 	 bufreg_out;
+   assign o_dbus_adr = {bufreg_out[31:2], 2'b00};
+
+   serv_bufreg bufreg
+     (
+      .i_clk    (clk),
+      .i_rst    (i_rst),
+
+Clone Blocks 2:
+serv/rtl/serv_top.v@223:233
+      .o_op_b_source      (op_b_source),
+      .o_rd_csr_en        (rd_csr_en),
+      .o_rd_alu_en        (rd_alu_en),
+      .o_rd_mem_en        (rd_mem_en));
+
+   wire [1:0] 	 lsb;
+   wire [31:0] 	 bufreg_out;
+   assign o_dbus_adr = {bufreg_out[31:2], 2'b00};
+
+   serv_bufreg bufreg
+     (
+

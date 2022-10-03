@@ -1,0 +1,28 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@182:198@HdlStmProcess
+
+/*
+ * If req_sync_transfer_start is set all incoming beats will be skipped until
+ * one has s_axi_sync set. This will be the first beat that is passsed through.
+ */
+always @(posedge clk) begin
+  if (m_axi_valid == 1'b1) begin
+    needs_sync <= 1'b0;
+  end else if (req_ready == 1'b1) begin
+    needs_sync <= req_sync_transfer_start;
+  end
+end
+
+// If we want to support zero delay between transfers we have to assert
+// req_ready on the same cycle on which the last load happens.
+assign last_load = m_axi_valid && last_eot && eot;
+assign req_ready = last_load || ~active || (transfer_abort_s & rewind_req_ready);
+
+Diff Content:
+- 188   if (m_axi_valid == 1'b1) begin
+- 189     needs_sync <= 1'b0;
+- 190   end else if (req_ready == 1'b1) begin
++ 190   if (req_ready == 1'b1) begin
++ 191   end else if (m_axi_valid == 1'b1) begin
++ 191     needs_sync <= 1'b0;
+
+Clone Blocks:

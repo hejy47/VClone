@@ -1,0 +1,40 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@182:195@HdlStmAssign
+   //####################################
+
+   //auto start on writing to lowest tx data register
+  
+
+   assign write_mask[63:0] = (datamode_in[1:0]==2'b00) ? 64'h00000000000000FF :
+			     (datamode_in[1:0]==2'b01) ? 64'h000000000000FFFF :
+			     (datamode_in[1:0]==2'b10) ? 64'h00000000FFFFFFFF :
+			                                 64'hFFFFFFFFFFFFFFFF;
+   
+   always @ (posedge clk)
+     for(i=0;i<64;i=i+1)	   
+       if(tx_write & write_mask[i])	       
+ 	 tx_reg[dstaddr_in[4:3]][i] <= reg_wdata[i]; 
+
+Diff Content:
+- 187    assign write_mask[63:0] = (datamode_in[1:0]==2'b00) ? 64'h00000000000000FF :
+- 188 			     (datamode_in[1:0]==2'b01) ? 64'h000000000000FFFF :
+- 189 			     (datamode_in[1:0]==2'b10) ? 64'h00000000FFFFFFFF :
+- 190 			                                 64'hFFFFFFFFFFFFFFFF;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_master_regs.v@187:200
+   assign write_mask[63:0] = (datamode_in[1:0]==2'b00) ? 64'h00000000000000FF :
+			     (datamode_in[1:0]==2'b01) ? 64'h000000000000FFFF :
+			     (datamode_in[1:0]==2'b10) ? 64'h00000000FFFFFFFF :
+			                                 64'hFFFFFFFFFFFFFFFF;
+   
+   always @ (posedge clk)
+     for(i=0;i<64;i=i+1)	   
+       if(tx_write & write_mask[i])	       
+ 	 tx_reg[dstaddr_in[4:3]][i] <= reg_wdata[i]; 
+   
+   assign tx_vector[255:0]= {tx_reg[3],
+                             tx_reg[2],
+			     tx_reg[1],
+			     tx_reg[0]};
+

@@ -1,0 +1,56 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@362:384@HdlStmProcess
+        sync_id_pending <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+      offload_sync_id <= 'h00;
+      offload_sync_id_pending <= 1'b0;
+    end else begin
+      if (offload_sync_fifo_valid == 1'b1) begin
+        offload_sync_id <= offload_sync_fifo_data;
+        offload_sync_id_pending <= 1'b1;
+      end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[3] == 1'b1) begin
+        offload_sync_id_pending <= 1'b0;
+      end
+    end
+  end
+
+  generate if (ASYNC_SPI_CLK) begin
+
+    wire spi_reset;
+    ad_rst i_spi_resetn (
+
+Diff Content:
+- 375       end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[3] == 1'b1) begin
++ 375       end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[4] == 1'b1) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@348:370
+      8'h41: up_rdata_ff <= {offload0_enabled_s};
+      default: up_rdata_ff <= 'h00;
+    endcase
+  end
+
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+      sync_id <= 'h00;
+      sync_id_pending <= 1'b0;
+    end else begin
+      if (sync_fifo_valid == 1'b1) begin
+        sync_id <= sync_fifo_data;
+        sync_id_pending <= 1'b1;
+      end else if (up_wreq_s == 1'b1 && up_waddr_s == 8'h21 && up_wdata_s[3] == 1'b1) begin
+        sync_id_pending <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+      offload_sync_id <= 'h00;
+      offload_sync_id_pending <= 1'b0;
+

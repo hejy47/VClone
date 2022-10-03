@@ -1,0 +1,250 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr.v@1412:1469@HdlStmIf
+  assign        qpll_sel_12 = sys_clk_sel_12 == 2'd3 ? 0 : 1;
+
+  // instantiations
+
+  generate
+  if (NUM_OF_LANES >= 1) begin
+  util_adxcvr_xcm #(
+    .XCVR_TYPE (XCVR_TYPE),
+    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
+    .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
+    .POR_CFG (POR_CFG),
+    .PPF0_CFG (PPF0_CFG),
+    .PPF1_CFG (PPF1_CFG),
+    .QPLL_CFG (QPLL_CFG),
+    .QPLL_FBDIV (QPLL_FBDIV),
+    .QPLL_CFG0 (QPLL_CFG0),
+    .QPLL_CFG1 (QPLL_CFG1),
+    .QPLL_CFG1_G3 (QPLL_CFG1_G3),
+    .QPLL_CFG2 (QPLL_CFG2),
+    .QPLL_CFG2_G3 (QPLL_CFG2_G3),
+    .QPLL_CFG3 (QPLL_CFG3),
+    .QPLL_CP_G3 (QPLL_CP_G3),
+    .QPLL_LPF (QPLL_LPF),
+    .QPLL_CP (QPLL_CP),
+    .QPLL_CFG4 (QPLL_CFG4))
+  i_xcm_0 (
+    .qpll_ref_clk (qpll_ref_clk_0),
+    .qpll_sel (qpll_sel_0),
+    .qpll2ch_clk (qpll2ch_clk_0),
+    .qpll2ch_ref_clk (qpll2ch_ref_clk_0),
+    .qpll2ch_locked (qpll2ch_locked_0),
+    .qpll1_clk (qpll1_clk_0),
+    .qpll1_ref_clk (qpll1_ref_clk_0),
+    .qpll1_locked (qpll1_locked_0),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_qpll_rst (up_qpll_rst_0),
+    .up_cm_enb (up_cm_enb_0),
+    .up_cm_addr (up_cm_addr_0),
+    .up_cm_wr (up_cm_wr_0),
+    .up_cm_wdata (up_cm_wdata_0),
+    .up_cm_rdata (up_cm_rdata_0),
+    .up_cm_ready (up_cm_ready_0));
+  end else begin
+  assign qpll2ch_clk_0 = 1'd0;
+  assign qpll2ch_ref_clk_0 = 1'd0;
+  assign qpll2ch_locked_0 = 1'd0;
+  assign qpll1_clk_0 = 1'd0;
+  assign qpll1_ref_clk_0 = 1'd0;
+  assign qpll1_locked_0 = 1'd0;
+  assign up_cm_rdata_0 = 16'd0;
+  assign up_cm_ready_0 = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES >= 1) begin
+  util_adxcvr_xch #(
+
+Diff Content:
+- 1436     .QPLL_CFG4 (QPLL_CFG4))
+- 1437   i_xcm_0 (
++ 1437     .QPLL_CFG4 (QPLL_CFG4)
++ 1437   ) i_xcm_0 (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/util_adxcvr/util_adxcvr.v@3386:3443
+  assign up_tx_ready_11 = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES >= 13) begin
+  util_adxcvr_xcm #(
+    .XCVR_TYPE (XCVR_TYPE),
+    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
+    .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
+    .POR_CFG (POR_CFG),
+    .PPF0_CFG (PPF0_CFG),
+    .PPF1_CFG (PPF1_CFG),
+    .QPLL_CFG (QPLL_CFG),
+    .QPLL_FBDIV (QPLL_FBDIV),
+    .QPLL_CFG0 (QPLL_CFG0),
+    .QPLL_CFG1 (QPLL_CFG1),
+    .QPLL_CFG1_G3 (QPLL_CFG1_G3),
+    .QPLL_CFG2 (QPLL_CFG2),
+    .QPLL_CFG2_G3 (QPLL_CFG2_G3),
+    .QPLL_CFG3 (QPLL_CFG3),
+    .QPLL_CP_G3 (QPLL_CP_G3),
+    .QPLL_LPF (QPLL_LPF),
+    .QPLL_CP (QPLL_CP),
+    .QPLL_CFG4 (QPLL_CFG4))
+  i_xcm_12 (
+    .qpll_ref_clk (qpll_ref_clk_12),
+    .qpll_sel (qpll_sel_12),
+    .qpll2ch_clk (qpll2ch_clk_12),
+    .qpll2ch_ref_clk (qpll2ch_ref_clk_12),
+    .qpll2ch_locked (qpll2ch_locked_12),
+    .qpll1_clk (qpll1_clk_12),
+    .qpll1_ref_clk (qpll1_ref_clk_12),
+    .qpll1_locked (qpll1_locked_12),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_qpll_rst (up_qpll_rst_12),
+    .up_cm_enb (up_cm_enb_12),
+    .up_cm_addr (up_cm_addr_12),
+    .up_cm_wr (up_cm_wr_12),
+    .up_cm_wdata (up_cm_wdata_12),
+    .up_cm_rdata (up_cm_rdata_12),
+    .up_cm_ready (up_cm_ready_12));
+  end else begin
+  assign qpll2ch_clk_12 = 1'd0;
+  assign qpll2ch_ref_clk_12 = 1'd0;
+  assign qpll2ch_locked_12 = 1'd0;
+  assign qpll1_clk_12 = 1'd0;
+  assign qpll1_ref_clk_12 = 1'd0;
+  assign qpll1_locked_12 = 1'd0;
+  assign up_cm_rdata_12 = 16'd0;
+  assign up_cm_ready_12 = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES >= 13) begin
+  util_adxcvr_xch #(
+
+Clone Blocks 2:
+hdl/library/xilinx/util_adxcvr/util_adxcvr.v@2728:2785
+  assign up_tx_ready_7 = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES >= 9) begin
+  util_adxcvr_xcm #(
+    .XCVR_TYPE (XCVR_TYPE),
+    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
+    .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
+    .POR_CFG (POR_CFG),
+    .PPF0_CFG (PPF0_CFG),
+    .PPF1_CFG (PPF1_CFG),
+    .QPLL_CFG (QPLL_CFG),
+    .QPLL_FBDIV (QPLL_FBDIV),
+    .QPLL_CFG0 (QPLL_CFG0),
+    .QPLL_CFG1 (QPLL_CFG1),
+    .QPLL_CFG1_G3 (QPLL_CFG1_G3),
+    .QPLL_CFG2 (QPLL_CFG2),
+    .QPLL_CFG2_G3 (QPLL_CFG2_G3),
+    .QPLL_CFG3 (QPLL_CFG3),
+    .QPLL_CP_G3 (QPLL_CP_G3),
+    .QPLL_LPF (QPLL_LPF),
+    .QPLL_CP (QPLL_CP),
+    .QPLL_CFG4 (QPLL_CFG4))
+  i_xcm_8 (
+    .qpll_ref_clk (qpll_ref_clk_8),
+    .qpll_sel (qpll_sel_8),
+    .qpll2ch_clk (qpll2ch_clk_8),
+    .qpll2ch_ref_clk (qpll2ch_ref_clk_8),
+    .qpll2ch_locked (qpll2ch_locked_8),
+    .qpll1_clk (qpll1_clk_8),
+    .qpll1_ref_clk (qpll1_ref_clk_8),
+    .qpll1_locked (qpll1_locked_8),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_qpll_rst (up_qpll_rst_8),
+    .up_cm_enb (up_cm_enb_8),
+    .up_cm_addr (up_cm_addr_8),
+    .up_cm_wr (up_cm_wr_8),
+    .up_cm_wdata (up_cm_wdata_8),
+    .up_cm_rdata (up_cm_rdata_8),
+    .up_cm_ready (up_cm_ready_8));
+  end else begin
+  assign qpll2ch_clk_8 = 1'd0;
+  assign qpll2ch_ref_clk_8 = 1'd0;
+  assign qpll2ch_locked_8 = 1'd0;
+  assign qpll1_clk_8 = 1'd0;
+  assign qpll1_ref_clk_8 = 1'd0;
+  assign qpll1_locked_8 = 1'd0;
+  assign up_cm_rdata_8 = 16'd0;
+  assign up_cm_ready_8 = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES >= 9) begin
+  util_adxcvr_xch #(
+
+Clone Blocks 3:
+hdl/library/xilinx/util_adxcvr/util_adxcvr.v@2070:2127
+  assign up_tx_ready_3 = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES >= 5) begin
+  util_adxcvr_xcm #(
+    .XCVR_TYPE (XCVR_TYPE),
+    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
+    .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
+    .POR_CFG (POR_CFG),
+    .PPF0_CFG (PPF0_CFG),
+    .PPF1_CFG (PPF1_CFG),
+    .QPLL_CFG (QPLL_CFG),
+    .QPLL_FBDIV (QPLL_FBDIV),
+    .QPLL_CFG0 (QPLL_CFG0),
+    .QPLL_CFG1 (QPLL_CFG1),
+    .QPLL_CFG1_G3 (QPLL_CFG1_G3),
+    .QPLL_CFG2 (QPLL_CFG2),
+    .QPLL_CFG2_G3 (QPLL_CFG2_G3),
+    .QPLL_CFG3 (QPLL_CFG3),
+    .QPLL_CP_G3 (QPLL_CP_G3),
+    .QPLL_LPF (QPLL_LPF),
+    .QPLL_CP (QPLL_CP),
+    .QPLL_CFG4 (QPLL_CFG4))
+  i_xcm_4 (
+    .qpll_ref_clk (qpll_ref_clk_4),
+    .qpll_sel (qpll_sel_4),
+    .qpll2ch_clk (qpll2ch_clk_4),
+    .qpll2ch_ref_clk (qpll2ch_ref_clk_4),
+    .qpll2ch_locked (qpll2ch_locked_4),
+    .qpll1_clk (qpll1_clk_4),
+    .qpll1_ref_clk (qpll1_ref_clk_4),
+    .qpll1_locked (qpll1_locked_4),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_qpll_rst (up_qpll_rst_4),
+    .up_cm_enb (up_cm_enb_4),
+    .up_cm_addr (up_cm_addr_4),
+    .up_cm_wr (up_cm_wr_4),
+    .up_cm_wdata (up_cm_wdata_4),
+    .up_cm_rdata (up_cm_rdata_4),
+    .up_cm_ready (up_cm_ready_4));
+  end else begin
+  assign qpll2ch_clk_4 = 1'd0;
+  assign qpll2ch_ref_clk_4 = 1'd0;
+  assign qpll2ch_locked_4 = 1'd0;
+  assign qpll1_clk_4 = 1'd0;
+  assign qpll1_ref_clk_4 = 1'd0;
+  assign qpll1_locked_4 = 1'd0;
+  assign up_cm_rdata_4 = 16'd0;
+  assign up_cm_ready_4 = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (NUM_OF_LANES >= 5) begin
+  util_adxcvr_xch #(
+

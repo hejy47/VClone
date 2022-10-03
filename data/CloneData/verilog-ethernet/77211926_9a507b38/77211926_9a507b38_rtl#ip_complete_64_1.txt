@@ -1,0 +1,136 @@
+Source Block: verilog-ethernet/rtl/ip_complete_64.v@248:258@HdlStmAssign
+assign arp_rx_eth_payload_tkeep = input_eth_payload_tkeep;
+assign arp_rx_eth_payload_tvalid = input_select_arp_reg & input_eth_payload_tvalid;
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+assign input_eth_payload_tready = (input_select_ip_reg & ip_rx_eth_payload_tready) |
+                                  (input_select_arp_reg & arp_rx_eth_payload_tready) |
+                                  input_select_none_reg;
+
+
+Diff Content:
+- 253 assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
++ 253 assign input_eth_hdr_ready = (input_select_ip & ip_rx_eth_hdr_ready) |
++ 253                              (input_select_arp & arp_rx_eth_hdr_ready) |
++ 253                              (input_select_none);
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip_complete.v@240:252
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+assign input_eth_payload_tready = (input_select_ip_reg & ip_rx_eth_payload_tready) |
+                                  (input_select_arp_reg & arp_rx_eth_payload_tready) |
+                                  input_select_none_reg;
+
+/*
+ * Output arbiter
+ */
+eth_arb_mux_2
+
+Clone Blocks 2:
+verilog-ethernet/rtl/ip_complete_64.v@244:254
+assign arp_rx_eth_dest_mac = input_eth_dest_mac;
+assign arp_rx_eth_src_mac = input_eth_src_mac;
+assign arp_rx_eth_type = 16'h0806;
+assign arp_rx_eth_payload_tdata = input_eth_payload_tdata;
+assign arp_rx_eth_payload_tkeep = input_eth_payload_tkeep;
+assign arp_rx_eth_payload_tvalid = input_select_arp_reg & input_eth_payload_tvalid;
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+
+Clone Blocks 3:
+verilog-ethernet/rtl/ip_complete_64.v@246:256
+assign arp_rx_eth_type = 16'h0806;
+assign arp_rx_eth_payload_tdata = input_eth_payload_tdata;
+assign arp_rx_eth_payload_tkeep = input_eth_payload_tkeep;
+assign arp_rx_eth_payload_tvalid = input_select_arp_reg & input_eth_payload_tvalid;
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+assign input_eth_payload_tready = (input_select_ip_reg & ip_rx_eth_payload_tready) |
+                                  (input_select_arp_reg & arp_rx_eth_payload_tready) |
+
+Clone Blocks 4:
+verilog-ethernet/rtl/ip_complete_64.v@245:255
+assign arp_rx_eth_src_mac = input_eth_src_mac;
+assign arp_rx_eth_type = 16'h0806;
+assign arp_rx_eth_payload_tdata = input_eth_payload_tdata;
+assign arp_rx_eth_payload_tkeep = input_eth_payload_tkeep;
+assign arp_rx_eth_payload_tvalid = input_select_arp_reg & input_eth_payload_tvalid;
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+assign input_eth_payload_tready = (input_select_ip_reg & ip_rx_eth_payload_tready) |
+
+Clone Blocks 5:
+verilog-ethernet/rtl/ip_complete.v@235:245
+assign arp_rx_eth_dest_mac = input_eth_dest_mac;
+assign arp_rx_eth_src_mac = input_eth_src_mac;
+assign arp_rx_eth_type = 16'h0806;
+assign arp_rx_eth_payload_tdata = input_eth_payload_tdata;
+assign arp_rx_eth_payload_tvalid = input_select_arp_reg & input_eth_payload_tvalid;
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+assign input_eth_payload_tready = (input_select_ip_reg & ip_rx_eth_payload_tready) |
+
+Clone Blocks 6:
+verilog-ethernet/rtl/ip_complete.v@236:246
+assign arp_rx_eth_src_mac = input_eth_src_mac;
+assign arp_rx_eth_type = 16'h0806;
+assign arp_rx_eth_payload_tdata = input_eth_payload_tdata;
+assign arp_rx_eth_payload_tvalid = input_select_arp_reg & input_eth_payload_tvalid;
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+assign input_eth_payload_tready = (input_select_ip_reg & ip_rx_eth_payload_tready) |
+                                  (input_select_arp_reg & arp_rx_eth_payload_tready) |
+
+Clone Blocks 7:
+verilog-ethernet/rtl/ip_complete.v@238:248
+assign arp_rx_eth_payload_tdata = input_eth_payload_tdata;
+assign arp_rx_eth_payload_tvalid = input_select_arp_reg & input_eth_payload_tvalid;
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+assign input_eth_payload_tready = (input_select_ip_reg & ip_rx_eth_payload_tready) |
+                                  (input_select_arp_reg & arp_rx_eth_payload_tready) |
+                                  input_select_none_reg;
+
+
+Clone Blocks 8:
+verilog-ethernet/rtl/ip_complete_64.v@250:262
+assign arp_rx_eth_payload_tlast = input_eth_payload_tlast;
+assign arp_rx_eth_payload_tuser = input_eth_payload_tuser;
+
+assign input_eth_hdr_ready = arp_rx_eth_hdr_ready & ip_rx_eth_hdr_ready;
+
+assign input_eth_payload_tready = (input_select_ip_reg & ip_rx_eth_payload_tready) |
+                                  (input_select_arp_reg & arp_rx_eth_payload_tready) |
+                                  input_select_none_reg;
+
+/*
+ * Output arbiter
+ */
+eth_arb_mux_64_2
+

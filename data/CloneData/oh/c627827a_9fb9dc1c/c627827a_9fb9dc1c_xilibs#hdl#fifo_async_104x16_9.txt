@@ -1,0 +1,25 @@
+Source Block: oh/xilibs/hdl/fifo_async_104x16.v@47:61@HdlStmProcess
+   
+   assign wr_vec[DW/8-1:0] = {(DW/8){wr_en}};
+
+
+   //Valid data at output
+   always @ (posedge rd_clk or posedge rd_rst)
+     if(rd_rst)
+       valid <=1'b0;
+     else
+       valid <= rd_en;
+   
+   memory_dp #(.DW(DW),.AW(AW)) memory_dp (
+					   // Outputs
+					   .rd_data	(dout[DW-1:0]),
+					   // Inputs
+
+Diff Content:
+- 52    always @ (posedge rd_clk or posedge rd_rst)
+- 53      if(rd_rst)
+- 54        valid <=1'b0;
+- 55      else
+- 56        valid <= rd_en;
+
+Clone Blocks:

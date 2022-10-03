@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/erx_cfg.v@116:130@HdlStmProcess
+   assign mailbox_irq_en      = rx_cfg_reg[28];
+      
+   //###########################1
+   //# STATUS
+   //###########################   
+   always @ (posedge clk)     
+     if (rx_status_write)
+       rx_status_reg[15:0] <= mi_din[15:0];
+     else
+       rx_status_reg[15:0] <= rx_status_reg[15:0] | rx_status[15:0];
+     
+   //###########################
+   //# GPIO-DATAIN
+   //###########################
+   always @ (posedge clk)
+
+Diff Content:
+- 123        rx_status_reg[15:0] <= mi_din[15:0];
++ 123        rx_status_reg[15:0] <= data_in[15:0];
+
+Clone Blocks:

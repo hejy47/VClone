@@ -1,0 +1,20 @@
+Source Block: oh/common/hdl/oh_fifo_cdc.v@56:68@HdlStmProcess
+   oh_rsync sync_reset(.nrst_out  (nreset_out),
+                       .clk       (clk_out),
+                       .nrst_in   (nreset));
+   
+   //align valid signal with FIFO read delay
+   always @ (posedge clk_out or negedge nreset_out)
+     if(!nreset_out)
+       valid_out <= 1'b0;   
+     else if(ready_in)
+       valid_out <= rd_en;
+   
+endmodule // oh_fifo_cdc
+
+
+Diff Content:
+- 63        valid_out <= 1'b0;   
++ 63        valid_out <= 1'b0;
+
+Clone Blocks:

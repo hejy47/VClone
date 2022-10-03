@@ -1,0 +1,27 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1253:1268@HdlStmProcess
+ 
+   //####################
+   //# Byte0 detection
+   //####################
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & start_tran)
+       begin
+	  tran_byte0[LW-1:0]  <= fifo_data_reg[2*LW-1:LW]; 
+	  ctrlmode[3:0]       <= fifo_data_reg[7:4];
+       end
+
+   //# byte0 decode
+   //# bit[2] is the only one in use for now
+   assign byte0_inc8   = ~tran_byte0[2];
+
+
+Diff Content:
+- 1258    always @ (posedge rxi_lclk)
+- 1259      if(fifo_data_val & start_tran)
+- 1260        begin
+- 1261 	  tran_byte0[LW-1:0]  <= fifo_data_reg[2*LW-1:LW]; 
+- 1262 	  ctrlmode[3:0]       <= fifo_data_reg[7:4];
+- 1263        end
+
+Clone Blocks:

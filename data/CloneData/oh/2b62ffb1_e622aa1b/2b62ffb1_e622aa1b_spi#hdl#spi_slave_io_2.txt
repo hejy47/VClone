@@ -1,0 +1,18 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@65:75@HdlStmAssign
+   
+   //#################################
+   //# STATE MACHINE
+   //#################################
+
+   assign packetsize[7:0] = spi_regs[15:8];
+   
+`define SPI_IDLE   3'b000  // when ss is high
+`define SPI_CMD    3'b001  // 8 cycles for command/addr
+`define SPI_READ   3'b010  // 8 cycles to shift out data
+`define SPI_WRITE  3'b011  // 8 cycles for data to write
+
+Diff Content:
+- 70    assign packetsize[7:0] = spi_regs[15:8];
++ 70    assign psize[7:0] = spi_regs[15:8];
+
+Clone Blocks:

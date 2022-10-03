@@ -1,0 +1,32 @@
+Source Block: serv/rtl/serv_bufreg.v@17:27@HdlStmAssign
+
+   wire 	      c, q;
+   reg 		      c_r;
+   reg [31:0] 	      data;
+
+   assign {c,q} = (i_rs1 & i_rs1_en) + (i_imm & i_imm_en) + c_r;
+
+   always @(posedge i_clk) begin
+      c_r <= c & !i_clr;
+
+      if (i_rst)
+
+Diff Content:
+- 22    assign {c,q} = (i_rs1 & i_rs1_en) + (i_imm & i_imm_en) + c_r;
++ 22    assign {c,q} = {1'b0,(i_rs1 & i_rs1_en)} + {1'b0,(i_imm & i_imm_en)} + c_r;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_bufreg.v@15:25
+   output wire [31:0] o_reg,
+   output wire 	      o_q);
+
+   wire 	      c, q;
+   reg 		      c_r;
+   reg [31:0] 	      data;
+
+   assign {c,q} = (i_rs1 & i_rs1_en) + (i_imm & i_imm_en) + c_r;
+
+   always @(posedge i_clk) begin
+      c_r <= c & !i_clr;
+

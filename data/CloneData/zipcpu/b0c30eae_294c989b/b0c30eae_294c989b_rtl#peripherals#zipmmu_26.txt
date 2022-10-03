@@ -1,0 +1,45 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@650:660@HdlStmProcess
+	default: begin end
+	endcase
+
+	initial	rtn_err = 1'b0;
+	initial	o_cyc   = 1'b0;
+	initial	o_rtn_ack = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		o_cyc <= 1'b0;
+		o_rtn_ack <= 1'b0;
+
+Diff Content:
+- 655 	initial	o_rtn_ack = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/zipmmu.v@649:659
+	2'b10: bus_pending <= 1'b1;
+	default: begin end
+	endcase
+
+	initial	rtn_err = 1'b0;
+	initial	o_cyc   = 1'b0;
+	initial	o_rtn_ack = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		o_cyc <= 1'b0;
+
+Clone Blocks 2:
+zipcpu/rtl/peripherals/zipmmu.v@648:658
+	2'b01: bus_pending <= (bus_outstanding > 1);
+	2'b10: bus_pending <= 1'b1;
+	default: begin end
+	endcase
+
+	initial	rtn_err = 1'b0;
+	initial	o_cyc   = 1'b0;
+	initial	o_rtn_ack = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+

@@ -1,0 +1,56 @@
+Source Block: hdl/library/jesd204/axi_jesd204_tx/jesd204_up_tx.v@294:318@HdlStmIf
+    end
+  end
+end
+
+generate
+if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
+always @(posedge core_clk) begin
+  if (core_ilas_config_rd == 1'b1) begin
+    for (i = 0; i < NUM_LANES; i = i + 1) begin
+      core_ilas_config_data[i*32+:32] <= up_cfg_ilas_data[i][core_ilas_config_addr];
+    end
+  end
+end
+end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+always @(posedge core_clk) begin
+  if (core_ilas_config_rd == 1'b1) begin
+    for (i = 0; i < NUM_LANES; i = i + 1) begin
+      core_ilas_config_data[i*64+:64] <= {up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b1}],up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b0}]};
+    end
+  end
+end
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 299 if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
+- 300 always @(posedge core_clk) begin
+- 301   if (core_ilas_config_rd == 1'b1) begin
+- 302     for (i = 0; i < NUM_LANES; i = i + 1) begin
+- 303       core_ilas_config_data[i*32+:32] <= up_cfg_ilas_data[i][core_ilas_config_addr];
+- 306 end
+- 307 end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+- 308 always @(posedge core_clk) begin
+- 309   if (core_ilas_config_rd == 1'b1) begin
+- 310     for (i = 0; i < NUM_LANES; i = i + 1) begin
+- 311       core_ilas_config_data[i*64+:64] <= {up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b1}],up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b0}]};
+- 314 end
+- 315 end
++ 303   generate
++ 303   if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
++ 303   always @(posedge core_clk) begin
++ 303     if (core_ilas_config_rd == 1'b1) begin
++ 303       for (i = 0; i < NUM_LANES; i = i + 1) begin
++ 303         core_ilas_config_data[i*32+:32] <= up_cfg_ilas_data[i][core_ilas_config_addr];
++ 303       end
++ 311   end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
++ 311   always @(posedge core_clk) begin
++ 311     if (core_ilas_config_rd == 1'b1) begin
++ 311       for (i = 0; i < NUM_LANES; i = i + 1) begin
++ 311         core_ilas_config_data[i*64+:64] <= {up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b1}],up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b0}]};
++ 311       end
+
+Clone Blocks:

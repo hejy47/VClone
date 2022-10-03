@@ -1,0 +1,29 @@
+Source Block: hdl/library/xilinx/common/ad_serdes_in.v@121:142@HdlStmFor
+  endgenerate
+
+  // received data interface: ibuf -> idelay -> iserdes
+  genvar l_inst;
+  generate
+    for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_io
+      if (CMOS_LVDS_N == 0) begin
+        IBUFDS i_ibuf (
+          .I (data_in_p[l_inst]),
+          .IB (data_in_n[l_inst]),
+          .O (data_in_ibuf_s[l_inst]));
+       end else begin
+        IBUF i_ibuf (
+          .I (data_in_p[l_inst]),
+          .O (data_in_ibuf_s[l_inst]));
+       end
+    end
+  endgenerate
+
+  reg [6:0] serdes_rst_seq;
+  wire      serdes_rst     = serdes_rst_seq [6];
+
+
+Diff Content:
+- 133         IBUF i_ibuf (
++ 133          IBUF i_ibuf (
+
+Clone Blocks:

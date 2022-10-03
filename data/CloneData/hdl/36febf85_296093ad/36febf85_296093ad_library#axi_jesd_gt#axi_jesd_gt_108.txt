@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@362:372@HdlIdDef
+  wire    [ 13:0]                               up_waddr_s;
+  wire    [ 31:0]                               up_wdata_s;
+  wire                                          up_wack_s;
+  wire                                          up_rreq_s;
+  wire    [ 13:0]                               up_raddr_s;
+  wire    [ 31:0]                               up_rdata_s;
+  wire                                          up_rack_s;
+
+  // debug interface
+
+  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s[((PCORE_NUM_OF_RX_LANES*50)-1):0]};
+
+Diff Content:
+- 367   wire    [ 31:0]                               up_rdata_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@363:373
+  wire    [ 31:0]                               up_wdata_s;
+  wire                                          up_wack_s;
+  wire                                          up_rreq_s;
+  wire    [ 13:0]                               up_raddr_s;
+  wire    [ 31:0]                               up_rdata_s;
+  wire                                          up_rack_s;
+
+  // debug interface
+
+  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s[((PCORE_NUM_OF_RX_LANES*50)-1):0]};
+  assign rx_mon_trigger = {rx_sync, rx_sysref, rx_mon_trigger_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0]};
+

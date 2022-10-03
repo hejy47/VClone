@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_dmac/dest_fifo_inf.v@130:150@HdlStmProcess
+  .m_axi_valid(data_valid),
+  .m_axi_data(dout_s),
+  .m_axi_last()
+);
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    valid <= 1'b0;
+    underflow <= 1'b0;
+    xfer_req <= 1'b0;
+  end else begin
+    valid <= valid_s;
+    underflow <= underflow_s;
+    xfer_req <= xfer_req_s;
+  end
+end
+
+always @(posedge clk) begin
+  if ((resetn == 1'b0) || (valid_s == 1'b0)) begin
+    dout <= {DATA_WIDTH{1'b0}};
+  end else begin
+
+Diff Content:
+- 136   if (resetn == 1'b0) begin
+- 137     valid <= 1'b0;
+- 138     underflow <= 1'b0;
+- 139     xfer_req <= 1'b0;
+- 140   end else begin
+- 141     valid <= valid_s;
+- 142     underflow <= underflow_s;
+- 143     xfer_req <= xfer_req_s;
+- 144   end
+- 145 end
+
+Clone Blocks:

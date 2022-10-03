@@ -1,0 +1,27 @@
+Source Block: serv/rtl/serv_decode.v@98:113@HdlStmAssign
+
+   assign o_alu_en = cnt_en;
+
+   assign o_alu_init = (state == INIT);
+
+   assign o_alu_sub = (opcode == OP_OP) ? signbit /*    ? 1'b1*/ :
+                      ((opcode == OP_BRANCH) & (o_funct3 == 3'b100)) ? 1'b1 :
+                      ((opcode == OP_BRANCH) & (o_funct3 == 3'b101)) ? 1'b1 :
+                      ((opcode == OP_BRANCH) & (o_funct3 == 3'b110)) ? 1'b1 :
+                      ((opcode == OP_OPIMM)  & (o_funct3 == 3'b000)) ? 1'b0 :
+                      1'bx;
+
+
+   assign o_alu_cmp_neg = (opcode == OP_BRANCH) & o_funct3[0];
+
+   assign o_csr_en = ((opcode == OP_SYSTEM) & (|o_funct3) | o_ctrl_mret | o_ctrl_trap) & running;
+
+Diff Content:
+- 104                       ((opcode == OP_BRANCH) & (o_funct3 == 3'b100)) ? 1'b1 :
+- 105                       ((opcode == OP_BRANCH) & (o_funct3 == 3'b101)) ? 1'b1 :
+- 106                       ((opcode == OP_BRANCH) & (o_funct3 == 3'b110)) ? 1'b1 :
++ 106                       (branch_op & (o_funct3 == 3'b100)) ? 1'b1 :
++ 106                       (branch_op & (o_funct3 == 3'b101)) ? 1'b1 :
++ 106                       (branch_op & (o_funct3 == 3'b110)) ? 1'b1 :
+
+Clone Blocks:

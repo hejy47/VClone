@@ -1,0 +1,87 @@
+Source Block: zipcpu/rtl/core/dcache.v@194:267@HdlStmProcess
+	initial	r_cachable = 1'b0;
+	initial	r_svalid = 1'b0;
+	initial	r_dvalid = 1'b0;
+	initial	r_cache_miss = 1'b0;
+	initial	r_addr = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		r_rd <= 1'b0;
+		r_cachable <= 1'b0;
+		r_svalid <= 1'b0;
+		r_dvalid <= 1'b0;
+		r_cache_miss <= 1'b0;
+		r_addr <= 0;
+		r_rd_pending <= 0;
+		last_tag_valid <= 0;
+	end else begin
+		// The single clock path
+		// The valid for the single clock path
+		//	Only ... we need to wait if we are currently writing
+		//	to our cache.
+		r_svalid<= (!i_op[0])&&(!cache_miss_inow)&&(w_cachable)
+				&&(i_pipe_stb)&&(!c_wr)&&(!wr_cstb);
+
+		//
+		// The two clock in-cache path
+		//
+		// Some preliminaries that needed to be calculated on the first
+		// clock
+		if (!o_busy)
+		begin
+			r_iv   <= c_v[i_cline];
+			r_itag <= c_vtags[i_cline];
+			r_addr <= i_addr[(AW+1):2];
+			r_cachable <= (!i_op[0])&&(w_cachable)&&(i_pipe_stb);
+			o_wreg <= i_oreg;
+			r_rd_pending <= (i_pipe_stb)&&(!i_op[0]);
+		end else begin
+			r_iv   <= c_v[r_cline];
+			r_itag <= c_vtags[r_cline];
+			r_rd_pending <= (r_rd_pending)&&((r_itag != r_ctag)
+				||(!r_iv)||(!r_cachable))&&(!r_svalid);
+		end
+		r_rd <= (i_pipe_stb)&&(!i_op[0]);
+		// r_itag contains the tag we didn't have available to us on the
+		// last clock, r_ctag is a bit select from r_addr containing a
+		// one clock delayed address.
+		r_dvalid <= (!r_svalid)&&(r_itag == r_ctag)&&(r_iv)&&(r_cachable)&&(r_rd_pending);
+		if ((r_itag == r_ctag)&&(r_iv)&&(r_cachable))
+		begin
+			last_tag_valid <= 1'b1;
+			last_tag <= r_ctag;
+		end
+
+		// r_cache miss takes a clock cycle.  It is only ever true for
+		// something that should be cachable, but isn't in the cache.
+		// A cache miss is only true _if_
+		// 1. A read was requested
+		// 2. It is for a cachable address, AND
+		// 3. It isn't in the cache on the first read
+		//	or the second read
+		// 4. The read hasn't yet started to get this address
+		r_cache_miss <= ((!cyc)||(o_wb_we))&&(r_cachable)
+				// One clock path -- miss
+				&&(!r_svalid)
+				// Two clock path -- misses as well
+				&&(r_rd)&&(!r_svalid)
+				&&((r_itag != r_ctag)||(!r_iv));
+	end
+
+	reg	[DW/8-1:0]	r_sel;
+
+	initial	r_sel = 4'hf;
+	always @(posedge i_clk)
+
+Diff Content:
+- 227 			r_addr <= i_addr[(AW+1):2];
+- 234 			r_rd_pending <= (r_rd_pending)&&((r_itag != r_ctag)
+- 235 				||(!r_iv)||(!r_cachable))&&(!r_svalid);
++ 220 		if ((!o_pipe_stalled)&&(!r_rd_pending))
++ 220 			r_addr <= i_addr[(AW+1):2];
++ 235 			r_rd_pending <= (r_rd_pending)&&(!r_svalid)
++ 235 					&&(!r_dvalid)
++ 235 					&&((r_cachable)||(!i_wb_ack));
+
+Clone Blocks:

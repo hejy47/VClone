@@ -1,0 +1,54 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_dev_if.v@364:378@HdlStmProcess
+    tx_n_frame <= tx_frame;
+    tx_n_data_p <= tx_data_p;
+    tx_n_data_n <= tx_data_n;
+  end
+
+  always @(posedge l_clk) begin
+    tx_p_frame <= tx_n_frame;
+    tx_p_data_p <= tx_n_data_p;
+    tx_p_data_n <= tx_n_data_n;
+  end
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  generate
+  for (l_inst = 0; l_inst <= 5; l_inst = l_inst + 1) begin: g_rx_data
+
+Diff Content:
++ 373   always @(posedge up_clk) begin
++ 373     up_enable_int <= up_enable;
++ 373     up_txnrx_int <= up_txnrx;
++ 373   end
++ 373   always @(posedge clk or posedge rst) begin
++ 373     if (rst == 1'b1) begin
++ 373       enable_up_m1 <= 1'b0;
++ 373       txnrx_up_m1 <= 1'b0;
++ 373       enable_up <= 1'b0;
++ 373       txnrx_up <= 1'b0;
++ 373     end else begin
++ 373       enable_up_m1 <= up_enable_int;
++ 373       txnrx_up_m1 <= up_txnrx_int;
++ 373       enable_up <= enable_up_m1;
++ 373       txnrx_up <= txnrx_up_m1;
++ 373     end
++ 373   end
++ 373   always @(posedge clk) begin
++ 373     if (tdd_mode == 1'b1) begin
++ 373       enable_int <= tdd_enable;
++ 373       txnrx_int <= tdd_txnrx;
++ 373     end else begin
++ 373       enable_int <= enable_up;
++ 373       txnrx_int <= txnrx_up;
++ 373     end
++ 373   end
++ 373   always @(negedge clk) begin
++ 373     enable_n_int <= enable_int;
++ 373     txnrx_n_int <= txnrx_int;
++ 373   end
++ 373   always @(posedge l_clk) begin
++ 373     enable_p_int <= enable_n_int;
++ 373     txnrx_p_int <= txnrx_n_int;
++ 373   end
+
+Clone Blocks:

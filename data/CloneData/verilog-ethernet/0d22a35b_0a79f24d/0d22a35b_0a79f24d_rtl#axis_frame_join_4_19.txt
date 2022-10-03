@@ -1,0 +1,89 @@
+Source Block: verilog-ethernet/rtl/axis_frame_join_4.v@289:326@HdlStmProcess
+            end 
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        port_sel_reg <= 0;
+        input_0_axis_tready_reg <= 0;
+        input_1_axis_tready_reg <= 0;
+        input_2_axis_tready_reg <= 0;
+        input_3_axis_tready_reg <= 0;
+        output_tuser_reg <= 0;
+        busy_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        port_sel_reg <= port_sel_next;
+
+        input_0_axis_tready_reg <= input_0_axis_tready_next;
+        input_1_axis_tready_reg <= input_1_axis_tready_next;
+        input_2_axis_tready_reg <= input_2_axis_tready_next;
+        input_3_axis_tready_reg <= input_3_axis_tready_next;
+
+        output_tuser_reg <= output_tuser_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+    end
+end
+
+// output datapath logic
+reg [7:0] output_axis_tdata_reg = 0;
+reg       output_axis_tvalid_reg = 0;
+reg       output_axis_tlast_reg = 0;
+
+Diff Content:
+- 297         frame_ptr_reg <= 0;
+- 298         port_sel_reg <= 0;
+- 299         input_0_axis_tready_reg <= 0;
+- 300         input_1_axis_tready_reg <= 0;
+- 301         input_2_axis_tready_reg <= 0;
+- 302         input_3_axis_tready_reg <= 0;
+- 303         output_tuser_reg <= 0;
+- 304         busy_reg <= 0;
++ 304         frame_ptr_reg <= 3'd0;
++ 304         port_sel_reg <= 2'd0;
++ 304         input_0_axis_tready_reg <= 1'b0;
++ 304         input_1_axis_tready_reg <= 1'b0;
++ 304         input_2_axis_tready_reg <= 1'b0;
++ 304         input_3_axis_tready_reg <= 1'b0;
++ 304         output_tuser_reg <= 1'b0;
++ 304         busy_reg <= 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_mux_4.v@184:210
+    output_axis_tvalid_int = current_input_tvalid & current_input_tready & frame_reg;
+    output_axis_tlast_int = current_input_tlast;
+    output_axis_tuser_int = current_input_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_0_axis_tready_reg <= 0;
+        input_1_axis_tready_reg <= 0;
+        input_2_axis_tready_reg <= 0;
+        input_3_axis_tready_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_0_axis_tready_reg <= input_0_axis_tready_next;
+        input_1_axis_tready_reg <= input_1_axis_tready_next;
+        input_2_axis_tready_reg <= input_2_axis_tready_next;
+        input_3_axis_tready_reg <= input_3_axis_tready_next;
+    end
+end
+
+// output datapath logic
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = 0;
+reg                  output_axis_tvalid_reg = 0;
+reg                  output_axis_tlast_reg = 0;
+

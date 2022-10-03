@@ -1,0 +1,29 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@217:233@HdlStmProcess
+      left_aligned <= DATA_WIDTH - cmd[7:0];
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if ((clk_div_last == 1'b0 && idle == 1'b0 && wait_for_io == 1'b0 &&
+    clk_div_counter == 'h01) || clk_div == 'h00)
+    clk_div_last <= 1'b1;
+  else
+    clk_div_last <= 1'b0;
+end
+
+always @(posedge clk) begin
+  if (clk_div_last == 1'b1 || idle == 1'b1 || wait_for_io == 1'b1) begin
+    clk_div_counter <= clk_div;
+    trigger <= 1'b1;
+
+Diff Content:
+- 222 always @(posedge clk) begin
+- 223   if ((clk_div_last == 1'b0 && idle == 1'b0 && wait_for_io == 1'b0 &&
+- 224     clk_div_counter == 'h01) || clk_div == 'h00)
+- 225     clk_div_last <= 1'b1;
+- 226   else
+- 227     clk_div_last <= 1'b0;
+- 228 end
+
+Clone Blocks:

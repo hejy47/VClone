@@ -1,0 +1,59 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@315:325@HdlIdDef
+
+assign zD  = (dataout_z3) ? data_z3_hi16 : (dataout ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+// autoconf status
+reg z_confdone = 0;
+reg z3_confdone = 0;
+assign znCFGOUT = ((~z_confdone)&&(~z3_confdone))?1'bZ:1'b0; // inspired by z3sdram
+
+// zorro synchronizers
+// (inspired by https://github.com/endofexclusive/greta/blob/master/hdl/bus_interface/bus_interface.vhdl)
+
+Diff Content:
+- 320 reg z_confdone = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@312:322
+
+assign znSLAVEN = (dataout && slaven)?1'b0:1'b1;
+assign znDTACK  = dtack?1'b0:1'bZ;
+
+assign zD  = (dataout_z3) ? data_z3_hi16 : (dataout ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+// autoconf status
+reg z_confdone = 0;
+reg z3_confdone = 0;
+assign znCFGOUT = ((~z_confdone)&&(~z3_confdone))?1'bZ:1'b0; // inspired by z3sdram
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@316:326
+assign zD  = (dataout_z3) ? data_z3_hi16 : (dataout ? data : 16'bzzzz_zzzz_zzzz_zzzz); // data = Z2: full 16 bit or Z3: upper 16 bit
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+// autoconf status
+reg z_confdone = 0;
+reg z3_confdone = 0;
+assign znCFGOUT = ((~z_confdone)&&(~z3_confdone))?1'bZ:1'b0; // inspired by z3sdram
+
+// zorro synchronizers
+// (inspired by https://github.com/endofexclusive/greta/blob/master/hdl/bus_interface/bus_interface.vhdl)
+
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@317:327
+assign zA  = (dataout_z3) ? {data_z3_low16, 7'bzzzz_zzz} : 23'bzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
+
+// autoconf status
+reg z_confdone = 0;
+reg z3_confdone = 0;
+assign znCFGOUT = ((~z_confdone)&&(~z3_confdone))?1'bZ:1'b0; // inspired by z3sdram
+
+// zorro synchronizers
+// (inspired by https://github.com/endofexclusive/greta/blob/master/hdl/bus_interface/bus_interface.vhdl)
+
+reg [4:0] znAS_sync  = 5'b11111;
+

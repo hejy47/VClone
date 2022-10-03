@@ -1,0 +1,21 @@
+Source Block: oh/gpio/hdl/gpio.v@142:154@HdlStmProcess
+       ien_reg[63:0] <= reg_wdata[63:0];
+     else if(ien_write)
+       ien_reg[31:0] <= reg_wdata[31:0];
+
+   //idata
+   always @ (posedge clk)
+     idata_reg[63:0] <= idata_reg[63:0] |
+			(gpio_sync[N-1:0] & ien_reg[63:0]);
+
+   assign gpio_data[N-1:0] = idata_reg[63:0];
+
+   //################################
+   //# IRQS
+
+Diff Content:
+- 148      idata_reg[63:0] <= idata_reg[63:0] |
+- 149 			(gpio_sync[N-1:0] & ien_reg[63:0]);
++ 149      in_reg[63:0] <= gpio_sync[N-1:0] & ien_reg[63:0];
+
+Clone Blocks:

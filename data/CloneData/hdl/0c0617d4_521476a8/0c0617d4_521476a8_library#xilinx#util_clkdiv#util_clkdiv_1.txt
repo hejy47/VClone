@@ -1,0 +1,120 @@
+Source Block: hdl/library/xilinx/util_clkdiv/util_clkdiv.v@46:94@HdlStmIf
+parameter SEL_1_DIV = "2";
+
+  wire clk_div_sel_0_s;
+  wire clk_div_sel_1_s;
+
+generate if (SIM_DEVICE == "7SERIES") begin
+
+  BUFR #(
+    .BUFR_DIVIDE(SEL_0_DIV),
+    .SIM_DEVICE("7SERIES")
+  ) clk_divide_sel_0 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_sel_0_s));
+
+  BUFR #(
+    .BUFR_DIVIDE(SEL_1_DIV),
+    .SIM_DEVICE("7SERIES")
+  ) clk_divide_sel_1 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_sel_1_s));
+
+end else if (SIM_DEVICE == "ULTRASCALE") begin
+
+  BUFGCE_DIV #(
+    .BUFGCE_DIVIDE(SEL_0_DIV)
+  ) clk_divide_sel_0 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_sel_0_s));
+
+  BUFGCE_DIV #(
+    .BUFGCE_DIVIDE(SEL_1_DIV)
+  ) clk_divide_sel_1 (
+    .I(clk),
+    .CE(1),
+    .CLR(0),
+    .O(clk_div_sel_1_s));
+
+end endgenerate
+
+  BUFGMUX_CTRL i_div_clk_gbuf (
+    .I0(clk_div_sel_0_s), // 1-bit input: Clock input (S=0)
+    .I1(clk_div_sel_1_s), // 1-bit input: Clock input (S=1)
+    .S(clk_sel),
+
+Diff Content:
+- 51 generate if (SIM_DEVICE == "7SERIES") begin
+- 53   BUFR #(
+- 54     .BUFR_DIVIDE(SEL_0_DIV),
+- 55     .SIM_DEVICE("7SERIES")
+- 56   ) clk_divide_sel_0 (
+- 57     .I(clk),
+- 58     .CE(1),
+- 59     .CLR(0),
+- 60     .O(clk_div_sel_0_s));
+- 62   BUFR #(
+- 63     .BUFR_DIVIDE(SEL_1_DIV),
+- 64     .SIM_DEVICE("7SERIES")
+- 65   ) clk_divide_sel_1 (
+- 66     .I(clk),
+- 67     .CE(1),
+- 68     .CLR(0),
+- 69     .O(clk_div_sel_1_s));
+- 71 end else if (SIM_DEVICE == "ULTRASCALE") begin
+- 73   BUFGCE_DIV #(
+- 74     .BUFGCE_DIVIDE(SEL_0_DIV)
+- 75   ) clk_divide_sel_0 (
+- 76     .I(clk),
+- 77     .CE(1),
+- 78     .CLR(0),
+- 79     .O(clk_div_sel_0_s));
+- 81   BUFGCE_DIV #(
+- 82     .BUFGCE_DIVIDE(SEL_1_DIV)
+- 83   ) clk_divide_sel_1 (
+- 84     .I(clk),
+- 85     .CE(1),
+- 86     .CLR(0),
+- 87     .O(clk_div_sel_1_s));
+- 89 end endgenerate
++ 51   generate if (SIM_DEVICE == "7SERIES") begin
++ 60     BUFR #(
++ 60       .BUFR_DIVIDE(SEL_0_DIV),
++ 60       .SIM_DEVICE("7SERIES")
++ 60     ) clk_divide_sel_0 (
++ 60       .I(clk),
++ 60       .CE(1),
++ 60       .CLR(0),
++ 60       .O(clk_div_sel_0_s));
++ 69     BUFR #(
++ 69       .BUFR_DIVIDE(SEL_1_DIV),
++ 69       .SIM_DEVICE("7SERIES")
++ 69     ) clk_divide_sel_1 (
++ 69       .I(clk),
++ 69       .CE(1),
++ 69       .CLR(0),
++ 69       .O(clk_div_sel_1_s));
++ 71   end else if (SIM_DEVICE == "ULTRASCALE") begin
++ 79     BUFGCE_DIV #(
++ 79       .BUFGCE_DIVIDE(SEL_0_DIV)
++ 79     ) clk_divide_sel_0 (
++ 79       .I(clk),
++ 79       .CE(1),
++ 79       .CLR(0),
++ 79       .O(clk_div_sel_0_s));
++ 87     BUFGCE_DIV #(
++ 87       .BUFGCE_DIVIDE(SEL_1_DIV)
++ 87     ) clk_divide_sel_1 (
++ 87       .I(clk),
++ 87       .CE(1),
++ 87       .CLR(0),
++ 87       .O(clk_div_sel_1_s));
++ 89   end endgenerate
+
+Clone Blocks:

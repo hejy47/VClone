@@ -1,0 +1,59 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@228:246@HdlStmProcess
+    clk_div_last <= 1'b1;
+  else
+    clk_div_last <= 1'b0;
+end
+
+always @(posedge clk) begin
+  if (clk_div_last == 1'b1 || idle == 1'b1 || wait_for_io == 1'b1) begin
+    clk_div_counter <= clk_div;
+    trigger <= 1'b1;
+  end else begin
+    clk_div_counter <= clk_div_counter - 1'b1;
+    trigger <= 1'b0;
+  end
+end
+
+
+wire sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+wire cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+wire cs_sleep_counter_compare2 = cs_sleep_counter2 == {cmd_d1[9:8],1'b1} && clk_div_last == 1'b1;
+
+Diff Content:
++ 241 wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
++ 241 wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@241:251
+end
+
+
+wire sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+wire cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+wire cs_sleep_counter_compare2 = cs_sleep_counter2 == {cmd_d1[9:8],1'b1} && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (idle == 1'b1)
+    counter <= 'h00;
+  else if (clk_div_last == 1'b1 && wait_for_io == 1'b0)
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@243:258
+
+wire sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+wire cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+wire cs_sleep_counter_compare2 = cs_sleep_counter2 == {cmd_d1[9:8],1'b1} && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (idle == 1'b1)
+    counter <= 'h00;
+  else if (clk_div_last == 1'b1 && wait_for_io == 1'b0)
+    counter <= counter + (transfer_active ? 'h1 : 'h10);
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    idle <= 1'b1;
+  end else begin
+

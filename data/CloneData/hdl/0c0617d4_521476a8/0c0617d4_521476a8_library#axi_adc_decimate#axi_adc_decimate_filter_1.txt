@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_adc_decimate/axi_adc_decimate_filter.v@159:189@HdlStmProcess
+      3'h7: filter_enable <= 5'b11111;
+      default: filter_enable <= 5'b00000;
+    endcase
+  end
+
+  always @(*) begin
+    case (filter_enable[0])
+      1'b0: adc_dec_data_a_r = {{4{adc_data_a[11]}},adc_data_a};
+      default: adc_dec_data_a_r = {adc_fir_data_a[25], adc_fir_data_a[25:11]};
+    endcase
+
+    case (filter_enable[0])
+      1'b0: adc_dec_valid_a_filter = adc_valid_a;
+      default: adc_dec_valid_a_filter = adc_fir_valid_a;
+    endcase
+
+     case (filter_enable[0])
+      1'b0: adc_dec_data_b_r = {{4{adc_data_b[11]}},adc_data_b};
+      default adc_dec_data_b_r = {adc_fir_data_b[25], adc_fir_data_b[25:11]};
+    endcase
+
+    case (filter_enable[0])
+      1'b0: adc_dec_valid_b_filter = adc_valid_b;
+      default: adc_dec_valid_b_filter = adc_fir_valid_b;
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    if (adc_rst == 1'b1) begin
+      decimation_counter <= 32'b0;
+      adc_dec_valid_a_r <= 1'b0;
+
+Diff Content:
+- 175      case (filter_enable[0])
++ 175     case (filter_enable[0])
+
+Clone Blocks:

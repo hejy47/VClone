@@ -1,0 +1,26 @@
+Source Block: oh/elink/hdl/etx_io.v@80:92@HdlStmProcess
+`define CYCLE7  3'b111
+   
+   //#############################
+   //# Synchronize to lclk_io
+   //#############################  
+   always @ (posedge tx_lclk_io)
+     if(tx_sample)
+	  tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];
+   
+   always @ (posedge tx_lclk_io)
+     tx_access_reg         <= tx_access;	  
+   
+   packet2emesh p2e_reg (
+
+Diff Content:
++ 86        begin
++ 87        end
++ 87    reg 		  tx_burst_reg;   
++ 87    always @ (posedge tx_lclk_io)
++ 87      if(!nreset)
++ 87        tx_burst_reg <= 1'b0;  
++ 87      else if(tx_state[2:0]==`CYCLE4)
++ 87 	tx_burst_reg <= tx_burst;   
+
+Clone Blocks:

@@ -1,0 +1,193 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_rx_link.v@69:226@HdlStmIf
+  wire       data_valid;
+
+  assign rx_clk = adc_clk_div;
+
+  // CMOS can operate in SDR or DDR mode
+  generate if (CMOS_LVDS_N) begin : cmos_4_to_8
+    wire [3:0] sdr_data_0;
+    wire [3:0] sdr_data_1;
+    wire [3:0] sdr_data_2;
+    wire [3:0] sdr_data_3;
+    wire [3:0] sdr_data_strobe;
+    wire       sdr_data_valid;
+
+    wire [3:0] sdr_data_0_aligned;
+    wire [3:0] sdr_data_1_aligned;
+    wire [3:0] sdr_data_2_aligned;
+    wire [3:0] sdr_data_3_aligned;
+    wire [3:0] sdr_data_strobe_aligned;
+
+    wire [7:0] sdr_data_0_packed;
+    wire [7:0] sdr_data_1_packed;
+    wire [7:0] sdr_data_2_packed;
+    wire [7:0] sdr_data_3_packed;
+    wire [7:0] sdr_data_strobe_packed;
+
+    wire       aligner4_ovalid;
+
+    // For SDR drop every second DDR bit
+
+    assign sdr_data_0 = {adc_data_0[7],adc_data_0[5],adc_data_0[3],adc_data_0[1]};
+    assign sdr_data_1 = {adc_data_1[7],adc_data_1[5],adc_data_1[3],adc_data_1[1]};
+    assign sdr_data_2 = {adc_data_2[7],adc_data_2[5],adc_data_2[3],adc_data_2[1]};
+    assign sdr_data_3 = {adc_data_3[7],adc_data_3[5],adc_data_3[3],adc_data_3[1]};
+    assign sdr_data_strobe = {adc_data_strobe[7],adc_data_strobe[5],adc_data_strobe[3],adc_data_strobe[1]};
+
+    adrv9001_aligner4 i_rx_aligner4_0 (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_0),
+      .ivalid (adc_valid),
+      .strobe (sdr_data_strobe),
+      .odata (sdr_data_0_aligned)
+    );
+
+    adrv9001_aligner4 i_rx_aligner4_1 (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_1),
+      .ivalid (adc_valid),
+      .strobe (sdr_data_strobe),
+      .odata (sdr_data_1_aligned)
+    );
+
+    adrv9001_aligner4 i_rx_aligner4_2 (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_2),
+      .ivalid (adc_valid),
+      .strobe (sdr_data_strobe),
+      .odata (sdr_data_2_aligned)
+    );
+
+    adrv9001_aligner4 i_rx_aligner4_3 (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_3),
+      .ivalid (adc_valid),
+      .strobe (sdr_data_strobe),
+      .odata (sdr_data_3_aligned)
+    );
+
+    adrv9001_aligner4 i_rx_aligner4_strobe (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_strobe),
+      .ivalid (adc_valid),
+      .strobe (sdr_data_strobe),
+      .ovalid (aligner4_ovalid),
+      .odata (sdr_data_strobe_aligned)
+    );
+
+    adrv9001_pack #(
+      .WIDTH(4)
+    ) i_rx_pack_4_to_8_0 (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_0_aligned),
+      .ivalid (aligner4_ovalid),
+      .sof (sdr_data_strobe_aligned[3]),
+      .odata (sdr_data_0_packed),
+      .ovalid (sdr_data_valid)
+    );
+
+    adrv9001_pack #(
+      .WIDTH(4)
+    ) i_rx_pack_4_to_8_1 (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_1_aligned),
+      .ivalid (aligner4_ovalid),
+      .sof (sdr_data_strobe_aligned[3]),
+      .odata (sdr_data_1_packed),
+      .ovalid ()
+    );
+
+    adrv9001_pack #(
+      .WIDTH(4)
+    ) i_rx_pack_4_to_8_2 (
+      .clk (adc_clk_div),
+      .idata (sdr_data_2_aligned),
+      .ivalid (aligner4_ovalid),
+      .sof (sdr_data_strobe_aligned[3]),
+      .odata (sdr_data_2_packed),
+      .ovalid ()
+    );
+
+    adrv9001_pack #(
+      .WIDTH(4)
+    ) i_rx_pack_4_to_8_3 (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_3_aligned),
+      .ivalid (aligner4_ovalid),
+      .sof (sdr_data_strobe_aligned[3]),
+      .odata (sdr_data_3_packed),
+      .ovalid ()
+    );
+
+    adrv9001_pack #(
+      .WIDTH(4)
+    ) i_rx_pack_4_to_8_strobe (
+      .clk (adc_clk_div),
+      .rst (adc_rst),
+      .idata (sdr_data_strobe_aligned),
+      .ivalid (aligner4_ovalid),
+      .sof (sdr_data_strobe_aligned[3]),
+      .odata (sdr_data_strobe_packed),
+      .ovalid ()
+    );
+    assign data_0 = rx_sdr_ddr_n ? sdr_data_0_packed : adc_data_0;
+    assign data_1 = rx_sdr_ddr_n ? sdr_data_1_packed : adc_data_1;
+    assign data_2 = rx_sdr_ddr_n ? sdr_data_2_packed : adc_data_2;
+    assign data_3 = rx_sdr_ddr_n ? sdr_data_3_packed : adc_data_3;
+    assign data_strobe = rx_sdr_ddr_n ? sdr_data_strobe_packed : adc_data_strobe;
+    assign data_valid = rx_sdr_ddr_n ? sdr_data_valid : adc_valid;
+  end else begin
+    assign data_0 = adc_data_0;
+    assign data_1 = adc_data_1;
+    assign data_2 = adc_data_2;
+    assign data_3 = adc_data_3;
+    assign data_strobe = adc_data_strobe;
+    assign data_valid = adc_valid;
+  end
+  endgenerate
+
+  // ADC
+
+  wire [7:0] rx_data8_0_aligned;
+
+Diff Content:
+- 110       .odata (sdr_data_0_aligned)
+- 111     );
+- 119       .odata (sdr_data_1_aligned)
+- 120     );
+- 128       .odata (sdr_data_2_aligned)
+- 129     );
+- 137       .odata (sdr_data_3_aligned)
+- 138     );
+- 147       .odata (sdr_data_strobe_aligned)
+- 148     );
+- 159       .ovalid (sdr_data_valid)
+- 160     );
+- 171       .ovalid ()
+- 172     );
+- 182       .ovalid ()
+- 183     );
+- 194       .ovalid ()
+- 195     );
+- 206       .ovalid ()
+- 207     );
++ 111       .odata (sdr_data_0_aligned));
++ 120       .odata (sdr_data_1_aligned));
++ 129       .odata (sdr_data_2_aligned));
++ 138       .odata (sdr_data_3_aligned));
++ 148       .odata (sdr_data_strobe_aligned));
++ 160       .ovalid (sdr_data_valid));
++ 172       .ovalid ());
++ 183       .ovalid ());
++ 195       .ovalid ());
++ 207       .ovalid ());
+
+Clone Blocks:

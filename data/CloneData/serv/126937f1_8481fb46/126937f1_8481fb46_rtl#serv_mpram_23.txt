@@ -1,0 +1,34 @@
+Source Block: serv/rtl/serv_mpram.v@103:113@HdlIdDef
+
+   //0 : RS1
+   //1 : RS2
+   //2 : CSR
+   reg [2:0] rcnt_hi;
+   reg [3:0] rcnt_lo;
+
+   wire [8:0] raddr;
+
+   reg [3:0] rdata;
+
+
+Diff Content:
+- 108    reg [3:0] rcnt_lo;
++ 108    reg [4:0]  rcnt;
++ 108    wire [3:0] rslot = rcnt[4:1];
++ 108    wire       rport = rcnt[0];
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_mpram.v@102:112
+   end
+
+   //0 : RS1
+   //1 : RS2
+   //2 : CSR
+   reg [2:0] rcnt_hi;
+   reg [3:0] rcnt_lo;
+
+   wire [8:0] raddr;
+
+   reg [3:0] rdata;
+

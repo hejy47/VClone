@@ -1,0 +1,45 @@
+Source Block: oh/elink/hdl/emaxi.v@418:428@HdlIdDef
+   //transactions (need an actual axi implementation that doesn't stall on every read)
+   //SOLUTION: Put in the bullet proof async fifo and hope...
+
+
+   wire [PW-1:0] packet_out;   
+   wire 	 fifo_prog_full;
+   wire 	 fifo_full;   		 
+   defparam fifo.DW    = 104;
+   defparam fifo.DEPTH = 32;
+   defparam fifo.WAIT  = 0;
+
+
+Diff Content:
+- 423    wire 	 fifo_prog_full;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/emaxi.v@419:429
+   //SOLUTION: Put in the bullet proof async fifo and hope...
+
+
+   wire [PW-1:0] packet_out;   
+   wire 	 fifo_prog_full;
+   wire 	 fifo_full;   		 
+   defparam fifo.DW    = 104;
+   defparam fifo.DEPTH = 32;
+   defparam fifo.WAIT  = 0;
+
+   fifo_async fifo (.full		(fifo_full),
+
+Clone Blocks 2:
+oh/elink/hdl/emaxi.v@417:427
+   //TODO: We don't have a way of testing this, since we don't have a model that will accept enough
+   //transactions (need an actual axi implementation that doesn't stall on every read)
+   //SOLUTION: Put in the bullet proof async fifo and hope...
+
+
+   wire [PW-1:0] packet_out;   
+   wire 	 fifo_prog_full;
+   wire 	 fifo_full;   		 
+   defparam fifo.DW    = 104;
+   defparam fifo.DEPTH = 32;
+   defparam fifo.WAIT  = 0;
+

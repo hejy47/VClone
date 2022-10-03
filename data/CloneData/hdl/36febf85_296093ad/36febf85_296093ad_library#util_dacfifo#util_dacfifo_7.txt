@@ -1,0 +1,31 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@93:103@HdlIdDef
+
+  reg     [(ADDR_WIDTH-1):0]                    dac_raddr = 'b0;
+  reg     [(DATA_WIDTH-1):0]                    dac_data = 'b0;
+
+  // internal wires
+  wire                                          dma_wren;
+  wire    [(DATA_WIDTH-1):0]                    dac_data_s;
+
+  // write interface
+  always @(posedge dma_clk) begin
+    if(dma_rst == 1'b1) begin
+
+Diff Content:
+- 98   wire                                          dma_wren;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_dacfifo/util_dacfifo.v@94:104
+  reg     [(ADDR_WIDTH-1):0]                    dac_raddr = 'b0;
+  reg     [(DATA_WIDTH-1):0]                    dac_data = 'b0;
+
+  // internal wires
+  wire                                          dma_wren;
+  wire    [(DATA_WIDTH-1):0]                    dac_data_s;
+
+  // write interface
+  always @(posedge dma_clk) begin
+    if(dma_rst == 1'b1) begin
+      dma_ready <= 1'b0;
+

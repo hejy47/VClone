@@ -1,0 +1,36 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@182:210@HdlStmProcess
+
+  // The memory module is ready if it's not empty
+
+  assign dac_addr_diff_s = {1'b1, dac_waddr} - dac_raddr;
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_addr_diff <= 'b0;
+      dac_waddr_m1 <= 'b0;
+      dac_waddr_m2 <= 'b0;
+      dac_waddr <= 'b0;
+      dac_mem_ready <= 1'b0;
+    end else begin
+      dac_waddr_m1 <= dma_waddr_g;
+      dac_waddr_m2 <= dac_waddr_m1;
+      dac_waddr <= dac_waddr_g2b_s;
+      dac_addr_diff <= dac_addr_diff_s[ADDRESS_WIDTH-1:0];
+      if (dac_addr_diff > 0) begin
+        dac_mem_ready <= 1'b1;
+      end else begin
+        dac_mem_ready <= 1'b0;
+      end
+    end
+  end
+
+  ad_g2b #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dac_waddr_g2b (
+    .din (dac_waddr_m2),
+
+Diff Content:
+- 188     if (dac_rst == 1'b1) begin
++ 188     if (dac_rst_int_s == 1'b1) begin
+
+Clone Blocks:

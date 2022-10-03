@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/etx_io.v@134:144@HdlIdDef
+
+   wire 	  tx_sample = ((tx_state[2:0]==`CYCLE4) & tx_burst) | 
+                              (tx_state[2:0]==`IDLE);
+
+ 
+   reg [2:0] counter;
+   //makes sure all transactions are cleared
+   always @ (posedge tx_lclk_io)
+     if(!nreset)
+       counter[2:0] <= 3'b111;
+     else if(tx_sample & ~tx_wait_in)
+
+Diff Content:
+- 139    reg [2:0] counter;
+
+Clone Blocks:

@@ -1,0 +1,132 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_frame_mark.v@187:235@HdlStmProcess
+assign default_sof = {{DATA_PATH_WIDTH-1{1'b0}}, cur_sof};
+assign default_eof = {cur_eof, {DATA_PATH_WIDTH-1{1'b0}}};
+
+// cfg_octets_per_frame must be a multiple of DATA_PATH_WIDTH
+// except for the following supported special cases
+always @(*) begin
+  case(cfg_octets_per_frame)
+    8'd0:
+      begin
+        sof = {DATA_PATH_WIDTH{1'b1}};
+        eof = {DATA_PATH_WIDTH{1'b1}};
+      end
+    8'd1:
+      begin
+        sof = {DATA_PATH_WIDTH/2{2'b01}};
+        eof = {DATA_PATH_WIDTH/2{2'b10}};
+      end
+    8'd2:
+      begin
+        sof = sof_f_3[beat_cnt_mod_3];
+        eof = eof_f_3[beat_cnt_mod_3];
+      end
+    8'd3:
+      begin
+        sof = {DATA_PATH_WIDTH/4{4'b0001}};
+        eof = {DATA_PATH_WIDTH/4{4'b1000}};
+      end
+    8'd5:
+      begin
+        sof = sof_f_6[beat_cnt_mod_3];
+        eof = eof_f_6[beat_cnt_mod_3];
+      end
+    8'd11:
+      begin
+        sof = (DATA_PATH_WIDTH == 4) ? default_sof : sof_f_12[beat_cnt_mod_3];
+        eof = (DATA_PATH_WIDTH == 4) ? default_eof : eof_f_12[beat_cnt_mod_3];
+      end
+    default:
+      begin
+        sof = default_sof;
+        eof = default_eof;
+      end
+  endcase
+end
+
+// Beat count per multiframe
+// Only support F*K%4=0
+// If DATA_PATH_WIDTH == 4, or if DATA_PATH_WIDTH == 8 and F*K%8=0,
+// then multiframes always start/end at the first/last octet in the data bus
+
+Diff Content:
+- 192 always @(*) begin
+- 193   case(cfg_octets_per_frame)
+- 194     8'd0:
+- 195       begin
+- 196         sof = {DATA_PATH_WIDTH{1'b1}};
+- 197         eof = {DATA_PATH_WIDTH{1'b1}};
+- 198       end
+- 199     8'd1:
+- 200       begin
+- 201         sof = {DATA_PATH_WIDTH/2{2'b01}};
+- 202         eof = {DATA_PATH_WIDTH/2{2'b10}};
+- 203       end
+- 204     8'd2:
+- 205       begin
+- 206         sof = sof_f_3[beat_cnt_mod_3];
+- 207         eof = eof_f_3[beat_cnt_mod_3];
+- 208       end
+- 209     8'd3:
+- 210       begin
+- 211         sof = {DATA_PATH_WIDTH/4{4'b0001}};
+- 212         eof = {DATA_PATH_WIDTH/4{4'b1000}};
+- 213       end
+- 214     8'd5:
+- 215       begin
+- 216         sof = sof_f_6[beat_cnt_mod_3];
+- 217         eof = eof_f_6[beat_cnt_mod_3];
+- 218       end
+- 219     8'd11:
+- 220       begin
+- 221         sof = (DATA_PATH_WIDTH == 4) ? default_sof : sof_f_12[beat_cnt_mod_3];
+- 222         eof = (DATA_PATH_WIDTH == 4) ? default_eof : eof_f_12[beat_cnt_mod_3];
+- 223       end
+- 224     default:
+- 225       begin
+- 226         sof = default_sof;
+- 227         eof = default_eof;
+- 228       end
+- 229   endcase
+- 230 end
++ 230   always @(*) begin
++ 230     case(cfg_octets_per_frame)
++ 230       8'd0:
++ 230         begin
++ 230           sof = {DATA_PATH_WIDTH{1'b1}};
++ 230           eof = {DATA_PATH_WIDTH{1'b1}};
++ 230         end
++ 230       8'd1:
++ 230         begin
++ 230           sof = {DATA_PATH_WIDTH/2{2'b01}};
++ 230           eof = {DATA_PATH_WIDTH/2{2'b10}};
++ 230         end
++ 230       8'd2:
++ 230         begin
++ 230           sof = sof_f_3[beat_cnt_mod_3];
++ 230           eof = eof_f_3[beat_cnt_mod_3];
++ 230         end
++ 230       8'd3:
++ 230         begin
++ 230           sof = {DATA_PATH_WIDTH/4{4'b0001}};
++ 230           eof = {DATA_PATH_WIDTH/4{4'b1000}};
++ 230         end
++ 230       8'd5:
++ 230         begin
++ 230           sof = sof_f_6[beat_cnt_mod_3];
++ 230           eof = eof_f_6[beat_cnt_mod_3];
++ 230         end
++ 230       8'd11:
++ 230         begin
++ 230           sof = (DATA_PATH_WIDTH == 4) ? default_sof : sof_f_12[beat_cnt_mod_3];
++ 230           eof = (DATA_PATH_WIDTH == 4) ? default_eof : eof_f_12[beat_cnt_mod_3];
++ 230         end
++ 230       default:
++ 230         begin
++ 230           sof = default_sof;
++ 230           eof = default_eof;
++ 230         end
++ 230     endcase
++ 230   end
+
+Clone Blocks:

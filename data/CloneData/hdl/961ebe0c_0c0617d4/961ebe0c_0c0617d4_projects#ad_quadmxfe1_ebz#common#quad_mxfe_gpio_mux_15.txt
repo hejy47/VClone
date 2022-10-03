@@ -1,0 +1,108 @@
+Source Block: hdl/projects/ad_quadmxfe1_ebz/common/quad_mxfe_gpio_mux.v@391:404@HdlStmAssign
+assign {mxfe0_gpio0_o,
+        mxfe1_gpio0_o,
+        mxfe2_gpio0_o,
+        mxfe3_gpio0_o} = gpio0_mode ? {4{mxfe3_gpio0_i}} : {4{gpio_o[64]}};
+
+assign {mxfe0_gpio1_o,
+        mxfe1_gpio1_o,
+        mxfe2_gpio1_o,
+        mxfe3_gpio1_o} = {4{gpio_o[65]}};
+
+assign {mxfe0_gpio2_o,
+        mxfe1_gpio2_o,
+        mxfe2_gpio2_o,
+        mxfe3_gpio2_o} = {4{gpio_o[66]}};
+
+Diff Content:
+- 396 assign {mxfe0_gpio1_o,
+- 397         mxfe1_gpio1_o,
+- 398         mxfe2_gpio1_o,
+- 399         mxfe3_gpio1_o} = {4{gpio_o[65]}};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/ad_quadmxfe1_ebz/common/quad_mxfe_gpio_mux.v@325:338
+assign {mxfe0_gpio0_t,
+        mxfe1_gpio0_t,
+        mxfe2_gpio0_t,
+        mxfe3_gpio0_t} = gpio0_mode ? 4'b0001 : {4{gpio_t[64]}};
+
+assign {mxfe0_gpio1_t,
+        mxfe1_gpio1_t,
+        mxfe2_gpio1_t,
+        mxfe3_gpio1_t} = {4{gpio_t[65]}};
+
+assign {mxfe0_gpio2_t,
+        mxfe1_gpio2_t,
+        mxfe2_gpio2_t,
+        mxfe3_gpio2_t} = {4{gpio_t[66]}};
+
+Clone Blocks 2:
+hdl/projects/ad_quadmxfe1_ebz/common/quad_mxfe_gpio_mux.v@396:409
+assign {mxfe0_gpio1_o,
+        mxfe1_gpio1_o,
+        mxfe2_gpio1_o,
+        mxfe3_gpio1_o} = {4{gpio_o[65]}};
+
+assign {mxfe0_gpio2_o,
+        mxfe1_gpio2_o,
+        mxfe2_gpio2_o,
+        mxfe3_gpio2_o} = {4{gpio_o[66]}};
+
+assign {mxfe0_gpio5_o,
+        mxfe1_gpio5_o,
+        mxfe2_gpio5_o,
+        mxfe3_gpio5_o} = {4{gpio_o[69]}};
+
+Clone Blocks 3:
+hdl/projects/ad_quadmxfe1_ebz/common/quad_mxfe_gpio_mux.v@401:414
+assign {mxfe0_gpio2_o,
+        mxfe1_gpio2_o,
+        mxfe2_gpio2_o,
+        mxfe3_gpio2_o} = {4{gpio_o[66]}};
+
+assign {mxfe0_gpio5_o,
+        mxfe1_gpio5_o,
+        mxfe2_gpio5_o,
+        mxfe3_gpio5_o} = {4{gpio_o[69]}};
+
+assign {mxfe0_gpio6_o,
+        mxfe1_gpio6_o,
+        mxfe2_gpio6_o,
+        mxfe3_gpio6_o} = {4{gpio_o[70]}};
+
+Clone Blocks 4:
+hdl/projects/ad_quadmxfe1_ebz/common/quad_mxfe_gpio_mux.v@386:399
+        mxfe1_syncout_1_p_t,
+        mxfe2_syncout_1_p_t,
+        mxfe3_syncout_1_p_t} = {4{gpio_t[78]}};
+
+// Bidirectional buffer output values
+assign {mxfe0_gpio0_o,
+        mxfe1_gpio0_o,
+        mxfe2_gpio0_o,
+        mxfe3_gpio0_o} = gpio0_mode ? {4{mxfe3_gpio0_i}} : {4{gpio_o[64]}};
+
+assign {mxfe0_gpio1_o,
+        mxfe1_gpio1_o,
+        mxfe2_gpio1_o,
+        mxfe3_gpio1_o} = {4{gpio_o[65]}};
+
+Clone Blocks 5:
+hdl/projects/ad_quadmxfe1_ebz/common/quad_mxfe_gpio_mux.v@459:472
+assign gpio_i[64] = gpio0_mode ? gpio_o[64] : |{mxfe0_gpio0_i,
+                                                mxfe1_gpio0_i,
+                                                mxfe2_gpio0_i,
+                                                mxfe3_gpio0_i};
+
+assign gpio_i[65] = |{mxfe0_gpio1_i,
+                      mxfe1_gpio1_i,
+                      mxfe2_gpio1_i,
+                      mxfe3_gpio1_i};
+
+assign gpio_i[66] = |{mxfe0_gpio2_i,
+                      mxfe1_gpio2_i,
+                      mxfe2_gpio2_i,
+                      mxfe3_gpio2_i};
+

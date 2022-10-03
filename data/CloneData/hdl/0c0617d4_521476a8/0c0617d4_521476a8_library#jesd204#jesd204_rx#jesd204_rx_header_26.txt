@@ -1,0 +1,39 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@113:125@HdlStmAssign
+assign cmd3 = {sync_word[31:29],sync_word[27:25],
+               sync_word[23:21],sync_word[19:17],
+               sync_word[15:13],sync_word[11],
+               sync_word[7:5]};
+
+assign cmd = cfg_header_mode == 0 ? {12'b0,cmd0} :
+             cfg_header_mode == 1 ? {12'b0,cmd1} :
+             cfg_header_mode == 3 ? cmd3 : 'b0;
+
+assign fec = {sync_word[31:10],sync_word[8:5]};
+
+
+assign eomb  = sync_word[4:0] == 5'b00001;
+
+Diff Content:
+- 118 assign cmd = cfg_header_mode == 0 ? {12'b0,cmd0} :
+- 119              cfg_header_mode == 1 ? {12'b0,cmd1} :
+- 120              cfg_header_mode == 3 ? cmd3 : 'b0;
++ 120   reg [31:0] sync_word = 'h0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@108:121
+assign cmd0 = {sync_word[15:13],sync_word[11],
+               sync_word[7:5]};
+assign cmd1 = {sync_word[27:25],
+               sync_word[19:17],
+               sync_word[11]};
+assign cmd3 = {sync_word[31:29],sync_word[27:25],
+               sync_word[23:21],sync_word[19:17],
+               sync_word[15:13],sync_word[11],
+               sync_word[7:5]};
+
+assign cmd = cfg_header_mode == 0 ? {12'b0,cmd0} :
+             cfg_header_mode == 1 ? {12'b0,cmd1} :
+             cfg_header_mode == 3 ? cmd3 : 'b0;
+
+

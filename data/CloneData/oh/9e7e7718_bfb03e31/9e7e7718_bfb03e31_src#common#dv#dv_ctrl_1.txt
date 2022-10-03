@@ -1,0 +1,40 @@
+Source Block: oh/src/common/dv/dv_ctrl.v@86:100@HdlStmProcess
+
+   //#################################
+   //SYNCHRONOUS STIMULUS
+   //#################################
+   //START TEST
+   always @ (posedge clk1 or negedge nreset)
+     if(!nreset)
+       start = 1'b0;
+     else if(dut_active)       
+       start = 1'b1;
+
+   //STOP SIMULATION
+   always @ (posedge clk1)
+     if(stim_done & test_done)       
+       #(CFG_TIMEOUT) $finish;	  
+
+Diff Content:
+- 93        start = 1'b0;
+- 95        start = 1'b1;
++ 93        start <= 1'b0;
++ 95        start <= 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/dv/dv_ctrl.v@93:105
+       start = 1'b0;
+     else if(dut_active)       
+       start = 1'b1;
+
+   //STOP SIMULATION
+   always @ (posedge clk1)
+     if(stim_done & test_done)       
+       #(CFG_TIMEOUT) $finish;	  
+   	   
+   //WAVEFORM DUMP
+   //Better solution?
+`ifndef VERILATOR 
+   initial
+

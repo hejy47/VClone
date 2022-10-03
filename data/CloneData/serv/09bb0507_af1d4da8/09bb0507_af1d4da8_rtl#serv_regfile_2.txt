@@ -1,0 +1,34 @@
+Source Block: serv/rtl/serv_regfile.v@26:51@HdlStmProcess
+   reg 	     rs1;
+   reg 	     rs2;
+   reg 	     rs1_r;
+
+   wire [1:0] wdata = {i_rd, rd_r};
+   always @(posedge i_clk) begin
+      rd_r <= i_rd;
+      if (i_rs_en)
+	wcnt <= wcnt + 1;
+
+      if (i_go)
+	rcnt <= 5'd0;
+      else
+	rcnt <= rcnt + 4'd1;
+      if (rs1_en) begin
+	 rs1 <= rdata[1];
+      end else begin
+	 rs2 <= rdata[1];
+      end
+      rs1_r <= rs1_tmp;
+   end
+
+   wire rs1_tmp = (rs1_en ? rdata[0] : rs1);
+
+   assign o_rs1 = (|i_rs1_addr) & rs1_r;
+   assign o_rs2 = (|i_rs2_addr) & (rs1_en ? rs2 : rdata[0]);
+
+Diff Content:
++ 45       if (i_rst) begin
++ 45 	 wcnt <= 5'd0;
++ 45       end
+
+Clone Blocks:

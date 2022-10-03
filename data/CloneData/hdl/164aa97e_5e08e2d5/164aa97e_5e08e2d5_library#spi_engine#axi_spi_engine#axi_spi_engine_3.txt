@@ -1,0 +1,37 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@304:334@HdlStmProcess
+    end else begin
+      up_rack_ff <= up_rreq_s;
+    end
+  end
+
+  always @(posedge clk) begin
+    case (up_raddr_s)
+      8'h00: up_rdata_ff <= PCORE_VERSION;
+      8'h01: up_rdata_ff <= ID;
+      8'h02: up_rdata_ff <= up_scratch;
+      8'h03: up_rdata_ff <= DATA_WIDTH;
+      8'h10: up_rdata_ff <= up_sw_reset;
+      8'h20: up_rdata_ff <= up_irq_mask;
+      8'h21: up_rdata_ff <= up_irq_pending;
+      8'h22: up_rdata_ff <= up_irq_source;
+      8'h30: up_rdata_ff <= sync_id;
+      8'h34: up_rdata_ff <= cmd_fifo_room;
+      8'h35: up_rdata_ff <= sdo_fifo_room;
+      8'h36: up_rdata_ff <= sdi_fifo_level;
+      8'h3a: up_rdata_ff <= sdi_fifo_out_data;
+      8'h3c: up_rdata_ff <= sdi_fifo_out_data; /* PEEK register */
+      8'h40: up_rdata_ff <= {offload0_enable_reg};
+      8'h41: up_rdata_ff <= {offload0_enabled_s};
+      default: up_rdata_ff <= 'h00;
+    endcase
+  end
+
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+      sync_id <= 'h00;
+      sync_id_pending <= 1'b0;
+
+Diff Content:
++ 326       8'h48: up_rdata_ff <= pulse_gen_period;
+
+Clone Blocks:

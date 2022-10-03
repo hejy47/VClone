@@ -1,0 +1,40 @@
+Source Block: hdl/library/common/ad_serdes_clk.v@103:135@HdlStmIf
+    .I (clk_in_p),
+    .IB (clk_in_n),
+    .O (clk_in_s));
+
+  generate
+  if (MMCM == 1) begin
+  ad_mmcm_drp #(
+    .MMCM_DEVICE_TYPE (MMCM_DEVICE_TYPE),
+    .MMCM_CLKIN_PERIOD  (MMCM_CLKIN_PERIOD),
+    .MMCM_VCO_DIV  (MMCM_VCO_DIV),
+    .MMCM_VCO_MUL (MMCM_VCO_MUL),
+    .MMCM_CLK0_DIV (MMCM_CLK0_DIV),
+    .MMCM_CLK1_DIV (MMCM_CLK1_DIV))
+  i_mmcm_drp (
+    .clk (clk_in_s),
+    .mmcm_rst (mmcm_rst),
+    .mmcm_clk_0 (clk),
+    .mmcm_clk_1 (div_clk),
+    .up_clk (up_clk),
+    .up_rstn (up_rstn),
+    .up_drp_sel (up_drp_sel),
+    .up_drp_wr (up_drp_wr),
+    .up_drp_addr (up_drp_addr),
+    .up_drp_wdata (up_drp_wdata),
+    .up_drp_rdata (up_drp_rdata),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked));
+  end
+
+  if ((MMCM == 0) && (SERDES == 0)) begin
+  BUFR #(.BUFR_DIVIDE("BYPASS")) i_clk_buf (
+    .CLR (1'b0),
+    .CE (1'b1),
+
+Diff Content:
+- 108   if (MMCM == 1) begin
++ 108   if (MMCM_OR_BUFR_N == 1) begin
+
+Clone Blocks:

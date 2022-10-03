@@ -1,0 +1,50 @@
+Source Block: hdl/library/data_offload/data_offload.v@379:390@HdlStmProcess
+  .m_axis_tkeep(),
+  .m_axis_tlast(),
+  .m_axis_almost_empty()
+);
+
+always @(posedge m_axis_aclk) begin
+  if (rd_ml_valid & rd_ml_ready)
+   rd_request_length <= rd_wr_response_measured_length;
+end
+
+endmodule
+
+
+Diff Content:
+- 384 always @(posedge m_axis_aclk) begin
+- 385   if (rd_ml_valid & rd_ml_ready)
+- 386    rd_request_length <= rd_wr_response_measured_length;
+- 387 end
++ 387   util_axis_fifo #(
++ 387     .DATA_WIDTH(MEM_SIZE_LOG2),
++ 387     .ADDRESS_WIDTH(0),
++ 387     .ASYNC_CLK(1)
++ 387   ) i_measured_length_cdc (
++ 387     .s_axis_aclk(s_axis_aclk),
++ 387     .s_axis_aresetn(s_axis_aresetn),
++ 387     .s_axis_valid(wr_response_eot),
++ 387     .s_axis_ready(),
++ 387     .s_axis_full(),
++ 387     .s_axis_data(wr_response_measured_length),
++ 387     .s_axis_room(),
++ 387     .s_axis_tkeep(),
++ 387     .s_axis_tlast(),
++ 387     .s_axis_almost_full(),
++ 387     .m_axis_aclk(m_axis_aclk),
++ 387     .m_axis_aresetn(m_axis_aresetn),
++ 387     .m_axis_valid(rd_ml_valid),
++ 387     .m_axis_ready(rd_ml_ready),
++ 387     .m_axis_data(rd_wr_response_measured_length),
++ 387     .m_axis_level(),
++ 387     .m_axis_empty(),
++ 387     .m_axis_tkeep(),
++ 387     .m_axis_tlast(),
++ 387     .m_axis_almost_empty());
++ 387   always @(posedge m_axis_aclk) begin
++ 387     if (rd_ml_valid & rd_ml_ready)
++ 387      rd_request_length <= rd_wr_response_measured_length;
++ 387   end
+
+Clone Blocks:

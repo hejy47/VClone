@@ -1,0 +1,33 @@
+Source Block: oh/elink/hdl/erx_remap.v@45:56@HdlStmAssign
+   
+   //parsing packet
+   assign addr_in[31:0]       =  emesh_packet_in[39:8];
+
+   //simple static remap
+   assign static_remap[31:20] = (remap_sel[11:0] & remap_pattern[11:0]) |
+			        (~remap_sel[11:0] & addr_in[31:0]);
+
+   assign static_remap[19:0]  = addr_in[19:0];
+    
+   //more complex compresssed map
+   assign dynamic_remap[31:0] = addr_in[31:0]      //input
+
+Diff Content:
+- 51 			        (~remap_sel[11:0] & addr_in[31:0]);
++ 51 			        (~remap_sel[11:0] & addr_in[31:20]);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_remap.v@48:58
+
+   //simple static remap
+   assign static_remap[31:20] = (remap_sel[11:0] & remap_pattern[11:0]) |
+			        (~remap_sel[11:0] & addr_in[31:0]);
+
+   assign static_remap[19:0]  = addr_in[19:0];
+    
+   //more complex compresssed map
+   assign dynamic_remap[31:0] = addr_in[31:0]      //input
+			     - (colid << 20)    //subtracing elink (start at 0)
+			     + remap_base[31:0]  //adding back base
+

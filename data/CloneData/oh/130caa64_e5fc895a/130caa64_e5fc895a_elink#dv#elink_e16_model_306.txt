@@ -1,0 +1,49 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2560:2570@HdlStmAssign
+
+   //# Mesh transaction for external corners detection
+//   assign dst_y_k[2:0] = dstaddr[31:29];
+//   assign dst_x_k[2:0] = dstaddr[28:26];
+   assign dst_y_k[3:0] = dstaddr[31:28];
+   assign dst_x_k[3:0] = dstaddr[25:22];
+
+   assign west_east_corner_tran = ((dst_x_k[3:0] == ext_xid_k[3:0]) &
+				  ~(dst_y_k[3:0] == ext_yid_k[3:0]));
+
+   assign north_south_corner_tran = (~(dst_x_k[3:0] == ext_xid_k[3:0]) &
+
+Diff Content:
+- 2565    assign dst_x_k[3:0] = dstaddr[25:22];
++ 2565    parameter DW = `CFG_DW;
++ 2565    input           io_lclk;    //link clock from IO
++ 2565    input [DW-1:0]  rxi_cfg_reg;//used to deskew clock input
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2559:2569
+			                      srcaddr_int[AW-1:0];
+
+   //# Mesh transaction for external corners detection
+//   assign dst_y_k[2:0] = dstaddr[31:29];
+//   assign dst_x_k[2:0] = dstaddr[28:26];
+   assign dst_y_k[3:0] = dstaddr[31:28];
+   assign dst_x_k[3:0] = dstaddr[25:22];
+
+   assign west_east_corner_tran = ((dst_x_k[3:0] == ext_xid_k[3:0]) &
+				  ~(dst_y_k[3:0] == ext_yid_k[3:0]));
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@2562:2573
+//   assign dst_y_k[2:0] = dstaddr[31:29];
+//   assign dst_x_k[2:0] = dstaddr[28:26];
+   assign dst_y_k[3:0] = dstaddr[31:28];
+   assign dst_x_k[3:0] = dstaddr[25:22];
+
+   assign west_east_corner_tran = ((dst_x_k[3:0] == ext_xid_k[3:0]) &
+				  ~(dst_y_k[3:0] == ext_yid_k[3:0]));
+
+   assign north_south_corner_tran = (~(dst_x_k[3:0] == ext_xid_k[3:0]) &
+				      (dst_y_k[3:0] == ext_yid_k[3:0]));
+
+   assign corner_tran[3:0] = {north_south_corner_tran, west_east_corner_tran,
+

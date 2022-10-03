@@ -1,0 +1,98 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2799:2809@HdlStmAssign
+   //Mesh transaction
+   assign dst_addr_out[AW-1:0] = mesh_dst_addr_cvre[AW-1:0];
+   assign src_addr_out[AW-1:0] = mesh_src_addr_cvre[AW-1:0];
+   assign data_out[MDW-1:0]    = mesh_data_cvre[MDW-1:0];   
+   assign datamode_out[1:0]    = mesh_datamode_cvre[1:0];
+   assign ctrlmode_out[3:0]    = mesh_ctrlmode_cvre[3:0];
+
+
+endmodule // link_rxi_router
+
+     //#############################################################
+
+Diff Content:
+- 2804    assign ctrlmode_out[3:0]    = mesh_ctrlmode_cvre[3:0];
++ 2804    assign wr_gray_next_rlc[FAD:0] = {1'b0,wr_binary_next_rlc[FAD:1]} ^ 
++ 2804 				    wr_binary_next_rlc[FAD:0];
++ 2804    assign fifo_full_next_rlc = 
++ 2804 			   (wr_gray_next_rlc[FAD-2:0] == rd_gray_pointer_rlc[FAD-2:0]) &
++ 2804                            (wr_gray_next_rlc[FAD]     ^  rd_gray_pointer_rlc[FAD])     &
++ 2804                            (wr_gray_next_rlc[FAD-1]   ^  rd_gray_pointer_rlc[FAD-1]);
++ 2804    always @ (posedge rxi_lclk or posedge reset)
++ 2804      if(reset)
++ 2804        fifo_full_rlc <= 1'b0;
++ 2804      else 
++ 2804        fifo_full_rlc <= fifo_full_next_rlc;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2796:2806
+   //WRITE
+   assign write_out            = request_cvre & mesh_write_cvre;
+   
+   //Mesh transaction
+   assign dst_addr_out[AW-1:0] = mesh_dst_addr_cvre[AW-1:0];
+   assign src_addr_out[AW-1:0] = mesh_src_addr_cvre[AW-1:0];
+   assign data_out[MDW-1:0]    = mesh_data_cvre[MDW-1:0];   
+   assign datamode_out[1:0]    = mesh_datamode_cvre[1:0];
+   assign ctrlmode_out[3:0]    = mesh_ctrlmode_cvre[3:0];
+
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@2795:2805
+   
+   //WRITE
+   assign write_out            = request_cvre & mesh_write_cvre;
+   
+   //Mesh transaction
+   assign dst_addr_out[AW-1:0] = mesh_dst_addr_cvre[AW-1:0];
+   assign src_addr_out[AW-1:0] = mesh_src_addr_cvre[AW-1:0];
+   assign data_out[MDW-1:0]    = mesh_data_cvre[MDW-1:0];   
+   assign datamode_out[1:0]    = mesh_datamode_cvre[1:0];
+   assign ctrlmode_out[3:0]    = mesh_ctrlmode_cvre[3:0];
+
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@2798:2808
+   
+   //Mesh transaction
+   assign dst_addr_out[AW-1:0] = mesh_dst_addr_cvre[AW-1:0];
+   assign src_addr_out[AW-1:0] = mesh_src_addr_cvre[AW-1:0];
+   assign data_out[MDW-1:0]    = mesh_data_cvre[MDW-1:0];   
+   assign datamode_out[1:0]    = mesh_datamode_cvre[1:0];
+   assign ctrlmode_out[3:0]    = mesh_ctrlmode_cvre[3:0];
+
+
+endmodule // link_rxi_router
+
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@2797:2807
+   assign write_out            = request_cvre & mesh_write_cvre;
+   
+   //Mesh transaction
+   assign dst_addr_out[AW-1:0] = mesh_dst_addr_cvre[AW-1:0];
+   assign src_addr_out[AW-1:0] = mesh_src_addr_cvre[AW-1:0];
+   assign data_out[MDW-1:0]    = mesh_data_cvre[MDW-1:0];   
+   assign datamode_out[1:0]    = mesh_datamode_cvre[1:0];
+   assign ctrlmode_out[3:0]    = mesh_ctrlmode_cvre[3:0];
+
+
+endmodule // link_rxi_router
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@2792:2802
+
+   //READ
+   assign read_out             = request_cvre & mesh_read_cvre;
+   
+   //WRITE
+   assign write_out            = request_cvre & mesh_write_cvre;
+   
+   //Mesh transaction
+   assign dst_addr_out[AW-1:0] = mesh_dst_addr_cvre[AW-1:0];
+   assign src_addr_out[AW-1:0] = mesh_src_addr_cvre[AW-1:0];
+   assign data_out[MDW-1:0]    = mesh_data_cvre[MDW-1:0];   
+

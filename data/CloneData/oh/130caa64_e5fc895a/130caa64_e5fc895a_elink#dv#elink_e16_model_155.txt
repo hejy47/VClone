@@ -1,0 +1,56 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1527:1547@HdlStmProcess
+   // # while the negative edge FFs can be disabled
+   // # by the state of the detected frame (to save power)  
+   // ####################################################     
+
+   //# frame
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       begin
+	  frame_reg     <= 1'b0;
+	  frame_reg_del <= 1'b0;
+       end
+     else
+       begin
+	  frame_reg     <= rxi_frame;
+	  frame_reg_del <= frame_reg;
+       end
+
+   //# even bytes
+   always @ (posedge rxi_lclk)
+     data_even_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+
+Diff Content:
+- 1532    always @ (posedge rxi_lclk or posedge reset)
+- 1533      if(reset)
+- 1534        begin
+- 1535 	  frame_reg     <= 1'b0;
+- 1536 	  frame_reg_del <= 1'b0;
+- 1537        end
+- 1538      else
+- 1539        begin
+- 1540 	  frame_reg     <= rxi_frame;
+- 1541 	  frame_reg_del <= frame_reg;
+- 1542        end
++ 1542    input [5:0] 	     txo_cfg_reg;// Link configuration register
++ 1542    input             vertical_k; // specifies if block is vertical or horizontal
++ 1542    input [3:0] 	     who_am_i;   // specifies what link is that (north,east,south,west)
++ 1542    input 	     cfg_extcomp_dis;// Disable external coordinates comparison
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1540:1551
+	  frame_reg     <= rxi_frame;
+	  frame_reg_del <= frame_reg;
+       end
+
+   //# even bytes
+   always @ (posedge rxi_lclk)
+     data_even_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+   //# odd bytes
+   always @ (negedge rxi_lclk)
+     data_odd_reg[LW-1:0] <= rxi_data[LW-1:0];
+
+

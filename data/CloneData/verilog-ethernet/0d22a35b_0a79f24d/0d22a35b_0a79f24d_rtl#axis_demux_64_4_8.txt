@@ -1,0 +1,81 @@
+Source Block: verilog-ethernet/rtl/axis_demux_64_4.v@124:158@HdlStmProcess
+            current_output_tready = output_3_axis_tready;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+    input_axis_tready_next = 0;
+
+    if (frame_reg) begin
+        if (input_axis_tvalid & input_axis_tready) begin
+            // end of frame detection
+            frame_next = ~input_axis_tlast;
+        end
+    end else if (enable & input_axis_tvalid & ~current_output_tvalid) begin
+        // start of frame, grab select value
+        frame_next = 1;
+        select_next = select;
+    end
+
+    input_axis_tready_next = output_axis_tready_int_early & frame_next;
+
+    output_axis_tdata_int = input_axis_tdata;
+    output_axis_tkeep_int = input_axis_tkeep;
+    output_axis_tvalid_int = input_axis_tvalid & input_axis_tready;
+    output_axis_tlast_int = input_axis_tlast;
+    output_axis_tuser_int = input_axis_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+
+Diff Content:
+- 133     input_axis_tready_next = 0;
+- 142         frame_next = 1;
++ 133     input_axis_tready_next = 1'b0;
++ 142         frame_next = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_demux_4.v@117:150
+            current_output_tready = output_3_axis_tready;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+    input_axis_tready_next = 0;
+
+    if (frame_reg) begin
+        if (input_axis_tvalid & input_axis_tready) begin
+            // end of frame detection
+            frame_next = ~input_axis_tlast;
+        end
+    end else if (enable & input_axis_tvalid & ~current_output_tvalid) begin
+        // start of frame, grab select value
+        frame_next = 1;
+        select_next = select;
+    end
+
+    input_axis_tready_next = output_axis_tready_int_early & frame_next;
+
+    output_axis_tdata_int = input_axis_tdata;
+    output_axis_tvalid_int = input_axis_tvalid & input_axis_tready;
+    output_axis_tlast_int = input_axis_tlast;
+    output_axis_tuser_int = input_axis_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+

@@ -1,0 +1,22 @@
+Source Block: hdl/library/prcfg/bist/prcfg_dac.v@140:154@HdlStmProcess
+    status <= {24'h0, RP_ID};
+    mode   <= control[7:4];
+  end
+
+  // sine tone generation
+  always @(posedge clk) begin
+    if (dst_dac_en == 1'h1) begin
+      counter <= counter + 1;
+    end
+  end
+
+  always @(counter) begin
+    case(counter)
+      3'd0  : begin
+                sin_tone <= 16'h0000;
+
+Diff Content:
+- 146     if (dst_dac_en == 1'h1) begin
++ 146     if ((dst_dac_enable == 1'h1) && (dst_dac_valid == 1'h1)) begin
+
+Clone Blocks:

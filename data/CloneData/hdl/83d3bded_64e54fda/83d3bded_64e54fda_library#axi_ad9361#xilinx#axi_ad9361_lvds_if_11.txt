@@ -1,0 +1,255 @@
+Source Block: hdl/library/axi_ad9361/xilinx/axi_ad9361_lvds_if.v@240:334@HdlStmProcess
+    end
+  end
+
+  // delineation
+
+  always @(posedge l_clk) begin
+    if (rx_valid == 1'b1) begin
+      case ({rx_r1_mode, rx_frame_s, rx_frame})
+        5'b01111: begin
+          adc_valid_p <= 1'b0;
+          adc_data_p[47:24] <= 24'd0;
+          adc_data_p[23:12] <= {rx_data_1, rx_data_1_s};
+          adc_data_p[11: 0] <= {rx_data_0, rx_data_0_s};
+        end
+        5'b00000: begin
+          adc_valid_p <= 1'b1;
+          adc_data_p[47:36] <= {rx_data_1, rx_data_1_s};
+          adc_data_p[35:24] <= {rx_data_0, rx_data_0_s};
+          adc_data_p[23: 0] <= adc_data_p[23:0];
+        end
+        5'b00111: begin
+          adc_valid_p <= 1'b0;
+          adc_data_p[47:24] <= 24'd0;
+          adc_data_p[23:12] <= {rx_data_0, rx_data_0_s};
+          adc_data_p[11: 0] <= {rx_data_1_2d, rx_data_1};
+        end
+        5'b01000: begin
+          adc_valid_p <= 1'b1;
+          adc_data_p[47:36] <= {rx_data_0, rx_data_0_s};
+          adc_data_p[35:24] <= {rx_data_1_2d, rx_data_1};
+          adc_data_p[23: 0] <= adc_data_p[23:0];
+        end
+        5'b00011: begin
+          adc_valid_p <= 1'b0;
+          adc_data_p[47:24] <= 24'd0;
+          adc_data_p[23:12] <= {rx_data_1_2d, rx_data_1};
+          adc_data_p[11: 0] <= {rx_data_0_2d, rx_data_0};
+        end
+        5'b01100: begin
+          adc_valid_p <= 1'b1;
+          adc_data_p[47:36] <= {rx_data_1_2d, rx_data_1};
+          adc_data_p[35:24] <= {rx_data_0_2d, rx_data_0};
+          adc_data_p[23: 0] <= adc_data_p[23:0];
+        end
+        5'b00001: begin
+          adc_valid_p <= 1'b0;
+          adc_data_p[47:24] <= 24'd0;
+          adc_data_p[23:12] <= {rx_data_0_2d, rx_data_0};
+          adc_data_p[11: 0] <= {rx_data_1_d, rx_data_1_2d};
+        end
+        5'b01110: begin
+          adc_valid_p <= 1'b1;
+          adc_data_p[47:36] <= {rx_data_0_2d, rx_data_0};
+          adc_data_p[35:24] <= {rx_data_1_d, rx_data_1_2d};
+          adc_data_p[23: 0] <= adc_data_p[23:0];
+        end
+        5'b10011: begin
+          adc_valid_p <= 1'b1;
+          adc_data_p[47:24] <= 24'd0;
+          adc_data_p[23:12] <= {rx_data_1, rx_data_1_s};
+          adc_data_p[11: 0] <= {rx_data_0, rx_data_0_s};
+        end
+        5'b11001: begin
+          adc_valid_p <= 1'b1;
+          adc_data_p[47:24] <= 24'd0;
+          adc_data_p[23:12] <= {rx_data_0, rx_data_0_s};
+          adc_data_p[11: 0] <= {rx_data_1_2d, rx_data_1};
+        end
+        5'b11100: begin
+          adc_valid_p <= 1'b1;
+          adc_data_p[47:24] <= 24'd0;
+          adc_data_p[23:12] <= {rx_data_1_2d, rx_data_1};
+          adc_data_p[11: 0] <= {rx_data_0_2d, rx_data_0};
+        end
+        5'b10110: begin
+          adc_valid_p <= 1'b1;
+          adc_data_p[47:24] <= 24'd0;
+          adc_data_p[23:12] <= {rx_data_0_2d, rx_data_0};
+          adc_data_p[11: 0] <= {rx_data_1_d, rx_data_1_2d};
+        end
+        default: begin
+          adc_valid_p <= 1'b0;
+          adc_data_p <= 48'd0;
+        end
+      endcase
+    end else begin
+      adc_valid_p <= 1'b0;
+      adc_data_p <= adc_data_p;
+    end
+  end
+
+  // adc-status
+
+  always @(posedge l_clk) begin
+    if (rx_valid == 1'b1) begin
+
+Diff Content:
+- 246     if (rx_valid == 1'b1) begin
+- 250           adc_data_p[47:24] <= 24'd0;
+- 258           adc_data_p[23: 0] <= adc_data_p[23:0];
+- 259         end
+- 260         5'b00111: begin
+- 261           adc_valid_p <= 1'b0;
+- 262           adc_data_p[47:24] <= 24'd0;
+- 263           adc_data_p[23:12] <= {rx_data_0, rx_data_0_s};
+- 264           adc_data_p[11: 0] <= {rx_data_1_2d, rx_data_1};
+- 265         end
+- 266         5'b01000: begin
+- 267           adc_valid_p <= 1'b1;
+- 268           adc_data_p[47:36] <= {rx_data_0, rx_data_0_s};
+- 269           adc_data_p[35:24] <= {rx_data_1_2d, rx_data_1};
+- 270           adc_data_p[23: 0] <= adc_data_p[23:0];
+- 271         end
+- 272         5'b00011: begin
+- 273           adc_valid_p <= 1'b0;
+- 274           adc_data_p[47:24] <= 24'd0;
+- 275           adc_data_p[23:12] <= {rx_data_1_2d, rx_data_1};
+- 276           adc_data_p[11: 0] <= {rx_data_0_2d, rx_data_0};
+- 277         end
+- 278         5'b01100: begin
+- 279           adc_valid_p <= 1'b1;
+- 280           adc_data_p[47:36] <= {rx_data_1_2d, rx_data_1};
+- 281           adc_data_p[35:24] <= {rx_data_0_2d, rx_data_0};
+- 282           adc_data_p[23: 0] <= adc_data_p[23:0];
+- 283         end
+- 284         5'b00001: begin
+- 285           adc_valid_p <= 1'b0;
+- 286           adc_data_p[47:24] <= 24'd0;
+- 287           adc_data_p[23:12] <= {rx_data_0_2d, rx_data_0};
+- 288           adc_data_p[11: 0] <= {rx_data_1_d, rx_data_1_2d};
+- 289         end
+- 290         5'b01110: begin
+- 291           adc_valid_p <= 1'b1;
+- 292           adc_data_p[47:36] <= {rx_data_0_2d, rx_data_0};
+- 293           adc_data_p[35:24] <= {rx_data_1_d, rx_data_1_2d};
+- 294           adc_data_p[23: 0] <= adc_data_p[23:0];
+- 302         5'b11001: begin
+- 303           adc_valid_p <= 1'b1;
+- 304           adc_data_p[47:24] <= 24'd0;
+- 305           adc_data_p[23:12] <= {rx_data_0, rx_data_0_s};
+- 306           adc_data_p[11: 0] <= {rx_data_1_2d, rx_data_1};
+- 307         end
+- 308         5'b11100: begin
+- 309           adc_valid_p <= 1'b1;
+- 310           adc_data_p[47:24] <= 24'd0;
+- 311           adc_data_p[23:12] <= {rx_data_1_2d, rx_data_1};
+- 312           adc_data_p[11: 0] <= {rx_data_0_2d, rx_data_0};
+- 313         end
+- 314         5'b10110: begin
+- 315           adc_valid_p <= 1'b1;
+- 316           adc_data_p[47:24] <= 24'd0;
+- 317           adc_data_p[23:12] <= {rx_data_0_2d, rx_data_0};
+- 318           adc_data_p[11: 0] <= {rx_data_1_d, rx_data_1_2d};
+- 319         end
+- 322           adc_data_p <= 48'd0;
+- 325     end else begin
+- 326       adc_valid_p <= 1'b0;
+- 327       adc_data_p <= adc_data_p;
+- 328     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/intel/axi_ad9361_lvds_if.v@236:325
+    rx_data_1 <= rx_data_1_s;
+  end
+
+  // delineation
+
+  always @(posedge l_clk) begin
+    case ({rx_r1_mode, rx_frame_s})
+      5'b01111: begin
+        adc_valid_p <= 1'b0;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_1_s, rx_data_3_s};
+        adc_data_p[11: 0] <= {rx_data_0_s, rx_data_2_s};
+      end
+      5'b00000: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:36] <= {rx_data_1_s, rx_data_3_s};
+        adc_data_p[35:24] <= {rx_data_0_s, rx_data_2_s};
+        adc_data_p[23: 0] <= adc_data_p[23:0];
+      end
+      5'b00111: begin
+        adc_valid_p <= 1'b0;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_0_s, rx_data_2_s};
+        adc_data_p[11: 0] <= {rx_data_3, rx_data_1_s};
+      end
+      5'b01000: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:36] <= {rx_data_0_s, rx_data_2_s};
+        adc_data_p[35:24] <= {rx_data_3, rx_data_1_s};
+        adc_data_p[23: 0] <= adc_data_p[23:0];
+      end
+      5'b00011: begin
+        adc_valid_p <= 1'b0;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_3, rx_data_1_s};
+        adc_data_p[11: 0] <= {rx_data_2, rx_data_0_s};
+      end
+      5'b01100: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:36] <= {rx_data_3, rx_data_1_s};
+        adc_data_p[35:24] <= {rx_data_2, rx_data_0_s};
+        adc_data_p[23: 0] <= adc_data_p[23:0];
+      end
+      5'b00001: begin
+        adc_valid_p <= 1'b0;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_2, rx_data_0_s};
+        adc_data_p[11: 0] <= {rx_data_1, rx_data_3};
+      end
+      5'b01110: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:36] <= {rx_data_2, rx_data_0_s};
+        adc_data_p[35:24] <= {rx_data_1, rx_data_3};
+        adc_data_p[23: 0] <= adc_data_p[23:0];
+      end
+      5'b10011: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_1_s, rx_data_3_s};
+        adc_data_p[11: 0] <= {rx_data_0_s, rx_data_2_s};
+      end
+      5'b11001: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_0_s, rx_data_2_s};
+        adc_data_p[11: 0] <= {rx_data_3, rx_data_1_s};
+      end
+      5'b11100: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_3, rx_data_1_s};
+        adc_data_p[11: 0] <= {rx_data_2, rx_data_0_s};
+      end
+      5'b10110: begin
+        adc_valid_p <= 1'b1;
+        adc_data_p[47:24] <= 24'd0;
+        adc_data_p[23:12] <= {rx_data_2, rx_data_0_s};
+        adc_data_p[11: 0] <= {rx_data_1, rx_data_3};
+      end
+      default: begin
+        adc_valid_p <= 1'b0;
+        adc_data_p <= 48'd0;
+      end
+    endcase
+  end
+
+  // adc-status
+
+  always @(posedge l_clk) begin
+    if (rx_frame_d == rx_frame_s) begin
+

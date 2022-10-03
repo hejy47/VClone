@@ -1,0 +1,26 @@
+Source Block: hdl/library/common/sync_gray.v@84:100@HdlStmProcess
+				g[i] = b[i + 1] ^ b[i];
+		b2g = g;
+	end
+endfunction
+
+always @(posedge in_clk) begin
+	if (in_resetn == 1'b0) begin
+		in_count_gray <= 'h00;
+	end else begin
+		in_count_gray <= b2g(in_count);
+	end
+end
+
+always @(posedge out_clk) begin
+	if (out_resetn == 1'b0) begin
+		out_count_gray_m1 <= 'h00;
+		out_count_gray_m2 <= 'h00;
+
+Diff Content:
+- 91 		in_count_gray <= 'h00;
+- 93 		in_count_gray <= b2g(in_count);
++ 91 		cdc_sync_stage0 <= 'h00;
++ 93 		cdc_sync_stage0 <= b2g(in_count);
+
+Clone Blocks:

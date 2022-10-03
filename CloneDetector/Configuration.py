@@ -1,0 +1,20 @@
+# Verilog
+SUBJECTS_PATH = "../subjects/"
+OUTPUT_PATH = "../data/"
+
+PATCH_COMMITS_PATH = OUTPUT_PATH + "PatchCommits"
+CLONE_PATH = OUTPUT_PATH + "CloneData"
+CLONE_BACKUP_PATH = OUTPUT_PATH + "CloneBackupData"
+BUG_REPORTS_PATH = OUTPUT_PATH + "BugReports"
+DIFFENTRY_SIZE_PATH = OUTPUT_PATH + "DiffentrySizes"
+PARSE_RESULTS_PATH = OUTPUT_PATH + "ParseResults"
+
+TOKENIZERS_PATH = "SourcererCC/tokenizers/"
+TOKENIZERS_DATA_PATH = TOKENIZERS_PATH + "data"
+TOKENIZERS_TOKENS_PATH = TOKENIZERS_PATH + "block_tokens"
+TOKENIZERS_STATS_PATH = TOKENIZERS_PATH + "file_block_stats"
+TOKENIZERS_CONF_PATH = TOKENIZERS_PATH + "projects-list.txt"
+
+DETECTOR_PATH = "SourcererCC/clone-detector/"
+DETECTOR_INPUT_PATH = DETECTOR_PATH + "input/dataset"
+DETECTOR_RESULT_PATH = DETECTOR_PATH + "results.pairs"

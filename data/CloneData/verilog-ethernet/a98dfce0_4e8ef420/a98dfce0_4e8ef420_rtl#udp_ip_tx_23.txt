@@ -1,0 +1,4609 @@
+Source Block: verilog-ethernet/rtl/udp_ip_tx.v@167:177@HdlIdDef
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+
+Diff Content:
+- 172 reg [2:0] output_ip_flags_reg = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@109:119
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+reg [63:0] input_3_ip_payload_tdata = 0;
+
+Clone Blocks 2:
+verilog-ethernet/tb/test_udp_ip_tx_64.v@73:83
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/udp_ip_tx_64.v@165:175
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+
+Clone Blocks 4:
+verilog-ethernet/tb/test_ip_demux_4.v@43:53
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [7:0] input_ip_payload_tdata = 0;
+
+Clone Blocks 5:
+verilog-ethernet/tb/test_ip_mux_64_4.v@148:158
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [63:0] output_ip_payload_tdata;
+
+Clone Blocks 6:
+verilog-ethernet/tb/test_udp_ip_tx.v@41:51
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 7:
+verilog-ethernet/tb/test_udp_ip_tx_64.v@41:51
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 8:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@144:154
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 9:
+verilog-ethernet/tb/test_ip_complete_64.v@99:109
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 10:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@91:101
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+
+Clone Blocks 11:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@86:96
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+
+Clone Blocks 12:
+verilog-ethernet/tb/test_udp_complete_64.v@119:129
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/udp_ip_rx_64.v@171:181
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+Clone Blocks 14:
+verilog-ethernet/tb/test_ip.v@86:96
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 15:
+verilog-ethernet/tb/test_udp_ip_tx.v@70:80
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 16:
+verilog-ethernet/tb/test_ip_mux_64_4.v@106:116
+reg [3:0] input_3_ip_version = 0;
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+
+Clone Blocks 17:
+verilog-ethernet/tb/test_udp.v@100:110
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 18:
+verilog-ethernet/tb/test_udp_mux_4.v@67:77
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+
+Clone Blocks 19:
+verilog-ethernet/tb/test_ip_mux_4.v@84:94
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+
+Clone Blocks 20:
+verilog-ethernet/tb/test_ip.v@88:98
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [7:0] output_ip_payload_tdata;
+
+Clone Blocks 21:
+verilog-ethernet/rtl/udp_ip_rx.v@170:180
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+
+Clone Blocks 22:
+verilog-ethernet/tb/test_udp_mux_4.v@41:51
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+
+Clone Blocks 23:
+verilog-ethernet/tb/test_udp_ip_rx.v@43:53
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [7:0] input_ip_payload_tdata = 0;
+
+Clone Blocks 24:
+verilog-ethernet/rtl/udp_ip_rx.v@165:175
+reg output_udp_hdr_valid_reg = 0, output_udp_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+
+Clone Blocks 25:
+verilog-ethernet/tb/test_udp_mux_4.v@40:50
+reg [3:0] input_0_ip_version = 0;
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+
+Clone Blocks 26:
+verilog-ethernet/rtl/ip_eth_rx.v@162:172
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+
+Clone Blocks 27:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@141:151
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [7:0] output_ip_payload_tdata;
+
+Clone Blocks 28:
+verilog-ethernet/tb/test_ip_mux_64_4.v@86:96
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+
+Clone Blocks 29:
+verilog-ethernet/tb/test_udp.v@101:111
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 30:
+verilog-ethernet/rtl/ip_eth_rx_64.v@159:169
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+
+Clone Blocks 31:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@69:79
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+reg [15:0] input_1_udp_source_port = 0;
+
+Clone Blocks 32:
+verilog-ethernet/tb/test_ip_mux_64_4.v@43:53
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+reg [63:0] input_0_ip_payload_tdata = 0;
+
+Clone Blocks 33:
+verilog-ethernet/rtl/udp_ip_tx_64.v@174:184
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+Clone Blocks 34:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@93:103
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+reg [15:0] input_2_udp_source_port = 0;
+
+Clone Blocks 35:
+verilog-ethernet/rtl/udp_ip_rx_64.v@165:175
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+
+Clone Blocks 36:
+verilog-ethernet/tb/test_ip_eth_rx_64.v@58:68
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [63:0] output_ip_payload_tdata;
+
+Clone Blocks 37:
+verilog-ethernet/tb/test_udp_ip_rx.v@41:51
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 38:
+verilog-ethernet/tb/test_ip_mux_4.v@41:51
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+
+Clone Blocks 39:
+verilog-ethernet/tb/test_ip_mux_4.v@40:50
+reg [3:0] input_0_ip_version = 0;
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+
+Clone Blocks 40:
+verilog-ethernet/rtl/udp_ip_rx_64.v@167:177
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+Clone Blocks 41:
+verilog-ethernet/tb/test_udp_mux_64_4.v@161:171
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 42:
+verilog-ethernet/tb/test_udp_demux_64_4.v@41:51
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 43:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@103:113
+reg [3:0] input_3_ip_version = 0;
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+
+Clone Blocks 44:
+verilog-ethernet/tb/test_ip_mux_64_4.v@146:156
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 45:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@42:52
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+
+Clone Blocks 46:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@121:131
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+reg [15:0] input_3_udp_source_port = 0;
+
+Clone Blocks 47:
+verilog-ethernet/rtl/ip_eth_rx.v@167:177
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+Clone Blocks 48:
+verilog-ethernet/tb/test_udp_ip_rx_64.v@68:78
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 49:
+verilog-ethernet/tb/test_udp_ip_tx.v@42:52
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [15:0] input_udp_source_port = 0;
+
+Clone Blocks 50:
+verilog-ethernet/rtl/udp_ip_rx.v@172:182
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+
+Clone Blocks 51:
+verilog-ethernet/tb/test_udp_ip_rx.v@68:78
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 52:
+verilog-ethernet/tb/test_ip_mux_4.v@42:52
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+
+Clone Blocks 53:
+verilog-ethernet/rtl/udp_ip_rx_64.v@164:174
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+
+Clone Blocks 54:
+verilog-ethernet/tb/test_udp_mux_64_4.v@40:50
+reg [3:0] input_0_ip_version = 0;
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+
+Clone Blocks 55:
+verilog-ethernet/rtl/udp_ip_tx.v@164:174
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+
+Clone Blocks 56:
+verilog-ethernet/rtl/ip_eth_tx_64.v@140:150
+reg [5:0] ip_dscp_reg = 0;
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+
+Clone Blocks 57:
+verilog-ethernet/rtl/ip_eth_rx_64.v@158:168
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+Clone Blocks 58:
+verilog-ethernet/tb/test_ip_complete.v@97:107
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [7:0] output_ip_payload_tdata;
+
+Clone Blocks 59:
+verilog-ethernet/tb/test_udp_ip_rx.v@42:52
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 60:
+verilog-ethernet/tb/test_ip_mux_4.v@62:72
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+
+Clone Blocks 61:
+verilog-ethernet/tb/test_udp.v@102:112
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [7:0] output_ip_payload_tdata;
+
+Clone Blocks 62:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@41:51
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+
+Clone Blocks 63:
+verilog-ethernet/tb/test_ip_eth_rx.v@56:66
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 64:
+verilog-ethernet/rtl/udp_ip_tx.v@168:178
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+Clone Blocks 65:
+verilog-ethernet/tb/test_udp_mux_64_4.v@118:128
+reg [3:0] input_3_ip_version = 0;
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+
+Clone Blocks 66:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@61:71
+reg [3:0] input_1_ip_version = 0;
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+
+Clone Blocks 67:
+verilog-ethernet/rtl/ip_eth_rx.v@170:180
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+Clone Blocks 68:
+verilog-ethernet/tb/test_ip_eth_rx_64.v@55:65
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 69:
+verilog-ethernet/rtl/udp_ip_tx.v@161:171
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+
+Clone Blocks 70:
+verilog-ethernet/rtl/udp_ip_tx.v@171:181
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+reg busy_reg = 0;
+reg error_payload_early_termination_reg = 0, error_payload_early_termination_next;
+
+Clone Blocks 71:
+verilog-ethernet/rtl/udp_ip_rx_64.v@163:173
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+
+Clone Blocks 72:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@67:77
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+
+Clone Blocks 73:
+verilog-ethernet/tb/test_udp_ip_tx_64.v@43:53
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [15:0] input_udp_source_port = 0;
+reg [15:0] input_udp_dest_port = 0;
+
+Clone Blocks 74:
+verilog-ethernet/tb/test_ip_mux_64_4.v@85:95
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+
+Clone Blocks 75:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@119:129
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+
+Clone Blocks 76:
+verilog-ethernet/rtl/udp_ip_tx.v@166:176
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+
+Clone Blocks 77:
+verilog-ethernet/tb/test_udp_demux_4.v@42:52
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 78:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@106:116
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+reg [7:0] input_3_ip_payload_tdata = 0;
+
+Clone Blocks 79:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@85:95
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+reg [7:0] input_2_ip_payload_tdata = 0;
+
+Clone Blocks 80:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@87:97
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+reg [63:0] input_2_ip_payload_tdata = 0;
+
+Clone Blocks 81:
+verilog-ethernet/rtl/udp_ip_rx.v@166:176
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+
+Clone Blocks 82:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@43:53
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+reg [15:0] input_0_udp_source_port = 0;
+
+Clone Blocks 83:
+verilog-ethernet/tb/test_udp_ip_tx.v@73:83
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [7:0] output_ip_payload_tdata;
+
+Clone Blocks 84:
+verilog-ethernet/tb/test_udp_64.v@46:56
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 85:
+verilog-ethernet/tb/test_ip_mux_64_4.v@62:72
+reg [3:0] input_1_ip_version = 0;
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+
+Clone Blocks 86:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@85:95
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+
+Clone Blocks 87:
+verilog-ethernet/rtl/udp_ip_rx.v@173:183
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+
+Clone Blocks 88:
+verilog-ethernet/tb/test_udp_complete.v@117:127
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 89:
+verilog-ethernet/rtl/udp_ip_tx.v@163:173
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+
+Clone Blocks 90:
+verilog-ethernet/tb/test_udp_ip_rx_64.v@43:53
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [63:0] input_ip_payload_tdata = 0;
+
+Clone Blocks 91:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@106:116
+reg [3:0] input_3_ip_version = 0;
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+
+Clone Blocks 92:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@142:152
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 93:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@118:128
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+reg [15:0] input_3_udp_source_port = 0;
+
+Clone Blocks 94:
+verilog-ethernet/tb/test_udp_mux_64_4.v@94:104
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+
+Clone Blocks 95:
+verilog-ethernet/rtl/ip_eth_rx.v@169:179
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+reg busy_reg = 0;
+
+Clone Blocks 96:
+verilog-ethernet/tb/test_udp_ip_tx_64.v@40:50
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 97:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@108:118
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+
+Clone Blocks 98:
+verilog-ethernet/tb/test_ip_demux_64_4.v@41:51
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 99:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@64:74
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+
+Clone Blocks 100:
+verilog-ethernet/tb/test_udp_demux_64_4.v@43:53
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [15:0] input_udp_source_port = 0;
+
+Clone Blocks 101:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@62:72
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+
+Clone Blocks 102:
+verilog-ethernet/tb/test_ip_64.v@90:100
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 103:
+verilog-ethernet/tb/test_udp.v@47:57
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 104:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@155:165
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 105:
+verilog-ethernet/tb/test_ip_mux_64_4.v@84:94
+reg [3:0] input_2_ip_version = 0;
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+
+Clone Blocks 106:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@41:51
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+
+Clone Blocks 107:
+verilog-ethernet/tb/test_ip_mux_4.v@83:93
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+
+Clone Blocks 108:
+verilog-ethernet/rtl/udp_ip_rx.v@175:185
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+Clone Blocks 109:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@95:105
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+reg [15:0] input_2_udp_source_port = 0;
+
+Clone Blocks 110:
+verilog-ethernet/tb/test_udp_64.v@102:112
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 111:
+verilog-ethernet/rtl/udp_ip_tx_64.v@173:183
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+reg busy_reg = 0;
+
+Clone Blocks 112:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@116:126
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+
+Clone Blocks 113:
+verilog-ethernet/tb/test_ip_demux_4.v@42:52
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 114:
+verilog-ethernet/tb/test_ip_mux_64_4.v@41:51
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+
+Clone Blocks 115:
+verilog-ethernet/tb/test_udp_mux_4.v@157:167
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 116:
+verilog-ethernet/rtl/udp_ip_rx_64.v@166:176
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+
+Clone Blocks 117:
+verilog-ethernet/tb/test_udp_mux_4.v@93:103
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+reg [15:0] input_2_udp_source_port = 0;
+
+Clone Blocks 118:
+verilog-ethernet/tb/test_ip_complete.v@95:105
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 119:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@64:74
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+reg [7:0] input_1_ip_payload_tdata = 0;
+
+Clone Blocks 120:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@67:77
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+
+Clone Blocks 121:
+verilog-ethernet/tb/test_ip_complete_64.v@98:108
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 122:
+verilog-ethernet/tb/test_ip_eth_rx_64.v@56:66
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 123:
+verilog-ethernet/tb/test_udp_64.v@45:55
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+
+Clone Blocks 124:
+verilog-ethernet/tb/test_ip_mux_64_4.v@40:50
+reg [3:0] input_0_ip_version = 0;
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+
+Clone Blocks 125:
+verilog-ethernet/tb/test_ip_demux_64_4.v@43:53
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [63:0] input_ip_payload_tdata = 0;
+
+Clone Blocks 126:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@143:153
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 127:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@84:94
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+
+Clone Blocks 128:
+verilog-ethernet/tb/test_udp_demux_64_4.v@42:52
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 129:
+verilog-ethernet/tb/test_ip_mux_64_4.v@63:73
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+
+Clone Blocks 130:
+verilog-ethernet/tb/test_udp.v@48:58
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [7:0] input_ip_payload_tdata = 0;
+
+Clone Blocks 131:
+verilog-ethernet/tb/test_udp_ip_rx_64.v@40:50
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+
+Clone Blocks 132:
+verilog-ethernet/tb/test_ip.v@87:97
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 133:
+verilog-ethernet/rtl/udp_ip_tx.v@165:175
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+
+Clone Blocks 134:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@105:115
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+
+Clone Blocks 135:
+verilog-ethernet/tb/test_ip_eth_rx.v@55:65
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 136:
+verilog-ethernet/tb/test_udp_mux_4.v@43:53
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+reg [15:0] input_0_udp_source_port = 0;
+
+Clone Blocks 137:
+verilog-ethernet/tb/test_udp_ip_rx.v@40:50
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+
+Clone Blocks 138:
+verilog-ethernet/tb/test_ip_demux_4.v@40:50
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+
+Clone Blocks 139:
+verilog-ethernet/tb/test_udp_mux_4.v@66:76
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+
+Clone Blocks 140:
+verilog-ethernet/rtl/ip_eth_tx_64.v@139:149
+
+reg [5:0] ip_dscp_reg = 0;
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+Clone Blocks 141:
+verilog-ethernet/tb/test_ip_eth_rx_64.v@57:67
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 142:
+verilog-ethernet/tb/test_udp_mux_64_4.v@67:77
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+
+Clone Blocks 143:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@42:52
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+
+Clone Blocks 144:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@90:100
+reg [3:0] input_2_ip_version = 0;
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+
+Clone Blocks 145:
+verilog-ethernet/tb/test_udp_64.v@48:58
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [63:0] input_ip_payload_tdata = 0;
+
+Clone Blocks 146:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@158:168
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 147:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@42:52
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+
+Clone Blocks 148:
+verilog-ethernet/tb/test_ip_64.v@88:98
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 149:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@43:53
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+reg [63:0] input_0_ip_payload_tdata = 0;
+
+Clone Blocks 150:
+verilog-ethernet/tb/test_udp_ip_tx.v@71:81
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 151:
+verilog-ethernet/tb/test_ip_mux_4.v@142:152
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 152:
+verilog-ethernet/rtl/ip_eth_rx.v@164:174
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+
+Clone Blocks 153:
+verilog-ethernet/tb/test_udp_mux_64_4.v@93:103
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+
+Clone Blocks 154:
+verilog-ethernet/tb/test_udp_mux_4.v@42:52
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+
+Clone Blocks 155:
+verilog-ethernet/tb/test_ip_demux_64_4.v@42:52
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 156:
+verilog-ethernet/rtl/ip_eth_tx.v@130:140
+reg [7:0] last_word_data_reg = 0;
+
+reg [5:0] ip_dscp_reg = 0;
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+
+Clone Blocks 157:
+verilog-ethernet/tb/test_ip_mux_4.v@64:74
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+reg [7:0] input_1_ip_payload_tdata = 0;
+
+Clone Blocks 158:
+verilog-ethernet/rtl/ip_eth_tx.v@131:141
+
+reg [5:0] ip_dscp_reg = 0;
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+Clone Blocks 159:
+verilog-ethernet/rtl/udp_ip_tx_64.v@172:182
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+
+Clone Blocks 160:
+verilog-ethernet/tb/test_ip_mux_64_4.v@64:74
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+
+Clone Blocks 161:
+verilog-ethernet/rtl/ip_eth_rx_64.v@152:162
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+
+Clone Blocks 162:
+verilog-ethernet/tb/test_ip_mux_4.v@105:115
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+
+Clone Blocks 163:
+verilog-ethernet/tb/test_ip_mux_4.v@106:116
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+reg [7:0] input_3_ip_payload_tdata = 0;
+
+Clone Blocks 164:
+verilog-ethernet/tb/test_udp_mux_64_4.v@43:53
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+reg [15:0] input_0_udp_source_port = 0;
+
+Clone Blocks 165:
+verilog-ethernet/rtl/udp_ip_rx_64.v@168:178
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+
+Clone Blocks 166:
+verilog-ethernet/tb/test_udp_ip_tx.v@40:50
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 167:
+verilog-ethernet/tb/test_udp_64.v@101:111
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 168:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@40:50
+reg [3:0] input_0_ip_version = 0;
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+
+Clone Blocks 169:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@120:130
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+
+Clone Blocks 170:
+verilog-ethernet/rtl/udp_ip_rx_64.v@162:172
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+
+Clone Blocks 171:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@107:117
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+
+Clone Blocks 172:
+verilog-ethernet/rtl/udp_ip_rx.v@171:181
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+Clone Blocks 173:
+verilog-ethernet/tb/test_ip_64.v@91:101
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [63:0] output_ip_payload_tdata;
+
+Clone Blocks 174:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@145:155
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [63:0] output_ip_payload_tdata;
+
+Clone Blocks 175:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@82:92
+reg [3:0] input_2_ip_version = 0;
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+
+Clone Blocks 176:
+verilog-ethernet/tb/test_udp_mux_4.v@118:128
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+reg [15:0] input_3_udp_source_port = 0;
+
+Clone Blocks 177:
+verilog-ethernet/rtl/ip_eth_rx_64.v@161:171
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+reg busy_reg = 0;
+reg error_header_early_termination_reg = 0, error_header_early_termination_next;
+
+Clone Blocks 178:
+verilog-ethernet/tb/test_ip_demux_4.v@41:51
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 179:
+verilog-ethernet/rtl/udp_ip_rx_64.v@172:182
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+
+Clone Blocks 180:
+verilog-ethernet/tb/test_udp_mux_4.v@116:126
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+
+Clone Blocks 181:
+verilog-ethernet/rtl/udp_ip_rx_64.v@169:179
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+
+Clone Blocks 182:
+verilog-ethernet/tb/test_ip_mux_64_4.v@107:117
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+
+Clone Blocks 183:
+verilog-ethernet/tb/test_udp_ip_tx.v@72:82
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 184:
+verilog-ethernet/tb/test_ip_mux_64_4.v@65:75
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+reg [63:0] input_1_ip_payload_tdata = 0;
+
+Clone Blocks 185:
+verilog-ethernet/tb/test_ip_demux_64_4.v@40:50
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+
+Clone Blocks 186:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@40:50
+reg [3:0] input_0_ip_version = 0;
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+
+Clone Blocks 187:
+verilog-ethernet/tb/test_udp_complete.v@115:125
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 188:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@115:125
+reg [3:0] input_3_ip_version = 0;
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+
+Clone Blocks 189:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@118:128
+reg [3:0] input_3_ip_version = 0;
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+
+Clone Blocks 190:
+verilog-ethernet/tb/test_udp_mux_64_4.v@69:79
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+reg [15:0] input_1_udp_source_port = 0;
+
+Clone Blocks 191:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@159:169
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 192:
+verilog-ethernet/tb/test_udp_mux_64_4.v@42:52
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+
+Clone Blocks 193:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@104:114
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+
+Clone Blocks 194:
+verilog-ethernet/tb/test_udp_mux_4.v@158:168
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 195:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@41:51
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+
+Clone Blocks 196:
+verilog-ethernet/rtl/udp_ip_rx_64.v@160:170
+
+reg output_udp_hdr_valid_reg = 0, output_udp_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+
+Clone Blocks 197:
+verilog-ethernet/rtl/udp_ip_rx_64.v@170:180
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+
+Clone Blocks 198:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@40:50
+reg [3:0] input_0_ip_version = 0;
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+
+Clone Blocks 199:
+verilog-ethernet/tb/test_udp_mux_64_4.v@120:130
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+
+Clone Blocks 200:
+verilog-ethernet/rtl/udp_ip_rx.v@169:179
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+
+Clone Blocks 201:
+verilog-ethernet/tb/test_udp_mux_64_4.v@163:173
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 202:
+verilog-ethernet/rtl/ip_eth_rx.v@163:173
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+
+Clone Blocks 203:
+verilog-ethernet/rtl/udp_ip_tx_64.v@166:176
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+
+Clone Blocks 204:
+verilog-ethernet/tb/test_udp_mux_4.v@115:125
+reg [3:0] input_3_ip_version = 0;
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+
+Clone Blocks 205:
+verilog-ethernet/tb/test_udp_mux_64_4.v@121:131
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+reg [15:0] input_3_udp_source_port = 0;
+
+Clone Blocks 206:
+verilog-ethernet/tb/test_udp_mux_64_4.v@41:51
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+
+Clone Blocks 207:
+verilog-ethernet/rtl/ip_eth_rx.v@168:178
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+
+Clone Blocks 208:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@68:78
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+
+Clone Blocks 209:
+verilog-ethernet/tb/test_ip_complete_64.v@97:107
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 210:
+verilog-ethernet/tb/test_udp_ip_tx_64.v@42:52
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [15:0] input_udp_source_port = 0;
+
+Clone Blocks 211:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@138:148
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 212:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@40:50
+reg [3:0] input_0_ip_version = 0;
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+
+Clone Blocks 213:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@139:149
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 214:
+verilog-ethernet/tb/test_ip_mux_64_4.v@42:52
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+
+Clone Blocks 215:
+verilog-ethernet/tb/test_udp_mux_4.v@91:101
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+
+Clone Blocks 216:
+verilog-ethernet/tb/test_ip_complete.v@94:104
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 217:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@66:76
+reg [3:0] input_1_ip_version = 0;
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+
+Clone Blocks 218:
+verilog-ethernet/rtl/udp_ip_rx.v@164:174
+
+reg output_udp_hdr_valid_reg = 0, output_udp_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+
+Clone Blocks 219:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@92:102
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+
+Clone Blocks 220:
+verilog-ethernet/tb/test_ip_complete.v@96:106
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 221:
+verilog-ethernet/tb/test_udp_mux_64_4.v@162:172
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 222:
+verilog-ethernet/tb/test_ip_mux_4.v@143:153
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 223:
+verilog-ethernet/rtl/udp_ip_rx.v@167:177
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+
+Clone Blocks 224:
+verilog-ethernet/tb/test_udp_mux_64_4.v@119:129
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+
+Clone Blocks 225:
+verilog-ethernet/tb/test_udp_ip_tx.v@43:53
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [15:0] input_udp_source_port = 0;
+reg [15:0] input_udp_dest_port = 0;
+
+Clone Blocks 226:
+verilog-ethernet/tb/test_udp_ip_rx_64.v@41:51
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 227:
+verilog-ethernet/tb/test_udp_mux_4.v@92:102
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+
+Clone Blocks 228:
+verilog-ethernet/tb/test_ip_mux_4.v@63:73
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+
+Clone Blocks 229:
+verilog-ethernet/tb/test_udp_ip_tx_64.v@74:84
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [63:0] output_ip_payload_tdata;
+
+Clone Blocks 230:
+verilog-ethernet/tb/test_udp_mux_64_4.v@92:102
+reg [3:0] input_2_ip_version = 0;
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+
+Clone Blocks 231:
+verilog-ethernet/tb/test_ip_mux_4.v@61:71
+reg [3:0] input_1_ip_version = 0;
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+
+Clone Blocks 232:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@63:73
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+
+Clone Blocks 233:
+verilog-ethernet/tb/test_udp_demux_64_4.v@40:50
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+
+Clone Blocks 234:
+verilog-ethernet/rtl/udp_ip_tx.v@169:179
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+
+Clone Blocks 235:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@140:150
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 236:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@84:94
+reg [3:0] input_2_ip_version = 0;
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+
+Clone Blocks 237:
+verilog-ethernet/tb/test_ip_mux_4.v@82:92
+reg [3:0] input_2_ip_version = 0;
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+
+Clone Blocks 238:
+verilog-ethernet/rtl/ip_eth_tx.v@132:142
+reg [5:0] ip_dscp_reg = 0;
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+
+Clone Blocks 239:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@41:51
+reg [3:0] input_0_ip_ihl = 0;
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+
+Clone Blocks 240:
+verilog-ethernet/tb/test_ip_mux_4.v@141:151
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 241:
+verilog-ethernet/tb/test_ip_eth_rx.v@57:67
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [7:0] output_ip_payload_tdata;
+
+Clone Blocks 242:
+verilog-ethernet/tb/test_udp_ip_tx_64.v@71:81
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 243:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@156:166
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 244:
+verilog-ethernet/tb/test_udp.v@46:56
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 245:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@65:75
+reg [3:0] input_1_ip_version = 0;
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+
+Clone Blocks 246:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@83:93
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+
+Clone Blocks 247:
+verilog-ethernet/tb/test_udp_demux_4.v@40:50
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+
+Clone Blocks 248:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@42:52
+reg [5:0] input_0_ip_dscp = 0;
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+
+Clone Blocks 249:
+verilog-ethernet/tb/test_ip_mux_64_4.v@109:119
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+reg [63:0] input_3_ip_payload_tdata = 0;
+
+Clone Blocks 250:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@92:102
+reg [3:0] input_2_ip_version = 0;
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+
+Clone Blocks 251:
+verilog-ethernet/rtl/udp_ip_tx_64.v@170:180
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+
+Clone Blocks 252:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@43:53
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+reg [15:0] input_0_udp_source_port = 0;
+
+Clone Blocks 253:
+verilog-ethernet/rtl/ip_eth_rx_64.v@157:167
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+
+Clone Blocks 254:
+verilog-ethernet/tb/test_udp_demux_4.v@43:53
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+reg [15:0] input_udp_source_port = 0;
+
+Clone Blocks 255:
+verilog-ethernet/rtl/ip_eth_tx_64.v@137:147
+reg [63:0] last_word_data_reg = 0;
+reg [7:0] last_word_keep_reg = 0;
+
+reg [5:0] ip_dscp_reg = 0;
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+
+Clone Blocks 256:
+verilog-ethernet/tb/test_udp_mux_64_4.v@95:105
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+reg [15:0] input_2_udp_source_port = 0;
+
+Clone Blocks 257:
+verilog-ethernet/tb/test_udp_ip_rx.v@67:77
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 258:
+verilog-ethernet/rtl/udp_ip_tx_64.v@167:177
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+
+Clone Blocks 259:
+verilog-ethernet/tb/test_ip_mux_64_4.v@87:97
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+reg [63:0] input_2_ip_payload_tdata = 0;
+
+Clone Blocks 260:
+verilog-ethernet/rtl/ip_eth_rx.v@165:175
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+
+Clone Blocks 261:
+verilog-ethernet/tb/test_ip_complete_64.v@100:110
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [63:0] output_ip_payload_tdata;
+
+Clone Blocks 262:
+verilog-ethernet/tb/test_udp_complete_64.v@122:132
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [63:0] output_ip_payload_tdata;
+
+Clone Blocks 263:
+verilog-ethernet/tb/test_udp_mux_4.v@65:75
+reg [3:0] input_1_ip_version = 0;
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+
+Clone Blocks 264:
+verilog-ethernet/tb/test_udp_ip_rx.v@69:79
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 265:
+verilog-ethernet/tb/test_udp_ip_rx_64.v@42:52
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 266:
+verilog-ethernet/tb/test_ip_mux_4.v@85:95
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+reg [7:0] input_2_ip_payload_tdata = 0;
+
+Clone Blocks 267:
+verilog-ethernet/tb/test_ip_mux_4.v@43:53
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+reg [7:0] input_0_ip_payload_tdata = 0;
+
+Clone Blocks 268:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@68:78
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+reg [15:0] input_1_udp_source_port = 0;
+
+Clone Blocks 269:
+verilog-ethernet/tb/test_udp_mux_64_4.v@66:76
+reg [3:0] input_1_ip_version = 0;
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+
+Clone Blocks 270:
+verilog-ethernet/tb/test_udp_mux_4.v@159:169
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 271:
+verilog-ethernet/rtl/udp_ip_rx_64.v@161:171
+reg output_udp_hdr_valid_reg = 0, output_udp_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+
+Clone Blocks 272:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@93:103
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+
+Clone Blocks 273:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@65:75
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+reg [63:0] input_1_ip_payload_tdata = 0;
+
+Clone Blocks 274:
+verilog-ethernet/tb/test_udp_mux_4.v@90:100
+reg [3:0] input_2_ip_version = 0;
+reg [3:0] input_2_ip_ihl = 0;
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+
+Clone Blocks 275:
+verilog-ethernet/tb/test_udp.v@45:55
+reg [3:0] input_ip_version = 0;
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+
+Clone Blocks 276:
+verilog-ethernet/rtl/udp_ip_rx.v@174:184
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+
+Clone Blocks 277:
+verilog-ethernet/rtl/ip_eth_tx_64.v@141:151
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+
+Clone Blocks 278:
+verilog-ethernet/tb/test_udp_64.v@104:114
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [63:0] output_ip_payload_tdata;
+
+Clone Blocks 279:
+verilog-ethernet/rtl/ip_eth_tx_64.v@138:148
+reg [7:0] last_word_keep_reg = 0;
+
+reg [5:0] ip_dscp_reg = 0;
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+
+Clone Blocks 280:
+verilog-ethernet/tb/test_udp_64.v@103:113
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 281:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@160:170
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 282:
+verilog-ethernet/rtl/ip_eth_tx.v@133:143
+reg [1:0] ip_ecn_reg = 0;
+reg [15:0] ip_length_reg = 0;
+reg [15:0] ip_identification_reg = 0;
+reg [2:0] ip_flags_reg = 0;
+reg [12:0] ip_fragment_offset_reg = 0;
+reg [7:0] ip_ttl_reg = 0;
+reg [7:0] ip_protocol_reg = 0;
+reg [31:0] ip_source_ip_reg = 0;
+reg [31:0] ip_dest_ip_reg = 0;
+
+reg input_ip_hdr_ready_reg = 0, input_ip_hdr_ready_next;
+
+Clone Blocks 283:
+verilog-ethernet/rtl/ip_eth_rx.v@160:170
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+
+Clone Blocks 284:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@117:127
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+
+Clone Blocks 285:
+verilog-ethernet/rtl/udp_ip_tx_64.v@171:181
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+Clone Blocks 286:
+verilog-ethernet/rtl/ip_eth_rx_64.v@160:170
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+reg busy_reg = 0;
+
+Clone Blocks 287:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@63:73
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+
+Clone Blocks 288:
+verilog-ethernet/tb/test_udp_mux_4.v@117:127
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+
+Clone Blocks 289:
+verilog-ethernet/tb/test_ip_mux_64_4.v@145:155
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 290:
+verilog-ethernet/rtl/ip_eth_rx_64.v@156:166
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+
+Clone Blocks 291:
+verilog-ethernet/tb/test_ip.v@85:95
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 292:
+verilog-ethernet/tb/test_udp_arb_mux_64_4.v@94:104
+reg [5:0] input_2_ip_dscp = 0;
+reg [1:0] input_2_ip_ecn = 0;
+reg [15:0] input_2_ip_length = 0;
+reg [15:0] input_2_ip_identification = 0;
+reg [2:0] input_2_ip_flags = 0;
+reg [12:0] input_2_ip_fragment_offset = 0;
+reg [7:0] input_2_ip_ttl = 0;
+reg [7:0] input_2_ip_protocol = 0;
+reg [15:0] input_2_ip_header_checksum = 0;
+reg [31:0] input_2_ip_source_ip = 0;
+reg [31:0] input_2_ip_dest_ip = 0;
+
+Clone Blocks 293:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@66:76
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+
+Clone Blocks 294:
+verilog-ethernet/rtl/ip_eth_rx_64.v@153:163
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+
+Clone Blocks 295:
+verilog-ethernet/tb/test_udp_ip_rx_64.v@69:79
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 296:
+verilog-ethernet/tb/test_udp_ip_tx_64.v@72:82
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 297:
+verilog-ethernet/tb/test_ip_mux_64_4.v@108:118
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+reg [31:0] input_3_ip_dest_ip = 0;
+
+Clone Blocks 298:
+verilog-ethernet/tb/test_udp_complete.v@116:126
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 299:
+verilog-ethernet/tb/test_udp_complete_64.v@120:130
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 300:
+verilog-ethernet/rtl/ip_eth_rx_64.v@155:165
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+
+Clone Blocks 301:
+verilog-ethernet/rtl/ip_eth_rx_64.v@154:164
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+
+Clone Blocks 302:
+verilog-ethernet/tb/test_ip_arb_mux_64_4.v@62:72
+reg [3:0] input_1_ip_version = 0;
+reg [3:0] input_1_ip_ihl = 0;
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+
+Clone Blocks 303:
+verilog-ethernet/rtl/udp_ip_tx.v@170:180
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+
+reg busy_reg = 0;
+
+Clone Blocks 304:
+verilog-ethernet/rtl/udp_ip_tx.v@162:172
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+
+Clone Blocks 305:
+verilog-ethernet/rtl/udp_ip_rx.v@176:186
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+reg [31:0] output_ip_dest_ip_reg = 0;
+reg [15:0] output_udp_source_port_reg = 0;
+reg [15:0] output_udp_dest_port_reg = 0;
+reg [15:0] output_udp_length_reg = 0;
+reg [15:0] output_udp_checksum_reg = 0;
+
+
+Clone Blocks 306:
+verilog-ethernet/tb/test_udp_demux_4.v@41:51
+reg [3:0] input_ip_ihl = 0;
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+
+Clone Blocks 307:
+verilog-ethernet/rtl/udp_ip_rx.v@168:178
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+
+Clone Blocks 308:
+verilog-ethernet/rtl/udp_ip_tx_64.v@168:178
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+
+Clone Blocks 309:
+verilog-ethernet/tb/test_ip_mux_4.v@144:154
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [7:0] output_ip_payload_tdata;
+
+Clone Blocks 310:
+verilog-ethernet/rtl/udp_ip_tx_64.v@169:179
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+
+Clone Blocks 311:
+verilog-ethernet/rtl/ip_eth_rx_64.v@151:161
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+
+Clone Blocks 312:
+verilog-ethernet/tb/test_udp_complete.v@118:128
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+wire [7:0] output_ip_payload_tdata;
+
+Clone Blocks 313:
+verilog-ethernet/tb/test_ip_64.v@89:99
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+
+Clone Blocks 314:
+verilog-ethernet/tb/test_ip_mux_4.v@104:114
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+reg [31:0] input_3_ip_source_ip = 0;
+
+Clone Blocks 315:
+verilog-ethernet/tb/test_udp_64.v@47:57
+reg [5:0] input_ip_dscp = 0;
+reg [1:0] input_ip_ecn = 0;
+reg [15:0] input_ip_length = 0;
+reg [15:0] input_ip_identification = 0;
+reg [2:0] input_ip_flags = 0;
+reg [12:0] input_ip_fragment_offset = 0;
+reg [7:0] input_ip_ttl = 0;
+reg [7:0] input_ip_protocol = 0;
+reg [15:0] input_ip_header_checksum = 0;
+reg [31:0] input_ip_source_ip = 0;
+reg [31:0] input_ip_dest_ip = 0;
+
+Clone Blocks 316:
+verilog-ethernet/rtl/udp_ip_tx_64.v@164:174
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+
+Clone Blocks 317:
+verilog-ethernet/rtl/ip_eth_rx.v@161:171
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0;
+reg [47:0] output_eth_src_mac_reg = 0;
+reg [15:0] output_eth_type_reg = 0;
+reg [3:0] output_ip_version_reg = 0;
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+
+Clone Blocks 318:
+verilog-ethernet/tb/test_ip_mux_64_4.v@147:157
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 319:
+verilog-ethernet/tb/test_udp.v@99:109
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 320:
+verilog-ethernet/tb/test_udp_arb_mux_4.v@154:164
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+
+Clone Blocks 321:
+verilog-ethernet/tb/test_udp_mux_64_4.v@68:78
+reg [5:0] input_1_ip_dscp = 0;
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+
+Clone Blocks 322:
+verilog-ethernet/tb/test_ip_mux_4.v@103:113
+reg [3:0] input_3_ip_version = 0;
+reg [3:0] input_3_ip_ihl = 0;
+reg [5:0] input_3_ip_dscp = 0;
+reg [1:0] input_3_ip_ecn = 0;
+reg [15:0] input_3_ip_length = 0;
+reg [15:0] input_3_ip_identification = 0;
+reg [2:0] input_3_ip_flags = 0;
+reg [12:0] input_3_ip_fragment_offset = 0;
+reg [7:0] input_3_ip_ttl = 0;
+reg [7:0] input_3_ip_protocol = 0;
+reg [15:0] input_3_ip_header_checksum = 0;
+
+Clone Blocks 323:
+verilog-ethernet/tb/test_udp_mux_4.v@68:78
+reg [1:0] input_1_ip_ecn = 0;
+reg [15:0] input_1_ip_length = 0;
+reg [15:0] input_1_ip_identification = 0;
+reg [2:0] input_1_ip_flags = 0;
+reg [12:0] input_1_ip_fragment_offset = 0;
+reg [7:0] input_1_ip_ttl = 0;
+reg [7:0] input_1_ip_protocol = 0;
+reg [15:0] input_1_ip_header_checksum = 0;
+reg [31:0] input_1_ip_source_ip = 0;
+reg [31:0] input_1_ip_dest_ip = 0;
+reg [15:0] input_1_udp_source_port = 0;
+
+Clone Blocks 324:
+verilog-ethernet/tb/test_udp_ip_rx_64.v@70:80
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 325:
+verilog-ethernet/tb/test_udp_complete_64.v@121:131
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+wire [31:0] output_ip_source_ip;
+wire [31:0] output_ip_dest_ip;
+
+Clone Blocks 326:
+verilog-ethernet/tb/test_ip_arb_mux_4.v@43:53
+reg [1:0] input_0_ip_ecn = 0;
+reg [15:0] input_0_ip_length = 0;
+reg [15:0] input_0_ip_identification = 0;
+reg [2:0] input_0_ip_flags = 0;
+reg [12:0] input_0_ip_fragment_offset = 0;
+reg [7:0] input_0_ip_ttl = 0;
+reg [7:0] input_0_ip_protocol = 0;
+reg [15:0] input_0_ip_header_checksum = 0;
+reg [31:0] input_0_ip_source_ip = 0;
+reg [31:0] input_0_ip_dest_ip = 0;
+reg [7:0] input_0_ip_payload_tdata = 0;
+
+Clone Blocks 327:
+verilog-ethernet/rtl/ip_eth_rx.v@166:176
+reg [3:0] output_ip_ihl_reg = 0;
+reg [5:0] output_ip_dscp_reg = 0;
+reg [1:0] output_ip_ecn_reg = 0;
+reg [15:0] output_ip_length_reg = 0;
+reg [15:0] output_ip_identification_reg = 0;
+reg [2:0] output_ip_flags_reg = 0;
+reg [12:0] output_ip_fragment_offset_reg = 0;
+reg [7:0] output_ip_ttl_reg = 0;
+reg [7:0] output_ip_protocol_reg = 0;
+reg [15:0] output_ip_header_checksum_reg = 0;
+reg [31:0] output_ip_source_ip_reg = 0;
+
+Clone Blocks 328:
+verilog-ethernet/tb/test_ip_eth_rx.v@54:64
+wire [3:0] output_ip_version;
+wire [3:0] output_ip_ihl;
+wire [5:0] output_ip_dscp;
+wire [1:0] output_ip_ecn;
+wire [15:0] output_ip_length;
+wire [15:0] output_ip_identification;
+wire [2:0] output_ip_flags;
+wire [12:0] output_ip_fragment_offset;
+wire [7:0] output_ip_ttl;
+wire [7:0] output_ip_protocol;
+wire [15:0] output_ip_header_checksum;
+

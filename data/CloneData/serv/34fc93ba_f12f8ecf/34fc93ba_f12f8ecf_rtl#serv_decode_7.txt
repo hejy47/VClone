@@ -1,0 +1,17 @@
+Source Block: serv/rtl/serv_decode.v@94:104@HdlStmAssign
+                       (opcode != OP_STORE) &
+                       (opcode != OP_BRANCH);
+
+   assign o_rf_rs_en = cnt_en;
+
+   assign o_alu_en = cnt_en;
+
+   assign o_alu_init = (state == INIT);
+
+   assign o_alu_sub = (opcode == OP_OP) ? signbit /*    ? 1'b1*/ :
+                      ((opcode == OP_BRANCH) & (o_funct3 == 3'b100)) ? 1'b1 :
+
+Diff Content:
++ 99    assign o_ctrl_en = cnt_en;
+
+Clone Blocks:

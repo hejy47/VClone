@@ -1,0 +1,46 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v@81:91@HdlIdDef
+);
+
+  // Number of samples per channel that are processed in parallel.
+  localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
+  localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
+  localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
+
+  localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
+
+  wire [NUM_CHANNELS-1:0] dfmt_enable_s;
+  wire [NUM_CHANNELS-1:0] dfmt_sign_extend_s;
+
+Diff Content:
+- 86   localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
++ 86   localparam DMA_DATA_WIDTH = BITS_PER_SAMPLE * DATA_PATH_WIDTH * NUM_CHANNELS;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v@80:90
+  output [31:0] s_axi_rdata
+);
+
+  // Number of samples per channel that are processed in parallel.
+  localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
+  localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
+  localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
+
+  localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
+
+  wire [NUM_CHANNELS-1:0] dfmt_enable_s;
+
+Clone Blocks 2:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v@83:93
+  // Number of samples per channel that are processed in parallel.
+  localparam DATA_PATH_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES / NUM_CHANNELS / BITS_PER_SAMPLE;
+  localparam LINK_DATA_WIDTH = NUM_LANES * OCTETS_PER_BEAT * 8;
+  localparam DMA_DATA_WIDTH = 16 * DATA_PATH_WIDTH * NUM_CHANNELS;
+
+  localparam BYTES_PER_FRAME = (NUM_CHANNELS * BITS_PER_SAMPLE * SAMPLES_PER_FRAME) / ( 8 * NUM_LANES);
+
+  wire [NUM_CHANNELS-1:0] dfmt_enable_s;
+  wire [NUM_CHANNELS-1:0] dfmt_sign_extend_s;
+  wire [NUM_CHANNELS-1:0] dfmt_type_s;
+
+

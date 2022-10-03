@@ -1,0 +1,18 @@
+Source Block: hdl/library/axi_fmcadc5_sync/axi_fmcadc5_sync_calcor.v@107:117@HdlStmAssign
+ 
+  genvar n;
+
+  // offset & gain
+ 
+  assign rx_cor_enable = rx_cor_enable_int;
+
+  always @(posedge rx_clk) begin
+    rx_cor_enable_int = rx_enable_0 & rx_enable_1;
+  end
+
+
+Diff Content:
+- 112   assign rx_cor_enable = rx_cor_enable_int;
++ 112   assign rx_enable = rx_enable_int;
+
+Clone Blocks:

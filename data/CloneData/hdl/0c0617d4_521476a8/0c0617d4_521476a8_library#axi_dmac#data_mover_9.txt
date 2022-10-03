@@ -1,0 +1,73 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@92:102@HdlIdDef
+reg [ID_WIDTH-1:0] id = 'h00;
+reg [ID_WIDTH-1:0] id_next = 'h00;
+
+reg pending_burst = 1'b0;
+reg active = 1'b0;
+reg last_eot = 1'b0;
+reg last_non_eot = 1'b0;
+
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+
+Diff Content:
+- 97 reg last_eot = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/data_mover.v@91:101
+reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter_minus_one = 'h0;
+reg [ID_WIDTH-1:0] id = 'h00;
+reg [ID_WIDTH-1:0] id_next = 'h00;
+
+reg pending_burst = 1'b0;
+reg active = 1'b0;
+reg last_eot = 1'b0;
+reg last_non_eot = 1'b0;
+
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/data_mover.v@93:103
+reg [ID_WIDTH-1:0] id_next = 'h00;
+
+reg pending_burst = 1'b0;
+reg active = 1'b0;
+reg last_eot = 1'b0;
+reg last_non_eot = 1'b0;
+
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+wire s_axi_sync_valid = has_sync & s_axi_valid;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/data_mover.v@95:105
+reg pending_burst = 1'b0;
+reg active = 1'b0;
+reg last_eot = 1'b0;
+reg last_non_eot = 1'b0;
+
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+wire s_axi_sync_valid = has_sync & s_axi_valid;
+wire transfer_abort_s;
+
+
+Clone Blocks 4:
+hdl/library/axi_dmac/data_mover.v@90:100
+reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter_minus_one = 'h0;
+reg [ID_WIDTH-1:0] id = 'h00;
+reg [ID_WIDTH-1:0] id_next = 'h00;
+
+reg pending_burst = 1'b0;
+reg active = 1'b0;
+reg last_eot = 1'b0;
+reg last_non_eot = 1'b0;
+
+reg needs_sync = 1'b0;
+

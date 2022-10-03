@@ -1,0 +1,33 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@136:146@HdlStmAssign
+  end
+
+  // read is non-destructive
+
+  assign s_wready_s = (S_READY_ENABLE == 0) ? 1'b1 : s_wready;
+  assign fifo_rd = ~fifo_rempty & s_wready_s;
+
+  always @(posedge s_clk) begin
+    s_wr_int <= fifo_rd;
+  end
+  
+
+Diff Content:
+- 141   assign fifo_rd = ~fifo_rempty & s_wready_s;
++ 141   assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
++ 141   assign fifo_rd = ~fifo_rempty & dma_wready_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_wfifo/util_wfifo.v@135:145
+    end
+  end
+
+  // read is non-destructive
+
+  assign s_wready_s = (S_READY_ENABLE == 0) ? 1'b1 : s_wready;
+  assign fifo_rd = ~fifo_rempty & s_wready_s;
+
+  always @(posedge s_clk) begin
+    s_wr_int <= fifo_rd;
+  end
+

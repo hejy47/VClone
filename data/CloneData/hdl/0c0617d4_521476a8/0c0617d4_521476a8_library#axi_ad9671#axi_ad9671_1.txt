@@ -1,0 +1,43 @@
+Source Block: hdl/library/axi_ad9671/axi_ad9671.v@194:227@HdlStmFor
+
+  // channels
+
+  genvar n;
+  generate
+  for (n = 0; n < 8; n = n + 1) begin: g_channel
+  axi_ad9671_channel #(.CHANNEL_ID(n)) i_channel (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_valid (adc_valid_s),
+    .adc_data (adc_data_s[n]),
+    .adc_or (adc_or_s[n]),
+    .adc_dfmt_valid (adc_valid[n]),
+    .adc_dfmt_data (adc_data[(n*16)+15:(n*16)]),
+    .adc_enable (adc_enable[n]),
+    .up_adc_pn_err (up_adc_pn_err_s[n]),
+    .up_adc_pn_oos (up_adc_pn_oos_s[n]),
+    .up_adc_or (up_adc_or_s[n]),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[n]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s[n]),
+    .up_rack (up_rack_s[n]));
+  end
+  endgenerate
+
+  // common processor control
+
+  up_adc_common #(
+
+Diff Content:
+- 200   axi_ad9671_channel #(.CHANNEL_ID(n)) i_channel (
++ 200   axi_ad9671_channel #(
++ 200     .CHANNEL_ID(n)
++ 200   ) i_channel (
+
+Clone Blocks:

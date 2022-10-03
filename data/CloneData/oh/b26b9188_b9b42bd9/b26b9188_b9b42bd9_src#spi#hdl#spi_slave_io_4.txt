@@ -1,0 +1,17 @@
+Source Block: oh/src/spi/hdl/spi_slave_io.v@94:104@HdlStmAssign
+   
+   //#################################
+   //# SPI RX SHIFT REGISTER
+   //#################################
+
+   assign rx_shift = ~ss & spi_en;
+   
+   oh_ser2par #(.PW(8),
+		.SW(1))
+   rx_ser2par (// Outputs
+	       .dout	 (rx_data[7:0]),
+
+Diff Content:
+- 99    assign rx_shift = ~ss & spi_en;
+
+Clone Blocks:

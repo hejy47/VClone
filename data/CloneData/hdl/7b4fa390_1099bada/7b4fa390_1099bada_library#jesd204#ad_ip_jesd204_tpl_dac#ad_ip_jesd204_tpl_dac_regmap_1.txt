@@ -1,0 +1,22 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@186:198@HdlIdDef
+    end
+  end
+
+  // dac common processor interface
+  //
+  localparam CONFIG = (XBAR_ENABLE << 10) ||
+                      (DATAPATH_DISABLE << 6) ||
+                      (IQCORRECTION_DISABLE << 0);
+
+  up_dac_common #(
+    .COMMON_ID(6'h0),
+    .ID (ID),
+    .CONFIG(CONFIG),
+
+Diff Content:
+- 191   localparam CONFIG = (XBAR_ENABLE << 10) ||
+- 192                       (DATAPATH_DISABLE << 6) ||
++ 192   localparam CONFIG = (XBAR_ENABLE << 10) |
++ 192                       (DATAPATH_DISABLE << 6) |
+
+Clone Blocks:

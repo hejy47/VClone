@@ -1,0 +1,26 @@
+Source Block: oh/src/spi/hdl/spi_slave_io.v@178:192@HdlStmProcess
+		      .in   (ss_sync));
+
+   assign spi_fetch = ss_pulse & (command_reg[7:6]==`SPI_FETCH);
+   
+   // pipeleining and holding pulse if there is wait
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       access_out <= 1'b0;   
+     else if(~wait_in)
+       access_out <= spi_fetch;
+
+endmodule // spi_slave_io
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+// End:
+
+Diff Content:
+- 185        access_out <= 1'b0;   
+- 187        access_out <= spi_fetch;
++ 185        access_reg <= 1'b0;   
++ 187        access_reg <= spi_fetch;
++ 187    assign access_out = access_reg;
++ 187 `endif
+
+Clone Blocks:

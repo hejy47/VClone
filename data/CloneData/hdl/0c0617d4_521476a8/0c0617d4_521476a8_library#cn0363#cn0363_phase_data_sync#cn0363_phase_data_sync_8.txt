@@ -1,0 +1,17 @@
+Source Block: hdl/library/cn0363/cn0363_phase_data_sync/cn0363_phase_data_sync.v@72:82@HdlStmAssign
+wire sync;
+
+/* The ADC will do conversions regardless of whether the pipeline is ready or
+   not. So we'll always accept new samples and assert overflow if necessary if
+   the pipeline is not ready. */
+assign s_axis_sample_ready = 1'b1;
+
+// Conversion from offset binary to signed on data
+assign m_axis_sample_data = {~sample_hold[23],sample_hold[22:0]};
+assign m_axis_phase_data = phase_hold;
+
+
+Diff Content:
+- 77 assign s_axis_sample_ready = 1'b1;
+
+Clone Blocks:

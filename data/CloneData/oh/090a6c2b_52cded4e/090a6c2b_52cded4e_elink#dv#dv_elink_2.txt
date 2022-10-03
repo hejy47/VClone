@@ -1,0 +1,46 @@
+Source Block: oh/elink/dv/dv_elink.v@441:451@HdlStmAssign
+   
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+                                                        elink1_rxrd_packet[PW-1:0];
+
+   assign elink1_rxrd_wait = emem_wait | elink1_rxwr_access;
+   assign elink1_rxwr_wait = 1'b0; //no wait on write
+   
+   /*ememory AUTO_TEMPLATE ( 
+                        // Outputs
+                        .\(.*\)_out       (elink1_txrr_\1[]),
+                        .\(.*\)_in        (emem_\1[]),
+
+Diff Content:
+- 446    assign elink1_rxwr_wait = 1'b0; //no wait on write
++ 446    assign elink1_rxwr_wait = elink1_random_wait;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/dv_elink.v@440:450
+				   (elink1_rxrd_access & ~(elink1_rxrd_packet[39:28]==elink1.ID));
+   
+   assign  emem_packet[PW-1:0]   = elink1_rxwr_access ? elink1_rxwr_packet[PW-1:0]:
+                                                        elink1_rxrd_packet[PW-1:0];
+
+   assign elink1_rxrd_wait = emem_wait | elink1_rxwr_access;
+   assign elink1_rxwr_wait = 1'b0; //no wait on write
+   
+   /*ememory AUTO_TEMPLATE ( 
+                        // Outputs
+                        .\(.*\)_out       (elink1_txrr_\1[]),
+
+Clone Blocks 2:
+oh/elink/dv/dv_elink.v@744:754
+   
+   assign  emem2_packet[PW-1:0]   = txwr_access ? txwr_packet[PW-1:0]:
+                                                  txrd_packet[PW-1:0];
+
+   assign esaxi_rd_wait = emem2_wait | txwr_access;
+   assign esaxi_wr_wait = 1'b0; //no wait on write
+   
+   /*ememory AUTO_TEMPLATE ( 
+                        // Outputs
+                        .\(.*\)_out       (elink1_txrr_\1[]),
+                        .\(.*\)_in        (emem_\1[]),
+

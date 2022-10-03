@@ -1,0 +1,43 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4007:4018@HdlStmAssign
+       rd_addr_traninfo0_tlc[FAD-1:0] <= rd_addr_traninfo0_next_tlc[FAD-1:0];
+
+   assign rd_addr_traninfo1_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b01};
+
+   assign rd_addr_traninfo2_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b10};
+
+   //####################################################
+   //# Synchronization between rd/wr domains
+   //####################################################
+
+
+Diff Content:
+- 4012    assign rd_addr_traninfo2_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+- 4013                                            {{(FAD-2){1'b0}},2'b10};
++ 4013    always @ (posedge txo_lclk or posedge reset)
++ 4013      if(reset)
++ 4013        grants_reg[3:0] <= 4'b0000;
++ 4013      else
++ 4013        grants_reg[3:0] <= grants[3:0];
++ 4013    assign txo_rotate_dis[3:0] = {c3_txo_rotate_dis,
++ 4013 				 c2_txo_rotate_dis,
++ 4013 				 c1_txo_rotate_dis,
++ 4013 				 c0_txo_rotate_dis};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4004:4015
+     if(reset)
+       rd_addr_traninfo0_tlc[FAD-1:0] <= {(FAD){1'b0}};
+     else if(check_next_dstaddr_tlc)
+       rd_addr_traninfo0_tlc[FAD-1:0] <= rd_addr_traninfo0_next_tlc[FAD-1:0];
+
+   assign rd_addr_traninfo1_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b01};
+
+   assign rd_addr_traninfo2_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b10};
+
+   //####################################################
+

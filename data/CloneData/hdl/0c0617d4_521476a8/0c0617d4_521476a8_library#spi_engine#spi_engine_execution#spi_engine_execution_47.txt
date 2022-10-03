@@ -1,0 +1,61 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@141:151@HdlIdDef
+reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+
+reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
+
+wire [1:0] inst = cmd[13:12];
+wire [1:0] inst_d1 = cmd_d1[13:12];
+
+wire exec_cmd = cmd_ready && cmd_valid;
+wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
+
+wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
+
+Diff Content:
+- 146 wire [1:0] inst_d1 = cmd_d1[13:12];
++ 146   wire exec_cmd = cmd_ready && cmd_valid;
++ 146   wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@138:148
+reg sdo_enabled = 1'b0;
+reg sdi_enabled = 1'b0;
+
+reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+
+reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
+
+wire [1:0] inst = cmd[13:12];
+wire [1:0] inst_d1 = cmd_d1[13:12];
+
+wire exec_cmd = cmd_ready && cmd_valid;
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@140:150
+
+reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+
+reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
+
+wire [1:0] inst = cmd[13:12];
+wire [1:0] inst_d1 = cmd_d1[13:12];
+
+wire exec_cmd = cmd_ready && cmd_valid;
+wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
+
+
+Clone Blocks 3:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@143:153
+reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
+
+wire [1:0] inst = cmd[13:12];
+wire [1:0] inst_d1 = cmd_d1[13:12];
+
+wire exec_cmd = cmd_ready && cmd_valid;
+wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
+
+wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
+wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
+wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
+

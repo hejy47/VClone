@@ -1,0 +1,51 @@
+Source Block: oh/elink/hdl/esaxi.v@243:280@HdlStmProcess
+	end // else: !if(~s_axi_aresetn)
+     end // always @ (posedge s_axi_aclk )
+   
+	  
+   // capture address & other aw info, update address during cycle
+   always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn)  
+       begin
+          //s_axi_bid          <= 'd0;  // capture for write response
+          axi_awaddr[31:0] <= 32'd0;
+          axi_awsize[2:0]  <= 3'd0;
+          axi_awburst[1:0] <= 2'd0;         
+       end 
+     else 
+       begin	  
+          if( s_axi_awready & s_axi_awvalid ) 
+	    begin	     
+               axi_awaddr[31:0] <= s_axi_awaddr[31:0];
+               axi_awsize       <= s_axi_awsize;  // 0=byte, 1=16b, 2=32b
+               axi_awburst      <= s_axi_awburst; // type, 0=fixed, 1=incr, 2=wrap
+	       
+            end 
+	  else if( s_axi_wvalid & s_axi_wready ) 
+            if( axi_awburst == 2'b01 ) 
+		 begin //incremental burst
+		    // the write address for all the beats in the transaction are increments by the data width.
+		    // note: this should be based on awsize instead to support narrow bursts, i think.
+		    //TODO: BUG!!
+		    axi_awaddr[31:addr_lsb] <= axi_awaddr[31:addr_lsb] + 30'd1;
+		    //awaddr alignedto data width
+		    axi_awaddr[addr_lsb-1:0]  <= {addr_lsb{1'b0}};   		  
+		 end  // both fixed & wrapping types are treated as fixed, no update.
+       end // else: !if(~s_axi_aresetn)
+   
+   
+   //###################################################
+   //#WRITE CHANNEL
+   //###################################################
+
+Diff Content:
+- 267 		 begin //incremental burst
+- 271 		    axi_awaddr[31:addr_lsb] <= axi_awaddr[31:addr_lsb] + 30'd1;
+- 273 		    axi_awaddr[addr_lsb-1:0]  <= {addr_lsb{1'b0}};   		  
+- 274 		 end  // both fixed & wrapping types are treated as fixed, no update.
++ 274 	      begin //incremental burst
++ 274 		 axi_awaddr[31:2] <= axi_awaddr[31:2] + 30'd1;
++ 274 		 axi_awaddr[1:0]  <= 2'b0;   		  
++ 274 	      end  // both fixed & wrapping types are treated as fixed, no update.
+
+Clone Blocks:

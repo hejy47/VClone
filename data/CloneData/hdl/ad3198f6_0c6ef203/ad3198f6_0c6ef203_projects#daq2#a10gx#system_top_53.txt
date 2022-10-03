@@ -1,0 +1,89 @@
+Source Block: hdl/projects/daq2/a10gx/system_top.v@247:268@HdlStmProcess
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  always @(posedge rx_clk) begin
+    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+    dma0_wdata <= { adc0_data_b_s[31:16],
+                    adc0_data_a_s[31:16],
+                    adc0_data_b_s[15: 0],
+                    adc0_data_a_s[15: 0]};
+    dma1_wr <= adc1_enable_a_s & adc1_enable_b_s;
+    dma1_wdata <= { adc1_data_b_s[31:16],
+                    adc1_data_a_s[31:16],
+                    adc1_data_b_s[15: 0],
+                    adc1_data_a_s[15: 0]};
+  end
+
+  sld_signaltap #(
+    .sld_advanced_trigger_entity ("basic,1,"),
+    .sld_data_bits (130),
+    .sld_data_bit_cntr_bits (8),
+
+Diff Content:
+- 252   always @(posedge rx_clk) begin
+- 253     dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+- 254     dma0_wdata <= { adc0_data_b_s[31:16],
+- 255                     adc0_data_a_s[31:16],
+- 256                     adc0_data_b_s[15: 0],
+- 257                     adc0_data_a_s[15: 0]};
+- 258     dma1_wr <= adc1_enable_a_s & adc1_enable_b_s;
+- 259     dma1_wdata <= { adc1_data_b_s[31:16],
+- 260                     adc1_data_a_s[31:16],
+- 261                     adc1_data_b_s[15: 0],
+- 262                     adc1_data_a_s[15: 0]};
+- 263   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcjesdadc1/a5gt/system_top.v@247:268
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  always @(posedge rx_clk) begin
+    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+    dma0_wdata <= { adc0_data_b_s[31:16],
+                    adc0_data_a_s[31:16],
+                    adc0_data_b_s[15: 0],
+                    adc0_data_a_s[15: 0]};
+    dma1_wr <= adc1_enable_a_s & adc1_enable_b_s;
+    dma1_wdata <= { adc1_data_b_s[31:16],
+                    adc1_data_a_s[31:16],
+                    adc1_data_b_s[15: 0],
+                    adc1_data_a_s[15: 0]};
+  end
+
+  sld_signaltap #(
+    .sld_advanced_trigger_entity ("basic,1,"),
+    .sld_data_bits (130),
+    .sld_data_bit_cntr_bits (8),
+
+Clone Blocks 2:
+hdl/projects/fmcjesdadc1/a5soc/system_top.v@276:297
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  always @(posedge rx_clk) begin
+    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+    dma0_wdata <= { adc0_data_b_s[31:16],
+                    adc0_data_a_s[31:16],
+                    adc0_data_b_s[15: 0],
+                    adc0_data_a_s[15: 0]};
+    dma1_wr <= adc1_enable_a_s & adc1_enable_b_s;
+    dma1_wdata <= { adc1_data_b_s[31:16],
+                    adc1_data_a_s[31:16],
+                    adc1_data_b_s[15: 0],
+                    adc1_data_a_s[15: 0]};
+  end
+
+  sld_signaltap #(
+    .sld_advanced_trigger_entity ("basic,1,"),
+    .sld_data_bits (130),
+    .sld_data_bit_cntr_bits (8),
+

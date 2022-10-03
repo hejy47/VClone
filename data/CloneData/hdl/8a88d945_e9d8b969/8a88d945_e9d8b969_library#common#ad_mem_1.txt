@@ -1,0 +1,31 @@
+Source Block: hdl/library/common/ad_mem.v@47:57@HdlIdDef
+
+  input                   clkb,
+  input       [AW:0]      addrb,
+  output  reg [DW:0]      doutb);
+
+  localparam      DW = DATA_WIDTH - 1;
+  localparam      AW = ADDRESS_WIDTH - 1;
+
+  (* ram_style = "block" *)
+  reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
+
+
+Diff Content:
+- 52   localparam      DW = DATA_WIDTH - 1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_mem.v@48:58
+  input                   clkb,
+  input       [AW:0]      addrb,
+  output  reg [DW:0]      doutb);
+
+  localparam      DW = DATA_WIDTH - 1;
+  localparam      AW = ADDRESS_WIDTH - 1;
+
+  (* ram_style = "block" *)
+  reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
+
+  always @(posedge clka) begin
+

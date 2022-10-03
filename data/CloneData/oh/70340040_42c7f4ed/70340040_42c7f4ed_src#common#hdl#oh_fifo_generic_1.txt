@@ -1,0 +1,38 @@
+Source Block: oh/src/common/hdl/oh_fifo_generic.v@54:65@HdlStmAssign
+   assign full     =  (wr_addr[AW-1:0] == rd_addr_sync[AW-1:0]) &
+		      (wr_addr[AW]     != rd_addr_sync[AW]);
+
+
+   // programmable full
+   assign prog_full = (wr_addr_ahead[AW-1:0] == rd_addr_sync[AW-1:0]) &
+		      (wr_addr_ahead[AW]     != rd_addr_sync[AW]);
+
+   //###########################
+   //#write side state machine
+   //###########################
+
+
+Diff Content:
++ 60    oh_rsync wr_rsync (.nrst_out (wr_nreset), 
++ 60 		      .clk      (wr_clk), 
++ 60 		      .nrst_in	(nreset));
++ 60    oh_rsync rd_rsync (.nrst_out (rd_nreset), 
++ 60 		      .clk      (rd_clk), 
++ 60 		      .nrst_in	(nreset));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_fifo_generic.v@49:60
+   
+   // fifo indicators
+   assign empty    =  (rd_addr_gray[AW:0] == wr_addr_gray_sync[AW:0]);
+
+   // fifo full
+   assign full     =  (wr_addr[AW-1:0] == rd_addr_sync[AW-1:0]) &
+		      (wr_addr[AW]     != rd_addr_sync[AW]);
+
+
+   // programmable full
+   assign prog_full = (wr_addr_ahead[AW-1:0] == rd_addr_sync[AW-1:0]) &
+		      (wr_addr_ahead[AW]     != rd_addr_sync[AW]);
+

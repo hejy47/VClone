@@ -1,0 +1,32 @@
+Source Block: hdl/library/common/ad_upack.v@75:85@HdlIdDef
+
+// Width of shift reg is integer multiple of output data width
+localparam SH_W = ((I_W/O_W)+1)*O_W;
+localparam STEP = I_W % O_W;
+
+localparam LATENCY = 1; // Minimum input latency from iready to ivalid 
+
+integer i;
+
+reg [SH_W*UNIT_W-1:0] idata_sh;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+
+Diff Content:
+- 80 localparam LATENCY = 1; // Minimum input latency from iready to ivalid 
++ 80   localparam LATENCY = 1; // Minimum input latency from iready to ivalid
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_upack.v@72:82
+  output reg [O_W*UNIT_W-1:0] odata = 'h0,
+  output reg                  ovalid = 'b0
+);
+
+// Width of shift reg is integer multiple of output data width
+localparam SH_W = ((I_W/O_W)+1)*O_W;
+localparam STEP = I_W % O_W;
+
+localparam LATENCY = 1; // Minimum input latency from iready to ivalid 
+
+integer i;
+

@@ -1,0 +1,215 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@182:244@HdlStmIf
+
+assign status_sync_data = sync_data;
+assign status_sync_valid = sync_valid;
+assign sync_ready = status_sync_ready;
+
+generate if (ASYNC_SPI_CLK) begin
+
+/*
+ * The synchronization circuit takes care that there are no glitches on the
+ * ctrl_enabled signal. ctrl_do_enable is asserted whenever ctrl_enable is
+ * asserted, but only deasserted once the signal has been synchronized back from
+ * the SPI domain. This makes sure that we can't end up in a state where the
+ * enable signal in the SPI domain is asserted, but neither enable nor enabled
+ * is asserted in the control domain.
+ */
+
+reg ctrl_do_enable = 1'b0;
+wire ctrl_is_enabled;
+reg spi_enabled = 1'b0;
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_enable == 1'b1) begin
+    ctrl_do_enable <= 1'b1;
+  end else if (ctrl_is_enabled == 1'b1) begin
+    ctrl_do_enable <= 1'b0;
+  end
+end
+
+assign ctrl_enabled = ctrl_is_enabled | ctrl_do_enable;
+
+always @(posedge spi_clk) begin
+  spi_enabled <= spi_enable | spi_active;
+end
+
+sync_bits # (
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1)
+) i_sync_enable (
+    .in_bits(ctrl_do_enable),
+    .out_clk(spi_clk),
+    .out_resetn(1'b1),
+    .out_bits(spi_enable)
+);
+
+sync_bits # (
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1)
+) i_sync_enabled (
+    .in_bits(spi_enabled),
+    .out_clk(ctrl_clk),
+    .out_resetn(1'b1),
+    .out_bits(ctrl_is_enabled)
+);
+
+end else begin
+assign spi_enable = ctrl_enable;
+assign ctrl_enabled = spi_enable | spi_active;
+end endgenerate
+
+assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
+
+wire trigger_s;
+sync_bits #(
+
+Diff Content:
+- 187 generate if (ASYNC_SPI_CLK) begin
+- 189 /*
+- 190  * The synchronization circuit takes care that there are no glitches on the
+- 191  * ctrl_enabled signal. ctrl_do_enable is asserted whenever ctrl_enable is
+- 192  * asserted, but only deasserted once the signal has been synchronized back from
+- 193  * the SPI domain. This makes sure that we can't end up in a state where the
+- 194  * enable signal in the SPI domain is asserted, but neither enable nor enabled
+- 195  * is asserted in the control domain.
+- 196  */
+- 198 reg ctrl_do_enable = 1'b0;
+- 199 wire ctrl_is_enabled;
+- 200 reg spi_enabled = 1'b0;
+- 202 always @(posedge ctrl_clk) begin
+- 203   if (ctrl_enable == 1'b1) begin
+- 204     ctrl_do_enable <= 1'b1;
+- 205   end else if (ctrl_is_enabled == 1'b1) begin
+- 206     ctrl_do_enable <= 1'b0;
+- 208 end
+- 210 assign ctrl_enabled = ctrl_is_enabled | ctrl_do_enable;
+- 212 always @(posedge spi_clk) begin
+- 213   spi_enabled <= spi_enable | spi_active;
+- 214 end
+- 216 sync_bits # (
+- 219 ) i_sync_enable (
+- 223     .out_bits(spi_enable)
+- 224 );
+- 226 sync_bits # (
+- 229 ) i_sync_enabled (
+- 233     .out_bits(ctrl_is_enabled)
+- 234 );
+- 236 end else begin
+- 237 assign spi_enable = ctrl_enable;
+- 238 assign ctrl_enabled = spi_enable | spi_active;
+- 239 end endgenerate
++ 206   assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
++ 206   /*
++ 206    * Forwarded SYNC interface, this can be used to monitor the state of the
++ 206    * offload command sequence through SPI Engine regmap
++ 206    */
++ 206   assign status_sync_data = sync_data;
++ 206   assign status_sync_valid = sync_valid;
++ 206   assign sync_ready = status_sync_ready;
++ 206   generate if (ASYNC_SPI_CLK) begin
++ 206   /*
++ 206    * The synchronization circuit takes care that there are no glitches on the
++ 206    * ctrl_enabled signal. ctrl_do_enable is asserted whenever ctrl_enable is
++ 206    * asserted, but only deasserted once the signal has been synchronized back from
++ 206    * the SPI domain. This makes sure that we can't end up in a state where the
++ 206    * enable signal in the SPI domain is asserted, but neither enable nor enabled
++ 206    * is asserted in the control domain.
++ 206    */
++ 206   reg ctrl_do_enable = 1'b0;
++ 206   wire ctrl_is_enabled;
++ 206   reg spi_enabled = 1'b0;
++ 206   always @(posedge ctrl_clk) begin
++ 206     if (ctrl_enable == 1'b1) begin
++ 206       ctrl_do_enable <= 1'b1;
++ 206     end else if (ctrl_is_enabled == 1'b1) begin
++ 206       ctrl_do_enable <= 1'b0;
++ 206     end
++ 210   assign ctrl_enabled = ctrl_is_enabled | ctrl_do_enable;
++ 214   always @(posedge spi_clk) begin
++ 214     spi_enabled <= spi_enable | spi_active;
++ 214   end
++ 216   sync_bits #(
++ 219   ) i_sync_enable (
++ 224     .out_bits(spi_enable));
++ 226   sync_bits #(
++ 229   ) i_sync_enabled (
++ 234     .out_bits(ctrl_is_enabled));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad5766/axi_ad5766.v@161:234
+  assign sdo_data = sdo_mem[spi_sdo_rd_addr];
+  assign sync_ready = 1'b1;
+
+  assign sdi_data_ready = 1'b0;
+
+  generate if (ASYNC_SPI_CLK) begin
+
+    /*
+     * The synchronization circuit takes care that there are no glitches on the
+     * ctrl_enabled signal. ctrl_do_enable is asserted whenever ctrl_enable is
+     * asserted, but only deasserted once the signal has been synchronized back from
+     * the SPI domain. This makes sure that we can't end up in a state where the
+     * enable signal in the SPI domain is asserted, but neither enable nor enabled
+     * is asserted in the control domain.
+     */
+
+    reg ctrl_do_enable = 1'b0;
+    wire ctrl_is_enabled;
+    reg spi_enabled = 1'b0;
+
+    always @(posedge ctrl_clk) begin
+        if (ctrl_enable == 1'b1) begin
+                ctrl_do_enable <= 1'b1;
+        end else if (ctrl_is_enabled == 1'b1) begin
+                ctrl_do_enable <= 1'b0;
+        end
+    end
+
+    assign ctrl_enabled = ctrl_is_enabled | ctrl_do_enable;
+
+    always @(posedge spi_clk) begin
+        spi_enabled <= spi_enable_s | spi_active;
+    end
+
+    sync_bits # (
+        .NUM_OF_BITS(1),
+        .ASYNC_CLK(1)
+    ) i_sync_enable (
+        .in_bits(ctrl_do_enable),
+        .out_clk(spi_clk),
+        .out_resetn(1'b1),
+        .out_bits(spi_enable_s)
+    );
+
+    sync_bits # (
+        .NUM_OF_BITS(1),
+        .ASYNC_CLK(1)
+    ) i_sync_enabled (
+        .in_bits(spi_enabled),
+        .out_clk(ctrl_clk),
+        .out_resetn(1'b1),
+        .out_bits(ctrl_is_enabled)
+    );
+
+    sync_bits # (
+        .NUM_OF_BITS(1),
+        .ASYNC_CLK(1)
+    ) i_sync_mem_reset (
+        .in_bits(ctrl_mem_reset),
+        .out_clk(spi_clk),
+        .out_resetn(1'b1),
+        .out_bits(spi_mem_reset_s)
+    );
+
+  end else begin
+    assign spi_enable_s = ctrl_enable;
+    assign ctrl_enabled = spi_enable_s | spi_active;
+    assign spi_mem_reset_s = ctrl_mem_reset;
+  end endgenerate
+
+  assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
+
+  always @(posedge spi_clk) begin
+    if (spi_resetn == 1'b0) begin
+

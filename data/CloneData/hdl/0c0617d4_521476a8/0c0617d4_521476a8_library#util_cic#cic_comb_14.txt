@@ -1,0 +1,33 @@
+Source Block: hdl/library/util_cic/cic_comb.v@91:101@HdlIdDef
+    data_in_seq <= SEQ != 1 ? state : 'h00;
+  end
+end
+
+generate
+genvar i, j;
+
+for (j = 0; j < NUM_STAGES; j = j + 1) begin
+  localparam k = NUM_STAGES - j - 1;
+  localparam H = DATA_WIDTH - STAGE_WIDTH * j - 1;
+  localparam L = k == 0 ? 0 : DATA_WIDTH - STAGE_WIDTH * (j+1);
+
+Diff Content:
+- 96 genvar i, j;
++ 96   generate
++ 96   genvar i, j;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_cic/cic_comb.v@91:101
+    data_in_seq <= SEQ != 1 ? state : 'h00;
+  end
+end
+
+generate
+genvar i, j;
+
+for (j = 0; j < NUM_STAGES; j = j + 1) begin
+  localparam k = NUM_STAGES - j - 1;
+  localparam H = DATA_WIDTH - STAGE_WIDTH * j - 1;
+  localparam L = k == 0 ? 0 : DATA_WIDTH - STAGE_WIDTH * (j+1);
+

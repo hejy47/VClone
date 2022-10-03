@@ -1,0 +1,40 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@95:127@HdlStmProcess
+				                      txrd_fifo_packet[7:4];
+
+   assign txwr_ctrlmode[3:0] =  ecfg_tx_ctrlmode_bp ? ecfg_tx_ctrlmode[3:0] : 
+				                      txwr_fifo_packet[7:4];
+
+   always @ (posedge tx_lclk_div4)
+      if( reset ) 
+	begin
+           etx_access         <= 1'b0;
+	   etx_rr             <= 1'b0;//only way to differentiate between 'rr' and 'wr'
+	   etx_packet[PW-1:0] <= 'd0;
+	end 
+      else if (txrr_fifo_read | txrd_fifo_read | txwr_fifo_read )
+	begin
+	   etx_rr             <= txrr_fifo_read;	   
+	   etx_access         <= 1'b1;	   	   
+ 	   etx_packet[PW-1:0] <= txrr_fifo_read ? txrr_fifo_packet[PW-1:0]   : 
+ 			         txrd_fifo_read ? {txrd_fifo_packet[PW-1:8], 
+						   txrd_ctrlmode[3:0],
+						   txrd_fifo_packet[3:0]}    : 
+                                                  {txwr_fifo_packet[PW-1:8], 
+						   txwr_ctrlmode[3:0],
+						   txwr_fifo_packet[3:0]};
+ 	end   
+      else if (etx_wait)
+	begin
+	   etx_access <= 1'b0;	   
+	end   
+   	                                            
+endmodule // etx_arbiter
+/*
+  File: etx_arbiter.v
+ 
+
+Diff Content:
+- 119       else if (etx_wait)
++ 119       else if (~etx_io_wait)
+
+Clone Blocks:

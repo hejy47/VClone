@@ -1,0 +1,81 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_core.v@143:199@HdlStmFor
+
+  assign dac_valid = {NUM_CHANNELS{~dac_sync_in_arm}};
+
+  generate
+  genvar i;
+  for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
+
+    // Find the pair of the current channel for I/Q channels
+    // Assuming even channels are I, odd channels are Q
+    // Assuming channel count is even other case do not pair channels
+    localparam IQ_PAIR_CH_INDEX = (NUM_CHANNELS%2) ? i :
+                                  (i%2) ? i-1 : i+1;
+
+    ad_ip_jesd204_tpl_dac_channel #(
+      .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+      .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
+      .DATAPATH_DISABLE (DATAPATH_DISABLE),
+      .BITS_PER_SAMPLE (BITS_PER_SAMPLE),
+      .DDS_TYPE (DDS_TYPE),
+      .DDS_CORDIC_DW (DDS_CORDIC_DW),
+      .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
+      .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE),
+      .Q_OR_I_N(i%2)
+    ) i_channel (
+      .clk (clk),
+      .dac_enable (enable[i]),
+      .dac_data (dac_data_s[DAC_CDW*i+:DAC_CDW]),
+      .dma_data (dac_ddata[DMA_CDW*i+:DMA_CDW]),
+
+      .pn7_data (pn7_data),
+      .pn15_data (pn15_data),
+
+      .dac_data_sync (dac_sync_in_arm),
+      .dac_dds_format (dac_dds_format),
+
+      .dac_data_sel (dac_data_sel[4*i+:4]),
+
+      .dac_dds_scale_0 (dac_dds_scale_0[16*i+:16]),
+      .dac_dds_init_0 (dac_dds_init_0[16*i+:16]),
+      .dac_dds_incr_0 (dac_dds_incr_0[16*i+:16]),
+      .dac_dds_scale_1 (dac_dds_scale_1[16*i+:16]),
+      .dac_dds_init_1 (dac_dds_init_1[16*i+:16]),
+      .dac_dds_incr_1 (dac_dds_incr_1[16*i+:16]),
+
+      .dac_pat_data_0 (dac_pat_data_0[16*i+:16]),
+      .dac_pat_data_1 (dac_pat_data_1[16*i+:16]),
+
+      .dac_iqcor_enb (dac_iqcor_enb[i]),
+      .dac_iqcor_coeff_1 (dac_iqcor_coeff_1[16*i+:16]),
+      .dac_iqcor_coeff_2 (dac_iqcor_coeff_2[16*i+:16]),
+      .dac_iqcor_data_in (dac_ddata[DMA_CDW*IQ_PAIR_CH_INDEX+:DMA_CDW])
+
+    );
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 170       .dma_data (dac_ddata[DMA_CDW*i+:DMA_CDW]),
+- 193       .dac_iqcor_data_in (dac_ddata[DMA_CDW*IQ_PAIR_CH_INDEX+:DMA_CDW])
++ 154     if (XBAR_ENABLE == 1) begin
++ 154       ad_mux #(
++ 154         .CH_W (DMA_CDW),
++ 154         .CH_CNT (NUM_CHANNELS),
++ 154         .EN_REG (1)
++ 154       ) channel_mux (
++ 154         .clk (clk),
++ 154         .data_in (dac_ddata),
++ 154         .ch_sel (dac_src_chan_sel[8*i+:8]),
++ 154         .data_out (dac_ddata_muxed[DMA_CDW*i+:DMA_CDW])
++ 154       );
++ 154     end else begin
++ 154       assign dac_ddata_muxed[DMA_CDW*i+:DMA_CDW] = dac_ddata[DMA_CDW*i+:DMA_CDW];
++ 154     end
++ 170       .dma_data (dac_ddata_muxed[DMA_CDW*i+:DMA_CDW]),
++ 178       .dac_mask_enable (dac_mask_enable[i]),
++ 193       .dac_iqcor_data_in (dac_ddata_muxed[DMA_CDW*IQ_PAIR_CH_INDEX+:DMA_CDW])
+
+Clone Blocks:

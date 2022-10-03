@@ -1,0 +1,36 @@
+Source Block: oh/gpio/hdl/gpio.v@112:124@HdlStmProcess
+       odata_reg[N-1:0] <= data_in[N-1:0] | odata_reg[N-1:0];
+   
+   assign gpio_out[N-1:0] = odata_reg[N-1:0];
+
+   //OEN
+   always @ (posedge clk)
+     if(oen_write)
+       oen_reg[N-1:0] <= data_in[N-1:0];
+
+   assign gpio_en[N-1:0] = oen_reg[N-1:0];
+
+   //################################
+   //# INPUT CONTROL REGISTERS
+
+Diff Content:
+- 118      if(oen_write)
+- 119        oen_reg[N-1:0] <= data_in[N-1:0];
++ 119      idata_reg[63:0] <= idata_reg[63:0] |
++ 119 			(gpio_sync[N-1:0] & ien_reg[63:0]);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/gpio/hdl/gpio.v@109:119
+     else if(odataand_write)
+       odata_reg[N-1:0] <= data_in[N-1:0] & odata_reg[N-1:0];
+     else if(odataorr_write)
+       odata_reg[N-1:0] <= data_in[N-1:0] | odata_reg[N-1:0];
+   
+   assign gpio_out[N-1:0] = odata_reg[N-1:0];
+
+   //OEN
+   always @ (posedge clk)
+     if(oen_write)
+       oen_reg[N-1:0] <= data_in[N-1:0];
+

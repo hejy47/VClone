@@ -1,0 +1,282 @@
+Source Block: hdl/library/axi_generic_adc/axi_generic_adc.v@196:251@HdlStmFor
+  .up_rack (up_rack));
+
+generate
+genvar i;
+
+for (i = 0; i < NUM_OF_CHANNELS; i=i+1) begin
+  up_adc_channel #(.CHANNEL_ID(i)) i_up_adc_channel (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_enable (adc_enable[i]),
+    .adc_iqcor_enb (),
+    .adc_dcfilt_enb (),
+    .adc_dfmt_se (),
+    .adc_dfmt_type (),
+    .adc_dfmt_enable (),
+    .adc_dcfilt_offset (),
+    .adc_dcfilt_coeff (),
+    .adc_iqcor_coeff_1 (),
+    .adc_iqcor_coeff_2 (),
+    .adc_pnseq_sel (),
+    .adc_data_sel (),
+    .adc_pn_err (1'b0),
+    .adc_pn_oos (1'b0),
+    .adc_or (1'b0),
+    .up_adc_pn_err (),
+    .up_adc_pn_oos (),
+    .up_adc_or (),
+    .up_usr_datatype_be (),
+    .up_usr_datatype_signed (),
+    .up_usr_datatype_shift (),
+    .up_usr_datatype_total_bits (),
+    .up_usr_datatype_bits (),
+    .up_usr_decimation_m (),
+    .up_usr_decimation_n (),
+    .adc_usr_datatype_be (1'b0),
+    .adc_usr_datatype_signed (1'b1),
+    .adc_usr_datatype_shift (8'd0),
+    .adc_usr_datatype_total_bits (8'd32),
+    .adc_usr_datatype_bits (8'd32),
+    .adc_usr_decimation_m (16'd1),
+    .adc_usr_decimation_n (16'd1),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[i]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s[i]),
+    .up_rack (up_rack_s[i]));
+end
+
+endgenerate
+
+endmodule
+
+Diff Content:
+- 201 for (i = 0; i < NUM_OF_CHANNELS; i=i+1) begin
+- 202   up_adc_channel #(.CHANNEL_ID(i)) i_up_adc_channel (
+- 205     .adc_enable (adc_enable[i]),
+- 206     .adc_iqcor_enb (),
+- 207     .adc_dcfilt_enb (),
+- 208     .adc_dfmt_se (),
+- 209     .adc_dfmt_type (),
+- 210     .adc_dfmt_enable (),
+- 211     .adc_dcfilt_offset (),
+- 212     .adc_dcfilt_coeff (),
+- 213     .adc_iqcor_coeff_1 (),
+- 214     .adc_iqcor_coeff_2 (),
+- 215     .adc_pnseq_sel (),
+- 216     .adc_data_sel (),
+- 217     .adc_pn_err (1'b0),
+- 218     .adc_pn_oos (1'b0),
+- 219     .adc_or (1'b0),
+- 220     .up_adc_pn_err (),
+- 221     .up_adc_pn_oos (),
+- 222     .up_adc_or (),
+- 223     .up_usr_datatype_be (),
+- 224     .up_usr_datatype_signed (),
+- 225     .up_usr_datatype_shift (),
+- 226     .up_usr_datatype_total_bits (),
+- 227     .up_usr_datatype_bits (),
+- 228     .up_usr_decimation_m (),
+- 229     .up_usr_decimation_n (),
+- 230     .adc_usr_datatype_be (1'b0),
+- 231     .adc_usr_datatype_signed (1'b1),
+- 232     .adc_usr_datatype_shift (8'd0),
+- 233     .adc_usr_datatype_total_bits (8'd32),
+- 234     .adc_usr_datatype_bits (8'd32),
+- 235     .adc_usr_decimation_m (16'd1),
+- 236     .adc_usr_decimation_n (16'd1),
+- 242     .up_wack (up_wack_s[i]),
+- 245     .up_rdata (up_rdata_s[i]),
+- 246     .up_rack (up_rack_s[i]));
+- 247 end
++ 202   up_adc_common #(
++ 202     .ID(ID)
++ 202   ) i_up_adc_common (
++ 202     .mmcm_rst (),
++ 236     .adc_r1_mode (),
++ 236     .adc_ddr_edgesel (),
++ 236     .adc_pin_mode (),
++ 236     .adc_status ('h00),
++ 236     .adc_sync_status (1'b1),
++ 236     .adc_status_ovf (adc_dovf),
++ 236     .adc_clk_ratio (32'd1),
++ 236     .adc_start_code (),
++ 236     .adc_sref_sync (),
++ 236     .adc_sync (),
++ 236     .up_pps_rcounter (32'b0),
++ 236     .up_pps_status (1'b0),
++ 236     .up_pps_irq_mask (),
++ 236     .up_adc_ce (),
++ 236     .up_status_pn_err (1'b0),
++ 236     .up_status_pn_oos (1'b0),
++ 236     .up_status_or (1'b0),
++ 236     .up_drp_sel (),
++ 236     .up_drp_wr (),
++ 236     .up_drp_addr (),
++ 236     .up_drp_wdata (),
++ 236     .up_drp_rdata (32'd0),
++ 236     .up_drp_ready (1'd0),
++ 236     .up_drp_locked (1'd1),
++ 236     .up_usr_chanmax_out (),
++ 236     .up_usr_chanmax_in (NUM_OF_CHANNELS),
++ 236     .up_adc_gpio_in (32'b0),
++ 236     .up_adc_gpio_out (),
++ 242     .up_wack (up_wack_s[NUM_OF_CHANNELS]),
++ 247     .up_rdata (up_rdata_s[NUM_OF_CHANNELS]),
++ 247     .up_rack (up_rack_s[NUM_OF_CHANNELS]));
++ 247   up_axi i_up_axi (
++ 247     .up_rstn (up_rstn),
++ 247     .up_clk (up_clk),
++ 247     .up_axi_awvalid (s_axi_awvalid),
++ 247     .up_axi_awaddr (s_axi_awaddr),
++ 247     .up_axi_awready (s_axi_awready),
++ 247     .up_axi_wvalid (s_axi_wvalid),
++ 247     .up_axi_wdata (s_axi_wdata),
++ 247     .up_axi_wstrb (s_axi_wstrb),
++ 247     .up_axi_wready (s_axi_wready),
++ 247     .up_axi_bvalid (s_axi_bvalid),
++ 247     .up_axi_bresp (s_axi_bresp),
++ 247     .up_axi_bready (s_axi_bready),
++ 247     .up_axi_arvalid (s_axi_arvalid),
++ 247     .up_axi_araddr (s_axi_araddr),
++ 247     .up_axi_arready (s_axi_arready),
++ 247     .up_axi_rvalid (s_axi_rvalid),
++ 247     .up_axi_rresp (s_axi_rresp),
++ 247     .up_axi_rdata (s_axi_rdata),
++ 247     .up_axi_rready (s_axi_rready),
++ 247     .up_wreq (up_wreq_s),
++ 247     .up_waddr (up_waddr_s),
++ 247     .up_wdata (up_wdata_s),
++ 247     .up_wack (up_wack),
++ 247     .up_rreq (up_rreq_s),
++ 247     .up_raddr (up_raddr_s),
++ 247     .up_rdata (up_rdata),
++ 247     .up_rack (up_rack));
++ 247   generate
++ 247   genvar i;
++ 247   for (i = 0; i < NUM_OF_CHANNELS; i=i+1) begin
++ 247     up_adc_channel #(
++ 247       .CHANNEL_ID(i)
++ 247     ) i_up_adc_channel (
++ 247       .adc_clk (adc_clk),
++ 247       .adc_rst (adc_rst),
++ 247       .adc_enable (adc_enable[i]),
++ 247       .adc_iqcor_enb (),
++ 247       .adc_dcfilt_enb (),
++ 247       .adc_dfmt_se (),
++ 247       .adc_dfmt_type (),
++ 247       .adc_dfmt_enable (),
++ 247       .adc_dcfilt_offset (),
++ 247       .adc_dcfilt_coeff (),
++ 247       .adc_iqcor_coeff_1 (),
++ 247       .adc_iqcor_coeff_2 (),
++ 247       .adc_pnseq_sel (),
++ 247       .adc_data_sel (),
++ 247       .adc_pn_err (1'b0),
++ 247       .adc_pn_oos (1'b0),
++ 247       .adc_or (1'b0),
++ 247       .up_adc_pn_err (),
++ 247       .up_adc_pn_oos (),
++ 247       .up_adc_or (),
++ 247       .up_usr_datatype_be (),
++ 247       .up_usr_datatype_signed (),
++ 247       .up_usr_datatype_shift (),
++ 247       .up_usr_datatype_total_bits (),
++ 247       .up_usr_datatype_bits (),
++ 247       .up_usr_decimation_m (),
++ 247       .up_usr_decimation_n (),
++ 247       .adc_usr_datatype_be (1'b0),
++ 247       .adc_usr_datatype_signed (1'b1),
++ 247       .adc_usr_datatype_shift (8'd0),
++ 247       .adc_usr_datatype_total_bits (8'd32),
++ 247       .adc_usr_datatype_bits (8'd32),
++ 247       .adc_usr_decimation_m (16'd1),
++ 247       .adc_usr_decimation_n (16'd1),
++ 247       .up_rstn (up_rstn),
++ 247       .up_clk (up_clk),
++ 247       .up_wreq (up_wreq_s),
++ 247       .up_waddr (up_waddr_s),
++ 247       .up_wdata (up_wdata_s),
++ 247       .up_wack (up_wack_s[i]),
++ 247       .up_rreq (up_rreq_s),
++ 247       .up_raddr (up_raddr_s),
++ 247       .up_rdata (up_rdata_s[i]),
++ 247       .up_rack (up_rack_s[i]));
++ 247   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v@264:329
+    .up_rack (up_rack_s[0])
+  );
+
+  generate
+  genvar i;
+  for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_channel
+    up_adc_channel #(
+      .COMMON_ID (6'h1 + i/16),
+      .CHANNEL_ID (i % 16),
+      .USERPORTS_DISABLE (1),
+      .DCFILTER_DISABLE (1),
+      .IQCORRECTION_DISABLE (1)
+    ) i_up_adc_channel (
+      .adc_clk (link_clk),
+      .adc_rst (adc_rst),
+      .adc_enable (enable[i]),
+      .adc_iqcor_enb (),
+      .adc_dcfilt_enb (),
+      .adc_dfmt_enable (dfmt_enable[i]),
+      .adc_dfmt_se (dfmt_sign_extend[i]),
+      .adc_dfmt_type (dfmt_type[i]),
+      .adc_dcfilt_offset (),
+      .adc_dcfilt_coeff (),
+      .adc_iqcor_coeff_1 (),
+      .adc_iqcor_coeff_2 (),
+      .adc_pnseq_sel (pn_seq_sel[i*4+:4]),
+      .adc_data_sel (),
+      .adc_pn_err (pn_err[i]),
+      .adc_pn_oos (pn_oos[i]),
+      .adc_or (1'b0),
+      .adc_usr_datatype_be (1'b0),
+      .adc_usr_datatype_signed (1'b1),
+      .adc_usr_datatype_shift (8'd0),
+      .adc_usr_datatype_total_bits (8'd16),
+      .adc_usr_datatype_bits (8'd16),
+      .adc_usr_decimation_m (16'd1),
+      .adc_usr_decimation_n (16'd1),
+
+      .up_adc_pn_err (up_adc_pn_err_s[i]),
+      .up_adc_pn_oos (up_adc_pn_oos_s[i]),
+      .up_adc_or (),
+      .up_usr_datatype_be (),
+      .up_usr_datatype_signed (),
+      .up_usr_datatype_shift (),
+      .up_usr_datatype_total_bits (),
+      .up_usr_datatype_bits (),
+      .up_usr_decimation_m (),
+      .up_usr_decimation_n (),
+
+      .up_clk (up_clk),
+      .up_rstn (up_rstn),
+      .up_wreq (up_wreq_s),
+      .up_waddr ({3'b0,up_waddr_s}),
+      .up_wdata (up_wdata_s),
+      .up_wack (up_wack_s[i+1]),
+      .up_rreq (up_rreq_s),
+      .up_raddr ({3'b0,up_raddr_s}),
+      .up_rdata (up_rdata_s[i+1]),
+      .up_rack (up_rack_s[i+1])
+    );
+  end
+  endgenerate
+
+  up_tpl_common #(
+     .COMMON_ID(2'h0),            // Offset of regmap
+     .NUM_PROFILES(NUM_PROFILES)  // Number of JESD profiles
+

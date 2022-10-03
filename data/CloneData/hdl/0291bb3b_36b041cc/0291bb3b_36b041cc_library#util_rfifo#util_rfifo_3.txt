@@ -1,0 +1,22 @@
+Source Block: hdl/library/util_rfifo/util_rfifo.v@100:110@HdlIdDef
+  reg                             m_runf_m2 = 'd0;
+  reg                             m_runf = 'd0;
+
+  // internal signals
+
+  wire                            m_runf_s;
+
+  // defaults
+
+  assign fifo_rst = ~rstn;
+
+
+Diff Content:
+- 105   wire                            m_runf_s;
++ 105   always @(posedge dac_clk) begin
++ 105     dac_runf_m[0] <= dma_runf | fifo_runf;
++ 105     dac_runf_m[1] <= dac_runf_m[0];
++ 105     dac_runf <= dac_runf_m[1];
++ 105   end
+
+Clone Blocks:

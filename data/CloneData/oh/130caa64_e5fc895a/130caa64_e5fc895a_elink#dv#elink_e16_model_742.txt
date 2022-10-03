@@ -1,0 +1,25 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5729:5743@HdlStmProcess
+	 end
+ 
+   //#####################
+   //# Wait out control
+   //#####################
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       wait_out <= 1'b0;
+     else if(clk_en)
+       wait_out <= wait_int;
+   
+endmodule // e16_mesh_interface
+
+
+
+
+Diff Content:
+- 5734    always @ (posedge clk or posedge reset)
+- 5735      if(reset)
+- 5736        wait_out <= 1'b0;
+- 5737      else if(clk_en)
+- 5738        wait_out <= wait_int;
+
+Clone Blocks:

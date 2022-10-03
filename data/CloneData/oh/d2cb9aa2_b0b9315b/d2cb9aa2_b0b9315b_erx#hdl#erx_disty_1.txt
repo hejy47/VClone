@@ -1,0 +1,57 @@
+Source Block: oh/erx/hdl/erx_disty.v@105:123@HdlStmProcess
+   wire [102:0]   emrr_wr_data;
+
+   //############
+   //# PIPELINE AND DISTRIBUTE
+   //############   
+   always @ (posedge clk) 
+     begin
+	in_write          <= emesh_write;
+        in_datamode[1:0]  <= emesh_datamode[1:0];
+        in_ctrlmode[3:0]  <= emesh_ctrlmode[3:0];
+        in_dstaddr[31:0]  <= emesh_dstaddr[31:0];
+        in_srcaddr[31:0]  <= emesh_srcaddr[31:0];
+        in_data[31:0]     <= emesh_data[31:0];
+     end
+	
+   always @ (posedge clk) 
+     if(emesh_access) 
+       begin
+	  emrq_wr_en <= ~emesh_write;
+
+Diff Content:
+- 112 	in_write          <= emesh_write;
+- 113         in_datamode[1:0]  <= emesh_datamode[1:0];
+- 114         in_ctrlmode[3:0]  <= emesh_ctrlmode[3:0];
+- 115         in_dstaddr[31:0]  <= emesh_dstaddr[31:0];
+- 116         in_srcaddr[31:0]  <= emesh_srcaddr[31:0];
+- 117         in_data[31:0]     <= emesh_data[31:0];
++ 117 	in_write          <= emmu_write;
++ 117         in_datamode[1:0]  <= emmu_datamode[1:0];
++ 117         in_ctrlmode[3:0]  <= emmu_ctrlmode[3:0];
++ 117         in_dstaddr[31:0]  <= mmu_en ? emmu_dstaddr[31:0] : {C_REMAP_ADDR[31:(32-C_REMAP_BITS)], 
++ 117 								 emmu_dstaddr[(31-C_REMAP_BITS):0]};
++ 117         in_srcaddr[31:0]  <= emmu_srcaddr[31:0];
++ 117         in_data[31:0]     <= emmu_data[31:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/erx/hdl/erx_disty.v@115:131
+        in_dstaddr[31:0]  <= emesh_dstaddr[31:0];
+        in_srcaddr[31:0]  <= emesh_srcaddr[31:0];
+        in_data[31:0]     <= emesh_data[31:0];
+     end
+	
+   always @ (posedge clk) 
+     if(emesh_access) 
+       begin
+	  emrq_wr_en <= ~emesh_write;
+          emrr_wr_en <= emesh_write & (emesh_dstaddr[31:20] == C_READ_TAG_ADDR);
+          emwr_wr_en <= emesh_write & (emesh_dstaddr[31:20] != C_READ_TAG_ADDR);
+       end
+   
+   // TODO: Why not keep the bit pattern the same as our "default" pattern??
+   assign fifo_din[102:0] = {
+			     in_write,
+			     in_datamode[1:0],
+

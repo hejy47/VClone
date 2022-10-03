@@ -1,0 +1,48 @@
+Source Block: oh/elink/hdl/ecfg_if.v@103:115@HdlStmAssign
+		      (dstaddr[10:8]==3'h5)  & 
+		      (dstaddr[5]==rxsel);
+   
+
+   //mmu select
+   assign mi_mmu_en = mi_match & 
+		      (dstaddr[19:16]==4'hE) &
+		      (dstaddr[15]==rxsel);
+
+
+   //read/write indicator
+   assign mi_en = (mi_mmu_en | mi_cfg_en | mi_dma_en);   
+   assign mi_rd = ~write & mi_en;   
+
+Diff Content:
+- 109 		      (dstaddr[19:16]==4'hE) &
++ 109 		      (dstaddr[19:16]==`EGROUP_MMU) &
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/ecfg_if.v@109:119
+		      (dstaddr[19:16]==4'hE) &
+		      (dstaddr[15]==rxsel);
+
+
+   //read/write indicator
+   assign mi_en = (mi_mmu_en | mi_cfg_en | mi_dma_en);   
+   assign mi_rd = ~write & mi_en;   
+   assign mi_we = write  & mi_en;
+   
+   //signal to carry transaction from ETX to ERX block through fifo_cdc
+   assign mi_rx_en = mi_match & 
+
+Clone Blocks 2:
+oh/elink/hdl/ecfg_if.v@110:120
+		      (dstaddr[15]==rxsel);
+
+
+   //read/write indicator
+   assign mi_en = (mi_mmu_en | mi_cfg_en | mi_dma_en);   
+   assign mi_rd = ~write & mi_en;   
+   assign mi_we = write  & mi_en;
+   
+   //signal to carry transaction from ETX to ERX block through fifo_cdc
+   assign mi_rx_en = mi_match & 
+		     ((dstaddr[19:16]==4'hE) | (dstaddr[19:16]==4'hF)) &  
+

@@ -1,0 +1,33 @@
+Source Block: serv/servant/servant.v@116:139@HdlStmIf
+      .i_wb_dat (wb_mem_dat),
+      .o_wb_rdt (wb_mem_rdt),
+      .o_wb_ack (wb_mem_ack));
+
+   generate
+      if (with_csr) begin
+	 servant_timer
+	   #(.WIDTH (32))
+	 timer
+	   (.i_clk    (wb_clk),
+	    .o_irq    (timer_irq),
+	    .i_wb_cyc (wb_timer_cyc),
+	    .i_wb_we  (wb_timer_we) ,
+	    .i_wb_dat (wb_timer_dat),
+	    .o_wb_dat (wb_timer_rdt));
+      end else begin
+	 assign wb_timer_rdt = 32'd0;
+	 assign timer_irq = 1'b0;
+      end
+   endgenerate
+
+   servant_gpio gpio
+     (.i_wb_clk (wb_clk),
+      .i_wb_dat (wb_gpio_dat),
+
+Diff Content:
+- 123 	   #(.WIDTH (32))
++ 123 	   #(.RESET_STRATEGY (reset_strategy),
++ 123 	     .WIDTH (32))
++ 125 	    .i_rst    (wb_rst),
+
+Clone Blocks:

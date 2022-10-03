@@ -1,0 +1,68 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@99:116@HdlStmProcess
+    else if (~addr_valid)
+      enabled <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (addr_valid == 1'b0) begin
+    if (eot == 1'b1)
+      length <= last_burst_len;
+    else
+      length <= MAX_BEATS_PER_BURST - 1;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    last <= 1'b0;
+  end else if (addr_valid == 1'b0) begin
+
+Diff Content:
+- 109       length <= MAX_BEATS_PER_BURST - 1;
++ 109       length <= MAX_LENGTH;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@108:124
+    else
+      length <= MAX_BEATS_PER_BURST - 1;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    last <= 1'b0;
+  end else if (addr_valid == 1'b0) begin
+    last <= eot;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    address <= 'h00;
+    last_burst_len <= 'h00;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/address_generator.v@88:107
+reg addr_valid_d1;
+reg last = 1'b0;
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+// we can disable the address generator.
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+  end else begin
+    if (enable)
+      enabled <= 1'b1;
+    else if (~addr_valid)
+      enabled <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (addr_valid == 1'b0) begin
+    if (eot == 1'b1)
+      length <= last_burst_len;
+

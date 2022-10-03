@@ -1,0 +1,29 @@
+Source Block: oh/elink/hdl/etx_io.v@194:208@HdlStmProcess
+       tx_double[63:0] <= {data[31:0],srcaddr[31:0]};
+   
+   //#############################
+   //# SELECTING DATA FOR TRANSMIT
+   //#############################  
+   always @ (posedge tx_lclk_io)
+     begin
+	tx_state_reg[2:0] <= tx_state[2:0];
+	tx_frame          <= (|tx_state_reg[2:0]); 
+     end        
+   
+   always @ (posedge tx_lclk_io)
+     case(tx_state_reg[2:0])
+       //Cycle1
+       3'b001: tx_data16[15:0]  <= tx_double[47:32];       
+
+Diff Content:
+- 199    always @ (posedge tx_lclk_io)
+- 200      begin
+- 201 	tx_state_reg[2:0] <= tx_state[2:0];
+- 202 	tx_frame          <= (|tx_state_reg[2:0]); 
+- 203      end        
++ 203    dsync sync_rd (
++ 203 		.dout			(tx_rd_wait),
++ 203 		.clk			(tx_lclk_io),
++ 203 		.din			(tx_rd_wait_async));
+
+Clone Blocks:

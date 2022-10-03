@@ -1,0 +1,59 @@
+Source Block: hdl/library/common/up_clock_mon.v@82:109@HdlStmProcess
+      up_count_running_m2 <= up_count_running_m1;
+      up_count_running_m3 <= up_count_running_m2;
+    end
+  end
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_d_count <= 'd0;
+      up_count_run <= 1'b0;
+    end else begin
+      if (up_count_running_m3 == 1'b0) begin
+        up_count_run <= 1'b1;
+      end else if (up_count == 'h00) begin
+        up_count_run <= 1'b0;
+      end
+
+      if (up_count_capture_s == 1'b1) begin
+        up_d_count <= d_count;
+      end else if (up_count == 'h00 && up_count_running_m3 == 1'b0) begin
+        up_d_count <= 'h00;
+      end
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if (up_count_run == 1'b0) begin
+      up_count <= 'h01;
+    end else begin
+
+Diff Content:
+- 100       end else if (up_count == 'h00 && up_count_running_m3 == 1'b0) begin
++ 100       end else if (up_count == 'h00 && up_count_run != up_count_running_m3) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_clock_mon.v@70:90
+  // processor reference
+
+  // Capture on the falling edge of running
+  assign up_count_capture_s = up_count_running_m3 == 1'b1 && up_count_running_m2 == 1'b0;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_count_running_m1 <= 1'b0;
+      up_count_running_m2 <= 1'b0;
+      up_count_running_m3 <= 1'b0;
+    end else begin
+      up_count_running_m1 <= d_count_run_m3;
+      up_count_running_m2 <= up_count_running_m1;
+      up_count_running_m3 <= up_count_running_m2;
+    end
+  end
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_d_count <= 'd0;
+      up_count_run <= 1'b0;
+

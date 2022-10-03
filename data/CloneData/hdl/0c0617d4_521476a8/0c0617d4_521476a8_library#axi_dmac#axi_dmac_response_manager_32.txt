@@ -1,0 +1,131 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@178:229@HdlStmProcess
+  end else if (state == STATE_ACC) begin
+    measured_burst_length <= req_response_dest_data_burst_length;
+  end
+end
+
+always @(*) begin
+  nx_state = state;
+  case (state)
+    STATE_IDLE: begin
+      if (response_dest_valid == 1'b1) begin
+        nx_state = STATE_ACC;
+      end else if (|to_complete_count) begin
+        if (transfer_id == completion_transfer_id)
+          nx_state = STATE_ZERO_COMPL;
+      end
+    end
+    STATE_ACC: begin
+      nx_state = STATE_WRITE_RESPR;
+    end
+    STATE_WRITE_RESPR: begin
+      if (response_ready == 1'b1) begin
+        if (|to_complete_count && transfer_id == completion_transfer_id) begin
+          nx_state = STATE_ZERO_COMPL;
+        end else begin
+          nx_state = STATE_IDLE;
+        end
+      end
+    end
+    STATE_ZERO_COMPL: begin
+      if (|to_complete_count) begin
+        nx_state = STATE_WRITE_ZRCMPL;
+      end else begin
+        if (completion_req_last_found == 1'b1) begin
+          nx_state = STATE_IDLE;
+        end
+      end
+    end
+    STATE_WRITE_ZRCMPL:begin
+      if (response_ready == 1'b1) begin
+        nx_state = STATE_ZERO_COMPL;
+      end
+    end
+    default: begin
+      nx_state = STATE_IDLE;
+    end
+  endcase
+end
+
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+    state <= STATE_IDLE;
+  end else begin
+
+Diff Content:
+- 183 always @(*) begin
+- 184   nx_state = state;
+- 185   case (state)
+- 186     STATE_IDLE: begin
+- 187       if (response_dest_valid == 1'b1) begin
+- 188         nx_state = STATE_ACC;
+- 189       end else if (|to_complete_count) begin
+- 190         if (transfer_id == completion_transfer_id)
+- 191           nx_state = STATE_ZERO_COMPL;
+- 193     end
+- 194     STATE_ACC: begin
+- 195       nx_state = STATE_WRITE_RESPR;
+- 196     end
+- 197     STATE_WRITE_RESPR: begin
+- 198       if (response_ready == 1'b1) begin
+- 199         if (|to_complete_count && transfer_id == completion_transfer_id) begin
+- 200           nx_state = STATE_ZERO_COMPL;
+- 202           nx_state = STATE_IDLE;
+- 205     end
+- 206     STATE_ZERO_COMPL: begin
+- 207       if (|to_complete_count) begin
+- 208         nx_state = STATE_WRITE_ZRCMPL;
+- 209       end else begin
+- 210         if (completion_req_last_found == 1'b1) begin
+- 211           nx_state = STATE_IDLE;
+- 214     end
+- 215     STATE_WRITE_ZRCMPL:begin
+- 216       if (response_ready == 1'b1) begin
+- 217         nx_state = STATE_ZERO_COMPL;
+- 220     default: begin
+- 221       nx_state = STATE_IDLE;
+- 222     end
+- 223   endcase
+- 224 end
++ 191   always @(*) begin
++ 191     nx_state = state;
++ 191     case (state)
++ 191       STATE_IDLE: begin
++ 191         if (response_dest_valid == 1'b1) begin
++ 191           nx_state = STATE_ACC;
++ 191         end else if (|to_complete_count) begin
++ 191           if (transfer_id == completion_transfer_id)
++ 191             nx_state = STATE_ZERO_COMPL;
++ 191         end
++ 200       STATE_ACC: begin
++ 200         nx_state = STATE_WRITE_RESPR;
++ 200       end
++ 200       STATE_WRITE_RESPR: begin
++ 200         if (response_ready == 1'b1) begin
++ 200           if (|to_complete_count && transfer_id == completion_transfer_id) begin
++ 200             nx_state = STATE_ZERO_COMPL;
++ 200           end else begin
++ 200             nx_state = STATE_IDLE;
++ 200           end
++ 200         end
++ 200       end
++ 200       STATE_ZERO_COMPL: begin
++ 200         if (|to_complete_count) begin
++ 200           nx_state = STATE_WRITE_ZRCMPL;
++ 202           if (completion_req_last_found == 1'b1) begin
++ 202             nx_state = STATE_IDLE;
++ 202           end
++ 211       STATE_WRITE_ZRCMPL:begin
++ 211         if (response_ready == 1'b1) begin
++ 211           nx_state = STATE_ZERO_COMPL;
++ 217       default: begin
++ 217         nx_state = STATE_IDLE;
++ 218     endcase
++ 218   end
++ 218   always @(posedge req_clk) begin
++ 218     if (req_resetn == 1'b0) begin
++ 218       state <= STATE_IDLE;
++ 218     end else begin
++ 218       state <= nx_state;
+
+Clone Blocks:

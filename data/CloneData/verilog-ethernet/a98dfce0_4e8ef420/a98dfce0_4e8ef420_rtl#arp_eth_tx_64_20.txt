@@ -1,0 +1,151 @@
+Source Block: verilog-ethernet/rtl/arp_eth_tx_64.v@246:296@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        input_frame_ready_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        arp_htype_reg <= 0;
+        arp_ptype_reg <= 0;
+        arp_oper_reg <= 0;
+        arp_sha_reg <= 0;
+        arp_spa_reg <= 0;
+        arp_tha_reg <= 0;
+        arp_tpa_reg <= 0;
+        busy_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_frame_ready_reg <= input_frame_ready_next;
+
+        output_eth_hdr_valid_reg <= output_eth_hdr_valid_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        if (store_frame) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+            arp_htype_reg <= input_arp_htype;
+            arp_ptype_reg <= input_arp_ptype;
+            arp_oper_reg <= input_arp_oper;
+            arp_sha_reg <= input_arp_sha;
+            arp_spa_reg <= input_arp_spa;
+            arp_tha_reg <= input_arp_tha;
+            arp_tpa_reg <= input_arp_tpa;
+        end
+    end
+end
+
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+
+Diff Content:
+- 254         frame_ptr_reg <= 0;
+- 255         input_frame_ready_reg <= 0;
+- 256         output_eth_dest_mac_reg <= 0;
+- 257         output_eth_src_mac_reg <= 0;
+- 258         output_eth_type_reg <= 0;
+- 259         arp_htype_reg <= 0;
+- 260         arp_ptype_reg <= 0;
+- 261         arp_oper_reg <= 0;
+- 262         arp_sha_reg <= 0;
+- 263         arp_spa_reg <= 0;
+- 264         arp_tha_reg <= 0;
+- 265         arp_tpa_reg <= 0;
+- 266         busy_reg <= 0;
+- 278         if (store_frame) begin
+- 279             output_eth_dest_mac_reg <= input_eth_dest_mac;
+- 280             output_eth_src_mac_reg <= input_eth_src_mac;
+- 281             output_eth_type_reg <= input_eth_type;
+- 282             arp_htype_reg <= input_arp_htype;
+- 283             arp_ptype_reg <= input_arp_ptype;
+- 284             arp_oper_reg <= input_arp_oper;
+- 285             arp_sha_reg <= input_arp_sha;
+- 286             arp_spa_reg <= input_arp_spa;
+- 287             arp_tha_reg <= input_arp_tha;
+- 288             arp_tpa_reg <= input_arp_tpa;
+- 289         end
++ 266         frame_ptr_reg <= 8'd0;
++ 266         input_frame_ready_reg <= 1'b0;
++ 266         output_eth_hdr_valid_reg <= 1'b0;
++ 266         busy_reg <= 1'b0;
++ 276     end
++ 289     if (store_frame) begin
++ 289         output_eth_dest_mac_reg <= input_eth_dest_mac;
++ 289         output_eth_src_mac_reg <= input_eth_src_mac;
++ 289         output_eth_type_reg <= input_eth_type;
++ 289         arp_htype_reg <= input_arp_htype;
++ 289         arp_ptype_reg <= input_arp_ptype;
++ 289         arp_oper_reg <= input_arp_oper;
++ 289         arp_sha_reg <= input_arp_sha;
++ 289         arp_spa_reg <= input_arp_spa;
++ 289         arp_tha_reg <= input_arp_tha;
++ 289         arp_tpa_reg <= input_arp_tpa;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/arp_eth_tx.v@220:270
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        input_frame_ready_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        arp_htype_reg <= 0;
+        arp_ptype_reg <= 0;
+        arp_oper_reg <= 0;
+        arp_sha_reg <= 0;
+        arp_spa_reg <= 0;
+        arp_tha_reg <= 0;
+        arp_tpa_reg <= 0;
+        busy_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_frame_ready_reg <= input_frame_ready_next;
+
+        output_eth_hdr_valid_reg <= output_eth_hdr_valid_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        if (store_frame) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+            arp_htype_reg <= input_arp_htype;
+            arp_ptype_reg <= input_arp_ptype;
+            arp_oper_reg <= input_arp_oper;
+            arp_sha_reg <= input_arp_sha;
+            arp_spa_reg <= input_arp_spa;
+            arp_tha_reg <= input_arp_tha;
+            arp_tpa_reg <= input_arp_tpa;
+        end
+    end
+end
+
+// output datapath logic
+reg [7:0]  output_eth_payload_tdata_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+reg        output_eth_payload_tlast_reg = 0;
+

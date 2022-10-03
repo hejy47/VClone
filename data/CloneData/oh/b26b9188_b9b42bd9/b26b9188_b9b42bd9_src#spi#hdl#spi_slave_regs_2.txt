@@ -1,0 +1,21 @@
+Source Block: oh/src/spi/hdl/spi_slave_regs.v@129:141@HdlStmProcess
+  
+   //#####################################
+   //# USER SPACE REGISTERS
+   //#####################################
+
+   always @ (negedge spi_clk)
+     if(user_write)
+       user_regs[spi_addr[4:0]] <= spi_wdata[7:0]; 
+
+   //#####################################
+   //# REGISTER VECTOR (FOR FLEXIBILITY)
+   //#####################################
+
+
+Diff Content:
+- 134    always @ (negedge spi_clk)
+- 135      if(user_write)
+- 136        user_regs[spi_addr[4:0]] <= spi_wdata[7:0]; 
+
+Clone Blocks:

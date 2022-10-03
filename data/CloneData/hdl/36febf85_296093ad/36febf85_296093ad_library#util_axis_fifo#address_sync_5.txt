@@ -1,0 +1,71 @@
+Source Block: hdl/library/util_axis_fifo/address_sync.v@71:91@HdlStmProcess
+		m_axis_raddr_next <= m_axis_raddr + 1'b1;
+	else
+		m_axis_raddr_next <= m_axis_raddr;
+end
+
+always @(posedge clk)
+begin
+	if (resetn == 1'b0) begin
+		s_axis_waddr <= 'h00;
+		m_axis_raddr <= 'h00;
+	end else begin
+		if (write)
+			s_axis_waddr <= s_axis_waddr + 1'b1;
+		m_axis_raddr <= m_axis_raddr_next;
+	end
+end
+
+always @(*)
+begin
+	if (read & ~write)
+		level_next <= level - 1'b1;
+
+Diff Content:
+- 84 		m_axis_raddr <= m_axis_raddr_next;
++ 84 		if (read)
++ 84 			m_axis_raddr <= m_axis_raddr + 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/address_sync.v@83:101
+			s_axis_waddr <= s_axis_waddr + 1'b1;
+		m_axis_raddr <= m_axis_raddr_next;
+	end
+end
+
+always @(*)
+begin
+	if (read & ~write)
+		level_next <= level - 1'b1;
+	else if (~read & write)
+		level_next <= level + 1'b1;
+	else
+		level_next <= level;
+end
+
+always @(posedge clk)
+begin
+	if (resetn == 1'b0) begin
+		m_axis_valid <= 1'b0;
+
+Clone Blocks 2:
+hdl/library/util_axis_fifo/address_sync.v@63:79
+assign m_axis_level = level;
+
+wire read = m_axis_ready & m_axis_valid;
+wire write = s_axis_ready & s_axis_valid;
+
+always @(*)
+begin
+	if (read)
+		m_axis_raddr_next <= m_axis_raddr + 1'b1;
+	else
+		m_axis_raddr_next <= m_axis_raddr;
+end
+
+always @(posedge clk)
+begin
+	if (resetn == 1'b0) begin
+		s_axis_waddr <= 'h00;
+

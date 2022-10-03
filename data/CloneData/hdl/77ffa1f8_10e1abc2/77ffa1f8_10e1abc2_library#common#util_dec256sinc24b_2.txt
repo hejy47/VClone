@@ -1,0 +1,37 @@
+Source Block: hdl/library/common/util_dec256sinc24b.v@72:94@HdlStmProcess
+
+  /* Accumulator (Integrator) Perform the accumulation (IIR) at the speed of
+   * the modulator. Z = one sample delay MCLKOUT = modulators conversion
+   * bit rate */
+
+  always @(negedge clk) begin
+    if (reset == 1'b1) begin
+      /* initialize acc registers on reset */
+      acc1 <= 37'd0;
+      acc2 <= 37'd0;
+      acc3 <= 37'd0;
+    end else begin
+      /* perform accumulation process */
+      acc1 <= acc1 + data_int;
+      acc2 <= acc2 + acc1;
+      acc3 <= acc3 + acc2;
+    end
+  end
+
+  /* decimation stage (MCLKOUT/WORD_CLK) */
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+
+Diff Content:
+- 85       acc1 <= acc1 + data_int;
+- 86       acc2 <= acc2 + acc1;
+- 87       acc3 <= acc3 + acc2;
++ 87       acc1 <= acc1_s;
++ 87       acc2 <= acc2_s;
++ 87       acc3 <= acc3_s;
++ 89   assign acc1_s = acc1 + data_int;
++ 89   assign acc2_s = acc2 + acc1;
++ 89   assign acc3_s = acc3 + acc2;
+
+Clone Blocks:

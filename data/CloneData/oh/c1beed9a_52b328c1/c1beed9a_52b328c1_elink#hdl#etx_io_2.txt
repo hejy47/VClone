@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/etx_io.v@158:169@HdlIdDef
+	  tx_rd_wait <= tx_rd_wait_sync;
+	  tx_wr_wait <= tx_wr_wait_sync;
+       end
+   //Wait signal (align with end of transfer)
+
+   wire tx_wait_in = (tx_access_reg & tx_rd_wait_sync & ~write )  |
+  		     (tx_access_reg & tx_wr_wait_sync &  write );
+       
+   assign tx_wait = tx_wait_in & ~(|counter[2:1]);
+   
+		         
+   //#############################
+
+Diff Content:
+- 163    wire tx_wait_in = (tx_access_reg & tx_rd_wait_sync & ~write )  |
+- 164   		     (tx_access_reg & tx_wr_wait_sync &  write );
++ 164    wire tx_wait_in = tx_rd_wait_sync | tx_wr_wait_sync;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_io.v@161:171
+   //Wait signal (align with end of transfer)
+
+   wire tx_wait_in = (tx_access_reg & tx_rd_wait_sync & ~write )  |
+  		     (tx_access_reg & tx_wr_wait_sync &  write );
+       
+   assign tx_wait = tx_wait_in & ~(|counter[2:1]);
+   
+		         
+   //#############################
+   //# 2 CYCLE PACKET PIPELINE
+   //#############################  
+

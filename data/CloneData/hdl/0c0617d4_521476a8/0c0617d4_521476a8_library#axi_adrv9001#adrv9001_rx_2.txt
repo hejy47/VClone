@@ -1,0 +1,249 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_rx.v@188:279@HdlStmIf
+
+  end
+  endgenerate
+
+  generate
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+
+    BUFIO i_clk_buf (
+      .I (clk_in_s),
+      .O (adc_clk_in_fast));
+
+    BUFR #(.BUFR_DIVIDE("4")) i_div_clk_buf (
+      .CLR (mssi_sync),
+      .CE (1'b1),
+      .I (clk_in_s),
+      .O (adc_clk_div_s));
+
+    if (USE_BUFG == 1) begin
+      BUFG I_bufg (
+        .I (adc_clk_div_s),
+        .O (adc_clk_div)
+      );
+    end else begin
+      assign adc_clk_div = adc_clk_div_s;
+    end
+
+    xpm_cdc_async_rst
+    # (
+       .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
+       .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+       .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
+      )
+    rst_syncro
+    (
+     .src_arst (mssi_sync  ),
+     .dest_clk (adc_clk_div),
+     .dest_arst(ssi_rst    )
+    );
+
+  end else begin
+    wire adc_clk_in;
+
+    reg mssi_sync_d = 1'b0;
+    reg mssi_sync_2d = 1'b0;
+    reg mssi_sync_3d = 1'b0;
+    reg mssi_sync_edge = 1'b0;
+    always @(posedge adc_clk_in) begin
+      mssi_sync_d <= mssi_sync;
+      mssi_sync_2d <= mssi_sync_d;
+      mssi_sync_3d <= mssi_sync_2d;
+      mssi_sync_edge <= mssi_sync_2d & ~mssi_sync_3d;
+    end
+
+    assign ssi_sync_out = mssi_sync_edge;
+
+    reg ssi_rst_pos;
+    always @(posedge adc_clk_in) begin
+      ssi_rst_pos <= ssi_sync_in;
+    end
+
+    assign adc_clk_in = clk_in_s;
+
+    BUFGCE #(
+       .CE_TYPE ("SYNC"),
+       .IS_CE_INVERTED (1'b0),
+       .IS_I_INVERTED (1'b0)
+    ) i_clk_buf_fast (
+       .O (adc_clk_in_fast),
+       .CE (1'b1),
+       .I (adc_clk_in)
+    );
+
+    BUFGCE_DIV #(
+       .BUFGCE_DIVIDE (4),
+       .IS_CE_INVERTED (1'b0),
+       .IS_CLR_INVERTED (1'b0),
+       .IS_I_INVERTED (1'b0)
+    ) i_div_clk_buf (
+       .O (adc_clk_div),
+       .CE (1'b1),
+       .CLR (ssi_rst),
+       .I (adc_clk_in)
+    );
+
+    assign ssi_rst = ssi_rst_pos;
+
+  end
+
+  endgenerate
+
+  assign adc_clk = adc_clk_in_fast;
+  assign adc_valid = ~adc_rst;
+
+Diff Content:
+- 199     BUFR #(.BUFR_DIVIDE("4")) i_div_clk_buf (
+- 208         .O (adc_clk_div)
+- 209       );
+- 214     xpm_cdc_async_rst
+- 215     # (
+- 216        .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
+- 217        .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+- 218        .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
+- 219       )
+- 220     rst_syncro
+- 221     (
+- 222      .src_arst (mssi_sync  ),
+- 223      .dest_clk (adc_clk_div),
+- 224      .dest_arst(ssi_rst    )
+- 225     );
+- 251        .CE_TYPE ("SYNC"),
+- 252        .IS_CE_INVERTED (1'b0),
+- 253        .IS_I_INVERTED (1'b0)
+- 255        .O (adc_clk_in_fast),
+- 256        .CE (1'b1),
+- 257        .I (adc_clk_in)
+- 258     );
+- 261        .BUFGCE_DIVIDE (4),
+- 262        .IS_CE_INVERTED (1'b0),
+- 263        .IS_CLR_INVERTED (1'b0),
+- 264        .IS_I_INVERTED (1'b0)
+- 266        .O (adc_clk_div),
+- 267        .CE (1'b1),
+- 268        .CLR (ssi_rst),
+- 269        .I (adc_clk_in)
+- 270     );
++ 199     BUFR #(
++ 199       .BUFR_DIVIDE("4")
++ 199     ) i_div_clk_buf (
++ 209         .O (adc_clk_div));
++ 225     xpm_cdc_async_rst #(
++ 225       .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
++ 225       .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
++ 225       .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
++ 225     ) rst_syncro (
++ 225       .src_arst (mssi_sync),
++ 225       .dest_clk (adc_clk_div),
++ 225       .dest_arst(ssi_rst));
++ 253       .CE_TYPE ("SYNC"),
++ 253       .IS_CE_INVERTED (1'b0),
++ 253       .IS_I_INVERTED (1'b0)
++ 258       .O (adc_clk_in_fast),
++ 258       .CE (1'b1),
++ 258       .I (adc_clk_in));
++ 264       .BUFGCE_DIVIDE (4),
++ 264       .IS_CE_INVERTED (1'b0),
++ 264       .IS_CLR_INVERTED (1'b0),
++ 264       .IS_I_INVERTED (1'b0)
++ 270       .O (adc_clk_div),
++ 270       .CE (1'b1),
++ 270       .CLR (ssi_rst),
++ 270       .I (adc_clk_in));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adrv9001/adrv9001_rx.v@188:279
+
+  end
+  endgenerate
+
+  generate
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+
+    BUFIO i_clk_buf (
+      .I (clk_in_s),
+      .O (adc_clk_in_fast));
+
+    BUFR #(.BUFR_DIVIDE("4")) i_div_clk_buf (
+      .CLR (mssi_sync),
+      .CE (1'b1),
+      .I (clk_in_s),
+      .O (adc_clk_div_s));
+
+    if (USE_BUFG == 1) begin
+      BUFG I_bufg (
+        .I (adc_clk_div_s),
+        .O (adc_clk_div)
+      );
+    end else begin
+      assign adc_clk_div = adc_clk_div_s;
+    end
+
+    xpm_cdc_async_rst
+    # (
+       .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
+       .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+       .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
+      )
+    rst_syncro
+    (
+     .src_arst (mssi_sync  ),
+     .dest_clk (adc_clk_div),
+     .dest_arst(ssi_rst    )
+    );
+
+  end else begin
+    wire adc_clk_in;
+
+    reg mssi_sync_d = 1'b0;
+    reg mssi_sync_2d = 1'b0;
+    reg mssi_sync_3d = 1'b0;
+    reg mssi_sync_edge = 1'b0;
+    always @(posedge adc_clk_in) begin
+      mssi_sync_d <= mssi_sync;
+      mssi_sync_2d <= mssi_sync_d;
+      mssi_sync_3d <= mssi_sync_2d;
+      mssi_sync_edge <= mssi_sync_2d & ~mssi_sync_3d;
+    end
+
+    assign ssi_sync_out = mssi_sync_edge;
+
+    reg ssi_rst_pos;
+    always @(posedge adc_clk_in) begin
+      ssi_rst_pos <= ssi_sync_in;
+    end
+
+    assign adc_clk_in = clk_in_s;
+
+    BUFGCE #(
+       .CE_TYPE ("SYNC"),
+       .IS_CE_INVERTED (1'b0),
+       .IS_I_INVERTED (1'b0)
+    ) i_clk_buf_fast (
+       .O (adc_clk_in_fast),
+       .CE (1'b1),
+       .I (adc_clk_in)
+    );
+
+    BUFGCE_DIV #(
+       .BUFGCE_DIVIDE (4),
+       .IS_CE_INVERTED (1'b0),
+       .IS_CLR_INVERTED (1'b0),
+       .IS_I_INVERTED (1'b0)
+    ) i_div_clk_buf (
+       .O (adc_clk_div),
+       .CE (1'b1),
+       .CLR (ssi_rst),
+       .I (adc_clk_in)
+    );
+
+    assign ssi_rst = ssi_rst_pos;
+
+  end
+
+  endgenerate
+
+  assign adc_clk = adc_clk_in_fast;
+  assign adc_valid = ~adc_rst;
+

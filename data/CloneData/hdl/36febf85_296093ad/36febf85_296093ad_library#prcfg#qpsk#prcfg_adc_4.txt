@@ -1,0 +1,84 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_adc.v@117:127@HdlStmAssign
+  always @(posedge clk) begin
+    channel_sel <= control[ 3:0];
+    mode        <= control[ 7:4];
+  end
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
+
+  ad_pnmon #(
+    .DATA_WIDTH(8)
+
+Diff Content:
+- 122   assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
++ 122   assign adc_valid  = src_adc_valid & src_adc_enable;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/bist/prcfg_adc.v@136:149
+    end
+  endfunction
+
+  assign adc_dvalid = src_adc_dwr & src_adc_dsync;
+
+  always @(posedge clk) begin
+    channel_sel  <= control[3:0];
+    mode         <= control[7:4];
+  end
+
+  // prbs generation
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_pn_data <= pn(adc_pn_data_s);
+
+Clone Blocks 2:
+hdl/library/prcfg/bist/prcfg_adc.v@142:156
+    channel_sel  <= control[3:0];
+    mode         <= control[7:4];
+  end
+
+  // prbs generation
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_pn_data <= pn(adc_pn_data_s);
+    end
+  end
+
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? src_adc_ddata : adc_pn_data;
+
+  ad_pnmon #(
+    .DATA_WIDTH(32)
+
+Clone Blocks 3:
+hdl/library/prcfg/qpsk/prcfg_adc.v@112:125
+      pn = dout;
+    end
+  endfunction
+
+  // update control and status registers
+  always @(posedge clk) begin
+    channel_sel <= control[ 3:0];
+    mode        <= control[ 7:4];
+  end
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
+
+
+Clone Blocks 4:
+hdl/library/prcfg/qpsk/prcfg_adc.v@119:129
+    mode        <= control[ 7:4];
+  end
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  assign adc_pn_data_s = (adc_pn_oos_s == 1'b1) ? {adc_pn_data[7:2], adc_ddata_s} : adc_pn_data;
+
+  ad_pnmon #(
+    .DATA_WIDTH(8)
+  ) i_pn_mon (
+    .adc_clk(clk),
+

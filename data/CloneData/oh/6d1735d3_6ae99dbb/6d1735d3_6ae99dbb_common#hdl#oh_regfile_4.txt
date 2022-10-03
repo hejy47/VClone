@@ -1,0 +1,23 @@
+Source Block: oh/common/hdl/oh_regfile.v@59:71@HdlStmFor
+   
+   //#########################################
+   // read ports
+   //#########################################	
+   
+   for (i=0;i<RP;i=i+1)
+     assign rd_data[i*RW+:RW] = {(RW){rd_valid[i]}} & 
+				mem[rd_addr[i*RAW+:RAW]];
+   
+endmodule // oh_regfile
+
+
+
+
+Diff Content:
+- 64    for (i=0;i<RP;i=i+1)
+- 65      assign rd_data[i*RW+:RW] = {(RW){rd_valid[i]}} & 
++ 65    for (i=0;i<RP;i=i+1) begin: gen_rdport
++ 65       assign rd_data[i*RW+:RW] = {(RW){rd_valid[i]}} & 
++ 66    end
+
+Clone Blocks:

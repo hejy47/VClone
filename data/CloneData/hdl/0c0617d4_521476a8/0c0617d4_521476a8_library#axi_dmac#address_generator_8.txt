@@ -1,0 +1,73 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@91:101@HdlIdDef
+              DMA_DATA_WIDTH ==   64 ? 3'b011 :
+              DMA_DATA_WIDTH ==   32 ? 3'b010 :
+              DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
+
+reg addr_valid_d1;
+
+Diff Content:
+- 96 reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@93:103
+              DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
+
+reg addr_valid_d1;
+reg last = 1'b0;
+
+
+Clone Blocks 2:
+hdl/library/axi_dmac/address_generator.v@92:102
+              DMA_DATA_WIDTH ==   32 ? 3'b010 :
+              DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
+
+reg addr_valid_d1;
+reg last = 1'b0;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/address_generator.v@94:104
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
+
+reg addr_valid_d1;
+reg last = 1'b0;
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+
+Clone Blocks 4:
+hdl/library/axi_dmac/address_generator.v@90:100
+              DMA_DATA_WIDTH ==  128 ? 3'b100 :
+              DMA_DATA_WIDTH ==   64 ? 3'b011 :
+              DMA_DATA_WIDTH ==   32 ? 3'b010 :
+              DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+assign len = length;
+
+

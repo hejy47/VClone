@@ -1,0 +1,60 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@138:160@HdlStmProcess
+assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
+assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
+
+assign goto_next_state_s = good_cnt_limit_reached_s || (state == STATE_SYNCHRONIZED);
+
+always @(posedge clk) begin
+  if (reset) begin
+    good_counter <= 'h00;
+  end else if (state_good == 1'b1) begin
+    if (good_cnt_limit_reached_s) begin
+      good_counter <= 'h00;
+    end else begin
+      good_counter <= good_counter + 1'b1;
+    end
+  end else begin
+    good_counter <= 'h00;
+  end
+end
+
+always @(posedge clk) begin
+  case (state)
+  STATE_CGS: en_align <= 1'b1;
+  default: en_align <= 1'b0;
+
+Diff Content:
+- 143 always @(posedge clk) begin
+- 144   if (reset) begin
+- 145     good_counter <= 'h00;
+- 146   end else if (state_good == 1'b1) begin
+- 147     if (good_cnt_limit_reached_s) begin
+- 150       good_counter <= good_counter + 1'b1;
+- 152   end else begin
+- 153     good_counter <= 'h00;
+- 155 end
++ 147   always @(*) begin
++ 147     case (state)
++ 147     STATE_RESET: state_good = 1'b1;
++ 147     STATE_WAIT_FOR_PHY: state_good = phy_ready;
++ 147     STATE_CGS: state_good = &(cgs_ready | cfg_lanes_disable);
++ 147     STATE_SYNCHRONIZED: state_good = ENABLE_FRAME_ALIGN_ERR_RESET ?
++ 147                                      &(~frame_align_err_thresh_met | cfg_lanes_disable) :
++ 147                                      1'b1;
++ 147     default: state_good = 1'b0;
++ 147     endcase
++ 147   end
++ 147   assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
++ 147   assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
++ 147   assign goto_next_state_s = good_cnt_limit_reached_s || (state == STATE_SYNCHRONIZED);
++ 147   always @(posedge clk) begin
++ 147     if (reset) begin
++ 148     end else if (state_good == 1'b1) begin
++ 148       if (good_cnt_limit_reached_s) begin
++ 148         good_counter <= 'h00;
++ 148       end else begin
++ 148         good_counter <= good_counter + 1'b1;
++ 148       end
++ 150       good_counter <= 'h00;
+
+Clone Blocks:

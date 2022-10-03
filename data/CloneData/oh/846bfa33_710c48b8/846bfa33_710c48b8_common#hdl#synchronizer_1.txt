@@ -1,0 +1,36 @@
+Source Block: oh/common/hdl/synchronizer.v@22:36@HdlStmProcess
+   //Three stages
+   reg [DW-1:0] sync_reg0;
+   reg [DW-1:0] out;
+     
+   //We use two flip-flops for metastability improvement
+   always @ (posedge clk)
+     begin
+	sync_reg0[DW-1:0] <= in[DW-1:0];
+	out[DW-1:0]       <= sync_reg0[DW-1:0];
+     end
+   
+
+endmodule // synchronizer
+
+/*
+
+Diff Content:
+- 27    always @ (posedge clk)
+- 28      begin
+- 29 	sync_reg0[DW-1:0] <= in[DW-1:0];
+- 30 	out[DW-1:0]       <= sync_reg0[DW-1:0];
+- 31      end
++ 31    always @ (posedge clk or posedge reset)
++ 31      if(reset)
++ 31        begin
++ 31 	  sync_reg0[DW-1:0] <= {(DW){1'b0}};
++ 31 	  out[DW-1:0]       <= {(DW){1'b0}};
++ 31 	 end
++ 31      else
++ 31        begin
++ 31 	  sync_reg0[DW-1:0] <= in[DW-1:0];
++ 31 	  out[DW-1:0]       <= sync_reg0[DW-1:0];
++ 31        end
+
+Clone Blocks:

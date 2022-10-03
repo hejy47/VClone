@@ -1,0 +1,60 @@
+Source Block: hdl/library/prcfg/bist/prcfg_adc.v@81:91@HdlIdDef
+  reg               dst_adc_dsync;
+  reg     [31:0]    dst_adc_ddata;
+  reg               src_adc_dovf;
+
+  reg     [31:0]    status            = 0;
+  reg     [31:0]    adc_pn_data       = 0;
+
+  reg     [ 3:0]    mode;
+  reg     [ 3:0]    channel_sel;
+
+  wire              adc_dvalid;
+
+Diff Content:
+- 86   reg     [31:0]    adc_pn_data       = 0;
++ 86   reg     [15:0]    adc_pn_data       = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/bist/prcfg_adc.v@83:93
+  reg               src_adc_dovf;
+
+  reg     [31:0]    status            = 0;
+  reg     [31:0]    adc_pn_data       = 0;
+
+  reg     [ 3:0]    mode;
+  reg     [ 3:0]    channel_sel;
+
+  wire              adc_dvalid;
+  wire    [31:0]    adc_pn_data_s;
+  wire              adc_pn_oos_s;
+
+Clone Blocks 2:
+hdl/library/prcfg/qpsk/prcfg_adc.v@83:93
+  reg                                 src_adc_dovf    = 'h0;
+  reg                                 dst_adc_dwr     = 'h0;
+  reg                                 dst_adc_dsync   = 'h0;
+  reg     [(DATA_WIDTH-1):0]          dst_adc_ddata   = 'h0;
+
+  reg     [ 7:0]                      adc_pn_data     = 'hF1;
+  reg     [31:0]                      status          = 'h0;
+  reg     [ 3:0]                      mode            = 'h0;
+  reg     [ 3:0]                      channel_sel     = 'h0;
+
+  wire                                adc_dvalid;
+
+Clone Blocks 3:
+hdl/library/prcfg/bist/prcfg_adc.v@84:94
+
+  reg     [31:0]    status            = 0;
+  reg     [31:0]    adc_pn_data       = 0;
+
+  reg     [ 3:0]    mode;
+  reg     [ 3:0]    channel_sel;
+
+  wire              adc_dvalid;
+  wire    [31:0]    adc_pn_data_s;
+  wire              adc_pn_oos_s;
+  wire              adc_pn_err_s;
+

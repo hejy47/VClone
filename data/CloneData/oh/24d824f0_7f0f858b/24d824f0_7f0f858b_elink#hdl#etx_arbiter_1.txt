@@ -1,0 +1,38 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@165:181@HdlStmProcess
+		      (edma_grant & ~edma_wait);
+
+   //Pipeline + stall
+   assign write_in = etx_mux[1];
+
+   always @ (posedge clk)
+     if ((write_in & ~etx_wr_wait) | (~write_in & ~etx_rd_wait))
+       begin
+	  etx_access         <= access_in;
+	  etx_packet[PW-1:0] <= etx_mux[PW-1:0];
+	  etx_rr             <= txrr_grant;
+       end
+   
+endmodule // etx_arbiter
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+// End:
+
+Diff Content:
+- 171      if ((write_in & ~etx_wr_wait) | (~write_in & ~etx_rd_wait))
++ 171      if (access_in & (write_in & ~etx_wr_wait) | (~write_in & ~etx_rd_wait))
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_arbiter.v@163:173
+		      (txrd_grant & ~txrd_wait) |
+		      (txrr_grant & ~txrr_wait) |
+		      (edma_grant & ~edma_wait);
+
+   //Pipeline + stall
+   assign write_in = etx_mux[1];
+
+   always @ (posedge clk)
+     if ((write_in & ~etx_wr_wait) | (~write_in & ~etx_rd_wait))
+       begin
+	  etx_access         <= access_in;
+

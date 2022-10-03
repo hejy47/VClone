@@ -1,0 +1,17 @@
+Source Block: oh/common/hdl/oh_mux4.v@31:40@HdlStmProcess
+   
+
+   assign error = (sel0 | sel1 | sel2 | sel3) &
+   		  ~(sel0 ^ sel1 ^ sel2 ^ sel3);
+
+   always @ (posedge error)
+     $display ("ERROR in oh_mux4 %m");
+   			
+endmodule // oh_mux4
+
+
+Diff Content:
+- 37      $display ("ERROR in oh_mux4 %m");
++ 37      $display ("ERROR at in oh_mux4 %m at ",$time);
+
+Clone Blocks:

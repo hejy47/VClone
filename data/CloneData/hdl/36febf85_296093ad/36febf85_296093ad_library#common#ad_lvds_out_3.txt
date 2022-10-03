@@ -1,0 +1,114 @@
+Source Block: hdl/library/common/ad_lvds_out.v@98:116@HdlStmIf
+  wire                tx_data_odelay_s;
+
+  // delay controller
+
+  generate
+  if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end else begin
+  assign delay_locked = 1'b1;
+  end
+  endgenerate
+
+  // transmit data interface, oddr -> odelay -> obuf
+
+  ODDR #(
+
+Diff Content:
+- 103   if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
++ 103   if ((IODELAY_ENABLE == 1) && (DEVICE_TYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_lvds_in.v@102:120
+  wire                rx_data_idelay_s;
+
+  // delay controller
+
+  generate
+  if (IODELAY_CTRL == 1) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end else begin
+  assign delay_locked = 1'b1;
+  end
+  endgenerate
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  IBUFDS i_rx_data_ibuf (
+
+Clone Blocks 2:
+hdl/library/common/ad_lvds_in.v@102:120
+  wire                rx_data_idelay_s;
+
+  // delay controller
+
+  generate
+  if (IODELAY_CTRL == 1) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end else begin
+  assign delay_locked = 1'b1;
+  end
+  endgenerate
+
+  // receive data interface, ibuf -> idelay -> iddr
+
+  IBUFDS i_rx_data_ibuf (
+
+Clone Blocks 3:
+hdl/library/common/ad_serdes_in.v@127:145
+  wire            data_shift2_s;
+
+  // delay controller
+
+  generate
+  if (IODELAY_CTRL == 1) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end else begin
+  assign delay_locked = 1'b1;
+  end
+  endgenerate
+
+  // received data interface: ibuf -> idelay -> iserdes
+
+  IBUFDS i_ibuf (
+
+Clone Blocks 4:
+hdl/library/common/ad_lvds_out.v@98:116
+  wire                tx_data_odelay_s;
+
+  // delay controller
+
+  generate
+  if ((IODELAY_ENABLE == 1) && (BUFTYPE == SERIES7) && (IODELAY_CTRL == 1)) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYCTRL i_delay_ctrl (
+    .RST (delay_rst),
+    .REFCLK (delay_clk),
+    .RDY (delay_locked));
+  end else begin
+  assign delay_locked = 1'b1;
+  end
+  endgenerate
+
+  // transmit data interface, oddr -> odelay -> obuf
+
+  ODDR #(
+

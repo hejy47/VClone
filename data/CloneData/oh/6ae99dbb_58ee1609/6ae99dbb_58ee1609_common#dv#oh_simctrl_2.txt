@@ -1,0 +1,42 @@
+Source Block: oh/common/dv/oh_simctrl.v@112:136@HdlStmProcess
+	  $display("TEST %0s STARTED", testname);
+	  start <= 1'b1; 
+       end
+   
+   //STOP SIMULATION ON END
+   always @ (posedge clk1 or negedge nreset)
+     if(!nreset)
+       test_fail <= 1'b0;
+     else if (test_diff)
+       test_fail <= 1'b1;
+     else if(stim_done & test_done)
+       begin
+	  $display("-------------------");
+	  if(test_fail)
+	    $display("TEST %0s FAILED", testname);
+	  else
+	    $display("TEST %0s PASSED", testname);
+	  #100
+	    $finish;
+       end
+   
+   //#################################
+   // TIMEOUT
+   //#################################
+   initial
+
+Diff Content:
+- 120      else if (test_diff)
+- 121        test_fail <= 1'b1;
+- 124 	  $display("-------------------");
+- 128 	    $display("TEST %0s PASSED", testname);
+- 129 	  #100
+- 130 	    $finish;
++ 124 	  #500
++ 124 	    $display("-------------------");
++ 130 	    $display("TEST %0s PASSED", testname);	  
++ 130 	  $finish;
++ 131      else if (test_diff)
++ 131        test_fail <= 1'b1;
+
+Clone Blocks:

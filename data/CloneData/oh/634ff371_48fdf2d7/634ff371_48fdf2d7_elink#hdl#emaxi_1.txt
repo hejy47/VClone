@@ -1,0 +1,21 @@
+Source Block: oh/elink/hdl/emaxi.v@437:447@HdlStmAssign
+   
+   //#########################################################################
+   //Read response channel
+   //#########################################################################
+
+   assign m_axi_rready  = ~txrr_wait; //pass through
+   
+   always @( posedge m_axi_aclk )
+     if( ~m_axi_aresetn ) 
+       begin      
+	  txrr_data[31:0]     <= 32'b0;
+
+Diff Content:
++ 442    always @( posedge m_axi_aclk )
++ 442        if ( ~m_axi_aresetn )
++ 442            m_axi_rdata_reg <= 'b0;
++ 442        else
++ 442            m_axi_rdata_reg <= m_axi_rdata;
+
+Clone Blocks:

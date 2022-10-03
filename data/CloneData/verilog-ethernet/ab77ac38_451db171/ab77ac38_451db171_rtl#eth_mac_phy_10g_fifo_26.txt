@@ -1,0 +1,390 @@
+Source Block: verilog-ethernet/rtl/eth_mac_phy_10g_fifo.v@259:447@HdlStmIf
+end
+
+// PTP timestamping
+generate
+
+if (TX_PTP_TS_ENABLE) begin
+    
+    ptp_clock_cdc #(
+        .TS_WIDTH(PTP_TS_WIDTH),
+        .NS_WIDTH(4),
+        .FNS_WIDTH(16),
+        .INPUT_PERIOD_NS(LOGIC_PTP_PERIOD_NS),
+        .INPUT_PERIOD_FNS(LOGIC_PTP_PERIOD_FNS),
+        .OUTPUT_PERIOD_NS(PTP_PERIOD_NS),
+        .OUTPUT_PERIOD_FNS(PTP_PERIOD_FNS),
+        .USE_SAMPLE_CLOCK(PTP_USE_SAMPLE_CLOCK)
+    )
+    tx_ptp_cdc (
+        .input_clk(logic_clk),
+        .input_rst(logic_rst),
+        .output_clk(tx_clk),
+        .output_rst(tx_rst),
+        .sample_clk(ptp_sample_clk),
+        .input_ts(ptp_ts_96),
+        .output_ts(tx_ptp_ts_96),
+        .output_ts_step(),
+        .output_pps()
+    );
+
+    if (TX_PTP_TAG_ENABLE) begin
+
+        ptp_tag_insert #(
+            .DATA_WIDTH(DATA_WIDTH),
+            .KEEP_WIDTH(KEEP_WIDTH),
+            .TAG_WIDTH(PTP_TAG_WIDTH),
+            .TAG_OFFSET(1),
+            .USER_WIDTH(TX_USER_WIDTH)
+        )
+        tx_ptp_tag_insert (
+            .clk(logic_clk),
+            .rst(logic_rst),
+
+            // AXI stream input
+            .s_axis_tdata(tx_axis_tdata),
+            .s_axis_tkeep(tx_axis_tkeep),
+            .s_axis_tvalid(tx_axis_tvalid),
+            .s_axis_tready(tx_axis_tready),
+            .s_axis_tlast(tx_axis_tlast),
+            .s_axis_tuser(tx_axis_tuser),
+
+            // AXI stream input
+            .m_axis_tdata(tx_axis_tdata_int),
+            .m_axis_tkeep(tx_axis_tkeep_int),
+            .m_axis_tvalid(tx_axis_tvalid_int),
+            .m_axis_tready(tx_axis_tready_int),
+            .m_axis_tlast(tx_axis_tlast_int),
+            .m_axis_tuser(tx_axis_tuser_int),
+
+            // Tag input
+            .s_axis_tag(s_axis_tx_ptp_ts_tag),
+            .s_axis_tag_valid(s_axis_tx_ptp_ts_valid),
+            .s_axis_tag_ready(s_axis_tx_ptp_ts_ready)
+        );
+
+        axis_async_fifo #(
+            .DEPTH(TX_PTP_TS_FIFO_DEPTH),
+            .DATA_WIDTH(PTP_TAG_WIDTH+PTP_TS_WIDTH),
+            .KEEP_ENABLE(0),
+            .LAST_ENABLE(0),
+            .ID_ENABLE(0),
+            .DEST_ENABLE(0),
+            .USER_ENABLE(0),
+            .FRAME_FIFO(0)
+        )
+        tx_ptp_ts_fifo (
+            .async_rst(logic_rst | tx_rst),
+
+            // AXI input
+            .s_clk(tx_clk),
+            .s_axis_tdata({tx_axis_ptp_ts_tag, tx_axis_ptp_ts_96}),
+            .s_axis_tkeep(0),
+            .s_axis_tvalid(tx_axis_ptp_ts_valid),
+            .s_axis_tready(),
+            .s_axis_tlast(0),
+            .s_axis_tid(0),
+            .s_axis_tdest(0),
+            .s_axis_tuser(0),
+
+            // AXI output
+            .m_clk(logic_clk),
+            .m_axis_tdata({m_axis_tx_ptp_ts_tag, m_axis_tx_ptp_ts_96}),
+            .m_axis_tkeep(),
+            .m_axis_tvalid(m_axis_tx_ptp_ts_valid),
+            .m_axis_tready(m_axis_tx_ptp_ts_ready),
+            .m_axis_tlast(),
+            .m_axis_tid(),
+            .m_axis_tdest(),
+            .m_axis_tuser(),
+
+            // Status
+            .s_status_overflow(),
+            .s_status_bad_frame(),
+            .s_status_good_frame(),
+            .m_status_overflow(),
+            .m_status_bad_frame(),
+            .m_status_good_frame()
+        );
+        
+    end else begin
+
+        assign tx_axis_tdata_int = tx_axis_tdata;
+        assign tx_axis_tkeep_int = tx_axis_tkeep;
+        assign tx_axis_tvalid_int = tx_axis_tvalid;
+        assign tx_axis_tready = tx_axis_tready_int;
+        assign tx_axis_tlast_int = tx_axis_tlast;
+        assign tx_axis_tuser_int = tx_axis_tuser;
+
+        axis_async_fifo #(
+            .DEPTH(TX_PTP_TS_FIFO_DEPTH),
+            .DATA_WIDTH(PTP_TS_WIDTH),
+            .KEEP_ENABLE(0),
+            .LAST_ENABLE(0),
+            .ID_ENABLE(0),
+            .DEST_ENABLE(0),
+            .USER_ENABLE(0),
+            .FRAME_FIFO(0)
+        )
+        tx_ptp_ts_fifo (
+            .async_rst(logic_rst | tx_rst),
+
+            // AXI input
+            .s_clk(tx_clk),
+            .s_axis_tdata(tx_axis_ptp_ts_96),
+            .s_axis_tkeep(0),
+            .s_axis_tvalid(tx_axis_ptp_ts_valid),
+            .s_axis_tready(),
+            .s_axis_tlast(0),
+            .s_axis_tid(0),
+            .s_axis_tdest(0),
+            .s_axis_tuser(0),
+
+            // AXI output
+            .m_clk(logic_clk),
+            .m_axis_tdata(m_axis_tx_ptp_ts_96),
+            .m_axis_tkeep(),
+            .m_axis_tvalid(m_axis_tx_ptp_ts_valid),
+            .m_axis_tready(m_axis_tx_ptp_ts_ready),
+            .m_axis_tlast(),
+            .m_axis_tid(),
+            .m_axis_tdest(),
+            .m_axis_tuser(),
+
+            // Status
+            .s_status_overflow(),
+            .s_status_bad_frame(),
+            .s_status_good_frame(),
+            .m_status_overflow(),
+            .m_status_bad_frame(),
+            .m_status_good_frame()
+        );
+
+        assign s_axis_tx_ptp_ts_ready = 1'b0;
+        assign m_axis_tx_ptp_ts_tag = {PTP_TAG_WIDTH{1'b0}};
+
+    end
+
+end else begin
+    
+    assign s_axis_tx_ptp_ts_ready = 1'b0;
+
+    assign m_axis_tx_ptp_ts_96 = {PTP_TS_WIDTH{1'b0}};
+    assign m_axis_tx_ptp_ts_tag = {PTP_TAG_WIDTH{1'b0}};
+    assign m_axis_tx_ptp_ts_valid = 1'b0;
+
+    assign tx_ptp_ts_96 = {PTP_TS_WIDTH{1'b0}};
+
+    assign tx_axis_tdata_int = tx_axis_tdata;
+    assign tx_axis_tkeep_int = tx_axis_tkeep;
+    assign tx_axis_tvalid_int = tx_axis_tvalid;
+    assign tx_axis_tready = tx_axis_tready_int;
+    assign tx_axis_tlast_int = tx_axis_tlast;
+    assign tx_axis_tuser_int = tx_axis_tuser;
+
+end
+
+if (RX_PTP_TS_ENABLE) begin
+
+    ptp_clock_cdc #(
+        .TS_WIDTH(PTP_TS_WIDTH),
+
+Diff Content:
+- 291             .DATA_WIDTH(DATA_WIDTH),
+- 292             .KEEP_WIDTH(KEEP_WIDTH),
++ 292             .DATA_WIDTH(AXIS_DATA_WIDTH),
++ 292             .KEEP_WIDTH(AXIS_KEEP_WIDTH),
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mac_10g_fifo.v@242:430
+end
+
+// PTP timestamping
+generate
+
+if (TX_PTP_TS_ENABLE) begin
+    
+    ptp_clock_cdc #(
+        .TS_WIDTH(PTP_TS_WIDTH),
+        .NS_WIDTH(4),
+        .FNS_WIDTH(16),
+        .INPUT_PERIOD_NS(LOGIC_PTP_PERIOD_NS),
+        .INPUT_PERIOD_FNS(LOGIC_PTP_PERIOD_FNS),
+        .OUTPUT_PERIOD_NS(PTP_PERIOD_NS),
+        .OUTPUT_PERIOD_FNS(PTP_PERIOD_FNS),
+        .USE_SAMPLE_CLOCK(PTP_USE_SAMPLE_CLOCK)
+    )
+    tx_ptp_cdc (
+        .input_clk(logic_clk),
+        .input_rst(logic_rst),
+        .output_clk(tx_clk),
+        .output_rst(tx_rst),
+        .sample_clk(ptp_sample_clk),
+        .input_ts(ptp_ts_96),
+        .output_ts(tx_ptp_ts_96),
+        .output_ts_step(),
+        .output_pps()
+    );
+
+    if (TX_PTP_TAG_ENABLE) begin
+
+        ptp_tag_insert #(
+            .DATA_WIDTH(DATA_WIDTH),
+            .KEEP_WIDTH(KEEP_WIDTH),
+            .TAG_WIDTH(PTP_TAG_WIDTH),
+            .TAG_OFFSET(1),
+            .USER_WIDTH(TX_USER_WIDTH)
+        )
+        tx_ptp_tag_insert (
+            .clk(logic_clk),
+            .rst(logic_rst),
+
+            // AXI stream input
+            .s_axis_tdata(tx_axis_tdata),
+            .s_axis_tkeep(tx_axis_tkeep),
+            .s_axis_tvalid(tx_axis_tvalid),
+            .s_axis_tready(tx_axis_tready),
+            .s_axis_tlast(tx_axis_tlast),
+            .s_axis_tuser(tx_axis_tuser),
+
+            // AXI stream input
+            .m_axis_tdata(tx_axis_tdata_int),
+            .m_axis_tkeep(tx_axis_tkeep_int),
+            .m_axis_tvalid(tx_axis_tvalid_int),
+            .m_axis_tready(tx_axis_tready_int),
+            .m_axis_tlast(tx_axis_tlast_int),
+            .m_axis_tuser(tx_axis_tuser_int),
+
+            // Tag input
+            .s_axis_tag(s_axis_tx_ptp_ts_tag),
+            .s_axis_tag_valid(s_axis_tx_ptp_ts_valid),
+            .s_axis_tag_ready(s_axis_tx_ptp_ts_ready)
+        );
+
+        axis_async_fifo #(
+            .DEPTH(TX_PTP_TS_FIFO_DEPTH),
+            .DATA_WIDTH(PTP_TAG_WIDTH+PTP_TS_WIDTH),
+            .KEEP_ENABLE(0),
+            .LAST_ENABLE(0),
+            .ID_ENABLE(0),
+            .DEST_ENABLE(0),
+            .USER_ENABLE(0),
+            .FRAME_FIFO(0)
+        )
+        tx_ptp_ts_fifo (
+            .async_rst(logic_rst | tx_rst),
+
+            // AXI input
+            .s_clk(tx_clk),
+            .s_axis_tdata({tx_axis_ptp_ts_tag, tx_axis_ptp_ts_96}),
+            .s_axis_tkeep(0),
+            .s_axis_tvalid(tx_axis_ptp_ts_valid),
+            .s_axis_tready(),
+            .s_axis_tlast(0),
+            .s_axis_tid(0),
+            .s_axis_tdest(0),
+            .s_axis_tuser(0),
+
+            // AXI output
+            .m_clk(logic_clk),
+            .m_axis_tdata({m_axis_tx_ptp_ts_tag, m_axis_tx_ptp_ts_96}),
+            .m_axis_tkeep(),
+            .m_axis_tvalid(m_axis_tx_ptp_ts_valid),
+            .m_axis_tready(m_axis_tx_ptp_ts_ready),
+            .m_axis_tlast(),
+            .m_axis_tid(),
+            .m_axis_tdest(),
+            .m_axis_tuser(),
+
+            // Status
+            .s_status_overflow(),
+            .s_status_bad_frame(),
+            .s_status_good_frame(),
+            .m_status_overflow(),
+            .m_status_bad_frame(),
+            .m_status_good_frame()
+        );
+        
+    end else begin
+
+        assign tx_axis_tdata_int = tx_axis_tdata;
+        assign tx_axis_tkeep_int = tx_axis_tkeep;
+        assign tx_axis_tvalid_int = tx_axis_tvalid;
+        assign tx_axis_tready = tx_axis_tready_int;
+        assign tx_axis_tlast_int = tx_axis_tlast;
+        assign tx_axis_tuser_int = tx_axis_tuser;
+
+        axis_async_fifo #(
+            .DEPTH(TX_PTP_TS_FIFO_DEPTH),
+            .DATA_WIDTH(PTP_TS_WIDTH),
+            .KEEP_ENABLE(0),
+            .LAST_ENABLE(0),
+            .ID_ENABLE(0),
+            .DEST_ENABLE(0),
+            .USER_ENABLE(0),
+            .FRAME_FIFO(0)
+        )
+        tx_ptp_ts_fifo (
+            .async_rst(logic_rst | tx_rst),
+
+            // AXI input
+            .s_clk(tx_clk),
+            .s_axis_tdata(tx_axis_ptp_ts_96),
+            .s_axis_tkeep(0),
+            .s_axis_tvalid(tx_axis_ptp_ts_valid),
+            .s_axis_tready(),
+            .s_axis_tlast(0),
+            .s_axis_tid(0),
+            .s_axis_tdest(0),
+            .s_axis_tuser(0),
+
+            // AXI output
+            .m_clk(logic_clk),
+            .m_axis_tdata(m_axis_tx_ptp_ts_96),
+            .m_axis_tkeep(),
+            .m_axis_tvalid(m_axis_tx_ptp_ts_valid),
+            .m_axis_tready(m_axis_tx_ptp_ts_ready),
+            .m_axis_tlast(),
+            .m_axis_tid(),
+            .m_axis_tdest(),
+            .m_axis_tuser(),
+
+            // Status
+            .s_status_overflow(),
+            .s_status_bad_frame(),
+            .s_status_good_frame(),
+            .m_status_overflow(),
+            .m_status_bad_frame(),
+            .m_status_good_frame()
+        );
+
+        assign s_axis_tx_ptp_ts_ready = 1'b0;
+        assign m_axis_tx_ptp_ts_tag = {PTP_TAG_WIDTH{1'b0}};
+
+    end
+
+end else begin
+    
+    assign s_axis_tx_ptp_ts_ready = 1'b0;
+
+    assign m_axis_tx_ptp_ts_96 = {PTP_TS_WIDTH{1'b0}};
+    assign m_axis_tx_ptp_ts_tag = {PTP_TAG_WIDTH{1'b0}};
+    assign m_axis_tx_ptp_ts_valid = 1'b0;
+
+    assign tx_ptp_ts_96 = {PTP_TS_WIDTH{1'b0}};
+
+    assign tx_axis_tdata_int = tx_axis_tdata;
+    assign tx_axis_tkeep_int = tx_axis_tkeep;
+    assign tx_axis_tvalid_int = tx_axis_tvalid;
+    assign tx_axis_tready = tx_axis_tready_int;
+    assign tx_axis_tlast_int = tx_axis_tlast;
+    assign tx_axis_tuser_int = tx_axis_tuser;
+
+end
+
+if (RX_PTP_TS_ENABLE) begin
+
+    ptp_clock_cdc #(
+        .TS_WIDTH(PTP_TS_WIDTH),
+

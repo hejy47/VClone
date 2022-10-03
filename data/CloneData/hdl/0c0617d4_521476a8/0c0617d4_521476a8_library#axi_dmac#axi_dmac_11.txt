@@ -1,0 +1,19 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@274:285@HdlIdDef
+   theory unlimted. Set it to 1024 to provide a reasonable upper threshold */
+localparam BEATS_PER_BURST_LIMIT_DEST =
+  (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_DEST =
+    BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+localparam BEATS_PER_BURST_LIMIT_SRC =
+  (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_SRC =
+
+Diff Content:
+- 279 localparam BYTES_PER_BURST_LIMIT_DEST =
+- 280     BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+
+Clone Blocks:

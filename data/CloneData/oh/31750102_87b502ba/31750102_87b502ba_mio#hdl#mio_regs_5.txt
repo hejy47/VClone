@@ -1,0 +1,27 @@
+Source Block: oh/mio/hdl/mio_regs.v@174:193@HdlStmProcess
+   assign clkdiv[7:0] = clkdiv_reg[7:0];
+
+   //###############################
+   //# CLKPHASE
+   //################################ 
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       begin
+	  clkphase_reg[7:0]   <= DEF_RISE0;
+	  clkphase_reg[15:8]  <= DEF_FALL0;
+	  clkphase_reg[23:16] <= DEF_RISE1;
+	  clkphase_reg[31:24] <= DEF_FALL1;	  
+       end
+     else if(clkdiv_write)
+       clkphase_reg[31:0] <= data_in[31:0];
+
+   assign clkphase0[15:0] = clkphase_reg[15:0];
+   assign clkphase1[15:0] = clkphase_reg[31:16];
+     
+   //###############################
+
+Diff Content:
+- 187      else if(clkdiv_write)
++ 187      else if(clkphase_write)
+
+Clone Blocks:

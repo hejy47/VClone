@@ -1,0 +1,27 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@242:257@HdlStmAssign
+// IRQ handling
+reg [3:0] up_irq_mask = 'h0;
+wire [3:0] up_irq_source;
+wire [3:0] up_irq_pending;
+
+assign up_irq_source = {
+        sync_id_pending,
+        sdi_fifo_almost_full,
+        sdo_fifo_almost_empty,
+        cmd_fifo_almost_empty
+};
+
+assign up_irq_pending = up_irq_mask & up_irq_source;
+
+always @(posedge clk) begin
+        if (rstn == 1'b0)
+
+Diff Content:
+- 247 assign up_irq_source = {
+- 248         sync_id_pending,
+- 249         sdi_fifo_almost_full,
+- 250         sdo_fifo_almost_empty,
+- 251         cmd_fifo_almost_empty
+- 252 };
+
+Clone Blocks:

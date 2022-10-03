@@ -1,0 +1,140 @@
+Source Block: hdl/library/common/ad_tdd_control.v@205:277@HdlStmProcess
+
+  // ***************************************************************************
+  // all the control registers needs to be updated at the same time
+  // ***************************************************************************
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_secondary_d <= 1'h0;
+      tdd_start_d <= 1'h0;
+      tdd_counter_init_d <= 22'h0;
+      tdd_frame_length_d <= 22'h0;
+      tdd_burst_en_d <= 1'h0;
+      tdd_burst_count_d <= 5'h0;
+      tdd_infinite_burst_d <= 1'h0;
+      tdd_tx_dp_delay_d <= 8'h0;
+      tdd_vco_rx_on_1_d <= 22'h0;
+      tdd_vco_rx_on_1_d <= 22'h0;
+      tdd_vco_tx_on_1_d <= 22'h0;
+      tdd_vco_tx_off_1_d <= 22'h0;
+      tdd_rx_on_1_d <= 22'h0;
+      tdd_rx_off_1_d <= 22'h0;
+      tdd_tx_on_1_d <= 22'h0;
+      tdd_tx_off_1_d <= 22'h0;
+      tdd_tx_dp_on_1_d <= 22'h0;
+      tdd_tx_dp_off_1_d <= 22'h0;
+      tdd_vco_rx_on_2_d <= 22'h0;
+      tdd_vco_rx_off_2_d <= 22'h0;
+      tdd_vco_tx_on_2_d <= 22'h0;
+      tdd_vco_tx_off_2_d <= 22'h0;
+      tdd_rx_on_2_d <= 22'h0;
+      tdd_rx_off_2_d <= 22'h0;
+      tdd_tx_on_2_d <= 22'h0;
+      tdd_tx_off_2_d <= 22'h0;
+      tdd_tx_dp_on_2_d <= 22'h0;
+      tdd_tx_dp_off_2_d <= 22'h0;
+    end else begin
+      //if((tdd_update_regs == 1'b1) && (tdd_counter_state == OFF)) begin
+        tdd_secondary_d <= tdd_secondary;
+        tdd_start_d <= tdd_start;
+        tdd_frame_length_d <= tdd_frame_length;
+        tdd_counter_init_d <= tdd_counter_init;
+        tdd_burst_en_d <= tdd_burst_en;
+        tdd_burst_count_d <= tdd_burst_count;
+        tdd_infinite_burst_d <= tdd_infinite_burst;
+        tdd_tx_dp_delay_d <= tdd_tx_dp_delay;
+        tdd_vco_rx_on_1_d <= tdd_vco_rx_on_1;
+        tdd_vco_rx_off_1_d <= tdd_vco_rx_off_1;
+        tdd_vco_tx_on_1_d <= tdd_vco_tx_on_1;
+        tdd_vco_tx_off_1_d <= tdd_vco_tx_off_1;
+        tdd_rx_on_1_d <= tdd_rx_on_1;
+        tdd_rx_off_1_d <= tdd_rx_off_1;
+        tdd_tx_on_1_d <= tdd_tx_on_1;
+        tdd_tx_off_1_d <= tdd_tx_off_1;
+        tdd_tx_dp_on_1_d <= tdd_tx_dp_on_1;
+        tdd_tx_dp_off_1_d <= tdd_tx_dp_off_1;
+        tdd_vco_rx_on_2_d <= tdd_vco_rx_on_2;
+        tdd_vco_rx_off_2_d <= tdd_vco_rx_off_2;
+        tdd_vco_tx_on_2_d <= tdd_vco_tx_on_2;
+        tdd_vco_tx_off_2_d <= tdd_vco_tx_off_2;
+        tdd_rx_on_2_d <= tdd_rx_on_2;
+        tdd_rx_off_2_d <= tdd_rx_off_2;
+        tdd_tx_on_2_d <= tdd_tx_on_2;
+        tdd_tx_off_2_d <= tdd_tx_off_2;
+        tdd_tx_dp_on_2_d <= tdd_tx_dp_on_2;
+        tdd_tx_dp_off_2_d <= tdd_tx_dp_off_2;
+      //end
+    end
+  end
+
+  // ***************************************************************************
+  // tdd counter (state machine)
+  // ***************************************************************************
+
+
+Diff Content:
+- 210   always @(posedge clk) begin
+- 211     if(rst == 1'b1) begin
+- 212       tdd_secondary_d <= 1'h0;
+- 213       tdd_start_d <= 1'h0;
+- 214       tdd_counter_init_d <= 22'h0;
+- 215       tdd_frame_length_d <= 22'h0;
+- 216       tdd_burst_en_d <= 1'h0;
+- 217       tdd_burst_count_d <= 5'h0;
+- 218       tdd_infinite_burst_d <= 1'h0;
+- 219       tdd_tx_dp_delay_d <= 8'h0;
+- 220       tdd_vco_rx_on_1_d <= 22'h0;
+- 221       tdd_vco_rx_on_1_d <= 22'h0;
+- 222       tdd_vco_tx_on_1_d <= 22'h0;
+- 223       tdd_vco_tx_off_1_d <= 22'h0;
+- 224       tdd_rx_on_1_d <= 22'h0;
+- 225       tdd_rx_off_1_d <= 22'h0;
+- 226       tdd_tx_on_1_d <= 22'h0;
+- 227       tdd_tx_off_1_d <= 22'h0;
+- 228       tdd_tx_dp_on_1_d <= 22'h0;
+- 229       tdd_tx_dp_off_1_d <= 22'h0;
+- 230       tdd_vco_rx_on_2_d <= 22'h0;
+- 231       tdd_vco_rx_off_2_d <= 22'h0;
+- 232       tdd_vco_tx_on_2_d <= 22'h0;
+- 233       tdd_vco_tx_off_2_d <= 22'h0;
+- 234       tdd_rx_on_2_d <= 22'h0;
+- 235       tdd_rx_off_2_d <= 22'h0;
+- 236       tdd_tx_on_2_d <= 22'h0;
+- 237       tdd_tx_off_2_d <= 22'h0;
+- 238       tdd_tx_dp_on_2_d <= 22'h0;
+- 239       tdd_tx_dp_off_2_d <= 22'h0;
+- 240     end else begin
+- 242         tdd_secondary_d <= tdd_secondary;
+- 243         tdd_start_d <= tdd_start;
+- 244         tdd_frame_length_d <= tdd_frame_length;
+- 245         tdd_counter_init_d <= tdd_counter_init;
+- 246         tdd_burst_en_d <= tdd_burst_en;
+- 247         tdd_burst_count_d <= tdd_burst_count;
+- 248         tdd_infinite_burst_d <= tdd_infinite_burst;
+- 249         tdd_tx_dp_delay_d <= tdd_tx_dp_delay;
+- 250         tdd_vco_rx_on_1_d <= tdd_vco_rx_on_1;
+- 251         tdd_vco_rx_off_1_d <= tdd_vco_rx_off_1;
+- 252         tdd_vco_tx_on_1_d <= tdd_vco_tx_on_1;
+- 253         tdd_vco_tx_off_1_d <= tdd_vco_tx_off_1;
+- 254         tdd_rx_on_1_d <= tdd_rx_on_1;
+- 255         tdd_rx_off_1_d <= tdd_rx_off_1;
+- 256         tdd_tx_on_1_d <= tdd_tx_on_1;
+- 257         tdd_tx_off_1_d <= tdd_tx_off_1;
+- 258         tdd_tx_dp_on_1_d <= tdd_tx_dp_on_1;
+- 259         tdd_tx_dp_off_1_d <= tdd_tx_dp_off_1;
+- 260         tdd_vco_rx_on_2_d <= tdd_vco_rx_on_2;
+- 261         tdd_vco_rx_off_2_d <= tdd_vco_rx_off_2;
+- 262         tdd_vco_tx_on_2_d <= tdd_vco_tx_on_2;
+- 263         tdd_vco_tx_off_2_d <= tdd_vco_tx_off_2;
+- 264         tdd_rx_on_2_d <= tdd_rx_on_2;
+- 265         tdd_rx_off_2_d <= tdd_rx_off_2;
+- 266         tdd_tx_on_2_d <= tdd_tx_on_2;
+- 267         tdd_tx_off_2_d <= tdd_tx_off_2;
+- 268         tdd_tx_dp_on_2_d <= tdd_tx_dp_on_2;
+- 269         tdd_tx_dp_off_2_d <= tdd_tx_dp_off_2;
+- 271     end
+- 272   end
++ 272   assign  tdd_counter_status = tdd_counter;
+
+Clone Blocks:

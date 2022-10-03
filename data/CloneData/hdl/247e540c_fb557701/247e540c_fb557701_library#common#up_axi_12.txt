@@ -1,0 +1,37 @@
+Source Block: hdl/library/common/up_axi.v@91:101@HdlIdDef
+
+  // internal signals
+
+  wire            up_wack_s;
+  wire            up_rack_s;
+  wire    [31:0]  up_rdata_s;
+
+  // write channel interface
+
+  assign up_axi_bresp = 2'd0;
+
+
+Diff Content:
+- 96   wire    [31:0]  up_rdata_s;
++ 96   wire                              up_wack_s;
++ 96   wire                              up_rack_s;
++ 96   wire    [31:0]                    up_rdata_s;
++ 96   assign up_axi_awready = up_axi_awready_int;
++ 96   assign up_axi_wready = up_axi_wready_int;
++ 96   assign up_axi_bvalid = up_axi_bvalid_int;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_axi.v@90:100
+  reg     [ 4:0]  up_rcount = 'd0;
+
+  // internal signals
+
+  wire            up_wack_s;
+  wire            up_rack_s;
+  wire    [31:0]  up_rdata_s;
+
+  // write channel interface
+
+  assign up_axi_bresp = 2'd0;
+

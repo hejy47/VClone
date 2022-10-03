@@ -1,0 +1,38 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/jesd204_up_ilas_mem.v@73:91@HdlStmProcess
+  .out_resetn(1'b1),
+  .out_clk(up_clk),
+  .out_bits(up_ilas_ready)
+);
+
+always @(posedge core_clk) begin
+  if (core_reset == 1'b1) begin
+    core_ilas_captured <= 1'b0;
+  end else begin
+    if (core_ilas_config_valid == 1'b1 && core_ilas_config_addr == ILAS_DATA_LENGTH-1) begin
+      core_ilas_captured <= 1'b1;
+    end
+  end
+end
+
+generate
+if(DATA_PATH_WIDTH == 4)  begin : dp_4_gen
+always @(posedge up_clk) begin
+  if (up_rreq == 1'b1) begin
+
+Diff Content:
+- 78 always @(posedge core_clk) begin
+- 79   if (core_reset == 1'b1) begin
+- 80     core_ilas_captured <= 1'b0;
+- 81   end else begin
+- 82     if (core_ilas_config_valid == 1'b1 && core_ilas_config_addr == ILAS_DATA_LENGTH-1) begin
+- 83       core_ilas_captured <= 1'b1;
+- 86 end
++ 83   always @(posedge core_clk) begin
++ 83     if (core_reset == 1'b1) begin
++ 83       core_ilas_captured <= 1'b0;
++ 83     end else begin
++ 83       if (core_ilas_config_valid == 1'b1 && core_ilas_config_addr == ILAS_DATA_LENGTH-1) begin
++ 83         core_ilas_captured <= 1'b1;
++ 83       end
+
+Clone Blocks:

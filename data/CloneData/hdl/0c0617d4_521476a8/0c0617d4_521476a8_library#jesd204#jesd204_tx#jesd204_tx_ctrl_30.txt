@@ -1,0 +1,39 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@168:186@HdlStmProcess
+  end else begin
+    last_ilas_mframe <= 1'b0;
+  end
+end
+
+always @(*) begin
+  if (sync_request == 1'b1 || reset == 1'b1) begin
+    eof_reset = 1'b1;
+  end else if (lmfc_edge == 1'b1 && sync_request_received == 1'b1) begin
+    eof_reset = 1'b0;
+  end else begin
+    eof_reset = eof_reset_d;
+  end
+end
+
+always @(posedge clk) begin
+  eof_reset_d <= eof_reset;
+end
+
+
+Diff Content:
+- 173 always @(*) begin
+- 174   if (sync_request == 1'b1 || reset == 1'b1) begin
+- 175     eof_reset = 1'b1;
+- 176   end else if (lmfc_edge == 1'b1 && sync_request_received == 1'b1) begin
+- 177     eof_reset = 1'b0;
+- 178   end else begin
+- 179     eof_reset = eof_reset_d;
+- 181 end
++ 179   always @(posedge clk) begin
++ 179     if (cfg_skip_ilas == 1'b1 ||
++ 179       mframe_counter == cfg_lmfc_per_ilas) begin
++ 179       last_ilas_mframe <= 1'b1;
++ 179     end else begin
++ 179       last_ilas_mframe <= 1'b0;
++ 179     end
+
+Clone Blocks:

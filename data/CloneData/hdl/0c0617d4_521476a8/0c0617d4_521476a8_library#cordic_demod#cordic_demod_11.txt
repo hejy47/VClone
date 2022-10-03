@@ -1,0 +1,104 @@
+Source Block: hdl/library/cordic_demod/cordic_demod.v@58:68@HdlStmAssign
+reg [32:0] i_shift;
+reg [32:0] q_shift;
+
+assign s_axis_ready = state == STATE_IDLE;
+assign m_axis_data = {q[32:1],i[32:1]};
+assign m_axis_valid = state == STATE_DONE;
+
+localparam STATE_IDLE = 0;
+localparam STATE_SHIFT_LOAD = 1;
+localparam STATE_SHIFT = 2;
+localparam STATE_ADD = 3;
+
+Diff Content:
+- 63 assign m_axis_valid = state == STATE_DONE;
++ 63   assign s_axis_ready = state == STATE_IDLE;
++ 63   assign m_axis_data = {q[32:1],i[32:1]};
++ 63   assign m_axis_valid = state == STATE_DONE;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/cordic_demod/cordic_demod.v@60:70
+
+assign s_axis_ready = state == STATE_IDLE;
+assign m_axis_data = {q[32:1],i[32:1]};
+assign m_axis_valid = state == STATE_DONE;
+
+localparam STATE_IDLE = 0;
+localparam STATE_SHIFT_LOAD = 1;
+localparam STATE_SHIFT = 2;
+localparam STATE_ADD = 3;
+localparam STATE_DONE = 4;
+
+
+Clone Blocks 2:
+hdl/library/cordic_demod/cordic_demod.v@56:66
+reg [32:0] i;
+reg [32:0] q;
+reg [32:0] i_shift;
+reg [32:0] q_shift;
+
+assign s_axis_ready = state == STATE_IDLE;
+assign m_axis_data = {q[32:1],i[32:1]};
+assign m_axis_valid = state == STATE_DONE;
+
+localparam STATE_IDLE = 0;
+localparam STATE_SHIFT_LOAD = 1;
+
+Clone Blocks 3:
+hdl/library/cordic_demod/cordic_demod.v@54:64
+reg [2:0] state;
+
+reg [32:0] i;
+reg [32:0] q;
+reg [32:0] i_shift;
+reg [32:0] q_shift;
+
+assign s_axis_ready = state == STATE_IDLE;
+assign m_axis_data = {q[32:1],i[32:1]};
+assign m_axis_valid = state == STATE_DONE;
+
+
+Clone Blocks 4:
+hdl/library/cordic_demod/cordic_demod.v@57:67
+reg [32:0] q;
+reg [32:0] i_shift;
+reg [32:0] q_shift;
+
+assign s_axis_ready = state == STATE_IDLE;
+assign m_axis_data = {q[32:1],i[32:1]};
+assign m_axis_valid = state == STATE_DONE;
+
+localparam STATE_IDLE = 0;
+localparam STATE_SHIFT_LOAD = 1;
+localparam STATE_SHIFT = 2;
+
+Clone Blocks 5:
+hdl/library/cordic_demod/cordic_demod.v@61:71
+assign s_axis_ready = state == STATE_IDLE;
+assign m_axis_data = {q[32:1],i[32:1]};
+assign m_axis_valid = state == STATE_DONE;
+
+localparam STATE_IDLE = 0;
+localparam STATE_SHIFT_LOAD = 1;
+localparam STATE_SHIFT = 2;
+localparam STATE_ADD = 3;
+localparam STATE_DONE = 4;
+
+reg [31:0] angle[0:30];
+
+Clone Blocks 6:
+hdl/library/cordic_demod/cordic_demod.v@53:63
+reg [30:0] phase;
+reg [2:0] state;
+
+reg [32:0] i;
+reg [32:0] q;
+reg [32:0] i_shift;
+reg [32:0] q_shift;
+
+assign s_axis_ready = state == STATE_IDLE;
+assign m_axis_data = {q[32:1],i[32:1]};
+assign m_axis_valid = state == STATE_DONE;
+

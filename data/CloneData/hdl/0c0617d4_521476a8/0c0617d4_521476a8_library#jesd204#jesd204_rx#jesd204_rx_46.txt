@@ -1,0 +1,21 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx.v@278:290@HdlStmAssign
+  })
+);
+
+// If input and output widths are symmetric keep the calculation for backwards
+// compatibility of the software.
+assign device_cfg_beats_per_multiframe_s = (TPL_DATA_PATH_WIDTH == DATA_PATH_WIDTH) ?
+                                   device_cfg_octets_per_multiframe >> DPW_LOG2 :
+                                   device_cfg_beats_per_multiframe;
+
+jesd204_lmfc #(
+  .LINK_MODE(LINK_MODE),
+  .DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH)
+) i_lmfc (
+
+Diff Content:
+- 283 assign device_cfg_beats_per_multiframe_s = (TPL_DATA_PATH_WIDTH == DATA_PATH_WIDTH) ?
+- 284                                    device_cfg_octets_per_multiframe >> DPW_LOG2 :
+- 285                                    device_cfg_beats_per_multiframe;
+
+Clone Blocks:

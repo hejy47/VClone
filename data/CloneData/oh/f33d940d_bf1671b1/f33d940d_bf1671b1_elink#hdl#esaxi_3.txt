@@ -1,0 +1,38 @@
+Source Block: oh/elink/hdl/esaxi.v@283:313@HdlStmProcess
+   
+   // implement write response logic generation
+   // the write response and response valid signals are asserted by the slave 
+   // at the end of each transaction, burst or single.
+
+   always @( posedge s_axi_aclk )
+     if ( s_axi_aresetn == 1'b0 ) 
+       begin
+          s_axi_bvalid <= 1'b0;
+          s_axi_bresp[1:0]  <= 2'b0;
+          b_wait     <= 1'b0;         
+       end 
+     else 
+       begin         
+         if( last_wr_beat ) 
+	   begin
+              s_axi_bvalid      <= 1'b1;
+              s_axi_bresp[1:0]  <= 2'b0;       // 'okay' response
+              b_wait            <= ~s_axi_bready;  // note: assumes bready will not drop without valid?            
+         end 
+	 else if (s_axi_bready & s_axi_bvalid) 
+	   begin	    
+              s_axi_bvalid <= 1'b0;
+              b_wait       <= 1'b0;            
+           end
+       end // else: !if( s_axi_aresetn == 1'b0 )
+
+
+    assign          last_rd_beat = s_axi_rvalid & s_axi_rlast & s_axi_rready;
+   
+
+
+Diff Content:
+- 289      if ( s_axi_aresetn == 1'b0 ) 
++ 289      if (~s_axi_aresetn) 
+
+Clone Blocks:

@@ -1,0 +1,59 @@
+Source Block: zipcpu/rtl/aux/wbdblpriarb.v@107:117@HdlIdDef
+	//
+	// The CYC logic is here to make certain that, by the time we determine
+	// who the bus owner is, we can do so based upon determined criteria.
+	assign o_cyc_a = ((r_a_owner) ? i_a_cyc_a : i_b_cyc_a);
+	assign o_cyc_b = ((r_a_owner) ? i_a_cyc_b : i_b_cyc_b);
+	reg	r_a_owner;
+	initial	r_a_owner = 1'b1;
+	always @(posedge i_clk)
+		if (i_rst)
+			r_a_owner <= 1'b1;
+		/*
+
+Diff Content:
+- 112 	reg	r_a_owner;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/aux/wbdblpriarb.v@106:116
+	// the next clock.  (Sounds simple ...)
+	//
+	// The CYC logic is here to make certain that, by the time we determine
+	// who the bus owner is, we can do so based upon determined criteria.
+	assign o_cyc_a = ((r_a_owner) ? i_a_cyc_a : i_b_cyc_a);
+	assign o_cyc_b = ((r_a_owner) ? i_a_cyc_b : i_b_cyc_b);
+	reg	r_a_owner;
+	initial	r_a_owner = 1'b1;
+	always @(posedge i_clk)
+		if (i_rst)
+			r_a_owner <= 1'b1;
+
+Clone Blocks 2:
+zipcpu/rtl/aux/wbdblpriarb.v@105:115
+	// requesting the bus and A is not, then ownership goes to not A on
+	// the next clock.  (Sounds simple ...)
+	//
+	// The CYC logic is here to make certain that, by the time we determine
+	// who the bus owner is, we can do so based upon determined criteria.
+	assign o_cyc_a = ((r_a_owner) ? i_a_cyc_a : i_b_cyc_a);
+	assign o_cyc_b = ((r_a_owner) ? i_a_cyc_b : i_b_cyc_b);
+	reg	r_a_owner;
+	initial	r_a_owner = 1'b1;
+	always @(posedge i_clk)
+		if (i_rst)
+
+Clone Blocks 3:
+zipcpu/rtl/aux/wbdblpriarb.v@108:118
+	// The CYC logic is here to make certain that, by the time we determine
+	// who the bus owner is, we can do so based upon determined criteria.
+	assign o_cyc_a = ((r_a_owner) ? i_a_cyc_a : i_b_cyc_a);
+	assign o_cyc_b = ((r_a_owner) ? i_a_cyc_b : i_b_cyc_b);
+	reg	r_a_owner;
+	initial	r_a_owner = 1'b1;
+	always @(posedge i_clk)
+		if (i_rst)
+			r_a_owner <= 1'b1;
+		/*
+		// Remain with the "last owner" until 1) the other bus requests
+

@@ -1,0 +1,51 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@411:450@HdlStmIf
+  wire [127:0] rx_data_s;
+  wire [127:0] tx_data_s;
+  wire rx_bitslip_s;
+
+  generate
+    if (LINK_MODE[1]) begin
+
+      reg [3:0] rx_bitslip_d = 'h0;
+      reg rx_bitslip_req_s_d = 1'b0;
+      always @(posedge rx_clk) begin
+         rx_bitslip_d <= {rx_bitslip_d,rx_bitslip_s};
+         rx_bitslip_req_s_d <= rx_bitslip_req_s;
+      end
+      assign rx_bitslip_s = rx_bitslip_req_s & ~rx_bitslip_req_s_d;
+
+      // Sync header alignment
+      sync_header_align i_sync_header_align (
+        .clk(rx_clk),
+        .reset(~rx_rst_done_s),
+        .i_data({rx_header_s,rx_data_s[63:0]}),
+        .i_slip(rx_bitslip_req_s),
+        .i_slip_done(rx_bitslip_d[3]),
+        .o_data(rx_data),
+        .o_header(rx_header),
+        .o_block_sync(rx_block_sync)
+      );
+      assign tx_data_s = {64'd0, tx_data};
+
+    end else begin
+
+      assign {rx_data_open_s, rx_data} = rx_data_s;
+      assign rx_bitslip_s = 1'b0;
+      assign tx_data_s = {96'd0, tx_data};
+
+    end
+
+  endgenerate
+
+  // instantiations
+
+
+Diff Content:
++ 437       assign rx_usrclk = (XCVR_TYPE==GTHE3_TRANSCEIVERS) ||
++ 437                          (XCVR_TYPE==GTHE4_TRANSCEIVERS) ? rx_clk_2x : rx_clk;
++ 437       assign tx_usrclk = (XCVR_TYPE==GTHE3_TRANSCEIVERS) ||
++ 437                          (XCVR_TYPE==GTHE4_TRANSCEIVERS) ? tx_clk_2x : tx_clk;
++ 443       assign rx_usrclk = rx_clk;
++ 443       assign tx_usrclk = tx_clk;
+
+Clone Blocks:

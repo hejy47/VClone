@@ -1,0 +1,122 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@190:288@HdlStmIf
+end
+
+generate
+genvar i;
+
+if (LINK_MODE[0] == 1) begin : mode_8b10b
+
+reg [DATA_PATH_WIDTH-1:0] tx_eof_d;
+reg [DATA_PATH_WIDTH-1:0] tx_eomf_d;
+wire [NUM_LANES-1:0] lane_cgs_enable;
+wire [DW-1:0] ilas_data;
+wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk;
+
+wire cfg_generate_eomf = 1'b1;
+
+always @(posedge clk) begin
+  tx_eof_d <= tx_eof;
+  tx_eomf_d <= tx_eomf;
+end
+
+jesd204_tx_ctrl #(
+  .NUM_LANES(NUM_LANES),
+  .NUM_LINKS(NUM_LINKS),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+) i_tx_ctrl (
+  .clk(clk),
+  .reset(reset),
+
+  .sync(sync),
+  .lmfc_edge(lmfc_edge),
+  .somf(tx_somf),
+  .somf_early2(tx_somf_early2),
+  .eomf(tx_eomf),
+
+  .lane_cgs_enable(lane_cgs_enable),
+  .eof_reset(eof_gen_reset),
+
+  .tx_ready(tx_ready),
+
+  .ilas_data(ilas_data),
+  .ilas_charisk(ilas_charisk),
+
+  .ilas_config_addr(ilas_config_addr),
+  .ilas_config_rd(ilas_config_rd),
+  .ilas_config_data(ilas_config_data),
+
+  .cfg_lanes_disable(cfg_lanes_disable),
+  .cfg_links_disable(cfg_links_disable),
+  .cfg_continuous_cgs(cfg_continuous_cgs),
+  .cfg_continuous_ilas(cfg_continuous_ilas),
+  .cfg_skip_ilas(cfg_skip_ilas),
+  .cfg_mframes_per_ilas(cfg_mframes_per_ilas),
+  .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
+  .ctrl_manual_sync_request(ctrl_manual_sync_request),
+
+  .status_sync(status_sync),
+  .status_state(status_state)
+);
+
+for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+
+  localparam D_START = i * DATA_PATH_WIDTH*8;
+  localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+  localparam C_START = i * DATA_PATH_WIDTH;
+  localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
+
+  jesd204_tx_lane #(
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+  ) i_lane (
+    .clk(clk),
+
+    .eof(tx_eof_d),
+    .eomf(tx_eomf_d),
+
+    .cgs_enable(lane_cgs_enable[i]),
+
+    .ilas_data(ilas_data[D_STOP:D_START]),
+    .ilas_charisk(ilas_charisk[C_STOP:C_START]),
+
+    .tx_data(tx_data[D_STOP:D_START]),
+    .tx_ready(tx_ready),
+
+    .phy_data(phy_data_r[D_STOP:D_START]),
+    .phy_charisk(phy_charisk_r[C_STOP:C_START]),
+
+    .cfg_octets_per_frame(cfg_octets_per_frame),
+    .cfg_disable_char_replacement(cfg_disable_char_replacement),
+    .cfg_disable_scrambler(cfg_disable_scrambler)
+  );
+end
+
+assign phy_header_r = 'h0;
+
+end
+
+if (LINK_MODE[1] == 1) begin : mode_64b66b
+
+  for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+    localparam D_START = i * DATA_PATH_WIDTH*8;
+
+Diff Content:
+- 197 reg [DATA_PATH_WIDTH-1:0] tx_eof_d;
+- 198 reg [DATA_PATH_WIDTH-1:0] tx_eomf_d;
+- 206   tx_eof_d <= tx_eof;
+- 207   tx_eomf_d <= tx_eomf;
+- 220   .somf(tx_somf),
+- 221   .somf_early2(tx_somf_early2),
+- 222   .eomf(tx_eomf),
+- 261     .eof(tx_eof_d),
+- 262     .eomf(tx_eomf_d),
++ 198 reg [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3;
++ 198 reg [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3;
++ 207   tx_eof_fm_d3 <= tx_eof_fm_d2;
++ 207   tx_eomf_fm_d3 <= tx_eomf_fm_d2;
++ 222   .somf(tx_somf_fm_d2),
++ 222   .somf_early2(tx_somf_fm),
++ 222   .eomf(tx_eomf_fm_d2),
++ 262     .eof(tx_eof_fm_d3),
++ 262     .eomf(tx_eomf_fm_d3),
+
+Clone Blocks:

@@ -1,0 +1,80 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@323:338@HdlStmProcess
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_ready == 1'b1) begin
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
+    dest_beat_counter <= 'h00;
+  end else if (dest_beat == 1'b1) begin
+
+Diff Content:
+- 328 always @(posedge dest_clk) begin
+- 329   if (dest_burst_ready == 1'b1) begin
+- 330     dest_id <= dest_id_next;
+- 331     dest_id_reduced_msb <= dest_id_reduced_msb_next;
+- 333 end
++ 331   /*
++ 331    * The output register of the memory creates a extra clock cycle of latency on
++ 331    * the data path. We need to handle this more the handshaking signals. If data
++ 331    * is available in the memory it will be available one clock cycle later in the
++ 331    * output register.
++ 331    */
++ 331   always @(posedge dest_clk) begin
++ 331     if (dest_reset == 1'b1) begin
++ 331       dest_mem_data_valid <= 1'b0;
++ 331     end else if (dest_valid == 1'b1) begin
++ 331       dest_mem_data_valid <= 1'b1;
++ 331     end else if (dest_mem_data_ready == 1'b1) begin
++ 331       dest_mem_data_valid <= 1'b0;
++ 331     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@317:331
+    dest_id_next <= dest_id_next_inc;
+    dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_ready == 1'b1) begin
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@307:325
+  end
+end
+
+assign dest_id_next_inc = inc_id(dest_id_next);
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_id_next <= 'h00;
+    dest_id_reduced_msb_next <= 1'b0;
+  end else if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_id_next <= dest_id_next_inc;
+    dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+  end
+

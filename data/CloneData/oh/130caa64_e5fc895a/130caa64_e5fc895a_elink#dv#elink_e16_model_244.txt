@@ -1,0 +1,58 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2288:2302@HdlStmProcess
+   assign rd_gray_next[FAD:0]  = {1'b0,rd_binary_next[FAD:1]} ^ rd_binary_next[FAD:0];
+
+   //# FIFO empty indication
+   assign fifo_empty_next = (rd_gray_next[FAD:0]==wr_gray_pointer[FAD:0]);
+
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+       fifo_empty <= 1'b1;
+     else if(cclk_en)
+       fifo_empty <= fifo_empty_next;
+
+   //####################################################
+   //# Synchronization between rd/wr domains
+   //####################################################
+
+
+Diff Content:
+- 2293    always @ (posedge cclk or posedge reset)
+- 2294      if(reset)
+- 2295        fifo_empty <= 1'b1;
+- 2296      else if(cclk_en)
+- 2297        fifo_empty <= fifo_empty_next;
++ 2297    assign my_tran = ~(rd_tran ^ rxi_rd);
++ 2297    always @ (posedge rxi_lclk)
++ 2297      if(~frame_reg)            //will stop sampling when byte0 is received
++ 2297        rd_tran <= rxi_data[7];
++ 2297    assign new_tran = my_tran & frame_reg & ~frame_reg_del;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/memory/hdl/fifo_empty_block.v@63:73
+   assign rd_gray_next[AW:0] = {1'b0,rd_binary_next[AW:1]} ^ 
+			       rd_binary_next[AW:0];
+
+
+   //# FIFO empty indication
+   assign rd_fifo_empty_next = (rd_gray_next[AW:0]==rd_wr_gray_pointer[AW:0]);
+
+   always @ (posedge rd_clk or posedge reset)
+     if(reset)
+       rd_fifo_empty <= 1'b1;
+     else 
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@2286:2296
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign rd_gray_next[FAD:0]  = {1'b0,rd_binary_next[FAD:1]} ^ rd_binary_next[FAD:0];
+
+   //# FIFO empty indication
+   assign fifo_empty_next = (rd_gray_next[FAD:0]==wr_gray_pointer[FAD:0]);
+
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+       fifo_empty <= 1'b1;
+     else if(cclk_en)
+

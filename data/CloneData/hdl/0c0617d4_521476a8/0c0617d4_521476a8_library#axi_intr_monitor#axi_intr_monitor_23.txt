@@ -1,0 +1,134 @@
+Source Block: hdl/library/axi_intr_monitor/axi_intr_monitor.v@102:149@HdlStmProcess
+//----------- Assign/Always Blocks ---------------------------------------------
+//------------------------------------------------------------------------------
+
+assign irq = interrupt;
+
+always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0 || control[0] == 1'b0) begin
+    counter_to_interrupt_cnt <= 0;
+    counter_interrupt_handling <= 'd0;
+    counter_from_interrupt <= 32'h0;
+    min_interrupt_handling <= 'd0;
+    max_interrupt_handling <= 'd0;
+    interrupt_d1 <= 0;
+    counter_active <= 1'b0;
+  end else begin
+    interrupt_d1 <= irq;
+
+    if (arm_counter == 1'b1) begin
+      counter_to_interrupt_cnt <= counter_to_interrupt;
+      counter_active <= 1'b1;
+    end else if (counter_to_interrupt_cnt > 0) begin
+      counter_to_interrupt_cnt <= counter_to_interrupt_cnt - 1;
+    end else begin
+      counter_active <= 1'b0;
+    end
+
+    if (irq == 1'b1 && interrupt_d1 == 1'b0) begin
+      counter_from_interrupt <= 32'h0;
+    end else begin
+      counter_from_interrupt <= counter_from_interrupt + 1;
+    end
+
+    if (irq == 1'b0 && interrupt_d1 == 1'b1) begin
+      counter_interrupt_handling <= counter_from_interrupt;
+      if (min_interrupt_handling > counter_from_interrupt) begin
+        min_interrupt_handling <= counter_from_interrupt;
+      end
+      if (max_interrupt_handling < counter_from_interrupt) begin
+        max_interrupt_handling <= counter_from_interrupt;
+      end
+    end
+  end
+end
+
+always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 0) begin
+    up_wack                    <= 1'b0;
+    scratch                    <= 'd0;
+
+Diff Content:
+- 107 always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+- 108   if (s_axi_aresetn == 1'b0 || control[0] == 1'b0) begin
+- 109     counter_to_interrupt_cnt <= 0;
+- 110     counter_interrupt_handling <= 'd0;
+- 111     counter_from_interrupt <= 32'h0;
+- 112     min_interrupt_handling <= 'd0;
+- 113     max_interrupt_handling <= 'd0;
+- 114     interrupt_d1 <= 0;
+- 115     counter_active <= 1'b0;
+- 116   end else begin
+- 117     interrupt_d1 <= irq;
+- 119     if (arm_counter == 1'b1) begin
+- 120       counter_to_interrupt_cnt <= counter_to_interrupt;
+- 121       counter_active <= 1'b1;
+- 122     end else if (counter_to_interrupt_cnt > 0) begin
+- 123       counter_to_interrupt_cnt <= counter_to_interrupt_cnt - 1;
+- 124     end else begin
+- 125       counter_active <= 1'b0;
+- 126     end
+- 128     if (irq == 1'b1 && interrupt_d1 == 1'b0) begin
+- 131       counter_from_interrupt <= counter_from_interrupt + 1;
+- 132     end
+- 134     if (irq == 1'b0 && interrupt_d1 == 1'b1) begin
+- 135       counter_interrupt_handling <= counter_from_interrupt;
+- 136       if (min_interrupt_handling > counter_from_interrupt) begin
+- 137         min_interrupt_handling <= counter_from_interrupt;
+- 139       if (max_interrupt_handling < counter_from_interrupt) begin
+- 140         max_interrupt_handling <= counter_from_interrupt;
+- 144 end
++ 128   parameter VERSION = 32'h00010000;
++ 128   reg     [31:0]  up_rdata                    = 'd0;
++ 128   reg             up_wack                     = 'd0;
++ 128   reg             up_rack                     = 'd0;
++ 128   reg             pwm_gen_clk                 = 'd0;
++ 128   reg     [31:0]  scratch                     = 'd0;
++ 128   reg     [31:0]  control                     = 'd0;
++ 128   reg             interrupt                   = 'd0;
++ 128   reg     [31:0]  counter_to_interrupt        = 'd0;
++ 128   reg     [31:0]  counter_to_interrupt_cnt    = 'd0;
++ 128   reg     [31:0]  counter_from_interrupt      = 'd0;
++ 128   reg     [31:0]  counter_interrupt_handling  = 'd0;
++ 128   reg     [31:0]  min_interrupt_handling      = 'd0;
++ 128   reg     [31:0]  max_interrupt_handling      = 'd0;
++ 128   reg             interrupt_d1                = 'd0;
++ 128   reg             arm_counter                 = 'd0;
++ 128   reg             counter_active              = 'd0;
++ 128   wire            up_rreq_s;
++ 128   wire            up_wreq_s;
++ 128   wire    [13:0]  up_raddr_s;
++ 128   wire    [13:0]  up_waddr_s;
++ 128   wire    [31:0]  up_wdata_s;
++ 128   assign irq = interrupt;
++ 128   always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
++ 128     if (s_axi_aresetn == 1'b0 || control[0] == 1'b0) begin
++ 128       counter_to_interrupt_cnt <= 0;
++ 128       counter_interrupt_handling <= 'd0;
++ 129       min_interrupt_handling <= 'd0;
++ 129       max_interrupt_handling <= 'd0;
++ 129       interrupt_d1 <= 0;
++ 129       counter_active <= 1'b0;
++ 132       interrupt_d1 <= irq;
++ 132       if (arm_counter == 1'b1) begin
++ 132         counter_to_interrupt_cnt <= counter_to_interrupt;
++ 132         counter_active <= 1'b1;
++ 132       end else if (counter_to_interrupt_cnt > 0) begin
++ 132         counter_to_interrupt_cnt <= counter_to_interrupt_cnt - 1;
++ 132       end else begin
++ 132         counter_active <= 1'b0;
++ 132       end
++ 137       if (irq == 1'b1 && interrupt_d1 == 1'b0) begin
++ 137         counter_from_interrupt <= 32'h0;
++ 137       end else begin
++ 137         counter_from_interrupt <= counter_from_interrupt + 1;
++ 140       if (irq == 1'b0 && interrupt_d1 == 1'b1) begin
++ 140         counter_interrupt_handling <= counter_from_interrupt;
++ 140         if (min_interrupt_handling > counter_from_interrupt) begin
++ 140           min_interrupt_handling <= counter_from_interrupt;
++ 140         end
++ 140         if (max_interrupt_handling < counter_from_interrupt) begin
++ 140           max_interrupt_handling <= counter_from_interrupt;
++ 140         end
+
+Clone Blocks:

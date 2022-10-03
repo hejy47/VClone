@@ -1,0 +1,32 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@405:429@HdlStmFor
+
+// Load the serial data into SDI shift register(s), then link it to the output
+// register of the module
+genvar i;
+generate
+  for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
+
+    reg [DATA_WIDTH-1:0] data_sdi_shift;
+
+    always @(posedge clk) begin
+      if (inst_d1 == CMD_CHIPSELECT) begin
+        data_sdi_shift <= {DATA_WIDTH{1'b0}};
+      end else if (trigger_rx_s == 1'b1) begin
+        data_sdi_shift <= {data_sdi_shift[DATA_WIDTH-2:0], sdi[i]};
+      end
+    end
+
+    assign sdi_data[((i+1)*DATA_WIDTH)-1:i*DATA_WIDTH] = data_sdi_shift;
+
+  end
+endgenerate
+
+assign last_sdi_bit = (sdi_counter == word_length-1);
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+
+Diff Content:
+- 415       if (inst_d1 == CMD_CHIPSELECT) begin
++ 415       if (cs_active_s) begin
+
+Clone Blocks:

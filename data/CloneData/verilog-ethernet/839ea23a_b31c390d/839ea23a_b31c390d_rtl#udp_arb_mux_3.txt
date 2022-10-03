@@ -1,0 +1,270 @@
+Source Block: verilog-ethernet/rtl/udp_arb_mux.v@162:172@HdlStmAssign
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = (!s_udp_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+assign s_udp_payload_axis_tready = (m_udp_payload_axis_tready_int_reg && grant_valid) << grant_encoded;
+
+assign m_udp_hdr_valid = m_udp_hdr_valid_reg;
+assign m_eth_dest_mac = m_eth_dest_mac_reg;
+
+Diff Content:
+- 167 assign s_udp_hdr_ready = (!s_udp_hdr_ready_mask_reg && grant_valid) << grant_encoded;
++ 167 assign s_udp_hdr_ready = s_udp_hdr_ready_reg;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip_arb_mux.v@148:158
+reg                   m_ip_payload_axis_tready_int_reg = 1'b0;
+reg                   m_ip_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_ip_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_ip_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_ip_payload_axis_tuser_int;
+wire                  m_ip_payload_axis_tready_int_early;
+
+assign s_ip_hdr_ready = (!s_ip_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+assign s_ip_payload_axis_tready = (m_ip_payload_axis_tready_int_reg && grant_valid) << grant_encoded;
+
+
+Clone Blocks 2:
+verilog-ethernet/rtl/udp_arb_mux.v@164:174
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = (!s_udp_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+assign s_udp_payload_axis_tready = (m_udp_payload_axis_tready_int_reg && grant_valid) << grant_encoded;
+
+assign m_udp_hdr_valid = m_udp_hdr_valid_reg;
+assign m_eth_dest_mac = m_eth_dest_mac_reg;
+assign m_eth_src_mac = m_eth_src_mac_reg;
+assign m_eth_type = m_eth_type_reg;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/udp_ip_rx.v@198:208
+reg       m_udp_payload_axis_tready_int_reg = 1'b0;
+reg       m_udp_payload_axis_tlast_int;
+reg       m_udp_payload_axis_tuser_int;
+wire      m_udp_payload_axis_tready_int_early;
+
+assign s_ip_hdr_ready = s_ip_hdr_ready_reg;
+assign s_ip_payload_axis_tready = s_ip_payload_axis_tready_reg;
+
+assign m_udp_hdr_valid = m_udp_hdr_valid_reg;
+assign m_eth_dest_mac = m_eth_dest_mac_reg;
+assign m_eth_src_mac = m_eth_src_mac_reg;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/ip_arb_mux.v@147:157
+reg                   m_ip_payload_axis_tvalid_int;
+reg                   m_ip_payload_axis_tready_int_reg = 1'b0;
+reg                   m_ip_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_ip_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_ip_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_ip_payload_axis_tuser_int;
+wire                  m_ip_payload_axis_tready_int_early;
+
+assign s_ip_hdr_ready = (!s_ip_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+assign s_ip_payload_axis_tready = (m_ip_payload_axis_tready_int_reg && grant_valid) << grant_encoded;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/eth_arb_mux.v@111:121
+reg  [ID_WIDTH-1:0]   m_eth_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_eth_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_eth_payload_axis_tuser_int;
+wire                  m_eth_payload_axis_tready_int_early;
+
+assign s_eth_hdr_ready = (!s_eth_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+assign s_eth_payload_axis_tready = (m_eth_payload_axis_tready_int_reg && grant_valid) << grant_encoded;
+
+assign m_eth_hdr_valid = m_eth_hdr_valid_reg;
+assign m_eth_dest_mac = m_eth_dest_mac_reg;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/ip_mux.v@149:159
+reg  [ID_WIDTH-1:0]   m_ip_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_ip_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_ip_payload_axis_tuser_int;
+wire                  m_ip_payload_axis_tready_int_early;
+
+assign s_ip_hdr_ready = s_ip_hdr_ready_reg;
+
+assign s_ip_payload_axis_tready = s_ip_payload_axis_tready_reg;
+
+assign m_ip_hdr_valid = m_ip_hdr_valid_reg;
+assign m_eth_dest_mac = m_eth_dest_mac_reg;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/udp_arb_mux.v@158:168
+reg  [KEEP_WIDTH-1:0] m_udp_payload_axis_tkeep_int;
+reg                   m_udp_payload_axis_tvalid_int;
+reg                   m_udp_payload_axis_tready_int_reg = 1'b0;
+reg                   m_udp_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = (!s_udp_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+
+Clone Blocks 8:
+verilog-ethernet/rtl/ip_demux.v@151:161
+reg  [ID_WIDTH-1:0]   m_ip_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_ip_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_ip_payload_axis_tuser_int;
+wire                  m_ip_payload_axis_tready_int_early;
+
+assign s_ip_hdr_ready = s_ip_hdr_ready_reg && enable;
+
+assign s_ip_payload_axis_tready = s_ip_payload_axis_tready_reg && enable;
+
+assign m_ip_hdr_valid = m_ip_hdr_valid_reg;
+assign m_eth_dest_mac = {M_COUNT{m_eth_dest_mac_reg}};
+
+Clone Blocks 9:
+verilog-ethernet/rtl/udp_demux.v@160:170
+reg  [M_COUNT-1:0]    m_udp_payload_axis_tvalid_int;
+reg                   m_udp_payload_axis_tready_int_reg = 1'b0;
+reg                   m_udp_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = s_udp_hdr_ready_reg && enable;
+
+assign s_udp_payload_axis_tready = s_udp_payload_axis_tready_reg && enable;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/ip_arb_mux.v@150:160
+reg  [ID_WIDTH-1:0]   m_ip_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_ip_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_ip_payload_axis_tuser_int;
+wire                  m_ip_payload_axis_tready_int_early;
+
+assign s_ip_hdr_ready = (!s_ip_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+assign s_ip_payload_axis_tready = (m_ip_payload_axis_tready_int_reg && grant_valid) << grant_encoded;
+
+assign m_ip_hdr_valid = m_ip_hdr_valid_reg;
+assign m_eth_dest_mac = m_eth_dest_mac_reg;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/udp_mux.v@161:171
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = s_udp_hdr_ready_reg;
+
+assign s_udp_payload_axis_tready = s_udp_payload_axis_tready_reg;
+
+assign m_udp_hdr_valid = m_udp_hdr_valid_reg;
+assign m_eth_dest_mac = m_eth_dest_mac_reg;
+
+Clone Blocks 12:
+verilog-ethernet/rtl/udp_mux.v@158:168
+reg                   m_udp_payload_axis_tvalid_int;
+reg                   m_udp_payload_axis_tready_int_reg = 1'b0;
+reg                   m_udp_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = s_udp_hdr_ready_reg;
+
+assign s_udp_payload_axis_tready = s_udp_payload_axis_tready_reg;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/udp_ip_rx_64.v@194:204
+reg        m_udp_payload_axis_tready_int_reg = 1'b0;
+reg        m_udp_payload_axis_tlast_int;
+reg        m_udp_payload_axis_tuser_int;
+wire       m_udp_payload_axis_tready_int_early;
+
+assign s_ip_hdr_ready = s_ip_hdr_ready_reg;
+assign s_ip_payload_axis_tready = s_ip_payload_axis_tready_reg;
+
+assign m_udp_hdr_valid = m_udp_hdr_valid_reg;
+assign m_eth_dest_mac = m_eth_dest_mac_reg;
+assign m_eth_src_mac = m_eth_src_mac_reg;
+
+Clone Blocks 14:
+verilog-ethernet/rtl/udp_demux.v@161:171
+reg                   m_udp_payload_axis_tready_int_reg = 1'b0;
+reg                   m_udp_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = s_udp_hdr_ready_reg && enable;
+
+assign s_udp_payload_axis_tready = s_udp_payload_axis_tready_reg && enable;
+
+
+Clone Blocks 15:
+verilog-ethernet/rtl/udp_arb_mux.v@159:169
+reg                   m_udp_payload_axis_tvalid_int;
+reg                   m_udp_payload_axis_tready_int_reg = 1'b0;
+reg                   m_udp_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = (!s_udp_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+assign s_udp_payload_axis_tready = (m_udp_payload_axis_tready_int_reg && grant_valid) << grant_encoded;
+
+Clone Blocks 16:
+verilog-ethernet/rtl/udp_arb_mux.v@160:170
+reg                   m_udp_payload_axis_tready_int_reg = 1'b0;
+reg                   m_udp_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = (!s_udp_hdr_ready_mask_reg && grant_valid) << grant_encoded;
+
+assign s_udp_payload_axis_tready = (m_udp_payload_axis_tready_int_reg && grant_valid) << grant_encoded;
+
+
+Clone Blocks 17:
+verilog-ethernet/rtl/udp_demux.v@163:173
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = s_udp_hdr_ready_reg && enable;
+
+assign s_udp_payload_axis_tready = s_udp_payload_axis_tready_reg && enable;
+
+assign m_udp_hdr_valid = m_udp_hdr_valid_reg;
+assign m_eth_dest_mac = {M_COUNT{m_eth_dest_mac_reg}};
+
+Clone Blocks 18:
+verilog-ethernet/rtl/udp_mux.v@159:169
+reg                   m_udp_payload_axis_tready_int_reg = 1'b0;
+reg                   m_udp_payload_axis_tlast_int;
+reg  [ID_WIDTH-1:0]   m_udp_payload_axis_tid_int;
+reg  [DEST_WIDTH-1:0] m_udp_payload_axis_tdest_int;
+reg  [USER_WIDTH-1:0] m_udp_payload_axis_tuser_int;
+wire                  m_udp_payload_axis_tready_int_early;
+
+assign s_udp_hdr_ready = s_udp_hdr_ready_reg;
+
+assign s_udp_payload_axis_tready = s_udp_payload_axis_tready_reg;
+
+

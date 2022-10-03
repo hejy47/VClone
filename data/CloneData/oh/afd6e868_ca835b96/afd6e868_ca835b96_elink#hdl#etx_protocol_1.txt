@@ -1,0 +1,60 @@
+Source Block: oh/elink/hdl/etx_protocol.v@43:53@HdlIdDef
+   input          tx_wr_wait;  // to the emesh interfaces
+
+   //############
+   //# Local regs & wires
+   //############
+   reg           etx_cycle;    //Cycle 0 or 1
+   reg [7:0]     tx_frame_par;
+   reg [127:0]   tx_data_reg;  //sample transaction on one clock cycle
+   reg 		 rd_wait_sync;
+   reg 		 wr_wait_sync;
+   reg 		 etx_rd_wait;
+
+Diff Content:
+- 48    reg           etx_cycle;    //Cycle 0 or 1
++ 48    reg           etx_sample;   //hold for second cycle
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@46:56
+   //# Local regs & wires
+   //############
+   reg           etx_cycle;    //Cycle 0 or 1
+   reg [7:0]     tx_frame_par;
+   reg [127:0]   tx_data_reg;  //sample transaction on one clock cycle
+   reg 		 rd_wait_sync;
+   reg 		 wr_wait_sync;
+   reg 		 etx_rd_wait;
+   reg 		 etx_wr_wait;
+
+   wire 	 etx_write;
+
+Clone Blocks 2:
+oh/elink/hdl/etx_protocol.v@45:55
+   //############
+   //# Local regs & wires
+   //############
+   reg           etx_cycle;    //Cycle 0 or 1
+   reg [7:0]     tx_frame_par;
+   reg [127:0]   tx_data_reg;  //sample transaction on one clock cycle
+   reg 		 rd_wait_sync;
+   reg 		 wr_wait_sync;
+   reg 		 etx_rd_wait;
+   reg 		 etx_wr_wait;
+
+
+Clone Blocks 3:
+oh/elink/hdl/etx_protocol.v@47:57
+   //############
+   reg           etx_cycle;    //Cycle 0 or 1
+   reg [7:0]     tx_frame_par;
+   reg [127:0]   tx_data_reg;  //sample transaction on one clock cycle
+   reg 		 rd_wait_sync;
+   reg 		 wr_wait_sync;
+   reg 		 etx_rd_wait;
+   reg 		 etx_wr_wait;
+
+   wire 	 etx_write;
+   wire [1:0] 	 etx_datamode;
+

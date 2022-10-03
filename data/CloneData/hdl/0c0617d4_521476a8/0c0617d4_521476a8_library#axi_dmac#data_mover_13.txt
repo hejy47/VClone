@@ -1,0 +1,73 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@98:108@HdlIdDef
+reg last_non_eot = 1'b0;
+
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+wire s_axi_sync_valid = has_sync & s_axi_valid;
+wire transfer_abort_s;
+
+wire last_load;
+wire last;
+wire early_tlast;
+
+Diff Content:
+- 103 wire s_axi_sync_valid = has_sync & s_axi_valid;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/data_mover.v@99:109
+
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+wire s_axi_sync_valid = has_sync & s_axi_valid;
+wire transfer_abort_s;
+
+wire last_load;
+wire last;
+wire early_tlast;
+
+
+Clone Blocks 2:
+hdl/library/axi_dmac/data_mover.v@96:106
+reg active = 1'b0;
+reg last_eot = 1'b0;
+reg last_non_eot = 1'b0;
+
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+wire s_axi_sync_valid = has_sync & s_axi_valid;
+wire transfer_abort_s;
+
+wire last_load;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/data_mover.v@95:105
+reg pending_burst = 1'b0;
+reg active = 1'b0;
+reg last_eot = 1'b0;
+reg last_non_eot = 1'b0;
+
+reg needs_sync = 1'b0;
+wire has_sync = ~needs_sync | s_axi_sync;
+
+wire s_axi_sync_valid = has_sync & s_axi_valid;
+wire transfer_abort_s;
+
+
+Clone Blocks 4:
+hdl/library/axi_dmac/data_mover.v@101:111
+wire has_sync = ~needs_sync | s_axi_sync;
+
+wire s_axi_sync_valid = has_sync & s_axi_valid;
+wire transfer_abort_s;
+
+wire last_load;
+wire last;
+wire early_tlast;
+
+assign xfer_req = active;
+
+

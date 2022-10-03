@@ -1,0 +1,20 @@
+Source Block: oh/common/hdl/oh_mux4.v@22:35@HdlStmAssign
+   output [DW-1:0] out;
+
+   wire 	   error;
+   
+  
+   assign out[DW-1:0] = ({(DW){sel0}} & in0[DW-1:0] |
+			 {(DW){sel1}} & in1[DW-1:0] |
+			 {(DW){sel2}} & in2[DW-1:0] |
+			 {(DW){sel3}} & in3[DW-1:0]);
+   
+
+   assign error = (sel0 | sel1 | sel2 | sel3) &
+   		  ~(sel0 ^ sel1 ^ sel2 ^ sel3);
+
+
+Diff Content:
++ 30 `ifdef TARGET_SIM
+
+Clone Blocks:

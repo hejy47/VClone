@@ -1,0 +1,49 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@234:252@HdlStmProcess
+always @(posedge m_axis_aclk) begin
+  if (rd_valid_l1)
+    rd_data_l2 <= rd_data;
+ end
+
+ always @(posedge m_axis_aclk) begin
+  if (rd_valid_l1)
+    rd_valid_l2 <= 1'b1;
+  else if (rd_fifo_s_ready)
+    rd_valid_l2 <= 1'b0;
+
+  if (rd_valid_l1)
+    rd_last_l2 <= rd_last_l1;
+end
+
+assign rd_fifo_s_valid = rd_valid_l2;
+
+// Read datapath to AXIS logic
+util_axis_fifo #(
+
+Diff Content:
+- 239  always @(posedge m_axis_aclk) begin
+- 240   if (rd_valid_l1)
+- 241     rd_valid_l2 <= 1'b1;
+- 242   else if (rd_fifo_s_ready)
+- 243     rd_valid_l2 <= 1'b0;
+- 245   if (rd_valid_l1)
+- 246     rd_last_l2 <= rd_last_l1;
+- 247 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_do_ram/util_do_ram.v@229:242
+  rd_valid_l1 <= rd_enable;
+  rd_last_l1 <= rd_last_beat;
+end
+
+// Extra pipeline to be sucked in by the BRAM/URAM output stage
+always @(posedge m_axis_aclk) begin
+  if (rd_valid_l1)
+    rd_data_l2 <= rd_data;
+ end
+
+ always @(posedge m_axis_aclk) begin
+  if (rd_valid_l1)
+    rd_valid_l2 <= 1'b1;
+  else if (rd_fifo_s_ready)
+

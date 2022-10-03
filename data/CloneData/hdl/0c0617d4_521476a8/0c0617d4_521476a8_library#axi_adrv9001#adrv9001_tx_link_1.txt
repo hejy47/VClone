@@ -1,0 +1,50 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_tx_link.v@114:140@HdlStmProcess
+                        strobe32[30],strobe32[30],
+                        strobe32[29],strobe32[29],
+                        strobe32[28],strobe32[28]};
+
+  // Serialization factor Per data lane 16
+  always @(posedge tx_clk) begin
+    if (tx_data_valid) begin
+      data16_0 <= tx_data_i;
+      data16_1 <= tx_data_q;
+      strobe16 <= {1'b1,15'b0};
+    end else if (ld_next) begin
+     if(tx_sdr_ddr_n) begin
+       data16_0 <= {data16_0,4'b0};
+       data16_1 <= {data16_1,4'b0};
+       strobe16 <= {strobe16,4'b0};
+     end else begin
+       data16_0 <= {data16_0,8'b0};
+       data16_1 <= {data16_1,8'b0};
+       strobe16 <= {strobe16,8'b0};
+     end
+    end
+  end
+
+  // Double each bit due to the DDR PHY
+  assign data16sdr_0 = {data16_0[15],data16_0[15],
+                        data16_0[14],data16_0[14],
+                        data16_0[13],data16_0[13],
+
+Diff Content:
+- 125      if(tx_sdr_ddr_n) begin
+- 126        data16_0 <= {data16_0,4'b0};
+- 127        data16_1 <= {data16_1,4'b0};
+- 128        strobe16 <= {strobe16,4'b0};
+- 129      end else begin
+- 130        data16_0 <= {data16_0,8'b0};
+- 131        data16_1 <= {data16_1,8'b0};
+- 132        strobe16 <= {strobe16,8'b0};
+- 133      end
++ 133       if(tx_sdr_ddr_n) begin
++ 133         data16_0 <= {data16_0,4'b0};
++ 133         data16_1 <= {data16_1,4'b0};
++ 133         strobe16 <= {strobe16,4'b0};
++ 133       end else begin
++ 133         data16_0 <= {data16_0,8'b0};
++ 133         data16_1 <= {data16_1,8'b0};
++ 133         strobe16 <= {strobe16,8'b0};
++ 133       end
+
+Clone Blocks:

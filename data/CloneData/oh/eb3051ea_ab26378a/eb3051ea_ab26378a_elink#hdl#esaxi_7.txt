@@ -1,0 +1,32 @@
+Source Block: oh/elink/hdl/esaxi.v@178:188@HdlIdDef
+   reg [3:0] 	      emrq_ctrlmode;
+   reg [1:0] 	      emrq_datamode;
+   reg [31:0] 	      emrq_dstaddr;
+   reg [31:0] 	      emrq_srcaddr;  //upper 32 bits in case 64 bit writes are supported
+   
+   reg 		      pre_wr_en;   // delay for data alignment
+   
+   reg 		      ractive_reg;  // need leading edge of active for 1st req
+   reg 		      rnext;
+        
+   reg 		      mi_rx_emmu_reg;
+
+Diff Content:
+- 183    reg 		      pre_wr_en;   // delay for data alignment
++ 183    reg 		      pre_wr_en;    // delay for data alignment
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/esaxi.v@180:190
+   reg [31:0] 	      emrq_dstaddr;
+   reg [31:0] 	      emrq_srcaddr;  //upper 32 bits in case 64 bit writes are supported
+   
+   reg 		      pre_wr_en;   // delay for data alignment
+   
+   reg 		      ractive_reg;  // need leading edge of active for 1st req
+   reg 		      rnext;
+        
+   reg 		      mi_rx_emmu_reg;
+   reg 		      mi_tx_emmu_reg;
+   reg 		      mi_ecfg_reg;
+

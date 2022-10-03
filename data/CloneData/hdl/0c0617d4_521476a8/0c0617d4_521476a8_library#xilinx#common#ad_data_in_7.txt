@@ -1,0 +1,43 @@
+Source Block: hdl/library/xilinx/common/ad_data_in.v@196:215@HdlStmIf
+    .Q2 (rx_data_n));
+  end
+  endgenerate
+
+  generate
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+  IDDR #(.DDR_CLK_EDGE (IDDR_CLK_EDGE)) i_rx_data_iddr (
+    .CE (1'b1),
+    .R (1'b0),
+    .S (1'b0),
+    .C (rx_clk),
+    .D (rx_data_idelay_s),
+    .Q1 (rx_data_p),
+    .Q2 (rx_data_n));
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 202   IDDR #(.DDR_CLK_EDGE (IDDR_CLK_EDGE)) i_rx_data_iddr (
+- 203     .CE (1'b1),
+- 204     .R (1'b0),
+- 205     .S (1'b0),
+- 206     .C (rx_clk),
+- 207     .D (rx_data_idelay_s),
+- 208     .Q1 (rx_data_p),
+- 209     .Q2 (rx_data_n));
++ 209     IDDR #(
++ 209       .DDR_CLK_EDGE (IDDR_CLK_EDGE)
++ 209     ) i_rx_data_iddr (
++ 209       .CE (1'b1),
++ 209       .R (1'b0),
++ 209       .S (1'b0),
++ 209       .C (rx_clk),
++ 209       .D (rx_data_idelay_s),
++ 209       .Q1 (rx_data_p),
++ 209       .Q2 (rx_data_n));
+
+Clone Blocks:

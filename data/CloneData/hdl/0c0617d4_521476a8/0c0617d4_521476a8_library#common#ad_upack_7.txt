@@ -1,0 +1,171 @@
+Source Block: hdl/library/common/ad_upack.v@81:91@HdlIdDef
+
+integer i;
+
+reg [SH_W*UNIT_W-1:0] idata_sh;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_d_nx;
+reg [SH_W-1:0] in_use = 'h0;
+reg [SH_W-1:0] inmask;
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+wire [SH_W-1:0] in_use_nx;
+
+Diff Content:
+- 86 reg [SH_W*UNIT_W-1:0] idata_d_nx;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_pack.v@82:92
+reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
+reg [SH_W-1:0] in_use = 'b0;
+reg [SH_W-1:0] out_mask;
+
+wire [SH_W*UNIT_W-1:0] idata_dd_nx;
+wire [SH_W-1:0] in_use_nx;
+wire pack_wr;
+
+generate
+  if (I_REG) begin : i_reg
+
+
+Clone Blocks 2:
+hdl/library/common/ad_pack.v@79:89
+reg [O_W*UNIT_W-1:0] idata_packed;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg ivalid_d  = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
+reg [SH_W-1:0] in_use = 'b0;
+reg [SH_W-1:0] out_mask;
+
+wire [SH_W*UNIT_W-1:0] idata_dd_nx;
+wire [SH_W-1:0] in_use_nx;
+wire pack_wr;
+
+
+Clone Blocks 3:
+hdl/library/common/ad_upack.v@86:96
+reg [SH_W*UNIT_W-1:0] idata_d_nx;
+reg [SH_W-1:0] in_use = 'h0;
+reg [SH_W-1:0] inmask;
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+wire [SH_W-1:0] in_use_nx;
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+wire                  ovalid_s;
+
+assign unit_valid = (in_use | inmask);
+
+Clone Blocks 4:
+hdl/library/common/ad_upack.v@85:95
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_d_nx;
+reg [SH_W-1:0] in_use = 'h0;
+reg [SH_W-1:0] inmask;
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+wire [SH_W-1:0] in_use_nx;
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+wire                  ovalid_s;
+
+
+Clone Blocks 5:
+hdl/library/common/ad_pack.v@78:88
+
+reg [O_W*UNIT_W-1:0] idata_packed;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg ivalid_d  = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
+reg [SH_W-1:0] in_use = 'b0;
+reg [SH_W-1:0] out_mask;
+
+wire [SH_W*UNIT_W-1:0] idata_dd_nx;
+wire [SH_W-1:0] in_use_nx;
+wire pack_wr;
+
+Clone Blocks 6:
+hdl/library/common/ad_upack.v@82:92
+integer i;
+
+reg [SH_W*UNIT_W-1:0] idata_sh;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_d_nx;
+reg [SH_W-1:0] in_use = 'h0;
+reg [SH_W-1:0] inmask;
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+wire [SH_W-1:0] in_use_nx;
+wire [SH_W-1:0] unit_valid;
+
+Clone Blocks 7:
+hdl/library/common/ad_pack.v@81:91
+reg ivalid_d  = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
+reg [SH_W-1:0] in_use = 'b0;
+reg [SH_W-1:0] out_mask;
+
+wire [SH_W*UNIT_W-1:0] idata_dd_nx;
+wire [SH_W-1:0] in_use_nx;
+wire pack_wr;
+
+generate
+  if (I_REG) begin : i_reg
+
+Clone Blocks 8:
+hdl/library/common/ad_upack.v@83:93
+
+reg [SH_W*UNIT_W-1:0] idata_sh;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_d_nx;
+reg [SH_W-1:0] in_use = 'h0;
+reg [SH_W-1:0] inmask;
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+wire [SH_W-1:0] in_use_nx;
+wire [SH_W-1:0] unit_valid;
+wire [O_W*UNIT_W-1:0] odata_s;
+
+Clone Blocks 9:
+hdl/library/common/ad_pack.v@77:87
+localparam STEP = O_W % I_W;
+
+reg [O_W*UNIT_W-1:0] idata_packed;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg ivalid_d  = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
+reg [SH_W-1:0] in_use = 'b0;
+reg [SH_W-1:0] out_mask;
+
+wire [SH_W*UNIT_W-1:0] idata_dd_nx;
+wire [SH_W-1:0] in_use_nx;
+
+Clone Blocks 10:
+hdl/library/common/ad_upack.v@80:90
+localparam LATENCY = 1; // Minimum input latency from iready to ivalid 
+
+integer i;
+
+reg [SH_W*UNIT_W-1:0] idata_sh;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_d_nx;
+reg [SH_W-1:0] in_use = 'h0;
+reg [SH_W-1:0] inmask;
+
+wire [SH_W-1:0] out_mask = {O_W{1'b1}};
+
+Clone Blocks 11:
+hdl/library/common/ad_pack.v@76:86
+localparam SH_W = ((O_W/I_W)+|(O_W % I_W))*I_W;
+localparam STEP = O_W % I_W;
+
+reg [O_W*UNIT_W-1:0] idata_packed;
+reg [SH_W*UNIT_W-1:0] idata_d = 'h0;
+reg ivalid_d  = 'h0;
+reg [SH_W*UNIT_W-1:0] idata_dd = 'h0;
+reg [SH_W-1:0] in_use = 'b0;
+reg [SH_W-1:0] out_mask;
+
+wire [SH_W*UNIT_W-1:0] idata_dd_nx;
+

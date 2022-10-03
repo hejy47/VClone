@@ -1,0 +1,63 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@267:281@HdlStmProcess
+    dest_id_next <= dest_id_next_inc;
+    dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len <= burst_len_mem[dest_id_reduced_next];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_ready == 1'b1) begin
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+
+Diff Content:
+- 274     dest_burst_len <= burst_len_mem[dest_id_reduced_next];
++ 274     dest_burst_len_data <= burst_len_mem[dest_id_reduced_next];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@257:275
+  end
+end
+
+assign dest_id_next_inc = inc_id(dest_id_next);
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_id_next <= 'h00;
+    dest_id_reduced_msb_next <= 1'b0;
+  end else if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_id_next <= dest_id_next_inc;
+    dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len <= burst_len_mem[dest_id_reduced_next];
+  end
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@273:288
+  if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    dest_burst_len <= burst_len_mem[dest_id_reduced_next];
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_burst_ready == 1'b1) begin
+    dest_id <= dest_id_next;
+    dest_id_reduced_msb <= dest_id_reduced_msb_next;
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_beat_counter <= 'h00;
+  end else if (dest_beat == 1'b1) begin
+

@@ -1,0 +1,174 @@
+Source Block: verilog-ethernet/example/VCU108/fpga_1g/rtl/fpga_core.v@285:304@HdlStmProcess
+
+// Place first payload byte onto LEDs
+reg valid_last = 0;
+reg [7:0] led_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        led_reg <= 0;
+    end else begin
+        valid_last <= tx_udp_payload_tvalid;
+        if (tx_udp_payload_tvalid & ~valid_last) begin
+            led_reg <= tx_udp_payload_tdata;
+        end
+    end
+end
+
+//assign led = sw;
+assign led = led_reg;
+assign phy_reset_n = ~rst;
+
+
+Diff Content:
+- 294         valid_last <= tx_udp_payload_tvalid;
+- 295         if (tx_udp_payload_tvalid & ~valid_last) begin
+- 296             led_reg <= tx_udp_payload_tdata;
++ 296         if (tx_udp_payload_tvalid) begin
++ 296             if (~valid_last) begin
++ 296                 led_reg <= tx_udp_payload_tdata;
++ 296                 valid_last <= 1'b1;
++ 296             end
++ 296             if (tx_udp_payload_tlast) begin
++ 296                 valid_last <= 1'b0;
++ 296             end
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/example/ATLYS/fpga/rtl/fpga_core.v@298:317
+
+// Place first payload byte onto LEDs
+reg valid_last = 0;
+reg [7:0] led_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        led_reg <= 0;
+    end else begin
+        valid_last <= tx_udp_payload_tvalid;
+        if (tx_udp_payload_tvalid & ~valid_last) begin
+            led_reg <= tx_udp_payload_tdata;
+        end
+    end
+end
+
+//assign led = sw;
+assign led = led_reg;
+assign phy_reset_n = ~rst;
+
+
+Clone Blocks 2:
+verilog-ethernet/example/ML605/fpga/rtl/fpga_core.v@305:324
+
+// Place first payload byte onto LEDs
+reg valid_last = 0;
+reg [7:0] led_reg = 0;
+
+always @(posedge clk_125mhz) begin
+    if (rst_125mhz) begin
+        led_reg <= 0;
+    end else begin
+        valid_last <= tx_udp_payload_tvalid;
+        if (tx_udp_payload_tvalid & ~valid_last) begin
+            led_reg <= tx_udp_payload_tdata;
+        end
+    end
+end
+
+//assign led = sw;
+assign ledu = 0;
+assign ledl = 0;
+assign ledd = 0;
+
+Clone Blocks 3:
+verilog-ethernet/example/VCU108/fpga_10g/rtl/fpga_core.v@336:355
+
+// Place first payload byte onto LEDs
+reg valid_last = 0;
+reg [7:0] led_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        led_reg <= 0;
+    end else begin
+        valid_last <= tx_udp_payload_tvalid;
+        if (tx_udp_payload_tvalid & ~valid_last) begin
+            led_reg <= tx_udp_payload_tdata;
+        end
+    end
+end
+
+//assign led = sw;
+assign led = led_reg;
+assign phy_reset_n = ~rst;
+
+
+Clone Blocks 4:
+verilog-ethernet/example/NexysVideo/fpga/rtl/fpga_core.v@299:318
+
+// Place first payload byte onto LEDs
+reg valid_last = 0;
+reg [7:0] led_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        led_reg <= 0;
+    end else begin
+        valid_last <= tx_udp_payload_tvalid;
+        if (tx_udp_payload_tvalid & ~valid_last) begin
+            led_reg <= tx_udp_payload_tdata;
+        end
+    end
+end
+
+//assign led = sw;
+assign led = led_reg;
+assign phy_reset_n = ~rst;
+
+
+Clone Blocks 5:
+verilog-ethernet/example/DE5-Net/fpga/rtl/fpga_core.v@298:317
+
+// Place first payload byte onto LEDs
+reg valid_last = 0;
+reg [7:0] led_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        led_reg <= 0;
+    end else begin
+        valid_last <= tx_udp_payload_tvalid;
+        if (tx_udp_payload_tvalid & ~valid_last) begin
+            led_reg <= tx_udp_payload_tdata;
+        end
+    end
+end
+
+//assign led = sw;
+assign led = led_reg;
+assign led_bkt = led_reg;
+assign led_hex0_d = 7'h00;
+
+Clone Blocks 6:
+verilog-ethernet/example/HXT100G/fpga/rtl/fpga_core.v@404:423
+
+// Place first payload byte onto LEDs
+reg valid_last = 0;
+reg [7:0] led_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        led_reg <= 0;
+    end else begin
+        valid_last <= tx_udp_payload_tvalid;
+        if (tx_udp_payload_tvalid & ~valid_last) begin
+            led_reg <= tx_udp_payload_tdata;
+        end
+    end
+end
+
+//assign led = sw;
+assign led = led_reg;
+
+assign eth_r0_txd = 64'h0707070707070707;
+

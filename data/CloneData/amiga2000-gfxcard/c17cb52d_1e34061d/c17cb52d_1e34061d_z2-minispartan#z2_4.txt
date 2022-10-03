@@ -1,0 +1,560 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@449:947@HdlStmProcess
+  end
+end
+
+// =================================================================================
+// ZORRO MACHINE
+always @(posedge z_sample_clk) begin
+  LEDS <= zorro_state|(ram_arbiter_state<<5);
+  
+  case (zorro_state)
+    RESET: begin
+      dataout_enable <= 0;
+      dataout <= 0;
+      slaven <= 0;
+      z_ready <= 1'bZ; // clear XRDY (cpu wait)
+      zorro_ram_write_done <= 1;
+      zorro_ram_read_done <= 1;
+      blitter_rgb <= 'h0005;
+      blitter_enable <= 1;
+      
+      ram_low   <= 'h600000;
+      ram_high  <= 'h600000 + ram_size;
+      reg_low   <= 'h600000 + reg_base;
+      reg_high  <= 'h600000 + reg_base + 'h100;
+      
+      zorro_state <= CONFIGURING;
+    end
+    
+    CONFIGURING: begin
+      /*if (zaddr_autoconfig && !znCFGIN) begin
+        if (zorro_read) begin
+          // read iospace 'he80000 (Autoconfig ROM)
+          dataout_enable <= 1;
+          dataout <= 1;
+          slaven <= 1;
+          
+          case (zaddr & 'h0000ff)
+            'h000000: data <= 'b1100_0000_0000_0000; // zorro 2
+            'h000002: data <= 'b0111_0000_0000_0000; // 2mb
+            
+            'h000004: data <= 'b1111_0000_0000_0000; // product number
+            'h000006: data <= 'b1110_0000_0000_0000; // (23)
+            
+            'h000008: data <= 'b0011_0000_0000_0000; // flags inverted
+            'h00000a: data <= 'b1111_0000_0000_0000; // inverted zero
+            
+            'h000010: data <= 'b1111_0000_0000_0000; // manufacturer high byte inverted (02)
+            'h000012: data <= 'b1101_0000_0000_0000; // 
+            'h000014: data <= 'b0110_0000_0000_0000; // manufacturer low byte (9a)
+            'h000016: data <= 'b0101_0000_0000_0000;
+            
+            'h000018: data <= 'b1111_0000_0000_0000; // serial
+            'h00001a: data <= 'b1110_0000_0000_0000; //
+            'h00001c: data <= 'b1111_0000_0000_0000; //
+            'h00001e: data <= 'b1110_0000_0000_0000; //
+            'h000020: data <= 'b1111_0000_0000_0000; //
+            'h000022: data <= 'b1110_0000_0000_0000; //
+            'h000024: data <= 'b1111_0000_0000_0000; //
+            'h000026: data <= 'b1110_0000_0000_0000; //
+            
+            'h000040: data <= 'b0000_0000_0000_0000; // interrupts (not inverted)
+            'h000042: data <= 'b0000_0000_0000_0000; //
+           
+            default: data <= 'b1111_0000_0000_0000;
+          endcase        
+        end else begin
+          // write to autoconfig register
+          if (datastrobe_synced) begin
+            case (zaddr & 'h0000ff)
+              'h000048: begin
+                ram_low[23:20] <= data_in[15:12];
+              end
+              'h00004a: begin
+                ram_low[19:16] <= data_in[15:12];
+                ram_high  <= ram_low + ram_size;
+                reg_low   <= ram_low + reg_base;
+                reg_high  <= ram_low + reg_base + 'h100;
+                zorro_state <= CONFIGURED; // configured
+              end
+              'h00004c: begin 
+                zorro_state <= CONFIGURED; // configured, shut up
+              end
+            endcase
+          end
+        end
+      end else begin
+        // no address match
+        dataout <= 0;
+        dataout_enable <= 0;
+        slaven <= 0;
+      end*/
+    end
+      
+    CONFIGURED: begin
+      blitter_rgb <= 'hffff;
+      blitter_enable <= 0;
+      zorro_state <= IDLE;
+    
+      uart_write <= 1;
+      uart_data <= 33;
+      uart_nybble <= 9;
+    end
+  
+    // ----------------------------------------------------------------------------------  
+    IDLE: begin
+      dataout <= 0;
+      dataout_enable <= 0;
+      slaven <= 0;
+      write_stall <= 0;
+      z_ready <= 1'bZ; // clear XRDY (cpu wait)
+      
+      if (uart_nybble==9 && uart_busy) begin
+        uart_write <= 0;
+        uart_nybble <= 0;
+      end
+      
+      if (znRST_sync[1]==0) begin
+        // system reset
+        zorro_state <= IDLE;
+      end else if (znAS_sync[1]==0 && znAS_sync[0]==0) begin
+        if (zorro_read && zaddr_in_ram) begin
+          // read RAM
+          // request ram access from arbiter
+          zorro_ram_read_addr <= ((zaddr_sync-ram_low)>>1);
+          zorro_ram_read_request <= 1;
+          zorro_ram_read_done <= 0;
+          data <= 'hffff;
+          read_counter <= 0;
+          
+          slaven <= 1;
+          dataout_enable <= 1;
+          dataout <= 1;
+          
+          z_ready <= 0;
+          zorro_state <= WAIT_READ2;
+          
+        end else if (zorro_write && zaddr_in_ram) begin
+          // write RAM
+          
+          last_addr <= ((zaddr_sync-ram_low)>>1);
+          zorro_state <= WAIT_WRITE;
+          
+        end else if (zorro_write && zaddr_in_reg && datastrobe_synced) begin
+          // write to register
+          case (zaddr & 'h0000ff)
+            /*'h00: display_enable <= data_in[0];
+            'h02: read_to_fetch_time <= data_in[7:0];
+            'h04: fetch_delay_value <= data_in[7:0];
+            'h06: margin_x <= data_in[7:0];
+            'h08: fetch_preroll <= data_in[7:0];
+            'h0a: dataout_time <= data_in[7:0];
+            'h0c: slaven_time <= data_in[7:0];
+            'h0e: zready_time <= data_in[7:0];
+            'h10: glitch_reg <= data_in[7:0];
+            'h12: glitchx_reg <= data_in[11:0];
+            'h14: glitch_offset <= data_in[7:0];
+            'h16: negx_margin <= data_in[7:0];*/
+            
+            // blitter regs
+            'h20: blitter_x1 <= data_in[10:0];
+            'h22: blitter_y1 <= data_in[10:0];
+            'h24: blitter_x2 <= data_in[10:0];
+            'h26: blitter_y2 <= data_in[10:0];
+            'h28: blitter_rgb <= data_in[15:0];
+            'h2a: begin
+              blitter_enable <= data_in[3:0];
+              blitter_curx <= blitter_x1;
+              blitter_cury <= blitter_y1;
+              blitter_curx2 <= blitter_x3;
+              blitter_cury2 <= blitter_y3;
+            end
+            'h2c: blitter_x3 <= data_in[10:0];
+            'h2e: blitter_y3 <= data_in[10:0];
+            'h30: blitter_x4 <= data_in[10:0];
+            'h32: blitter_y4 <= data_in[10:0];
+            
+            // sd card regs
+            'h60: sd_reset <= data_in[8];
+            'h62: sd_read <= data_in[8];
+            'h64: sd_write <= data_in[8];
+            'h66: sd_handshake_in <= data_in[8];
+            'h68: sd_addr_in[31:16] <= data_in;
+            'h6a: sd_addr_in[15:0] <= data_in;
+            'h6c: sd_data_in <= data_in[15:8];
+          endcase
+        end else if (zorro_read && zaddr_in_reg) begin
+          // read from registers
+          
+          dataout_enable <= 1;
+          dataout <= 1;
+          slaven <= 1;
+          
+          case (zaddr & 'h0000ff)
+            'h2a: data <= blitter_enable|16'h0000;
+            /*'h00: data <= ram_low[23:16];
+            'h02: data <= ram_low[15:0];
+            'h04: data <= ram_high[23:16];
+            'h06: data <= ram_high[15:0];*/
+            
+            'h60: data <= sd_busy<<8;
+            'h62: data <= sd_read<<8;
+            'h64: data <= sd_write<<8;
+            'h66: data <= sd_handshake_out<<8;
+            'h68: data <= sd_addr_in[31:16];
+            'h6a: data <= sd_addr_in[15:0];
+            'h6c: data <= sd_data_in<<8;
+            'h6e: data <= sd_data_out<<8;
+            'h70: data <= sd_error;
+            
+            default: data <= 'h0000;
+          endcase
+         
+        end        
+      end
+    end
+  
+    // ----------------------------------------------------------------------------------
+    WAIT_READ2: begin
+      if (znAS_sync[1]==1 && znAS_sync[0]==1) begin
+        // ram too slow TODO: report this
+        zorro_ram_read_request <= 0;
+        zorro_state <= IDLE;
+      end else if (zorro_ram_read_done) begin
+        read_counter <= read_counter + 1;
+        zorro_ram_read_request <= 0;
+        
+        if (read_counter >= dataout_time) begin
+          zorro_state <= WAIT_READ;
+        end
+        data <= zorro_ram_read_data;
+      end
+    end
+  
+    // ----------------------------------------------------------------------------------
+    WAIT_READ:
+      if (znAS_sync[1]==1 && znAS_sync[0]==1) begin
+        zorro_state <= IDLE;
+        z_ready <= 1'bZ;
+      end else begin
+        data <= zorro_ram_read_data;
+        z_ready <= 1'bZ;
+      end
+   
+    // ----------------------------------------------------------------------------------
+    WAIT_WRITE:
+      if (!zorro_ram_write_request) begin
+      
+        /*if (uart_nybble<4) begin
+          z_ready <= 0;
+          if (uart_busy && uart_write) begin
+            uart_write <= 0;
+          end else if (!uart_busy && uart_write==0) begin
+            if (uart_nybble==0) begin
+              if (last_addr[7:4]<10)
+                uart_data <= last_addr[7:4]+48;
+              else
+                uart_data <= last_addr[7:4]+87;
+              uart_nybble <= 1;
+              uart_write <= 1;
+            end else if (uart_nybble==1) begin
+              if (last_addr[3:0]<10)
+                uart_data <= last_addr[3:0]+48;
+              else
+                uart_data <= last_addr[3:0]+87;
+              uart_nybble <= 2;
+              uart_write <= 1;
+            end else if (uart_nybble==2) begin
+              uart_data <= 13;
+              uart_nybble <= 3;
+              uart_write <= 1;
+            end else if (uart_nybble==3) begin
+              uart_data <= 10;
+              uart_nybble <= 4;
+              uart_write <= 1;
+            end
+          end
+        // nybble>=4
+        end else if (uart_busy && uart_nybble==4) begin
+          // wait
+        end else if (!uart_busy) begin*/
+          /*uart_data <= 0;
+          uart_nybble <= 0;
+          uart_write <= 0;*/
+          
+          // there is still room in the queue
+          z_ready <= 1'bZ;
+          write_stall <= 0;
+          if (datastrobe_synced && zdata_in_sync==data_in) begin
+            zorro_ram_write_addr <= last_addr;
+            zorro_ram_write_bytes <= {~znUDS_sync[2],~znLDS_sync[2]};
+            zorro_ram_write_data <= zdata_in_sync;
+            zorro_ram_write_request <= 1;
+            
+            zorro_state <= WAIT_WRITE2;
+          end
+        /*end else begin
+          z_ready <= 0;
+          write_stall <= 1;
+        end*/
+      end else begin
+        z_ready <= 0;
+        write_stall <= 1;
+      end
+    
+    // ----------------------------------------------------------------------------------
+    WAIT_WRITE2: begin
+      z_ready <= 1'bZ;
+      if (znAS_sync[1]==1 && znAS_sync[0]==1) begin
+        zorro_state <= IDLE;
+      end
+    end
+    
+  endcase
+
+// =================================================================================
+// RAM ARBITER
+
+  case (ram_arbiter_state)
+    RAM_READY: begin
+      // start fetching a row
+      ram_enable <= 1;
+      if (row_fetched) begin
+        if (cmd_ready) begin
+          ram_burst <= 0;
+          ram_arbiter_state <= RAM_BURST_OFF;
+          fetch_x <= 0;
+        end
+      end else begin
+        if (cmd_ready) begin
+          ram_burst <= 1;
+          ram_addr  <= ((fetch_y << 11) | 504);
+          ram_byte_enable <= 'b11;
+          ram_write <= 0;
+          ram_arbiter_state <= RAM_BURST_ON;
+          fetch_x <= 0;
+          fetch_x2 <= 504;
+        end
+      end
+    end
+    
+    RAM_BURST_ON: begin
+      if (cmd_ready) begin
+        ram_arbiter_state <= RAM_FETCHING_ROW;
+      end
+    end
+    
+    RAM_BURST_OFF: begin
+      ram_enable <= 0;
+      if (data_out_queue_empty)
+        ram_arbiter_state <= RAM_ROW_FETCHED;
+    end
+    
+    RAM_FETCHING_ROW:    
+      if (data_out_ready) begin
+        if (fetch_x >= screen_w) begin
+          row_fetched <= 1; // row completely fetched
+          ram_arbiter_state <= RAM_READY;
+        end else begin
+          ram_enable <= 1;
+          ram_write <= 0;
+          ram_byte_enable <= 'b11;
+          ram_addr  <= ((fetch_y << 11) | fetch_x2); // burst incremented
+          
+          //(sdram_state=='b10010)?'hffff:'h0000; // ram_data_out[15:0];
+          //fetch_x <= fetch_x + 1;
+           
+          //if (sdram_state=='b10010) begin // || sdram_state=='b00111 || sdram_state=='b01101) begin
+          //if (data_out_ready) begin
+            fetch_x <= fetch_x + 1;
+            fetch_x2 <= fetch_x2 + 1;
+            fetch_buffer[fetch_x] <= ram_data_out[15:0];
+          //end
+          
+          /*if (cmd_ready) begin
+            fetch_x <= fetch_x + 1;
+            ram_addr  <= ((fetch_y << 11) | fetch_x[10:0]);
+            ram_enable <= 1; // fetch next
+            ram_byte_enable <= 'b11;
+            ram_write <= 0;
+          end*/
+          
+        end
+      end
+    RAM_ROW_FETCHED:
+      if (counter_x>=h_max-64 && counter_y<screen_h) begin
+        row_fetched <= 0;
+        fetch_x <= 0;
+        fetch_y <= counter_y;
+        ram_arbiter_state <= RAM_READY;
+      end else if (writeq_fill>0) begin
+        // process write queue
+        if (cmd_ready) begin
+          if (writeq_addr[writeq_fill-1][uds_bit] && !writeq_addr[writeq_fill-1][lds_bit])
+            ram_byte_enable <= 'b10; // UDS
+          else if (writeq_addr[writeq_fill-1][lds_bit] && !writeq_addr[writeq_fill-1][uds_bit])
+            ram_byte_enable <= 'b01; // LDS
+          else
+            ram_byte_enable <= 'b11;
+          
+          ram_data_in <= (writeq_data[writeq_fill-1]);
+          ram_addr    <= (writeq_addr[writeq_fill-1][q_msb:0]);
+          ram_write   <= 1;
+          ram_enable  <= 1;
+          
+          writeq_fill <= writeq_fill-1;
+          // TODO additional wait state?
+        end
+      end else if (zorro_ram_write_request) begin
+        if (writeq_fill<max_fill) begin
+          // process write request
+          zorro_ram_write_done <= 1;
+          zorro_ram_write_request <= 0;
+          writeq_addr[writeq_fill][q_msb:0] <= zorro_ram_write_addr;
+          writeq_addr[writeq_fill][uds_bit] <= zorro_ram_write_bytes[1];
+          writeq_addr[writeq_fill][lds_bit] <= zorro_ram_write_bytes[0];
+          writeq_data[writeq_fill] <= zorro_ram_write_data;
+          
+          writeq_fill <= writeq_fill + 1;
+        end else begin
+          zorro_ram_write_done <= 0;
+        end
+      end else if (zorro_ram_read_request) begin
+        // process read request
+        zorro_ram_read_done <= 0;
+        if (cmd_ready && data_out_queue_empty) begin
+          ram_write <= 0;
+          ram_addr <= zorro_ram_read_addr;
+          ram_byte_enable <= 'b11;
+          ram_enable <= 1;
+          ram_arbiter_state <= RAM_READING_ZORRO;
+        end else 
+          ram_enable <= 0;
+      end else if ((blitter_enable>0) && cmd_ready) begin // ==1 || blitter_enable==3
+        // rect fill blitter
+        if (blitter_curx<=blitter_x2) begin
+          blitter_curx <= blitter_curx + 1;
+          ram_byte_enable <= 'b11;
+          ram_addr    <= (blitter_cury<<11)|blitter_curx;
+          if (blitter_enable == 3) begin            
+            blitter_curx2 <= blitter_curx2 + 1;
+            blitter_enable <= 2;
+            ram_data_in <= blitter_copy_rgb;
+            ram_write   <= 1;
+            ram_enable  <= 1;
+          end else begin
+            ram_data_in <= blitter_rgb;
+            ram_write   <= 1;
+            ram_enable  <= 1;
+          end
+        end else if (blitter_cury<blitter_y2) begin
+          blitter_cury <= blitter_cury + 1;
+          blitter_curx <= blitter_x1;
+        end else begin
+          blitter_curx <= 0;
+          blitter_cury <= 0;
+          blitter_enable <= 0;
+          ram_enable <= 0;
+        end
+      end
+      /*end else if (blitter_enable==4 && data_out_ready) begin
+        // block copy (data ready)
+        ram_enable <= 0;
+        blitter_copy_rgb <= ram_data_out;
+        blitter_enable <= 3;
+      end else if (blitter_enable==2 && cmd_ready && data_out_queue_empty) begin //  && (counter_x<(h_max-fetch_preroll-'h10))
+        // block copy (read)
+        if (blitter_curx2<=blitter_x4) begin
+          ram_byte_enable <= 'b11;
+          ram_addr    <= (blitter_cury2<<11)|blitter_curx2;
+          ram_write   <= 0;
+          ram_enable  <= 1;
+          blitter_enable <= 4; // wait for read
+        end else if (blitter_cury2<blitter_y4) begin
+          blitter_cury2 <= blitter_cury2 + 1;
+          blitter_curx2 <= blitter_x3;
+        end else begin
+          blitter_curx2 <= 0;
+          blitter_cury2 <= 0;
+          blitter_enable <= 0;
+          ram_enable <= 0;
+        end
+      end*/
+      
+    RAM_READING_ZORRO: begin    
+        if (data_out_ready) begin
+          //ram_enable <= 0;
+          zorro_ram_read_data <= ram_data_out; // zorro_ram_read_addr; <- debug
+          zorro_ram_read_done <= 1;
+          zorro_ram_read_request <= 0;
+          ram_arbiter_state <= RAM_ROW_FETCHED;
+        end
+      end
+    
+  endcase
+end
+
+reg[15:0] rgb = 'h0000;
+
+always @(posedge vga_clk) begin
+  if (counter_x >= h_max) begin
+
+Diff Content:
+- 596             'h06: margin_x <= data_in[7:0];
+- 602             'h12: glitchx_reg <= data_in[11:0];
+- 778           ram_addr  <= ((fetch_y << 11) | 504);
+- 783           fetch_x2 <= 504;
+- 855       end else if (zorro_ram_write_request) begin
+- 856         if (writeq_fill<max_fill) begin
+- 858           zorro_ram_write_done <= 1;
+- 859           zorro_ram_write_request <= 0;
+- 860           writeq_addr[writeq_fill][q_msb:0] <= zorro_ram_write_addr;
+- 861           writeq_addr[writeq_fill][uds_bit] <= zorro_ram_write_bytes[1];
+- 862           writeq_addr[writeq_fill][lds_bit] <= zorro_ram_write_bytes[0];
+- 863           writeq_data[writeq_fill] <= zorro_ram_write_data;
+- 865           writeq_fill <= writeq_fill + 1;
+- 866         end else begin
+- 867           zorro_ram_write_done <= 0;
+- 868         end
+- 869       end else if (zorro_ram_read_request) begin
+- 871         zorro_ram_read_done <= 0;
+- 872         if (cmd_ready && data_out_queue_empty) begin
+- 873           ram_write <= 0;
+- 874           ram_addr <= zorro_ram_read_addr;
+- 875           ram_byte_enable <= 'b11;
+- 876           ram_enable <= 1;
+- 877           ram_arbiter_state <= RAM_READING_ZORRO;
+- 878         end else 
+- 879           ram_enable <= 0;
+- 886           if (blitter_enable == 3) begin            
+- 892           end else begin
+- 896           end
+- 904           ram_enable <= 0;
++ 604             'h06: margin_x <= data_in[7:0];
++ 604             'h12: glitchx_reg <= data_in[15:0];
++ 604             'h14: ram_burst_col <= data_in[8:0];
++ 669         z_ready <= 1'bZ;
++ 778           ram_addr  <= ((fetch_y << 11) | glitchx_reg);
++ 783           fetch_x2 <= glitchx_reg;
++ 836       end else if (zorro_ram_read_request) begin
++ 836         zorro_ram_read_done <= 0;
++ 836         if (cmd_ready && data_out_queue_empty) begin
++ 836           ram_write <= 0;
++ 836           ram_addr <= zorro_ram_read_addr;
++ 836           ram_byte_enable <= 'b11;
++ 836           ram_enable <= 1;
++ 836           ram_arbiter_state <= RAM_READING_ZORRO;
++ 836         end else 
++ 836           ram_enable <= 0;
++ 836       end else if (zorro_ram_write_request && writeq_fill<max_fill) begin
++ 836         zorro_ram_write_done <= 1;
++ 836         zorro_ram_write_request <= 0;
++ 836         writeq_addr[writeq_fill][q_msb:0] <= zorro_ram_write_addr;
++ 836         writeq_addr[writeq_fill][uds_bit] <= zorro_ram_write_bytes[1];
++ 836         writeq_addr[writeq_fill][lds_bit] <= zorro_ram_write_bytes[0];
++ 836         writeq_data[writeq_fill] <= zorro_ram_write_data;
++ 836         writeq_fill <= writeq_fill + 1;
++ 886           /*if (blitter_enable == 3) begin            
++ 892           end else begin*/
+
+Clone Blocks:

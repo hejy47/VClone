@@ -1,0 +1,32 @@
+Source Block: serv/rtl/serv_decode.v@175:185@HdlStmAssign
+   assign o_mem_en   = mem_op & cnt_en;
+   assign o_mem_cmd  = (opcode == OP_STORE);
+
+   assign o_mem_init = mem_op & (state == INIT);
+
+   assign jal_misalign  = imm[21] & (opcode == OP_JAL);
+
+   reg [4:0] opcode;
+   reg [31:0] imm;
+
+   always @(posedge clk) begin
+
+Diff Content:
+- 180    assign jal_misalign  = imm[21] & (opcode == OP_JAL);
++ 180    wire jal_misalign  = imm[21] & (opcode == OP_JAL);
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_decode.v@173:183
+   assign o_alu_sh_right = o_funct3[2];
+
+   assign o_mem_en   = mem_op & cnt_en;
+   assign o_mem_cmd  = (opcode == OP_STORE);
+
+   assign o_mem_init = mem_op & (state == INIT);
+
+   assign jal_misalign  = imm[21] & (opcode == OP_JAL);
+
+   reg [4:0] opcode;
+   reg [31:0] imm;
+

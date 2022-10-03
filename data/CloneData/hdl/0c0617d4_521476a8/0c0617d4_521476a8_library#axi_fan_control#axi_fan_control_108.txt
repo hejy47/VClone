@@ -1,0 +1,212 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@527:630@HdlStmProcess
+        state <= DRP_WAIT_FSM_EN;
+    endcase
+  end
+
+//axi registers write
+always @(posedge up_clk) begin
+  if (up_resetn == 1'b0) begin
+    up_pwm_width <= 'd0;
+    up_tacho_val <= 'd0;
+    up_tacho_tol <= 'd0;
+    up_tacho_en <= 'd0;
+    up_scratch <= 'd0;
+    up_temp_00_h <= THRESH_PWM_000;
+    up_temp_25_l <= THRESH_PWM_025_L;
+    up_temp_25_h <= THRESH_PWM_025_H;
+    up_temp_50_l <= THRESH_PWM_050_L;
+    up_temp_50_h <= THRESH_PWM_050_H;
+    up_temp_75_l <= THRESH_PWM_075_L;
+    up_temp_75_h <= THRESH_PWM_075_H;
+    up_temp_100_l <= THRESH_PWM_100;
+    up_tacho_25 <= TACHO_T25;
+    up_tacho_50 <= TACHO_T50;
+    up_tacho_75 <= TACHO_T75;
+    up_tacho_100 <= TACHO_T100;
+    up_tacho_25_tol <= TACHO_T25 * TACHO_TOL_PERCENT / 100;
+    up_tacho_50_tol <= TACHO_T50 * TACHO_TOL_PERCENT / 100;
+    up_tacho_75_tol <= TACHO_T75 * TACHO_TOL_PERCENT / 100;
+    up_tacho_100_tol <= TACHO_T100 * TACHO_TOL_PERCENT / 100;
+    up_irq_mask <= 4'b1111;
+  end else begin
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
+      up_scratch <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h21)) begin
+      up_pwm_width <= up_wdata_s;
+      up_tacho_en <= 1'b0;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h22)) begin
+      up_tacho_val <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h23)) begin
+      up_tacho_tol <= up_wdata_s;
+      up_tacho_en <= 1'b1;
+    end else if (temp_increase_alarm) begin
+      up_tacho_en <= 1'b0;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h40)) begin
+      up_temp_00_h <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h41)) begin
+      up_temp_25_l <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h42)) begin
+      up_temp_25_h <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h43)) begin
+      up_temp_50_l <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h44)) begin
+     up_temp_50_h <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h45)) begin
+      up_temp_75_l <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h46)) begin
+      up_temp_75_h <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h47)) begin
+      up_temp_100_l <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h50)) begin
+      up_tacho_25 <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h51)) begin
+      up_tacho_50 <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h52)) begin
+      up_tacho_75 <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h53)) begin
+      up_tacho_100 <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h54)) begin
+      up_tacho_25_tol <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h55)) begin
+      up_tacho_50_tol <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h56)) begin
+      up_tacho_75_tol <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h57)) begin
+      up_tacho_100_tol <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h10)) begin
+      up_irq_mask <= up_wdata_s[3:0];
+    end
+  end
+end
+
+//writing reset
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_wack <= 'd0;
+
+Diff Content:
+- 532 always @(posedge up_clk) begin
+- 533   if (up_resetn == 1'b0) begin
+- 534     up_pwm_width <= 'd0;
+- 535     up_tacho_val <= 'd0;
+- 536     up_tacho_tol <= 'd0;
+- 537     up_tacho_en <= 'd0;
+- 538     up_scratch <= 'd0;
+- 539     up_temp_00_h <= THRESH_PWM_000;
+- 540     up_temp_25_l <= THRESH_PWM_025_L;
+- 541     up_temp_25_h <= THRESH_PWM_025_H;
+- 542     up_temp_50_l <= THRESH_PWM_050_L;
+- 543     up_temp_50_h <= THRESH_PWM_050_H;
+- 544     up_temp_75_l <= THRESH_PWM_075_L;
+- 545     up_temp_75_h <= THRESH_PWM_075_H;
+- 546     up_temp_100_l <= THRESH_PWM_100;
+- 547     up_tacho_25 <= TACHO_T25;
+- 548     up_tacho_50 <= TACHO_T50;
+- 549     up_tacho_75 <= TACHO_T75;
+- 550     up_tacho_100 <= TACHO_T100;
+- 551     up_tacho_25_tol <= TACHO_T25 * TACHO_TOL_PERCENT / 100;
+- 552     up_tacho_50_tol <= TACHO_T50 * TACHO_TOL_PERCENT / 100;
+- 553     up_tacho_75_tol <= TACHO_T75 * TACHO_TOL_PERCENT / 100;
+- 554     up_tacho_100_tol <= TACHO_T100 * TACHO_TOL_PERCENT / 100;
+- 555     up_irq_mask <= 4'b1111;
+- 556   end else begin
+- 557     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
+- 558       up_scratch <= up_wdata_s;
+- 559     end
+- 560     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h21)) begin
+- 561       up_pwm_width <= up_wdata_s;
+- 562       up_tacho_en <= 1'b0;
+- 563     end
+- 564     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h22)) begin
+- 565       up_tacho_val <= up_wdata_s;
+- 566     end
+- 567     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h23)) begin
+- 568       up_tacho_tol <= up_wdata_s;
+- 569       up_tacho_en <= 1'b1;
+- 570     end else if (temp_increase_alarm) begin
+- 571       up_tacho_en <= 1'b0;
+- 572     end
+- 573     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h40)) begin
+- 574       up_temp_00_h <= up_wdata_s;
+- 575     end
+- 576     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h41)) begin
+- 577       up_temp_25_l <= up_wdata_s;
+- 578     end
+- 579     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h42)) begin
+- 580       up_temp_25_h <= up_wdata_s;
+- 581     end
+- 582     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h43)) begin
+- 583       up_temp_50_l <= up_wdata_s;
+- 584     end
+- 585     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h44)) begin
+- 586      up_temp_50_h <= up_wdata_s;
+- 587     end
+- 588     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h45)) begin
+- 589       up_temp_75_l <= up_wdata_s;
+- 590     end
+- 591     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h46)) begin
+- 592       up_temp_75_h <= up_wdata_s;
+- 593     end
+- 594     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h47)) begin
+- 595       up_temp_100_l <= up_wdata_s;
+- 596     end
+- 597     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h50)) begin
+- 598       up_tacho_25 <= up_wdata_s;
+- 599     end
+- 600     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h51)) begin
+- 601       up_tacho_50 <= up_wdata_s;
+- 602     end
+- 603     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h52)) begin
+- 604       up_tacho_75 <= up_wdata_s;
+- 605     end
+- 606     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h53)) begin
+- 607       up_tacho_100 <= up_wdata_s;
+- 608     end
+- 609     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h54)) begin
+- 610       up_tacho_25_tol <= up_wdata_s;
+- 611     end
+- 612     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h55)) begin
+- 613       up_tacho_50_tol <= up_wdata_s;
+- 614     end
+- 615     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h56)) begin
+- 616       up_tacho_75_tol <= up_wdata_s;
+- 617     end
+- 618     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h57)) begin
+- 619       up_tacho_100_tol <= up_wdata_s;
+- 620     end
+- 621     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h10)) begin
+- 622       up_irq_mask <= up_wdata_s[3:0];
+- 625 end
++ 622   always @(posedge up_clk) begin
++ 622     if (s_axi_aresetn == 1'b0) begin
++ 622       up_wack <= 'd0;
++ 622       up_resetn <= 1'd0;
++ 622     end else begin
++ 622       up_wack <= up_wreq_s;
++ 622       if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
++ 622         up_resetn <= up_wdata_s[0];
++ 622       end else begin
++ 622         up_resetn <= 1'd1;
++ 622       end
+
+Clone Blocks:

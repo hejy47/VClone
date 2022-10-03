@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/esaxi.v@419:429@HdlStmAssign
+   // --
+   // -- because elink reads are not generally 
+   // -- returned in order, we will only allow
+   // -- one at a time.
+   //Need to look at txrd_wait signal
+   assign txrd_write         = 1'b0;
+   always @( posedge s_axi_aclk )
+     if (~s_axi_aresetn) 
+       begin
+	  txrd_access         <= 1'b0;      
+	  txrd_datamode[1:0]  <= 2'd0;
+
+Diff Content:
+- 424    assign txrd_write         = 1'b0;
+
+Clone Blocks:

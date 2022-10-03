@@ -1,0 +1,88 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1637:1651@HdlStmProcess
+   //# all of the transactions sent by the transmitter in that case.
+   //######################################################################
+
+   assign fifo_write = my_tran & frame_reg;
+   
+   always @(posedge rxi_lclk or posedge reset)
+     if(reset)
+       wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
+     else if(fifo_write)
+       wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
+
+   assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
+   assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_write};
+
+   //#############################
+
+Diff Content:
+- 1642    always @(posedge rxi_lclk or posedge reset)
+- 1643      if(reset)
+- 1644        wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
+- 1645      else if(fifo_write)
+- 1646        wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
++ 1646    output 	     rxi_wr_wait;  //wait indicator for write transactions
++ 1646    output 	     rxi_rd_wait;  //wait indicator for read transactions 
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1643:1653
+     if(reset)
+       wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
+     else if(fifo_write)
+       wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
+
+   assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
+   assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_write};
+
+   //#############################
+   //# FIFO Read State Machine
+   //#############################
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1643:1653
+     if(reset)
+       wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
+     else if(fifo_write)
+       wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
+
+   assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
+   assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_write};
+
+   //#############################
+   //# FIFO Read State Machine
+   //#############################
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1644:1654
+       wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
+     else if(fifo_write)
+       wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
+
+   assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
+   assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_write};
+
+   //#############################
+   //# FIFO Read State Machine
+   //#############################
+   
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@3941:3956
+   //# While for the actual address calculation we use [FAD-1:0] bits only,
+   //# the bit FAD of the counter is needed in order to distinguish
+   //# between the fifo entry currently being written and the one
+   //# written in the previous "round" (FAD is a carry-out bit and is
+   //# switched every "round")
+   always @(posedge cclk or posedge reset)
+     if(reset)
+       wr_binary_pointer[FAD:0]     <= {(FAD+1){1'b0}};
+     else if(cclk_en)
+       if(wr_write)
+	 wr_binary_pointer[FAD:0]     <= wr_binary_next[FAD:0];	  
+   
+   assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
+   assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},wr_write};
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+

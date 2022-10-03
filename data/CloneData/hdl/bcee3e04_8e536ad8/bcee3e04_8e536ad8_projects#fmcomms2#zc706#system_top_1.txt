@@ -1,0 +1,74 @@
+Source Block: hdl/projects/fmcomms2/zc706/system_top.v@210:220@HdlIdDef
+  wire    [31:0]  adc_gpio_input;
+  wire    [31:0]  adc_gpio_output;
+  wire    [31:0]  dac_gpio_input;
+  wire    [31:0]  dac_gpio_output;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+
+Diff Content:
+- 215   wire            tdd_enable_s;
++ 215   wire            tdd_enabled_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms2/zc706/system_top.v@211:221
+  wire    [31:0]  adc_gpio_output;
+  wire    [31:0]  dac_gpio_input;
+  wire    [31:0]  dac_gpio_output;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+
+Clone Blocks 2:
+hdl/projects/fmcomms2/zc706/system_top.v@206:216
+  wire            dma_adc_dwr;
+  wire            core_adc_dwr;
+  wire            dma_adc_dsync;
+  wire            core_adc_dsync;
+  wire    [31:0]  adc_gpio_input;
+  wire    [31:0]  adc_gpio_output;
+  wire    [31:0]  dac_gpio_input;
+  wire    [31:0]  dac_gpio_output;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+
+Clone Blocks 3:
+hdl/projects/fmcomms2/zc706/system_top.v@207:217
+  wire            core_adc_dwr;
+  wire            dma_adc_dsync;
+  wire            core_adc_dsync;
+  wire    [31:0]  adc_gpio_input;
+  wire    [31:0]  adc_gpio_output;
+  wire    [31:0]  dac_gpio_input;
+  wire    [31:0]  dac_gpio_output;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+
+Clone Blocks 4:
+hdl/projects/fmcomms2/zc706/system_top.v@208:218
+  wire            dma_adc_dsync;
+  wire            core_adc_dsync;
+  wire    [31:0]  adc_gpio_input;
+  wire    [31:0]  adc_gpio_output;
+  wire    [31:0]  dac_gpio_input;
+  wire    [31:0]  dac_gpio_output;
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+

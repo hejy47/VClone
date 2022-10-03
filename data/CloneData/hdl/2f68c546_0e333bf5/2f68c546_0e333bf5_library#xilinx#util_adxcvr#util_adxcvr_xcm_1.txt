@@ -1,0 +1,79 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xcm.v@130:200@HdlStmIf
+  end
+
+  // instantiations
+
+  generate
+  if (XCVR_TYPE == 0) begin
+  GTXE2_COMMON #(
+    .BIAS_CFG (64'h0000040000001000),
+    .COMMON_CFG (32'h00000000),
+    .IS_DRPCLK_INVERTED (1'b0),
+    .IS_GTGREFCLK_INVERTED (1'b0),
+    .IS_QPLLLOCKDETCLK_INVERTED (1'b0),
+    .QPLL_CFG (QPLL_CFG),
+    .QPLL_CLKOUT_CFG (4'b0000),
+    .QPLL_COARSE_FREQ_OVRD (6'b010000),
+    .QPLL_COARSE_FREQ_OVRD_EN (1'b0),
+    .QPLL_CP (10'b0000011111),
+    .QPLL_CP_MONITOR_EN (1'b0),
+    .QPLL_DMONITOR_SEL (1'b0),
+    .QPLL_FBDIV (QPLL_FBDIV),
+    .QPLL_FBDIV_MONITOR_EN (1'b0),
+    .QPLL_FBDIV_RATIO (QPLL_FBDIV_RATIO),
+    .QPLL_INIT_CFG (24'h000006),
+    .QPLL_LOCK_CFG (16'h21E8),
+    .QPLL_LPF (4'b1111),
+    .QPLL_REFCLK_DIV (QPLL_REFCLK_DIV),
+    .SIM_QPLLREFCLK_SEL (3'b001),
+    .SIM_RESET_SPEEDUP ("TRUE"),
+    .SIM_VERSION ("4.0"))
+  i_gtxe2_common (
+    .QPLLDMONITOR (),
+    .QPLLFBCLKLOST (),
+    .REFCLKOUTMONITOR (),
+    .BGBYPASSB (1'h1),
+    .BGMONITORENB (1'h1),
+    .BGPDB (1'h1),
+    .BGRCALOVRD (5'h1f),
+    .DRPADDR (up_addr_int[7:0]),
+    .DRPCLK (up_clk),
+    .DRPDI (up_wdata_int),
+    .DRPDO (up_rdata_s),
+    .DRPEN (up_enb_int),
+    .DRPRDY (up_ready_s),
+    .DRPWE (up_wr_int),
+    .GTGREFCLK (1'h0),
+    .GTNORTHREFCLK0 (1'h0),
+    .GTNORTHREFCLK1 (1'h0),
+    .GTREFCLK0 (qpll_ref_clk),
+    .GTREFCLK1 (1'h0),
+    .GTSOUTHREFCLK0 (1'h0),
+    .GTSOUTHREFCLK1 (1'h0),
+    .PMARSVD (8'h0),
+    .QPLLLOCK (qpll2ch_locked),
+    .QPLLLOCKDETCLK (up_clk),
+    .QPLLLOCKEN (1'h1),
+    .QPLLOUTCLK (qpll2ch_clk),
+    .QPLLOUTREFCLK (qpll2ch_ref_clk),
+    .QPLLOUTRESET (1'h0),
+    .QPLLPD (1'h0),
+    .QPLLREFCLKLOST (),
+    .QPLLREFCLKSEL (3'h1),
+    .QPLLRESET (up_qpll_rst),
+    .QPLLRSVD1 (16'h0),
+    .QPLLRSVD2 (5'h1f),
+    .RCALENB (1'h1));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == 1) begin
+  GTHE3_COMMON #(
+
+Diff Content:
++ 135   assign qpll1_locked = 1'b0;
++ 135   assign qpll1_clk = 1'b0;
++ 135   assign qpll1_ref_clk = 1'b0;
+
+Clone Blocks:

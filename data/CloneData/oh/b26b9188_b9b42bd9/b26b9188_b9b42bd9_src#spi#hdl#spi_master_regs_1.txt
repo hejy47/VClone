@@ -1,0 +1,46 @@
+Source Block: oh/src/spi/hdl/spi_master_regs.v@110:120@HdlStmAssign
+   
+   assign spi_en       = hw_en & ~config_reg[0]; // disable spi (on by default)
+   assign irq_en       = config_reg[1];          // enable interrupt
+   assign cpol         = config_reg[2];          // cpol
+   assign cpha         = config_reg[3];          // cpha
+   assign lsbfirst     = config_reg[4];          // send lsb first
+  
+   //####################################
+   //# STATUS
+   //####################################
+
+
+Diff Content:
++ 115    assign manual_mode  = config_reg[5];          // manual control of ss bit
++ 115    assign send_data    = config_reg[6];          // ss bit
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/spi/hdl/spi_master_regs.v@109:119
+       config_reg[7:0] <= data_in[7:0];
+   
+   assign spi_en       = hw_en & ~config_reg[0]; // disable spi (on by default)
+   assign irq_en       = config_reg[1];          // enable interrupt
+   assign cpol         = config_reg[2];          // cpol
+   assign cpha         = config_reg[3];          // cpha
+   assign lsbfirst     = config_reg[4];          // send lsb first
+  
+   //####################################
+   //# STATUS
+   //####################################
+
+Clone Blocks 2:
+oh/src/spi/hdl/spi_master_regs.v@108:118
+     else if(config_write)
+       config_reg[7:0] <= data_in[7:0];
+   
+   assign spi_en       = hw_en & ~config_reg[0]; // disable spi (on by default)
+   assign irq_en       = config_reg[1];          // enable interrupt
+   assign cpol         = config_reg[2];          // cpol
+   assign cpha         = config_reg[3];          // cpha
+   assign lsbfirst     = config_reg[4];          // send lsb first
+  
+   //####################################
+   //# STATUS
+

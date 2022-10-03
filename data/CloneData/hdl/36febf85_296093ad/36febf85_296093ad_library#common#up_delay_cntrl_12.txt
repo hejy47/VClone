@@ -1,0 +1,18 @@
+Source Block: hdl/library/common/up_delay_cntrl.v@116:126@HdlIdDef
+  wire    [(IO_WIDTH-1):0]      up_drdata1_s;
+  wire    [(IO_WIDTH-1):0]      up_drdata0_s;
+
+  // variables
+
+  genvar                        n;
+
+  // decode block select
+
+  assign up_wreq_s = (up_waddr[13:8] == IO_BASEADDR) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == IO_BASEADDR) ? up_rreq : 1'b0;
+
+Diff Content:
+- 121   genvar                        n;
++ 121   genvar                          n;
+
+Clone Blocks:

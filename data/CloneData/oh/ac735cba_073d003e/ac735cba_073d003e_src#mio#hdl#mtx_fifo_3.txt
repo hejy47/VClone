@@ -1,0 +1,20 @@
+Source Block: oh/src/mio/hdl/mtx_fifo.v@65:75@HdlStmAssign
+
+   // create 64 bit data vector (related to packet packing)
+   assign data_wide[63:0]    =  {srcaddr_in[31:0],data_in[31:0]};
+
+   // create a dummy wide packet to avoid warnings
+   assign packet_wide[191:0] = packet_in[PW-1:0];
+    
+   // Emesh write pipeline (note! fifo_wait means half full!)
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       emesh_cycle[1:0] <= 'b0;
+
+Diff Content:
+- 70    assign packet_wide[191:0] = packet_in[PW-1:0];
++ 70    always @ (posedge clk)
++ 70      if(~wait_out & access_in)
++ 70        packet_buffer[191:0] <= packet_in[PW-1:0];
+
+Clone Blocks:

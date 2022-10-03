@@ -1,0 +1,74 @@
+Source Block: hdl/library/axi_ad9434/axi_ad9434_core.v@119:141@HdlStmFor
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pn_oos (adc_pn_oos_s));
+
+  genvar n;
+  generate
+  for (n = 0; n < 4; n = n + 1) begin: g_ad_dfmt
+   ad_datafmt # (
+    .DATA_WIDTH(12))
+  i_datafmt (
+    .clk (adc_clk),
+    .valid (1'b1),
+    .data (adc_data[n*12+11:n*12]),
+    .valid_out (dma_dvalid),
+    .data_out (dma_data[n*16+15:n*16]),
+    .dfmt_enable (adc_dfmt_enable_s),
+    .dfmt_type (adc_dfmt_type_s),
+    .dfmt_se (adc_dfmt_se_s));
+  end
+  endgenerate
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Diff Content:
+- 125    ad_datafmt # (
+- 126     .DATA_WIDTH(12))
+- 127   i_datafmt (
+- 128     .clk (adc_clk),
+- 129     .valid (1'b1),
+- 130     .data (adc_data[n*12+11:n*12]),
+- 131     .valid_out (dma_dvalid),
+- 132     .data_out (dma_data[n*16+15:n*16]),
+- 133     .dfmt_enable (adc_dfmt_enable_s),
+- 134     .dfmt_type (adc_dfmt_type_s),
+- 135     .dfmt_se (adc_dfmt_se_s));
++ 135     ad_datafmt #(
++ 135       .DATA_WIDTH(12)
++ 135     ) i_datafmt (
++ 135       .clk (adc_clk),
++ 135       .valid (1'b1),
++ 135       .data (adc_data[n*12+11:n*12]),
++ 135       .valid_out (dma_dvalid),
++ 135       .data_out (dma_data[n*16+15:n*16]),
++ 135       .dfmt_enable (adc_dfmt_enable_s),
++ 135       .dfmt_type (adc_dfmt_type_s),
++ 135       .dfmt_se (adc_dfmt_se_s));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9625/axi_ad9625_channel.v@83:103
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pnseq_sel (adc_pnseq_sel_s));
+
+  genvar n;
+  generate
+  for (n = 0; n < 16; n = n + 1) begin: g_ad_datafmt_1
+  ad_datafmt #(.DATA_WIDTH(12)) i_ad_datafmt (
+    .clk (adc_clk),
+    .valid (1'b1),
+    .data (adc_data[n*12+11:n*12]),
+    .valid_out (),
+    .data_out (adc_dfmt_data[n*16+15:n*16]),
+    .dfmt_enable (adc_dfmt_enable_s),
+    .dfmt_type (adc_dfmt_type_s),
+    .dfmt_se (adc_dfmt_se_s));
+  end
+  endgenerate
+
+  up_adc_channel #(
+    .COMMON_ID(6'h1),
+    .CHANNEL_ID(0),
+

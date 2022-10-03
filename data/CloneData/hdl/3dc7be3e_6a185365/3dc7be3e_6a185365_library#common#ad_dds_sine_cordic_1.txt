@@ -1,0 +1,48 @@
+Source Block: hdl/library/common/ad_dds_sine_cordic.v@83:93@HdlIdDef
+  localparam ANGLE_ROT_VAL_23 = 0.0000068301891700;
+
+  // 1.64676025812 = system gain
+
+  localparam X_FSCALE = 1 << (CORDIC_DW);
+  localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/1.64676025812)-3; // ((2^N)/2)/1.647...
+
+  // Registers Declarations
+
+  reg  [CORDIC_DW-1:0] x0  = 'd0;
+  reg  [CORDIC_DW-1:0] y0  = 'd0;
+
+Diff Content:
+- 88   localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/1.64676025812)-3; // ((2^N)/2)/1.647...
++ 88   localparam APROX_DW_GAIN_ERR = (CORDIC_DW < 21) ? 4 :
++ 88                                  (CORDIC_DW <= 24) ? 7 : 0;
++ 88   localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/(1.64676))-APROX_DW_GAIN_ERR;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_dds_sine_cordic.v@82:92
+  localparam ANGLE_ROT_VAL_22 = 0.0000136603783400;
+  localparam ANGLE_ROT_VAL_23 = 0.0000068301891700;
+
+  // 1.64676025812 = system gain
+
+  localparam X_FSCALE = 1 << (CORDIC_DW);
+  localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/1.64676025812)-3; // ((2^N)/2)/1.647...
+
+  // Registers Declarations
+
+  reg  [CORDIC_DW-1:0] x0  = 'd0;
+
+Clone Blocks 2:
+hdl/library/common/ad_dds_sine_cordic.v@87:97
+  localparam X_FSCALE = 1 << (CORDIC_DW);
+  localparam [CORDIC_DW-1:0] X_VALUE = ((X_FSCALE/2)/1.64676025812)-3; // ((2^N)/2)/1.647...
+
+  // Registers Declarations
+
+  reg  [CORDIC_DW-1:0] x0  = 'd0;
+  reg  [CORDIC_DW-1:0] y0  = 'd0;
+  reg  [ PHASE_DW-1:0] z0  = 'd0;
+
+  // Wires Declarations
+
+

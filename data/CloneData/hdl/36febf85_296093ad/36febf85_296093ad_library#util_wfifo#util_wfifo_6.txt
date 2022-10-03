@@ -1,0 +1,61 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@131:150@HdlStmProcess
+  wire                            dma_wready_s;
+  wire    [DMA_DATA_WIDTH-1:0]    dma_wdata_s;
+
+  // adc overflow
+
+  always @(posedge adc_clk) begin
+    if (adc_rst == 1'b1) begin
+      adc_wovf_m <= 2'd0;
+      adc_wovf <= 1'b0;
+    end else begin
+      adc_wovf_m[0] <= dma_wovf | fifo_wovf;
+      adc_wovf_m[1] <= adc_wovf_m[0];
+      adc_wovf <= adc_wovf_m[1];
+    end
+  end
+
+  // write
+
+  assign fifo_wr = adc_wr;
+
+
+Diff Content:
+- 136   always @(posedge adc_clk) begin
+- 137     if (adc_rst == 1'b1) begin
+- 138       adc_wovf_m <= 2'd0;
+- 139       adc_wovf <= 1'b0;
+- 141       adc_wovf_m[0] <= dma_wovf | fifo_wovf;
+- 142       adc_wovf_m[1] <= adc_wovf_m[0];
+- 143       adc_wovf <= adc_wovf_m[1];
++ 139   always @(posedge din_clk) begin
++ 139     if (din_rst == 1'b1) begin
++ 139       din_enable <= 8'd0;
++ 139       din_dcnt <= 3'd0;
++ 139       din_wr <= 1'd0;
++ 139       din_waddr <= 5'd0;
++ 139       din_waddr_rel_t <= 1'd0;
++ 139       din_waddr_rel <= 5'd0;
++ 139       din_ovf_m <= 'd0;
++ 139       din_ovf <= 'd0;
++ 143       din_enable <= din_enable_s;
++ 143       if (din_valid_s[0] == 1'b1) begin
++ 143         din_dcnt <= din_dcnt + 1'b1;
++ 143       end
++ 143       case (M_MEM_RATIO)
++ 143         8: din_wr <= din_valid_s[0] & din_dcnt[0] & din_dcnt[1] & din_dcnt[2];
++ 143         4: din_wr <= din_valid_s[0] & din_dcnt[0] & din_dcnt[1];
++ 143         2: din_wr <= din_valid_s[0] & din_dcnt[0];
++ 143         default: din_wr <= din_valid_s[0];
++ 143       endcase
++ 143       if (din_wr == 1'b1) begin
++ 143         din_waddr <= din_waddr + 1'b1;
++ 143       end
++ 143       if ((din_wr == 1'b1) && (din_waddr[2:0] == 3'd0)) begin
++ 143         din_waddr_rel_t <= ~din_waddr_rel_t;
++ 143         din_waddr_rel <= din_waddr;
++ 143       end
++ 143       din_ovf_m <= {din_ovf_m[1:0], dout_ovf_int};
++ 143       din_ovf <= din_ovf_m[2];
+
+Clone Blocks:

@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/erx_arbiter.v@116:126@HdlStmAssign
+			ecfg_access;
+   
+   assign rxrr_packet[PW-1:0] = erx_rr_access ?  erx_packet[PW-1:0] :
+			 	                 ecfg_packet[PW-1:0];
+
+   assign ecfg_wait = erx_rr_access;
+
+   //####################################
+   //Write Path (direct)
+   //####################################
+
+
+Diff Content:
+- 121    assign ecfg_wait = erx_rr_access;
++ 121    assign ecfg_wait           = erx_rr_access;
++ 121    assign emmu_write          = emmu_packet[1];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_arbiter.v@113:124
+				  );
+   
+   assign rxrr_access = erx_rr_access   |
+			ecfg_access;
+   
+   assign rxrr_packet[PW-1:0] = erx_rr_access ?  erx_packet[PW-1:0] :
+			 	                 ecfg_packet[PW-1:0];
+
+   assign ecfg_wait = erx_rr_access;
+
+   //####################################
+   //Write Path (direct)
+

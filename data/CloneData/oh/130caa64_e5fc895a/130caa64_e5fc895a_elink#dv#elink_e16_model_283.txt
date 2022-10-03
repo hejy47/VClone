@@ -1,0 +1,33 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2486:2497@HdlStmAssign
+   //# If valid mesh transaction is detected we should prevent the launch
+   //# of this transaction on the emesh
+   assign emesh_tran_dis = access;
+
+   //# Valid mesh (multicast or not) transaction
+   assign access = ~fifo_empty & access_int & 
+		   (corner_tran_match | multicast_match | mesh_tran_match);
+
+   //# Read next entry
+   assign mesh_fifo_read = access & ~mesh_wait_in;
+
+   //# Mesh transaction fields extraction
+
+Diff Content:
+- 2491    assign access = ~fifo_empty & access_int & 
+- 2492 		   (corner_tran_match | multicast_match | mesh_tran_match);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2483:2493
+   wire 	 corner_tran_match;
+   wire 	 mesh_tran_match;
+
+   //# If valid mesh transaction is detected we should prevent the launch
+   //# of this transaction on the emesh
+   assign emesh_tran_dis = access;
+
+   //# Valid mesh (multicast or not) transaction
+   assign access = ~fifo_empty & access_int & 
+		   (corner_tran_match | multicast_match | mesh_tran_match);
+
+

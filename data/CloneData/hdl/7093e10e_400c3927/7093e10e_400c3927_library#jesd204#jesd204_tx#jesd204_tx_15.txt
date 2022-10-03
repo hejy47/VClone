@@ -1,0 +1,67 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@280:336@HdlStmIf
+
+assign phy_header_r = 'h0;
+
+end
+
+if (LINK_MODE[1] == 1) begin : mode_64b66b
+
+  for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+    localparam D_START = i * DATA_PATH_WIDTH*8;
+    localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+    localparam H_START = i * 2;
+    localparam H_STOP = H_START + 2 -1;
+    jesd204_tx_lane_64b i_lane(
+      .clk(clk),
+      .reset(reset),
+
+      .tx_data(tx_data[D_STOP:D_START]),
+      .tx_ready(tx_ready_64b),
+
+      .phy_data(phy_data_r[D_STOP:D_START]),
+      .phy_header(phy_header_r[H_STOP:H_START]),
+
+      .lmc_edge(lmc_edge),
+      .lmc_quarter_edge(lmc_quarter_edge),
+      .eoemb(eoemb),
+
+      .cfg_disable_scrambler(cfg_disable_scrambler),
+      .cfg_header_mode(2'b0),
+      .cfg_lane_disable(cfg_lanes_disable[i])
+    );
+  end
+
+  always @(posedge clk) begin
+    if (reset) begin
+      tx_ready_64b <= 1'b0;
+    end else if (lmfc_edge) begin
+      tx_ready_64b <= 1'b1;
+    end
+  end
+
+  assign tx_ready = tx_ready_64b;
+  // Link considered in DATA phase when SYSREF received and LEMC clock started
+  // running
+  assign status_state = {2{tx_ready_64b}};
+
+
+  assign phy_charisk_r = 'h0;
+  assign ilas_config_rd = 'h0;
+  assign ilas_config_addr = 'h0;
+  assign status_sync = 'h0;
+
+end
+
+endgenerate
+
+pipeline_stage #(
+  .WIDTH(CW + DW + HW),
+
+Diff Content:
+- 315     end else if (lmfc_edge) begin
+- 316       tx_ready_64b <= 1'b1;
++ 310   assign tx_ready_64b_next = reset ? 1'b0 : (lmfc_edge || tx_ready_64b);
++ 316     end else begin
++ 316       tx_ready_64b <= tx_ready_64b_next;
+
+Clone Blocks:

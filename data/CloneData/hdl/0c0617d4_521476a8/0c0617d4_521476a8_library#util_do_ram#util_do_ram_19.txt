@@ -1,0 +1,31 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@106:123@HdlStmProcess
+reg   [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
+reg   [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
+reg  rd_pending = 1'b0;
+
+
+always @(posedge s_axis_aclk) begin
+  if (~s_axis_aresetn)
+    wr_request_ready <= 1'b1;
+  else if (wr_request_valid)
+    wr_request_ready <= 1'b0;
+  else if (wr_response_eot)
+    wr_request_ready <= 1'b1;
+end
+
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+Diff Content:
+- 111 always @(posedge s_axis_aclk) begin
+- 112   if (~s_axis_aresetn)
+- 113     wr_request_ready <= 1'b1;
+- 114   else if (wr_request_valid)
+- 115     wr_request_ready <= 1'b0;
+- 116   else if (wr_response_eot)
+- 117     wr_request_ready <= 1'b1;
+- 118 end
+
+Clone Blocks:

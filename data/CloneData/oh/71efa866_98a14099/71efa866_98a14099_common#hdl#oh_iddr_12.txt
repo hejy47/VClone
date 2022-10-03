@@ -1,0 +1,38 @@
+Source Block: oh/common/hdl/oh_iddr.v@53:64@HdlStmAssign
+   //Select behavior based on parameters
+   assign q1[DW-1:0] = (DDR_CLK_EDGE_REG == "SAME_EDGE_PIPELINED") ? q1_reg[DW-1:0] :
+		       (DDR_CLK_EDGE_REG == "SAME_EDGE")           ? q1_pos[DW-1:0] :
+	                                                             'b0;
+   
+   assign q2[DW-1:0] = (DDR_CLK_EDGE_REG == "SAME_EDGE_PIPELINED") ? q2_pos[DW-1:0] :
+		       (DDR_CLK_EDGE_REG == "SAME_EDGE")           ? q2_pos[DW-1:0] :
+	                                                             'b0;
+            
+endmodule // oh_iddr
+
+
+
+Diff Content:
+- 58    assign q2[DW-1:0] = (DDR_CLK_EDGE_REG == "SAME_EDGE_PIPELINED") ? q2_pos[DW-1:0] :
+- 59 		       (DDR_CLK_EDGE_REG == "SAME_EDGE")           ? q2_pos[DW-1:0] :
+- 60 	                                                             'b0;
++ 60    assign q1[DW-1:0] = q1_sl[DW-1:0];   
++ 60    assign q2[DW-1:0] = q2_sl[DW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_iddr.v@49:61
+   always @ (posedge clk)
+     if(ce)
+       q2_pos[DW-1:0] <= #(HOLDHACK) q2_neg[DW-1:0];
+
+   //Select behavior based on parameters
+   assign q1[DW-1:0] = (DDR_CLK_EDGE_REG == "SAME_EDGE_PIPELINED") ? q1_reg[DW-1:0] :
+		       (DDR_CLK_EDGE_REG == "SAME_EDGE")           ? q1_pos[DW-1:0] :
+	                                                             'b0;
+   
+   assign q2[DW-1:0] = (DDR_CLK_EDGE_REG == "SAME_EDGE_PIPELINED") ? q2_pos[DW-1:0] :
+		       (DDR_CLK_EDGE_REG == "SAME_EDGE")           ? q2_pos[DW-1:0] :
+	                                                             'b0;
+            
+

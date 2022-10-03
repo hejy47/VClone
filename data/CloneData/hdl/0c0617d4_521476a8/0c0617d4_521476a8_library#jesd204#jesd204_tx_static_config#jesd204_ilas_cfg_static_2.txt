@@ -1,0 +1,61 @@
+Source Block: hdl/library/jesd204/jesd204_tx_static_config/jesd204_ilas_cfg_static.v@69:79@HdlIdDef
+  input ilas_config_rd,
+  output reg [NUM_LANES*DATA_PATH_WIDTH*8-1:0] ilas_config_data
+);
+
+wire [31:0] ilas_mem[0:3];
+reg  [31:0] ilas_lane_mem[0:NUM_LANES-1][0:3];
+
+assign ilas_mem[0][15:0] = 8'h00;
+assign ilas_mem[0][23:16] = DID;         // DID
+assign ilas_mem[0][27:24] = BID;         // BID
+assign ilas_mem[0][31:28] = 4'h0;        // ADJCNT
+
+Diff Content:
+- 74 reg  [31:0] ilas_lane_mem[0:NUM_LANES-1][0:3];
++ 74   wire [31:0] ilas_mem[0:3];
++ 74   reg  [31:0] ilas_lane_mem[0:NUM_LANES-1][0:3];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx_static_config/jesd204_ilas_cfg_static.v@72:82
+
+wire [31:0] ilas_mem[0:3];
+reg  [31:0] ilas_lane_mem[0:NUM_LANES-1][0:3];
+
+assign ilas_mem[0][15:0] = 8'h00;
+assign ilas_mem[0][23:16] = DID;         // DID
+assign ilas_mem[0][27:24] = BID;         // BID
+assign ilas_mem[0][31:28] = 4'h0;        // ADJCNT
+assign ilas_mem[1][4:0] = 5'h00;         // LID
+assign ilas_mem[1][5] = 1'b0;            // PHADJ
+assign ilas_mem[1][6] = 1'b0;            // ADJDIR
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_tx_static_config/jesd204_ilas_cfg_static.v@71:81
+);
+
+wire [31:0] ilas_mem[0:3];
+reg  [31:0] ilas_lane_mem[0:NUM_LANES-1][0:3];
+
+assign ilas_mem[0][15:0] = 8'h00;
+assign ilas_mem[0][23:16] = DID;         // DID
+assign ilas_mem[0][27:24] = BID;         // BID
+assign ilas_mem[0][31:28] = 4'h0;        // ADJCNT
+assign ilas_mem[1][4:0] = 5'h00;         // LID
+assign ilas_mem[1][5] = 1'b0;            // PHADJ
+
+Clone Blocks 3:
+hdl/library/jesd204/jesd204_tx_static_config/jesd204_ilas_cfg_static.v@68:78
+  input [1:0] ilas_config_addr,
+  input ilas_config_rd,
+  output reg [NUM_LANES*DATA_PATH_WIDTH*8-1:0] ilas_config_data
+);
+
+wire [31:0] ilas_mem[0:3];
+reg  [31:0] ilas_lane_mem[0:NUM_LANES-1][0:3];
+
+assign ilas_mem[0][15:0] = 8'h00;
+assign ilas_mem[0][23:16] = DID;         // DID
+assign ilas_mem[0][27:24] = BID;         // BID
+

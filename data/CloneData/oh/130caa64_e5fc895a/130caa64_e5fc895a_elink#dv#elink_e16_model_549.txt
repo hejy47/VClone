@@ -1,0 +1,27 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4382:4396@HdlStmProcess
+		        type_match     & // type match
+		        double_write   & // double write transaction
+		        ((next_inc8_match  & ~byte0_inc0) |  // address match
+			 (next_inc0_match  &  byte0_inc0));
+
+   always @ (posedge txo_lclk or posedge reset)
+     if (reset)
+       burst_req    <= 1'b0;
+     else
+       burst_req    <= burst_tran;
+
+  //####################################################################################
+   //# Composing byte0 of the transaction
+   //# 
+   //# Byte0 has the following encoding scheme:
+
+Diff Content:
+- 4387    always @ (posedge txo_lclk or posedge reset)
+- 4388      if (reset)
+- 4389        burst_req    <= 1'b0;
+- 4390      else
+- 4391        burst_req    <= burst_tran;
++ 4391    assign rd_gray_next_tlc[FAD:0]  = {1'b0,rd_binary_next_tlc[FAD:1]} ^ 
++ 4391                                            rd_binary_next_tlc[FAD:0];
+
+Clone Blocks:

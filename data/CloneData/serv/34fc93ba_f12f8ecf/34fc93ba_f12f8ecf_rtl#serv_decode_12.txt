@@ -1,0 +1,50 @@
+Source Block: serv/rtl/serv_decode.v@259:271@HdlIdDef
+
+   reg go = 1'b0;
+   always @(posedge clk)
+     go <= i_wb_en;
+
+   wire cnt_en =
+        (state == RUN) |
+        (state == INIT);
+
+   wire cnt_done = cnt == 31;
+   assign running = (state == RUN);
+
+   always @(posedge clk) begin
+
+Diff Content:
+- 264    wire cnt_en =
+- 265         (state == RUN) |
+- 266         (state == INIT);
++ 266    wire cnt_en = (state != IDLE);
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_decode.v@264:274
+   wire cnt_en =
+        (state == RUN) |
+        (state == INIT);
+
+   wire cnt_done = cnt == 31;
+   assign running = (state == RUN);
+
+   always @(posedge clk) begin
+      if (cnt_done)
+	o_ctrl_trap <= i_mem_misalign;
+      if (go)
+
+Clone Blocks 2:
+serv/rtl/serv_decode.v@263:273
+
+   wire cnt_en =
+        (state == RUN) |
+        (state == INIT);
+
+   wire cnt_done = cnt == 31;
+   assign running = (state == RUN);
+
+   always @(posedge clk) begin
+      if (cnt_done)
+	o_ctrl_trap <= i_mem_misalign;
+

@@ -1,0 +1,49 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_frame_align.v@141:164@HdlStmProcess
+    end
+  end
+end
+endgenerate
+
+always @(posedge clk) begin
+  if(reset) begin
+    align_good <= 1'b0;
+    align_err <= 1'b0;
+  end else begin
+    if(RESET_COUNT_ON_MF_ONLY) begin
+      align_good <= |eomf_good;
+    end else begin
+      align_good <= |({eomf_good, eof_good});
+    end
+
+    align_err <= |({eomf_err, eof_err});
+  end
+end
+
+assign align_err_cnt_next = {1'b0, align_err_cnt} + cur_align_err_cnt;
+
+// Alignment error counter
+// Resets upon good alignment
+
+Diff Content:
+- 146 always @(posedge clk) begin
+- 147   if(reset) begin
+- 148     align_good <= 1'b0;
+- 149     align_err <= 1'b0;
+- 150   end else begin
+- 151     if(RESET_COUNT_ON_MF_ONLY) begin
+- 152       align_good <= |eomf_good;
+- 154       align_good <= |({eomf_good, eof_good});
+- 155     end
+- 157     align_err <= |({eomf_err, eof_err});
+- 159 end
++ 152       align_good <= 1'b0;
++ 152       align_err <= 1'b0;
++ 155       if(RESET_COUNT_ON_MF_ONLY) begin
++ 155         align_good <= |eomf_good;
++ 155       end else begin
++ 155         align_good <= |({eomf_good, eof_good});
++ 155       end
++ 157       align_err <= |({eomf_err, eof_err});
++ 157     end
+
+Clone Blocks:

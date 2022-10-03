@@ -1,0 +1,23 @@
+Source Block: oh/elink/hdl/etx_protocol.v@91:103@HdlStmProcess
+	 .data_in	(),
+	 .srcaddr_in	(),
+	 .packet_in	(etx_packet[PW-1:0]));//input
+   
+   //Hold transaction while waiting
+   always @ (posedge clk)
+     if(~etx_wait)
+       tx_packet[PW-1:0] <= etx_packet[PW-1:0];
+  
+   //the IO pipeline flushes out
+   packet2emesh #(.AW(AW))
+   p2m1 (
+	 .write_in	(tx_write),
+
+Diff Content:
+- 98        tx_packet[PW-1:0] <= etx_packet[PW-1:0];
++ 98        tx_packet[PW-1:0] <= {etx_packet[PW-1:8],   
++ 98 			     1'b0,			     
++ 98 			     ctrlmode_mux[3:0], 
++ 98 			     etx_packet[2:0]};
+
+Clone Blocks:

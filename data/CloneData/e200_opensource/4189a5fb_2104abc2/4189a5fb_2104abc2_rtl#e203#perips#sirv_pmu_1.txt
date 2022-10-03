@@ -1,0 +1,24 @@
+Source Block: e200_opensource/rtl/e203/perips/sirv_pmu.v@536:552@HdlStmProcess
+  //always @(posedge clock) begin
+  //  T_355 <= reset;
+  //  T_356 <= T_355;
+  //end
+  //Bob: Why here need to flop the reset twice? this is not allowed in coding style so just comment it out
+  always @(posedge clock or posedge reset) begin
+    if(reset) begin
+      T_355 <= 1'b1;
+      T_356 <= T_355;
+    end
+    else begin
+      T_355 <= 1'b0;
+      T_356 <= T_355;
+    end
+  end
+
+endmodule
+
+Diff Content:
+- 544       T_356 <= T_355;
++ 544       T_356 <= 1'b1;
+
+Clone Blocks:

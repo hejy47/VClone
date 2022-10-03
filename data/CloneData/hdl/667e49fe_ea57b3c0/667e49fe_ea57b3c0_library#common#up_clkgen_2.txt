@@ -1,0 +1,117 @@
+Source Block: hdl/library/common/up_clkgen.v@126:181@HdlStmProcess
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_raddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_mmcm_preset <= 1'd1;
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_mmcm_resetn <= 'd0;
+      up_resetn <= 'd0;
+      up_drp_sel <= 'd0;
+      up_drp_wr <= 'd0;
+      up_drp_status <= 'd0;
+      up_drp_rwn <= 'd0;
+      up_drp_addr <= 'd0;
+      up_drp_wdata <= 'd0;
+      up_drp_rdata_hold <= 'd0;
+    end else begin
+      up_mmcm_preset <= ~up_mmcm_resetn;
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+        up_mmcm_resetn <= up_wdata[1];
+        up_resetn <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        up_drp_sel <= 1'b1;
+        up_drp_wr <= ~up_wdata[28];
+      end else begin
+        up_drp_sel <= 1'b0;
+        up_drp_wr <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        up_drp_status <= 1'b1;
+      end else if (up_drp_ready == 1'b1) begin
+        up_drp_status <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        up_drp_rwn <= up_wdata[28];
+        up_drp_addr <= up_wdata[27:16];
+        up_drp_wdata <= up_wdata[15:0];
+      end
+      if (up_drp_ready == 1'b1) begin
+        up_drp_rdata_hold <= up_drp_rdata;
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
++ 144       up_clk_sel <= 'd0;
++ 154       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
++ 154         up_clk_sel <= up_wdata[0];
++ 154       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_axis_dma_rx.v@136:184
+  assign up_wreq_s = (up_waddr[13:8] == 6'h00) ? up_wreq : 1'b0;
+  assign up_rreq_s = (up_waddr[13:8] == 6'h00) ? up_rreq : 1'b0;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_preset <= 1'd1;
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_resetn <= 'd0;
+      up_dma_stream <= 'd0;
+      up_dma_start <= 'd0;
+      up_dma_count <= 'd0;
+      up_dma_ovf <= 'd0;
+      up_dma_unf <= 'd0;
+    end else begin
+      up_preset <= 1'd0;
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+        up_resetn <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
+        up_dma_stream <= up_wdata[1];
+        up_dma_start <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
+        up_dma_count <= up_wdata;
+      end
+      if (up_dma_ovf_s == 1'b1) begin
+        up_dma_ovf <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+        up_dma_ovf <= up_dma_ovf & ~up_wdata[2];
+      end
+      if (up_dma_unf_s == 1'b1) begin
+        up_dma_unf <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+        up_dma_unf <= up_dma_unf & ~up_wdata[1];
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+

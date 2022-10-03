@@ -1,0 +1,93 @@
+Source Block: miaow/scripts/xilinx/axi_slave_v1_0_S00_AXI.v@364:428@HdlStmProcess
+	// These registers are cleared when reset (active low) is applied.
+	// Slave register write enable is asserted when valid address and data are available
+	// and the slave is ready to accept the write address and write data.
+	assign slv_reg_wren = axi_wready && S_AXI_WVALID && axi_awready && S_AXI_AWVALID;
+
+	always @( posedge S_AXI_ACLK )
+    begin
+      if ( S_AXI_ARESETN == 1'b0 )
+      begin
+        waveID    <= 32'd0;
+        baseVGPR  <= 32'd0;
+        baseSGPR  <= 32'd0;
+        baseLDS   <= 32'd0;
+        waveCount <= 32'd0;
+
+        resultsReadyTag <= 32'd0;
+        
+        slv_reg_wren_buffer <= 1'b0;
+      end
+      else begin
+        slv_reg_wren_buffer <= slv_reg_wren;
+        if(cu2dispatch_wf_done_in) begin
+          resultsReadyTag <= resultsReadyTag_in;
+        end
+        if (slv_reg_wren)
+          begin
+            case ( axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] )
+              // 7'h00: Start command initiate program
+              7'h01: waveID       <= S_AXI_WDATA;
+              7'h02: baseVGPR     <= S_AXI_WDATA;
+              7'h03: baseSGPR     <= S_AXI_WDATA;
+              7'h04: baseLDS      <= S_AXI_WDATA;
+              7'h05: waveCount    <= S_AXI_WDATA;
+              7'h06: pcStart      <= S_AXI_WDATA;
+              7'h07: instrAddrReg <= S_AXI_WDATA;
+              // 7'h08: Instruction value
+              // 7'h09: Unused
+              // 7'h0A: GPR command register
+              7'h0B: quadBaseAddress <= S_AXI_WDATA[9:0];
+              7'h0C: quadData0 <= S_AXI_WDATA;
+              7'h0D: quadData1 <= S_AXI_WDATA;
+              7'h0E: quadData2 <= S_AXI_WDATA;
+              7'h0F: quadData3 <= S_AXI_WDATA;
+              
+              7'h30: mb2fpgamem_data_in_reg <= S_AXI_WDATA;
+              7'h31: mb2fpgamem_data_we_reg <= S_AXI_WDATA[0];
+              7'h32: mb2fpgamem_ack_reg <= S_AXI_WDATA[0];
+              7'h33: mb2fpgamem_done_reg <= S_AXI_WDATA[0];
+              default:
+              begin
+                waveID    <= waveID;
+                baseVGPR  <= baseVGPR;
+                baseSGPR  <= baseSGPR;
+                baseLDS   <= baseLDS;
+                waveCount <= waveCount;
+              end
+            endcase
+          end
+      end
+    end
+
+	// Implement write response logic generation
+	// The write response and response valid signals are asserted by the slave
+	// when axi_wready, S_AXI_WVALID, axi_wready and S_AXI_WVALID are asserted.
+	// This marks the acceptance of address and indicates the status of
+
+Diff Content:
+- 384         slv_reg_wren_buffer <= slv_reg_wren;
+- 385         if(cu2dispatch_wf_done_in) begin
+- 386           resultsReadyTag <= resultsReadyTag_in;
+- 387         end
++ 387       	if( mb_reset == 1'b0)
++ 387             begin
++ 387               waveID    <= 32'd0;
++ 387               baseVGPR  <= 32'd0;
++ 387               baseSGPR  <= 32'd0;
++ 387               baseLDS   <= 32'd0;
++ 387               waveCount <= 32'd0;
++ 387               resultsReadyTag <= 32'd0;
++ 387               slv_reg_wren_buffer <= 1'b0;
++ 387             end
++ 387         else
++ 387           begin
++ 387               slv_reg_wren_buffer <= slv_reg_wren;
++ 387               if(cu2dispatch_wf_done_in) begin
++ 387                 resultsReadyTag <= resultsReadyTag_in;
++ 387               end
++ 387           end
++ 398               7'h09: mb_reset <= ~S_AXI_WDATA[0];
++ 411               7'h34: singleVectorBaseAddress <= S_AXI_WDATA[9:0];
+
+Clone Blocks:

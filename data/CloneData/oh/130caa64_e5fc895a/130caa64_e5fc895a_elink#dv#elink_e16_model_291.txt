@@ -1,0 +1,37 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2507:2519@HdlStmAssign
+
+   assign data[DW-1:0]    = {fifo_tran_out[5*LW-1:4*LW],
+                             fifo_tran_out[8*LW-1:6*LW],
+                             fifo_tran_out[10*LW-1:9*LW]};
+
+   assign srcaddr_int[AW-1:0] = {fifo_tran_out[9*LW-1:8*LW],
+                                 fifo_tran_out[12*LW-1:10*LW],
+                                 fifo_tran_out[14*LW-1:13*LW]};
+
+   //# Multicast transaction (there is no multicast transaction when no external compare)
+   assign multicast_match = write & ~cfg_extcomp_dis &
+			    (ctrlmode[1:0]==2'b11) & ~(datamode[1:0] == 2'b11);
+
+
+Diff Content:
+- 2512    assign srcaddr_int[AW-1:0] = {fifo_tran_out[9*LW-1:8*LW],
+- 2513                                  fifo_tran_out[12*LW-1:10*LW],
+- 2514                                  fifo_tran_out[14*LW-1:13*LW]};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2503:2515
+
+   assign datamode[1:0]   =  fifo_tran_out[6*LW-5:6*LW-6];
+   assign write           =  fifo_tran_out[6*LW-7]; 
+   assign access_int      =  fifo_tran_out[5*LW]; 
+
+   assign data[DW-1:0]    = {fifo_tran_out[5*LW-1:4*LW],
+                             fifo_tran_out[8*LW-1:6*LW],
+                             fifo_tran_out[10*LW-1:9*LW]};
+
+   assign srcaddr_int[AW-1:0] = {fifo_tran_out[9*LW-1:8*LW],
+                                 fifo_tran_out[12*LW-1:10*LW],
+                                 fifo_tran_out[14*LW-1:13*LW]};
+
+

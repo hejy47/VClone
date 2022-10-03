@@ -1,0 +1,17 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_rx.v@252:262@HdlIdDef
+        detect_error[i] = xgmii_rxc_d0[i] && (xgmii_rxd_d0[i*8 +: 8] == 8'hfe);
+    end
+end
+
+// mask errors to within packet
+reg [7:0] detect_error_masked;
+
+always @* begin
+    case (detect_term)
+    8'b00000000: begin
+        detect_error_masked = detect_error;
+
+Diff Content:
++ 257 reg [7:0] control_masked;
+
+Clone Blocks:

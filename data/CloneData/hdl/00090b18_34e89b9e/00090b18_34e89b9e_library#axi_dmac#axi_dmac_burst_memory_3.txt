@@ -1,0 +1,50 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@213:227@HdlStmProcess
+  end else if (src_beat == 1'b1) begin
+    src_beat_counter <= src_beat_counter + 1'b1;
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_last_beat == 1'b1) begin
+    burst_len_mem[src_id_reduced] <= src_burst_len_data;
+  end
+end
+
+assign dest_ready = ~dest_mem_data_valid | dest_mem_data_ready;
+assign dest_last = dest_beat_counter == dest_burst_len;
+
+assign dest_beat = dest_valid & dest_ready;
+
+Diff Content:
+- 220     burst_len_mem[src_id_reduced] <= src_burst_len_data;
++ 220     burst_len_mem[src_id_reduced] <= src_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@219:229
+  if (src_last_beat == 1'b1) begin
+    burst_len_mem[src_id_reduced] <= src_burst_len_data;
+  end
+end
+
+assign dest_ready = ~dest_mem_data_valid | dest_mem_data_ready;
+assign dest_last = dest_beat_counter == dest_burst_len;
+
+assign dest_beat = dest_valid & dest_ready;
+assign dest_last_beat = dest_last & dest_beat;
+assign dest_raddr = {dest_id_reduced,dest_beat_counter};
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@220:230
+    burst_len_mem[src_id_reduced] <= src_burst_len_data;
+  end
+end
+
+assign dest_ready = ~dest_mem_data_valid | dest_mem_data_ready;
+assign dest_last = dest_beat_counter == dest_burst_len;
+
+assign dest_beat = dest_valid & dest_ready;
+assign dest_last_beat = dest_last & dest_beat;
+assign dest_raddr = {dest_id_reduced,dest_beat_counter};
+
+

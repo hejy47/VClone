@@ -1,0 +1,48 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_dac.v@138:167@HdlStmProcess
+    .data_qpsk_i(dac_data_fltr_i),
+    .data_qpsk_q(dac_data_fltr_q)
+  );
+
+  // output logic
+  always @(posedge clk) begin
+
+    src_dac_en     <= dst_dac_en;
+    dst_dac_dvalid <= src_dac_dvalid;
+
+    case(mode)
+      4'h0 : begin
+        dst_dac_ddata <= src_dac_ddata;
+        dst_dac_dunf  <= src_dac_dunf;
+      end
+      4'h1 : begin
+        dst_dac_ddata <= { dac_data_fltr_q, dac_data_fltr_i };
+        dst_dac_dunf  <= 1'h0;
+      end
+      4'h2 : begin
+        dst_dac_ddata <= { dac_data_fltr_q, dac_data_fltr_i };
+        dst_dac_dunf  <= src_dac_dunf;
+      end
+      default : begin
+      end
+    endcase
+
+  end
+endmodule
+
+
+Diff Content:
+- 145     src_dac_en     <= dst_dac_en;
+- 146     dst_dac_dvalid <= src_dac_dvalid;
+- 150         dst_dac_ddata <= src_dac_ddata;
+- 151         dst_dac_dunf  <= src_dac_dunf;
+- 154         dst_dac_ddata <= { dac_data_fltr_q, dac_data_fltr_i };
+- 155         dst_dac_dunf  <= 1'h0;
+- 158         dst_dac_ddata <= { dac_data_fltr_q, dac_data_fltr_i };
+- 159         dst_dac_dunf  <= src_dac_dunf;
++ 146     src_dac_enable <= dst_dac_en;
++ 146     src_dac_valid  <= dst_dac_valid;
++ 151         dst_dac_data <= src_dac_data;
++ 155         dst_dac_data <= { dac_data_fltr_q, dac_data_fltr_i };
++ 159         dst_dac_data <= { dac_data_fltr_q, dac_data_fltr_i };
+
+Clone Blocks:

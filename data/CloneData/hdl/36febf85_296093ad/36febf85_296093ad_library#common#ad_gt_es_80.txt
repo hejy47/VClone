@@ -1,0 +1,57 @@
+Source Block: hdl/library/common/ad_gt_es.v@323:364@HdlStmProcess
+  assign up_es_ut_s = up_es_ut & ~up_lpm_dfe_n;
+  assign up_es_voffset_2_s = ~up_es_voffset + 1'b1;
+  assign up_es_voffset_n_s = {1'b1, up_es_voffset_2_s[6:0]};
+  assign up_es_voffset_s = (up_es_voffset[7] == 1'b1) ? up_es_voffset_n_s : up_es_voffset;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_es_status <= 1'b0;
+      up_es_ut <= 'd0;
+      up_es_dma_addr <= 'd0;
+      up_es_hoffset <= 'd0;
+      up_es_voffset <= 'd0;
+    end else begin
+      if (up_es_fsm == ES_FSM_IDLE) begin
+        up_es_status <= 1'b0;
+      end else begin
+        up_es_status <= 1'b1;
+      end
+      if (up_es_fsm == ES_FSM_IDLE) begin
+        up_es_ut <= up_lpm_dfe_n;
+        up_es_dma_addr <= up_es_start_addr;
+        up_es_hoffset <= up_es_hoffset_min;
+        up_es_voffset <= up_es_voffset_min;
+      end else if (up_es_fsm == ES_FSM_UPDATE) begin
+        up_es_ut <= ~up_es_ut | up_lpm_dfe_n;
+        up_es_dma_addr <= up_es_dma_addr + 3'd4;
+        if (up_es_heos_s == 1'b1) begin
+          up_es_hoffset <= up_es_hoffset_min;
+        end else if (up_es_ut == 1'b1) begin
+          up_es_hoffset <= up_es_hoffset + up_es_hoffset_step;
+        end
+        if (up_es_heos_s == 1'b1) begin
+          up_es_voffset <= up_es_voffset + up_es_voffset_step;
+        end
+      end
+    end
+  end
+
+  // read-modify-write parameters (gt's are full of mixed up controls)
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+
+Diff Content:
+- 332       up_es_dma_addr <= 'd0;
+- 342         up_es_ut <= up_lpm_dfe_n;
+- 343         up_es_dma_addr <= up_es_start_addr;
+- 347         up_es_ut <= ~up_es_ut | up_lpm_dfe_n;
+- 348         up_es_dma_addr <= up_es_dma_addr + 3'd4;
++ 332       up_es_addr <= 'd0;
++ 343         up_es_ut <= lpm_dfe_n;
++ 343         up_es_addr <= up_es_start_addr;
++ 348         up_es_ut <= ~up_es_ut | lpm_dfe_n;
++ 348         up_es_addr <= up_es_addr + 3'd4;
+
+Clone Blocks:

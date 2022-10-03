@@ -1,0 +1,36 @@
+Source Block: hdl/library/common/ad_tdd_control.v@196:222@HdlStmProcess
+      tdd_cstate <= tdd_cstate_next;
+      tdd_enable_d <= tdd_enable;
+    end
+  end
+
+  always @* begin
+    tdd_cstate_next <= tdd_cstate;
+
+    case (tdd_cstate)
+      ON : begin
+        if ((tdd_enable == 1'b0) || (tdd_endof_burst == 1'b1)) begin
+          tdd_cstate_next <= OFF;
+        end
+      end
+
+      OFF : begin
+        if((tdd_enable == 1'b1) && (tdd_enable_d == 1'b0)) begin
+          tdd_cstate_next <= ON;
+        end
+      end
+    endcase
+  end
+
+  assign tdd_endof_frame = (tdd_counter == tdd_frame_length) ? 1'b1 : 1'b0;
+  assign tdd_endof_burst = ((tdd_last_burst == 1'b1) && (tdd_counter == tdd_frame_length)) ? 1'b1 : 1'b0;
+
+  // tdd free running counter
+
+Diff Content:
+- 212         if((tdd_enable == 1'b1) && (tdd_enable_d == 1'b0)) begin
+- 213           tdd_cstate_next <= ON;
++ 213         if(tdd_enable == 1'b1) begin
++ 213           tdd_cstate_next <= ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) ? ON : OFF;
+
+Clone Blocks:

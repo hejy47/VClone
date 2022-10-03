@@ -1,0 +1,18 @@
+Source Block: hdl/library/common/up_delay_cntrl.v@194:204@HdlStmAssign
+    end
+  end
+
+  // resets
+
+  assign delay_rst = (DISABLE == 1) ? 1'd0 : delay_rst_s;
+
+  ad_rst i_delay_rst_reg (
+    .preset (up_preset),
+    .clk (delay_clk),
+    .rst (delay_rst_s));
+
+Diff Content:
+- 199   assign delay_rst = (DISABLE == 1) ? 1'd0 : delay_rst_s;
++ 199   assign delay_rst = delay_rst_s;
+
+Clone Blocks:

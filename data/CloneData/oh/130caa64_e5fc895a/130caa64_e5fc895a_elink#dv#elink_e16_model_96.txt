@@ -1,0 +1,69 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1326:1338@HdlStmProcess
+   //# data
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & (data_3116_en | burst_tran))
+       data[31:16] <= fifo_data_reg[2*LW-1:0];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & data_1500_en)
+       data[15:0] <= fifo_data_reg[2*LW-1:0];
+
+   //# srcaddr
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & srcaddr_3116_en)
+        srcaddr[31:16] <= fifo_data_reg[2*LW-1:0];
+
+Diff Content:
+- 1331    always @ (posedge rxi_lclk)
+- 1332      if(fifo_data_val & data_1500_en)
+- 1333        data[15:0] <= fifo_data_reg[2*LW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1322:1334
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & access_en)
+       access <= fifo_data_reg[0];
+
+   //# data
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & (data_3116_en | burst_tran))
+       data[31:16] <= fifo_data_reg[2*LW-1:0];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & data_1500_en)
+       data[15:0] <= fifo_data_reg[2*LW-1:0];
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1331:1343
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & data_1500_en)
+       data[15:0] <= fifo_data_reg[2*LW-1:0];
+
+   //# srcaddr
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & srcaddr_3116_en)
+        srcaddr[31:16] <= fifo_data_reg[2*LW-1:0];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & srcaddr_1500_en)
+       srcaddr[15:0] <= fifo_data_reg[2*LW-1:0];
+       
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1317:1329
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & write_en)
+       write <= fifo_data_reg[1];
+
+   //# access
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & access_en)
+       access <= fifo_data_reg[0];
+
+   //# data
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & (data_3116_en | burst_tran))
+       data[31:16] <= fifo_data_reg[2*LW-1:0];
+

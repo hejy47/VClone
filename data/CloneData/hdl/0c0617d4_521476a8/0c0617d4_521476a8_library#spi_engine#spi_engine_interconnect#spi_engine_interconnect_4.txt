@@ -1,0 +1,45 @@
+Source Block: hdl/library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v@103:113@HdlStmAssign
+assign m_cmd_data   = s_active == 1'b0 ? s0_cmd_data : s1_cmd_data;
+assign m_cmd_valid  = `spi_engine_interconnect_mux(s0_cmd_valid, s1_cmd_valid);
+assign s0_cmd_ready = `spi_engine_interconnect_mux(m_cmd_ready, 1'b0);
+assign s1_cmd_ready = `spi_engine_interconnect_mux(1'b0, m_cmd_ready);
+
+assign m_sdo_data   = s_active == 1'b0 ? s0_sdo_data : s1_sdo_data;
+assign m_sdo_valid  = `spi_engine_interconnect_mux(s0_sdo_valid, s1_sdo_valid);
+assign s0_sdo_ready = `spi_engine_interconnect_mux(m_sdo_ready, 1'b0);
+assign s1_sdo_ready = `spi_engine_interconnect_mux(1'b0, m_sdo_ready);
+
+assign s0_sdi_data  = m_sdi_data;
+
+Diff Content:
+- 108 assign m_sdo_data   = s_active == 1'b0 ? s0_sdo_data : s1_sdo_data;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v@108:118
+assign m_sdo_data   = s_active == 1'b0 ? s0_sdo_data : s1_sdo_data;
+assign m_sdo_valid  = `spi_engine_interconnect_mux(s0_sdo_valid, s1_sdo_valid);
+assign s0_sdo_ready = `spi_engine_interconnect_mux(m_sdo_ready, 1'b0);
+assign s1_sdo_ready = `spi_engine_interconnect_mux(1'b0, m_sdo_ready);
+
+assign s0_sdi_data  = m_sdi_data;
+assign s1_sdi_data  = m_sdi_data;
+assign m_sdi_ready  = `spi_engine_interconnect_mux(s0_sdi_ready, s1_sdi_ready);
+assign s0_sdi_valid = `spi_engine_interconnect_mux(m_sdi_valid, 1'b0);
+assign s1_sdi_valid = `spi_engine_interconnect_mux(1'b0, m_sdi_valid);
+
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v@109:119
+assign m_sdo_valid  = `spi_engine_interconnect_mux(s0_sdo_valid, s1_sdo_valid);
+assign s0_sdo_ready = `spi_engine_interconnect_mux(m_sdo_ready, 1'b0);
+assign s1_sdo_ready = `spi_engine_interconnect_mux(1'b0, m_sdo_ready);
+
+assign s0_sdi_data  = m_sdi_data;
+assign s1_sdi_data  = m_sdi_data;
+assign m_sdi_ready  = `spi_engine_interconnect_mux(s0_sdi_ready, s1_sdi_ready);
+assign s0_sdi_valid = `spi_engine_interconnect_mux(m_sdi_valid, 1'b0);
+assign s1_sdi_valid = `spi_engine_interconnect_mux(1'b0, m_sdi_valid);
+
+assign s0_sync       = m_sync;
+

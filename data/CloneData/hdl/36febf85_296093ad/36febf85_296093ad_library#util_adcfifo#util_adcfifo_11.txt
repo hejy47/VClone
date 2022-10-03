@@ -1,0 +1,60 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@186:196@HdlStmAssign
+      end
+    end
+  end
+  
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign dma_rd_s = (dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rd <= 'd0;
+      dma_rd_d <= 'd0;
+
+Diff Content:
+- 191   assign dma_rd_s = (dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
++ 191   assign dma_rd_s = (dma_raddr < ADC_ADDR_LIMIT) ?  ((dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_wready_s) : dma_wready_s ;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adcfifo/axi_adcfifo_dma.v@179:189
+        dma_waddr_rel <= axi_waddr_rel;
+      end
+    end
+  end
+  
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign dma_rd_s = (dma_raddr == dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rd <= 'd0;
+
+Clone Blocks 2:
+hdl/library/util_adcfifo/util_adcfifo.v@185:195
+        dma_waddr_rel <= adc_waddr_rel;
+      end
+    end
+  end
+  
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign dma_rd_s = (dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rd <= 'd0;
+
+Clone Blocks 3:
+hdl/library/axi_adcfifo/axi_adcfifo_dma.v@180:190
+      end
+    end
+  end
+  
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign dma_rd_s = (dma_raddr == dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rd <= 'd0;
+      dma_rd_d <= 'd0;
+

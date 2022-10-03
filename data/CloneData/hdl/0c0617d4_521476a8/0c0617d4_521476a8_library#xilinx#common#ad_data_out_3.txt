@@ -1,0 +1,82 @@
+Source Block: hdl/library/xilinx/common/ad_data_out.v@125:159@HdlStmIf
+  endgenerate
+
+  // odelay
+
+  generate
+  if (IODELAY_FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  ODELAYE2 #(
+    .CINVCTRL_SEL ("FALSE"),
+    .DELAY_SRC ("ODATAIN"),
+    .HIGH_PERFORMANCE_MODE ("FALSE"),
+    .ODELAY_TYPE ("VAR_LOAD"),
+    .ODELAY_VALUE (0),
+    .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
+    .PIPE_SEL ("FALSE"),
+    .SIGNAL_PATTERN ("DATA"))
+  i_tx_data_odelay (
+    .CE (1'b0),
+    .CLKIN (1'b0),
+    .INC (1'b0),
+    .LDPIPEEN (1'b0),
+    .CINVCTRL (1'b0),
+    .REGRST (1'b0),
+    .C (up_clk),
+    .ODATAIN (tx_data_oddr_s),
+    .DATAOUT (tx_data_odelay_s),
+    .LD (up_dld),
+    .CNTVALUEIN (up_dwdata),
+    .CNTVALUEOUT (up_drdata));
+  end
+  endgenerate
+
+  generate
+  if (IODELAY_FPGA_TECHNOLOGY == NONE) begin
+  assign up_drdata = 5'd0;
+
+Diff Content:
+- 140     .SIGNAL_PATTERN ("DATA"))
+- 141   i_tx_data_odelay (
++ 141     .SIGNAL_PATTERN ("DATA")
++ 141   ) i_tx_data_odelay (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/common/ad_data_in.v@119:153
+  endgenerate
+
+  // idelay
+
+  generate
+  if (IODELAY_FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+  (* IODELAY_GROUP = IODELAY_GROUP *)
+  IDELAYE2 #(
+    .CINVCTRL_SEL ("FALSE"),
+    .DELAY_SRC ("IDATAIN"),
+    .HIGH_PERFORMANCE_MODE ("FALSE"),
+    .IDELAY_TYPE ("VAR_LOAD"),
+    .IDELAY_VALUE (0),
+    .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
+    .PIPE_SEL ("FALSE"),
+    .SIGNAL_PATTERN ("DATA"))
+  i_rx_data_idelay (
+    .CE (1'b0),
+    .INC (1'b0),
+    .DATAIN (1'b0),
+    .LDPIPEEN (1'b0),
+    .CINVCTRL (1'b0),
+    .REGRST (1'b0),
+    .C (up_clk),
+    .IDATAIN (rx_data_ibuf_s),
+    .DATAOUT (rx_data_idelay_s),
+    .LD (up_dld),
+    .CNTVALUEIN (up_dwdata),
+    .CNTVALUEOUT (up_drdata));
+  end
+  endgenerate
+
+  generate
+  if ((IODELAY_FPGA_TECHNOLOGY == ULTRASCALE) || (IODELAY_FPGA_TECHNOLOGY == ULTRASCALE_PLUS)) begin
+  assign up_drdata = up_drdata_s[8:4];
+

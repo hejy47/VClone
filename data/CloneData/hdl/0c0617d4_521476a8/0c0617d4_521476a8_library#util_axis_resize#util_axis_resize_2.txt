@@ -1,0 +1,244 @@
+Source Block: hdl/library/util_axis_resize/util_axis_resize.v@64:163@HdlStmIf
+  for (clog2=0; value>0; clog2=clog2+1)
+    value = value>>1;
+  end
+endfunction
+
+generate if (SLAVE_DATA_WIDTH == MASTER_DATA_WIDTH) begin
+
+assign m_valid = s_valid;
+assign s_ready = m_ready;
+assign m_data = s_data;
+
+end else if (SLAVE_DATA_WIDTH < MASTER_DATA_WIDTH) begin
+
+reg [MASTER_DATA_WIDTH-1:0] data;
+reg [clog2(RATIO)-1:0] count;
+reg valid;
+
+always @(posedge clk)
+begin
+  if (resetn == 1'b0) begin
+    count <= RATIO - 1;
+    valid <= 1'b0;
+  end else begin
+    if (count == 'h00 && s_ready == 1'b1 && s_valid == 1'b1)
+      valid <= 1'b1;
+    else if (m_ready == 1'b1)
+      valid <= 1'b0;
+
+    if (s_ready == 1'b1 && s_valid == 1'b1) begin
+      if (count == 'h00)
+        count <= RATIO - 1;
+      else
+        count <= count - 1'b1;
+    end
+  end
+end
+
+always @(posedge clk)
+begin
+  if (s_ready == 1'b1 && s_valid == 1'b1)
+    if (BIG_ENDIAN == 1) begin
+      data <= {data[MASTER_DATA_WIDTH-SLAVE_DATA_WIDTH-1:0], s_data};
+    end else begin
+      data <= {s_data, data[MASTER_DATA_WIDTH-1:SLAVE_DATA_WIDTH]};
+    end
+end
+
+assign s_ready = ~valid || m_ready;
+assign m_valid = valid;
+assign m_data = data;
+
+end else begin
+
+reg [SLAVE_DATA_WIDTH-1:0] data;
+reg [clog2(RATIO)-1:0] count;
+reg valid;
+
+always @(posedge clk)
+begin
+  if (resetn == 1'b0) begin
+    count <= RATIO - 1;
+    valid <= 1'b0;
+  end else begin
+    if (s_valid == 1'b1 && s_ready == 1'b1)
+      valid <= 1'b1;
+    else if (count == 'h0 && m_ready == 1'b1 && m_valid == 1'b1)
+      valid <= 1'b0;
+
+    if (m_ready == 1'b1 && m_valid == 1'b1) begin
+      if (count == 'h00)
+        count <= RATIO - 1;
+      else
+        count <= count - 1'b1;
+    end
+  end
+end
+
+always @(posedge clk)
+begin
+  if (s_ready == 1'b1 && s_valid == 1'b1) begin
+    data <= s_data;
+  end else if (m_ready == 1'b1 && m_valid == 1'b1) begin
+    if (BIG_ENDIAN == 1) begin
+      data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH] <= data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0];
+    end else begin
+      data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0] <= data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH];
+    end
+  end
+end
+
+assign s_ready = ~valid || (m_ready && count == 'h0);
+assign m_valid = valid;
+assign m_data = BIG_ENDIAN == 1 ?
+  data[SLAVE_DATA_WIDTH-1:SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH] :
+  data[MASTER_DATA_WIDTH-1:0];
+
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 69 generate if (SLAVE_DATA_WIDTH == MASTER_DATA_WIDTH) begin
+- 71 assign m_valid = s_valid;
+- 72 assign s_ready = m_ready;
+- 73 assign m_data = s_data;
+- 75 end else if (SLAVE_DATA_WIDTH < MASTER_DATA_WIDTH) begin
+- 77 reg [MASTER_DATA_WIDTH-1:0] data;
+- 78 reg [clog2(RATIO)-1:0] count;
+- 79 reg valid;
+- 81 always @(posedge clk)
+- 82 begin
+- 83   if (resetn == 1'b0) begin
+- 84     count <= RATIO - 1;
+- 85     valid <= 1'b0;
+- 86   end else begin
+- 87     if (count == 'h00 && s_ready == 1'b1 && s_valid == 1'b1)
+- 88       valid <= 1'b1;
+- 89     else if (m_ready == 1'b1)
+- 92     if (s_ready == 1'b1 && s_valid == 1'b1) begin
+- 93       if (count == 'h00)
+- 94         count <= RATIO - 1;
+- 95       else
+- 96         count <= count - 1'b1;
+- 99 end
+- 101 always @(posedge clk)
+- 102 begin
+- 103   if (s_ready == 1'b1 && s_valid == 1'b1)
+- 104     if (BIG_ENDIAN == 1) begin
+- 105       data <= {data[MASTER_DATA_WIDTH-SLAVE_DATA_WIDTH-1:0], s_data};
+- 106     end else begin
+- 107       data <= {s_data, data[MASTER_DATA_WIDTH-1:SLAVE_DATA_WIDTH]};
+- 108     end
+- 109 end
+- 111 assign s_ready = ~valid || m_ready;
+- 112 assign m_valid = valid;
+- 113 assign m_data = data;
+- 115 end else begin
+- 117 reg [SLAVE_DATA_WIDTH-1:0] data;
+- 118 reg [clog2(RATIO)-1:0] count;
+- 119 reg valid;
+- 121 always @(posedge clk)
+- 122 begin
+- 123   if (resetn == 1'b0) begin
+- 124     count <= RATIO - 1;
+- 125     valid <= 1'b0;
+- 126   end else begin
+- 127     if (s_valid == 1'b1 && s_ready == 1'b1)
+- 128       valid <= 1'b1;
+- 129     else if (count == 'h0 && m_ready == 1'b1 && m_valid == 1'b1)
+- 132     if (m_ready == 1'b1 && m_valid == 1'b1) begin
+- 133       if (count == 'h00)
+- 134         count <= RATIO - 1;
+- 135       else
+- 136         count <= count - 1'b1;
+- 139 end
+- 141 always @(posedge clk)
+- 142 begin
+- 143   if (s_ready == 1'b1 && s_valid == 1'b1) begin
+- 144     data <= s_data;
+- 145   end else if (m_ready == 1'b1 && m_valid == 1'b1) begin
+- 146     if (BIG_ENDIAN == 1) begin
+- 147       data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH] <= data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0];
+- 148     end else begin
+- 149       data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0] <= data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH];
+- 152 end
+- 154 assign s_ready = ~valid || (m_ready && count == 'h0);
+- 155 assign m_valid = valid;
+- 156 assign m_data = BIG_ENDIAN == 1 ?
+- 157   data[SLAVE_DATA_WIDTH-1:SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH] :
+- 158   data[MASTER_DATA_WIDTH-1:0];
+- 160 end
++ 69   generate if (SLAVE_DATA_WIDTH == MASTER_DATA_WIDTH) begin
++ 73   assign m_valid = s_valid;
++ 73   assign s_ready = m_ready;
++ 73   assign m_data = s_data;
++ 75   end else if (SLAVE_DATA_WIDTH < MASTER_DATA_WIDTH) begin
++ 79   reg [MASTER_DATA_WIDTH-1:0] data;
++ 79   reg [clog2(RATIO)-1:0] count;
++ 79   reg valid;
++ 89   always @(posedge clk)
++ 89   begin
++ 89     if (resetn == 1'b0) begin
++ 89       count <= RATIO - 1;
++ 96     end else begin
++ 96       if (count == 'h00 && s_ready == 1'b1 && s_valid == 1'b1)
++ 96         valid <= 1'b1;
++ 96       else if (m_ready == 1'b1)
++ 96         valid <= 1'b0;
++ 96       if (s_ready == 1'b1 && s_valid == 1'b1) begin
++ 96         if (count == 'h00)
++ 96           count <= RATIO - 1;
++ 96         else
++ 96           count <= count - 1'b1;
++ 96       end
++ 109   always @(posedge clk)
++ 109   begin
++ 109     if (s_ready == 1'b1 && s_valid == 1'b1)
++ 109       if (BIG_ENDIAN == 1) begin
++ 109         data <= {data[MASTER_DATA_WIDTH-SLAVE_DATA_WIDTH-1:0], s_data};
++ 109       end else begin
++ 109         data <= {s_data, data[MASTER_DATA_WIDTH-1:SLAVE_DATA_WIDTH]};
++ 109       end
++ 109   end
++ 113   assign s_ready = ~valid || m_ready;
++ 113   assign m_valid = valid;
++ 113   assign m_data = data;
++ 115   end else begin
++ 119   reg [SLAVE_DATA_WIDTH-1:0] data;
++ 119   reg [clog2(RATIO)-1:0] count;
++ 119   reg valid;
++ 129   always @(posedge clk)
++ 129   begin
++ 129     if (resetn == 1'b0) begin
++ 129       count <= RATIO - 1;
++ 136     end else begin
++ 136       if (s_valid == 1'b1 && s_ready == 1'b1)
++ 136         valid <= 1'b1;
++ 136       else if (count == 'h0 && m_ready == 1'b1 && m_valid == 1'b1)
++ 136         valid <= 1'b0;
++ 136       if (m_ready == 1'b1 && m_valid == 1'b1) begin
++ 136         if (count == 'h00)
++ 136           count <= RATIO - 1;
++ 136         else
++ 136           count <= count - 1'b1;
++ 136       end
++ 149   always @(posedge clk)
++ 149   begin
++ 149     if (s_ready == 1'b1 && s_valid == 1'b1) begin
++ 149       data <= s_data;
++ 149     end else if (m_ready == 1'b1 && m_valid == 1'b1) begin
++ 149       if (BIG_ENDIAN == 1) begin
++ 149         data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH] <= data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0];
++ 149       end else begin
++ 149         data[SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH-1:0] <= data[SLAVE_DATA_WIDTH-1:MASTER_DATA_WIDTH];
++ 149       end
++ 158   assign s_ready = ~valid || (m_ready && count == 'h0);
++ 158   assign m_valid = valid;
++ 158   assign m_data = BIG_ENDIAN == 1 ?
++ 158     data[SLAVE_DATA_WIDTH-1:SLAVE_DATA_WIDTH-MASTER_DATA_WIDTH] :
++ 158     data[MASTER_DATA_WIDTH-1:0];
+
+Clone Blocks:

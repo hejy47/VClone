@@ -1,0 +1,42 @@
+Source Block: hdl/library/common/ad_dds_1.v@61:93@HdlStmIf
+  wire    [DDS_D_DW+17:0] s1_data_s;
+
+  // sine
+
+  generate
+    if (DDS_TYPE == DDS_CORDIC_TYPE) begin
+
+      ad_dds_sine_cordic #(
+        .CORDIC_DW(DDS_D_DW),
+        .PHASE_DW(DDS_P_DW),
+        .DELAY_DW(1))
+      i_dds_sine (
+        .clk (clk),
+        .angle (angle),
+        .sine (sine_s),
+        .cosine (),
+        .ddata_in (1'b0),
+        .ddata_out ());
+
+    end else begin
+
+      ad_dds_sine i_dds_sine (
+        .clk (clk),
+        .angle (angle),
+        .sine (sine_s),
+        .ddata_in (1'b0),
+        .ddata_out ());
+    end
+  endgenerate
+
+  // scale for a sine generator
+
+  ad_mul #(
+
+Diff Content:
+- 71         .DELAY_DW(1))
+- 72       i_dds_sine (
++ 72         .DELAY_DW(1)
++ 72       ) i_dds_sine (
+
+Clone Blocks:

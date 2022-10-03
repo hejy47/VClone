@@ -1,0 +1,35 @@
+Source Block: zipcpu/rtl/zipbones.v@157:170@HdlStmAssign
+	//	0x00400 -> cmd_halt
+	//	0x00800 -> cmd_clear_pf_cache
+	//	0x01000 -> cc.sleep
+	//	0x02000 -> cc.gie
+	//	0x10000 -> External interrupt line is high
+	assign	cmd_data = { 7'h00, 8'h00, i_ext_int,
+			cpu_dbg_cc,
+			1'b0, cmd_halt, (~cpu_dbg_stall), 1'b0,
+			1'b0, cpu_reset, 1'b0, cmd_addr };
+
+	//
+	// The CPU itself
+	//
+	wire		cpu_gbl_stb, cpu_lcl_cyc, cpu_lcl_stb, 
+
+Diff Content:
+- 164 			1'b0, cmd_halt, (~cpu_dbg_stall), 1'b0,
++ 164 			1'b0, cmd_halt, (!cpu_dbg_stall), 1'b0,
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipsystem.v@368:378
+		assign	cmd_data = { i_ext_int[15:0], cpu_dbg_cc,
+				1'b0, cmd_halt, (~cpu_dbg_stall), 1'b0,
+				pic_data[15], cpu_reset, cmd_addr };
+	endgenerate
+
+	wire	cpu_gie;
+	assign	cpu_gie = cpu_dbg_cc[1];
+
+	//
+	// The WATCHDOG Timer
+	//
+

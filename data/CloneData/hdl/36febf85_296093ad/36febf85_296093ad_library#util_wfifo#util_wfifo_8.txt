@@ -1,0 +1,47 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@146:156@HdlIdDef
+
+  // write
+
+  assign fifo_wr = adc_wr;
+
+  genvar m;
+  generate
+  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+
+Diff Content:
+- 151   genvar m;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_wfifo/util_wfifo.v@148:160
+
+  assign fifo_wr = adc_wr;
+
+  genvar m;
+  generate
+  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
+  end
+  endgenerate
+
+  // read
+
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+
+Clone Blocks 2:
+hdl/library/util_wfifo/util_wfifo.v@144:154
+    end
+  end
+
+  // write
+
+  assign fifo_wr = adc_wr;
+
+  genvar m;
+  generate
+  for (m = 0; m < ADC_DATA_WIDTH; m = m + 1) begin: g_wdata
+  assign fifo_wdata[m] = adc_wdata[(ADC_DATA_WIDTH-1)-m];
+

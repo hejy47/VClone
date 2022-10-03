@@ -1,0 +1,46 @@
+Source Block: oh/elink/hdl/erx_cfg.v@119:129@HdlStmAssign
+   assign dma_access     =  erx_cfg_access & 
+			  (dstaddr_in[19:16] ==`EGROUP_MMR) &
+			  (dstaddr_in[10:8]  ==`EGROUP_DMA);
+   
+   
+   assign ecfg_read      = cfg_access & ~write_in;
+   assign ecfg_write     = cfg_access & write_in;
+
+   //Config write enables
+   assign rx_cfg_write      = ecfg_write & (dstaddr_in[RFAW+1:2]==`ERX_CFG);
+   assign rx_offset_write   = ecfg_write & (dstaddr_in[RFAW+1:2]==`ERX_OFFSET);
+
+Diff Content:
+- 124    assign ecfg_read      = cfg_access & ~write_in;
++ 124    assign ecfg_read      = erx_cfg_access & ~write_in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_cfg.v@120:130
+			  (dstaddr_in[19:16] ==`EGROUP_MMR) &
+			  (dstaddr_in[10:8]  ==`EGROUP_DMA);
+   
+   
+   assign ecfg_read      = cfg_access & ~write_in;
+   assign ecfg_write     = cfg_access & write_in;
+
+   //Config write enables
+   assign rx_cfg_write      = ecfg_write & (dstaddr_in[RFAW+1:2]==`ERX_CFG);
+   assign rx_offset_write   = ecfg_write & (dstaddr_in[RFAW+1:2]==`ERX_OFFSET);
+   assign rx_idelay0_write  = ecfg_write & (dstaddr_in[RFAW+1:2]==`ERX_IDELAY0);
+
+Clone Blocks 2:
+oh/elink/hdl/etx_cfg.v@93:103
+   //read/write decode
+   assign tx_match     = cfg_access &
+		         (dstaddr_in[19:16] ==`EGROUP_MMR) &
+		         (dstaddr_in[10:8]  ==`EGROUP_TX);
+   			 			 
+   assign ecfg_read    = tx_match & ~write_in;
+   assign ecfg_write   = tx_match & write_in;
+   
+   //Config write enables 
+   assign tx_version_write  = ecfg_write & (dstaddr_in[RFAW+1:2]==`E_VERSION);
+   assign tx_cfg_write      = ecfg_write & (dstaddr_in[RFAW+1:2]==`ETX_CFG);
+

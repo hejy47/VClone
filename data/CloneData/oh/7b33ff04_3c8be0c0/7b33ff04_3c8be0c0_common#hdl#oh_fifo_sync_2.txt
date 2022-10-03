@@ -1,0 +1,75 @@
+Source Block: oh/common/hdl/oh_fifo_sync.v@24:34@HdlIdDef
+   output 	       empty, // fifo is empty  
+   output reg [AW-1:0] rd_count     // valid entries in fifo
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+
+Diff Content:
+- 29    reg [AW-1:0]        rd_addr;
++ 29    reg [AW:0]          wr_addr;
++ 29    reg [AW:0]          rd_addr;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_fifo_sync.v@23:33
+   output 	       prog_full, // fifo is almost full
+   output 	       empty, // fifo is empty  
+   output reg [AW-1:0] rd_count     // valid entries in fifo
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+
+   assign fifo_read   = rd_en & ~empty;
+
+Clone Blocks 2:
+oh/common/hdl/oh_fifo_sync.v@30:40
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+   assign fifo_empty  = (rd_count[AW-1:0] == 0);     
+
+ 
+   
+
+Clone Blocks 3:
+oh/common/hdl/oh_fifo_sync.v@25:35
+   output reg [AW-1:0] rd_count     // valid entries in fifo
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+
+Clone Blocks 4:
+oh/common/hdl/oh_fifo_sync.v@26:36
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+

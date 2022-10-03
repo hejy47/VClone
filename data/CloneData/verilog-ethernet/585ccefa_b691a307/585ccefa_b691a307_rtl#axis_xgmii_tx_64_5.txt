@@ -1,0 +1,71 @@
+Source Block: verilog-ethernet/rtl/axis_xgmii_tx_64.v@640:703@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+        frame_ptr_reg <= 16'd0;
+
+        ifg_count_reg <= 8'd0;
+        deficit_idle_count_reg <= 2'd0;
+
+        s_axis_tready_reg <= 1'b0;
+
+        xgmii_txd_reg <= {8{XGMII_IDLE}};
+        xgmii_txc_reg <= 8'b11111111;
+
+        start_packet_0_reg <= 1'b0;
+        start_packet_4_reg <= 1'b0;
+
+        crc_state <= 32'hFFFFFFFF;
+
+        lanes_swapped <= 1'b0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        ifg_count_reg <= ifg_count_next;
+        deficit_idle_count_reg <= deficit_idle_count_next;
+
+        s_axis_tready_reg <= s_axis_tready_next;
+
+        start_packet_0_reg <= start_packet_0_next;
+        start_packet_4_reg <= start_packet_4_next;
+
+        if (swap_lanes || (lanes_swapped && !unswap_lanes)) begin
+            lanes_swapped <= 1'b1;
+            xgmii_txd_reg <= {xgmii_txd_next[31:0], swap_txd};
+            xgmii_txc_reg <= {xgmii_txc_next[3:0], swap_txc};
+        end else begin
+            lanes_swapped <= 1'b0;
+            xgmii_txd_reg <= xgmii_txd_next;
+            xgmii_txc_reg <= xgmii_txc_next;
+        end
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+        end else if (update_crc) begin
+            crc_state <= crc_next7;
+        end
+    end
+
+    s_tdata_reg <= s_tdata_next;
+    s_tkeep_reg <= s_tkeep_next;
+
+    swap_txd <= xgmii_txd_next[63:32];
+    swap_txc <= xgmii_txc_next[7:4];
+end
+
+endmodule
+
+Diff Content:
++ 660         error_underflow_reg <= 1'b0;
++ 676         error_underflow_reg <= error_underflow_next;
+
+Clone Blocks:

@@ -1,0 +1,38 @@
+Source Block: oh/elink/hdl/erx_core.v@263:273@HdlStmAssign
+   /*erx_cfg AUTO_TEMPLATE (.mi_dout       (mi_cfg_dout[DW-1:0]),
+                            .mi_en	   (mi_cfg_en),
+    );
+        */   
+   
+   assign rx_status[15:0] = {16'b0};
+   assign gpio_datain[8:0]=9'b0;
+   
+  /*
+   assign gpio_datain[8:0]= {rx_frame_par[0],
+			     rx_data_par[7],
+
+Diff Content:
+- 268    assign rx_status[15:0] = {16'b0};
++ 268    assign rx_status[15:0] = {11'b0,
++ 268 			     rx_rd_wait,
++ 268 			     rx_wr_wait,
++ 268 			     rxrr_wait,
++ 268 			     rxrd_wait,
++ 268 			     rxwr_wait
++ 268 			     };
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_core.v@264:274
+                            .mi_en	   (mi_cfg_en),
+    );
+        */   
+   
+   assign rx_status[15:0] = {16'b0};
+   assign gpio_datain[8:0]=9'b0;
+   
+  /*
+   assign gpio_datain[8:0]= {rx_frame_par[0],
+			     rx_data_par[7],
+			     rx_data_par[6],
+

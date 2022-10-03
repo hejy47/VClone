@@ -1,0 +1,111 @@
+Source Block: hdl/library/cordic_demod/cordic_demod.v@102:147@HdlStmProcess
+  angle[28] = 32'h00000003;
+  angle[29] = 32'h00000001;
+  angle[30] = 32'h00000001;
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    state <= STATE_IDLE;
+  end else begin
+    case (state)
+    STATE_IDLE: begin
+      if (s_axis_valid == 1'b1) begin
+        state <= STATE_SHIFT_LOAD;
+      end
+    end
+    STATE_SHIFT_LOAD: begin
+      if (step_counter == 'h00) begin
+        state <= STATE_ADD;
+      end else begin
+        state <= STATE_SHIFT;
+      end
+    end
+    STATE_SHIFT: begin
+      if (shift_counter == 'h01) begin
+        state <= STATE_ADD;
+      end
+    end
+    STATE_ADD: begin
+      if (step_counter == 'd30) begin
+        state <= STATE_DONE;
+      end else begin
+        state <= STATE_SHIFT_LOAD;
+      end
+    end
+    STATE_DONE: begin
+      if (m_axis_ready == 1'b1)
+        state <= STATE_IDLE;
+    end
+    endcase
+  end
+end
+
+always @(posedge clk) begin
+  case(state)
+  STATE_SHIFT_LOAD: begin
+    shift_counter <= step_counter;
+
+Diff Content:
+- 107 always @(posedge clk) begin
+- 108   if (resetn == 1'b0) begin
+- 109     state <= STATE_IDLE;
+- 110   end else begin
+- 111     case (state)
+- 112     STATE_IDLE: begin
+- 113       if (s_axis_valid == 1'b1) begin
+- 114         state <= STATE_SHIFT_LOAD;
+- 116     end
+- 117     STATE_SHIFT_LOAD: begin
+- 118       if (step_counter == 'h00) begin
+- 119         state <= STATE_ADD;
+- 120       end else begin
+- 121         state <= STATE_SHIFT;
+- 123     end
+- 124     STATE_SHIFT: begin
+- 125       if (shift_counter == 'h01) begin
+- 126         state <= STATE_ADD;
+- 128     end
+- 129     STATE_ADD: begin
+- 130       if (step_counter == 'd30) begin
+- 131         state <= STATE_DONE;
+- 132       end else begin
+- 133         state <= STATE_SHIFT_LOAD;
+- 136     STATE_DONE: begin
+- 137       if (m_axis_ready == 1'b1)
+- 138         state <= STATE_IDLE;
+- 139     end
+- 140     endcase
+- 142 end
++ 114   always @(posedge clk) begin
++ 114     if (resetn == 1'b0) begin
++ 114       state <= STATE_IDLE;
++ 114     end else begin
++ 114       case (state)
++ 114       STATE_IDLE: begin
++ 114         if (s_axis_valid == 1'b1) begin
++ 114           state <= STATE_SHIFT_LOAD;
++ 114         end
++ 121       STATE_SHIFT_LOAD: begin
++ 121         if (step_counter == 'h00) begin
++ 121           state <= STATE_ADD;
++ 121         end else begin
++ 121           state <= STATE_SHIFT;
++ 121         end
++ 126       STATE_SHIFT: begin
++ 126         if (shift_counter == 'h01) begin
++ 126           state <= STATE_ADD;
++ 126         end
++ 133       STATE_ADD: begin
++ 133         if (step_counter == 'd30) begin
++ 133           state <= STATE_DONE;
++ 133         end else begin
++ 133           state <= STATE_SHIFT_LOAD;
++ 133         end
++ 134       STATE_DONE: begin
++ 134         if (m_axis_ready == 1'b1)
++ 134           state <= STATE_IDLE;
++ 134       end
++ 134       endcase
+
+Clone Blocks:

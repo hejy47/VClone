@@ -1,0 +1,189 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@534:691@HdlStmIf
+	.underflow(fifo_rd_underflow)
+);
+
+end endgenerate
+
+generate if (C_DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
+
+assign src_clk = m_src_axi_aclk;
+assign src_resetn = m_src_axi_aresetn;
+
+wire [C_ID_WIDTH-1:0] src_data_id;
+wire [C_ID_WIDTH-1:0] src_address_id;
+wire src_address_eot = eot_mem_src[src_address_id];
+wire src_data_eot = eot_mem_src[src_data_id];
+
+assign dbg_src_address_id = src_address_id;
+assign dbg_src_data_id = src_data_id;
+
+dmac_src_mm_axi #(
+	.C_ID_WIDTH(C_ID_WIDTH),
+	.C_DMA_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
+	.C_ADDR_ALIGN_BITS(C_ADDR_ALIGN_BITS),
+	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+) i_src_dma_mm (
+	.m_axi_aclk(m_src_axi_aclk),
+	.m_axi_aresetn(m_src_axi_aresetn),
+
+	.enable(src_enable),
+	.enabled(src_enabled),
+	.sync_id(src_sync_id),
+	.sync_id_ret(src_sync_id_ret),
+
+	.req_valid(src_req_valid),
+	.req_ready(src_req_ready),
+	.req_address(src_req_address),
+	.req_last_burst_length(src_req_last_burst_length),
+
+	.response_valid(src_response_valid),
+	.response_ready(src_response_ready),
+	.response_resp(src_response_resp),
+
+	.request_id(src_request_id),
+	.response_id(src_response_id),
+	.address_id(src_address_id),
+	.data_id(src_data_id),
+
+	.address_eot(src_address_eot),
+	.data_eot(src_data_eot),
+
+	.fifo_valid(src_valid),
+	.fifo_ready(src_ready),
+	.fifo_data(src_data),
+
+	.m_axi_arready(m_axi_arready),
+	.m_axi_arvalid(m_axi_arvalid),
+	.m_axi_araddr(m_axi_araddr),
+	.m_axi_arlen(m_axi_arlen),
+	.m_axi_arsize(m_axi_arsize),
+	.m_axi_arburst(m_axi_arburst),
+	.m_axi_arprot(m_axi_arprot),
+	.m_axi_arcache(m_axi_arcache),
+
+	.m_axi_rready(m_axi_rready),
+	.m_axi_rvalid(m_axi_rvalid),
+	.m_axi_rdata(m_axi_rdata),
+	.m_axi_rresp(m_axi_rresp)
+);
+
+end else if (C_DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
+
+assign src_clk = s_axis_aclk;
+
+wire src_eot = eot_mem_src[src_response_id];
+
+assign dbg_src_address_id = 'h00;
+assign dbg_src_data_id = 'h00;
+
+dmac_src_axi_stream #(
+	.C_ID_WIDTH(C_ID_WIDTH),
+	.C_S_AXIS_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
+	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+) i_src_dma_stream (
+	.s_axis_aclk(s_axis_aclk),
+	.s_axis_aresetn(src_resetn),
+
+	.enable(src_enable),
+	.enabled(src_enabled),
+	.sync_id(src_sync_id),
+	.sync_id_ret(src_sync_id_ret),
+
+	.req_valid(src_req_valid),
+	.req_ready(src_req_ready),
+	.req_last_burst_length(src_req_last_burst_length),
+	.req_sync_transfer_start(src_req_sync_transfer_start),
+
+	.request_id(src_request_id),
+	.response_id(src_response_id),
+
+	.eot(src_eot),
+
+	.fifo_valid(src_valid),
+	.fifo_ready(src_ready),
+	.fifo_data(src_data),
+
+	.s_axis_valid(s_axis_valid),
+	.s_axis_ready(s_axis_ready),
+	.s_axis_data(s_axis_data),
+	.s_axis_user(s_axis_user)
+);
+
+end else /* if (C_DMA_TYPE_SRC == DMA_TYPE_FIFO) */ begin
+
+assign src_clk = fifo_wr_clk;
+
+wire src_eot = eot_mem_src[src_response_id];
+
+assign dbg_src_address_id = 'h00;
+assign dbg_src_data_id = 'h00;
+
+dmac_src_fifo_inf #(
+	.C_ID_WIDTH(C_ID_WIDTH),
+	.C_DATA_WIDTH(C_DMA_DATA_WIDTH_SRC),
+	.C_BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+) i_src_dma_fifo (
+	.clk(fifo_wr_clk),
+	.resetn(src_resetn),
+
+	.enable(src_enable),
+	.enabled(src_enabled),
+	.sync_id(src_sync_id),
+	.sync_id_ret(src_sync_id_ret),
+
+	.req_valid(src_req_valid),
+	.req_ready(src_req_ready),
+	.req_last_burst_length(src_req_last_burst_length),
+	.req_sync_transfer_start(src_req_sync_transfer_start),
+
+	.request_id(src_request_id),
+	.response_id(src_response_id),
+
+	.eot(src_eot),
+
+	.fifo_valid(src_valid),
+	.fifo_ready(src_ready),
+	.fifo_data(src_data),
+
+	.en(fifo_wr_en),
+	.din(fifo_wr_din),
+	.overflow(fifo_wr_overflow),
+	.sync(fifo_wr_sync)
+);
+
+end endgenerate
+
+sync_bits #(
+	.NUM_BITS(C_ID_WIDTH),
+	.CLK_ASYNC(C_CLKS_ASYNC_REQ_SRC)
+) i_sync_src_request_id (
+
+Diff Content:
+- 602 end else if (C_DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
+- 644 end else /* if (C_DMA_TYPE_SRC == DMA_TYPE_FIFO) */ begin
++ 559 	.pause(pause),
++ 602 end else begin
++ 602 assign m_axi_arvalid = 1'b0;
++ 602 assign m_axi_araddr = 'h00;
++ 602 assign m_axi_arlen = 'h00;
++ 602 assign m_axi_arsize = 'h00;
++ 602 assign m_axi_arburst = 'h00;
++ 602 assign m_axi_arcache = 'h00;
++ 602 assign m_axi_arprot = 'h00;
++ 602 assign m_axi_rready = 1'b0;
++ 602 end 
++ 602 if (C_DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
++ 609 /* TODO */
++ 609 assign src_response_valid = 1'b0;
++ 609 assign src_response_resp = 2'b0;
++ 644 end else begin
++ 644 assign s_axis_ready = 1'b0;
++ 644 end
++ 644 if (C_DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
++ 651 /* TODO */
++ 651 assign src_response_valid = 1'b0;
++ 651 assign src_response_resp = 2'b0;
++ 684 end else begin
++ 684 assign fifo_wr_overflow = 1'b0;
+
+Clone Blocks:

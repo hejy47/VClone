@@ -1,0 +1,17 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_lane_latency_monitor.v@73:83@HdlIdDef
+    beat_counter <= beat_counter + 1'b1;
+  end
+end
+
+generate
+genvar i;
+
+for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      lane_latency_mem[i] <= 'h00;
+
+Diff Content:
+- 78 genvar i;
+
+Clone Blocks:

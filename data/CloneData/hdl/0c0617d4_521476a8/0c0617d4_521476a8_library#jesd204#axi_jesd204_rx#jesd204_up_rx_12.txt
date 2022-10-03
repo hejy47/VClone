@@ -1,0 +1,96 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/jesd204_up_rx.v@176:212@HdlStmProcess
+    end
+  end
+  endcase
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_cfg_buffer_early_release <= 1'b0;
+    up_cfg_buffer_delay <= 'h00;
+    up_ctrl_err_statistics_mask <= 7'h0;
+    up_ctrl_err_statistics_reset <= 1'b0;
+    up_cfg_frame_align_err_threshold <= 8'd4;
+  end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
+    case (up_waddr)
+    /* JESD RX configuraton */
+    12'h090: begin
+      up_cfg_buffer_early_release <= up_wdata[16];
+      up_cfg_buffer_delay <= up_wdata[9:DATA_PATH_WIDTH_LOG2];
+    end
+    endcase
+  end else if (up_wreq == 1'b1) begin
+    case (up_waddr)
+    12'h91: begin
+      up_ctrl_err_statistics_mask <= up_wdata[14:8];
+      up_ctrl_err_statistics_reset <= up_wdata[0];
+    end
+    12'h92: begin
+      up_cfg_frame_align_err_threshold <= up_wdata[7:0];
+    end
+    endcase
+  end
+end
+
+genvar i;
+generate for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+    jesd204_up_rx_lane #(
+      .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+
+Diff Content:
+- 181 always @(posedge up_clk) begin
+- 182   if (up_reset == 1'b1) begin
+- 183     up_cfg_buffer_early_release <= 1'b0;
+- 184     up_cfg_buffer_delay <= 'h00;
+- 185     up_ctrl_err_statistics_mask <= 7'h0;
+- 186     up_ctrl_err_statistics_reset <= 1'b0;
+- 187     up_cfg_frame_align_err_threshold <= 8'd4;
+- 188   end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
+- 189     case (up_waddr)
+- 191     12'h090: begin
+- 192       up_cfg_buffer_early_release <= up_wdata[16];
+- 193       up_cfg_buffer_delay <= up_wdata[9:DATA_PATH_WIDTH_LOG2];
+- 194     end
+- 195     endcase
+- 196   end else if (up_wreq == 1'b1) begin
+- 197     case (up_waddr)
+- 198     12'h91: begin
+- 199       up_ctrl_err_statistics_mask <= up_wdata[14:8];
+- 200       up_ctrl_err_statistics_reset <= up_wdata[0];
+- 201     end
+- 202     12'h92: begin
+- 203       up_cfg_frame_align_err_threshold <= up_wdata[7:0];
+- 207 end
++ 203     12'h090: up_rdata = {
++ 203       /* 17-31 */ 15'h00, /* Reserved for future additions */
++ 203       /*    16 */ up_cfg_buffer_early_release, /* Release buffer as soon as all lanes are ready. */
++ 203       /* 10-15 */ 6'b0000, /* Reserved for future extensions of buffer_delay */
++ 203       /* 02-09 */ up_cfg_buffer_delay, /* Buffer release delay */
++ 203       /* 00-01 */ 2'b00 /* Data path width alignment */
++ 203     };
++ 203     12'h91: up_rdata = {
++ 203       /* 15-31 */ 17'h00, /* Reserved for future additions */
++ 203       /* 08-14 */ up_ctrl_err_statistics_mask,
++ 203       /* 01-07 */ 7'h0,
++ 203       /*    00 */ up_ctrl_err_statistics_reset
++ 203     };
++ 203     12'h92: up_rdata = {
++ 203       /* 08-31 */ 24'h0,
++ 203       /* 00-07 */ up_cfg_frame_align_err_threshold
++ 203     };
++ 203     /* 0x93-0x9f reserved for future use */
++ 203     /* JESD RX status */
++ 203     12'ha0: up_rdata = {
++ 203       /* 04-31 */ 28'h00, /* Reserved for future additions */
++ 203       /* 02-03 */ 2'b00, /* Reserved for future extensions of ctrl_state */
++ 203       /* 00-01 */ up_status_ctrl_state /* State of the internal state machine */
++ 203     };
++ 203     default: begin
++ 203       if (up_raddr[11:3] >= LANE_BASE_ADDR &&
++ 203           up_raddr[11:3] < LANE_BASE_ADDR + NUM_LANES) begin
++ 203         up_rdata = up_lane_rdata[up_raddr[11:3] - LANE_BASE_ADDR];
++ 203       end else begin
++ 203         up_rdata = 'h00;
++ 203       end
+
+Clone Blocks:

@@ -1,0 +1,115 @@
+Source Block: hdl/projects/daq3/zc706/system_top.v@273:332@HdlStmProcess
+  wire            adc_valid_0;
+  wire            adc_valid_1;
+
+  // adc-dac data
+
+  always @(posedge dac_clk) begin
+    case ({dac_enable_1, dac_enable_0})
+      2'b11: begin
+        dac_drd <= dac_valid_0 & dac_valid_1;
+        dac_ddata_0[63:48] <= dac_ddata[111: 96];
+        dac_ddata_0[47:32] <= dac_ddata[ 79: 64];
+        dac_ddata_0[31:16] <= dac_ddata[ 47: 32];
+        dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
+        dac_ddata_1[63:48] <= dac_ddata[127:112];
+        dac_ddata_1[47:32] <= dac_ddata[ 95: 80];
+        dac_ddata_1[31:16] <= dac_ddata[ 63: 48];
+        dac_ddata_1[15: 0] <= dac_ddata[ 31: 16];
+      end
+      2'b10: begin
+        dac_drd <= dac_valid_1 & ~dac_drd;
+        dac_ddata_0 <= 64'd0;
+        if (dac_drd == 1'b1) begin
+          dac_ddata_1[63:48] <= dac_ddata[127:112];
+          dac_ddata_1[47:32] <= dac_ddata[111: 96];
+          dac_ddata_1[31:16] <= dac_ddata[ 95: 80];
+          dac_ddata_1[15: 0] <= dac_ddata[ 79: 64];
+        end else begin
+          dac_ddata_1[63:48] <= dac_ddata[ 63: 48];
+          dac_ddata_1[47:32] <= dac_ddata[ 47: 32];
+          dac_ddata_1[31:16] <= dac_ddata[ 31: 16];
+          dac_ddata_1[15: 0] <= dac_ddata[ 15:  0];
+        end
+      end
+      2'b01: begin
+        dac_drd <= dac_valid_0 & ~dac_drd;
+        if (dac_drd == 1'b1) begin
+          dac_ddata_0[63:48] <= dac_ddata[127:112];
+          dac_ddata_0[47:32] <= dac_ddata[111: 96];
+          dac_ddata_0[31:16] <= dac_ddata[ 95: 80];
+          dac_ddata_0[15: 0] <= dac_ddata[ 79: 64];
+        end else begin
+          dac_ddata_0[63:48] <= dac_ddata[ 63: 48];
+          dac_ddata_0[47:32] <= dac_ddata[ 47: 32];
+          dac_ddata_0[31:16] <= dac_ddata[ 31: 16];
+          dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
+        end
+        dac_ddata_1 <= 64'd0;
+      end
+      default: begin
+        dac_drd <= 1'b0;
+        dac_ddata_0 <= 64'd0;
+        dac_ddata_1 <= 64'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_1, adc_enable_0})
+      2'b11: begin
+        adc_dsync <= 1'b1;
+
+Diff Content:
+- 278   always @(posedge dac_clk) begin
+- 279     case ({dac_enable_1, dac_enable_0})
+- 280       2'b11: begin
+- 281         dac_drd <= dac_valid_0 & dac_valid_1;
+- 282         dac_ddata_0[63:48] <= dac_ddata[111: 96];
+- 283         dac_ddata_0[47:32] <= dac_ddata[ 79: 64];
+- 284         dac_ddata_0[31:16] <= dac_ddata[ 47: 32];
+- 285         dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
+- 286         dac_ddata_1[63:48] <= dac_ddata[127:112];
+- 287         dac_ddata_1[47:32] <= dac_ddata[ 95: 80];
+- 288         dac_ddata_1[31:16] <= dac_ddata[ 63: 48];
+- 289         dac_ddata_1[15: 0] <= dac_ddata[ 31: 16];
+- 290       end
+- 291       2'b10: begin
+- 292         dac_drd <= dac_valid_1 & ~dac_drd;
+- 293         dac_ddata_0 <= 64'd0;
+- 294         if (dac_drd == 1'b1) begin
+- 295           dac_ddata_1[63:48] <= dac_ddata[127:112];
+- 296           dac_ddata_1[47:32] <= dac_ddata[111: 96];
+- 297           dac_ddata_1[31:16] <= dac_ddata[ 95: 80];
+- 298           dac_ddata_1[15: 0] <= dac_ddata[ 79: 64];
+- 299         end else begin
+- 300           dac_ddata_1[63:48] <= dac_ddata[ 63: 48];
+- 301           dac_ddata_1[47:32] <= dac_ddata[ 47: 32];
+- 302           dac_ddata_1[31:16] <= dac_ddata[ 31: 16];
+- 303           dac_ddata_1[15: 0] <= dac_ddata[ 15:  0];
+- 304         end
+- 305       end
+- 306       2'b01: begin
+- 307         dac_drd <= dac_valid_0 & ~dac_drd;
+- 308         if (dac_drd == 1'b1) begin
+- 309           dac_ddata_0[63:48] <= dac_ddata[127:112];
+- 310           dac_ddata_0[47:32] <= dac_ddata[111: 96];
+- 311           dac_ddata_0[31:16] <= dac_ddata[ 95: 80];
+- 312           dac_ddata_0[15: 0] <= dac_ddata[ 79: 64];
+- 313         end else begin
+- 314           dac_ddata_0[63:48] <= dac_ddata[ 63: 48];
+- 315           dac_ddata_0[47:32] <= dac_ddata[ 47: 32];
+- 316           dac_ddata_0[31:16] <= dac_ddata[ 31: 16];
+- 317           dac_ddata_0[15: 0] <= dac_ddata[ 15:  0];
+- 318         end
+- 319         dac_ddata_1 <= 64'd0;
+- 320       end
+- 321       default: begin
+- 322         dac_drd <= 1'b0;
+- 323         dac_ddata_0 <= 64'd0;
+- 324         dac_ddata_1 <= 64'd0;
+- 325       end
+- 326     endcase
+- 327   end
+
+Clone Blocks:

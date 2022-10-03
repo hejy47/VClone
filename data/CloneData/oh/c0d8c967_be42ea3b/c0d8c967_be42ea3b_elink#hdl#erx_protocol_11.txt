@@ -1,0 +1,18 @@
+Source Block: oh/elink/hdl/erx_protocol.v@329:339@HdlStmAssign
+				.in		(ecfg_rx_enable),
+				.clk		(rx_lclk_div4),
+				.reset		(reset)
+				);
+   
+   assign erx_access =  access_2 & ecfg_rx_enable_sync;
+
+   //Sending packet
+   emesh2packet e2p (
+		     // Outputs
+		     .packet_out	(erx_packet[PW-1:0]),
+
+Diff Content:
+- 334    assign erx_access =  access_2 & ecfg_rx_enable_sync;
++ 334    assign erx_access =  access_reg & rx_enable_sync;
+
+Clone Blocks:

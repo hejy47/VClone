@@ -1,0 +1,21 @@
+Source Block: oh/elink/hdl/erx_arbiter.v@110:121@HdlStmAssign
+				   erx_write & 
+				  (erx_dstaddr[31:20] == myid[11:0]) & 
+				  (erx_dstaddr[19:16] == `EGROUP_RR) // Not sure about this...
+				  );
+   
+   assign rxrr_access = erx_rr_access   |
+			ecfg_access;
+   
+   assign rxrr_packet[PW-1:0] = erx_rr_access ?  erx_packet[PW-1:0] :
+			 	                 ecfg_packet[PW-1:0];
+
+   assign ecfg_wait = erx_rr_access;
+
+Diff Content:
+- 115    assign rxrr_access = erx_rr_access   |
+- 116 			ecfg_access;
++ 116    assign rxrr_access         = erx_rr_access   |
++ 116 			        ecfg_access;
+
+Clone Blocks:

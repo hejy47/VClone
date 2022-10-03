@@ -1,0 +1,49 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@83:93@HdlStmAssign
+   
+   // FIFO read enables (one hot)
+   // Hold until transaction has been accepted by IO
+   assign     txrr_fifo_read = rr_ready & (~etx_access | etx_ack);
+   assign     txrd_fifo_read = rd_ready & (~etx_access | etx_ack);
+   assign     txwr_fifo_read = wr_ready & (~etx_access | etx_ack);
+   
+   //Selecting control mode on slave transcations
+   assign txrd_ctrlmode[3:0] =  ecfg_tx_ctrlmode_bp ? ecfg_tx_ctrlmode[3:0] : 
+				                      txrd_fifo_packet[7:4];
+
+
+Diff Content:
+- 88    assign     txwr_fifo_read = wr_ready & (~etx_access | etx_ack);
++ 88    assign     txrr_fifo_read = rr_ready & (~etx_access | etx_wait);
++ 88    assign     txrd_fifo_read = rd_ready & (~etx_access | etx_wait);
++ 88    assign     txwr_fifo_read = wr_ready & (~etx_access | etx_wait);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_arbiter.v@82:92
+   assign     rr_ready = ~txrr_fifo_empty & ~etx_wr_wait & ~wr_ready & ~rd_ready;//lowest
+   
+   // FIFO read enables (one hot)
+   // Hold until transaction has been accepted by IO
+   assign     txrr_fifo_read = rr_ready & (~etx_access | etx_ack);
+   assign     txrd_fifo_read = rd_ready & (~etx_access | etx_ack);
+   assign     txwr_fifo_read = wr_ready & (~etx_access | etx_ack);
+   
+   //Selecting control mode on slave transcations
+   assign txrd_ctrlmode[3:0] =  ecfg_tx_ctrlmode_bp ? ecfg_tx_ctrlmode[3:0] : 
+				                      txrd_fifo_packet[7:4];
+
+Clone Blocks 2:
+oh/elink/hdl/etx_arbiter.v@86:97
+   assign     txrr_fifo_read = rr_ready & (~etx_access | etx_ack);
+   assign     txrd_fifo_read = rd_ready & (~etx_access | etx_ack);
+   assign     txwr_fifo_read = wr_ready & (~etx_access | etx_ack);
+   
+   //Selecting control mode on slave transcations
+   assign txrd_ctrlmode[3:0] =  ecfg_tx_ctrlmode_bp ? ecfg_tx_ctrlmode[3:0] : 
+				                      txrd_fifo_packet[7:4];
+
+   assign txwr_ctrlmode[3:0] =  ecfg_tx_ctrlmode_bp ? ecfg_tx_ctrlmode[3:0] : 
+				                      txwr_fifo_packet[7:4];
+
+   
+

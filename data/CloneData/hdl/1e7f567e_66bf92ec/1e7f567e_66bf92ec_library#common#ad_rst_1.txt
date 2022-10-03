@@ -1,0 +1,45 @@
+Source Block: hdl/library/common/ad_rst.v@43:53@HdlIdDef
+  input                   clk,
+  output                  rstn,
+  output  reg             rst);
+
+  // internal registers
+  reg             rst_async_d1 = 'd0;
+  reg             rst_async_d2 = 'd0;
+  reg             rst_sync = 'd0;
+  reg             rst_sync_d = 'd0 /* synthesis preserve */;
+
+  // simple reset synchronizer
+
+Diff Content:
+- 48   reg             rst_async_d1 = 'd0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_rst.v@44:54
+  output                  rstn,
+  output  reg             rst);
+
+  // internal registers
+  reg             rst_async_d1 = 'd0;
+  reg             rst_async_d2 = 'd0;
+  reg             rst_sync = 'd0;
+  reg             rst_sync_d = 'd0 /* synthesis preserve */;
+
+  // simple reset synchronizer
+  always @(posedge clk or posedge rst_async) begin
+
+Clone Blocks 2:
+hdl/library/common/ad_rst.v@45:55
+  output  reg             rst);
+
+  // internal registers
+  reg             rst_async_d1 = 'd0;
+  reg             rst_async_d2 = 'd0;
+  reg             rst_sync = 'd0;
+  reg             rst_sync_d = 'd0 /* synthesis preserve */;
+
+  // simple reset synchronizer
+  always @(posedge clk or posedge rst_async) begin
+    if (rst_async) begin
+

@@ -1,0 +1,33 @@
+Source Block: hdl/library/common/ad_mem_asym.v@88:107@HdlStmIf
+      m_ram[{addra, 1'd1}] <= dina[((2*DATA_WIDTH_B)-1):(DATA_WIDTH_B*1)];
+    end
+  end
+  end
+
+  if (MEM_RATIO == 4) begin
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[{addra, 2'd0}] <= dina[((1*DATA_WIDTH_B)-1):(DATA_WIDTH_B*0)];
+      m_ram[{addra, 2'd1}] <= dina[((2*DATA_WIDTH_B)-1):(DATA_WIDTH_B*1)];
+      m_ram[{addra, 2'd2}] <= dina[((3*DATA_WIDTH_B)-1):(DATA_WIDTH_B*2)];
+      m_ram[{addra, 2'd3}] <= dina[((4*DATA_WIDTH_B)-1):(DATA_WIDTH_B*3)];
+    end
+  end
+  end
+
+  if (MEM_RATIO == 8) begin
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[{addra, 3'd0}] <= dina[((1*DATA_WIDTH_B)-1):(DATA_WIDTH_B*0)];
+
+Diff Content:
+- 96       m_ram[{addra, 2'd0}] <= dina[((1*DATA_WIDTH_B)-1):(DATA_WIDTH_B*0)];
+- 97       m_ram[{addra, 2'd1}] <= dina[((2*DATA_WIDTH_B)-1):(DATA_WIDTH_B*1)];
+- 98       m_ram[{addra, 2'd2}] <= dina[((3*DATA_WIDTH_B)-1):(DATA_WIDTH_B*2)];
+- 99       m_ram[{addra, 2'd3}] <= dina[((4*DATA_WIDTH_B)-1):(DATA_WIDTH_B*3)];
++ 99       m_ram[{addra, 2'd0}] <= dina[((1*B_DATA_WIDTH)-1):(B_DATA_WIDTH*0)];
++ 99       m_ram[{addra, 2'd1}] <= dina[((2*B_DATA_WIDTH)-1):(B_DATA_WIDTH*1)];
++ 99       m_ram[{addra, 2'd2}] <= dina[((3*B_DATA_WIDTH)-1):(B_DATA_WIDTH*2)];
++ 99       m_ram[{addra, 2'd3}] <= dina[((4*B_DATA_WIDTH)-1):(B_DATA_WIDTH*3)];
+
+Clone Blocks:

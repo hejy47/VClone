@@ -1,0 +1,63 @@
+Source Block: hdl/library/common/up_clock_mon.v@57:87@HdlStmProcess
+
+  // processor reference
+
+  assign up_count_toggle_s = up_count_toggle_m3 ^ up_count_toggle_m2;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_count <= 'd0;
+      up_count_toggle <= 'd0;
+      up_count_toggle_m1 <= 'd0;
+      up_count_toggle_m2 <= 'd0;
+      up_count_toggle_m3 <= 'd0;
+      up_d_count <= 'd0;
+    end else begin
+      up_count <= up_count + 1'b1;
+      if (up_count == 16'd0) begin
+        up_count_toggle <= ~up_count_toggle;
+      end
+      up_count_toggle_m1 <= d_count_toggle;
+      up_count_toggle_m2 <= up_count_toggle_m1;
+      up_count_toggle_m3 <= up_count_toggle_m2;
+      if (up_count_toggle_s == 1'b1) begin
+        up_d_count <= d_count_hold;
+      end
+    end
+  end
+
+  // device free running
+
+  assign d_count_toggle_s = d_count_toggle_m3 ^ d_count_toggle_m2;
+
+
+Diff Content:
+- 64       up_count <= 'd0;
+- 65       up_count_toggle <= 'd0;
+- 66       up_count_toggle_m1 <= 'd0;
+- 67       up_count_toggle_m2 <= 'd0;
+- 68       up_count_toggle_m3 <= 'd0;
+- 71       up_count <= up_count + 1'b1;
+- 72       if (up_count == 16'd0) begin
+- 73         up_count_toggle <= ~up_count_toggle;
+- 75       up_count_toggle_m1 <= d_count_toggle;
+- 76       up_count_toggle_m2 <= up_count_toggle_m1;
+- 77       up_count_toggle_m3 <= up_count_toggle_m2;
+- 78       if (up_count_toggle_s == 1'b1) begin
+- 79         up_d_count <= d_count_hold;
++ 69       up_count_run <= 1'b0;
++ 73       if (up_count_running_m3 == 1'b0) begin
++ 73         up_count_run <= 1'b1;
++ 73       end else if (up_count == 'h00) begin
++ 73         up_count_run <= 1'b0;
++ 79       if (up_count_capture_s == 1'b1) begin
++ 79         up_d_count <= d_count;
++ 82   always @(posedge up_clk) begin
++ 82     if (up_count_run == 1'b0) begin
++ 82       up_count <= 'h01;
++ 82     end else begin
++ 82       up_count <= up_count + 1'b1;
++ 82     end
++ 82   end
+
+Clone Blocks:

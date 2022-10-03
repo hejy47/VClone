@@ -1,0 +1,27 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@130:149@HdlStmProcess
+  wire                            dma_wready_s;
+  wire    [DMA_DATA_WIDTH-1:0]    dma_wdata_s;
+
+  // adc overflow
+
+  always @(posedge adc_clk) begin
+    if (adc_rst == 1'b0) begin
+      adc_wovf_m <= 2'd0;
+      adc_wovf <= 1'b0;
+    end else begin
+      adc_wovf_m[0] <= dma_wovf | fifo_wovf;
+      adc_wovf_m[1] <= adc_wovf_m[0];
+      adc_wovf <= adc_wovf_m[1];
+    end
+  end
+
+  // write
+
+  assign fifo_wr = adc_wr;
+
+
+Diff Content:
+- 136     if (adc_rst == 1'b0) begin
++ 136     if (adc_rst == 1'b1) begin
+
+Clone Blocks:

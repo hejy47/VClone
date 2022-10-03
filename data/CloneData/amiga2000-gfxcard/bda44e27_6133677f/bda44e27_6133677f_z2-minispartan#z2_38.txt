@@ -1,0 +1,651 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@466:715@HdlStmProcess
+  end
+end
+
+reg[15:0] rgb = 'h0000;
+
+always @(posedge vga_clk) begin
+  if (counter_x >= h_max) begin
+    counter_x <= 0;
+    if (counter_y == v_max)
+      counter_y <= 0;
+    else
+      counter_y <= counter_y + 1;
+  end else
+    counter_x <= counter_x + 1;
+    
+  if (counter_x>=h_sync_start && counter_x<h_sync_end)
+    dvi_hsync <= 1;
+  else
+    dvi_hsync <= 0;
+    
+  if (counter_y>=v_sync_start && counter_y<v_sync_end)
+    dvi_vsync <= 1;
+  else
+    dvi_vsync <= 0;
+      
+  if (counter_x<h_rez && counter_y<v_rez) begin
+    dvi_blank <= 0;
+  end else begin
+    dvi_blank <= 1;
+    rgb <= 0;
+  end
+  
+  red_p[0] <= rgb[0];
+  red_p[1] <= rgb[0];
+  red_p[2] <= rgb[1];
+  red_p[3] <= rgb[1];
+  red_p[4] <= rgb[2];
+  red_p[5] <= rgb[2];
+  red_p[6] <= rgb[3];
+  red_p[7] <= rgb[4];
+  
+  green_p[0] <= rgb[5];
+  green_p[1] <= rgb[5];
+  green_p[2] <= rgb[6];
+  green_p[3] <= rgb[6];
+  green_p[4] <= rgb[7];
+  green_p[5] <= rgb[8];
+  green_p[6] <= rgb[9];
+  green_p[7] <= rgb[10];
+  
+  blue_p[0] <= rgb[11];
+  blue_p[1] <= rgb[11];
+  blue_p[2] <= rgb[12];
+  blue_p[3] <= rgb[12];
+  blue_p[4] <= rgb[13];  
+  blue_p[5] <= rgb[13];
+  blue_p[6] <= rgb[14];
+  blue_p[7] <= rgb[15];
+
+  /*blue_p[0] <= rgb[3];
+  blue_p[1] <= rgb[4];
+  blue_p[2] <= rgb[5];
+  blue_p[3] <= rgb[5];
+  blue_p[4] <= rgb[6];
+  blue_p[5] <= rgb[6];
+  blue_p[6] <= rgb[7];
+  blue_p[7] <= rgb[7];
+  
+  green_p[0] <= rgb[13];
+  green_p[1] <= rgb[14];
+  green_p[2] <= rgb[15];
+  green_p[3] <= rgb[0];
+  green_p[4] <= rgb[1];
+  green_p[5] <= rgb[1];
+  green_p[6] <= rgb[2];
+  green_p[7] <= rgb[2];
+  
+  red_p[0] <= rgb[8];
+  red_p[1] <= rgb[9];
+  red_p[2] <= rgb[10];
+  red_p[3] <= rgb[10];
+  red_p[4] <= rgb[11];  
+  red_p[5] <= rgb[11];
+  red_p[6] <= rgb[12];
+  red_p[7] <= rgb[12];*/
+
+  LEDS <= 0;
+	//rgb <= 0;
+  
+  if (dvi_blank)
+	    rgb <= 0;
+	  else
+      //rgb <= ram_data_buffer[counter_x];
+      
+      if (counter_y>710) begin
+        if (counter_x<210)
+          rgb <= 0;
+        else if (counter_x<220)
+          rgb <= last_addr[23]?16'hff:16'h0;
+        else if (counter_x<230)
+          rgb <= last_addr[22]?16'hff:16'h0;
+        else if (counter_x<240)
+          rgb <= last_addr[21]?16'hff:16'h0;
+        else if (counter_x<250)
+          rgb <= last_addr[20]?16'hff:16'h0;
+        else if (counter_x<260)
+          rgb <= last_addr[19]?16'hff:16'h0;
+        else if (counter_x<270)
+          rgb <= last_addr[18]?16'hff:16'h0;
+        else if (counter_x<280)
+          rgb <= last_addr[17]?16'hff:16'h0;
+        else if (counter_x<290)
+          rgb <= last_addr[16]?16'hff:16'h0;
+        else if (counter_x<300)
+          rgb <= last_addr[15]?16'hff:16'h0;
+        else if (counter_x<310)
+          rgb <= last_addr[14]?16'hff:16'h0;
+        else if (counter_x<320)
+          rgb <= last_addr[13]?16'hff:16'h0;
+        else if (counter_x<330)
+          rgb <= last_addr[12]?16'hff:16'h0;
+        else if (counter_x<340)
+          rgb <= last_addr[11]?16'hff:16'h0;
+        else if (counter_x<350)
+          rgb <= last_addr[10]?16'hff:16'h0;
+        else if (counter_x<360)
+          rgb <= last_addr[9]?16'hff:16'h0;
+        else if (counter_x<370)
+          rgb <= last_addr[8]?16'hff:16'h0;
+        else if (counter_x<380)
+          rgb <= last_addr[7]?16'hff:16'h0;
+        else if (counter_x<390)
+          rgb <= last_addr[6]?16'hff:16'h0;
+        else if (counter_x<400)
+          rgb <= last_addr[5]?16'hff:16'h0;
+        else if (counter_x<410)
+          rgb <= last_addr[4]?16'hff:16'h0;
+        else if (counter_x<420)
+          rgb <= last_addr[3]?16'hff:16'h0;
+        else if (counter_x<430)
+          rgb <= last_addr[2]?16'hff:16'h0;
+        else if (counter_x<440)
+          rgb <= last_addr[1]?16'hff:16'h0;
+        else if (counter_x<450)
+          rgb <= last_addr[0]?16'hff:16'h0;
+        else if (counter_x<490)
+          rgb <= 16'h0;
+          
+        else if (counter_x<520)
+          rgb <= last_data[15]?16'hffff:16'h00ff;
+        else if (counter_x<521)
+          rgb <= 0;
+        else if (counter_x<530)
+          rgb <= last_data[14]?16'hffff:16'h00ff;
+        else if (counter_x<531)
+          rgb <= 0;
+        else if (counter_x<540)
+          rgb <= last_data[13]?16'hffff:16'h00ff;
+        else if (counter_x<541)
+          rgb <= 0;
+        else if (counter_x<550)
+          rgb <= last_data[12]?16'hffff:16'h00ff;
+        else if (counter_x<551)
+          rgb <= 0;
+        else if (counter_x<560)
+          rgb <= last_data[11]?16'hffff:16'h00ff;
+        else if (counter_x<561)
+          rgb <= 0;
+        else if (counter_x<570)
+          rgb <= last_data[10]?16'hffff:16'h00ff;
+        else if (counter_x<571)
+          rgb <= 0;
+        else if (counter_x<580)
+          rgb <= last_data[9]?16'hffff:16'h00ff;
+        else if (counter_x<581)
+          rgb <= 0;
+        else if (counter_x<590)
+          rgb <= last_data[8]?16'hffff:16'h00ff;
+        else if (counter_x<591)
+          rgb <= 0;
+        else if (counter_x<600)
+          rgb <= last_data[7]?16'hffff:16'h00ff;
+        else if (counter_x<601)
+          rgb <= 0;
+        else if (counter_x<610)
+          rgb <= last_data[6]?16'hffff:16'h00ff;
+        else if (counter_x<611)
+          rgb <= 0;
+        else if (counter_x<620)
+          rgb <= last_data[5]?16'hffff:16'h00ff;
+        else if (counter_x<621)
+          rgb <= 0;
+        else if (counter_x<630)
+          rgb <= last_data[4]?16'hffff:16'h00ff;
+        else if (counter_x<631)
+          rgb <= 0;
+        else if (counter_x<640)
+          rgb <= last_data[3]?16'hffff:16'h00ff;
+        else if (counter_x<641)
+          rgb <= 0;
+        else if (counter_x<650)
+          rgb <= last_data[2]?16'hffff:16'h00ff;
+        else if (counter_x<651)
+          rgb <= 0;
+        else if (counter_x<660)
+          rgb <= last_data[1]?16'hffff:16'h00ff;
+        else if (counter_x<661)
+          rgb <= 0;
+        else if (counter_x<670)
+          rgb <= last_data[0]?16'hffff:16'h00ff;
+        else if (counter_x<700)
+          rgb <= 0;
+        else if (counter_x<(700+max_fill)) begin
+          if (counter_y<550) 
+            rgb <= writeq_fill>(counter_x-700)?16'hffff:16'h0000;        
+          else
+            rgb <= writeq_drain>(counter_x-700)?16'hffff:16'h0000;
+        end else 
+          rgb <= 0;
+        end
+      else begin
+        if (counter_x>=(screen_w+240) || counter_x<240)
+          rgb <= 0;
+        
+        /*else if (counter_x<rec_depth) begin
+          if (counter_y>=100 && counter_y<=145)
+            rgb <= (rec_addr[counter_x][(counter_y-100)>>1])?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+          else if (counter_y>=200 && counter_y<=231)
+            rgb <= (rec_data[counter_x][(counter_y-200)>>1])?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+          else if (counter_y>=300 && counter_y<=305)
+            rgb <= rec_as[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+          else if (counter_y>=306 && counter_y<=310)
+            rgb <= rec_uds[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+          else if (counter_y>=311 && counter_y<=315)
+            rgb <= rec_lds[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+          else if (counter_y>=316 && counter_y<=320)
+            rgb <= rec_doe[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+          else if (counter_y>=321 && counter_y<=325)
+            rgb <= rec_read[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+          else
+            rgb <= ram_data_buffer[counter_x];*/
+        else rgb <= ram_data_buffer[counter_x-240];
+          
+        /*else
+          rgb <= ram_data_buffer[counter_x];*/
+      end
+
+end
+
+endmodule
+
+Diff Content:
+- 472   if (counter_x >= h_max) begin
+- 474     if (counter_y == v_max)
+- 476     else
+- 477       counter_y <= counter_y + 1;
+- 478   end else
+- 479     counter_x <= counter_x + 1;
+- 495     rgb <= 0;
+- 498   red_p[0] <= rgb[0];
+- 499   red_p[1] <= rgb[0];
+- 500   red_p[2] <= rgb[1];
+- 501   red_p[3] <= rgb[1];
+- 502   red_p[4] <= rgb[2];
+- 503   red_p[5] <= rgb[2];
+- 504   red_p[6] <= rgb[3];
+- 505   red_p[7] <= rgb[4];
+- 507   green_p[0] <= rgb[5];
+- 508   green_p[1] <= rgb[5];
+- 509   green_p[2] <= rgb[6];
+- 510   green_p[3] <= rgb[6];
+- 511   green_p[4] <= rgb[7];
+- 512   green_p[5] <= rgb[8];
+- 513   green_p[6] <= rgb[9];
+- 514   green_p[7] <= rgb[10];
+- 516   blue_p[0] <= rgb[11];
+- 517   blue_p[1] <= rgb[11];
+- 518   blue_p[2] <= rgb[12];
+- 519   blue_p[3] <= rgb[12];
+- 520   blue_p[4] <= rgb[13];  
+- 521   blue_p[5] <= rgb[13];
+- 522   blue_p[6] <= rgb[14];
+- 523   blue_p[7] <= rgb[15];
+- 525   /*blue_p[0] <= rgb[3];
+- 526   blue_p[1] <= rgb[4];
+- 527   blue_p[2] <= rgb[5];
+- 528   blue_p[3] <= rgb[5];
+- 529   blue_p[4] <= rgb[6];
+- 530   blue_p[5] <= rgb[6];
+- 531   blue_p[6] <= rgb[7];
+- 532   blue_p[7] <= rgb[7];
+- 534   green_p[0] <= rgb[13];
+- 535   green_p[1] <= rgb[14];
+- 536   green_p[2] <= rgb[15];
+- 537   green_p[3] <= rgb[0];
+- 538   green_p[4] <= rgb[1];
+- 539   green_p[5] <= rgb[1];
+- 540   green_p[6] <= rgb[2];
+- 541   green_p[7] <= rgb[2];
+- 543   red_p[0] <= rgb[8];
+- 544   red_p[1] <= rgb[9];
+- 545   red_p[2] <= rgb[10];
+- 546   red_p[3] <= rgb[10];
+- 547   red_p[4] <= rgb[11];  
+- 548   red_p[5] <= rgb[11];
+- 549   red_p[6] <= rgb[12];
+- 550   red_p[7] <= rgb[12];*/
+- 552   LEDS <= 0;
+- 555   if (dvi_blank)
+- 556 	    rgb <= 0;
+- 557 	  else
+- 560       if (counter_y>710) begin
+- 561         if (counter_x<210)
+- 562           rgb <= 0;
+- 563         else if (counter_x<220)
+- 564           rgb <= last_addr[23]?16'hff:16'h0;
+- 565         else if (counter_x<230)
+- 566           rgb <= last_addr[22]?16'hff:16'h0;
+- 567         else if (counter_x<240)
+- 568           rgb <= last_addr[21]?16'hff:16'h0;
+- 569         else if (counter_x<250)
+- 570           rgb <= last_addr[20]?16'hff:16'h0;
+- 571         else if (counter_x<260)
+- 572           rgb <= last_addr[19]?16'hff:16'h0;
+- 573         else if (counter_x<270)
+- 574           rgb <= last_addr[18]?16'hff:16'h0;
+- 575         else if (counter_x<280)
+- 576           rgb <= last_addr[17]?16'hff:16'h0;
+- 577         else if (counter_x<290)
+- 578           rgb <= last_addr[16]?16'hff:16'h0;
+- 579         else if (counter_x<300)
+- 580           rgb <= last_addr[15]?16'hff:16'h0;
+- 581         else if (counter_x<310)
+- 582           rgb <= last_addr[14]?16'hff:16'h0;
+- 583         else if (counter_x<320)
+- 584           rgb <= last_addr[13]?16'hff:16'h0;
+- 585         else if (counter_x<330)
+- 586           rgb <= last_addr[12]?16'hff:16'h0;
+- 587         else if (counter_x<340)
+- 588           rgb <= last_addr[11]?16'hff:16'h0;
+- 589         else if (counter_x<350)
+- 590           rgb <= last_addr[10]?16'hff:16'h0;
+- 591         else if (counter_x<360)
+- 592           rgb <= last_addr[9]?16'hff:16'h0;
+- 593         else if (counter_x<370)
+- 594           rgb <= last_addr[8]?16'hff:16'h0;
+- 595         else if (counter_x<380)
+- 596           rgb <= last_addr[7]?16'hff:16'h0;
+- 597         else if (counter_x<390)
+- 598           rgb <= last_addr[6]?16'hff:16'h0;
+- 599         else if (counter_x<400)
+- 600           rgb <= last_addr[5]?16'hff:16'h0;
+- 601         else if (counter_x<410)
+- 602           rgb <= last_addr[4]?16'hff:16'h0;
+- 603         else if (counter_x<420)
+- 604           rgb <= last_addr[3]?16'hff:16'h0;
+- 605         else if (counter_x<430)
+- 606           rgb <= last_addr[2]?16'hff:16'h0;
+- 607         else if (counter_x<440)
+- 608           rgb <= last_addr[1]?16'hff:16'h0;
+- 609         else if (counter_x<450)
+- 610           rgb <= last_addr[0]?16'hff:16'h0;
+- 611         else if (counter_x<490)
+- 612           rgb <= 16'h0;
+- 614         else if (counter_x<520)
+- 615           rgb <= last_data[15]?16'hffff:16'h00ff;
+- 616         else if (counter_x<521)
+- 617           rgb <= 0;
+- 618         else if (counter_x<530)
+- 619           rgb <= last_data[14]?16'hffff:16'h00ff;
+- 620         else if (counter_x<531)
+- 621           rgb <= 0;
+- 622         else if (counter_x<540)
+- 623           rgb <= last_data[13]?16'hffff:16'h00ff;
+- 624         else if (counter_x<541)
+- 625           rgb <= 0;
+- 626         else if (counter_x<550)
+- 627           rgb <= last_data[12]?16'hffff:16'h00ff;
+- 628         else if (counter_x<551)
+- 629           rgb <= 0;
+- 630         else if (counter_x<560)
+- 631           rgb <= last_data[11]?16'hffff:16'h00ff;
+- 632         else if (counter_x<561)
+- 633           rgb <= 0;
+- 634         else if (counter_x<570)
+- 635           rgb <= last_data[10]?16'hffff:16'h00ff;
+- 636         else if (counter_x<571)
+- 637           rgb <= 0;
+- 638         else if (counter_x<580)
+- 639           rgb <= last_data[9]?16'hffff:16'h00ff;
+- 640         else if (counter_x<581)
+- 641           rgb <= 0;
+- 642         else if (counter_x<590)
+- 643           rgb <= last_data[8]?16'hffff:16'h00ff;
+- 644         else if (counter_x<591)
+- 645           rgb <= 0;
+- 646         else if (counter_x<600)
+- 647           rgb <= last_data[7]?16'hffff:16'h00ff;
+- 648         else if (counter_x<601)
+- 649           rgb <= 0;
+- 650         else if (counter_x<610)
+- 651           rgb <= last_data[6]?16'hffff:16'h00ff;
+- 652         else if (counter_x<611)
+- 653           rgb <= 0;
+- 654         else if (counter_x<620)
+- 655           rgb <= last_data[5]?16'hffff:16'h00ff;
+- 656         else if (counter_x<621)
+- 657           rgb <= 0;
+- 658         else if (counter_x<630)
+- 659           rgb <= last_data[4]?16'hffff:16'h00ff;
+- 660         else if (counter_x<631)
+- 661           rgb <= 0;
+- 662         else if (counter_x<640)
+- 663           rgb <= last_data[3]?16'hffff:16'h00ff;
+- 664         else if (counter_x<641)
+- 665           rgb <= 0;
+- 666         else if (counter_x<650)
+- 667           rgb <= last_data[2]?16'hffff:16'h00ff;
+- 668         else if (counter_x<651)
+- 669           rgb <= 0;
+- 670         else if (counter_x<660)
+- 671           rgb <= last_data[1]?16'hffff:16'h00ff;
+- 672         else if (counter_x<661)
+- 673           rgb <= 0;
+- 674         else if (counter_x<670)
+- 675           rgb <= last_data[0]?16'hffff:16'h00ff;
+- 676         else if (counter_x<700)
+- 677           rgb <= 0;
+- 678         else if (counter_x<(700+max_fill)) begin
+- 679           if (counter_y<550) 
+- 680             rgb <= writeq_fill>(counter_x-700)?16'hffff:16'h0000;        
+- 681           else
+- 682             rgb <= writeq_drain>(counter_x-700)?16'hffff:16'h0000;
+- 683         end else 
+- 684           rgb <= 0;
+- 685         end
+- 686       else begin
+- 687         if (counter_x>=(screen_w+240) || counter_x<240)
+- 688           rgb <= 0;
+- 690         /*else if (counter_x<rec_depth) begin
+- 691           if (counter_y>=100 && counter_y<=145)
+- 692             rgb <= (rec_addr[counter_x][(counter_y-100)>>1])?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+- 693           else if (counter_y>=200 && counter_y<=231)
+- 694             rgb <= (rec_data[counter_x][(counter_y-200)>>1])?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+- 695           else if (counter_y>=300 && counter_y<=305)
+- 696             rgb <= rec_as[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+- 697           else if (counter_y>=306 && counter_y<=310)
+- 698             rgb <= rec_uds[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+- 699           else if (counter_y>=311 && counter_y<=315)
+- 700             rgb <= rec_lds[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+- 701           else if (counter_y>=316 && counter_y<=320)
+- 702             rgb <= rec_doe[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+- 703           else if (counter_y>=321 && counter_y<=325)
+- 704             rgb <= rec_read[counter_x]?(trigger_idx==counter_x?'hff00:'hffff):'h0000;
+- 705           else
+- 706             rgb <= ram_data_buffer[counter_x];*/
+- 707         else rgb <= ram_data_buffer[counter_x-240];
+- 709         /*else
+- 710           rgb <= ram_data_buffer[counter_x];*/
+- 711       end
++ 472   x_safe_area <= (counter_x > h_max-safe_x2);
++ 472   if (counter_x > h_max) begin
++ 474     if (counter_y > v_max) begin
++ 479     end else
++ 479       counter_y <= counter_y + 1'b1;
++ 479   end else begin
++ 479     counter_x <= counter_x + 1'b1;
++ 479     if (counter_x > h_max-fetch_preroll)
++ 479       if (counter_y<screen_h)
++ 479         need_row_fetch_y <= (counter_y+1'b1)>>scalemode;
++ 479       else
++ 479         need_row_fetch_y <= 0;
++ 479   end
++ 552   if ((counter_y<screen_h || counter_y>=v_max) && (counter_x>=h_max || counter_x<h_rez))
++ 552     display_pixels <= 1;
++ 552   else begin
++ 552     display_pixels <= 0;
++ 552     preheat <= 1;
++ 552     counter_scale <= scalemode;
++ 552     counter_8x <= margin_x;
++ 552     counter_x_hi <= 0;
++ 552     display_x2 <= {margin_x,1'b0};
++ 552     display_x3 <= {margin_x,1'b1};
++ 552   end
++ 557 `ifdef ANALYZER
++ 557   if (counter_y>=590) begin
++ 557     /*if (counter_x<110) begin
++ 557       if (zorro_state[4]) green_p <= 8'hff;
++ 557       else green_p <= 8'h20;
++ 557     end else if (counter_x<120) begin
++ 557       if (zorro_state[3]) green_p <= 8'hff;
++ 557       else green_p <= 8'h40;
++ 557     end else if (counter_x<130) begin
++ 557       if (zorro_state[2]) green_p <= 8'hff;
++ 557       else green_p <= 8'h20;
++ 557     end else if (counter_x<140) begin
++ 557       if (zorro_state[1]) green_p <= 8'hff;
++ 557       else green_p <= 8'h40;
++ 557     end else if (counter_x<150) begin
++ 557       if (zorro_state[0]) green_p <= 8'hff;
++ 557       else green_p <= 8'h20;
++ 557     end else if (counter_x<160) begin
++ 557       green_p <= 0;
++ 557     end else if (counter_x<170) begin
++ 557       if (ram_arbiter_state[4]) green_p <= 8'hff;
++ 557       else green_p <= 8'h20;
++ 557     end else if (counter_x<180) begin
++ 557       if (ram_arbiter_state[3]) green_p <= 8'hff;
++ 557       else green_p <= 8'h40;
++ 557     end else if (counter_x<190) begin
++ 557       if (ram_arbiter_state[2]) green_p <= 8'hff;
++ 557       else green_p <= 8'h20;
++ 557     end else if (counter_x<200) begin
++ 557       if (ram_arbiter_state[1]) green_p <= 8'hff;
++ 557       else green_p <= 8'h40;
++ 557     end else if (counter_x<210) begin
++ 557       if (ram_arbiter_state[0]) green_p <= 8'hff;
++ 557       else green_p <= 8'h20;
++ 711     end else if (counter_x<220) begin
++ 711       green_p <= 0;
++ 711     end else if (counter_x<230) begin
++ 711       if (zorro_ram_write_request) green_p <= 8'hff;
++ 711       else green_p <= 8'h40;
++ 711     end else if (counter_x<240) begin
++ 711       if (ram_enable) green_p <= 8'hff;
++ 711       else green_p <= 8'h20;
++ 711     end else if (counter_x<250) begin
++ 711       if (zorro_ram_read_request) green_p <= 8'hff;
++ 711       else green_p <= 8'h40;
++ 711     end else if (counter_x<260) begin
++ 711       if (zorro_ram_read_done) green_p <= 8'hff;
++ 711       else green_p <= 8'h40;
++ 711     end else begin
++ 711       green_p <= 0;
++ 711       blue_p <= 0;
++ 711     end*/
++ 711     if (counter_y<600) begin
++ 711       if (rec_zreadraw[counter_x]) green_p <= 8'hff;
++ 711       else green_p <= 0;
++ 711     end else if (counter_y<610) begin
++ 711       if (rec_zread[counter_x]) green_p <= 8'hff;
++ 711       else green_p <= 0;
++ 711     end else if (counter_y<620) begin
++ 711       if (rec_zwrite[counter_x]) green_p <= 8'hff;
++ 711       else green_p <= 0;
++ 711     end else if (counter_y<630) begin
++ 711       if (rec_zas0[counter_x]) green_p <= 8'hff;
++ 711       else green_p <= 0;
++ 711     end else if (counter_y<640) begin
++ 711       if (rec_zas1[counter_x]) green_p <= 8'hff;
++ 711       else green_p <= 0;
++ 711     end else if (counter_y<650) begin
++ 711       if (rec_zaddr_in_ram[counter_x]) green_p <= 8'hff;
++ 711       else green_p <= 0;
++ 711     end else if (counter_y<660) begin
++ 711       if (rec_state[counter_x]) blue_p <= 8'hff;
++ 711       else blue_p <= 0;
++ 711     end else if (counter_y<670) begin
++ 711       if (rec_statew[counter_x]) blue_p <= 8'hff;
++ 711       else blue_p <= 0;
++ 711     end else if (counter_y<680) begin
++ 711       if (rec_ready[counter_x]) blue_p <= 8'hff;
++ 711       else blue_p <= 0;
++ 711     end else if (counter_y<690) begin
++ 711       if (rec_endcycle[counter_x]) green_p <= 8'hff;
++ 711       else green_p <= 0;
++ 711     end else begin
++ 711       green_p <= 0;
++ 711       blue_p <= 0;
++ 711     end
++ 711   end else
++ 711 `endif
++ 711   if (!display_pixels) begin
++ 711     red_p   <= 0;
++ 711     green_p <= 0;
++ 711     blue_p  <= 0;
++ 711   end else if (colormode==0) begin
++ 711     if (preheat) begin
++ 711       red_p <= 0;
++ 711       green_p <= 0;
++ 711       blue_p <= 0;
++ 711       preheat <= 0;
++ 711     end else if (counter_scale != scalemode) begin
++ 711       counter_scale <= counter_scale + 1'b1;
++ 711     end else if (counter_x_hi==1) begin
++ 711       red_p   <= palette_r[fetch_buffer[counter_8x][7:0]];
++ 711       green_p <= palette_g[fetch_buffer[counter_8x][7:0]];
++ 711       blue_p  <= palette_b[fetch_buffer[counter_8x][7:0]];
++ 711       counter_8x <= counter_8x + 1'b1;
++ 711       counter_x_hi <= 0;
++ 711       counter_scale <= 0;
++ 711     end else begin
++ 711       red_p   <= palette_r[fetch_buffer[counter_8x][15:8]];
++ 711       green_p <= palette_g[fetch_buffer[counter_8x][15:8]];
++ 711       blue_p  <= palette_b[fetch_buffer[counter_8x][15:8]];
++ 711       counter_x_hi <= 1;
++ 711       counter_scale <= 0;
++ 711     end
++ 711   end else if (colormode==1) begin
++ 711     if (counter_scale != scalemode) begin
++ 711       counter_scale <= counter_scale + 1'b1;
++ 711     end else begin
++ 711       counter_scale <= 0;
++ 711       rgb <= fetch_buffer[counter_8x];
++ 711       counter_8x <= counter_8x + 1'b1;
++ 711     end
++ 711     red_p[0] <= rgb[0];
++ 711     red_p[1] <= rgb[0];
++ 711     red_p[2] <= rgb[1];
++ 711     red_p[3] <= rgb[1];
++ 711     red_p[4] <= rgb[2];
++ 711     red_p[5] <= rgb[2];
++ 711     red_p[6] <= rgb[3];
++ 711     red_p[7] <= rgb[4];
++ 711     green_p[0] <= rgb[5];
++ 711     green_p[1] <= rgb[5];
++ 711     green_p[2] <= rgb[6];
++ 711     green_p[3] <= rgb[6];
++ 711     green_p[4] <= rgb[7];
++ 711     green_p[5] <= rgb[8];
++ 711     green_p[6] <= rgb[9];
++ 711     green_p[7] <= rgb[10];
++ 711     blue_p[0] <= rgb[11];
++ 711     blue_p[1] <= rgb[11];
++ 711     blue_p[2] <= rgb[12];
++ 711     blue_p[3] <= rgb[12];
++ 711     blue_p[4] <= rgb[13];
++ 711     blue_p[5] <= rgb[13];
++ 711     blue_p[6] <= rgb[14];
++ 711     blue_p[7] <= rgb[15];
++ 711   end else if (colormode==2) begin
++ 711     if (counter_scale != scalemode) begin
++ 711       counter_scale <= counter_scale + 1'b1;
++ 711     end else begin
++ 711       counter_scale <= 0;
++ 711       counter_8x <= counter_8x + 1'b1;
++ 711       display_x2 <= display_x2 + 2'b10;
++ 711       display_x3 <= display_x3 + 2'b10;
++ 711     end
++ 711     rgb32 <= {fetch_buffer[display_x3],fetch_buffer[display_x2]};
++ 711     red_p   <= rgb32[15:8];
++ 711     green_p <= rgb32[7:0];
++ 711     blue_p <= rgb32[31:24];
++ 711   end else begin
++ 711     red_p   <= 0;
++ 711     green_p <= 0;
++ 711     blue_p  <= 0;
++ 711   end
+
+Clone Blocks:

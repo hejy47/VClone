@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@398:443@HdlStmProcess
+			endcase
+		end
+	end
+end
+
+always @(posedge s_axi_aclk)
+begin
+	if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+		up_rdata <= 'h00;
+	end else begin
+    up_rack <= up_rreq;
+		case (up_raddr)
+		12'h000: up_rdata <= PCORE_VERSION;
+		12'h001: up_rdata <= PCORE_ID;
+		12'h002: up_rdata <= up_scratch;
+		12'h020: up_rdata <= up_irq_mask;
+		12'h021: up_rdata <= up_irq_pending;
+		12'h022: up_rdata <= up_irq_source;
+		12'h100: up_rdata <= {up_pause, up_enable};
+		12'h101: up_rdata <= up_transfer_id;
+		12'h102: up_rdata <= up_dma_req_valid;
+		12'h103: up_rdata <= {30'h00, up_axis_xlast, up_dma_cyclic}; // Flags
+		12'h104: up_rdata <= HAS_DEST_ADDR ? {up_dma_dest_address,{BYTES_PER_BEAT_WIDTH_DEST{1'b0}}} : 'h00;
+		12'h105: up_rdata <= HAS_SRC_ADDR ? {up_dma_src_address,{BYTES_PER_BEAT_WIDTH_SRC{1'b0}}} : 'h00;
+		12'h106: up_rdata <= up_dma_x_length;
+		12'h107: up_rdata <= C_2D_TRANSFER ? up_dma_y_length : 'h00;
+		12'h108: up_rdata <= C_2D_TRANSFER ? up_dma_dest_stride : 'h00;
+		12'h109: up_rdata <= C_2D_TRANSFER ? up_dma_src_stride : 'h00;
+		12'h10a: up_rdata <= up_transfer_done_bitmap;
+		12'h10b: up_rdata <= up_transfer_id_eot;
+		12'h10c: up_rdata <= 'h00; // Status
+		12'h10d: up_rdata <= m_dest_axi_awaddr; //HAS_DEST_ADDR ? 'h00 : 'h00; // Current dest address
+		12'h10e: up_rdata <= m_src_axi_araddr; //HAS_SRC_ADDR ? 'h00 : 'h00; // Current src address
+		12'h10f: up_rdata <= {src_response_id, 1'b0, src_data_id, 1'b0, src_address_id, 1'b0, src_request_id,
+							1'b0, dest_response_id, 1'b0, dest_data_id, 1'b0, dest_address_id, 1'b0, dest_request_id};
+		12'h110: up_rdata <= dbg_status;
+		default: up_rdata <= 'h00;
+		endcase
+	end
+end
+
+// Request ID and Request done bitmap handling
+always @(posedge s_axi_aclk)
+begin
+	if (s_axi_aresetn == 1'b0 || up_enable == 1'b0) begin
+
+Diff Content:
+- 412 		12'h001: up_rdata <= PCORE_ID;
+- 424 		12'h107: up_rdata <= C_2D_TRANSFER ? up_dma_y_length : 'h00;
+- 425 		12'h108: up_rdata <= C_2D_TRANSFER ? up_dma_dest_stride : 'h00;
+- 426 		12'h109: up_rdata <= C_2D_TRANSFER ? up_dma_src_stride : 'h00;
++ 412 		12'h001: up_rdata <= ID;
++ 426 		12'h107: up_rdata <= DMA_2D_TRANSFER ? up_dma_y_length : 'h00;
++ 426 		12'h108: up_rdata <= DMA_2D_TRANSFER ? up_dma_dest_stride : 'h00;
++ 426 		12'h109: up_rdata <= DMA_2D_TRANSFER ? up_dma_src_stride : 'h00;
+
+Clone Blocks:

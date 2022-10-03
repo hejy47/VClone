@@ -1,0 +1,36 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@123:137@HdlStmProcess
+   //# TX SHIFT REGISTER
+   //#################################
+
+   assign load_tx  = byte_done & (spi_state[1:0]==`SPI_CMD);
+    
+   always @ (posedge sclk)
+     if(load_tx)
+       spi_tx[7:0] <= spi_regs[spi_rx[6:0]]; // 
+     else if(~ss)
+       spi_tx[7:0] <= {spi_tx[6:0],1'b0};   
+
+   assign miso = spi_tx[7];
+     
+   //#################################
+   //# REGISTER FILE INTERFACE
+
+Diff Content:
+- 130        spi_tx[7:0] <= spi_regs[spi_rx[6:0]]; // 
++ 130        spi_tx[7:0] <= spi_regs[rx_data[6:0]]; // 
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_slave_io.v@129:139
+     if(load_tx)
+       spi_tx[7:0] <= spi_regs[spi_rx[6:0]]; // 
+     else if(~ss)
+       spi_tx[7:0] <= {spi_tx[6:0],1'b0};   
+
+   assign miso = spi_tx[7];
+     
+   //#################################
+   //# REGISTER FILE INTERFACE
+   //#################################
+   assign spi_clk       = sclk;
+

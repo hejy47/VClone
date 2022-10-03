@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@117:129@HdlStmAssign
+   //######################################################################
+   //Pushback (stall) Signals
+   //######################################################################
+   
+   //Write waits on pin wr wait or cfg_wait
+   assign txwr_wait = etx_wr_wait |
+		      etx_rd_wait |
+		      etx_cfg_wait;
+   
+   //Read response
+   assign txrr_wait = etx_wr_wait  |
+		      etx_rd_wait  |
+		      etx_cfg_wait |
+
+Diff Content:
+- 122    assign txwr_wait = etx_wr_wait |
+- 123 		      etx_rd_wait |
+- 124 		      etx_cfg_wait;
++ 124    assign etx_all_wait = etx_wait  | etx_cfg_wait;
+
+Clone Blocks:

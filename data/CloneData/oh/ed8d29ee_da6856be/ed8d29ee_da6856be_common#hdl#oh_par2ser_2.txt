@@ -1,0 +1,18 @@
+Source Block: oh/common/hdl/oh_par2ser.v@60:70@HdlStmAssign
+       count[CW-1:0] <= datasize[CW-1:0];
+     else if(shift & access_out)
+       count[CW-1:0] <= count[CW-1:0] - 1'b1;
+        
+   //output data is valid while count>0
+   assign access_out = |count[CW-1:0];
+   
+   //wait until valid data is finished
+   assign wait_out  = access_out |
+		      wait_in;
+   
+
+Diff Content:
+- 65    assign access_out = |count[CW-1:0];
++ 65    assign busy = |count[CW-1:0];
+
+Clone Blocks:

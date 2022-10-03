@@ -1,0 +1,60 @@
+Source Block: hdl/library/util_hbm/util_hbm.v@238:248@HdlStmAssign
+      {{LW_PER_M-1{1'b0}},~wr_request_eot_loc[0]};
+  end else if (wr_response_eot == 1'b1) begin
+    wr_response_measured_length_per_m <= {LW_PER_M{1'h0}};
+  end
+end
+assign wr_response_measured_length = {wr_response_measured_length_per_m,{NUM_M_LOG2{1'b1}}};
+
+always @(posedge s_axis_aclk) begin
+  wr_response_eot <= wr_eot_pending_all;
+end
+
+
+Diff Content:
+- 243 assign wr_response_measured_length = {wr_response_measured_length_per_m,{NUM_M_LOG2{1'b1}}};
++ 243   localparam DMA_TYPE_AXI_MM = 0;
++ 243   localparam DMA_TYPE_AXI_STREAM = 1;
++ 243   localparam DMA_TYPE_FIFO = 2;
++ 243   localparam SRC_DATA_WIDTH_PER_M = SRC_DATA_WIDTH / NUM_M;
++ 243   localparam DST_DATA_WIDTH_PER_M = DST_DATA_WIDTH / NUM_M;
++ 243   localparam AXI_BYTES_PER_BEAT_WIDTH = $clog2(AXI_DATA_WIDTH/8);
++ 243   localparam SRC_BYTES_PER_BEAT_WIDTH = $clog2(SRC_DATA_WIDTH_PER_M/8);
++ 243   localparam DST_BYTES_PER_BEAT_WIDTH = $clog2(DST_DATA_WIDTH_PER_M/8);
++ 243   localparam MAX_BYTES_PER_BURST = (AXI_PROTOCOL ? 16 : 256) * AXI_DATA_WIDTH/8;
++ 243   localparam MAX_BYTES_PER_BURST_LMT = MAX_BYTES_PER_BURST >= 4096 ? 4096 :
++ 243                                        MAX_BYTES_PER_BURST;
++ 243   localparam BYTES_PER_BURST_WIDTH = $clog2(MAX_BYTES_PER_BURST_LMT);
++ 243   localparam AXI_ALEN = (8-(4*AXI_PROTOCOL));
++ 243   localparam NUM_M_LOG2 = $clog2(NUM_M);
++ 243   genvar i;
++ 243   wire [NUM_M-1:0] wr_request_ready_loc;
++ 243   wire [NUM_M-1:0] rd_request_ready_loc;
++ 243   wire [NUM_M-1:0] wr_request_eot_loc;
++ 243   wire [NUM_M-1:0] rd_request_eot_loc;
++ 243   wire [NUM_M-1:0] rd_response_valid_loc;
++ 243   wire [NUM_M-1:0] wr_response_valid_loc;
++ 243   wire             wr_eot_pending_all;
++ 243   wire             rd_eot_pending_all;
++ 243   assign wr_request_ready = &wr_request_ready_loc;
++ 243   assign rd_request_ready = &rd_request_ready_loc;
++ 243   reg [NUM_M-1:0] wr_eot_pending = {NUM_M{1'b0}};
++ 243   reg [NUM_M-1:0] rd_eot_pending = {NUM_M{1'b0}};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_hbm/util_hbm.v@240:252
+    wr_response_measured_length_per_m <= {LW_PER_M{1'h0}};
+  end
+end
+assign wr_response_measured_length = {wr_response_measured_length_per_m,{NUM_M_LOG2{1'b1}}};
+
+always @(posedge s_axis_aclk) begin
+  wr_response_eot <= wr_eot_pending_all;
+end
+
+always @(posedge m_axis_aclk) begin
+  rd_response_eot <= rd_eot_pending_all;
+end
+
+

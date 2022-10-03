@@ -1,0 +1,24 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616_pif.v@211:225@HdlStmProcess
+
+  // FSM output logic
+
+  assign db_o = wr_data;
+
+  always @(posedge clk) begin
+    data_out_a <= (rd_db_valid) ? db_i : data_out_a;
+    data_out_b <= (rd_db_valid) ? data_out_a : data_out_b;
+    rd_valid <= rd_db_valid;
+  end
+
+  assign rd_data = data_out_a;
+
+  assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
+  assign db_t = ~wr_req_d;
+
+Diff Content:
+- 217     data_out_a <= (rd_db_valid) ? db_i : data_out_a;
+- 218     data_out_b <= (rd_db_valid) ? data_out_a : data_out_b;
++ 218     data_out_a <= (transfer_state == CNTRL0_HIGH) ? db_i : data_out_a;
++ 218     data_out_b <= (transfer_state == CNTRL1_HIGH) ? db_i : data_out_b;
+
+Clone Blocks:

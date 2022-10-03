@@ -1,0 +1,65 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_transfer.v@233:291@HdlStmIf
+ * shutdown and reset phase.
+ */
+assign req_valid_gated = req_enable & req_valid;
+assign req_ready = req_enable & req_ready_gated;
+
+generate if (DMA_2D_TRANSFER == 1) begin
+
+dmac_2d_transfer #(
+  .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),
+  .BYTES_PER_BEAT_WIDTH_DEST (BYTES_PER_BEAT_WIDTH_DEST),
+  .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC)
+) i_2d_transfer (
+  .req_aclk (req_clk),
+  .req_aresetn (req_resetn),
+
+  .req_eot (req_eot),
+
+  .req_valid (req_valid_gated),
+  .req_ready (req_ready_gated),
+  .req_dest_address (req_dest_address),
+  .req_src_address (req_src_address),
+  .req_x_length (req_x_length),
+  .req_y_length (req_y_length),
+  .req_dest_stride (req_dest_stride),
+  .req_src_stride (req_src_stride),
+  .req_sync_transfer_start (req_sync_transfer_start),
+
+  .out_req_valid (dma_req_valid),
+  .out_req_ready (dma_req_ready),
+  .out_req_dest_address (dma_req_dest_address),
+  .out_req_src_address (dma_req_src_address),
+  .out_req_length (dma_req_length),
+  .out_req_sync_transfer_start (dma_req_sync_transfer_start),
+  .out_eot (dma_req_eot)
+);
+
+assign dma_req_last = 1'b0;
+
+end else begin
+
+/* Request */
+assign dma_req_valid = req_valid_gated;
+assign req_ready_gated = dma_req_ready;
+
+assign dma_req_dest_address = req_dest_address;
+assign dma_req_src_address = req_src_address;
+assign dma_req_length = req_x_length;
+assign dma_req_sync_transfer_start = req_sync_transfer_start;
+assign dma_req_last = req_last;
+
+/* Response */
+assign req_eot = dma_req_eot;
+
+end endgenerate
+
+dmac_request_arb #(
+  .DMA_DATA_WIDTH_SRC (DMA_DATA_WIDTH_SRC),
+  .DMA_DATA_WIDTH_DEST (DMA_DATA_WIDTH_DEST),
+  .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),
+
+Diff Content:
++ 240   .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+
+Clone Blocks:

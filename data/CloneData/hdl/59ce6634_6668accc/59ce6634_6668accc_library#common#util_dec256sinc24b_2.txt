@@ -1,0 +1,50 @@
+Source Block: hdl/library/common/util_dec256sinc24b.v@97:116@HdlStmProcess
+      else
+        word_count <= word_count + 16'b1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (reset == 1'b0) begin
+      word_clk <= 1'b0;
+    end else begin
+      if (word_count == (dec_rate/2 - 1))
+        word_clk <= 1'b1;
+      else if (word_count == (dec_rate - 1))
+        word_clk <= 1'b0;
+    end
+  end
+
+  /* Differentiator (including decimation stage)
+   * Perform the differentiation stage (FIR) at a lower speed.
+   * Z = one sample delay WORD_CLK = output word rate */
+
+
+Diff Content:
+- 103     if (reset == 1'b0) begin
++ 103     if (reset == 1'b1) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/util_dec256sinc24b.v@86:105
+      acc3 <= acc3 + acc2;
+    end
+  end
+
+  /* decimation stage (MCLKOUT/WORD_CLK) */
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      word_count <= 16'd0;
+    end else begin
+      if (word_count == (dec_rate - 1))
+        word_count <= 16'd0;
+      else
+        word_count <= word_count + 16'b1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (reset == 1'b0) begin
+      word_clk <= 1'b0;
+    end else begin
+

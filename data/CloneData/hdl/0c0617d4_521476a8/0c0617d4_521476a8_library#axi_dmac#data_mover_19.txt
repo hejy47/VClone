@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@107:117@HdlStmAssign
+wire last;
+wire early_tlast;
+
+assign xfer_req = active;
+
+assign response_id = id;
+
+assign source_id = id;
+assign source_eot = eot || early_tlast;
+
+assign last = eot ? last_eot : last_non_eot;
+
+Diff Content:
+- 112 assign response_id = id;
++ 112   assign last = eot ? last_eot : last_non_eot;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/data_mover.v@105:115
+
+wire last_load;
+wire last;
+wire early_tlast;
+
+assign xfer_req = active;
+
+assign response_id = id;
+
+assign source_id = id;
+assign source_eot = eot || early_tlast;
+

@@ -1,0 +1,18 @@
+Source Block: oh/src/mio/hdl/mrx_protocol.v@10:20@HdlIdDef
+   //#####################################################################
+
+   //parameters
+   parameter  PW   = 104;               // packet width (core)
+   parameter  NMIO = 8;                 // io packet width
+   localparam CW   = $clog2(2*PW/NMIO); // transfer count width
+   
+   //clock and reset
+   input              rx_clk;        // rx clock
+   input 	      nreset;        // async active low reset
+   
+
+Diff Content:
+- 15    localparam CW   = $clog2(2*PW/NMIO); // transfer count width
++ 15    parameter  CW   = $clog2(2*PW/NMIO); // transfer count width
+
+Clone Blocks:

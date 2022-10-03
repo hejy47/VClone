@@ -1,0 +1,54 @@
+Source Block: zipcpu/rtl/core/dblfetch.v@207:221@HdlStmProcess
+			if ((o_wb_cyc)&&(i_wb_ack))
+				cache_valid[cache_write_addr] <= 1'b1;
+		end
+
+	initial	o_i = {(32){1'b1}};
+	always @(posedge i_clk)
+		if ((i_stall_n)&&(o_wb_cyc)&&(i_wb_ack))
+			o_i <= i_wb_data;
+		else
+			o_i <= cache[cache_read_addr];
+
+	initial	o_pc = 0;
+	always @(posedge i_clk)
+		if (i_new_pc)
+			o_pc <= i_pc;
+
+Diff Content:
+- 213 		if ((i_stall_n)&&(o_wb_cyc)&&(i_wb_ack))
++ 213 		if (((i_stall_n)||(!o_v))&&(o_wb_cyc)&&(i_wb_ack))
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/dblfetch.v@214:228
+			o_i <= i_wb_data;
+		else
+			o_i <= cache[cache_read_addr];
+
+	initial	o_pc = 0;
+	always @(posedge i_clk)
+		if (i_new_pc)
+			o_pc <= i_pc;
+		else if ((o_v)&&(i_stall_n))
+			o_pc <= o_pc + 1'b1;
+
+	assign	o_v = cache_valid[cache_read_addr];
+
+	initial	o_illegal = 1'b0;
+	always @(posedge i_clk)
+
+Clone Blocks 2:
+zipcpu/rtl/core/dblfetch.v@206:216
+				cache_valid[cache_read_addr] <= 1'b0;
+			if ((o_wb_cyc)&&(i_wb_ack))
+				cache_valid[cache_write_addr] <= 1'b1;
+		end
+
+	initial	o_i = {(32){1'b1}};
+	always @(posedge i_clk)
+		if ((i_stall_n)&&(o_wb_cyc)&&(i_wb_ack))
+			o_i <= i_wb_data;
+		else
+			o_i <= cache[cache_read_addr];
+

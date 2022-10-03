@@ -1,0 +1,409 @@
+Source Block: hdl/projects/adv7513/de10nano/system_top.v@132:142@HdlStmAssign
+  // instantiations
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+
+  assign gpio_i[11:4] = gpio_bd_i[7:0];
+  assign gpio_bd_o[3:0] = gpio_o[3:0];
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+
+  assign ltc2308_cs = gpio_o[41];
+
+
+Diff Content:
+- 137   assign gpio_bd_o[3:0] = gpio_o[3:0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms8/a10soc/system_top.v@292:302
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+
+Clone Blocks 2:
+hdl/projects/adv7513/de10nano/system_top.v@131:141
+
+  // instantiations
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+
+  assign gpio_i[11:4] = gpio_bd_i[7:0];
+  assign gpio_bd_o[3:0] = gpio_o[3:0];
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+
+  assign ltc2308_cs = gpio_o[41];
+
+Clone Blocks 3:
+hdl/projects/daq2/a10soc/system_top.v@213:223
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+
+Clone Blocks 4:
+hdl/projects/adv7513/de10nano/system_top.v@136:146
+  assign gpio_i[11:4] = gpio_bd_i[7:0];
+  assign gpio_bd_o[3:0] = gpio_o[3:0];
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+
+  assign ltc2308_cs = gpio_o[41];
+
+  ALT_IOBUF scl_iobuf (
+    .i(1'b0),
+    .oe(i2c0_out_clk),
+    .o(i2c0_scl_in_clk),
+
+Clone Blocks 5:
+hdl/projects/adrv9371x/a10soc/system_top.v@198:208
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+
+Clone Blocks 6:
+hdl/projects/dac_fmc_ebz/a10soc/system_top.v@187:197
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+  assign sys_resetn_s = sys_resetn & sys_hps_resetn;
+
+
+Clone Blocks 7:
+hdl/projects/cn0506_rgmii/a10soc/system_top.v@225:235
+  assign gpio_i[33] = int_n_a;
+  assign gpio_i[32] = int_n_b;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[3:0];
+
+
+Clone Blocks 8:
+hdl/projects/adv7513/de10nano/system_top.v@129:139
+  wire             i2c0_out_clk;
+  wire             i2c0_scl_in_clk;
+
+  // instantiations
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+
+  assign gpio_i[11:4] = gpio_bd_i[7:0];
+  assign gpio_bd_o[3:0] = gpio_o[3:0];
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+
+Clone Blocks 9:
+hdl/projects/ad_fmclidar1_ebz/a10soc/system_top.v@195:205
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+  assign gpio_bd_o = gpio_o[3:0];
+
+  assign rx_sync_0 = rx_sync_s;
+  assign rx_sync_1 = rx_sync_s;
+
+  // peripheral reset
+
+Clone Blocks 10:
+hdl/projects/daq2/a10soc/system_top.v@215:225
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+  assign sys_resetn_s = sys_resetn & sys_hps_resetn;
+
+
+Clone Blocks 11:
+hdl/projects/dac_fmc_ebz/a10soc/system_top.v@183:193
+
+  assign gpio_i[63:32] = 'h0;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+
+Clone Blocks 12:
+hdl/projects/dac_fmc_ebz/a10soc/system_top.v@185:195
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+
+Clone Blocks 13:
+hdl/projects/adrv9361z7035/ccpackrf_lvds/system_top.v@232:242
+  assign switch_led_b = gpio_o[0];
+  assign gpio_i[3:0] = gpio_o[3:0];
+
+  // unused gpio - 63:30
+
+  assign gpio_i[63] = gpio_o[63];
+  assign gpio_i[62] = gpio_o[62];
+  assign gpio_i[61] = gpio_o[61];
+  assign gpio_i[60] = gpio_o[60];
+
+  // tsw-part-2 gpio - 59:57
+
+Clone Blocks 14:
+hdl/projects/cn0506_mii/a10soc/system_top.v@202:212
+  assign gpio_i[33] = mii_crs_a;
+  assign gpio_i[32] = mii_crs_b;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[3:0];
+
+
+Clone Blocks 15:
+hdl/projects/daq2/a10soc/system_top.v@211:221
+  assign gpio_i[34:34] = dac_irq;
+  assign gpio_i[33:32] = clkd_status;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+
+Clone Blocks 16:
+hdl/projects/adrv9371x/a10soc/system_top.v@196:206
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+
+Clone Blocks 17:
+hdl/projects/ad_fmclidar1_ebz/a10soc/system_top.v@194:204
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+  assign gpio_bd_o = gpio_o[3:0];
+
+  assign rx_sync_0 = rx_sync_s;
+  assign rx_sync_1 = rx_sync_s;
+
+
+Clone Blocks 18:
+hdl/projects/fmcomms8/a10soc/system_top.v@290:300
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+
+Clone Blocks 19:
+hdl/projects/daq2/a10soc/system_top.v@212:222
+  assign gpio_i[33:32] = clkd_status;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+Clone Blocks 20:
+hdl/projects/adrv9009/a10soc/system_top.v@197:207
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+
+Clone Blocks 21:
+hdl/projects/adrv9371x/a10soc/system_top.v@197:207
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+Clone Blocks 22:
+hdl/projects/adrv9364z7020/ccpackrf_lvds/system_top.v@225:235
+  assign switch_led_b = gpio_o[0];
+  assign gpio_i[3:0] = gpio_o[3:0];
+
+  // unused gpio - 63:30
+
+  assign gpio_i[63] = gpio_o[63];
+  assign gpio_i[62] = gpio_o[62];
+  assign gpio_i[61] = gpio_o[61];
+  assign gpio_i[60] = gpio_o[60];
+
+  // tsw-part-2 gpio - 59:57
+
+Clone Blocks 23:
+hdl/projects/fmcomms8/a10soc/system_top.v@291:301
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+Clone Blocks 24:
+hdl/projects/adrv9009/a10soc/system_top.v@198:208
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+Clone Blocks 25:
+hdl/projects/dac_fmc_ebz/a10soc/system_top.v@184:194
+  assign gpio_i[63:32] = 'h0;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+Clone Blocks 26:
+hdl/projects/adrv9009/a10soc/system_top.v@199:209
+
+  assign gpio_i[31:14] = gpio_o[31:14];
+  assign gpio_i[13:13] = sys_ddr_cal_success;
+  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[3:0];
+
+  assign gpio_bd_o = gpio_o[3:0];
+
+  // peripheral reset
+
+
+Clone Blocks 27:
+hdl/projects/adv7513/de10nano/system_top.v@134:144
+  assign gpio_i[63:32] = gpio_o[63:32];
+
+  assign gpio_i[11:4] = gpio_bd_i[7:0];
+  assign gpio_bd_o[3:0] = gpio_o[3:0];
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+
+  assign ltc2308_cs = gpio_o[41];
+
+  ALT_IOBUF scl_iobuf (
+    .i(1'b0),
+
+Clone Blocks 28:
+hdl/projects/ad_fmclidar1_ebz/a10soc/system_top.v@193:203
+  assign gpio_i[32] = adc_fdb;
+
+  // board stuff (max-v-u21)
+
+  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[11: 4] = gpio_bd_i;
+  assign gpio_i[ 3: 0] = gpio_o[ 3: 0];
+  assign gpio_bd_o = gpio_o[3:0];
+
+  assign rx_sync_0 = rx_sync_s;
+  assign rx_sync_1 = rx_sync_s;
+

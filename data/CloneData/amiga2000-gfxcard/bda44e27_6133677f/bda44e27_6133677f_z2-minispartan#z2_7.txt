@@ -1,0 +1,68 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@93:103@HdlIdDef
+reg  ram_write = 0;
+reg  [1:0]  ram_byte_enable;
+reg  [15:0] ram_data_buffer [0:screen_w-1]; // 1024x16bit line buffer
+reg  [10:0] fetch_x = 0;
+reg  [10:0] fetch_y = 0;
+reg  fetching = 0;
+
+// SDRAM
+SDRAM_Controller_v sdram(
+  .clk(z_sample_clk),   
+  .reset(sdram_reset),
+
+Diff Content:
++ 98 reg display_enable = 1;
++ 98 reg [10:0] glitchx2_reg = 'h1fd;
++ 98 reg [8:0]  ram_burst_col = 'h1fe; //'b111111010;
++ 98 reg burst_enabled = 1; // toggle ram burst mode on/off
++ 98 reg [10:0] fetch_preroll = 64;
++ 98 reg [15:0] row_pitch = 2048;
++ 98 reg [4:0] row_pitch_shift = 11; // 2048 = 1<<11
++ 98 reg [15:0] refresh_counter = 0;
++ 98 reg [23:0] refresh_addr = 0;
++ 98 reg [15:0] refresh_time = 'h1000;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@90:100
+wire [15:0] ram_data_out;
+wire data_out_ready;
+reg  [15:0] ram_data_in;
+reg  ram_write = 0;
+reg  [1:0]  ram_byte_enable;
+reg  [15:0] ram_data_buffer [0:screen_w-1]; // 1024x16bit line buffer
+reg  [10:0] fetch_x = 0;
+reg  [10:0] fetch_y = 0;
+reg  fetching = 0;
+
+// SDRAM
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@92:102
+reg  [15:0] ram_data_in;
+reg  ram_write = 0;
+reg  [1:0]  ram_byte_enable;
+reg  [15:0] ram_data_buffer [0:screen_w-1]; // 1024x16bit line buffer
+reg  [10:0] fetch_x = 0;
+reg  [10:0] fetch_y = 0;
+reg  fetching = 0;
+
+// SDRAM
+SDRAM_Controller_v sdram(
+  .clk(z_sample_clk),   
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@91:101
+wire data_out_ready;
+reg  [15:0] ram_data_in;
+reg  ram_write = 0;
+reg  [1:0]  ram_byte_enable;
+reg  [15:0] ram_data_buffer [0:screen_w-1]; // 1024x16bit line buffer
+reg  [10:0] fetch_x = 0;
+reg  [10:0] fetch_y = 0;
+reg  fetching = 0;
+
+// SDRAM
+SDRAM_Controller_v sdram(
+

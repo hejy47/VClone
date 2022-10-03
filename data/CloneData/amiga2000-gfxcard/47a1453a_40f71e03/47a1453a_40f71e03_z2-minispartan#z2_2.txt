@@ -1,0 +1,101 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@350:360@HdlStmAssign
+parameter CONFIGURED = 8;
+reg [6:0] zorro_state = CONFIGURED;
+
+assign datastrobe_synced = ((znUDS_sync[2]==znUDS_sync[1]) && (znLDS_sync[2]==znLDS_sync[1]) && ((znUDS_sync[2]==0) || (znLDS_sync[2]==0)));
+assign zaddr_in_ram = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=ram_low && zaddr<ram_high);
+assign zaddr_in_reg = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=reg_low && zaddr<reg_high);
+assign zaddr_autoconfig = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=rom_low && zaddr<rom_high);
+assign zorro_read = zREAD_sync[1];
+assign zorro_write = !zREAD_sync[1];
+
+reg row_fetched = 0;
+
+Diff Content:
+- 355 assign zaddr_in_reg = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=reg_low && zaddr<reg_high);
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@351:361
+reg [6:0] zorro_state = CONFIGURED;
+
+assign datastrobe_synced = ((znUDS_sync[2]==znUDS_sync[1]) && (znLDS_sync[2]==znLDS_sync[1]) && ((znUDS_sync[2]==0) || (znLDS_sync[2]==0)));
+assign zaddr_in_ram = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=ram_low && zaddr<ram_high);
+assign zaddr_in_reg = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=reg_low && zaddr<reg_high);
+assign zaddr_autoconfig = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=rom_low && zaddr<rom_high);
+assign zorro_read = zREAD_sync[1];
+assign zorro_write = !zREAD_sync[1];
+
+reg row_fetched = 0;
+
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@349:359
+parameter WAIT_READ2 = 7;
+parameter CONFIGURED = 8;
+reg [6:0] zorro_state = CONFIGURED;
+
+assign datastrobe_synced = ((znUDS_sync[2]==znUDS_sync[1]) && (znLDS_sync[2]==znLDS_sync[1]) && ((znUDS_sync[2]==0) || (znLDS_sync[2]==0)));
+assign zaddr_in_ram = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=ram_low && zaddr<ram_high);
+assign zaddr_in_reg = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=reg_low && zaddr<reg_high);
+assign zaddr_autoconfig = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=rom_low && zaddr<rom_high);
+assign zorro_read = zREAD_sync[1];
+assign zorro_write = !zREAD_sync[1];
+
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@348:358
+parameter WAIT_WRITE2 = 6;
+parameter WAIT_READ2 = 7;
+parameter CONFIGURED = 8;
+reg [6:0] zorro_state = CONFIGURED;
+
+assign datastrobe_synced = ((znUDS_sync[2]==znUDS_sync[1]) && (znLDS_sync[2]==znLDS_sync[1]) && ((znUDS_sync[2]==0) || (znLDS_sync[2]==0)));
+assign zaddr_in_ram = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=ram_low && zaddr<ram_high);
+assign zaddr_in_reg = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=reg_low && zaddr<reg_high);
+assign zaddr_autoconfig = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=rom_low && zaddr<rom_high);
+assign zorro_read = zREAD_sync[1];
+assign zorro_write = !zREAD_sync[1];
+
+Clone Blocks 4:
+amiga2000-gfxcard/z2-minispartan/z2.v@352:362
+
+assign datastrobe_synced = ((znUDS_sync[2]==znUDS_sync[1]) && (znLDS_sync[2]==znLDS_sync[1]) && ((znUDS_sync[2]==0) || (znLDS_sync[2]==0)));
+assign zaddr_in_ram = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=ram_low && zaddr<ram_high);
+assign zaddr_in_reg = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=reg_low && zaddr<reg_high);
+assign zaddr_autoconfig = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=rom_low && zaddr<rom_high);
+assign zorro_read = zREAD_sync[1];
+assign zorro_write = !zREAD_sync[1];
+
+reg row_fetched = 0;
+
+always @(posedge z_sample_clk) begin
+
+Clone Blocks 5:
+amiga2000-gfxcard/z2-minispartan/z2.v@353:363
+assign datastrobe_synced = ((znUDS_sync[2]==znUDS_sync[1]) && (znLDS_sync[2]==znLDS_sync[1]) && ((znUDS_sync[2]==0) || (znLDS_sync[2]==0)));
+assign zaddr_in_ram = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=ram_low && zaddr<ram_high);
+assign zaddr_in_reg = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=reg_low && zaddr<reg_high);
+assign zaddr_autoconfig = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=rom_low && zaddr<rom_high);
+assign zorro_read = zREAD_sync[1];
+assign zorro_write = !zREAD_sync[1];
+
+reg row_fetched = 0;
+
+always @(posedge z_sample_clk) begin
+  znUDS_sync  <= {znUDS_sync[1:0],znUDS};
+
+Clone Blocks 6:
+amiga2000-gfxcard/z2-minispartan/z2.v@346:356
+parameter WAIT_WRITE = 4;
+parameter WAIT_READ_ROM = 5;
+parameter WAIT_WRITE2 = 6;
+parameter WAIT_READ2 = 7;
+parameter CONFIGURED = 8;
+reg [6:0] zorro_state = CONFIGURED;
+
+assign datastrobe_synced = ((znUDS_sync[2]==znUDS_sync[1]) && (znLDS_sync[2]==znLDS_sync[1]) && ((znUDS_sync[2]==0) || (znLDS_sync[2]==0)));
+assign zaddr_in_ram = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=ram_low && zaddr<ram_high);
+assign zaddr_in_reg = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=reg_low && zaddr<reg_high);
+assign zaddr_autoconfig = (znAS_sync[1]==0 && zaddr_sync==zaddr && zaddr>=rom_low && zaddr<rom_high);
+

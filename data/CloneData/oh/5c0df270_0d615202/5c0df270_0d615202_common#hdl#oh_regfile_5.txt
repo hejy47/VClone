@@ -1,0 +1,52 @@
+Source Block: oh/common/hdl/oh_regfile.v@39:53@HdlStmFor
+   for(i=0;i<REGS;i=i+1)
+     for(j=0;j<WP;j=j+1)
+       assign write_en[i][j] = wr_valid[j] & (wr_addr[j*RAW+:RAW] == i);
+
+   //Memory array
+   for(i=0;i<REGS;i=i+1)
+     for(j=0;j<WP;j=j+1)
+       always @ (posedge clk)
+	 if (write_en[i][j])
+	   mem[i] <= wr_data[j*RW+:RW];
+
+   //#########################################
+   // read ports
+   //#########################################	
+   
+
+Diff Content:
+- 44    for(i=0;i<REGS;i=i+1)
+- 45      for(j=0;j<WP;j=j+1)
+- 46        always @ (posedge clk)
+- 47 	 if (write_en[i][j])
+- 48 	   mem[i] <= wr_data[j*RW+:RW];
++ 48    for(i=0;i<REGS;i=i+1) 
++ 48      begin: gmux
++ 48 	oh_mux #(.DW(RW), .N(WP))
++ 48 	iwrmux(.out (datamux[i][RW-1:0]),
++ 48 	       .sel (write_en[i][WP-1:0]),
++ 48 	       .in  (wr_data[WP*RW-1:0]));
++ 48      end
++ 48    for(i=0;i<REGS;i=i+1)
++ 48      always @ (posedge clk)
++ 48        if (|write_en[i][WP-1:0])
++ 48 	 mem[i] <= datamux[i];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_regfile.v@34:46
+   //#########################################
+   // write ports
+   //#########################################	
+
+   //Write Select lines
+   for(i=0;i<REGS;i=i+1)
+     for(j=0;j<WP;j=j+1)
+       assign write_en[i][j] = wr_valid[j] & (wr_addr[j*RAW+:RAW] == i);
+
+   //Memory array
+   for(i=0;i<REGS;i=i+1)
+     for(j=0;j<WP;j=j+1)
+       always @ (posedge clk)
+

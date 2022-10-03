@@ -1,0 +1,95 @@
+Source Block: verilog-ethernet/rtl/axis_switch.v@263:350@HdlStmFor
+            .m_axis_tdest(int_s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH]),
+            .m_axis_tuser(int_s_axis_tuser[m*USER_WIDTH +: USER_WIDTH])
+        );
+    end // s_ifaces
+
+    for (n = 0; n < M_COUNT; n = n + 1) begin : m_ifaces
+
+        // arbitration
+        wire [S_COUNT-1:0] request;
+        wire [S_COUNT-1:0] acknowledge;
+        wire [S_COUNT-1:0] grant;
+        wire grant_valid;
+        wire [CL_S_COUNT-1:0] grant_encoded;
+
+        arbiter #(
+            .PORTS(S_COUNT),
+            .TYPE(ARB_TYPE),
+            .BLOCK("ACKNOWLEDGE"),
+            .LSB_PRIORITY(LSB_PRIORITY)
+        )
+        arb_inst (
+            .clk(clk),
+            .rst(rst),
+            .request(request),
+            .acknowledge(acknowledge),
+            .grant(grant),
+            .grant_valid(grant_valid),
+            .grant_encoded(grant_encoded)
+        );
+
+        // mux
+        wire [DATA_WIDTH-1:0] s_axis_tdata_mux   = int_s_axis_tdata[grant_encoded*DATA_WIDTH +: DATA_WIDTH];
+        wire [KEEP_WIDTH-1:0] s_axis_tkeep_mux   = int_s_axis_tkeep[grant_encoded*KEEP_WIDTH +: KEEP_WIDTH];
+        wire                  s_axis_tvalid_mux  = int_axis_tvalid[grant_encoded*S_COUNT+n] && grant_valid;
+        wire                  s_axis_tready_mux;
+        wire                  s_axis_tlast_mux   = int_s_axis_tlast[grant_encoded];
+        wire [ID_WIDTH-1:0]   s_axis_tid_mux     = int_s_axis_tid[grant_encoded*ID_WIDTH +: ID_WIDTH];
+        wire [DEST_WIDTH-1:0] s_axis_tdest_mux   = int_s_axis_tdest[grant_encoded*DEST_WIDTH +: DEST_WIDTH];
+        wire [USER_WIDTH-1:0] s_axis_tuser_mux   = int_s_axis_tuser[grant_encoded*USER_WIDTH +: USER_WIDTH];
+
+        assign int_axis_tready[n*S_COUNT +: S_COUNT] = (grant_valid && s_axis_tready_mux) << grant_encoded;
+
+        for (m = 0; m < S_COUNT; m = m + 1) begin
+            assign request[m] = int_axis_tvalid[m*M_COUNT+n] && !grant[m];
+            assign acknowledge[m] = grant[m] && int_axis_tvalid[m*M_COUNT+n] && s_axis_tlast_mux && s_axis_tready_mux;
+        end
+
+        // M side register
+        axis_register #(
+            .DATA_WIDTH(DATA_WIDTH),
+            .KEEP_ENABLE(KEEP_ENABLE),
+            .KEEP_WIDTH(KEEP_WIDTH),
+            .LAST_ENABLE(1),
+            .ID_ENABLE(ID_ENABLE),
+            .ID_WIDTH(ID_WIDTH),
+            .DEST_ENABLE(1),
+            .DEST_WIDTH(DEST_WIDTH),
+            .USER_ENABLE(USER_ENABLE),
+            .USER_WIDTH(USER_WIDTH),
+            .REG_TYPE(M_REG_TYPE)
+        )
+        reg_inst (
+            .clk(clk),
+            .rst(rst),
+            // AXI input
+            .s_axis_tdata(s_axis_tdata_mux),
+            .s_axis_tkeep(s_axis_tkeep_mux),
+            .s_axis_tvalid(s_axis_tvalid_mux),
+            .s_axis_tready(s_axis_tready_mux),
+            .s_axis_tlast(s_axis_tlast_mux),
+            .s_axis_tid(s_axis_tid_mux),
+            .s_axis_tdest(s_axis_tdest_mux),
+            .s_axis_tuser(s_axis_tuser_mux),
+            // AXI output
+            .m_axis_tdata(m_axis_tdata[n*DATA_WIDTH +: DATA_WIDTH]),
+            .m_axis_tkeep(m_axis_tkeep[n*KEEP_WIDTH +: KEEP_WIDTH]),
+            .m_axis_tvalid(m_axis_tvalid[n]),
+            .m_axis_tready(m_axis_tready[n]),
+            .m_axis_tlast(m_axis_tlast[n]),
+            .m_axis_tid(m_axis_tid[n*ID_WIDTH +: ID_WIDTH]),
+            .m_axis_tdest(m_axis_tdest[n*DEST_WIDTH +: DEST_WIDTH]),
+            .m_axis_tuser(m_axis_tuser[n*USER_WIDTH +: USER_WIDTH])
+        );
+    end // m_ifaces
+
+endgenerate
+
+endmodule
+
+Diff Content:
+- 296         wire                  s_axis_tvalid_mux  = int_axis_tvalid[grant_encoded*S_COUNT+n] && grant_valid;
++ 296         wire                  s_axis_tvalid_mux  = int_axis_tvalid[grant_encoded*M_COUNT+n] && grant_valid;
+
+Clone Blocks:

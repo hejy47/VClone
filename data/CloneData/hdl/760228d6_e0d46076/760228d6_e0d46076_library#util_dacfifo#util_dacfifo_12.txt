@@ -1,0 +1,27 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@133:143@HdlStmAssign
+        dma_xfer_out <= 1'b1;
+      end
+    end
+  end
+
+  assign dma_wren = dma_valid & dma_xfer_req;
+
+  // sync lastaddr to dac clock domain
+
+  always @(posedge dac_clk) begin
+    dac_lastaddr_d <= dma_lastaddr;
+
+Diff Content:
+- 138   assign dma_wren = dma_valid & dma_xfer_req;
++ 138   always @(posedge dma_clk) begin
++ 138     if (dma_rst == 1'b1) begin
++ 138       dma_lastaddr_g <= 'b0;
++ 138     end else begin
++ 138       if (dma_bypass == 1'b0) begin
++ 138         dma_lastaddr_g <= (dma_xfer_last == 1'b1)? b2g(dma_waddr) : dma_lastaddr_g;
++ 138       end
++ 138     end
++ 138   end
++ 138   assign dac_addr_diff_s = {1'b1, dac_waddr} - dac_raddr;
+
+Clone Blocks:

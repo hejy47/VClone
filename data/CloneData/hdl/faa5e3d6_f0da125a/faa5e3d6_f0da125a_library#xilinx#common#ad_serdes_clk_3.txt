@@ -1,0 +1,56 @@
+Source Block: hdl/library/xilinx/common/ad_serdes_clk.v@132:158@HdlStmIf
+    .up_drp_rdata (up_drp_rdata[15:0]),
+    .up_drp_ready (up_drp_ready),
+    .up_drp_locked (up_drp_locked));
+  end
+
+  if (MMCM_OR_BUFR_N == 0) begin
+  BUFIO i_clk_buf (
+    .I (clk_in_s),
+    .O (clk));
+
+  BUFR #(.BUFR_DIVIDE(BUFR_DIVIDE)) i_div_clk_buf (
+    .CLR (1'b0),
+    .CE (1'b1),
+    .I (clk_in_s),
+    .O (div_clk));
+
+  assign out_clk = clk;
+  assign up_drp_rdata[15:0] = 'd0;
+  assign up_drp_ready = 'd0;
+  assign up_drp_locked = 'd0;
+
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 138   BUFIO i_clk_buf (
+- 139     .I (clk_in_s),
+- 140     .O (clk));
+- 142   BUFR #(.BUFR_DIVIDE(BUFR_DIVIDE)) i_div_clk_buf (
+- 143     .CLR (1'b0),
+- 144     .CE (1'b1),
+- 145     .I (clk_in_s),
+- 146     .O (div_clk));
+- 148   assign out_clk = clk;
+- 149   assign up_drp_rdata[15:0] = 'd0;
+- 150   assign up_drp_ready = 'd0;
+- 151   assign up_drp_locked = 'd0;
++ 151     BUFIO i_clk_buf (
++ 151       .I (clk_in_s),
++ 151       .O (clk));
++ 151     BUFR #(.BUFR_DIVIDE(BUFR_DIVIDE)) i_div_clk_buf (
++ 151       .CLR (1'b0),
++ 151       .CE (1'b1),
++ 151       .I (clk_in_s),
++ 151       .O (div_clk));
++ 151     assign out_clk = clk;
++ 151     assign up_drp_rdata[15:0] = 'd0;
++ 151     assign up_drp_ready = 'd0;
++ 151     assign up_drp_locked = 'd0;
+
+Clone Blocks:

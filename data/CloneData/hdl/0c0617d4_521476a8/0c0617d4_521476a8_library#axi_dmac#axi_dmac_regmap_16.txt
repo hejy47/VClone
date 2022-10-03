@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap.v@138:148@HdlIdDef
+
+// Interupt handling
+reg [1:0] up_irq_mask = 2'h3;
+reg [1:0] up_irq_source = 2'h0;
+
+wire [1:0] up_irq_pending;
+wire [1:0] up_irq_trigger;
+wire [1:0] up_irq_source_clear;
+
+// IRQ handling
+assign up_irq_pending = ~up_irq_mask & up_irq_source;
+
+Diff Content:
+- 143 wire [1:0] up_irq_pending;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_regmap.v@135:145
+// Start and end of transfer
+wire up_eot; // Asserted for one cycle when a transfer has been completed
+wire up_sot; // Asserted for one cycle when a transfer has been queued
+
+// Interupt handling
+reg [1:0] up_irq_mask = 2'h3;
+reg [1:0] up_irq_source = 2'h0;
+
+wire [1:0] up_irq_pending;
+wire [1:0] up_irq_trigger;
+wire [1:0] up_irq_source_clear;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_regmap.v@136:146
+wire up_eot; // Asserted for one cycle when a transfer has been completed
+wire up_sot; // Asserted for one cycle when a transfer has been queued
+
+// Interupt handling
+reg [1:0] up_irq_mask = 2'h3;
+reg [1:0] up_irq_source = 2'h0;
+
+wire [1:0] up_irq_pending;
+wire [1:0] up_irq_trigger;
+wire [1:0] up_irq_source_clear;
+
+
+Clone Blocks 3:
+hdl/library/axi_dmac/axi_dmac_regmap.v@139:149
+// Interupt handling
+reg [1:0] up_irq_mask = 2'h3;
+reg [1:0] up_irq_source = 2'h0;
+
+wire [1:0] up_irq_pending;
+wire [1:0] up_irq_trigger;
+wire [1:0] up_irq_source_clear;
+
+// IRQ handling
+assign up_irq_pending = ~up_irq_mask & up_irq_source;
+assign up_irq_trigger  = {up_eot, up_sot};
+

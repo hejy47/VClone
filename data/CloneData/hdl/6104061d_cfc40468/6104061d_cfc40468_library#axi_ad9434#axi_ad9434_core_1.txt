@@ -1,0 +1,30 @@
+Source Block: hdl/library/axi_ad9434/axi_ad9434_core.v@185:205@HdlStmProcess
+  end
+  endgenerate
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rdata <= 'd0;
+      up_rack <= 'd0;
+      up_wack <= 'd0;
+    end else begin
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2];
+      up_rack <= up_rack_s[0] | up_rack_s[1] | up_rdata_s[2];
+      up_wack <= up_wack_s[0] | up_wack_s[1] | up_rdata_s[2];
+    end
+  end
+
+  up_adc_common #(
+    .PCORE_ID(PCORE_ID))
+  i_adc_common(
+    .mmcm_rst (mmcm_rst),
+
+Diff Content:
+- 197       up_rack <= up_rack_s[0] | up_rack_s[1] | up_rdata_s[2];
+- 198       up_wack <= up_wack_s[0] | up_wack_s[1] | up_rdata_s[2];
++ 198       up_rack <= up_rack_s[0] | up_rack_s[1] | up_rack_s[2];
++ 198       up_wack <= up_wack_s[0] | up_wack_s[1] | up_wack_s[2];
+
+Clone Blocks:

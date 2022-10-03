@@ -1,0 +1,37 @@
+Source Block: oh/etx/hdl/etx_io.v@88:117@HdlStmProcess
+   //#############################  
+   assign         txenb = txenb_sync[0];   
+   assign         txgpio = txgpio_sync[0];
+
+   // Sync these control bits into our domain
+   always @ (posedge tx_lclk_par) 
+     begin
+	txenb_sync <= {ecfg_tx_enable, txenb_sync[1]};
+	txgpio_sync <= {ecfg_tx_gpio_mode, txgpio_sync[1]};      
+	if(txgpio) 
+	  begin
+             pframe <= {8{ecfg_dataout[8]}};           
+             for(n=0; n<8; n=n+1)
+               pdata[n*8+7 -: 8] <= ecfg_dataout[7:0];	   
+	  end else if(txenb) 
+	    begin
+               pframe[7:0]  <= tx_frame_par[7:0];
+               pdata[63:0]  <= tx_data_par[63:0];         
+	    end 
+	  else 
+	    begin	   
+               pframe[7:0] <= 8'd0;
+               pdata[63:0] <= 64'd0;	   
+	    end
+     end
+   
+
+   //FRAME SERDES
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+
+Diff Content:
+- 96 	txgpio_sync <= {ecfg_tx_gpio_mode, txgpio_sync[1]};      
++ 96 	txgpio_sync <= {ecfg_tx_gpio_enable, txgpio_sync[1]};      
+
+Clone Blocks:

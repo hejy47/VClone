@@ -1,0 +1,56 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@245:279@HdlStmProcess
+  // External trigger output hold 100000 clock cycles(1ms) on polarity change.
+  // All trigger signals that are to be outputted on the external trigger after a
+  // trigger out is acknowledged by the hold counter will be disregarded for 1ms.
+  // This was done to avoid noise created by high frequency switches on long
+  // wires.
+  always @(posedge clk) begin
+    // trigger_o[0] hold start
+    if ((trigger_o_m[0] != trigger_o_m_1[0]) & (trig_o_hold_cnt_0 == 17'd0)) begin
+      trig_o_hold_cnt_0 <= 17'd100000;
+      trig_o_hold_0 <= trigger_o_m[0];
+    end
+    if (trig_o_hold_cnt_0 != 17'd0) begin
+      trig_o_hold_cnt_0 <= trig_o_hold_cnt_0 - 17'd1;
+    end
+    trigger_o_m_1[0] <= trigger_o_m[0];
+
+    // trigger_o[1] hold start
+    if ((trigger_o_m[1] != trigger_o_m_1[1]) & (trig_o_hold_cnt_1 == 17'd0)) begin
+      trig_o_hold_cnt_1 <= 17'd100000;
+      trig_o_hold_1 <= trigger_o_m[1];
+    end
+    if (trig_o_hold_cnt_1 != 17'd0) begin
+      trig_o_hold_cnt_1 <= trig_o_hold_cnt_1 - 17'd1;
+    end
+    trigger_o_m_1[1] <= trigger_o_m[1];
+
+    // hold
+    trigger_o[0] <= (trig_o_hold_cnt_0 == 'd0) ? trigger_o_m[0] : trig_o_hold_0;
+    trigger_o[1] <= (trig_o_hold_cnt_1 == 'd0) ? trigger_o_m[1] : trig_o_hold_1;
+  end
+
+
+  // keep data in sync with the trigger. The trigger bypasses the variable fifo.
+  // The data goes through and it is delayed with 4 clock cycles)
+  always @(posedge clk) begin
+
+Diff Content:
+- 252     if ((trigger_o_m[0] != trigger_o_m_1[0]) & (trig_o_hold_cnt_0 == 17'd0)) begin
+- 253       trig_o_hold_cnt_0 <= 17'd100000;
+- 254       trig_o_hold_0 <= trigger_o_m[0];
+- 255     end
+- 259     trigger_o_m_1[0] <= trigger_o_m[0];
+- 262     if ((trigger_o_m[1] != trigger_o_m_1[1]) & (trig_o_hold_cnt_1 == 17'd0)) begin
+- 263       trig_o_hold_cnt_1 <= 17'd100000;
+- 264       trig_o_hold_1 <= trigger_o_m[1];
+- 265     end
+- 269     trigger_o_m_1[1] <= trigger_o_m[1];
++ 257     end else if (trig_o_hold_0 != trigger_o_m[0]) begin
++ 257       trig_o_hold_cnt_0 <= OUT_PIN_HOLD_N;
++ 257       trig_o_hold_0 <= trigger_o_m[0];
++ 267     end else if (trig_o_hold_1 != trigger_o_m[1]) begin
++ 267       trig_o_hold_cnt_1 <= OUT_PIN_HOLD_N;
++ 267       trig_o_hold_1 <= trigger_o_m[1];
+
+Clone Blocks:

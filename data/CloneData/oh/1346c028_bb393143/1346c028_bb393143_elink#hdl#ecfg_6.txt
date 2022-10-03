@@ -1,0 +1,70 @@
+Source Block: oh/elink/hdl/ecfg.v@312:326@HdlStmProcess
+     ecfg_datain_reg <= ecfg_datain;
+   
+   //###########################
+   //# ESYSDATAOUT
+   //###########################
+   always @ (posedge mi_clk)
+     if(hw_reset)
+       ecfg_dataout_reg <= 'd0;   
+     else if (ecfg_dataout_write)
+       ecfg_dataout_reg <= mi_din[10:0];
+
+   assign ecfg_dataout[10:0] = ecfg_dataout_reg[10:0];
+   
+   //###########################
+   //# ESYSRESET
+
+Diff Content:
+- 319        ecfg_dataout_reg <= 'd0;   
+- 321        ecfg_dataout_reg <= mi_din[10:0];
++ 319        ecfg_dataout_reg[10:0] <= 11'd0;   
++ 321        ecfg_dataout_reg[10:0] <= mi_din[10:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/ecfg/hdl/ecfg.v@318:328
+     if(hw_reset)
+       ecfg_dataout_reg <= 'd0;   
+     else if (ecfg_dataout_write)
+       ecfg_dataout_reg <= mi_din[10:0];
+
+   assign ecfg_dataout[10:0] = ecfg_dataout_reg[10:0];
+   
+   //###########################
+   //# ESYSRESET
+   //###########################
+    always @ (posedge mi_clk)
+
+Clone Blocks 2:
+oh/ecfg/hdl/ecfg.v@312:326
+     ecfg_datain_reg <= ecfg_datain;
+   
+   //###########################
+   //# ESYSDATAOUT
+   //###########################
+   always @ (posedge mi_clk)
+     if(hw_reset)
+       ecfg_dataout_reg <= 'd0;   
+     else if (ecfg_dataout_write)
+       ecfg_dataout_reg <= mi_din[10:0];
+
+   assign ecfg_dataout[10:0] = ecfg_dataout_reg[10:0];
+   
+   //###########################
+   //# ESYSRESET
+
+Clone Blocks 3:
+oh/elink/hdl/ecfg.v@318:328
+     if(hw_reset)
+       ecfg_dataout_reg <= 'd0;   
+     else if (ecfg_dataout_write)
+       ecfg_dataout_reg <= mi_din[10:0];
+
+   assign ecfg_dataout[10:0] = ecfg_dataout_reg[10:0];
+   
+   //###########################
+   //# ESYSRESET
+   //###########################
+    always @ (posedge mi_clk)
+

@@ -1,0 +1,101 @@
+Source Block: hdl/library/axi_dmac/dest_fifo_inf.v@87:97@HdlStmAssign
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
+
+assign req_ready = fifo_eot_beat | ~active;
+assign xfer_req = active;
+
+always @(posedge clk) begin
+  if (en) begin
+    dout <= fifo_valid ? fifo_data : {DATA_WIDTH{1'b0}};
+
+Diff Content:
+- 92 assign req_ready = fifo_eot_beat | ~active;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/dest_fifo_inf.v@85:95
+assign enabled = enable;
+assign fifo_ready = en & (fifo_valid | ~enable);
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
+
+assign req_ready = fifo_eot_beat | ~active;
+assign xfer_req = active;
+
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/dest_axi_stream.v@88:98
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
+
+assign req_ready = fifo_eot_beat | ~active;
+assign data_id = id;
+assign xfer_req = active;
+
+assign m_axis_valid = fifo_valid & active;
+assign fifo_ready = m_axis_ready & active;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/dest_fifo_inf.v@84:94
+
+assign enabled = enable;
+assign fifo_ready = en & (fifo_valid | ~enable);
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
+
+assign req_ready = fifo_eot_beat | ~active;
+assign xfer_req = active;
+
+
+Clone Blocks 4:
+hdl/library/axi_dmac/dest_axi_stream.v@85:95
+wire fifo_last_beat;
+/* Last beat of the segment */
+wire fifo_eot_beat;
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
+
+assign req_ready = fifo_eot_beat | ~active;
+assign data_id = id;
+assign xfer_req = active;
+
+Clone Blocks 5:
+hdl/library/axi_dmac/dest_axi_stream.v@86:96
+/* Last beat of the segment */
+wire fifo_eot_beat;
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
+
+assign req_ready = fifo_eot_beat | ~active;
+assign data_id = id;
+assign xfer_req = active;
+
+
+Clone Blocks 6:
+hdl/library/axi_dmac/dest_fifo_inf.v@88:98
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+assign fifo_eot_beat = fifo_last_beat & data_eot;
+
+assign req_ready = fifo_eot_beat | ~active;
+assign xfer_req = active;
+
+always @(posedge clk) begin
+  if (en) begin
+    dout <= fifo_valid ? fifo_data : {DATA_WIDTH{1'b0}};
+    valid <= fifo_valid & enable;
+

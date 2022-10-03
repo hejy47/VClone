@@ -1,0 +1,17 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@67:77@HdlIdDef
+  output s_axis_almost_full,
+  output [S_ADDRESS_WIDTH-1:0] s_axis_room
+);
+
+// define which interface has a wider bus
+localparam RATIO_TYPE = (S_DATA_WIDTH >= M_DATA_WIDTH) ? 1 : 0;
+
+// bus width ratio
+localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
+
+// atomic parameters - NOTE: depth is always defined by the slave attributes
+
+Diff Content:
+- 72 localparam RATIO_TYPE = (S_DATA_WIDTH >= M_DATA_WIDTH) ? 1 : 0;
+
+Clone Blocks:

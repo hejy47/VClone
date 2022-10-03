@@ -1,0 +1,68 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_rx/jesd204_pattern_align.v@76:104@HdlStmProcess
+
+/* 2-stage cascade of 3:1 and 4:1 muxes */
+
+integer i;
+
+always @(*) begin
+  for (i = 0; i < DATA_PATH_WIDTH*10+3; i = i + 1) begin
+    if (i < DATA_PATH_WIDTH*10+1) begin
+      case (align[3:2])
+      2'b00: aligned_data_stage1[i] = full_data[i];
+      2'b01: aligned_data_stage1[i] = full_data[i+4];
+      2'b10: aligned_data_stage1[i] = full_data[i+8];
+      default: aligned_data_stage1[i] = 1'b0;
+      endcase
+    end else begin
+      case (align[2])
+      1'b0: aligned_data_stage1[i] = full_data[i];
+      default: aligned_data_stage1[i] = full_data[i+4];
+      endcase
+    end
+  end
+
+  aligned_data_stage2 = aligned_data_stage1[align[1:0]+:DATA_PATH_WIDTH*10];
+end
+
+always @(posedge clk) begin
+  data_d1 <= in_data[DATA_PATH_WIDTH*10-9+:9];
+end
+
+
+Diff Content:
+- 81 always @(*) begin
+- 82   for (i = 0; i < DATA_PATH_WIDTH*10+3; i = i + 1) begin
+- 83     if (i < DATA_PATH_WIDTH*10+1) begin
+- 84       case (align[3:2])
+- 85       2'b00: aligned_data_stage1[i] = full_data[i];
+- 86       2'b01: aligned_data_stage1[i] = full_data[i+4];
+- 87       2'b10: aligned_data_stage1[i] = full_data[i+8];
+- 88       default: aligned_data_stage1[i] = 1'b0;
+- 89       endcase
+- 90     end else begin
+- 91       case (align[2])
+- 92       1'b0: aligned_data_stage1[i] = full_data[i];
+- 93       default: aligned_data_stage1[i] = full_data[i+4];
+- 94       endcase
+- 96   end
+- 98   aligned_data_stage2 = aligned_data_stage1[align[1:0]+:DATA_PATH_WIDTH*10];
+- 99 end
++ 94   always @(*) begin
++ 94     for (i = 0; i < DATA_PATH_WIDTH*10+3; i = i + 1) begin
++ 94       if (i < DATA_PATH_WIDTH*10+1) begin
++ 94         case (align[3:2])
++ 94         2'b00: aligned_data_stage1[i] = full_data[i];
++ 94         2'b01: aligned_data_stage1[i] = full_data[i+4];
++ 94         2'b10: aligned_data_stage1[i] = full_data[i+8];
++ 94         default: aligned_data_stage1[i] = 1'b0;
++ 94         endcase
++ 94       end else begin
++ 94         case (align[2])
++ 94         1'b0: aligned_data_stage1[i] = full_data[i];
++ 94         default: aligned_data_stage1[i] = full_data[i+4];
++ 94         endcase
++ 94       end
++ 99     aligned_data_stage2 = aligned_data_stage1[align[1:0]+:DATA_PATH_WIDTH*10];
++ 99   end
+
+Clone Blocks:

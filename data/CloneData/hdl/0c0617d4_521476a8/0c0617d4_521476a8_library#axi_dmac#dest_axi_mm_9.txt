@@ -1,0 +1,100 @@
+Source Block: hdl/library/axi_dmac/dest_axi_mm.v@180:193@HdlStmProcess
+reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
+
+assign {response_resp_partial,
+        response_data_burst_length} = bl_mem[response_id];
+
+always @(posedge m_axi_aclk) begin
+  if (dest_burst_info_write) begin
+    bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
+                                   dest_burst_info_length};
+  end
+end
+
+
+endmodule
+
+Diff Content:
+- 185 always @(posedge m_axi_aclk) begin
+- 186   if (dest_burst_info_write) begin
+- 187     bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
+- 188                                    dest_burst_info_length};
+- 190 end
++ 188   wire address_enabled;
++ 188   address_generator #(
++ 188     .ID_WIDTH(ID_WIDTH),
++ 188     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
++ 188     .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
++ 188     .DMA_DATA_WIDTH(DMA_DATA_WIDTH),
++ 188     .LENGTH_WIDTH(AXI_LENGTH_WIDTH),
++ 188     .DMA_ADDR_WIDTH(DMA_ADDR_WIDTH),
++ 188     .CACHE_COHERENT(CACHE_COHERENT)
++ 188   ) i_addr_gen (
++ 188     .clk(m_axi_aclk),
++ 188     .resetn(m_axi_aresetn),
++ 188     .enable(enable),
++ 188     .enabled(address_enabled),
++ 188     .id(address_id),
++ 188     .request_id(request_id),
++ 188     .req_valid(req_valid),
++ 188     .req_ready(req_ready),
++ 188     .req_address(req_address),
++ 188     .bl_valid(bl_valid),
++ 188     .bl_ready(bl_ready),
++ 188     .measured_last_burst_length(measured_last_burst_length),
++ 188     .eot(address_eot),
++ 188     .addr_ready(m_axi_awready),
++ 188     .addr_valid(m_axi_awvalid),
++ 188     .addr(m_axi_awaddr),
++ 188     .len(m_axi_awlen),
++ 188     .size(m_axi_awsize),
++ 188     .burst(m_axi_awburst),
++ 188     .prot(m_axi_awprot),
++ 188     .cache(m_axi_awcache));
++ 188   assign m_axi_wvalid = fifo_valid;
++ 188   assign fifo_ready = m_axi_wready;
++ 188   assign m_axi_wlast = fifo_last;
++ 188   assign m_axi_wdata = fifo_data;
++ 188   assign m_axi_wstrb = fifo_strb;
++ 188   response_handler #(
++ 188     .ID_WIDTH(ID_WIDTH)
++ 188   ) i_response_handler (
++ 188     .clk(m_axi_aclk),
++ 188     .resetn(m_axi_aresetn),
++ 188     .bvalid(m_axi_bvalid),
++ 188     .bready(m_axi_bready),
++ 188     .bresp(m_axi_bresp),
++ 188     .enable(address_enabled),
++ 188     .enabled(enabled),
++ 188     .id(response_id),
++ 188     .request_id(address_id),
++ 188     .eot(response_eot),
++ 188     .resp_valid(response_valid),
++ 188     .resp_ready(response_ready),
++ 188     .resp_resp(response_resp),
++ 188     .resp_eot(response_resp_eot));
++ 188   reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
++ 188   assign {response_resp_partial,
++ 188           response_data_burst_length} = bl_mem[response_id];
++ 188   always @(posedge m_axi_aclk) begin
++ 188     if (dest_burst_info_write) begin
++ 188       bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
++ 188                                      dest_burst_info_length};
++ 188     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/dest_axi_mm.v@177:188
+  .resp_eot(response_resp_eot)
+);
+
+reg [BYTES_PER_BURST_WIDTH+1-1:0] bl_mem [0:2**(ID_WIDTH)-1];
+
+assign {response_resp_partial,
+        response_data_burst_length} = bl_mem[response_id];
+
+always @(posedge m_axi_aclk) begin
+  if (dest_burst_info_write) begin
+    bl_mem[dest_burst_info_id] <= {dest_burst_info_partial,
+                                   dest_burst_info_length};
+

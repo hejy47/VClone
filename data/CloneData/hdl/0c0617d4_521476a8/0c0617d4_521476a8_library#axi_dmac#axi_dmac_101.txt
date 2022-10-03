@@ -1,0 +1,395 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@625:632@HdlStmAssign
+
+assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_strb = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_id = 'h0;
+assign m_axis_dest = 'h0;
+assign m_axis_user = 'h0;
+
+endmodule
+
+Diff Content:
+- 630 assign m_axis_user = 'h0;
++ 630   localparam DMA_TYPE_AXI_MM = 0;
++ 630   localparam DMA_TYPE_AXI_STREAM = 1;
++ 630   localparam DMA_TYPE_FIFO = 2;
++ 630   localparam HAS_DEST_ADDR = DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
++ 630   localparam HAS_SRC_ADDR = DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
++ 630   localparam BYTES_PER_BEAT_WIDTH_DEST = DMA_DATA_WIDTH_DEST > 1024 ? 8 :
++ 630     DMA_DATA_WIDTH_DEST > 512 ? 7 :
++ 630     DMA_DATA_WIDTH_DEST > 256 ? 6 :
++ 630     DMA_DATA_WIDTH_DEST > 128 ? 5 :
++ 630     DMA_DATA_WIDTH_DEST > 64 ? 4 :
++ 630     DMA_DATA_WIDTH_DEST > 32 ? 3 :
++ 630     DMA_DATA_WIDTH_DEST > 16 ? 2 :
++ 630     DMA_DATA_WIDTH_DEST > 8 ? 1 : 0;
++ 630   localparam BYTES_PER_BEAT_WIDTH_SRC = DMA_DATA_WIDTH_SRC > 1024 ? 8 :
++ 630     DMA_DATA_WIDTH_SRC > 512 ? 7 :
++ 630     DMA_DATA_WIDTH_SRC > 256 ? 6 :
++ 630     DMA_DATA_WIDTH_SRC > 128 ? 5 :
++ 630     DMA_DATA_WIDTH_SRC > 64 ? 4 :
++ 630     DMA_DATA_WIDTH_SRC > 32 ? 3 :
++ 630     DMA_DATA_WIDTH_SRC > 16 ? 2 :
++ 630     DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
++ 630   localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
++ 630     (FIFO_SIZE) > 32 ? 7 :
++ 630     (FIFO_SIZE) > 16 ? 6 :
++ 630     (FIFO_SIZE) > 8 ? 5 :
++ 630     (FIFO_SIZE) > 4 ? 4 :
++ 630     (FIFO_SIZE) > 2 ? 3 :
++ 630     (FIFO_SIZE) > 1 ? 2 : 1;
++ 630   localparam DBG_ID_PADDING = ID_WIDTH > 8 ? 0 : 8 - ID_WIDTH;
++ 630   /* AXI3 supports a maximum of 16 beats per burst. AXI4 supports a maximum of
++ 630      256 beats per burst. If either bus is AXI3 set the maximum number of beats
++ 630      per burst to 16. For non AXI interfaces the maximum beats per burst is in
++ 630      theory unlimted. Set it to 1024 to provide a reasonable upper threshold */
++ 630   localparam BEATS_PER_BURST_LIMIT_DEST =
++ 630     (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
++ 630       (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
++ 630       1024;
++ 630   localparam BYTES_PER_BURST_LIMIT_DEST =
++ 630       BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
++ 630   localparam BEATS_PER_BURST_LIMIT_SRC =
++ 630     (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
++ 630       (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
++ 630       1024;
++ 630   localparam BYTES_PER_BURST_LIMIT_SRC =
++ 630       BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
++ 630   /* The smaller bus limits the maximum bytes per burst. */
++ 630   localparam BYTES_PER_BURST_LIMIT =
++ 630     (BYTES_PER_BURST_LIMIT_DEST < BYTES_PER_BURST_LIMIT_SRC) ?
++ 630     BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
++ 630   /* Make sure the requested MAX_BYTES_PER_BURST does not exceed what the
++ 630      interfaces can support. Limit the value if necessary. */
++ 630   localparam REAL_MAX_BYTES_PER_BURST =
++ 630     BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
++ 630       BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
++ 630   /* MM has no alignment requirements */
++ 630   localparam DMA_LENGTH_ALIGN_SRC =
++ 630     DMA_TYPE_SRC == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_SRC;
++ 630   localparam DMA_LENGTH_ALIGN_DEST =
++ 630     DMA_TYPE_DEST == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_DEST;
++ 630   /* Choose the larger of the two */
++ 630    localparam DMA_LENGTH_ALIGN =
++ 630      DMA_LENGTH_ALIGN_SRC < DMA_LENGTH_ALIGN_DEST ?
++ 630        DMA_LENGTH_ALIGN_DEST : DMA_LENGTH_ALIGN_SRC;
++ 630   localparam BYTES_PER_BURST_WIDTH =
++ 630     REAL_MAX_BYTES_PER_BURST > 2048 ? 12 :
++ 630     REAL_MAX_BYTES_PER_BURST > 1024 ? 11 :
++ 630     REAL_MAX_BYTES_PER_BURST > 512 ? 10 :
++ 630     REAL_MAX_BYTES_PER_BURST > 256 ? 9 :
++ 630     REAL_MAX_BYTES_PER_BURST > 128 ? 8 :
++ 630     REAL_MAX_BYTES_PER_BURST > 64 ? 7 :
++ 630     REAL_MAX_BYTES_PER_BURST > 32 ? 6 :
++ 630     REAL_MAX_BYTES_PER_BURST > 16 ? 5 :
++ 630     REAL_MAX_BYTES_PER_BURST > 8 ? 4 :
++ 630     REAL_MAX_BYTES_PER_BURST > 4 ? 3 :
++ 630     REAL_MAX_BYTES_PER_BURST > 2 ? 2 : 1;
++ 630   wire [ID_WIDTH-1:0] dest_request_id;
++ 630   wire [ID_WIDTH-1:0] dest_data_id;
++ 630   wire [ID_WIDTH-1:0] dest_address_id;
++ 630   wire [ID_WIDTH-1:0] dest_response_id;
++ 630   wire [ID_WIDTH-1:0] src_request_id;
++ 630   wire [ID_WIDTH-1:0] src_data_id;
++ 630   wire [ID_WIDTH-1:0] src_address_id;
++ 630   wire [ID_WIDTH-1:0] src_response_id;
++ 630   wire [11:0] dbg_status;
++ 630   wire [31:0] dbg_ids0;
++ 630   wire [31:0] dbg_ids1;
++ 630   assign m_dest_axi_araddr = 'd0;
++ 630   assign m_dest_axi_arlen = 'd0;
++ 630   assign m_dest_axi_arsize = 'd0;
++ 630   assign m_dest_axi_arburst = 'd0;
++ 630   assign m_dest_axi_arcache = 'd0;
++ 630   assign m_dest_axi_arprot = 'd0;
++ 630   assign m_dest_axi_awid = 'h0;
++ 630   assign m_dest_axi_awlock = 'h0;
++ 630   assign m_dest_axi_wid = 'h0;
++ 630   assign m_dest_axi_arid = 'h0;
++ 630   assign m_dest_axi_arlock = 'h0;
++ 630   assign m_src_axi_awaddr = 'd0;
++ 630   assign m_src_axi_awlen = 'd0;
++ 630   assign m_src_axi_awsize = 'd0;
++ 630   assign m_src_axi_awburst = 'd0;
++ 630   assign m_src_axi_awcache = 'd0;
++ 630   assign m_src_axi_awprot = 'd0;
++ 630   assign m_src_axi_wdata = 'd0;
++ 630   assign m_src_axi_wstrb = 'd0;
++ 630   assign m_src_axi_wlast = 'd0;
++ 630   assign m_src_axi_awid = 'h0;
++ 630   assign m_src_axi_awlock = 'h0;
++ 630   assign m_src_axi_wid = 'h0;
++ 630   assign m_src_axi_arid = 'h0;
++ 630   assign m_src_axi_arlock = 'h0;
++ 630   wire up_req_eot;
++ 630   wire [BYTES_PER_BURST_WIDTH-1:0] up_req_measured_burst_length;
++ 630   wire up_response_partial;
++ 630   wire up_response_valid;
++ 630   wire up_response_ready;
++ 630   wire ctrl_enable;
++ 630   wire ctrl_pause;
++ 630   wire up_dma_req_valid;
++ 630   wire up_dma_req_ready;
++ 630   wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_req_dest_address;
++ 630   wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] up_dma_req_src_address;
++ 630   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_x_length;
++ 630   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_y_length;
++ 630   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_dest_stride;
++ 630   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_src_stride;
++ 630   wire up_dma_req_sync_transfer_start;
++ 630   wire up_dma_req_last;
++ 630   assign dbg_ids0 = {
++ 630     {DBG_ID_PADDING{1'b0}}, dest_response_id,
++ 630     {DBG_ID_PADDING{1'b0}}, dest_data_id,
++ 630     {DBG_ID_PADDING{1'b0}}, dest_address_id,
++ 630     {DBG_ID_PADDING{1'b0}}, dest_request_id
++ 630   };
++ 630   assign dbg_ids1 = {
++ 630     {DBG_ID_PADDING{1'b0}}, src_response_id,
++ 630     {DBG_ID_PADDING{1'b0}}, src_data_id,
++ 630     {DBG_ID_PADDING{1'b0}}, src_address_id,
++ 630     {DBG_ID_PADDING{1'b0}}, src_request_id
++ 630   };
++ 630   axi_dmac_regmap #(
++ 630     .ID(ID),
++ 630     .DISABLE_DEBUG_REGISTERS(DISABLE_DEBUG_REGISTERS),
++ 630     .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
++ 630     .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
++ 630     .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
++ 630     .DMA_TYPE_DEST(DMA_TYPE_DEST),
++ 630     .DMA_TYPE_SRC(DMA_TYPE_SRC),
++ 630     .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
++ 630     .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
++ 630     .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
++ 630     .DMA_CYCLIC(CYCLIC),
++ 630     .HAS_DEST_ADDR(HAS_DEST_ADDR),
++ 630     .HAS_SRC_ADDR(HAS_SRC_ADDR),
++ 630     .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
++ 630     .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
++ 630     .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
++ 630   ) i_regmap (
++ 630     .s_axi_aclk(s_axi_aclk),
++ 630     .s_axi_aresetn(s_axi_aresetn),
++ 630     .s_axi_awvalid(s_axi_awvalid),
++ 630     .s_axi_awaddr(s_axi_awaddr),
++ 630     .s_axi_awready(s_axi_awready),
++ 630     .s_axi_awprot(s_axi_awprot),
++ 630     .s_axi_wvalid(s_axi_wvalid),
++ 630     .s_axi_wdata(s_axi_wdata),
++ 630     .s_axi_wstrb(s_axi_wstrb),
++ 630     .s_axi_wready(s_axi_wready),
++ 630     .s_axi_bvalid(s_axi_bvalid),
++ 630     .s_axi_bresp(s_axi_bresp),
++ 630     .s_axi_bready(s_axi_bready),
++ 630     .s_axi_arvalid(s_axi_arvalid),
++ 630     .s_axi_araddr(s_axi_araddr),
++ 630     .s_axi_arready(s_axi_arready),
++ 630     .s_axi_arprot(s_axi_arprot),
++ 630     .s_axi_rvalid(s_axi_rvalid),
++ 630     .s_axi_rready(s_axi_rready),
++ 630     .s_axi_rresp(s_axi_rresp),
++ 630     .s_axi_rdata(s_axi_rdata),
++ 630     .irq(irq),
++ 630     .ctrl_enable(ctrl_enable),
++ 630     .ctrl_pause(ctrl_pause),
++ 630     .request_valid(up_dma_req_valid),
++ 630     .request_ready(up_dma_req_ready),
++ 630     .request_dest_address(up_dma_req_dest_address),
++ 630     .request_src_address(up_dma_req_src_address),
++ 630     .request_x_length(up_dma_req_x_length),
++ 630     .request_y_length(up_dma_req_y_length),
++ 630     .request_dest_stride(up_dma_req_dest_stride),
++ 630     .request_src_stride(up_dma_req_src_stride),
++ 630     .request_sync_transfer_start(up_dma_req_sync_transfer_start),
++ 630     .request_last(up_dma_req_last),
++ 630     .response_eot(up_req_eot),
++ 630     .response_measured_burst_length(up_req_measured_burst_length),
++ 630     .response_partial(up_response_partial),
++ 630     .response_valid(up_response_valid),
++ 630     .response_ready(up_response_ready),
++ 630     .dbg_dest_addr(m_dest_axi_awaddr),
++ 630     .dbg_src_addr(m_src_axi_araddr),
++ 630     .dbg_status(dbg_status),
++ 630     .dbg_ids0(dbg_ids0),
++ 630     .dbg_ids1(dbg_ids1));
++ 630   axi_dmac_transfer #(
++ 630     .DMA_DATA_WIDTH_SRC(DMA_DATA_WIDTH_SRC),
++ 630     .DMA_DATA_WIDTH_DEST(DMA_DATA_WIDTH_DEST),
++ 630     .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
++ 630     .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
++ 630     .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
++ 630     .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
++ 630     .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
++ 630     .DMA_TYPE_DEST(DMA_TYPE_DEST),
++ 630     .DMA_TYPE_SRC(DMA_TYPE_SRC),
++ 630     .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
++ 630     .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
++ 630     .ASYNC_CLK_REQ_SRC(ASYNC_CLK_REQ_SRC),
++ 630     .ASYNC_CLK_SRC_DEST(ASYNC_CLK_SRC_DEST),
++ 630     .ASYNC_CLK_DEST_REQ(ASYNC_CLK_DEST_REQ),
++ 630     .AXI_SLICE_DEST(AXI_SLICE_DEST),
++ 630     .AXI_SLICE_SRC(AXI_SLICE_SRC),
++ 630     .MAX_BYTES_PER_BURST(REAL_MAX_BYTES_PER_BURST),
++ 630     .FIFO_SIZE(FIFO_SIZE),
++ 630     .ID_WIDTH(ID_WIDTH),
++ 630     .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
++ 630     .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST)),
++ 630     .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
++ 630     .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM),
++ 630     .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
++ 630   ) i_transfer (
++ 630     .ctrl_clk(s_axi_aclk),
++ 630     .ctrl_resetn(s_axi_aresetn),
++ 630     .ctrl_enable(ctrl_enable),
++ 630     .ctrl_pause(ctrl_pause),
++ 630     .req_valid(up_dma_req_valid),
++ 630     .req_ready(up_dma_req_ready),
++ 630     .req_dest_address(up_dma_req_dest_address),
++ 630     .req_src_address(up_dma_req_src_address),
++ 630     .req_x_length(up_dma_req_x_length),
++ 630     .req_y_length(up_dma_req_y_length),
++ 630     .req_dest_stride(up_dma_req_dest_stride),
++ 630     .req_src_stride(up_dma_req_src_stride),
++ 630     .req_sync_transfer_start(up_dma_req_sync_transfer_start),
++ 630     .req_last(up_dma_req_last),
++ 630     .req_eot(up_req_eot),
++ 630     .req_measured_burst_length(up_req_measured_burst_length),
++ 630     .req_response_partial(up_response_partial),
++ 630     .req_response_valid(up_response_valid),
++ 630     .req_response_ready(up_response_ready),
++ 630     .m_dest_axi_aclk(m_dest_axi_aclk),
++ 630     .m_dest_axi_aresetn(m_dest_axi_aresetn),
++ 630     .m_src_axi_aclk(m_src_axi_aclk),
++ 630     .m_src_axi_aresetn(m_src_axi_aresetn),
++ 630     .m_axi_awaddr(m_dest_axi_awaddr),
++ 630     .m_axi_awlen(m_dest_axi_awlen),
++ 630     .m_axi_awsize(m_dest_axi_awsize),
++ 630     .m_axi_awburst(m_dest_axi_awburst),
++ 630     .m_axi_awprot(m_dest_axi_awprot),
++ 630     .m_axi_awcache(m_dest_axi_awcache),
++ 630     .m_axi_awvalid(m_dest_axi_awvalid),
++ 630     .m_axi_awready(m_dest_axi_awready),
++ 630     .m_axi_wdata(m_dest_axi_wdata),
++ 630     .m_axi_wstrb(m_dest_axi_wstrb),
++ 630     .m_axi_wready(m_dest_axi_wready),
++ 630     .m_axi_wvalid(m_dest_axi_wvalid),
++ 630     .m_axi_wlast(m_dest_axi_wlast),
++ 630     .m_axi_bvalid(m_dest_axi_bvalid),
++ 630     .m_axi_bresp(m_dest_axi_bresp),
++ 630     .m_axi_bready(m_dest_axi_bready),
++ 630     .m_axi_arready(m_src_axi_arready),
++ 630     .m_axi_arvalid(m_src_axi_arvalid),
++ 630     .m_axi_araddr(m_src_axi_araddr),
++ 630     .m_axi_arlen(m_src_axi_arlen),
++ 630     .m_axi_arsize(m_src_axi_arsize),
++ 630     .m_axi_arburst(m_src_axi_arburst),
++ 630     .m_axi_arprot(m_src_axi_arprot),
++ 630     .m_axi_arcache(m_src_axi_arcache),
++ 630     .m_axi_rdata(m_src_axi_rdata),
++ 630     .m_axi_rready(m_src_axi_rready),
++ 630     .m_axi_rvalid(m_src_axi_rvalid),
++ 630     .m_axi_rlast(m_src_axi_rlast),
++ 630     .m_axi_rresp(m_src_axi_rresp),
++ 630     .s_axis_aclk(s_axis_aclk),
++ 630     .s_axis_ready(s_axis_ready),
++ 630     .s_axis_valid(s_axis_valid),
++ 630     .s_axis_data(s_axis_data),
++ 630     .s_axis_user(s_axis_user),
++ 630     .s_axis_last(s_axis_last),
++ 630     .s_axis_xfer_req(s_axis_xfer_req),
++ 630     .m_axis_aclk(m_axis_aclk),
++ 630     .m_axis_ready(m_axis_ready),
++ 630     .m_axis_valid(m_axis_valid),
++ 630     .m_axis_data(m_axis_data),
++ 630     .m_axis_last(m_axis_last),
++ 630     .m_axis_xfer_req(m_axis_xfer_req),
++ 630     .fifo_wr_clk(fifo_wr_clk),
++ 630     .fifo_wr_en(fifo_wr_en),
++ 630     .fifo_wr_din(fifo_wr_din),
++ 630     .fifo_wr_overflow(fifo_wr_overflow),
++ 630     .fifo_wr_sync(fifo_wr_sync),
++ 630     .fifo_wr_xfer_req(fifo_wr_xfer_req),
++ 630     .fifo_rd_clk(fifo_rd_clk),
++ 630     .fifo_rd_en(fifo_rd_en),
++ 630     .fifo_rd_valid(fifo_rd_valid),
++ 630     .fifo_rd_dout(fifo_rd_dout),
++ 630     .fifo_rd_underflow(fifo_rd_underflow),
++ 630     .fifo_rd_xfer_req(fifo_rd_xfer_req),
++ 630     .dbg_dest_request_id(dest_request_id),
++ 630     .dbg_dest_address_id(dest_address_id),
++ 630     .dbg_dest_data_id(dest_data_id),
++ 630     .dbg_dest_response_id(dest_response_id),
++ 630     .dbg_src_request_id(src_request_id),
++ 630     .dbg_src_address_id(src_address_id),
++ 630     .dbg_src_data_id(src_data_id),
++ 630     .dbg_src_response_id(src_response_id),
++ 630     .dbg_status(dbg_status),
++ 630     .dest_diag_level_bursts(dest_diag_level_bursts));
++ 630   assign m_dest_axi_arvalid = 1'b0;
++ 630   assign m_dest_axi_rready = 1'b0;
++ 630   assign m_dest_axi_araddr = 'h0;
++ 630   assign m_dest_axi_arlen = 'h0;
++ 630   assign m_dest_axi_arsize = 'h0;
++ 630   assign m_dest_axi_arburst = 'h0;
++ 630   assign m_dest_axi_arcache = 'h0;
++ 630   assign m_dest_axi_arprot = 'h0;
++ 630   assign m_src_axi_awvalid = 1'b0;
++ 630   assign m_src_axi_wvalid = 1'b0;
++ 630   assign m_src_axi_bready = 1'b0;
++ 630   assign m_src_axi_awvalid = 'h0;
++ 630   assign m_src_axi_awaddr = 'h0;
++ 630   assign m_src_axi_awlen = 'h0;
++ 630   assign m_src_axi_awsize = 'h0;
++ 630   assign m_src_axi_awburst = 'h0;
++ 630   assign m_src_axi_awcache = 'h0;
++ 630   assign m_src_axi_awprot = 'h0;
++ 630   assign m_src_axi_wvalid = 'h0;
++ 630   assign m_src_axi_wdata = 'h0;
++ 630   assign m_src_axi_wstrb = 'h0;
++ 630   assign m_src_axi_wlast = 'h0;
++ 630   assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
++ 630   assign m_axis_strb = {DMA_DATA_WIDTH_DEST/8{1'b1}};
++ 630   assign m_axis_id = 'h0;
++ 630   assign m_axis_dest = 'h0;
++ 630   assign m_axis_user = 'h0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac.v@622:632
+assign m_src_axi_wdata = 'h0;
+assign m_src_axi_wstrb = 'h0;
+assign m_src_axi_wlast = 'h0;
+
+assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_strb = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_id = 'h0;
+assign m_axis_dest = 'h0;
+assign m_axis_user = 'h0;
+
+endmodule
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac.v@623:632
+assign m_src_axi_wstrb = 'h0;
+assign m_src_axi_wlast = 'h0;
+
+assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_strb = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_id = 'h0;
+assign m_axis_dest = 'h0;
+assign m_axis_user = 'h0;
+
+endmodule
+
+Clone Blocks 3:
+hdl/library/axi_dmac/axi_dmac.v@624:632
+assign m_src_axi_wlast = 'h0;
+
+assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_strb = {DMA_DATA_WIDTH_DEST/8{1'b1}};
+assign m_axis_id = 'h0;
+assign m_axis_dest = 'h0;
+assign m_axis_user = 'h0;
+
+endmodule
+

@@ -1,0 +1,256 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_insert.v@100:252@HdlStmProcess
+    .data_in(output_axis_tdata_int),
+    .crc_state(crc_state),
+    .crc_next(crc_next)
+);
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    input_axis_tready_next = 0;
+
+    output_axis_tdata_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            input_axis_tready_next = output_axis_tready_int_early;
+            frame_ptr_next = 0;
+            reset_crc = 1;
+
+            output_axis_tdata_int = input_axis_tdata;
+            output_axis_tvalid_int = input_axis_tvalid;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                frame_ptr_next = 1;
+                reset_crc = 0;
+                update_crc = 1;
+                if (input_axis_tlast) begin
+                    if (input_axis_tuser) begin
+                        output_axis_tlast_int = 1;
+                        output_axis_tuser_int = 1;
+                        reset_crc = 1;
+                        frame_ptr_next = 0;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        input_axis_tready_next = 0;
+                        if (ENABLE_PADDING && frame_ptr_reg < MIN_FRAME_LENGTH-5) begin
+                            state_next = STATE_PAD;
+                        end else begin
+                            frame_ptr_next = 0;
+                            state_next = STATE_FCS;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // transfer payload
+            input_axis_tready_next = output_axis_tready_int_early;
+
+            output_axis_tdata_int = input_axis_tdata;
+            output_axis_tvalid_int = input_axis_tvalid;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                frame_ptr_next = frame_ptr_reg + 1;
+                update_crc = 1;
+                if (input_axis_tlast) begin
+                    if (input_axis_tuser) begin
+                        output_axis_tlast_int = 1;
+                        output_axis_tuser_int = 1;
+                        reset_crc = 1;
+                        frame_ptr_next = 0;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        input_axis_tready_next = 0;
+                        if (ENABLE_PADDING && frame_ptr_reg < MIN_FRAME_LENGTH-5) begin
+                            state_next = STATE_PAD;
+                        end else begin
+                            frame_ptr_next = 0;
+                            state_next = STATE_FCS;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_PAD: begin
+            // insert padding
+            input_axis_tready_next = 0;
+
+            output_axis_tdata_int = 0;
+            output_axis_tvalid_int = 1;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (output_axis_tready_int) begin
+                frame_ptr_next = frame_ptr_reg + 1;
+                update_crc = 1;
+                if (frame_ptr_reg < MIN_FRAME_LENGTH-5) begin
+                    state_next = STATE_PAD;
+                end else begin
+                    frame_ptr_next = 0;
+                    state_next = STATE_FCS;
+                end
+            end else begin
+                state_next = STATE_PAD;
+            end
+        end
+        STATE_FCS: begin
+            // send FCS
+            input_axis_tready_next = 0;
+
+            case (frame_ptr_reg)
+                2'd0: output_axis_tdata_int = ~crc_state[7:0];
+                2'd1: output_axis_tdata_int = ~crc_state[15:8];
+                2'd2: output_axis_tdata_int = ~crc_state[23:16];
+                2'd3: output_axis_tdata_int = ~crc_state[31:24];
+            endcase
+            output_axis_tvalid_int = 1;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (output_axis_tready_int) begin
+                frame_ptr_next = frame_ptr_reg + 1;
+
+                if (frame_ptr_reg < 3) begin
+                    state_next = STATE_FCS;
+                end else begin
+                    reset_crc = 1;
+                    frame_ptr_next = 0;
+                    output_axis_tlast_int = 1;
+                    input_axis_tready_next = output_axis_tready_int_early;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                state_next = STATE_FCS;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        
+
+Diff Content:
+- 108     reset_crc = 0;
+- 109     update_crc = 0;
+- 113     input_axis_tready_next = 0;
+- 115     output_axis_tdata_int = 0;
+- 116     output_axis_tvalid_int = 0;
+- 117     output_axis_tlast_int = 0;
+- 118     output_axis_tuser_int = 0;
+- 124             frame_ptr_next = 0;
+- 125             reset_crc = 1;
+- 129             output_axis_tlast_int = 0;
+- 130             output_axis_tuser_int = 0;
+- 133                 frame_ptr_next = 1;
+- 134                 reset_crc = 0;
+- 135                 update_crc = 1;
+- 138                         output_axis_tlast_int = 1;
+- 139                         output_axis_tuser_int = 1;
+- 140                         reset_crc = 1;
+- 141                         frame_ptr_next = 0;
+- 144                         input_axis_tready_next = 0;
+- 148                             frame_ptr_next = 0;
+- 165             output_axis_tlast_int = 0;
+- 166             output_axis_tuser_int = 0;
+- 169                 frame_ptr_next = frame_ptr_reg + 1;
+- 170                 update_crc = 1;
+- 173                         output_axis_tlast_int = 1;
+- 174                         output_axis_tuser_int = 1;
+- 175                         reset_crc = 1;
+- 176                         frame_ptr_next = 0;
+- 179                         input_axis_tready_next = 0;
+- 183                             frame_ptr_next = 0;
+- 196             input_axis_tready_next = 0;
+- 198             output_axis_tdata_int = 0;
+- 199             output_axis_tvalid_int = 1;
+- 200             output_axis_tlast_int = 0;
+- 201             output_axis_tuser_int = 0;
+- 203             if (output_axis_tready_int) begin
+- 204                 frame_ptr_next = frame_ptr_reg + 1;
+- 205                 update_crc = 1;
+- 209                     frame_ptr_next = 0;
+- 218             input_axis_tready_next = 0;
+- 226             output_axis_tvalid_int = 1;
+- 227             output_axis_tlast_int = 0;
+- 228             output_axis_tuser_int = 0;
+- 230             if (output_axis_tready_int) begin
+- 231                 frame_ptr_next = frame_ptr_reg + 1;
+- 233                 if (frame_ptr_reg < 3) begin
+- 236                     reset_crc = 1;
+- 237                     frame_ptr_next = 0;
+- 238                     output_axis_tlast_int = 1;
++ 109     reset_crc = 1'b0;
++ 109     update_crc = 1'b0;
++ 113     input_axis_tready_next = 1'b0;
++ 118     output_axis_tdata_int = 8'd0;
++ 118     output_axis_tvalid_int = 1'b0;
++ 118     output_axis_tlast_int = 1'b0;
++ 118     output_axis_tuser_int = 1'b0;
++ 125             frame_ptr_next = 16'd0;
++ 125             reset_crc = 1'b1;
++ 130             output_axis_tlast_int = 1'b0;
++ 130             output_axis_tuser_int = 1'b0;
++ 135                 frame_ptr_next = 16'd1;
++ 135                 reset_crc = 1'b0;
++ 135                 update_crc = 1'b1;
++ 141                         output_axis_tlast_int = 1'b1;
++ 141                         output_axis_tuser_int = 1'b1;
++ 141                         reset_crc = 1'b1;
++ 141                         frame_ptr_next = 16'd0;
++ 144                         input_axis_tready_next = 1'b0;
++ 148                             frame_ptr_next = 16'd0;
++ 166             output_axis_tlast_int = 1'b0;
++ 166             output_axis_tuser_int = 1'b0;
++ 170                 frame_ptr_next = frame_ptr_reg + 16'd1;
++ 170                 update_crc = 1'b1;
++ 176                         output_axis_tlast_int = 1'b1;
++ 176                         output_axis_tuser_int = 1'b1;
++ 176                         reset_crc = 1'b1;
++ 176                         frame_ptr_next = 16'd0;
++ 179                         input_axis_tready_next = 1'b0;
++ 183                             frame_ptr_next = 16'd0;
++ 196             input_axis_tready_next = 1'b0;
++ 201             output_axis_tdata_int = 8'd0;
++ 201             output_axis_tvalid_int = 1'b1;
++ 201             output_axis_tlast_int = 1'b0;
++ 201             output_axis_tuser_int = 1'b0;
++ 205             if (output_axis_tready_int_reg) begin
++ 205                 frame_ptr_next = frame_ptr_reg + 16'd1;
++ 205                 update_crc = 1'b1;
++ 209                     frame_ptr_next = 16'd0;
++ 218             input_axis_tready_next = 1'b0;
++ 228             output_axis_tvalid_int = 1'b1;
++ 228             output_axis_tlast_int = 1'b0;
++ 228             output_axis_tuser_int = 1'b0;
++ 231             if (output_axis_tready_int_reg) begin
++ 231                 frame_ptr_next = frame_ptr_reg + 16'd1;
++ 233                 if (frame_ptr_reg < 16'd3) begin
++ 238                     reset_crc = 1'b1;
++ 238                     frame_ptr_next = 16'd0;
++ 238                     output_axis_tlast_int = 1'b1;
+
+Clone Blocks:

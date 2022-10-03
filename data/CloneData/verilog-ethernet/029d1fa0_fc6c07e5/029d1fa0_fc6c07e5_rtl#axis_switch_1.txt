@@ -1,0 +1,100 @@
+Source Block: verilog-ethernet/rtl/axis_switch.v@132:219@HdlStmFor
+
+generate
+
+    genvar m, n;
+
+    for (m = 0; m < S_COUNT; m = m + 1) begin : s_ifaces
+
+        // decoding
+        reg [CL_S_COUNT-1:0] select_reg = 0, select_next;
+        reg drop_reg = 1'b0, drop_next;
+        reg select_valid_reg = 1'b0, select_valid_next;
+
+        always @* begin
+            select_next = select_reg;
+            drop_next = drop_reg && !(int_s_axis_tvalid[m] && int_s_axis_tready[m] && int_s_axis_tlast[m]);
+            select_valid_next = select_valid_reg && !(int_s_axis_tvalid[m] && int_s_axis_tready[m] && int_s_axis_tlast[m]);
+
+            if (int_s_axis_tvalid[m] && !select_valid_reg) begin
+                select_next = 1'b0;
+                select_valid_next = 1'b0;
+                drop_next = 1'b1;
+                for (i = 0; i < M_COUNT; i = i + 1) begin
+                    if (int_s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH] >= M_BASE[i*32 +: 32] && int_s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[i*32 +: 32] && (M_CONNECT & (1 << (m+i*S_COUNT)))) begin
+                        select_next = i;
+                        select_valid_next = 1'b1;
+                        drop_next = 1'b0;
+                    end
+                end
+            end
+        end
+
+        always @(posedge clk) begin
+            if (rst) begin
+                select_valid_reg <= 1'b0;
+            end else begin
+                select_valid_reg <= select_valid_next;
+            end
+
+            select_reg <= select_next;
+            drop_reg <= drop_next;
+        end
+
+        // forwarding
+        assign int_axis_tvalid[m*M_COUNT +: M_COUNT] = (int_s_axis_tvalid[m] && select_valid_reg && !drop_reg) << select_reg;
+        assign int_s_axis_tready[m] = int_axis_tready[select_reg*M_COUNT+m] || drop_reg;
+
+        // S side register
+        axis_register #(
+            .DATA_WIDTH(DATA_WIDTH),
+            .KEEP_ENABLE(KEEP_ENABLE),
+            .KEEP_WIDTH(KEEP_WIDTH),
+            .LAST_ENABLE(1),
+            .ID_ENABLE(ID_ENABLE),
+            .ID_WIDTH(ID_WIDTH),
+            .DEST_ENABLE(1),
+            .DEST_WIDTH(DEST_WIDTH),
+            .USER_ENABLE(USER_ENABLE),
+            .USER_WIDTH(USER_WIDTH),
+            .REG_TYPE(S_REG_TYPE)
+        )
+        reg_inst (
+            .clk(clk),
+            .rst(rst),
+            // AXI input
+            .s_axis_tdata(s_axis_tdata[m*DATA_WIDTH +: DATA_WIDTH]),
+            .s_axis_tkeep(s_axis_tkeep[m*KEEP_WIDTH +: KEEP_WIDTH]),
+            .s_axis_tvalid(s_axis_tvalid[m]),
+            .s_axis_tready(s_axis_tready[m]),
+            .s_axis_tlast(s_axis_tlast[m]),
+            .s_axis_tid(s_axis_tid[m*ID_WIDTH +: ID_WIDTH]),
+            .s_axis_tdest(s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH]),
+            .s_axis_tuser(s_axis_tuser[m*USER_WIDTH +: USER_WIDTH]),
+            // AXI output
+            .m_axis_tdata(int_s_axis_tdata[m*DATA_WIDTH +: DATA_WIDTH]),
+            .m_axis_tkeep(int_s_axis_tkeep[m*KEEP_WIDTH +: KEEP_WIDTH]),
+            .m_axis_tvalid(int_s_axis_tvalid[m]),
+            .m_axis_tready(int_s_axis_tready[m]),
+            .m_axis_tlast(int_s_axis_tlast[m]),
+            .m_axis_tid(int_s_axis_tid[m*ID_WIDTH +: ID_WIDTH]),
+            .m_axis_tdest(int_s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH]),
+            .m_axis_tuser(int_s_axis_tuser[m*USER_WIDTH +: USER_WIDTH])
+        );
+    end // s_ifaces
+
+    for (n = 0; n < M_COUNT; n = n + 1) begin : m_ifaces
+
+        // arbitration
+        wire [S_COUNT-1:0] request;
+
+Diff Content:
+- 153                 for (i = 0; i < M_COUNT; i = i + 1) begin
+- 154                     if (int_s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH] >= M_BASE[i*32 +: 32] && int_s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[i*32 +: 32] && (M_CONNECT & (1 << (m+i*S_COUNT)))) begin
+- 155                         select_next = i;
++ 142         integer k;
++ 155                 for (k = 0; k < M_COUNT; k = k + 1) begin
++ 155                     if (int_s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH] >= M_BASE[k*32 +: 32] && int_s_axis_tdest[m*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[k*32 +: 32] && (M_CONNECT & (1 << (m+k*S_COUNT)))) begin
++ 155                         select_next = k;
+
+Clone Blocks:

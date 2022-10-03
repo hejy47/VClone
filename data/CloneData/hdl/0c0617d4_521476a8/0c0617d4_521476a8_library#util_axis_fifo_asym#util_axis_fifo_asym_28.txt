@@ -1,0 +1,108 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@197:250@HdlStmIf
+
+endgenerate
+
+// read or slave logic
+generate
+  if (RATIO_TYPE) begin : small_master
+
+    for (i=0; i<RATIO; i=i+1) begin
+      assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? m_axis_ready : 1'b0;
+    end
+
+    assign m_axis_data = m_axis_data_int_s >> (m_axis_counter*A_WIDTH) ;
+    assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8) ;
+
+    // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
+    assign m_axis_valid = m_axis_valid_int_s >> m_axis_counter;
+
+    // the FIFO has the same level as the last atomic instance
+    // (NOTE: this is not the real level value, rather the value will be updated
+    // after every RATIO number of reads)
+    assign m_axis_level = {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
+    assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
+    assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
+
+  end else begin : big_master
+
+    for (i=0; i<RATIO; i=i+1) begin
+      assign m_axis_ready_int_s[i] = m_axis_ready;
+    end
+
+    for (i=0; i<RATIO; i=i+1) begin
+      assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = (m_axis_tlast_int_s[i:0] == 0) ||
+                                                    (m_axis_tlast_int_s[i]) ?
+                                                  m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
+                                                  {(A_WIDTH/8){1'b0}};
+    end
+
+    assign m_axis_data = m_axis_data_int_s;
+    // if every instance has a valid data, the interface has valid data,
+    // otherwise valid is asserted only if TLAST is asserted
+    assign m_axis_valid = (|m_axis_tlast_int_s) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+    // if one of the atomic instance is empty, m_axis_empty should be asserted
+    assign m_axis_empty = |m_axis_empty_int_s;
+    assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
+
+    // the FIFO has the same room as the atomic FIFO
+    assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
+
+  end
+
+  assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
+
+endgenerate
+
+
+Diff Content:
+- 202   if (RATIO_TYPE) begin : small_master
+- 204     for (i=0; i<RATIO; i=i+1) begin
+- 205       assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? m_axis_ready : 1'b0;
+- 208     assign m_axis_data = m_axis_data_int_s >> (m_axis_counter*A_WIDTH) ;
+- 209     assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8) ;
+- 212     assign m_axis_valid = m_axis_valid_int_s >> m_axis_counter;
+- 217     assign m_axis_level = {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
+- 218     assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
+- 219     assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
+- 221   end else begin : big_master
+- 223     for (i=0; i<RATIO; i=i+1) begin
+- 224       assign m_axis_ready_int_s[i] = m_axis_ready;
+- 225     end
+- 227     for (i=0; i<RATIO; i=i+1) begin
+- 228       assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = (m_axis_tlast_int_s[i:0] == 0) ||
+- 229                                                     (m_axis_tlast_int_s[i]) ?
+- 230                                                   m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
+- 231                                                   {(A_WIDTH/8){1'b0}};
+- 232     end
+- 234     assign m_axis_data = m_axis_data_int_s;
+- 237     assign m_axis_valid = (|m_axis_tlast_int_s) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+- 239     assign m_axis_empty = |m_axis_empty_int_s;
+- 240     assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
+- 243     assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
+- 245   end
++ 202       assign s_axis_full = s_axis_full_int_s[RATIO-1];
++ 202       assign s_axis_room = {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
++ 209   endgenerate
++ 212   generate
++ 212     if (RATIO_TYPE) begin : small_master
++ 219       for (i=0; i<RATIO; i=i+1) begin
++ 219         assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? m_axis_ready : 1'b0;
++ 219       end
++ 221       assign m_axis_data = m_axis_data_int_s >> (m_axis_counter*A_WIDTH) ;
++ 221       assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8) ;
++ 225       assign m_axis_valid = m_axis_valid_int_s >> m_axis_counter;
++ 232       assign m_axis_level = {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
++ 232       assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
++ 232       assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
++ 240     end else begin : big_master
++ 243       for (i=0; i<RATIO; i=i+1) begin
++ 243         assign m_axis_ready_int_s[i] = m_axis_ready;
++ 243       end
++ 245       for (i=0; i<RATIO; i=i+1) begin
++ 245         assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = (m_axis_tlast_int_s[i:0] == 0) ||
++ 245                                                       (m_axis_tlast_int_s[i]) ?
++ 245                                                     m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
++ 245                                                     {(A_WIDTH/8){1'b0}};
++ 245       end
+
+Clone Blocks:

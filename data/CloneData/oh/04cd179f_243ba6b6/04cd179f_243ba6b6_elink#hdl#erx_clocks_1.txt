@@ -1,0 +1,101 @@
+Source Block: oh/elink/hdl/erx_clocks.v@69:79@HdlIdDef
+   reg [RCW:0] reset_counter = 'b0; //works b/c of free running counter!
+   reg 	       heartbeat;   
+   wire        pll_locked_sync;     
+   reg [2:0]   reset_state;
+   wire        pll_reset;
+   reg 	       rx_nreset;
+   
+   //Reset 
+   assign rx_nreset_in  =  sys_nreset & tx_active;   
+   
+   //wrap around counter that generates a 1 cycle heartbeat       
+
+Diff Content:
++ 74    wire        pll_locked;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_clocks.v@64:74
+   
+   //###########################
+   // RESET STATE MACHINE
+   //###########################
+  
+   reg [RCW:0] reset_counter = 'b0; //works b/c of free running counter!
+   reg 	       heartbeat;   
+   wire        pll_locked_sync;     
+   reg [2:0]   reset_state;
+   wire        pll_reset;
+   reg 	       rx_nreset;
+
+Clone Blocks 2:
+oh/elink/hdl/erx_clocks.v@65:75
+   //###########################
+   // RESET STATE MACHINE
+   //###########################
+  
+   reg [RCW:0] reset_counter = 'b0; //works b/c of free running counter!
+   reg 	       heartbeat;   
+   wire        pll_locked_sync;     
+   reg [2:0]   reset_state;
+   wire        pll_reset;
+   reg 	       rx_nreset;
+   
+
+Clone Blocks 3:
+oh/elink/hdl/erx_clocks.v@66:76
+   // RESET STATE MACHINE
+   //###########################
+  
+   reg [RCW:0] reset_counter = 'b0; //works b/c of free running counter!
+   reg 	       heartbeat;   
+   wire        pll_locked_sync;     
+   reg [2:0]   reset_state;
+   wire        pll_reset;
+   reg 	       rx_nreset;
+   
+   //Reset 
+
+Clone Blocks 4:
+oh/elink/hdl/erx_clocks.v@67:77
+   //###########################
+  
+   reg [RCW:0] reset_counter = 'b0; //works b/c of free running counter!
+   reg 	       heartbeat;   
+   wire        pll_locked_sync;     
+   reg [2:0]   reset_state;
+   wire        pll_reset;
+   reg 	       rx_nreset;
+   
+   //Reset 
+   assign rx_nreset_in  =  sys_nreset & tx_active;   
+
+Clone Blocks 5:
+oh/elink/hdl/erx_clocks.v@68:78
+  
+   reg [RCW:0] reset_counter = 'b0; //works b/c of free running counter!
+   reg 	       heartbeat;   
+   wire        pll_locked_sync;     
+   reg [2:0]   reset_state;
+   wire        pll_reset;
+   reg 	       rx_nreset;
+   
+   //Reset 
+   assign rx_nreset_in  =  sys_nreset & tx_active;   
+   
+
+Clone Blocks 6:
+oh/elink/hdl/erx_clocks.v@72:82
+   reg [2:0]   reset_state;
+   wire        pll_reset;
+   reg 	       rx_nreset;
+   
+   //Reset 
+   assign rx_nreset_in  =  sys_nreset & tx_active;   
+   
+   //wrap around counter that generates a 1 cycle heartbeat       
+   always @ (posedge sys_clk)
+     begin
+	reset_counter[RCW-1:0] <= reset_counter[RCW-1:0]+1'b1;
+

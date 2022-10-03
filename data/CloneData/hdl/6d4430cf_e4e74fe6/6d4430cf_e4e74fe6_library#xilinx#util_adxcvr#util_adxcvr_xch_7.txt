@@ -1,0 +1,91 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@191:270@HdlStmProcess
+    (up_rx_sel == 8'hff)) ? up_rx_enb : 1'b0;
+
+  assign up_tx_enb_s = ((up_tx_sel == XCVR_ID) ||
+    (up_tx_sel == 8'hff)) ? up_tx_enb : 1'b0;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_es_rdata_int <= 15'd0;
+      up_es_ready_int <= 1'd0;
+      up_rx_rdata_int <= 15'd0;
+      up_rx_ready_int <= 1'd0;
+      up_tx_rdata_int <= 15'd0;
+      up_tx_ready_int <= 1'd0;
+      up_sel_int <= 3'd0;
+      up_enb_int <= 1'd0;
+      up_addr_int <= 12'd0;
+      up_wr_int <= 1'd0;
+      up_wdata_int <= 15'd0;
+    end else begin
+      if (up_sel_int == 3'b100) begin
+        up_es_rdata_int <= up_rdata_s;
+        up_es_ready_int <= up_ready_s;
+      end else begin
+        up_es_rdata_int <= 15'd0;
+        up_es_ready_int <= 1'd0;
+      end
+      if (up_sel_int == 3'b101) begin
+        up_rx_rdata_int <= up_rdata_s;
+        up_rx_ready_int <= up_ready_s;
+      end else begin
+        up_rx_rdata_int <= 15'd0;
+        up_rx_ready_int <= 1'd0;
+      end
+      if (up_sel_int == 3'b110) begin
+        up_tx_rdata_int <= up_rdata_s;
+        up_tx_ready_int <= up_ready_s;
+      end else begin
+        up_tx_rdata_int <= 15'd0;
+        up_tx_ready_int <= 1'd0;
+      end
+      if (up_sel_int[2] == 1'b1) begin
+        if (up_ready_s == 1'b1) begin
+          up_sel_int <= 3'b000;
+        end
+        up_enb_int <= 1'b0;
+        up_addr_int <= 12'd0;
+        up_wr_int <= 1'd0;
+        up_wdata_int <= 15'd0;
+      end else if (up_es_enb_s == 1'b1) begin
+        up_sel_int <= 3'b100;
+        up_enb_int <= 1'b1;
+        up_addr_int <= up_es_addr;
+        up_wr_int <= up_es_wr;
+        up_wdata_int <= up_es_wdata;
+      end else if (up_rx_enb_s == 1'b1) begin
+        up_sel_int <= 3'b101;
+        up_enb_int <= 1'b1;
+        up_addr_int <= up_rx_addr;
+        up_wr_int <= up_rx_wr;
+        up_wdata_int <= up_rx_wdata;
+      end else if (up_tx_enb_s == 1'b1) begin
+        up_sel_int <= 3'b110;
+        up_enb_int <= 1'b1;
+        up_addr_int <= up_tx_addr;
+        up_wr_int <= up_tx_wr;
+        up_wdata_int <= up_tx_wdata;
+      end else begin
+        up_sel_int <= 3'b000;
+        up_enb_int <= 1'b0;
+        up_addr_int <= 12'd0;
+        up_wr_int <= 1'd0;
+        up_wdata_int <= 15'd0;
+      end
+    end
+  end
+
+  assign up_rx_rst_done = up_rx_rst_done_m2;
+  assign up_tx_rst_done = up_tx_rst_done_m2;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+
+Diff Content:
+- 239       end else if (up_es_enb_s == 1'b1) begin
+- 245       end else if (up_rx_enb_s == 1'b1) begin
+- 251       end else if (up_tx_enb_s == 1'b1) begin
++ 239       end else if (up_es_enb == 1'b1) begin
++ 245       end else if (up_rx_enb == 1'b1) begin
++ 251       end else if (up_tx_enb == 1'b1) begin
+
+Clone Blocks:

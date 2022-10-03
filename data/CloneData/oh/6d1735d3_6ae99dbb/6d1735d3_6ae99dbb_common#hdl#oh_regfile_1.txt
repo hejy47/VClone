@@ -1,0 +1,28 @@
+Source Block: oh/common/hdl/oh_regfile.v@35:47@HdlStmFor
+   //#########################################
+   // write ports
+   //#########################################	
+
+   //One hote write enables
+   for(i=0;i<REGS;i=i+1)
+     for(j=0;j<WP;j=j+1)
+       assign write_en[i][j] = wr_valid[j] & (wr_addr[j*RAW+:RAW] == i);
+
+
+   //Multi Write-Port Mux
+   for(i=0;i<REGS;i=i+1) 
+     begin: gmux
+
+Diff Content:
+- 40    for(i=0;i<REGS;i=i+1)
+- 41      for(j=0;j<WP;j=j+1)
+- 42        assign write_en[i][j] = wr_valid[j] & (wr_addr[j*RAW+:RAW] == i);
++ 42    for(i=0;i<REGS;i=i+1) 
++ 42      begin: gen_regwrite
++ 42 	for(j=0;j<WP;j=j+1) 
++ 42 	  begin: gen_wp	
++ 42 	     assign write_en[i][j] = wr_valid[j] & (wr_addr[j*RAW+:RAW] == i);
++ 42 	  end
++ 42      end
+
+Clone Blocks:

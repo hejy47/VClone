@@ -1,0 +1,22 @@
+Source Block: oh/common/hdl/oh_standby.v@63:77@HdlStmProcess
+
+   //Adding reset to wakeup signal
+   assign wakeup_now = sync_reset_pulse | wakeup;   
+
+   // Stay awake for PD cycles
+   always @ (posedge clkin or negedge nreset)
+     if(!nreset)
+       wakeup_pipe[PD-1:0] <= 'b0;   
+     else
+       wakeup_pipe[PD-1:0] <= {wakeup_pipe[PD-2:0], wakeup_now};
+   
+   // Clock enable
+   assign  clk_en    =  wakeup                 | //immediate wakeup
+                        (|wakeup_pipe[PD-1:0]) | //anything in pipe
+		        ~idle;                   //core not in idle
+
+Diff Content:
+- 70        wakeup_pipe[PD-1:0] <= 'b0;   
++ 70        wakeup_pipe[PD-1:0] <= 'b0;
+
+Clone Blocks:

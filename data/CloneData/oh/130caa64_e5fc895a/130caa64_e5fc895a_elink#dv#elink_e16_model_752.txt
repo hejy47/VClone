@@ -1,0 +1,65 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5982:6004@HdlStmProcess
+   reg [DW-1:0] sync_reg1;
+   reg [DW-1:0] out;
+     
+   //Synchronization between clock domain
+   //We use two flip-flops for metastability improvement
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       begin
+	  sync_reg0[DW-1:0] <= {(DW){1'b0}};
+	  sync_reg1[DW-1:0] <= {(DW){1'b0}};
+	  out[DW-1:0]       <= {(DW){1'b0}};
+       end
+     else
+       begin
+	  sync_reg0[DW-1:0] <= in[DW-1:0];
+	  sync_reg1[DW-1:0] <= sync_reg0[DW-1:0];
+	  out[DW-1:0]       <= sync_reg1[DW-1:0];
+       end
+   
+
+
+   
+   
+
+Diff Content:
+- 5987    always @ (posedge clk or posedge reset)
+- 5988      if(reset)
+- 5989        begin
+- 5990 	  sync_reg0[DW-1:0] <= {(DW){1'b0}};
+- 5991 	  sync_reg1[DW-1:0] <= {(DW){1'b0}};
+- 5992 	  out[DW-1:0]       <= {(DW){1'b0}};
+- 5993        end
+- 5994      else
+- 5995        begin
+- 5996 	  sync_reg0[DW-1:0] <= in[DW-1:0];
+- 5997 	  sync_reg1[DW-1:0] <= sync_reg0[DW-1:0];
+- 5998 	  out[DW-1:0]       <= sync_reg1[DW-1:0];
+- 5999        end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/synchronizer.v@23:43
+   //Three stages
+   reg [DW-1:0] sync_reg0;
+   reg [DW-1:0] out;
+     
+   //We use two flip-flops for metastability improvement
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       begin
+	  sync_reg0[DW-1:0] <= {(DW){1'b0}};
+	  out[DW-1:0]       <= {(DW){1'b0}};
+	 end
+     else
+       begin
+	  sync_reg0[DW-1:0] <= in[DW-1:0];
+	  out[DW-1:0]       <= sync_reg0[DW-1:0];
+       end
+   
+
+endmodule // synchronizer
+
+/*
+

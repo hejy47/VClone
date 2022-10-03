@@ -1,0 +1,35 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@174:186@HdlStmAssign
+wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe >> DPW_LOG2;
+wire [7:0] device_cfg_beats_per_multiframe_s;
+
+// If input and output widths are symmetric keep the calculation for backwards
+// compatibility of the software.
+assign device_cfg_beats_per_multiframe_s = (TPL_DATA_PATH_WIDTH == DATA_PATH_WIDTH) ?
+                                   device_cfg_octets_per_multiframe >> DPW_LOG2 :
+                                   device_cfg_beats_per_multiframe;
+
+jesd204_lmfc #(
+  .LINK_MODE(LINK_MODE),
+  .DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH)
+) i_lmfc (
+
+Diff Content:
+- 179 assign device_cfg_beats_per_multiframe_s = (TPL_DATA_PATH_WIDTH == DATA_PATH_WIDTH) ?
+- 180                                    device_cfg_octets_per_multiframe >> DPW_LOG2 :
+- 181                                    device_cfg_beats_per_multiframe;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx.v@170:180
+wire device_eoemb;
+wire tx_next_mf_ready;
+wire link_tx_ready;
+
+wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe >> DPW_LOG2;
+wire [7:0] device_cfg_beats_per_multiframe_s;
+
+// If input and output widths are symmetric keep the calculation for backwards
+// compatibility of the software.
+assign device_cfg_beats_per_multiframe_s = (TPL_DATA_PATH_WIDTH == DATA_PATH_WIDTH) ?
+                                   device_cfg_octets_per_multiframe >> DPW_LOG2 :
+

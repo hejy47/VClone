@@ -1,0 +1,118 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v@258:315@HdlStmProcess
+      default: alt7 = 1'b0;
+      endcase
+  end
+end
+
+always @(*) begin
+  case (in_char[7:5])
+  3'd0: begin
+    data4b = 4'b0010;
+    may_invert4b = 1'b1;
+    disparity4b = 1'b1;
+  end
+  3'd1: begin
+    data4b = 4'b1001;
+    may_invert4b = in_charisk;
+    disparity4b = 1'b0;
+  end
+  3'd2: begin
+    data4b = 4'b1010;
+    may_invert4b = in_charisk;
+    disparity4b = 1'b0;
+  end
+  3'd3: begin
+    data4b = 4'b1100;
+    may_invert4b = 1'b1;
+    disparity4b = 1'b0;
+  end
+  3'd4: begin
+    data4b = 4'b0100;
+    may_invert4b = 1'b1;
+    disparity4b = 1'b1;
+  end
+  3'd5: begin
+    data4b = 4'b0101;
+    may_invert4b = in_charisk;
+    disparity4b = 1'b0;
+  end
+  3'd6: begin
+    data4b = 4'b0110;
+    may_invert4b = in_charisk;
+    disparity4b = 1'b0;
+  end
+  default: begin
+    if (alt7 == 1'b1) begin
+      data4b = 4'b0001;
+    end else begin
+      data4b = 4'b1000;
+    end
+    may_invert4b = 1'b1;
+    disparity4b = 1'b1;
+  end
+  endcase
+end
+
+assign disparity4b_in = in_disparity ^ disparity6b;
+assign out_disparity = disparity4b_in ^ disparity4b;
+
+always @(*) begin
+
+Diff Content:
+- 263 always @(*) begin
+- 264   case (in_char[7:5])
+- 265   3'd0: begin
+- 266     data4b = 4'b0010;
+- 267     may_invert4b = 1'b1;
+- 268     disparity4b = 1'b1;
+- 269   end
+- 270   3'd1: begin
+- 271     data4b = 4'b1001;
+- 272     may_invert4b = in_charisk;
+- 273     disparity4b = 1'b0;
+- 274   end
+- 275   3'd2: begin
+- 276     data4b = 4'b1010;
+- 277     may_invert4b = in_charisk;
+- 278     disparity4b = 1'b0;
+- 279   end
+- 280   3'd3: begin
+- 281     data4b = 4'b1100;
+- 282     may_invert4b = 1'b1;
+- 283     disparity4b = 1'b0;
+- 284   end
+- 285   3'd4: begin
+- 286     data4b = 4'b0100;
+- 287     may_invert4b = 1'b1;
+- 288     disparity4b = 1'b1;
+- 289   end
+- 290   3'd5: begin
+- 291     data4b = 4'b0101;
+- 292     may_invert4b = in_charisk;
+- 293     disparity4b = 1'b0;
+- 294   end
+- 295   3'd6: begin
+- 296     data4b = 4'b0110;
+- 297     may_invert4b = in_charisk;
+- 298     disparity4b = 1'b0;
+- 299   end
+- 300   default: begin
+- 301     if (alt7 == 1'b1) begin
+- 302       data4b = 4'b0001;
+- 304       data4b = 4'b1000;
+- 306     may_invert4b = 1'b1;
+- 307     disparity4b = 1'b1;
+- 308   end
+- 309   endcase
+- 310 end
++ 302   always @(*) begin
++ 302     if (in_disparity == 1'b0 && may_invert6b == 1'b1) begin
++ 302       out6b = ~data6b;
++ 304       out6b = data6b;
++ 304     end
++ 304     if (disparity4b_in == 1'b0 && may_invert4b == 1'b1) begin
++ 304       out4b = ~data4b;
++ 304     end else begin
++ 304       out4b = data4b;
+
+Clone Blocks:

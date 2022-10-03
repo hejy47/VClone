@@ -1,0 +1,269 @@
+Source Block: hdl/library/axi_adrv9001/axi_adrv9001_rx_channel.v@193:322@HdlStmIf
+    .iqcor_coeff_1 (adc_iqcor_coeff_1_s),
+    .iqcor_coeff_2 (adc_iqcor_coeff_2_s));
+  end
+  end
+
+  if (DISABLE == 1) begin
+    assign adc_enable = 1'b0;
+    assign up_adc_pn_err = 1'b0;
+    assign up_adc_pn_oos = 1'b0;
+    assign up_adc_or = 1'b0;
+    assign up_wack = 1'b0;
+    assign up_rdata =  32'b0;
+    assign up_rack = 1'b0;
+  end else begin
+  // pn oos & pn err
+
+  // PN7 x^7 + x^6 + 1
+  ad_pngen  #(
+    .POL_MASK ( (1<<7) | (1<<6) ),
+    .POL_W (7),
+    .DW (16)
+    ) PN7_gen (
+    .clk (adc_clk),
+    .reset (adc_rst),
+    .clk_en (adc_valid_in_s),
+    .pn_init (adc_pn_oos_s),
+    .pn_data_in (adc_data_in_s),
+    .pn_data_out (pn7_data)
+  );
+
+  // PN15 x^15 + x^14 + 1
+  ad_pngen  #(
+    .POL_MASK ( (1<<15) | (1<<14) ),
+    .POL_W (15),
+    .DW (16)
+    ) PN15_gen (
+    .clk (adc_clk),
+    .reset (adc_rst),
+    .clk_en (adc_valid_in_s),
+    .pn_init (adc_pn_oos_s),
+    .pn_data_in (adc_data_in_s),
+    .pn_data_out (pn15_data)
+  );
+
+  // reference nibble ramp and full ramp generator
+  always @(posedge adc_clk) begin
+    if (adc_pn_oos_s) begin
+      full_ramp_counter <= adc_data_in_s + 16'd1;
+    end else if (adc_valid_in_s) begin
+      full_ramp_counter <= full_ramp_counter + 16'd1;
+    end
+  end
+
+  assign adc_data_pn  = adc_pnseq_sel == 4'd4 ? pn7_data :
+                        adc_pnseq_sel == 4'd5 ? pn15_data :
+                        adc_pnseq_sel == 4'd10 ? {4{full_ramp_counter[3:0]}} :
+                        adc_pnseq_sel == 4'd11 ? full_ramp_counter : 'h0;
+
+  ad_pnmon #(
+    .DATA_WIDTH (DATA_WIDTH),
+    .OOS_THRESHOLD (8),
+    .ALLOW_ZERO_MASKING(1)
+  ) i_pnmon (
+    .adc_clk (adc_clk),
+    .adc_valid_in (adc_valid_in_s),
+    .adc_data_in (adc_data_in_s),
+    .adc_data_pn (adc_data_pn),
+    .adc_pattern_has_zero (adc_pnseq_sel[3]),
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_pn_err (adc_pn_err_s)
+  );
+
+  up_adc_channel #(
+    .COMMON_ID (COMMON_ID),
+    .CHANNEL_ID (CHANNEL_ID),
+    .USERPORTS_DISABLE(1),
+    .DATAFORMAT_DISABLE(DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE(DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE))
+  i_up_adc_channel (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_enable (adc_enable),
+    .adc_iqcor_enb (adc_iqcor_enb_s),
+    .adc_dcfilt_enb (adc_dcfilt_enb_s),
+    .adc_dfmt_se (adc_dfmt_se_s),
+    .adc_dfmt_type (adc_dfmt_type_s),
+    .adc_dfmt_enable (adc_dfmt_enable_s),
+    .adc_dcfilt_offset (adc_dcfilt_offset_s),
+    .adc_dcfilt_coeff (adc_dcfilt_coeff_s),
+    .adc_iqcor_coeff_1 (adc_iqcor_coeff_1_s),
+    .adc_iqcor_coeff_2 (adc_iqcor_coeff_2_s),
+    .adc_pnseq_sel (adc_pnseq_sel),
+    .adc_data_sel (adc_data_sel_s),
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_or (1'd0),
+    .up_adc_pn_err (up_adc_pn_err),
+    .up_adc_pn_oos (up_adc_pn_oos),
+    .up_adc_or (up_adc_or),
+    .up_usr_datatype_be (),
+    .up_usr_datatype_signed (),
+    .up_usr_datatype_shift (),
+    .up_usr_datatype_total_bits (),
+    .up_usr_datatype_bits (),
+    .up_usr_decimation_m (),
+    .up_usr_decimation_n (),
+    .adc_usr_datatype_be (1'b0),
+    .adc_usr_datatype_signed (1'b1),
+    .adc_usr_datatype_shift (8'd0),
+    .adc_usr_datatype_total_bits (8'd16),
+    .adc_usr_datatype_bits (8'd16),
+    .adc_usr_decimation_m (16'd1),
+    .adc_usr_decimation_n (16'd1),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata),
+    .up_rack (up_rack));
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 239     if (adc_pn_oos_s) begin
+- 240       full_ramp_counter <= adc_data_in_s + 16'd1;
+- 241     end else if (adc_valid_in_s) begin
+- 242       full_ramp_counter <= full_ramp_counter + 16'd1;
++ 242     if (adc_valid_in_s) begin
++ 242       if (adc_pn_oos_s) begin
++ 242         full_ramp_counter <= adc_data_in_s + 16'd1;
++ 242       end else begin
++ 242         full_ramp_counter <= full_ramp_counter + 16'd1;
++ 242       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_rx_channel.v@118:238
+  assign up_rack = 1'd0;
+  end
+  endgenerate
+
+  generate
+  if (DISABLE == 0) begin
+
+  // iq correction inputs
+
+  assign adc_data_s = (adc_data_sel_s == 4'h0) ? adc_data : dac_data;
+  assign adc_dcfilter_data_out = adc_dcfilter_data_s;
+
+  axi_ad9361_rx_pnmon #(
+    .Q_OR_I_N (Q_OR_I_N),
+    .PRBS_SEL (CHANNEL_ID))
+  i_rx_pnmon (
+    .adc_clk (adc_clk),
+    .adc_valid (adc_valid),
+    .adc_data_i (adc_data),
+    .adc_data_q (adc_data_q),
+    .adc_pnseq_sel (adc_pnseq_sel_s),
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_pn_err (adc_pn_err_s));
+
+  ad_datafmt #(
+    .DATA_WIDTH (12),
+    .DISABLE (DATAFORMAT_DISABLE))
+  i_ad_datafmt (
+    .clk (adc_clk),
+    .valid (adc_valid),
+    .data (adc_data_s),
+    .valid_out (adc_dfmt_valid_s),
+    .data_out (adc_dfmt_data_s),
+    .dfmt_enable (adc_dfmt_enable_s),
+    .dfmt_type (adc_dfmt_type_s),
+    .dfmt_se (adc_dfmt_se_s));
+
+  ad_dcfilter #(
+    .DISABLE (DCFILTER_DISABLE))
+  i_ad_dcfilter (
+    .clk (adc_clk),
+    .valid (adc_dfmt_valid_s),
+    .data (adc_dfmt_data_s),
+    .valid_out (adc_dcfilter_valid_s),
+    .data_out (adc_dcfilter_data_s),
+    .dcfilt_enb (adc_dcfilt_enb_s),
+    .dcfilt_coeff (adc_dcfilt_coeff_s),
+    .dcfilt_offset (adc_dcfilt_offset_s));
+
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N),
+    .DISABLE (IQCORRECTION_DISABLE))
+  i_ad_iqcor (
+    .clk (adc_clk),
+    .valid (adc_dcfilter_valid_s),
+    .data_in (adc_dcfilter_data_s),
+    .data_iq (adc_dcfilter_data_in),
+    .valid_out (adc_iqcor_valid),
+    .data_out (adc_iqcor_data),
+    .iqcor_enable (adc_iqcor_enb_s),
+    .iqcor_coeff_1 (adc_iqcor_coeff_1_s),
+    .iqcor_coeff_2 (adc_iqcor_coeff_2_s));
+
+  up_adc_channel #(
+    .CHANNEL_ID (CHANNEL_ID),
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE))
+  i_up_adc_channel (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_enable (adc_enable),
+    .adc_iqcor_enb (adc_iqcor_enb_s),
+    .adc_dcfilt_enb (adc_dcfilt_enb_s),
+    .adc_dfmt_se (adc_dfmt_se_s),
+    .adc_dfmt_type (adc_dfmt_type_s),
+    .adc_dfmt_enable (adc_dfmt_enable_s),
+    .adc_dcfilt_offset (adc_dcfilt_offset_s),
+    .adc_dcfilt_coeff (adc_dcfilt_coeff_s),
+    .adc_iqcor_coeff_1 (adc_iqcor_coeff_1_s),
+    .adc_iqcor_coeff_2 (adc_iqcor_coeff_2_s),
+    .adc_pnseq_sel (adc_pnseq_sel_s),
+    .adc_data_sel (adc_data_sel_s),
+    .adc_pn_err (adc_pn_err_s),
+    .adc_pn_oos (adc_pn_oos_s),
+    .adc_or (adc_or),
+    .up_adc_pn_err (up_adc_pn_err),
+    .up_adc_pn_oos (up_adc_pn_oos),
+    .up_adc_or (up_adc_or),
+    .up_usr_datatype_be (),
+    .up_usr_datatype_signed (),
+    .up_usr_datatype_shift (),
+    .up_usr_datatype_total_bits (),
+    .up_usr_datatype_bits (),
+    .up_usr_decimation_m (),
+    .up_usr_decimation_n (),
+    .adc_usr_datatype_be (1'b0),
+    .adc_usr_datatype_signed (1'b1),
+    .adc_usr_datatype_shift (8'd0),
+    .adc_usr_datatype_total_bits (8'd16),
+    .adc_usr_datatype_bits (8'd16),
+    .adc_usr_decimation_m (16'd1),
+    .adc_usr_decimation_n (16'd1),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata),
+    .up_rack (up_rack));
+
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+

@@ -1,0 +1,151 @@
+Source Block: hdl/library/cordic_demod/cordic_demod.v@150:205@HdlStmProcess
+    shift_counter <= shift_counter - 1'b1;
+  end
+  endcase
+end
+
+always @(posedge clk)
+begin
+  case(state)
+  STATE_IDLE:
+    if (s_axis_valid == 1'b1) begin
+      step_counter <= 'h00;
+      phase <= {1'b0,s_axis_data[61:32]};
+      step_counter <= 'h00;
+      case (s_axis_data[63:62])
+      2'b00: begin
+        i <= {s_axis_data[31],s_axis_data[31:0]};
+        q <= 'h00;
+      end
+      2'b01: begin
+        i <= 'h00;
+        q <= ~{s_axis_data[31],s_axis_data[31:0]};
+      end
+      2'b10: begin
+        i <= ~{s_axis_data[31],s_axis_data[31:0]};
+        q <= 'h00;
+      end
+      2'b11: begin
+        i <= 'h00;
+        q <= {s_axis_data[31],s_axis_data[31:0]};
+      end
+      endcase
+    end
+  STATE_SHIFT_LOAD: begin
+    i_shift <= i;
+    q_shift <= q;
+  end
+  STATE_SHIFT: begin
+    i_shift <= {i_shift[32],i_shift[32:1]};
+    q_shift <= {q_shift[32],q_shift[32:1]};
+  end
+  STATE_ADD: begin
+    if (phase[30] == 1'b0) begin
+      i <= i + q_shift;
+      q <= q - i_shift;
+      phase <= phase - angle[step_counter];
+    end else begin
+      i <= i - q_shift;
+      q <= q + i_shift;
+      phase <= phase + angle[step_counter];
+    end
+    step_counter <= step_counter + 1'b1;
+  end
+  endcase
+end
+
+endmodule
+
+Diff Content:
+- 155 always @(posedge clk)
+- 156 begin
+- 157   case(state)
+- 158   STATE_IDLE:
+- 159     if (s_axis_valid == 1'b1) begin
+- 160       step_counter <= 'h00;
+- 161       phase <= {1'b0,s_axis_data[61:32]};
+- 162       step_counter <= 'h00;
+- 163       case (s_axis_data[63:62])
+- 164       2'b00: begin
+- 165         i <= {s_axis_data[31],s_axis_data[31:0]};
+- 166         q <= 'h00;
+- 167       end
+- 168       2'b01: begin
+- 169         i <= 'h00;
+- 170         q <= ~{s_axis_data[31],s_axis_data[31:0]};
+- 171       end
+- 172       2'b10: begin
+- 173         i <= ~{s_axis_data[31],s_axis_data[31:0]};
+- 174         q <= 'h00;
+- 175       end
+- 176       2'b11: begin
+- 177         i <= 'h00;
+- 178         q <= {s_axis_data[31],s_axis_data[31:0]};
+- 180       endcase
+- 182   STATE_SHIFT_LOAD: begin
+- 183     i_shift <= i;
+- 184     q_shift <= q;
+- 185   end
+- 186   STATE_SHIFT: begin
+- 187     i_shift <= {i_shift[32],i_shift[32:1]};
+- 188     q_shift <= {q_shift[32],q_shift[32:1]};
+- 189   end
+- 190   STATE_ADD: begin
+- 191     if (phase[30] == 1'b0) begin
+- 192       i <= i + q_shift;
+- 193       q <= q - i_shift;
+- 194       phase <= phase - angle[step_counter];
+- 195     end else begin
+- 196       i <= i - q_shift;
+- 197       q <= q + i_shift;
+- 198       phase <= phase + angle[step_counter];
+- 200     step_counter <= step_counter + 1'b1;
+- 202   endcase
+- 203 end
++ 178   always @(posedge clk)
++ 178   begin
++ 178     case(state)
++ 178     STATE_IDLE:
++ 178       if (s_axis_valid == 1'b1) begin
++ 178         step_counter <= 'h00;
++ 178         phase <= {1'b0,s_axis_data[61:32]};
++ 178         step_counter <= 'h00;
++ 178         case (s_axis_data[63:62])
++ 178         2'b00: begin
++ 178           i <= {s_axis_data[31],s_axis_data[31:0]};
++ 178           q <= 'h00;
++ 178         end
++ 178         2'b01: begin
++ 178           i <= 'h00;
++ 178           q <= ~{s_axis_data[31],s_axis_data[31:0]};
++ 178         end
++ 178         2'b10: begin
++ 178           i <= ~{s_axis_data[31],s_axis_data[31:0]};
++ 178           q <= 'h00;
++ 178         end
++ 178         2'b11: begin
++ 178           i <= 'h00;
++ 178           q <= {s_axis_data[31],s_axis_data[31:0]};
++ 178         end
++ 178         endcase
++ 180     STATE_SHIFT_LOAD: begin
++ 180       i_shift <= i;
++ 180       q_shift <= q;
++ 198     STATE_SHIFT: begin
++ 198       i_shift <= {i_shift[32],i_shift[32:1]};
++ 198       q_shift <= {q_shift[32],q_shift[32:1]};
++ 200     STATE_ADD: begin
++ 200       if (phase[30] == 1'b0) begin
++ 200         i <= i + q_shift;
++ 200         q <= q - i_shift;
++ 200         phase <= phase - angle[step_counter];
++ 200       end else begin
++ 200         i <= i - q_shift;
++ 200         q <= q + i_shift;
++ 200         phase <= phase + angle[step_counter];
++ 200       end
++ 200       step_counter <= step_counter + 1'b1;
++ 200     end
++ 200     endcase
+
+Clone Blocks:

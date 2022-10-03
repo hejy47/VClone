@@ -1,0 +1,57 @@
+Source Block: hdl/library/common/ad_dds_1.v@111:130@HdlStmProcess
+
+  assign sine_scale_p_s = sine_scale_s[28:14];
+  assign sine_scale_n_s = ~sine_scale_s[28:14] + 1'b1;
+  assign sine_scale_sign_s = sine_sign_s ^ scale_sign_s;
+
+  always @(posedge clk) begin
+    sine_scale_p <= sine_scale_p_s;
+    sine_scale_n <= sine_scale_n_s;
+    sine_scale_sign <= sine_scale_sign_s;
+    if (sine_scale_sign == 1'b1) begin
+      dds_data <= {1'b1, sine_scale_n};
+    end else begin
+      dds_data <= {1'b0, sine_scale_p};
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 120     if (sine_scale_sign == 1'b1) begin
++ 120     if (scale[14:0] == 15'd0) begin
++ 120       dds_data <= 16'd0;
++ 120     end else if (sine_scale_sign == 1'b1) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_dds_1.v@108:118
+    .data_p (sine_scale_s),
+    .ddata_in ({sine_sign, scale[15]}),
+    .ddata_out ({sine_sign_s, scale_sign_s}));
+
+  assign sine_scale_p_s = sine_scale_s[28:14];
+  assign sine_scale_n_s = ~sine_scale_s[28:14] + 1'b1;
+  assign sine_scale_sign_s = sine_sign_s ^ scale_sign_s;
+
+  always @(posedge clk) begin
+    sine_scale_p <= sine_scale_p_s;
+    sine_scale_n <= sine_scale_n_s;
+
+Clone Blocks 2:
+hdl/library/common/ad_dds_1.v@109:119
+    .ddata_in ({sine_sign, scale[15]}),
+    .ddata_out ({sine_sign_s, scale_sign_s}));
+
+  assign sine_scale_p_s = sine_scale_s[28:14];
+  assign sine_scale_n_s = ~sine_scale_s[28:14] + 1'b1;
+  assign sine_scale_sign_s = sine_sign_s ^ scale_sign_s;
+
+  always @(posedge clk) begin
+    sine_scale_p <= sine_scale_p_s;
+    sine_scale_n <= sine_scale_n_s;
+    sine_scale_sign <= sine_scale_sign_s;
+

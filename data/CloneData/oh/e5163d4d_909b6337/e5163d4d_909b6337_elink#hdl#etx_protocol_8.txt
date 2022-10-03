@@ -1,0 +1,47 @@
+Source Block: oh/elink/hdl/etx_protocol.v@201:211@HdlStmAssign
+			//don't wait if there is nothing to wait for
+//		        ((tx_state[1:0]==`TX_IDLE) & tx_wait & ~tx_wait_reg);
+
+   //wait for data
+   assign etx_wr_wait = (tx_wr_wait | tx_ack_wait );// & ~adjust ;//& ~adjust
+   assign etx_rd_wait = (tx_rd_wait | tx_ack_wait );// & ~adjust  ;//& ~adjust
+   assign etx_wait    = etx_wr_wait | etx_rd_wait;   
+
+           
+endmodule // etx_protocol
+// Local Variables:
+
+Diff Content:
+- 206    assign etx_rd_wait = (tx_rd_wait | tx_ack_wait );// & ~adjust  ;//& ~adjust
++ 206    assign etx_wr_wait = (tx_wr_wait | tx_ack_wait );
++ 206    assign etx_rd_wait = (tx_rd_wait | tx_ack_wait );
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@202:212
+//		        ((tx_state[1:0]==`TX_IDLE) & tx_wait & ~tx_wait_reg);
+
+   //wait for data
+   assign etx_wr_wait = (tx_wr_wait | tx_ack_wait );// & ~adjust ;//& ~adjust
+   assign etx_rd_wait = (tx_rd_wait | tx_ack_wait );// & ~adjust  ;//& ~adjust
+   assign etx_wait    = etx_wr_wait | etx_rd_wait;   
+
+           
+endmodule // etx_protocol
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+
+Clone Blocks 2:
+oh/elink/hdl/etx_protocol.v@200:210
+   
+			//don't wait if there is nothing to wait for
+//		        ((tx_state[1:0]==`TX_IDLE) & tx_wait & ~tx_wait_reg);
+
+   //wait for data
+   assign etx_wr_wait = (tx_wr_wait | tx_ack_wait );// & ~adjust ;//& ~adjust
+   assign etx_rd_wait = (tx_rd_wait | tx_ack_wait );// & ~adjust  ;//& ~adjust
+   assign etx_wait    = etx_wr_wait | etx_rd_wait;   
+
+           
+endmodule // etx_protocol
+

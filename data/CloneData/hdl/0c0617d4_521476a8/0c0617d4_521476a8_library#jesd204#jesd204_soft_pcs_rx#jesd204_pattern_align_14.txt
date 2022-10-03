@@ -1,0 +1,18 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_rx/jesd204_pattern_align.v@74:84@HdlIdDef
+assign full_data = {in_data,data_d1};
+assign out_data = aligned_data_stage2;
+
+/* 2-stage cascade of 3:1 and 4:1 muxes */
+
+integer i;
+
+always @(*) begin
+  for (i = 0; i < DATA_PATH_WIDTH*10+3; i = i + 1) begin
+    if (i < DATA_PATH_WIDTH*10+1) begin
+      case (align[3:2])
+
+Diff Content:
+- 79 integer i;
++ 79   integer i;
+
+Clone Blocks:

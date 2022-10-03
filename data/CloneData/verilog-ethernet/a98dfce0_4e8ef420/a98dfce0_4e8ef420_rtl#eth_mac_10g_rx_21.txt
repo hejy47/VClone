@@ -1,0 +1,206 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_rx.v@226:350@HdlStmProcess
+        tkeep_mask = 8'b11111111;
+    end
+    endcase
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+
+    last_cycle_tkeep_next = last_cycle_tkeep_reg;
+
+    output_axis_tdata_next = 0;
+    output_axis_tkeep_next = 0;
+    output_axis_tvalid_next = 0;
+    output_axis_tlast_next = 0;
+    output_axis_tuser_next = 0;
+
+    error_bad_frame_next = 0;
+    error_bad_fcs_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for packet
+            reset_crc = 1;
+
+            if (xgmii_rxc_d1[0] && xgmii_rxd_d1[7:0] == 8'hfb) begin
+                // start condition
+                if (detect_error_masked) begin
+                    // error in first data word
+                    output_axis_tdata_next = 0;
+                    output_axis_tkeep_next = 1;
+                    output_axis_tvalid_next = 1;
+                    output_axis_tlast_next = 1;
+                    output_axis_tuser_next = 1;
+                    error_bad_frame_next = 1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    reset_crc = 0;
+                    update_crc = 1;
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // read payload
+            update_crc = 1;
+
+            output_axis_tdata_next = xgmii_rxd_d1;
+            output_axis_tkeep_next = ~xgmii_rxc_d1;
+            output_axis_tvalid_next = 1;
+            output_axis_tlast_next = 0;
+            output_axis_tuser_next = 0;
+
+            if (control_masked) begin
+                // control or error characters in packet
+                output_axis_tlast_next = 1;
+                output_axis_tuser_next = 1;
+                error_bad_frame_next = 1;
+                reset_crc = 1;
+                state_next = STATE_IDLE;
+            end else if (detect_term) begin
+                if (detect_term[4:0]) begin
+                    // end this cycle
+                    reset_crc = 1;
+                    output_axis_tkeep_next = {tkeep_mask[3:0], 4'b1111};
+                    output_axis_tlast_next = 1;
+                    if ((detect_term[0] & crc_valid7_save) ||
+                        (detect_term[1] & crc_valid0) ||
+                        (detect_term[2] & crc_valid1) ||
+                        (detect_term[3] & crc_valid2) ||
+                        (detect_term[4] & crc_valid3)) begin
+                        // CRC valid
+                    end else begin
+                        output_axis_tuser_next = 1;
+                        error_bad_frame_next = 1;
+                        error_bad_fcs_next = 1;
+                    end
+                    state_next = STATE_IDLE;
+                end else begin
+                    // need extra cycle
+                    last_cycle_tkeep_next = {4'b0000, tkeep_mask[7:4]};
+                    state_next = STATE_LAST;
+                end
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_LAST: begin
+            // last cycle of packet
+            output_axis_tdata_next = xgmii_rxd_d1;
+            output_axis_tkeep_next = last_cycle_tkeep_reg;
+            output_axis_tvalid_next = 1;
+            output_axis_tlast_next = 1;
+            output_axis_tuser_next = 0;
+
+            reset_crc = 1;
+
+            if ((detect_term_save[5] & crc_valid0) ||
+                (detect_term_save[6] & crc_valid1) ||
+                (detect_term_save[7] & crc_valid2)) begin
+                // CRC valid
+            end else begin
+                output_axis_tuser_next = 1;
+                error_bad_frame_next = 1;
+                error_bad_fcs_next = 1;
+            end
+
+            if (xgmii_rxc_d1[0] && xgmii_rxd_d1[7:0] == 8'hfb) begin
+                // start condition
+                state_next = STATE_PAYLOAD;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+
+Diff Content:
+- 234     reset_crc = 0;
+- 235     update_crc = 0;
+- 239     output_axis_tdata_next = 0;
+- 240     output_axis_tkeep_next = 0;
+- 241     output_axis_tvalid_next = 0;
+- 242     output_axis_tlast_next = 0;
+- 243     output_axis_tuser_next = 0;
+- 245     error_bad_frame_next = 0;
+- 246     error_bad_fcs_next = 0;
+- 251             reset_crc = 1;
+- 257                     output_axis_tdata_next = 0;
+- 258                     output_axis_tkeep_next = 1;
+- 259                     output_axis_tvalid_next = 1;
+- 260                     output_axis_tlast_next = 1;
+- 261                     output_axis_tuser_next = 1;
+- 262                     error_bad_frame_next = 1;
+- 265                     reset_crc = 0;
+- 266                     update_crc = 1;
+- 275             update_crc = 1;
+- 279             output_axis_tvalid_next = 1;
+- 280             output_axis_tlast_next = 0;
+- 281             output_axis_tuser_next = 0;
+- 285                 output_axis_tlast_next = 1;
+- 286                 output_axis_tuser_next = 1;
+- 287                 error_bad_frame_next = 1;
+- 288                 reset_crc = 1;
+- 293                     reset_crc = 1;
+- 295                     output_axis_tlast_next = 1;
+- 303                         output_axis_tuser_next = 1;
+- 304                         error_bad_frame_next = 1;
+- 305                         error_bad_fcs_next = 1;
+- 321             output_axis_tvalid_next = 1;
+- 322             output_axis_tlast_next = 1;
+- 323             output_axis_tuser_next = 0;
+- 325             reset_crc = 1;
+- 332                 output_axis_tuser_next = 1;
+- 333                 error_bad_frame_next = 1;
+- 334                 error_bad_fcs_next = 1;
++ 235     reset_crc = 1'b0;
++ 235     update_crc = 1'b0;
++ 243     output_axis_tdata_next = 64'd0;
++ 243     output_axis_tkeep_next = 8'd0;
++ 243     output_axis_tvalid_next = 1'b0;
++ 243     output_axis_tlast_next = 1'b0;
++ 243     output_axis_tuser_next = 1'b0;
++ 246     error_bad_frame_next = 1'b0;
++ 246     error_bad_fcs_next = 1'b0;
++ 251             reset_crc = 1'b1;
++ 262                     output_axis_tdata_next = 64'd0;
++ 262                     output_axis_tkeep_next = 8'h01;
++ 262                     output_axis_tvalid_next = 1'b1;
++ 262                     output_axis_tlast_next = 1'b1;
++ 262                     output_axis_tuser_next = 1'b1;
++ 262                     error_bad_frame_next = 1'b1;
++ 266                     reset_crc = 1'b0;
++ 266                     update_crc = 1'b1;
++ 275             update_crc = 1'b1;
++ 281             output_axis_tvalid_next = 1'b1;
++ 281             output_axis_tlast_next = 1'b0;
++ 281             output_axis_tuser_next = 1'b0;
++ 288                 output_axis_tlast_next = 1'b1;
++ 288                 output_axis_tuser_next = 1'b1;
++ 288                 error_bad_frame_next = 1'b1;
++ 288                 reset_crc = 1'b1;
++ 293                     reset_crc = 1'b1;
++ 295                     output_axis_tlast_next = 1'b1;
++ 305                         output_axis_tuser_next = 1'b1;
++ 305                         error_bad_frame_next = 1'b1;
++ 305                         error_bad_fcs_next = 1'b1;
++ 323             output_axis_tvalid_next = 1'b1;
++ 323             output_axis_tlast_next = 1'b1;
++ 323             output_axis_tuser_next = 1'b0;
++ 325             reset_crc = 1'b1;
++ 334                 output_axis_tuser_next = 1'b1;
++ 334                 error_bad_frame_next = 1'b1;
++ 334                 error_bad_fcs_next = 1'b1;
+
+Clone Blocks:

@@ -1,0 +1,205 @@
+Source Block: hdl/projects/common/a5gte/system_top.v@97:107@HdlStmAssign
+  assign eth_rx_cntrl = phy_rx_cntrl;
+  assign eth_rx_data = phy_rx_data;
+
+  assign phy_tx_clk_out = eth_tx_clk_out;
+  assign phy_tx_cntrl = eth_tx_cntrl;
+  assign phy_tx_data = eth_tx_data;
+
+  assign phy_mdc = eth_mdc;
+  assign phy_mdio = (eth_mdio_t == 1'b0) ? eth_mdio_o : 1'bz;
+  assign eth_mdio_i = phy_mdio;
+
+
+Diff Content:
+- 102   assign phy_tx_data = eth_tx_data;
++ 102   altera_pll #(
++ 102     .fractional_vco_multiplier("false"),
++ 102     .reference_clock_frequency("125.0 MHz"),
++ 102     .operation_mode("normal"),
++ 102     .number_of_clocks(1),
++ 102     .output_clock_frequency0("125.000000 MHz"),
++ 102     .phase_shift0("2000 ps"),
++ 102     .duty_cycle0(50),
++ 102     .output_clock_frequency1("0 MHz"),
++ 102     .phase_shift1("0 ps"),
++ 102     .duty_cycle1(50),
++ 102     .output_clock_frequency2("0 MHz"),
++ 102     .phase_shift2("0 ps"),
++ 102     .duty_cycle2(50),
++ 102     .output_clock_frequency3("0 MHz"),
++ 102     .phase_shift3("0 ps"),
++ 102     .duty_cycle3(50),
++ 102     .output_clock_frequency4("0 MHz"),
++ 102     .phase_shift4("0 ps"),
++ 102     .duty_cycle4(50),
++ 102     .output_clock_frequency5("0 MHz"),
++ 102     .phase_shift5("0 ps"),
++ 102     .duty_cycle5(50),
++ 102     .output_clock_frequency6("0 MHz"),
++ 102     .phase_shift6("0 ps"),
++ 102     .duty_cycle6(50),
++ 102     .output_clock_frequency7("0 MHz"),
++ 102     .phase_shift7("0 ps"),
++ 102     .duty_cycle7(50),
++ 102     .output_clock_frequency8("0 MHz"),
++ 102     .phase_shift8("0 ps"),
++ 102     .duty_cycle8(50),
++ 102     .output_clock_frequency9("0 MHz"),
++ 102     .phase_shift9("0 ps"),
++ 102     .duty_cycle9(50),
++ 102     .output_clock_frequency10("0 MHz"),
++ 102     .phase_shift10("0 ps"),
++ 102     .duty_cycle10(50),
++ 102     .output_clock_frequency11("0 MHz"),
++ 102     .phase_shift11("0 ps"),
++ 102     .duty_cycle11(50),
++ 102     .output_clock_frequency12("0 MHz"),
++ 102     .phase_shift12("0 ps"),
++ 102     .duty_cycle12(50),
++ 102     .output_clock_frequency13("0 MHz"),
++ 102     .phase_shift13("0 ps"),
++ 102     .duty_cycle13(50),
++ 102     .output_clock_frequency14("0 MHz"),
++ 102     .phase_shift14("0 ps"),
++ 102     .duty_cycle14(50),
++ 102     .output_clock_frequency15("0 MHz"),
++ 102     .phase_shift15("0 ps"),
++ 102     .duty_cycle15(50),
++ 102     .output_clock_frequency16("0 MHz"),
++ 102     .phase_shift16("0 ps"),
++ 102     .duty_cycle16(50),
++ 102     .output_clock_frequency17("0 MHz"),
++ 102     .phase_shift17("0 ps"),
++ 102     .duty_cycle17(50),
++ 102     .pll_type("General"),
++ 102     .pll_subtype("General")
++ 102   ) eth_tx_pll_i (
++ 102     .rst  (~eth_phy_resetn),
++ 102     .outclk (eth_tx_clk_90),
++ 102     .locked (),
++ 102     .fboutclk ( ),
++ 102     .fbclk  (1'b0),
++ 102     .refclk (eth_tx_clk)
++ 102   );
++ 102   altddio_in #(
++ 102     .intended_device_family("Arria V"),
++ 102     .invert_input_clocks("OFF"),
++ 102     .lpm_hint("UNUSED"),
++ 102     .lpm_type("altddio_in"),
++ 102     .power_up_high("OFF"),
++ 102     .width(5))
++ 102     eth_tx_path_in (
++ 102       .datain({eth_tx_cntrl,eth_tx_data}),
++ 102       .inclock(eth_tx_clk_90),
++ 102       .dataout_h(eth_tx_data_h),
++ 102       .dataout_l(eth_tx_data_l));
++ 102   always @(posedge eth_tx_clk_90)
++ 102   begin
++ 102     eth_tx_data_h_d <= eth_tx_data_h;
++ 102   end
++ 102  altddio_out #(
++ 102     .extend_oe_disable("OFF"),
++ 102     .intended_device_family("Arria V"),
++ 102     .invert_output("OFF"),
++ 102     .lpm_hint("UNUSED"),
++ 102     .lpm_type("altddio_out"),
++ 102     .oe_reg("UNREGISTERED"),
++ 102     .power_up_high("OFF"),
++ 102     .width(5)
++ 102   ) eth_tx_path_out (
++ 102     .datain_h (eth_tx_data_h_d),
++ 102     .datain_l (eth_tx_data_l),
++ 102     .outclock (eth_tx_clk_90),
++ 102     .dataout ({phy_tx_cntrl,phy_tx_data}),
++ 102     .aclr (~eth_phy_resetn),
++ 102     .aset (1'b0),
++ 102     .oe (1'b1),
++ 102     .oe_out (),
++ 102     .outclocken (1'b1),
++ 102     .sclr (1'b0),
++ 102     .sset (1'b0));
++ 102    altddio_out #(.width(1)) i_phy_tx_clk_out (
++ 102     .aset (1'b0),
++ 102     .sset (1'b0),
++ 102     .sclr (1'b0),
++ 102     .oe (1'b1),
++ 102     .oe_out (),
++ 102     .datain_h (1'b1),
++ 102     .datain_l (1'b0),
++ 102     .outclocken (1'b1),
++ 102     .aclr (1'b0),
++ 102     .outclock (eth_tx_clk_90),
++ 102     .dataout (phy_tx_clk_out));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/common/a5gte/system_top.v@99:109
+
+  assign phy_tx_clk_out = eth_tx_clk_out;
+  assign phy_tx_cntrl = eth_tx_cntrl;
+  assign phy_tx_data = eth_tx_data;
+
+  assign phy_mdc = eth_mdc;
+  assign phy_mdio = (eth_mdio_t == 1'b0) ? eth_mdio_o : 1'bz;
+  assign eth_mdio_i = phy_mdio;
+
+  assign phy_resetn = eth_phy_resetn;
+
+
+Clone Blocks 2:
+hdl/projects/common/a5gte/system_top.v@100:110
+  assign phy_tx_clk_out = eth_tx_clk_out;
+  assign phy_tx_cntrl = eth_tx_cntrl;
+  assign phy_tx_data = eth_tx_data;
+
+  assign phy_mdc = eth_mdc;
+  assign phy_mdio = (eth_mdio_t == 1'b0) ? eth_mdio_o : 1'bz;
+  assign eth_mdio_i = phy_mdio;
+
+  assign phy_resetn = eth_phy_resetn;
+
+endmodule
+
+Clone Blocks 3:
+hdl/projects/common/a5gte/system_top.v@95:105
+
+  assign eth_rx_clk = phy_rx_clk;
+  assign eth_rx_cntrl = phy_rx_cntrl;
+  assign eth_rx_data = phy_rx_data;
+
+  assign phy_tx_clk_out = eth_tx_clk_out;
+  assign phy_tx_cntrl = eth_tx_cntrl;
+  assign phy_tx_data = eth_tx_data;
+
+  assign phy_mdc = eth_mdc;
+  assign phy_mdio = (eth_mdio_t == 1'b0) ? eth_mdio_o : 1'bz;
+
+Clone Blocks 4:
+hdl/projects/common/a5gte/system_top.v@96:106
+  assign eth_rx_clk = phy_rx_clk;
+  assign eth_rx_cntrl = phy_rx_cntrl;
+  assign eth_rx_data = phy_rx_data;
+
+  assign phy_tx_clk_out = eth_tx_clk_out;
+  assign phy_tx_cntrl = eth_tx_cntrl;
+  assign phy_tx_data = eth_tx_data;
+
+  assign phy_mdc = eth_mdc;
+  assign phy_mdio = (eth_mdio_t == 1'b0) ? eth_mdio_o : 1'bz;
+  assign eth_mdio_i = phy_mdio;
+
+Clone Blocks 5:
+hdl/projects/common/a5gte/system_top.v@101:111
+  assign phy_tx_cntrl = eth_tx_cntrl;
+  assign phy_tx_data = eth_tx_data;
+
+  assign phy_mdc = eth_mdc;
+  assign phy_mdio = (eth_mdio_t == 1'b0) ? eth_mdio_o : 1'bz;
+  assign eth_mdio_i = phy_mdio;
+
+  assign phy_resetn = eth_phy_resetn;
+
+endmodule
+
+

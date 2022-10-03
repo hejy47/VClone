@@ -1,0 +1,46 @@
+Source Block: oh/src/common/hdl/oh_clockgate.v@14:45@HdlStmIf
+     input  en, // enable (from positive edge FF)
+     output eclk // enabled clock output
+     );
+
+   generate
+      if(ASIC)	     
+	begin : asic
+	   asic_icg  #(.PROJ(PROJ))
+	   asic_icg (.en(en),
+		     .te(te),
+		     .clk(clk),
+		     .eclk(eclk));
+	end
+      else
+	begin : generic
+	   wire    en_sh;
+	   wire    en_sl;
+	   //Stable low/valid rising edge enable
+	   assign   en_sl = en | te;
+	   
+	   //Stable high enable signal
+	   oh_lat0 lat0 (.out (en_sh),
+			 .in  (en_sl),
+			 .clk (clk));
+	   
+	   assign eclk =  clk & en_sh;
+	end 
+   endgenerate
+        
+endmodule // oh_clockgate
+
+
+
+Diff Content:
+- 21 	   asic_icg  #(.PROJ(PROJ))
+- 22 	   asic_icg (.en(en),
+- 23 		     .te(te),
+- 24 		     .clk(clk),
+- 25 		     .eclk(eclk));
++ 25 	   asic_icg asic_icg (.en(en),
++ 25 			      .te(te),
++ 25 			      .clk(clk),
++ 25 			      .eclk(eclk));
+
+Clone Blocks:

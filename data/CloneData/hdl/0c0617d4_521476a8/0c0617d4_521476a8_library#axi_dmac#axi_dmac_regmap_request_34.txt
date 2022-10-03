@@ -1,0 +1,59 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@212:222@HdlStmAssign
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot & response_valid & response_ready;
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+// Request ID and Request done bitmap handling
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+    up_transfer_id <= 2'h0;
+
+Diff Content:
+- 217 assign up_dma_req_ready = request_ready;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_regmap_request.v@209:219
+end
+endgenerate
+
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot & response_valid & response_ready;
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+// Request ID and Request done bitmap handling
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_regmap_request.v@208:218
+  assign request_src_stride = 'h0;
+end
+endgenerate
+
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot & response_valid & response_ready;
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+
+Clone Blocks 3:
+hdl/library/axi_dmac/axi_dmac_regmap_request.v@211:221
+
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot & response_valid & response_ready;
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+// Request ID and Request done bitmap handling
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+

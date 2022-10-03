@@ -1,0 +1,43 @@
+Source Block: miaow/src/verilog/rtl/lsu/lsu.v@87:114@HdlStmProcess
+   end
+   assign issue_ready = ~freez;
+
+
+   // Keep single cycle delay on exec signals
+   always @ ( posedge clk or posedge rst ) begin
+      if(rst) begin
+	 exec_rd_m0_value_i <= 0;
+	 //sgpr_source2_data_i <= 0;
+	 exec_exec_value_i <= 0;
+	 //sgpr_source1_data_i <= 0;
+	 //vgpr_source2_data_i <= 0;
+	 //vgpr_source1_data_i <= 0;
+      end
+      else begin
+	 exec_rd_m0_value_i <= exec_rd_m0_value;
+	 //sgpr_source2_data_i <= sgpr_source2_data;
+	 exec_exec_value_i <= exec_exec_value;
+	 //sgpr_source1_data_i <= sgpr_source1_data;
+	 //vgpr_source2_data_i <= vgpr_source2_data;
+	 //vgpr_source1_data_i <= vgpr_source1_data;
+      end
+   end
+   assign sgpr_source2_data_i = sgpr_source2_data;
+   assign sgpr_source1_data_i = sgpr_source1_data;
+   assign vgpr_source2_data_i = vgpr_source2_data;
+   assign vgpr_source1_data_i = vgpr_source1_data;
+   
+
+Diff Content:
+- 92    always @ ( posedge clk or posedge rst ) begin
+- 93       if(rst) begin
+- 94 	 exec_rd_m0_value_i <= 0;
+- 96 	 exec_exec_value_i <= 0;
+- 100       end
+- 101       else begin
+- 102 	 exec_rd_m0_value_i <= exec_rd_m0_value;
+- 104 	 exec_exec_value_i <= exec_exec_value;
+- 108       end
+- 109    end
+
+Clone Blocks:

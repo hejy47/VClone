@@ -1,0 +1,29 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4963:4974@HdlStmAssign
+
+   assign route_sides[3:0] = {route_north,route_east,route_south,route_west};
+   assign route_out = |(who_am_i[3:0] & route_sides[3:0]);
+
+   //# Request
+   assign mesh_req = access_reg & route_out & ((multicast_tran & ~cfg_multicast_dis) |
+					       ~multicast_tran);
+
+   //# Wait
+   assign mesh_ack_n    = mesh_req & ~mesh_grant;
+   assign mesh_ack      = mesh_req &  mesh_grant;
+   assign mesh_wait_int = mesh_req & ~mesh_last_tran | mesh_ack_n;
+
+Diff Content:
+- 4968    assign mesh_req = access_reg & route_out & ((multicast_tran & ~cfg_multicast_dis) |
+- 4969 					       ~multicast_tran);
++ 4969    assign txo_launch_cnt_next[2:0] =  jump_4entries ? 3'b011 :
++ 4969 	 (jump_3entries_write | txo_launch_cnt_max) ? 3'b000 :
++ 4969 			         jump_3entries_read ? 3'b101 : txo_launch_cnt_inc[2:0];
++ 4969    always @ (posedge txo_lclk or posedge reset)
++ 4969      if (reset)
++ 4969        txo_launch_cnt[2:0] <= 3'b000;
++ 4969      else if(txo_op_ack)
++ 4969        txo_launch_cnt[2:0] <= txo_launch_cnt_next[2:0];
++ 4969    assign tran_read = (~single_write & (txo_launch_cnt[2:0] == 3'b110)) |
++ 4969 		      ( single_write & (txo_launch_cnt[2:0] == 3'b100));
+
+Clone Blocks:

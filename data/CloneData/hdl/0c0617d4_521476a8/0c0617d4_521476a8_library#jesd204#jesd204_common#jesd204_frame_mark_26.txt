@@ -1,0 +1,93 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_frame_mark.v@154:174@HdlStmProcess
+  eof_f_12[1] = {8'b00001000};
+  eof_f_12[2] = {8'b10000000};
+end
+end
+// Beat count % 3, to support F=3, 6, 12
+always @(posedge clk) begin
+  if(reset) begin
+    beat_cnt_mod_3 <= 2'd0;
+  end else begin
+    if(beat_cnt_mod_3 == 2'd2) begin
+      beat_cnt_mod_3 <= 2'd0;
+    end else begin
+      beat_cnt_mod_3 <= beat_cnt_mod_3 + 1'b1;
+    end
+  end
+end
+
+// Beat count per frame
+always @(posedge clk) begin
+  if(reset) begin
+    beat_cnt_frame <= {BEATS_PER_FRAME_WIDTH{1'b0}};
+
+Diff Content:
+- 159 always @(posedge clk) begin
+- 160   if(reset) begin
+- 161     beat_cnt_mod_3 <= 2'd0;
+- 162   end else begin
+- 163     if(beat_cnt_mod_3 == 2'd2) begin
+- 166       beat_cnt_mod_3 <= beat_cnt_mod_3 + 1'b1;
+- 169 end
++ 163   generate
++ 163   if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
++ 163   initial begin
++ 163     sof_f_3[0] = {4'b1001};
++ 163     sof_f_3[1] = {4'b0100};
++ 163     sof_f_3[2] = {4'b0010};
++ 163     eof_f_3[0] = {4'b0100};
++ 163     eof_f_3[1] = {4'b0010};
++ 163     eof_f_3[2] = {4'b1001};
++ 163     sof_f_6[0] = {4'b0001};
++ 163     sof_f_6[1] = {4'b0100};
++ 163     sof_f_6[2] = {4'b0000};
++ 163     eof_f_6[0] = {4'b0000};
++ 163     eof_f_6[1] = {4'b0010};
++ 163     eof_f_6[2] = {4'b1000};
++ 163   end
++ 163   end else if(DATA_PATH_WIDTH == 6) begin : gen_dp_6
++ 163   initial begin
++ 163     sof_f_3[0] = {6'b001001};
++ 163     sof_f_3[1] = {6'b001001};
++ 163     sof_f_3[2] = {6'b001001};
++ 163     eof_f_3[0] = {6'b100100};
++ 163     eof_f_3[1] = {6'b100100};
++ 163     eof_f_3[2] = {6'b100100};
++ 163     sof_f_6[0] = {6'b000001};
++ 163     sof_f_6[1] = {6'b000001};
++ 163     sof_f_6[2] = {6'b000001};
++ 163     eof_f_6[0] = {6'b100000};
++ 163     eof_f_6[1] = {6'b100000};
++ 163     eof_f_6[2] = {6'b100000};
++ 163   end
++ 163   end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
++ 163   initial begin
++ 163     sof_f_3[0]  = {8'b01001001};
++ 163     sof_f_3[1]  = {8'b10010010};
++ 163     sof_f_3[2]  = {8'b00100100};
++ 163     eof_f_3[0]  = {8'b00100100};
++ 163     eof_f_3[1]  = {8'b01001001};
++ 163     eof_f_3[2]  = {8'b10010010};
++ 163     sof_f_6[0]  = {8'b01000001};
++ 163     sof_f_6[1]  = {8'b00010000};
++ 163     sof_f_6[2]  = {8'b00000100};
++ 163     eof_f_6[0]  = {8'b00100000};
++ 163     eof_f_6[1]  = {8'b00001000};
++ 163     eof_f_6[2]  = {8'b10000010};
++ 163     sof_f_12[0] = {8'b00000001};
++ 163     sof_f_12[1] = {8'b00010000};
++ 163     sof_f_12[2] = {8'b00000000};
++ 163     eof_f_12[0] = {8'b00000000};
++ 163     eof_f_12[1] = {8'b00001000};
++ 163     eof_f_12[2] = {8'b10000000};
++ 163   end
++ 163   end
++ 163   always @(posedge clk) begin
++ 163     if(reset) begin
++ 166       if(beat_cnt_mod_3 == 2'd2) begin
++ 166         beat_cnt_mod_3 <= 2'd0;
++ 166       end else begin
++ 166         beat_cnt_mod_3 <= beat_cnt_mod_3 + 1'b1;
++ 166       end
+
+Clone Blocks:

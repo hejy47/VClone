@@ -1,0 +1,24 @@
+Source Block: hdl/library/axi_sysid/axi_sysid.v@89:101@HdlStmProcess
+  .up_raddr (up_raddr_s),
+  .up_rdata (up_rdata_s),
+  .up_rack (up_rack_s));
+
+//delaying data read with 1 tck to compensate for the ROM latency
+always @(posedge up_clk) begin
+  up_rreq_s_d <= up_rreq_s;
+end
+
+//axi registers read
+always @(posedge up_clk) begin
+  if (up_rstn == 1'b0) begin
+    up_rack_s <= 'd0;
+
+Diff Content:
+- 94 always @(posedge up_clk) begin
+- 95   up_rreq_s_d <= up_rreq_s;
+- 96 end
++ 96   always @(posedge up_clk) begin
++ 96     up_rreq_s_d <= up_rreq_s;
++ 96   end
+
+Clone Blocks:

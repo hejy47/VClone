@@ -1,0 +1,229 @@
+Source Block: verilog-ethernet/rtl/axis_async_frame_fifo_64.v@322:343@HdlStmProcess
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        rd_ptr_gray_reg <= rd_ptr_gray_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+    end
+
+    if (read) begin
+        {output_axis_tlast_reg, output_axis_tkeep_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+endmodule
+
+Diff Content:
+- 339         {output_axis_tlast_reg, output_axis_tkeep_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
++ 339         mem_read_data_reg <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_frame_fifo.v@171:200
+        mem[wr_ptr_cur_reg[ADDR_WIDTH-1:0]] <= {input_axis_tlast, input_axis_tdata};
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+    rd_ptr_next = rd_ptr_reg;
+
+    output_axis_tvalid_next = output_axis_tvalid_reg;
+
+    if (output_axis_tready | ~output_axis_tvalid) begin
+        // output data not valid OR currently being transferred
+        if (~empty) begin
+            // not empty, perform read
+            read = 1'b1;
+            output_axis_tvalid_next = 1'b1;
+            rd_ptr_next = rd_ptr_reg + 1;
+        end else begin
+            // empty, invalidate
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_async_fifo.v@203:224
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        rd_ptr_gray_reg <= rd_ptr_gray_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+    end
+
+    if (read) begin
+        {output_axis_tlast_reg, output_axis_tuser_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+endmodule
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_frame_fifo.v@192:211
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+    end
+
+    if (read) begin
+        {output_axis_tlast_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+endmodule
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_frame_fifo_64.v@196:215
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+    end
+
+    if (read) begin
+        {output_axis_tlast_reg, output_axis_tkeep_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+endmodule
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_fifo.v@131:150
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+    end
+
+    if (read) begin
+        {output_axis_tlast_reg, output_axis_tuser_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+endmodule
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_async_frame_fifo.v@317:338
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        rd_ptr_gray_reg <= rd_ptr_gray_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+    end
+
+    if (read) begin
+        {output_axis_tlast_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+endmodule
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_fifo_64.v@137:156
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+    end
+
+    if (read) begin
+        {output_axis_tlast_reg, output_axis_tuser_reg, output_axis_tkeep_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+endmodule
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_async_fifo_64.v@208:229
+            output_axis_tvalid_next = 1'b0;
+        end
+    end
+end
+
+always @(posedge output_clk) begin
+    if (output_rst_sync3_reg) begin
+        rd_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        rd_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+        output_axis_tvalid_reg <= 1'b0;
+    end else begin
+        rd_ptr_reg <= rd_ptr_next;
+        rd_ptr_gray_reg <= rd_ptr_gray_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+    end
+
+    if (read) begin
+        {output_axis_tlast_reg, output_axis_tuser_reg, output_axis_tkeep_reg, output_axis_tdata_reg} <= mem[rd_ptr_reg[ADDR_WIDTH-1:0]];
+    end
+end
+
+endmodule
+

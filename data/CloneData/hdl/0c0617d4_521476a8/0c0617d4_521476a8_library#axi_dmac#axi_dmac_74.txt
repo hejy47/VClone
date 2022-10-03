@@ -1,0 +1,27 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@384:399@HdlStmAssign
+  {DBG_ID_PADDING{1'b0}}, dest_data_id,
+  {DBG_ID_PADDING{1'b0}}, dest_address_id,
+  {DBG_ID_PADDING{1'b0}}, dest_request_id
+};
+
+assign dbg_ids1 = {
+  {DBG_ID_PADDING{1'b0}}, src_response_id,
+  {DBG_ID_PADDING{1'b0}}, src_data_id,
+  {DBG_ID_PADDING{1'b0}}, src_address_id,
+  {DBG_ID_PADDING{1'b0}}, src_request_id
+};
+
+axi_dmac_regmap #(
+  .ID(ID),
+  .DISABLE_DEBUG_REGISTERS(DISABLE_DEBUG_REGISTERS),
+  .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
+
+Diff Content:
+- 389 assign dbg_ids1 = {
+- 390   {DBG_ID_PADDING{1'b0}}, src_response_id,
+- 391   {DBG_ID_PADDING{1'b0}}, src_data_id,
+- 392   {DBG_ID_PADDING{1'b0}}, src_address_id,
+- 393   {DBG_ID_PADDING{1'b0}}, src_request_id
+- 394 };
+
+Clone Blocks:

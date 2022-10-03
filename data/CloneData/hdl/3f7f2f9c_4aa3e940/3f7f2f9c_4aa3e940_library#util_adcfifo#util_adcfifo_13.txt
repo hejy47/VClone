@@ -1,0 +1,40 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@142:162@HdlStmProcess
+        end
+      end
+    end
+  end
+
+  always @(posedge adc_clk) begin
+    if (adc_rst_s == 1'b1) begin
+      adc_waddr_rel_t <= 'd0;
+      adc_waddr_rel <= 'd0;
+    end else begin
+      if ((adc_wr_int == 1'b1) && (adc_waddr_int[2:0] == 3'h7)) begin
+        adc_waddr_rel_t <= ~adc_waddr_rel_t;
+        adc_waddr_rel <= adc_waddr_int;
+      end
+    end
+  end
+
+  // read interface
+
+  assign dma_xfer_status = 4'd0;
+  assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
+
+Diff Content:
+- 148     if (adc_rst_s == 1'b1) begin
+- 149       adc_waddr_rel_t <= 'd0;
+- 150       adc_waddr_rel <= 'd0;
+- 152       if ((adc_wr_int == 1'b1) && (adc_waddr_int[2:0] == 3'h7)) begin
+- 153         adc_waddr_rel_t <= ~adc_waddr_rel_t;
+- 154         adc_waddr_rel <= adc_waddr_int;
++ 150     if (adc_xfer_req_m[2] == 1'b0) begin
++ 150       adc_wr_int <= 'd0;
++ 150       adc_wdata_int <= 'd0;
++ 150       adc_waddr_int <= 'd0;
++ 154       adc_wr_int <= adc_wr & adc_xfer_enable;
++ 154       adc_wdata_int <= adc_wdata;
++ 154       if (adc_wr_int == 1'b1) begin
++ 154         adc_waddr_int <= adc_waddr_int_s;
+
+Clone Blocks:

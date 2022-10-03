@@ -1,0 +1,73 @@
+Source Block: zipcpu/bench/formal/abs_mpy.v@58:123@HdlStmIf
+// i_stb instead of this_is_a_multiply_op
+// o_result
+// o_busy
+// o_done
+	generate
+	if (IMPLEMENT_MPY == 0)
+	begin // No multiply support.
+
+		assign	o_result   = 64'h00;
+		assign	o_busy     = 1'b0;
+		assign	o_valid    = 1'b1;
+		always @(*) o_hi = 1'b0; // Not needed
+
+	end else begin // Our single clock option (no extra clocks)
+
+		wire	[2:0]	next_delay_to_valid;
+
+		assign	next_delay_to_valid = $anyseq;
+		assign	o_result = $anyseq;
+
+		reg	[2:0]	delay_to_valid;
+		reg		r_busy;
+
+		always @(*)
+			assume((MAXDELAY == 0)
+				||(next_delay_to_valid < MAXDELAY));
+
+		initial	delay_to_valid = 3'h0;
+		always @(posedge i_clk)
+		if (i_reset)
+			delay_to_valid <= 0;
+		else if ((i_stb)&&(next_delay_to_valid != 0))
+			delay_to_valid <= next_delay_to_valid;
+		else if (delay_to_valid > 0)
+			delay_to_valid <= delay_to_valid - 1'b1;
+
+		always @(*)
+			assert((MAXDELAY == 0)
+				||(delay_to_valid < MAXDELAY));
+
+		initial	r_busy = 1'b0;
+		always @(posedge i_clk)
+		if (i_reset)
+			r_busy <= 1'b0;
+		else if (i_stb)
+			r_busy <= (next_delay_to_valid != 0);
+		else if (r_busy)
+			r_busy <= (delay_to_valid != 3'h1);
+
+		always @(posedge i_clk)
+		if (i_reset)
+			o_valid <= 1'b0;
+		else if ((i_stb)&&(next_delay_to_valid == 0))
+			o_valid <= 1'b1;
+		else
+			o_valid <= (o_busy)&&(delay_to_valid == 3'h1);
+
+		always @(posedge i_clk)
+		if (i_stb)
+			o_hi <= i_op[1];
+
+		assign	o_busy = r_busy;
+	end
+	endgenerate // All possible multiply results have been determined
+
+endmodule
+
+Diff Content:
+- 95 			assert((MAXDELAY == 0)
++ 95 			`ASSERT((MAXDELAY == 0)
+
+Clone Blocks:

@@ -1,0 +1,78 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@345:382@HdlStmProcess
+      3'h4: trigger_out_mixed = trigger_a ^ trigger_b;
+      default: trigger_out_mixed = trigger_a;
+    endcase
+  end
+
+  always @(posedge clk) begin
+    if (data_valid_a == 1'b1) begin
+      if (data_a_cmp > limit_a_cmp) begin
+        comp_high_a <= 1'b1;
+        passthrough_high_a <= low_a;
+      end else begin
+        comp_high_a <= 1'b0;
+        passthrough_high_a <= 1'b0;
+      end
+      if (data_a_cmp < limit_a_cmp) begin
+        comp_low_a <= 1'b1;
+        passthrough_low_a <= high_a;
+      end else begin
+        comp_low_a <= 1'b0;
+        passthrough_low_a <= 1'b0;
+      end
+      if (passthrough_high_a == 1'b1) begin
+        low_a <= 1'b0;
+      end else if (data_a_cmp < limit_a_cmp - hysteresis_a) begin
+        low_a <= 1'b1;
+      end
+      if (passthrough_low_a == 1'b1) begin
+        high_a <= 1'b0;
+      end else if (data_a_cmp > limit_a_cmp + hysteresis_a) begin
+        high_a <= 1'b1;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (data_valid_b == 1'b1) begin
+      if (data_b_cmp > limit_b_cmp) begin
+        comp_high_b <= 1'b1;
+
+Diff Content:
+- 352       if (data_a_cmp > limit_a_cmp) begin
+- 354         passthrough_high_a <= low_a;
+- 357         passthrough_high_a <= 1'b0;
+- 358       end
+- 359       if (data_a_cmp < limit_a_cmp) begin
+- 360         comp_low_a <= 1'b1;
+- 361         passthrough_low_a <= high_a;
+- 362       end else begin
+- 363         comp_low_a <= 1'b0;
+- 364         passthrough_low_a <= 1'b0;
+- 365       end
+- 366       if (passthrough_high_a == 1'b1) begin
+- 367         low_a <= 1'b0;
+- 368       end else if (data_a_cmp < limit_a_cmp - hysteresis_a) begin
+- 369         low_a <= 1'b1;
+- 370       end
+- 371       if (passthrough_low_a == 1'b1) begin
+- 372         high_a <= 1'b0;
+- 373       end else if (data_a_cmp > limit_a_cmp + hysteresis_a) begin
+- 374         high_a <= 1'b1;
++ 352       hyst_a_high_limit <= limit_a_cmp + hysteresis_a[15-SIGN_BITS:0];
++ 352       hyst_a_low_limit  <= limit_a_cmp - hysteresis_a[15-SIGN_BITS:0];
++ 352       if (data_a_cmp >= limit_a_cmp) begin
++ 354         first_a_h_trigger <= passthrough_high_a_s ? 0 : first_a_h_trigger;
++ 354         if (data_a_cmp > hyst_a_high_limit) begin
++ 354           first_a_l_trigger <= 1'b1;
++ 354         end
++ 374         first_a_l_trigger <= (passthrough_low_a_s) ? 0 : first_a_l_trigger;
++ 374         if (data_a_cmp < hyst_a_low_limit) begin
++ 374           first_a_h_trigger <= 1'b1;
++ 374         end
++ 375       old_comp_high_a <= comp_high_a;
++ 377   assign passthrough_high_a_s = !old_comp_high_a & comp_high_a & first_a_h_trigger;
++ 377   assign passthrough_low_a_s = old_comp_high_a & !comp_high_a & first_a_l_trigger;
++ 377   assign comp_low_a_s = !comp_high_a;
+
+Clone Blocks:

@@ -1,0 +1,48 @@
+Source Block: oh/src/common/hdl/oh_standby.v@21:32@HdlStmProcess
+   // detect an idle state change (wake up on any)
+   always @ (posedge clk )     
+     idle_reg <= idle;   
+   assign state_change = (idle ^ idle_reg);
+      
+   always @ (posedge clk)    
+     wakeup_pipe[PD-1:0] <= {wakeup_pipe[PD-2:0],(state_change | wakeup)};
+
+   //block enable signal
+   assign  clk_en    =  ~nreset                | //always on during reset
+                        wakeup                 | //immediate wakeup
+			state_change           | //incoming transition
+
+Diff Content:
+- 26    always @ (posedge clk)    
++ 26    always @ (posedge clkin)    
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_standby.v@19:29
+   reg          idle_reg;
+   
+   // detect an idle state change (wake up on any)
+   always @ (posedge clk )     
+     idle_reg <= idle;   
+   assign state_change = (idle ^ idle_reg);
+      
+   always @ (posedge clk)    
+     wakeup_pipe[PD-1:0] <= {wakeup_pipe[PD-2:0],(state_change | wakeup)};
+
+   //block enable signal
+
+Clone Blocks 2:
+oh/src/common/hdl/oh_standby.v@17:28
+   //Wire declarations
+   reg [PD-1:0]	wakeup_pipe;
+   reg          idle_reg;
+   
+   // detect an idle state change (wake up on any)
+   always @ (posedge clk )     
+     idle_reg <= idle;   
+   assign state_change = (idle ^ idle_reg);
+      
+   always @ (posedge clk)    
+     wakeup_pipe[PD-1:0] <= {wakeup_pipe[PD-2:0],(state_change | wakeup)};
+
+

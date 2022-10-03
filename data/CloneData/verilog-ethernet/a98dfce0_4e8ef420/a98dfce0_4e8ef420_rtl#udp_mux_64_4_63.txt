@@ -1,0 +1,247 @@
+Source Block: verilog-ethernet/rtl/udp_mux_64_4.v@392:437@HdlStmProcess
+reg [7:0] current_input_tkeep;
+reg current_input_tvalid;
+reg current_input_tready;
+reg current_input_tlast;
+reg current_input_tuser;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_input_tdata = input_0_udp_payload_tdata;
+            current_input_tkeep = input_0_udp_payload_tkeep;
+            current_input_tvalid = input_0_udp_payload_tvalid;
+            current_input_tready = input_0_udp_payload_tready;
+            current_input_tlast = input_0_udp_payload_tlast;
+            current_input_tuser = input_0_udp_payload_tuser;
+        end
+        2'd1: begin
+            current_input_tdata = input_1_udp_payload_tdata;
+            current_input_tkeep = input_1_udp_payload_tkeep;
+            current_input_tvalid = input_1_udp_payload_tvalid;
+            current_input_tready = input_1_udp_payload_tready;
+            current_input_tlast = input_1_udp_payload_tlast;
+            current_input_tuser = input_1_udp_payload_tuser;
+        end
+        2'd2: begin
+            current_input_tdata = input_2_udp_payload_tdata;
+            current_input_tkeep = input_2_udp_payload_tkeep;
+            current_input_tvalid = input_2_udp_payload_tvalid;
+            current_input_tready = input_2_udp_payload_tready;
+            current_input_tlast = input_2_udp_payload_tlast;
+            current_input_tuser = input_2_udp_payload_tuser;
+        end
+        2'd3: begin
+            current_input_tdata = input_3_udp_payload_tdata;
+            current_input_tkeep = input_3_udp_payload_tkeep;
+            current_input_tvalid = input_3_udp_payload_tvalid;
+            current_input_tready = input_3_udp_payload_tready;
+            current_input_tlast = input_3_udp_payload_tlast;
+            current_input_tuser = input_3_udp_payload_tuser;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+
+Diff Content:
++ 430         default: begin
++ 430             current_input_tdata = 64'd0;
++ 430             current_input_tkeep = 8'd0;
++ 430             current_input_tvalid = 1'b0;
++ 430             current_input_tready = 1'b0;
++ 430             current_input_tlast = 1'b0;
++ 430             current_input_tuser = 1'b0;
++ 430         end
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mux_64_4.v@188:233
+reg [7:0]  current_input_tkeep;
+reg current_input_tvalid;
+reg current_input_tready;
+reg current_input_tlast;
+reg current_input_tuser;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_input_tdata = input_0_eth_payload_tdata;
+            current_input_tkeep = input_0_eth_payload_tkeep;
+            current_input_tvalid = input_0_eth_payload_tvalid;
+            current_input_tready = input_0_eth_payload_tready;
+            current_input_tlast = input_0_eth_payload_tlast;
+            current_input_tuser = input_0_eth_payload_tuser;
+        end
+        2'd1: begin
+            current_input_tdata = input_1_eth_payload_tdata;
+            current_input_tkeep = input_1_eth_payload_tkeep;
+            current_input_tvalid = input_1_eth_payload_tvalid;
+            current_input_tready = input_1_eth_payload_tready;
+            current_input_tlast = input_1_eth_payload_tlast;
+            current_input_tuser = input_1_eth_payload_tuser;
+        end
+        2'd2: begin
+            current_input_tdata = input_2_eth_payload_tdata;
+            current_input_tkeep = input_2_eth_payload_tkeep;
+            current_input_tvalid = input_2_eth_payload_tvalid;
+            current_input_tready = input_2_eth_payload_tready;
+            current_input_tlast = input_2_eth_payload_tlast;
+            current_input_tuser = input_2_eth_payload_tuser;
+        end
+        2'd3: begin
+            current_input_tdata = input_3_eth_payload_tdata;
+            current_input_tkeep = input_3_eth_payload_tkeep;
+            current_input_tvalid = input_3_eth_payload_tvalid;
+            current_input_tready = input_3_eth_payload_tready;
+            current_input_tlast = input_3_eth_payload_tlast;
+            current_input_tuser = input_3_eth_payload_tuser;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+
+Clone Blocks 2:
+verilog-ethernet/rtl/udp_mux_4.v@385:426
+reg [7:0] current_input_tdata;
+reg current_input_tvalid;
+reg current_input_tready;
+reg current_input_tlast;
+reg current_input_tuser;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_input_tdata = input_0_udp_payload_tdata;
+            current_input_tvalid = input_0_udp_payload_tvalid;
+            current_input_tready = input_0_udp_payload_tready;
+            current_input_tlast = input_0_udp_payload_tlast;
+            current_input_tuser = input_0_udp_payload_tuser;
+        end
+        2'd1: begin
+            current_input_tdata = input_1_udp_payload_tdata;
+            current_input_tvalid = input_1_udp_payload_tvalid;
+            current_input_tready = input_1_udp_payload_tready;
+            current_input_tlast = input_1_udp_payload_tlast;
+            current_input_tuser = input_1_udp_payload_tuser;
+        end
+        2'd2: begin
+            current_input_tdata = input_2_udp_payload_tdata;
+            current_input_tvalid = input_2_udp_payload_tvalid;
+            current_input_tready = input_2_udp_payload_tready;
+            current_input_tlast = input_2_udp_payload_tlast;
+            current_input_tuser = input_2_udp_payload_tuser;
+        end
+        2'd3: begin
+            current_input_tdata = input_3_udp_payload_tdata;
+            current_input_tvalid = input_3_udp_payload_tvalid;
+            current_input_tready = input_3_udp_payload_tready;
+            current_input_tlast = input_3_udp_payload_tlast;
+            current_input_tuser = input_3_udp_payload_tuser;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+
+Clone Blocks 3:
+verilog-ethernet/rtl/ip_mux_64_4.v@344:389
+reg [7:0] current_input_tkeep;
+reg current_input_tvalid;
+reg current_input_tready;
+reg current_input_tlast;
+reg current_input_tuser;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_input_tdata = input_0_ip_payload_tdata;
+            current_input_tkeep = input_0_ip_payload_tkeep;
+            current_input_tvalid = input_0_ip_payload_tvalid;
+            current_input_tready = input_0_ip_payload_tready;
+            current_input_tlast = input_0_ip_payload_tlast;
+            current_input_tuser = input_0_ip_payload_tuser;
+        end
+        2'd1: begin
+            current_input_tdata = input_1_ip_payload_tdata;
+            current_input_tkeep = input_1_ip_payload_tkeep;
+            current_input_tvalid = input_1_ip_payload_tvalid;
+            current_input_tready = input_1_ip_payload_tready;
+            current_input_tlast = input_1_ip_payload_tlast;
+            current_input_tuser = input_1_ip_payload_tuser;
+        end
+        2'd2: begin
+            current_input_tdata = input_2_ip_payload_tdata;
+            current_input_tkeep = input_2_ip_payload_tkeep;
+            current_input_tvalid = input_2_ip_payload_tvalid;
+            current_input_tready = input_2_ip_payload_tready;
+            current_input_tlast = input_2_ip_payload_tlast;
+            current_input_tuser = input_2_ip_payload_tuser;
+        end
+        2'd3: begin
+            current_input_tdata = input_3_ip_payload_tdata;
+            current_input_tkeep = input_3_ip_payload_tkeep;
+            current_input_tvalid = input_3_ip_payload_tvalid;
+            current_input_tready = input_3_ip_payload_tready;
+            current_input_tlast = input_3_ip_payload_tlast;
+            current_input_tuser = input_3_ip_payload_tuser;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+
+Clone Blocks 4:
+verilog-ethernet/rtl/ip_mux_4.v@337:378
+reg [7:0] current_input_tdata;
+reg current_input_tvalid;
+reg current_input_tready;
+reg current_input_tlast;
+reg current_input_tuser;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_input_tdata = input_0_ip_payload_tdata;
+            current_input_tvalid = input_0_ip_payload_tvalid;
+            current_input_tready = input_0_ip_payload_tready;
+            current_input_tlast = input_0_ip_payload_tlast;
+            current_input_tuser = input_0_ip_payload_tuser;
+        end
+        2'd1: begin
+            current_input_tdata = input_1_ip_payload_tdata;
+            current_input_tvalid = input_1_ip_payload_tvalid;
+            current_input_tready = input_1_ip_payload_tready;
+            current_input_tlast = input_1_ip_payload_tlast;
+            current_input_tuser = input_1_ip_payload_tuser;
+        end
+        2'd2: begin
+            current_input_tdata = input_2_ip_payload_tdata;
+            current_input_tvalid = input_2_ip_payload_tvalid;
+            current_input_tready = input_2_ip_payload_tready;
+            current_input_tlast = input_2_ip_payload_tlast;
+            current_input_tuser = input_2_ip_payload_tuser;
+        end
+        2'd3: begin
+            current_input_tdata = input_3_ip_payload_tdata;
+            current_input_tvalid = input_3_ip_payload_tvalid;
+            current_input_tready = input_3_ip_payload_tready;
+            current_input_tlast = input_3_ip_payload_tlast;
+            current_input_tuser = input_3_ip_payload_tuser;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+

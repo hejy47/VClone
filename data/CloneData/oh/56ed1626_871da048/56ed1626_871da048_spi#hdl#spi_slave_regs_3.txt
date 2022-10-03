@@ -1,0 +1,18 @@
+Source Block: oh/spi/hdl/spi_slave_regs.v@62:72@HdlStmAssign
+   //# SPI DECODE
+   //#####################################
+   
+   assign spi_config_write  = spi_write & (spi_addr[5:0]==`SPI_CONFIG);
+   assign spi_status_write  = spi_write & (spi_addr[5:0]==`SPI_STATUS);
+   assign spi_user_write    = spi_write & (|spi_addr[5:4]);
+
+   //#####################################
+   //# CORE DECODE
+   //#####################################
+
+
+Diff Content:
+- 67    assign spi_user_write    = spi_write & (|spi_addr[5:4]);
++ 67    assign spi_user_write    = spi_write & (spi_addr[5]);
+
+Clone Blocks:

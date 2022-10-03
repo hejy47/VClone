@@ -1,0 +1,89 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@70:80@HdlStmAssign
+  reg adc_sync_armed = 1'b0;
+  reg adc_sync_in_d1 = 1'b0;
+  reg adc_sync_d1 = 1'b0;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{link_valid}};
+  assign adc_sync_status = adc_sync_armed;
+  assign adc_rst_sync = adc_sync_armed;
+
+  always @(posedge clk) begin
+    adc_sync_in_d1 <= adc_sync_in;
+
+Diff Content:
+- 75   assign adc_valid = {NUM_CHANNELS{link_valid}};
++ 75   assign link_valid_tmp = EN_FRAME_ALIGN ? link_valid_d : link_valid;
++ 75   assign adc_valid = {NUM_CHANNELS{link_valid_tmp}};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@71:81
+  reg adc_sync_in_d1 = 1'b0;
+  reg adc_sync_d1 = 1'b0;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{link_valid}};
+  assign adc_sync_status = adc_sync_armed;
+  assign adc_rst_sync = adc_sync_armed;
+
+  always @(posedge clk) begin
+    adc_sync_in_d1 <= adc_sync_in;
+    adc_sync_d1 <= adc_sync;
+
+Clone Blocks 2:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@69:79
+
+  reg adc_sync_armed = 1'b0;
+  reg adc_sync_in_d1 = 1'b0;
+  reg adc_sync_d1 = 1'b0;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{link_valid}};
+  assign adc_sync_status = adc_sync_armed;
+  assign adc_rst_sync = adc_sync_armed;
+
+  always @(posedge clk) begin
+
+Clone Blocks 3:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@67:77
+
+  wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+
+  reg adc_sync_armed = 1'b0;
+  reg adc_sync_in_d1 = 1'b0;
+  reg adc_sync_d1 = 1'b0;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{link_valid}};
+  assign adc_sync_status = adc_sync_armed;
+  assign adc_rst_sync = adc_sync_armed;
+
+Clone Blocks 4:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@72:82
+  reg adc_sync_d1 = 1'b0;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{link_valid}};
+  assign adc_sync_status = adc_sync_armed;
+  assign adc_rst_sync = adc_sync_armed;
+
+  always @(posedge clk) begin
+    adc_sync_in_d1 <= adc_sync_in;
+    adc_sync_d1 <= adc_sync;
+    if ((~adc_sync_d1 & adc_sync) == 1'b1) begin
+
+Clone Blocks 5:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@66:76
+  localparam CDW_FMT = DMA_BITS_PER_SAMPLE * DATA_PATH_WIDTH;
+
+  wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+
+  reg adc_sync_armed = 1'b0;
+  reg adc_sync_in_d1 = 1'b0;
+  reg adc_sync_d1 = 1'b0;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{link_valid}};
+  assign adc_sync_status = adc_sync_armed;
+

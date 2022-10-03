@@ -1,0 +1,31 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/axi_dacfifo_rd.v@175:198@HdlStmProcess
+
+  assign axi_last_beats_s = {1'b0, axi_last_beats} - 1;
+  assign axi_dvalid_s = ((axi_last_beats_cntr > axi_last_beats_s) && (axi_araddr_prev == axi_last_raddr)) ? 0 : axi_rvalid & axi_rready;
+  assign axi_dlast_s = (axi_araddr_prev == axi_last_raddr) ? 1 : 0;
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_ddata <= 'd0;
+      axi_rready <= 1'b0;
+      axi_dvalid <= 1'b0;
+    end else begin
+      axi_ddata <= axi_rdata;
+      axi_dvalid <= axi_dvalid_s;
+      axi_dlast <= axi_dlast_s;
+      if (axi_xfer_req == 1'b1) begin
+        axi_rready <= axi_rvalid;
+      end
+    end
+  end
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+      axi_rerror <= 'd0;
+    end else begin
+
+Diff Content:
+- 188       axi_dlast <= axi_dlast_s;
++ 188       axi_dlast <= axi_dlast_s & axi_rlast;
+
+Clone Blocks:

@@ -1,0 +1,34 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@114:124@HdlStmAssign
+reg up_cfg_disable_char_replacement = 1'b0;
+reg up_cfg_disable_scrambler = 1'b0;
+
+/* Reset for the register map */
+reg [2:0] up_reset_vector = 3'b111;
+assign up_reset = up_reset_vector[0];
+
+/* Reset signal generation for the JESD core */
+reg [4:0] core_reset_vector = 5'b11111;
+assign core_reset = core_reset_vector[0];
+
+
+Diff Content:
+- 119 assign up_reset = up_reset_vector[0];
++ 119   /* Reset for the register map */
++ 119   reg [2:0] up_reset_vector = 3'b111;
++ 119   assign up_reset = up_reset_vector[0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@113:123
+reg [NUM_LINKS-1:0] up_cfg_links_disable = {NUM_LINKS{1'b0}};
+reg up_cfg_disable_char_replacement = 1'b0;
+reg up_cfg_disable_scrambler = 1'b0;
+
+/* Reset for the register map */
+reg [2:0] up_reset_vector = 3'b111;
+assign up_reset = up_reset_vector[0];
+
+/* Reset signal generation for the JESD core */
+reg [4:0] core_reset_vector = 5'b11111;
+assign core_reset = core_reset_vector[0];
+

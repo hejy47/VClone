@@ -1,0 +1,67 @@
+Source Block: oh/padring/hdl/oh_padring.v@184:222@HdlStmFor
+      
+      //#############################
+      // WEST
+      //#############################
+
+      for(i=0;i<WE_DOMAINS;i=i+1)
+	begin: we_pads
+	   oh_pads_domain #(.DIR("WE"),
+			    .TYPE(TYPE),
+			    .NGPIO(WE_GPIO),
+			    .NVDDIO(WE_VDDIO),
+			    .NVSSIO(WE_VSSIO),
+			    .NVDD(WE_VDD),
+			    .NVSS(WE_VSS),
+			    .POC(1),
+			    .LEFTCUT(1),
+			    .RIGHTCUT(1))			    
+	 
+	   i0 (.vdd     (vdd),
+	       .vss     (vss),
+	       // Outputs
+	       .din     (we_din[WE_GPIO-1:0]),
+	       // Inouts
+	       .pad     (we_pad[WE_GPIO-1:0]),
+	       .vddio   (we_vddio[i]),
+	       .vssio	(we_vssio[i]),
+	       .poc	(we_poc[i]),
+	       // Inputs
+	       .dout	(we_dout[WE_GPIO-1:0]),
+	       .oen	(we_oen[WE_GPIO-1:0]),
+	       .ie	(we_ie[WE_GPIO-1:0]),
+	       .cfg	(we_cfg[WE_GPIO*8-1:0]));
+	   
+	end
+      
+   endgenerate
+
+endmodule // oh_padring
+
+
+Diff Content:
+- 190 	begin: we_pads
+- 191 	   oh_pads_domain #(.DIR("WE"),
+- 192 			    .TYPE(TYPE),
+- 193 			    .NGPIO(WE_GPIO),
+- 194 			    .NVDDIO(WE_VDDIO),
+- 195 			    .NVSSIO(WE_VSSIO),
+- 196 			    .NVDD(WE_VDD),
+- 197 			    .NVSS(WE_VSS),
+- 198 			    .POC(1),
+- 199 			    .LEFTCUT(1),
+- 200 			    .RIGHTCUT(1))			    
+- 202 	   i0 (.vdd     (vdd),
+- 203 	       .vss     (vss),
+- 205 	       .din     (we_din[WE_GPIO-1:0]),
+- 207 	       .pad     (we_pad[WE_GPIO-1:0]),
+- 208 	       .vddio   (we_vddio[i]),
+- 209 	       .vssio	(we_vssio[i]),
+- 210 	       .poc	(we_poc[i]),
+- 212 	       .dout	(we_dout[WE_GPIO-1:0]),
+- 213 	       .oen	(we_oen[WE_GPIO-1:0]),
+- 214 	       .ie	(we_ie[WE_GPIO-1:0]),
+- 215 	       .cfg	(we_cfg[WE_GPIO*8-1:0]));
+- 217 	end
+
+Clone Blocks:

@@ -1,0 +1,88 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1421:1431@HdlStmAssign
+//   assign chip_addr_n[3:0] =~chip_addr[3:0];
+   //# high comparison
+//   assign {carry_high,comp_high[5:0]} = comp_addr[5:0] + {chip_addr_n[2:0],3'b101};
+   assign {carry_high,comp_high[5:0]} = {1'b0,comp_addr[5:0]} - {1'b0,chip_addr[5:0]};
+   //# channels matching
+   assign c0_match =  carry_high; // chip addr is bigger
+   assign c1_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b01});//EQ   
+   assign c2_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b10});//EQ  
+   assign c3_match = ~(c0_match | c1_match | c2_match);
+   //# multicast tran detection
+   assign multicast_match = write & 
+
+Diff Content:
+- 1426    assign c0_match =  carry_high; // chip addr is bigger
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1423:1433
+//   assign {carry_high,comp_high[5:0]} = comp_addr[5:0] + {chip_addr_n[2:0],3'b101};
+   assign {carry_high,comp_high[5:0]} = {1'b0,comp_addr[5:0]} - {1'b0,chip_addr[5:0]};
+   //# channels matching
+   assign c0_match =  carry_high; // chip addr is bigger
+   assign c1_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b01});//EQ   
+   assign c2_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b10});//EQ  
+   assign c3_match = ~(c0_match | c1_match | c2_match);
+   //# multicast tran detection
+   assign multicast_match = write & 
+			    (ctrlmode[1:0]==2'b11) & ~(datamode[1:0] == 2'b11);
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@1424:1434
+   assign {carry_high,comp_high[5:0]} = {1'b0,comp_addr[5:0]} - {1'b0,chip_addr[5:0]};
+   //# channels matching
+   assign c0_match =  carry_high; // chip addr is bigger
+   assign c1_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b01});//EQ   
+   assign c2_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b10});//EQ  
+   assign c3_match = ~(c0_match | c1_match | c2_match);
+   //# multicast tran detection
+   assign multicast_match = write & 
+			    (ctrlmode[1:0]==2'b11) & ~(datamode[1:0] == 2'b11);
+
+
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1426:1437
+   assign c0_match =  carry_high; // chip addr is bigger
+   assign c1_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b01});//EQ   
+   assign c2_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b10});//EQ  
+   assign c3_match = ~(c0_match | c1_match | c2_match);
+   //# multicast tran detection
+   assign multicast_match = write & 
+			    (ctrlmode[1:0]==2'b11) & ~(datamode[1:0] == 2'b11);
+
+
+
+
+endmodule // link_rxi_assembler
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@1419:1429
+   assign chip_addr[5:2] = vertical_k ?  ext_yid_k[3:0] : ext_xid_k[3:0];
+   assign chip_addr[1:0] = 2'b11;
+//   assign chip_addr_n[3:0] =~chip_addr[3:0];
+   //# high comparison
+//   assign {carry_high,comp_high[5:0]} = comp_addr[5:0] + {chip_addr_n[2:0],3'b101};
+   assign {carry_high,comp_high[5:0]} = {1'b0,comp_addr[5:0]} - {1'b0,chip_addr[5:0]};
+   //# channels matching
+   assign c0_match =  carry_high; // chip addr is bigger
+   assign c1_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b01});//EQ   
+   assign c2_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b10});//EQ  
+   assign c3_match = ~(c0_match | c1_match | c2_match);
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@1422:1432
+   //# high comparison
+//   assign {carry_high,comp_high[5:0]} = comp_addr[5:0] + {chip_addr_n[2:0],3'b101};
+   assign {carry_high,comp_high[5:0]} = {1'b0,comp_addr[5:0]} - {1'b0,chip_addr[5:0]};
+   //# channels matching
+   assign c0_match =  carry_high; // chip addr is bigger
+   assign c1_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b01});//EQ   
+   assign c2_match =  (comp_addr[5:0] == {chip_addr[5:2],3'b10});//EQ  
+   assign c3_match = ~(c0_match | c1_match | c2_match);
+   //# multicast tran detection
+   assign multicast_match = write & 
+			    (ctrlmode[1:0]==2'b11) & ~(datamode[1:0] == 2'b11);
+

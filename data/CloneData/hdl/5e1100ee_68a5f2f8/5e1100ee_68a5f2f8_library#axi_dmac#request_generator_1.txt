@@ -1,0 +1,75 @@
+Source Block: hdl/library/axi_dmac/request_generator.v@165:230@HdlStmProcess
+ *
+ * Completion requests are generated for every segment that is
+ * consumed/ignored. These are handled by the response_manager once the
+ * interrupted segment got transferred to the destination.
+ */
+always @(*) begin
+  nx_state = state;
+  nx_completion_req_valid = 0;
+  case (state)
+    STATE_IDLE: begin
+      if (rewind_req_valid == 1'b1) begin
+        nx_state = STATE_REWIND_ID;
+      end else if (req_valid == 1'b1) begin
+        nx_state = STATE_GEN_ID;
+      end
+    end
+    STATE_GEN_ID: begin
+      if (rewind_req_valid == 1'b1) begin
+        nx_state = STATE_REWIND_ID;
+      end else if (eot == 1'b1 && incr_en == 1'b1) begin
+        nx_state = STATE_IDLE;
+      end
+    end
+    STATE_REWIND_ID: begin
+      if (transfer_id_match) begin
+        if (rew_req_xlast) begin
+          nx_state = STATE_IDLE;
+        end else begin
+          nx_state = STATE_CONSUME;
+        end
+      end else begin
+        if (rew_req_xlast) begin
+          nx_state = STATE_GEN_ID;
+        end else if (cur_req_xlast) begin
+          nx_state = STATE_IDLE;
+          nx_completion_req_valid = 1;
+        end else begin
+          nx_state = STATE_CONSUME;
+          nx_completion_req_valid = 1;
+        end
+      end
+    end
+    STATE_CONSUME: begin
+      if (req_valid) begin
+        nx_completion_req_valid = 1;
+        nx_state = STATE_WAIT_LAST;
+      end
+    end
+    STATE_WAIT_LAST:begin
+      if (cur_req_xlast) begin
+        nx_state = STATE_IDLE;
+      end else begin
+        nx_state = STATE_CONSUME;
+      end
+    end
+
+    default: begin
+      nx_state = STATE_IDLE;
+    end
+  endcase
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    state <= STATE_IDLE;
+  end else begin
+
+Diff Content:
+- 175       if (rewind_req_valid == 1'b1) begin
+- 182       if (rewind_req_valid == 1'b1) begin
++ 175       if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
++ 182       if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
+
+Clone Blocks:

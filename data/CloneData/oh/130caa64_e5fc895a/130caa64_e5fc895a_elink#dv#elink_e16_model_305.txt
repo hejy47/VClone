@@ -1,0 +1,31 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2559:2569@HdlStmAssign
+			                      srcaddr_int[AW-1:0];
+
+   //# Mesh transaction for external corners detection
+//   assign dst_y_k[2:0] = dstaddr[31:29];
+//   assign dst_x_k[2:0] = dstaddr[28:26];
+   assign dst_y_k[3:0] = dstaddr[31:28];
+   assign dst_x_k[3:0] = dstaddr[25:22];
+
+   assign west_east_corner_tran = ((dst_x_k[3:0] == ext_xid_k[3:0]) &
+				  ~(dst_y_k[3:0] == ext_yid_k[3:0]));
+
+
+Diff Content:
+- 2564    assign dst_y_k[3:0] = dstaddr[31:28];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2560:2570
+
+   //# Mesh transaction for external corners detection
+//   assign dst_y_k[2:0] = dstaddr[31:29];
+//   assign dst_x_k[2:0] = dstaddr[28:26];
+   assign dst_y_k[3:0] = dstaddr[31:28];
+   assign dst_x_k[3:0] = dstaddr[25:22];
+
+   assign west_east_corner_tran = ((dst_x_k[3:0] == ext_xid_k[3:0]) &
+				  ~(dst_y_k[3:0] == ext_yid_k[3:0]));
+
+   assign north_south_corner_tran = (~(dst_x_k[3:0] == ext_xid_k[3:0]) &
+

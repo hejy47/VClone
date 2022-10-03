@@ -1,0 +1,64 @@
+Source Block: oh/emmu/hdl/emmu.v@100:111@HdlStmAssign
+   /*****************************/
+   /*WRITE LOGIC                */
+   /*****************************/
+
+   //Duplicating 32 bit data
+   assign emmu_mem_wr_data[63:0] = {mi_data_in[31:0],
+			           mi_data_in[31:0]};
+   
+   //Enabling lower/upper 32 bit data write 
+   assign emmu_write             = mi_access & mi_write;
+
+   assign emmu_mem_wr_en[7:0]    = (emmu_write & mi_addr[0])  ? 8'b11110000 :
+
+Diff Content:
+- 105    assign emmu_mem_wr_data[63:0] = {mi_data_in[31:0],
+- 106 			           mi_data_in[31:0]};
++ 106    assign emmu_mem_wr_data[63:0] = {mi_din[31:0],
++ 106 			            mi_din[31:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/e_mmu/hdl/e_mmu.v@104:114
+   //Duplicating 32 bit data
+   assign emmu_mem_wr_data[63:0] = {mi_data_in[31:0],
+			           mi_data_in[31:0]};
+   
+   //Enabling lower/upper 32 bit data write 
+   assign emmu_write             = mi_access & mi_write;
+
+   assign emmu_mem_wr_en[7:0]    = (emmu_write & mi_addr[0])  ? 8'b11110000 :
+				   (emmu_write & ~mi_addr[0]) ? 8'b00001111 :
+				                                8'b00000000;
+   
+
+Clone Blocks 2:
+oh/emmu/hdl/emmu.v@104:114
+   //Duplicating 32 bit data
+   assign emmu_mem_wr_data[63:0] = {mi_data_in[31:0],
+			           mi_data_in[31:0]};
+   
+   //Enabling lower/upper 32 bit data write 
+   assign emmu_write             = mi_access & mi_write;
+
+   assign emmu_mem_wr_en[7:0]    = (emmu_write & mi_addr[0])  ? 8'b11110000 :
+				   (emmu_write & ~mi_addr[0]) ? 8'b00001111 :
+				                                8'b00000000;
+   
+
+Clone Blocks 3:
+oh/e_mmu/hdl/e_mmu.v@100:111
+   /*****************************/
+   /*WRITE LOGIC                */
+   /*****************************/
+
+   //Duplicating 32 bit data
+   assign emmu_mem_wr_data[63:0] = {mi_data_in[31:0],
+			           mi_data_in[31:0]};
+   
+   //Enabling lower/upper 32 bit data write 
+   assign emmu_write             = mi_access & mi_write;
+
+   assign emmu_mem_wr_en[7:0]    = (emmu_write & mi_addr[0])  ? 8'b11110000 :
+

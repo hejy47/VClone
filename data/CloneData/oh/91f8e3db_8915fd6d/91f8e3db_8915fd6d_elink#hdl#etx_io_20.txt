@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/etx_io.v@86:96@HdlIdDef
+			.fastclk	(tx_lclk_io),
+			.slowclk	(tx_lclk_div4)
+			);
+      
+   //Sample on aligned edge
+   reg 		  tx_burst_reg;   
+   always @ (posedge tx_lclk_io)
+     if(firstedge)
+       begin
+	  tx_access_reg    <= tx_access & ~tx_wait;
+	  tx_burst_reg     <= tx_burst;	  //need early indicator for first cycle
+
+Diff Content:
+- 91    reg 		  tx_burst_reg;   
+
+Clone Blocks:

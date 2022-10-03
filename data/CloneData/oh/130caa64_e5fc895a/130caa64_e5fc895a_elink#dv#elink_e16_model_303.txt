@@ -1,0 +1,36 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2549:2561@HdlStmAssign
+   //# Modified source address
+   //assign srcaddr_multicast[AW-1:0] = {srcaddr_int[31:26],1'b0,srcaddr_int_ycoord[1:0],
+   //				                1'b0,srcaddr_int_xcoord[1:0],
+   //                                    srcaddr_int[19:0]};
+
+   assign srcaddr_multicast[AW-1:0] = {srcaddr_int[31:28],srcaddr_int_ycoord[1:0],
+             		               srcaddr_int[25:22],srcaddr_int_xcoord[1:0],
+                                       srcaddr_int[19:0]};
+
+   assign srcaddr[AW-1:0] = multicast_match ? srcaddr_multicast[AW-1:0] : 
+			                      srcaddr_int[AW-1:0];
+
+   //# Mesh transaction for external corners detection
+
+Diff Content:
+- 2554    assign srcaddr_multicast[AW-1:0] = {srcaddr_int[31:28],srcaddr_int_ycoord[1:0],
+- 2555              		               srcaddr_int[25:22],srcaddr_int_xcoord[1:0],
+- 2556                                        srcaddr_int[19:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2553:2564
+
+   assign srcaddr_multicast[AW-1:0] = {srcaddr_int[31:28],srcaddr_int_ycoord[1:0],
+             		               srcaddr_int[25:22],srcaddr_int_xcoord[1:0],
+                                       srcaddr_int[19:0]};
+
+   assign srcaddr[AW-1:0] = multicast_match ? srcaddr_multicast[AW-1:0] : 
+			                      srcaddr_int[AW-1:0];
+
+   //# Mesh transaction for external corners detection
+//   assign dst_y_k[2:0] = dstaddr[31:29];
+//   assign dst_x_k[2:0] = dstaddr[28:26];
+   assign dst_y_k[3:0] = dstaddr[31:28];
+

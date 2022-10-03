@@ -1,0 +1,101 @@
+Source Block: oh/common/hdl/oh_fifo_sync.v@28:38@HdlStmAssign
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+   
+   assign empty       = (rd_count[AW-1:0] == 0);   
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   
+   always @ (posedge clk or negedge nreset) 
+
+Diff Content:
+- 33    assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_fifo_sync.v@30:40
+   wire 	       fifo_write;
+   
+   assign empty       = (rd_count[AW-1:0] == 0);   
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   
+   always @ (posedge clk or negedge nreset) 
+     if(~nreset) 
+       begin	   
+
+Clone Blocks 2:
+oh/common/hdl/oh_fifo_sync.v@24:34
+   output reg [AW-1:0] rd_count     // valid entries in fifo
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+   
+   assign empty       = (rd_count[AW-1:0] == 0);   
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+
+Clone Blocks 3:
+oh/common/hdl/oh_fifo_sync.v@31:41
+   
+   assign empty       = (rd_count[AW-1:0] == 0);   
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   
+   always @ (posedge clk or negedge nreset) 
+     if(~nreset) 
+       begin	   
+          wr_addr[AW-1:0]   <= 'd0;
+
+Clone Blocks 4:
+oh/common/hdl/oh_fifo_sync.v@29:39
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+   
+   assign empty       = (rd_count[AW-1:0] == 0);   
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   
+   always @ (posedge clk or negedge nreset) 
+     if(~nreset) 
+
+Clone Blocks 5:
+oh/common/hdl/oh_fifo_sync.v@27:37
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+   
+   assign empty       = (rd_count[AW-1:0] == 0);   
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+   assign fifo_read   = rd_en & ~empty;
+   assign fifo_write  = wr_en & ~full;
+   
+
+Clone Blocks 6:
+oh/common/hdl/oh_fifo_sync.v@25:35
+ );
+   
+   reg [AW-1:0]        wr_addr;
+   reg [AW-1:0]        rd_addr;
+   wire 	       fifo_read;
+   wire 	       fifo_write;
+   
+   assign empty       = (rd_count[AW-1:0] == 0);   
+   assign prog_full   = (rd_count[AW-1:0] >= PROG_FULL);   
+   assign full        = (rd_count[AW-1:0] == (DEPTH-1));
+   assign fifo_read   = rd_en & ~empty;
+

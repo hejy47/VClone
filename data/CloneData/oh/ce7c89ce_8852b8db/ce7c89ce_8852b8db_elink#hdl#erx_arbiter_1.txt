@@ -1,0 +1,38 @@
+Source Block: oh/elink/hdl/erx_arbiter.v@65:76@HdlStmAssign
+   
+   //#######################################################
+   //Read response path (from IO or elink register readback)
+   //#######################################################
+     
+   assign rxrr_access         = (erx_access & (erx_dstaddr[31:20]==ID))  |
+				 ecfg_access;
+   
+   assign rxrr_packet[PW-1:0] = ecfg_access ? ecfg_packet[PW-1:0] :	    
+                                              erx_packet[PW-1:0];
+
+   //####################################
+
+Diff Content:
+- 70    assign rxrr_access         = (erx_access & (erx_dstaddr[31:20]==ID))  |
+- 71 				 ecfg_access;
++ 71    assign rxrr_access   =  ecfg_access |
++ 71 			   (erx_access & 
++ 71 			    (erx_dstaddr[31:20]==ID) &
++ 71 			    (erx_dstaddr[19:16]==`EGROUP_RR));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_arbiter.v@68:79
+   //#######################################################
+     
+   assign rxrr_access         = (erx_access & (erx_dstaddr[31:20]==ID))  |
+				 ecfg_access;
+   
+   assign rxrr_packet[PW-1:0] = ecfg_access ? ecfg_packet[PW-1:0] :	    
+                                              erx_packet[PW-1:0];
+
+   //####################################
+   //Write Path (from IO through MMU)
+   //####################################
+
+

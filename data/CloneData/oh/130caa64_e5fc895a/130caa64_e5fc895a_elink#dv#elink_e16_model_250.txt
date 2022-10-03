@@ -1,0 +1,31 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2369:2379@HdlStmAssign
+   assign fifo_read = last_tran & ~emesh_wait_in;
+
+   //############################################
+   //# transaction launcher state machine
+   //############################################
+   assign last_tran = (launch_pointer[2:0] == 3'b110);
+                        
+   assign launch_pointer_incr[2:0] = last_tran ? 3'b000 : (launch_pointer[2:0] + 3'b001);
+
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+
+Diff Content:
+- 2374    assign last_tran = (launch_pointer[2:0] == 3'b110);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2371:2381
+   //############################################
+   //# transaction launcher state machine
+   //############################################
+   assign last_tran = (launch_pointer[2:0] == 3'b110);
+                        
+   assign launch_pointer_incr[2:0] = last_tran ? 3'b000 : (launch_pointer[2:0] + 3'b001);
+
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+       launch_pointer[2:0] <= 3'b000;
+     else if(cclk_en)
+

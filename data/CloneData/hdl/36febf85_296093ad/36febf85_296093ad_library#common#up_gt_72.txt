@@ -1,0 +1,17 @@
+Source Block: hdl/library/common/up_gt.v@663:673@HdlStmAssign
+    end
+  end
+
+  // rx sysref & sync
+
+  assign rx_sysref_s = (up_rx_sysref_sel == 1'b1) ? rx_ext_sysref : up_rx_sysref;
+
+  always @(posedge rx_clk) begin
+    if (rx_rst == 1'b1) begin
+      rx_sysref_m1 <= 'd0;
+      rx_sysref_m2 <= 'd0;
+
+Diff Content:
+- 668   assign rx_sysref_s = (up_rx_sysref_sel == 1'b1) ? rx_ext_sysref : up_rx_sysref;
+
+Clone Blocks:

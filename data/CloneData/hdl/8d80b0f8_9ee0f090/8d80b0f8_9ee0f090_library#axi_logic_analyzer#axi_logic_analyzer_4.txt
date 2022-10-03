@@ -1,0 +1,28 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer.v@286:302@HdlStmProcess
+    assign adc_data_mn[i] = data_dynamic_delay[i][in_data_delay[3:0]];
+  end
+  endgenerate
+
+  // adc path 'rate delay' given by axi_adc_decimate
+  always @(posedge clk_out) begin
+    case (external_rate)
+      3'd0:    adc_data_delay <= 5'd1; // 100MSPS
+      3'd1:    adc_data_delay <= 5'd3; // 10MSPS
+      default: adc_data_delay <= 5'd1; // <= 1MSPS
+    endcase
+  end
+
+  assign up_data_delay = data_delay_control[4:0];
+  assign rate_gen_select = data_delay_control[8];
+
+  // select if the delay taps number is chosen by the user or automatically
+
+Diff Content:
+- 293       3'd0:    adc_data_delay <= 5'd1; // 100MSPS
+- 294       3'd1:    adc_data_delay <= 5'd3; // 10MSPS
+- 295       default: adc_data_delay <= 5'd1; // <= 1MSPS
++ 295       3'd0:    adc_data_delay <= 4'd1; // 100MSPS
++ 295       3'd1:    adc_data_delay <= 4'd3; // 10MSPS
++ 295       default: adc_data_delay <= 4'd1; // <= 1MSPS
+
+Clone Blocks:

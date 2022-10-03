@@ -1,0 +1,35 @@
+Source Block: hdl/library/axi_hdmi_tx/axi_hdmi_tx_vdma.v@143:168@HdlStmProcess
+    end
+  endfunction
+
+  // get fs from hdmi side, return fs and sof write address back
+
+  always @(posedge vdma_clk) begin
+    if (vdma_rst == 1'b1) begin
+      vdma_fs_toggle_m1 <= 'd0;
+      vdma_fs_toggle_m2 <= 'd0;
+      vdma_fs_toggle_m3 <= 'd0;
+    end else begin
+      vdma_fs_toggle_m1 <= hdmi_fs_toggle;
+      vdma_fs_toggle_m2 <= vdma_fs_toggle_m1;
+      vdma_fs_toggle_m3 <= vdma_fs_toggle_m2;
+    end
+    vdma_fs <= vdma_fs_toggle_m2 ^ vdma_fs_toggle_m3;
+    if (vdma_fs_ret == 1'b1) begin
+      vdma_fs_waddr <= vdma_waddr;
+      vdma_fs_ret_toggle <= ~vdma_fs_ret_toggle;
+    end
+  end
+
+  // vdma write
+
+  always @(posedge vdma_clk) begin
+    vdma_wr <= vdma_valid & vdma_ready;
+
+Diff Content:
+- 148   always @(posedge vdma_clk) begin
++ 148   always @(posedge vdma_clk or posedge vdma_rst) begin
++ 157   end
++ 157   always @(posedge vdma_clk) begin
+
+Clone Blocks:

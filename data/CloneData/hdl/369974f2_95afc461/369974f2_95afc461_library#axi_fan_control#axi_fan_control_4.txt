@@ -1,0 +1,215 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@287:487@HdlStmProcess
+  .load_config (pulse_gen_load_config),
+  .pulse (pulse_gen_out)
+);
+
+//state machine
+always @(posedge up_clk)
+  if (up_resetn == 1'b0) begin
+    tacho_alarm <= 'h0;
+    drp_den_reg <= 'h0;
+    drp_dwe_reg <= 'h0;
+    drp_di <= 'h0;
+    tacho_avg_cnt <= 'h0;
+    tacho_avg_sum <= 'h0;
+    tacho_meas_ack <= 'h0;
+    pulse_gen_load_config <= 'h0;
+    sysmone_temp <= 'h0;
+    pwm_width_req <= 'h0;
+    pwm_width <= 'h0;
+    up_tacho_avg_sum <= 'h0;
+    temp_increase_alarm <= 'h0;
+    tacho_meas_int <= 1'b0;
+    state <= INIT;
+  end else begin
+
+    case (state)
+
+      INIT : begin
+        drp_daddr <= 8'h40;
+        // performing read
+        drp_den_reg <= 2'h2;
+        if (drp_eoc == 1'b1) begin
+          state <= DRP_WAIT_EOC;
+        end
+      end
+
+      DRP_WAIT_EOC : begin
+        if (drp_eoc == 1'b1) begin
+          //Clearing AVG bits for Configreg0
+          drp_di <= drp_do & 16'h03FF;
+          drp_daddr <= 8'h40;
+          drp_den_reg <= 2'h2;
+          // performing write
+          drp_dwe_reg <= 2'h2;
+          state <= DRP_WAIT_DRDY;
+        end else begin
+          drp_den_reg <= {1'b0, drp_den_reg[1]};
+          drp_dwe_reg <= {1'b0, drp_dwe_reg[1]};
+        end
+      end
+
+      DRP_WAIT_DRDY : begin
+        if (drp_drdy == 1'b1) begin
+          state <= DRP_READ_TEMP;
+        end else begin
+          drp_den_reg <= {1'b0, drp_den_reg[1]};
+          drp_dwe_reg <= {1'b0, drp_dwe_reg[1]};
+        end
+      end
+
+      DRP_READ_TEMP : begin
+        tacho_alarm <= 1'b0;
+        tacho_meas_int <= 1'b0;
+        pulse_gen_load_config <= 1'b0;
+        drp_daddr <= 8'h00;
+        // performing read
+        drp_den_reg <= 2'h2;
+        if (drp_eos == 1'b1) begin
+          state <= DRP_READ_TEMP_WAIT_DRDY;
+        end
+      end
+
+      DRP_READ_TEMP_WAIT_DRDY : begin
+        if (drp_drdy == 1'b1) begin
+          sysmone_temp <= drp_do;
+          state <= GET_TACHO;
+        end else begin
+          drp_den_reg <= {1'b0, drp_den_reg[1]};
+          drp_dwe_reg <= {1'b0, drp_dwe_reg[1]};
+        end
+      end
+
+      GET_TACHO : begin
+        //adding up tacho measurements in order to obtain a mean value from 32 samples
+        if ((tacho_avg_cnt == AVERAGE_DIV) || (counter_overflow) || (!pwm_change_done)) begin
+          //once a set measurements has been obtained, reset the values
+          tacho_avg_sum <= 1'b0;
+          tacho_avg_cnt <= 1'b0;
+          tacho_meas_ack <= 1'b0;
+        end else if ((tacho_meas_new) && (pwm_change_done)) begin
+          //tacho_meas_new and tacho_meas_ack ensure the value is read at the right time and only once
+          tacho_avg_sum <= tacho_avg_sum + tacho_meas;
+          tacho_avg_cnt <= tacho_avg_cnt + 1'b1;
+          //acknowledge tha the current values has been added
+          tacho_meas_ack <= 1'b1;
+        end else begin
+          tacho_meas_ack <= 1'b0;
+        end
+        state <= EVAL_TEMP;
+      end
+
+      EVAL_TEMP : begin
+         //pwm section
+        //the pwm only has to be changed when passing through these temperature intervals
+        if (sysmone_temp < THRESH_PWM_000) begin
+          //PWM DUTY should be 0%
+          pwm_width_req <= 1'b0;
+        end else if ((sysmone_temp > THRESH_PWM_025_L) && (sysmone_temp < THRESH_PWM_025_H)) begin
+          //PWM DUTY should be 25%
+          pwm_width_req <= PWM_ONTIME_25;
+        end else if ((sysmone_temp > THRESH_PWM_050_L) && (sysmone_temp < THRESH_PWM_050_H)) begin
+          //PWM DUTY should be 50%
+          pwm_width_req <= PWM_ONTIME_50;
+        end else if ((sysmone_temp > THRESH_PWM_075_L) && (sysmone_temp < THRESH_PWM_075_H)) begin
+          //PWM DUTY should be 75%
+          pwm_width_req <= PWM_ONTIME_75;
+        end else if (sysmone_temp > THRESH_PWM_100) begin
+          //PWM DUTY should be 100%
+          pwm_width_req <= PWM_PERIOD;
+          //default to 100% duty cycle after reset if not within temperature intervals described above
+        end else if ((sysmone_temp != 'h0) && (pwm_width == 'h0)) begin
+          pwm_width_req <= PWM_PERIOD;
+        end else begin
+          //if no changes are needed make sure to mantain current pwm
+          pwm_width_req <= pwm_width;
+        end
+        state <= EVAL_PWM;
+      end
+
+      EVAL_PWM : begin
+        //setting alarm for temperature increase
+        if (pwm_width_req > pwm_width) begin
+          temp_increase_alarm <= 1'b1;
+        end
+        state <= SET_PWM;
+      end
+
+      SET_PWM : begin
+        temp_increase_alarm <= 1'b0;
+        if ((up_pwm_width != pwm_width) && (up_pwm_width >= pwm_width_req) && (up_pwm_width <= PWM_PERIOD) && (pwm_change_done)) begin
+          pwm_width <= up_pwm_width;
+          pulse_gen_load_config <= 1'b1;
+          //clear alarm when pwm duty changes
+        end else if ((pwm_width != pwm_width_req) && (pwm_width_req > up_pwm_width) && (pwm_change_done)) begin
+          pwm_width <= pwm_width_req;
+          pulse_gen_load_config <= 1'b1;
+          //clear alarm when pwm duty changes
+        end
+        state <= EVAL_TACHO;
+      end
+
+      EVAL_TACHO : begin
+        //tacho section
+        //check if the fan is turning then see if it is turning correctly
+        if(counter_overflow & pwm_change_done) begin
+          //if overflow is 1 then the fan is not turning so do something
+          tacho_alarm <= 1'b1;
+        end else if (tacho_avg_cnt == AVERAGE_DIV) begin
+          //check rpm according to the current pwm duty cycle
+          //tacho_alarm is only asserted for certain known pwm duty cycles and
+          //for timeout
+          up_tacho_avg_sum <= tacho_avg_sum [31:7];
+          tacho_meas_int <= 1'b1;
+          if ((pwm_width == PWM_ONTIME_25) && (up_tacho_en == 0)) begin
+            if ((tacho_avg_sum [31:7] > TACHO_T25 + TACHO_T25_TOL) || (tacho_avg_sum [31:7] < TACHO_T25 - TACHO_T25_TOL)) begin
+              //the fan is turning but not as expected
+              tacho_alarm <= 1'b1;
+            end
+          end else if ((pwm_width == PWM_ONTIME_50) && (up_tacho_en == 0)) begin
+            if ((tacho_avg_sum [31:7] > TACHO_T50 + TACHO_T50_TOL) || (tacho_avg_sum [31:7] < TACHO_T50 - TACHO_T50_TOL)) begin
+              //the fan is turning but not as expected
+              tacho_alarm <= 1'b1;
+            end
+          end else if ((pwm_width == PWM_ONTIME_75) && (up_tacho_en == 0)) begin
+            if ((tacho_avg_sum [31:7] > TACHO_T75 + TACHO_T75_TOL) || (tacho_avg_sum [31:7] < TACHO_T75 - TACHO_T75_TOL)) begin
+              //the fan is turning but not as expected
+              tacho_alarm <= 1'b1;
+            end
+          end else if ((pwm_width == PWM_PERIOD) && (up_tacho_en == 0)) begin
+            if ((tacho_avg_sum [31:7] > TACHO_T100 + TACHO_T100_TOL) || (tacho_avg_sum [31:7] < TACHO_T100 - TACHO_T100_TOL)) begin
+              //the fan is turning but not as expected
+              tacho_alarm <= 1'b1;
+            end
+          end else if ((pwm_width == up_pwm_width) && up_tacho_en) begin
+            if ((tacho_avg_sum [31:7] > up_tacho_val + up_tacho_tol) || (tacho_avg_sum [31:7] < up_tacho_val - up_tacho_tol)) begin
+              //the fan is turning but not as expected
+              tacho_alarm <= 1'b1;
+            end
+          end
+        end
+        state <= DRP_READ_TEMP;
+      end
+
+      default :
+        state <= DRP_READ_TEMP;
+    endcase
+  end
+
+//axi registers write
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_wack <= 'd0;
+
+Diff Content:
+- 412         state <= EVAL_PWM;
+- 413       end
+- 415       EVAL_PWM : begin
+- 417         if (pwm_width_req > pwm_width) begin
+- 418           temp_increase_alarm <= 1'b1;
+- 419         end
+- 424         temp_increase_alarm <= 1'b0;
++ 431           temp_increase_alarm <= 1'b1;
++ 437         temp_increase_alarm <= 1'b0;
+
+Clone Blocks:

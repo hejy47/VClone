@@ -1,0 +1,34 @@
+Source Block: oh/mio/hdl/mio_if.v@138:149@HdlStmAssign
+   // address from 
+   assign dstaddr_out[AW-1:0] = amode ? dstaddr[AW-1:0] :
+                                        dstaddr_in[AW-1:0];
+   
+   // data in first 64 bits for amode
+   assign data_out[AW-1:0]    = amode ? rx_packet_in[AW-1:0] :
+                                        data_in[AW-1:0];
+
+   assign srcaddr_out[AW-1:0] = amode ? 'b0 :
+                                        srcaddr_in[AW-1:0];
+
+
+
+Diff Content:
+- 143    assign data_out[AW-1:0]    = amode ? rx_packet_in[AW-1:0] :
++ 143    assign data_out[AW-1:0]    = amode ? rx_packet_in[31:0] :
+
+Clone Blocks:
+Clone Blocks 1:
+oh/mio/hdl/mio_if.v@134:145
+   // ctrlmode from register in amode
+   assign ctrlmode_out[4:0]   = amode ? ctrlmode[4:0] :
+			                ctrlmode_in[4:0];
+   
+   // address from 
+   assign dstaddr_out[AW-1:0] = amode ? dstaddr[AW-1:0] :
+                                        dstaddr_in[AW-1:0];
+   
+   // data in first 64 bits for amode
+   assign data_out[AW-1:0]    = amode ? rx_packet_in[AW-1:0] :
+                                        data_in[AW-1:0];
+
+

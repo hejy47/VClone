@@ -1,0 +1,35 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616_pif.v@228:241@HdlStmProcess
+  assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_d == 1'b1)) ? 1'b0 : 1'b1;
+
+  // Master AXI stream output logic with additional xfer_req signal
+  // The first valid data is ALWAYS the first sample of a convertion
+
+  always @(negedge clk) begin
+    if (end_of_conv == 1'b1)
+      xfer_req_d <= m_axis_xfer_req;
+  end
+
+  assign m_axis_tdata = rd_data;
+  assign m_axis_tvalid = xfer_req_d & rd_db_valid & rd_db_valid_div2;
+
+endmodule
+
+Diff Content:
+- 234     if (end_of_conv == 1'b1)
++ 234     if (end_of_conv == 1'b1) begin
++ 235     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad7616/axi_ad7616_pif.v@233:242
+  always @(negedge clk) begin
+    if (end_of_conv == 1'b1)
+      xfer_req_d <= m_axis_xfer_req;
+  end
+
+  assign m_axis_tdata = rd_data;
+  assign m_axis_tvalid = xfer_req_d & rd_db_valid & rd_db_valid_div2;
+
+endmodule
+
+

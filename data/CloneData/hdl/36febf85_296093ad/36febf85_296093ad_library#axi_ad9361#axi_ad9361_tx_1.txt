@@ -1,0 +1,18 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tx.v@187:197@HdlStmAssign
+  wire            up_rack_s[0:5];
+  wire            up_wack_s[0:5];
+
+  // master/slave
+
+  assign dac_data_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
+
+  always @(posedge dac_clk) begin
+    dac_data_sync <= dac_data_sync_s;
+  end
+
+
+Diff Content:
+- 192   assign dac_data_sync_s = (PCORE_ID == 0) ? dac_sync_out : dac_sync_in;
++ 192   assign dac_data_sync_s = (ID == 0) ? dac_sync_out : dac_sync_in;
+
+Clone Blocks:

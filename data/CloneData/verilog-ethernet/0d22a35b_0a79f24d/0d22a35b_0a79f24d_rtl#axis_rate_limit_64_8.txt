@@ -1,0 +1,93 @@
+Source Block: verilog-ethernet/rtl/axis_rate_limit_64.v@80:120@HdlStmProcess
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+    acc_next = acc_reg;
+    pause = 0;
+    frame_next = frame_reg;
+
+    if (acc_reg >= rate_num) begin
+        acc_next = acc_reg - rate_num;
+    end
+
+    if (input_axis_tready & input_axis_tvalid) begin
+        // read input
+        frame_next = ~input_axis_tlast;
+        acc_next = acc_reg + (rate_denom - rate_num);
+    end
+
+    if (acc_next >= rate_num) begin
+        if (rate_by_frame) begin
+            pause = ~frame_next;
+        end else begin
+            pause = 1;
+        end
+    end
+
+    input_axis_tready_next = output_axis_tready_int_early & ~pause;
+
+    output_axis_tdata_int = input_axis_tdata;
+    output_axis_tkeep_int = input_axis_tkeep;
+    output_axis_tvalid_int = input_axis_tvalid & input_axis_tready;
+    output_axis_tlast_int = input_axis_tlast;
+    output_axis_tuser_int = input_axis_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        acc_reg <= 0;
+        frame_reg <= 0;
+
+Diff Content:
+- 87     pause = 0;
+- 104             pause = 1;
++ 87     pause = 1'b0;
++ 104             pause = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_rate_limit.v@76:115
+reg frame_reg = 0, frame_next;
+
+reg input_axis_tready_reg = 0, input_axis_tready_next;
+assign input_axis_tready = input_axis_tready_reg;
+
+always @* begin
+    acc_next = acc_reg;
+    pause = 0;
+    frame_next = frame_reg;
+
+    if (acc_reg >= rate_num) begin
+        acc_next = acc_reg - rate_num;
+    end
+
+    if (input_axis_tready & input_axis_tvalid) begin
+        // read input
+        frame_next = ~input_axis_tlast;
+        acc_next = acc_reg + (rate_denom - rate_num);
+    end
+
+    if (acc_next >= rate_num) begin
+        if (rate_by_frame) begin
+            pause = ~frame_next;
+        end else begin
+            pause = 1;
+        end
+    end
+
+    input_axis_tready_next = output_axis_tready_int_early & ~pause;
+
+    output_axis_tdata_int = input_axis_tdata;
+    output_axis_tvalid_int = input_axis_tvalid & input_axis_tready;
+    output_axis_tlast_int = input_axis_tlast;
+    output_axis_tuser_int = input_axis_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        acc_reg <= 0;
+        frame_reg <= 0;
+

@@ -1,0 +1,40 @@
+Source Block: hdl/library/prcfg/bist/prcfg_dac.v@197:209@HdlStmAssign
+    if(dst_dac_en == 1'h1) begin
+      pattern <= ~pattern;
+    end
+  end
+
+  assign dac_pattern_s = (pattern == 1'h1) ?
+                          {16'h5555, 16'hAAAA, 16'h5555, 16'hAAAA} :
+                          {16'hAAAA, 16'h5555, 16'hAAAA, 16'h5555};
+
+  // output mux for tx side
+  always @(posedge clk) begin
+    src_dac_en     <= (mode == 0) ? dst_dac_en  : 1'b0;
+    dst_dac_dvalid <= (mode == 0) ? src_dac_dvalid  : dst_dac_en;
+
+Diff Content:
+- 202   assign dac_pattern_s = (pattern == 1'h1) ?
+- 203                           {16'h5555, 16'hAAAA, 16'h5555, 16'hAAAA} :
+- 204                           {16'hAAAA, 16'h5555, 16'hAAAA, 16'h5555};
++ 204   assign dac_pattern_s = (pattern == 1'h1) ? 16'h5555 : 16'hAAAA;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/bist/prcfg_dac.v@202:216
+  assign dac_pattern_s = (pattern == 1'h1) ?
+                          {16'h5555, 16'hAAAA, 16'h5555, 16'hAAAA} :
+                          {16'hAAAA, 16'h5555, 16'hAAAA, 16'h5555};
+
+  // output mux for tx side
+  always @(posedge clk) begin
+    src_dac_en     <= (mode == 0) ? dst_dac_en  : 1'b0;
+    dst_dac_dvalid <= (mode == 0) ? src_dac_dvalid  : dst_dac_en;
+    dst_dac_dunf   <= (mode == 0) ? src_dac_dunf : 1'b0;
+  end
+
+  always @(posedge clk) begin
+    case(mode)
+      4'h0    : begin
+                  dst_dac_ddata <= src_dac_ddata;
+

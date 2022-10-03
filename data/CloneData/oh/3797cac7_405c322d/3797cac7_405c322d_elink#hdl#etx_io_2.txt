@@ -1,0 +1,20 @@
+Source Block: oh/elink/hdl/etx_io.v@115:127@HdlStmProcess
+     end
+
+   //#############################
+   //# 2 CYCLE PACKET PIPELINE
+   //#############################  
+   always @ (posedge tx_lclk)
+     if (tx_access)
+       tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];
+
+    packet2emesh p2e (
+		      .write_out	(write),
+		      .datamode_out	(datamode[1:0]),
+		      .ctrlmode_out	(ctrlmode[3:0]),
+
+Diff Content:
+- 120    always @ (posedge tx_lclk)
++ 120    always @ (posedge tx_lclk_io)
+
+Clone Blocks:

@@ -1,0 +1,33 @@
+Source Block: hdl/library/common/ad_gt_es.v@303:321@HdlStmProcess
+        axi_wdata <= {up_es_scnt_rdata, up_es_ecnt_rdata};
+      end
+    end
+  end
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_es_dmaerr <= 'd0;
+    end else begin
+      if (axi_bvalid == 1'b1) begin
+        up_es_dmaerr <= axi_bresp[1] | axi_bresp[0];
+      end
+    end
+  end
+
+  // prescale, horizontal and vertical offsets
+
+  assign up_es_heos_s = (up_es_hoffset == up_es_hoffset_max) ? up_es_ut : 1'b0;
+  assign up_es_eos_s = (up_es_voffset == up_es_voffset_max) ? up_es_heos_s : 1'b0;
+
+Diff Content:
+- 308   always @(negedge up_rstn or posedge up_clk) begin
+- 309     if (up_rstn == 1'b0) begin
+- 310       up_es_dmaerr <= 'd0;
+- 311     end else begin
+- 312       if (axi_bvalid == 1'b1) begin
+- 313         up_es_dmaerr <= axi_bresp[1] | axi_bresp[0];
++ 313         up_es_dma_req <= 1'b1;
++ 313         up_es_dma_addr <= up_es_addr;
++ 313         up_es_dma_data <= {up_es_scnt_rdata, up_es_ecnt_rdata};
+
+Clone Blocks:

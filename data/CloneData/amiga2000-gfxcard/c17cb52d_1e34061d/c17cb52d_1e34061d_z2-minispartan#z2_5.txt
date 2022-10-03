@@ -1,0 +1,83 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@941:1016@HdlStmProcess
+  endcase
+end
+
+reg[15:0] rgb = 'h0000;
+
+always @(posedge vga_clk) begin
+  if (counter_x >= h_max) begin
+    counter_x <= 0;
+    display_x <= 0;
+    
+    if (counter_y == v_max) begin
+      counter_y <= 0;
+    end else
+      counter_y <= counter_y + 1;
+  end else begin
+    counter_x <= counter_x + 1;
+    
+    if (counter_x>=margin_x)
+      display_x <= display_x + 1;
+  end
+  
+  if (counter_x>=h_sync_start && counter_x<h_sync_end)
+    dvi_hsync <= 1;
+  else
+    dvi_hsync <= 0;
+    
+  if (counter_y>=v_sync_start && counter_y<v_sync_end)
+    dvi_vsync <= 1;
+  else
+    dvi_vsync <= 0;
+      
+  if (counter_x<h_rez && counter_y<v_rez) begin
+    dvi_blank <= 0;
+  end else begin
+    dvi_blank <= 1;
+    rgb <= 0;
+  end
+  
+  red_p[0] <= rgb[0];
+  red_p[1] <= rgb[0];
+  red_p[2] <= rgb[1];
+  red_p[3] <= rgb[1];
+  red_p[4] <= rgb[2];
+  red_p[5] <= rgb[2];
+  red_p[6] <= rgb[3];
+  red_p[7] <= rgb[4];
+  
+  green_p[0] <= rgb[5];
+  green_p[1] <= rgb[5];
+  green_p[2] <= rgb[6];
+  green_p[3] <= rgb[6];
+  green_p[4] <= rgb[7];
+  green_p[5] <= rgb[8];
+  green_p[6] <= rgb[9];
+  green_p[7] <= rgb[10];
+  
+  blue_p[0] <= rgb[11];
+  blue_p[1] <= rgb[11];
+  blue_p[2] <= rgb[12];
+  blue_p[3] <= rgb[12];
+  blue_p[4] <= rgb[13];  
+  blue_p[5] <= rgb[13];
+  blue_p[6] <= rgb[14];
+  blue_p[7] <= rgb[15];
+  
+  if (dvi_blank)
+    rgb <= 0;
+  else if ((counter_x>=(screen_w+margin_x) || counter_x<margin_x) || counter_y>=screen_h)
+    rgb <= 0;
+  else begin
+    rgb <= fetch_buffer[counter_x];
+  end
+
+end
+
+endmodule
+
+Diff Content:
+- 1011     rgb <= fetch_buffer[counter_x];
++ 1011     rgb <= fetch_buffer[counter_x+margin_x];
+
+Clone Blocks:

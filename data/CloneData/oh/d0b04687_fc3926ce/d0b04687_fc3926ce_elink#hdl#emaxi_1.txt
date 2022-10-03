@@ -1,0 +1,72 @@
+Source Block: oh/elink/hdl/emaxi.v@356:413@HdlStmProcess
+   assign readinfo_rden = ~emrr_progfull & m_axi_rvalid;
+
+
+   assign emrr_write  = 1'b1;
+   
+   always @( posedge m_axi_aclk )
+     if( ~m_axi_aresetn ) 
+       begin      
+	  emrr_data[31:0]     <= 32'b0;
+	  emrr_srcaddr[31:0]  <= 32'b0;
+          emrr_access         <= 1'b0;         
+      end 
+     else 
+       begin
+          emrr_access         <= m_axi_rready & m_axi_rvalid;
+          emrr_datamode[1:0]  <= readinfo_out[1:0];
+          emrr_ctrlmode[3:0]  <= readinfo_out[5:2];
+          emrr_dstaddr[31:0]  <= readinfo_out[40:9];
+	  emrr_srcaddr[31:0]  <= m_axi_rdata[63:32];
+	  // steer read data according to size & host address lsbs
+	  //all data needs to be right aligned
+	  //(this is due to the Epiphany right aligning all words)
+	  case(readinfo_out[1:0])//datamode
+            2'd0:  // byte read
+              case(readinfo_out[8:6])
+		3'd0:     emrr_data[7:0] <= m_axi_rdata[7:0];
+		3'd1:     emrr_data[7:0] <= m_axi_rdata[15:8];
+		3'd2:     emrr_data[7:0] <= m_axi_rdata[23:16];
+		3'd3:     emrr_data[7:0] <= m_axi_rdata[31:24];
+		3'd4:     emrr_data[7:0] <= m_axi_rdata[39:32];
+		3'd5:     emrr_data[7:0] <= m_axi_rdata[47:40];
+		3'd6:     emrr_data[7:0] <= m_axi_rdata[55:48];
+		default:  emrr_data[7:0] <= m_axi_rdata[63:56];
+              endcase	    
+            2'd1:  // 16b hword
+              case( readinfo_out[8:7] )
+		2'd0:    emrr_data[15:0] <= m_axi_rdata[15:0];
+		2'd1:    emrr_data[15:0] <= m_axi_rdata[31:16];
+		2'd2:    emrr_data[15:0] <= m_axi_rdata[47:32];
+		default: emrr_data[15:0] <= m_axi_rdata[63:48];
+              endcase
+            2'd2:  // 32b word
+              if( readinfo_out[8] )
+               emrr_data[31:0] <= m_axi_rdata[63:32];
+             else
+               emrr_data[31:0] <= m_axi_rdata[31:0];
+           // 64b word already defined by defaults above
+           2'd3: begin // 64b dword
+              emrr_data[31:0]    <= m_axi_rdata[31:0];
+              
+           end
+         endcase         
+       end // else: !if( ~m_axi_aresetn )
+   
+endmodule
+/*
+ copyright (c) 2014 adapteva, inc.
+ contributed by fred huettig <fred@adapteva.com>
+
+Diff Content:
+- 366           emrr_access         <= 1'b0;         
+- 370           emrr_access         <= m_axi_rready & m_axi_rvalid;
+- 371           emrr_datamode[1:0]  <= readinfo_out[1:0];
+- 372           emrr_ctrlmode[3:0]  <= readinfo_out[5:2];
+- 373           emrr_dstaddr[31:0]  <= readinfo_out[40:9];
++ 366 	  emrr_access_reg     <= 1'b0;
++ 366 	  emrr_access         <= 1'b0;         
++ 373           emrr_access_reg     <= m_axi_rready & m_axi_rvalid;
++ 373 	  emrr_access         <= emrr_access_reg;//added pipeline stage for data 
+
+Clone Blocks:

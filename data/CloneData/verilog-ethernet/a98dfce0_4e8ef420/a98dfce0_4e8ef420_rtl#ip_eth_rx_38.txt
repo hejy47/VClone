@@ -1,0 +1,363 @@
+Source Block: verilog-ethernet/rtl/ip_eth_rx.v@224:431@HdlStmProcess
+        t = a+b;
+        add1c16b = t[15:0] + t[16];
+    end
+endfunction
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_eth_hdr_ready_next = 0;
+    input_eth_payload_tready_next = 0;
+
+    store_eth_hdr = 0;
+    store_ip_version_ihl = 0;
+    store_ip_dscp_ecn = 0;
+    store_ip_length_0 = 0;
+    store_ip_length_1 = 0;
+    store_ip_identification_0 = 0;
+    store_ip_identification_1 = 0;
+    store_ip_flags_fragment_offset_0 = 0;
+    store_ip_flags_fragment_offset_1 = 0;
+    store_ip_ttl = 0;
+    store_ip_protocol = 0;
+    store_ip_header_checksum_0 = 0;
+    store_ip_header_checksum_1 = 0;
+    store_ip_source_ip_0 = 0;
+    store_ip_source_ip_1 = 0;
+    store_ip_source_ip_2 = 0;
+    store_ip_source_ip_3 = 0;
+    store_ip_dest_ip_0 = 0;
+    store_ip_dest_ip_1 = 0;
+    store_ip_dest_ip_2 = 0;
+    store_ip_dest_ip_3 = 0;
+
+    store_last_word = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    hdr_sum_next = hdr_sum_reg;
+
+    output_ip_hdr_valid_next = output_ip_hdr_valid_reg & ~output_ip_hdr_ready;
+
+    error_header_early_termination_next = 0;
+    error_payload_early_termination_next = 0;
+    error_invalid_header_next = 0;
+    error_invalid_checksum_next = 0;
+
+    output_ip_payload_tdata_int = 0;
+    output_ip_payload_tvalid_int = 0;
+    output_ip_payload_tlast_int = 0;
+    output_ip_payload_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for header
+            frame_ptr_next = 0;
+            hdr_sum_next = 0;
+            input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+
+            if (input_eth_hdr_ready & input_eth_hdr_valid) begin
+                input_eth_hdr_ready_next = 0;
+                input_eth_payload_tready_next = 1;
+                store_eth_hdr = 1;
+                state_next = STATE_READ_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header
+            input_eth_payload_tready_next = 1;
+
+            if (input_eth_payload_tready & input_eth_payload_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+1;
+                state_next = STATE_READ_HEADER;
+
+                if (frame_ptr_reg[0]) begin
+                    hdr_sum_next = add1c16b(hdr_sum_reg, {8'd0, input_eth_payload_tdata});
+                end else begin
+                    hdr_sum_next = add1c16b(hdr_sum_reg, {input_eth_payload_tdata, 8'd0});
+                end
+
+                case (frame_ptr_reg)
+                    8'h00: store_ip_version_ihl = 1;
+                    8'h01: store_ip_dscp_ecn = 1;
+                    8'h02: store_ip_length_1 = 1;
+                    8'h03: store_ip_length_0 = 1;
+                    8'h04: store_ip_identification_1 = 1;
+                    8'h05: store_ip_identification_0 = 1;
+                    8'h06: store_ip_flags_fragment_offset_1 = 1;
+                    8'h07: store_ip_flags_fragment_offset_0 = 1;
+                    8'h08: store_ip_ttl = 1;
+                    8'h09: store_ip_protocol = 1;
+                    8'h0A: store_ip_header_checksum_1 = 1;
+                    8'h0B: store_ip_header_checksum_0 = 1;
+                    8'h0C: store_ip_source_ip_3 = 1;
+                    8'h0D: store_ip_source_ip_2 = 1;
+                    8'h0E: store_ip_source_ip_1 = 1;
+                    8'h0F: store_ip_source_ip_0 = 1;
+                    8'h10: store_ip_dest_ip_3 = 1;
+                    8'h11: store_ip_dest_ip_2 = 1;
+                    8'h12: store_ip_dest_ip_1 = 1;
+                    8'h13: begin
+                        store_ip_dest_ip_0 = 1;
+                        if (output_ip_version_reg != 4 || output_ip_ihl_reg != 5) begin
+                            error_invalid_header_next = 1;
+                            state_next = STATE_WAIT_LAST;
+                        end else if (hdr_sum_next != 16'hffff) begin
+                            error_invalid_checksum_next = 1;
+                            state_next = STATE_WAIT_LAST;
+                        end else begin
+                            output_ip_hdr_valid_next = 1;
+                            input_eth_payload_tready_next = output_ip_payload_tready_int_early;
+                            state_next = STATE_READ_PAYLOAD;
+                        end
+                    end
+                endcase
+
+                if (input_eth_payload_tlast) begin
+                    error_header_early_termination_next = 1;
+                    output_ip_hdr_valid_next = 0;
+                    input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                    input_eth_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end
+
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_READ_PAYLOAD: begin
+            // read payload
+            input_eth_payload_tready_next = output_ip_payload_tready_int_early;
+
+            output_ip_payload_tdata_int = input_eth_payload_tdata;
+            output_ip_payload_tvalid_int = input_eth_payload_tvalid;
+            output_ip_payload_tlast_int = input_eth_payload_tlast;
+            output_ip_payload_tuser_int = input_eth_payload_tuser;
+
+            if (input_eth_payload_tready & input_eth_payload_tvalid) begin
+                // word transfer through
+                frame_ptr_next = frame_ptr_reg+1;
+                if (input_eth_payload_tlast) begin
+                    if (frame_ptr_next != output_ip_length_reg) begin
+                        // end of frame, but length does not match
+                        output_ip_payload_tuser_int = 1;
+                        error_payload_early_termination_next = 1;
+                    end
+                    input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                    input_eth_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    if (frame_ptr_next == output_ip_length_reg) begin
+                        store_last_word = 1;
+                        output_ip_payload_tvalid_int = 0;
+                        state_next = STATE_READ_PAYLOAD_LAST;
+                    end else begin
+                        state_next = STATE_READ_PAYLOAD;
+                    end
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD;
+            end
+        end
+        STATE_READ_PAYLOAD_LAST: begin
+            // read and discard until end of frame
+            input_eth_payload_tready_next = output_ip_payload_tready_int_early;
+
+            output_ip_payload_tdata_int = last_word_data_reg;
+            output_ip_payload_tvalid_int = input_eth_payload_tvalid & input_eth_payload_tlast;
+            output_ip_payload_tlast_int = input_eth_payload_tlast;
+            output_ip_payload_tuser_int = input_eth_payload_tuser;
+
+            if (input_eth_payload_tready & input_eth_payload_tvalid) begin
+                if (input_eth_payload_tlast) begin
+                    input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                    input_eth_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_LAST;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_LAST;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // read and discard until end of frame
+            input_eth_payload_tready_next = 1;
+
+            if (input_eth_payload_tready & input_eth_payload_tvalid) begin
+                if (input_eth_payload_tlast) begin
+                    input_eth_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                    input_eth_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT_LAST;
+                end
+            end else begin
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 232     input_eth_hdr_ready_next = 0;
+- 233     input_eth_payload_tready_next = 0;
+- 235     store_eth_hdr = 0;
+- 236     store_ip_version_ihl = 0;
+- 237     store_ip_dscp_ecn = 0;
+- 238     store_ip_length_0 = 0;
+- 239     store_ip_length_1 = 0;
+- 240     store_ip_identification_0 = 0;
+- 241     store_ip_identification_1 = 0;
+- 242     store_ip_flags_fragment_offset_0 = 0;
+- 243     store_ip_flags_fragment_offset_1 = 0;
+- 244     store_ip_ttl = 0;
+- 245     store_ip_protocol = 0;
+- 246     store_ip_header_checksum_0 = 0;
+- 247     store_ip_header_checksum_1 = 0;
+- 248     store_ip_source_ip_0 = 0;
+- 249     store_ip_source_ip_1 = 0;
+- 250     store_ip_source_ip_2 = 0;
+- 251     store_ip_source_ip_3 = 0;
+- 252     store_ip_dest_ip_0 = 0;
+- 253     store_ip_dest_ip_1 = 0;
+- 254     store_ip_dest_ip_2 = 0;
+- 255     store_ip_dest_ip_3 = 0;
+- 257     store_last_word = 0;
+- 265     error_header_early_termination_next = 0;
+- 266     error_payload_early_termination_next = 0;
+- 267     error_invalid_header_next = 0;
+- 268     error_invalid_checksum_next = 0;
+- 270     output_ip_payload_tdata_int = 0;
+- 271     output_ip_payload_tvalid_int = 0;
+- 272     output_ip_payload_tlast_int = 0;
+- 273     output_ip_payload_tuser_int = 0;
+- 278             frame_ptr_next = 0;
+- 279             hdr_sum_next = 0;
+- 283                 input_eth_hdr_ready_next = 0;
+- 284                 input_eth_payload_tready_next = 1;
+- 285                 store_eth_hdr = 1;
+- 293             input_eth_payload_tready_next = 1;
+- 297                 frame_ptr_next = frame_ptr_reg+1;
+- 307                     8'h00: store_ip_version_ihl = 1;
+- 308                     8'h01: store_ip_dscp_ecn = 1;
+- 309                     8'h02: store_ip_length_1 = 1;
+- 310                     8'h03: store_ip_length_0 = 1;
+- 311                     8'h04: store_ip_identification_1 = 1;
+- 312                     8'h05: store_ip_identification_0 = 1;
+- 313                     8'h06: store_ip_flags_fragment_offset_1 = 1;
+- 314                     8'h07: store_ip_flags_fragment_offset_0 = 1;
+- 315                     8'h08: store_ip_ttl = 1;
+- 316                     8'h09: store_ip_protocol = 1;
+- 317                     8'h0A: store_ip_header_checksum_1 = 1;
+- 318                     8'h0B: store_ip_header_checksum_0 = 1;
+- 319                     8'h0C: store_ip_source_ip_3 = 1;
+- 320                     8'h0D: store_ip_source_ip_2 = 1;
+- 321                     8'h0E: store_ip_source_ip_1 = 1;
+- 322                     8'h0F: store_ip_source_ip_0 = 1;
+- 323                     8'h10: store_ip_dest_ip_3 = 1;
+- 324                     8'h11: store_ip_dest_ip_2 = 1;
+- 325                     8'h12: store_ip_dest_ip_1 = 1;
+- 327                         store_ip_dest_ip_0 = 1;
+- 328                         if (output_ip_version_reg != 4 || output_ip_ihl_reg != 5) begin
+- 329                             error_invalid_header_next = 1;
+- 332                             error_invalid_checksum_next = 1;
+- 335                             output_ip_hdr_valid_next = 1;
+- 343                     error_header_early_termination_next = 1;
+- 344                     output_ip_hdr_valid_next = 0;
+- 346                     input_eth_payload_tready_next = 0;
+- 365                 frame_ptr_next = frame_ptr_reg+1;
+- 369                         output_ip_payload_tuser_int = 1;
+- 370                         error_payload_early_termination_next = 1;
+- 373                     input_eth_payload_tready_next = 0;
+- 377                         store_last_word = 1;
+- 378                         output_ip_payload_tvalid_int = 0;
+- 400                     input_eth_payload_tready_next = 0;
+- 411             input_eth_payload_tready_next = 1;
+- 416                     input_eth_payload_tready_next = 0;
++ 257     input_eth_hdr_ready_next = 1'b0;
++ 257     input_eth_payload_tready_next = 1'b0;
++ 257     store_eth_hdr = 1'b0;
++ 257     store_ip_version_ihl = 1'b0;
++ 257     store_ip_dscp_ecn = 1'b0;
++ 257     store_ip_length_0 = 1'b0;
++ 257     store_ip_length_1 = 1'b0;
++ 257     store_ip_identification_0 = 1'b0;
++ 257     store_ip_identification_1 = 1'b0;
++ 257     store_ip_flags_fragment_offset_0 = 1'b0;
++ 257     store_ip_flags_fragment_offset_1 = 1'b0;
++ 257     store_ip_ttl = 1'b0;
++ 257     store_ip_protocol = 1'b0;
++ 257     store_ip_header_checksum_0 = 1'b0;
++ 257     store_ip_header_checksum_1 = 1'b0;
++ 257     store_ip_source_ip_0 = 1'b0;
++ 257     store_ip_source_ip_1 = 1'b0;
++ 257     store_ip_source_ip_2 = 1'b0;
++ 257     store_ip_source_ip_3 = 1'b0;
++ 257     store_ip_dest_ip_0 = 1'b0;
++ 257     store_ip_dest_ip_1 = 1'b0;
++ 257     store_ip_dest_ip_2 = 1'b0;
++ 257     store_ip_dest_ip_3 = 1'b0;
++ 257     store_last_word = 1'b0;
++ 268     error_header_early_termination_next = 1'b0;
++ 268     error_payload_early_termination_next = 1'b0;
++ 268     error_invalid_header_next = 1'b0;
++ 268     error_invalid_checksum_next = 1'b0;
++ 273     output_ip_payload_tdata_int = 8'd0;
++ 273     output_ip_payload_tvalid_int = 1'b0;
++ 273     output_ip_payload_tlast_int = 1'b0;
++ 273     output_ip_payload_tuser_int = 1'b0;
++ 279             frame_ptr_next = 16'd0;
++ 279             hdr_sum_next = 16'd0;
++ 285                 input_eth_hdr_ready_next = 1'b0;
++ 285                 input_eth_payload_tready_next = 1'b1;
++ 285                 store_eth_hdr = 1'b1;
++ 293             input_eth_payload_tready_next = 1'b1;
++ 297                 frame_ptr_next = frame_ptr_reg + 16'd1;
++ 325                     8'h00: store_ip_version_ihl = 1'b1;
++ 325                     8'h01: store_ip_dscp_ecn = 1'b1;
++ 325                     8'h02: store_ip_length_1 = 1'b1;
++ 325                     8'h03: store_ip_length_0 = 1'b1;
++ 325                     8'h04: store_ip_identification_1 = 1'b1;
++ 325                     8'h05: store_ip_identification_0 = 1'b1;
++ 325                     8'h06: store_ip_flags_fragment_offset_1 = 1'b1;
++ 325                     8'h07: store_ip_flags_fragment_offset_0 = 1'b1;
++ 325                     8'h08: store_ip_ttl = 1'b1;
++ 325                     8'h09: store_ip_protocol = 1'b1;
++ 325                     8'h0A: store_ip_header_checksum_1 = 1'b1;
++ 325                     8'h0B: store_ip_header_checksum_0 = 1'b1;
++ 325                     8'h0C: store_ip_source_ip_3 = 1'b1;
++ 325                     8'h0D: store_ip_source_ip_2 = 1'b1;
++ 325                     8'h0E: store_ip_source_ip_1 = 1'b1;
++ 325                     8'h0F: store_ip_source_ip_0 = 1'b1;
++ 325                     8'h10: store_ip_dest_ip_3 = 1'b1;
++ 325                     8'h11: store_ip_dest_ip_2 = 1'b1;
++ 325                     8'h12: store_ip_dest_ip_1 = 1'b1;
++ 329                         store_ip_dest_ip_0 = 1'b1;
++ 329                         if (output_ip_version_reg != 4'd4 || output_ip_ihl_reg != 4'd5) begin
++ 329                             error_invalid_header_next = 1'b1;
++ 332                             error_invalid_checksum_next = 1'b1;
++ 335                             output_ip_hdr_valid_next = 1'b1;
++ 344                     error_header_early_termination_next = 1'b1;
++ 344                     output_ip_hdr_valid_next = 1'b0;
++ 346                     input_eth_payload_tready_next = 1'b0;
++ 365                 frame_ptr_next = frame_ptr_reg + 16'd1;
++ 370                         output_ip_payload_tuser_int = 1'b1;
++ 370                         error_payload_early_termination_next = 1'b1;
++ 373                     input_eth_payload_tready_next = 1'b0;
++ 378                         store_last_word = 1'b1;
++ 378                         output_ip_payload_tvalid_int = 1'b0;
++ 400                     input_eth_payload_tready_next = 1'b0;
++ 411             input_eth_payload_tready_next = 1'b1;
++ 416                     input_eth_payload_tready_next = 1'b0;
+
+Clone Blocks:

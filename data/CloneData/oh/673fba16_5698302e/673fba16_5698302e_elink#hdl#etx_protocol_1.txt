@@ -1,0 +1,26 @@
+Source Block: oh/elink/hdl/etx_protocol.v@83:95@HdlStmAssign
+	  tx_access_reg     <= tx_enable & etx_access;
+       end
+  
+   //Clear out the access while in wait state
+   //the IO pipeline flushes out
+   assign tx_access = tx_access_reg  &
+//		      ~burst_negedge &
+		      ~(tx_wr_wait | tx_rd_wait);
+
+   //#################################
+   //# Checking for transaction "done"
+   //#################################
+   //if burst, you get immediate "ack"
+
+Diff Content:
++ 90    packet2emesh p2m1 (
++ 90 		     .write_out		(tx_write),
++ 90 		     .datamode_out	(tx_datamode[1:0]),
++ 90 		     .ctrlmode_out	(tx_ctrlmode[3:0]),
++ 90 		     .dstaddr_out	(tx_dstaddr[31:0]),
++ 90 		     .data_out		(),
++ 90 		     .srcaddr_out	(),
++ 90 		     .packet_in		(tx_packet[PW-1:0]));//input
+
+Clone Blocks:

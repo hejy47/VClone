@@ -1,0 +1,73 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@313:323@HdlStmAssign
+reg dtack = 0;
+
+// level shifter direction pins
+assign zDIR1     = (dataout_enable | dataout_z3_latched); // d2-d9
+assign zDIR2     = (dataout_enable | dataout_z3_latched); // d10-15, d0-d1
+assign zDIR3     = dataout_z3; // a16-a23 <- input
+assign zDIR4     = dataout_z3; // a8-a15 <- input
+
+reg z_ready = 'b1;
+reg z_ready_latch = 'b1;
+reg z_ovr = 0;
+
+Diff Content:
+- 318 assign zDIR3     = dataout_z3; // a16-a23 <- input
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@316:326
+assign zDIR1     = (dataout_enable | dataout_z3_latched); // d2-d9
+assign zDIR2     = (dataout_enable | dataout_z3_latched); // d10-15, d0-d1
+assign zDIR3     = dataout_z3; // a16-a23 <- input
+assign zDIR4     = dataout_z3; // a8-a15 <- input
+
+reg z_ready = 'b1;
+reg z_ready_latch = 'b1;
+reg z_ovr = 0;
+assign zXRDY  = 1'bZ; //z_ready_latch?1'bZ:1'b0; //works only if bZ?  1'bZ
+assign znCINH = !z_ovr; //1; // Z2 = /OVR
+
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@311:321
+reg dataout_enable = 0;
+reg slaven = 0;
+reg dtack = 0;
+
+// level shifter direction pins
+assign zDIR1     = (dataout_enable | dataout_z3_latched); // d2-d9
+assign zDIR2     = (dataout_enable | dataout_z3_latched); // d10-15, d0-d1
+assign zDIR3     = dataout_z3; // a16-a23 <- input
+assign zDIR4     = dataout_z3; // a8-a15 <- input
+
+reg z_ready = 'b1;
+
+Clone Blocks 3:
+amiga2000-gfxcard/z2-minispartan/z2.v@312:322
+reg slaven = 0;
+reg dtack = 0;
+
+// level shifter direction pins
+assign zDIR1     = (dataout_enable | dataout_z3_latched); // d2-d9
+assign zDIR2     = (dataout_enable | dataout_z3_latched); // d10-15, d0-d1
+assign zDIR3     = dataout_z3; // a16-a23 <- input
+assign zDIR4     = dataout_z3; // a8-a15 <- input
+
+reg z_ready = 'b1;
+reg z_ready_latch = 'b1;
+
+Clone Blocks 4:
+amiga2000-gfxcard/z2-minispartan/z2.v@314:324
+
+// level shifter direction pins
+assign zDIR1     = (dataout_enable | dataout_z3_latched); // d2-d9
+assign zDIR2     = (dataout_enable | dataout_z3_latched); // d10-15, d0-d1
+assign zDIR3     = dataout_z3; // a16-a23 <- input
+assign zDIR4     = dataout_z3; // a8-a15 <- input
+
+reg z_ready = 'b1;
+reg z_ready_latch = 'b1;
+reg z_ovr = 0;
+assign zXRDY  = 1'bZ; //z_ready_latch?1'bZ:1'b0; //works only if bZ?  1'bZ
+

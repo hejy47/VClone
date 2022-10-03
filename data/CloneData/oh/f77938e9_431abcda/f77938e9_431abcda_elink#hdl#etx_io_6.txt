@@ -1,0 +1,21 @@
+Source Block: oh/elink/hdl/etx_io.v@94:105@HdlStmProcess
+     if(!nreset)
+       tx_burst_reg <= 1'b0;  
+     else if(tx_state[2:0]==`CYCLE4)
+	tx_burst_reg <= tx_burst;   
+   
+   always @ (posedge tx_lclk_io)
+     tx_access_reg         <= tx_access;	  
+   
+   packet2emesh p2e_reg (
+			  .write_out	(write),
+			  .datamode_out	(datamode[1:0]),
+			  .ctrlmode_out	(ctrlmode[3:0]),
+
+Diff Content:
+- 99    always @ (posedge tx_lclk_io)
+- 100      tx_access_reg         <= tx_access;	  
++ 100      if(firstedge & ~tx_wait)
++ 100        tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];	 
+
+Clone Blocks:

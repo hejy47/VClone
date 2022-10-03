@@ -1,0 +1,299 @@
+Source Block: zipcpu/rtl/zipbones.v@105:115@HdlStmAssign
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+
+Diff Content:
+- 110 	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
++ 110 	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(!i_dbg_addr);
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipbones.v@140:150
+	initial	cmd_addr = 5'h0;
+	always @(posedge i_clk)
+		if (dbg_cmd_write)
+			cmd_addr <= i_dbg_data[4:0];
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
+	wire	[31:0]	cmd_data;
+
+Clone Blocks 2:
+zipcpu/rtl/zipsystem.v@307:317
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(dbg_idata[6]));
+
+Clone Blocks 3:
+zipcpu/rtl/zipbones.v@101:111
+	// set the following address in question.  Hence all accesses require
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+
+Clone Blocks 4:
+zipcpu/rtl/zipsystem.v@310:320
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(dbg_idata[6]));
+	//
+	initial	cmd_halt  = START_HALTED;
+	always @(posedge i_clk)
+
+Clone Blocks 5:
+zipcpu/rtl/zipsystem.v@305:315
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+
+Clone Blocks 6:
+zipcpu/rtl/zipbones.v@103:113
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+	//
+
+Clone Blocks 7:
+zipcpu/rtl/zipsystem.v@305:315
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+
+Clone Blocks 8:
+zipcpu/rtl/zipsystem.v@308:318
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(dbg_idata[6]));
+	//
+
+Clone Blocks 9:
+zipcpu/rtl/zipsystem.v@305:315
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+
+Clone Blocks 10:
+zipcpu/rtl/zipsystem.v@305:315
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+
+Clone Blocks 11:
+zipcpu/rtl/zipbones.v@102:112
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+
+Clone Blocks 12:
+zipcpu/rtl/zipsystem.v@311:322
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(dbg_idata[6]));
+	//
+	initial	cmd_halt  = START_HALTED;
+	always @(posedge i_clk)
+		if (i_rst)
+			cmd_halt <= (START_HALTED == 1)? 1'b1 : 1'b0;
+
+Clone Blocks 13:
+zipcpu/rtl/zipsystem.v@304:314
+	// set the following address in question.  Hence all accesses require
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+
+Clone Blocks 14:
+zipcpu/rtl/zipbones.v@101:111
+	// set the following address in question.  Hence all accesses require
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+
+Clone Blocks 15:
+zipcpu/rtl/zipbones.v@102:112
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+
+Clone Blocks 16:
+zipcpu/rtl/zipbones.v@102:112
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+
+Clone Blocks 17:
+zipcpu/rtl/zipsystem.v@306:316
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+
+Clone Blocks 18:
+zipcpu/rtl/zipbones.v@104:114
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+	//
+	initial	cmd_reset = 1'b1;
+
+Clone Blocks 19:
+zipcpu/rtl/zipsystem.v@304:314
+	// set the following address in question.  Hence all accesses require
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+
+Clone Blocks 20:
+zipcpu/rtl/zipbones.v@102:112
+	// two accesses: write the address to the control register (and halt
+	// the CPU if not halted), then read/write the data from the data
+	// register.
+	//
+	wire		cpu_break, dbg_cmd_write;
+	reg		cmd_reset, cmd_halt, cmd_step, cmd_clear_pf_cache;
+	reg	[4:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+

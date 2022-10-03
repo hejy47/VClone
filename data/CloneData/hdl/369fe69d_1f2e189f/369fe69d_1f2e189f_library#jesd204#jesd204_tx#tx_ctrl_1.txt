@@ -1,0 +1,18 @@
+Source Block: hdl/library/jesd204/jesd204_tx/tx_ctrl.v@92:102@HdlStmAssign
+
+always @(posedge clk) begin
+  sync_sync <= {sync_sync[0],sync};
+end
+
+assign status_sync = sync_sync;
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sync_request <= 1'b0;
+  end else begin
+
+Diff Content:
+- 97 assign status_sync = sync_sync;
++ 97 assign status_sync = sync_sync[1];
+
+Clone Blocks:

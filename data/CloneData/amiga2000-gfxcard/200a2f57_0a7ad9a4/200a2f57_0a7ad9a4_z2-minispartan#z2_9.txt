@@ -1,0 +1,40 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@2174:2207@HdlStmProcess
+reg[11:0] vga_v_sync_end = 0;
+reg[11:0] vga_h_rez = 0;
+reg[11:0] vga_v_rez = 0;
+reg[11:0] vga_screen_h = 0;
+
+always @(posedge vga_clk) begin
+  // clock domain sync
+  vga_scalemode_h <= scalemode_h;
+  vga_colormode <= colormode;
+  vga_margin_x <= margin_x;
+  vga_h_max <= h_max;
+  vga_v_max <= v_max;
+  if (videocap_mode) begin
+    if (videocap_ntsc)
+      vga_screen_h <= 'h19b;
+    else
+      vga_screen_h <= 'h1ff;
+    vga_scalemode_v <= videocap_interlace?0:1;
+  end else begin
+    vga_screen_h <= screen_h;
+    vga_scalemode_v <= scalemode_v;
+  end
+  vga_h_rez <= h_rez;
+  vga_v_rez <= v_rez;
+  vga_h_sync_start <= h_sync_start;
+  vga_h_sync_end <= h_sync_end;
+  vga_v_sync_start <= v_sync_start;
+  vga_v_sync_end <= v_sync_end;
+end
+
+reg [9:0] counter_scanout = 0;
+reg [9:0] counter_px = 0;
+reg [2:0] counter_repeat = 0;
+reg [2:0] counter_repeat_delayed = 0;
+
+Diff Content:
++ 2201   vga_reset <= dvid_reset;
+
+Clone Blocks:

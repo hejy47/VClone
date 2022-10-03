@@ -1,0 +1,26 @@
+Source Block: oh/src/common/hdl/oh_fifo_cdc.v@31:45@HdlStmProcess
+   assign wr_en    = access_in;
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out = prog_full;        //wait_out should stall access_in signal
+
+   //Holds access high while waiting
+   always @ (posedge clk_out or negedge nreset)
+     if(!nreset)
+       access_out <= 1'b0;   
+     else if(~wait_in)
+       access_out <= rd_en;
+
+   //Read response fifo (from master)
+   oh_fifo_async  #(.TARGET(TARGET),
+		    .DW(DW),
+		    .DEPTH(DEPTH))
+
+Diff Content:
+- 36    always @ (posedge clk_out or negedge nreset)
+- 37      if(!nreset)
+- 38        access_out <= 1'b0;   
+- 39      else if(~wait_in)
+- 40        access_out <= rd_en;
++ 40    wire 	   io_nreset;
+
+Clone Blocks:

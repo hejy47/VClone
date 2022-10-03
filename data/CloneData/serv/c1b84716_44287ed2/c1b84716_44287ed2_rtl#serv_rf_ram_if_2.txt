@@ -1,0 +1,59 @@
+Source Block: serv/rtl/serv_rf_ram_if.v@135:161@HdlStmProcess
+     end
+   else
+     always @(posedge i_clk) if (rtrig1) rdata1 <= i_rdata[1];
+   endgenerate
+
+   always @(posedge i_clk) begin
+      rtrig1 <= rtrig0;
+      rcnt <= rcnt+5'd1;
+      if (i_rreq)
+	 rcnt <= 5'd0;
+
+      rreq_r <= i_rreq;
+      rgnt <= rreq_r;
+
+      rdata0 <= {1'b0,rdata0[width-1:1]};
+      if (rtrig0)
+	rdata0 <= i_rdata;
+
+      if (i_rst) begin
+	 rgnt <= 1'b0;
+	 rreq_r <= 1'b0;
+      end
+   end
+
+
+
+endmodule
+
+Diff Content:
+- 154 	 rgnt <= 1'b0;
+- 155 	 rreq_r <= 1'b0;
++ 155 	 if (reset_strategy != "NONE") begin
++ 155 	    rgnt <= 1'b0;
++ 155 	    rreq_r <= 1'b0;
++ 155 	 end
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_rf_ram_if.v@125:142
+
+   assign rtrig0 = (rcnt[l2w-1:0] == 1);
+
+   reg 	      rreq_r;
+
+   generate if (width>2)
+     always @(posedge i_clk) begin
+	rdata1 <= {1'b0,rdata1[width-2:1]}; //Optimize?
+	if (rtrig1)
+	  rdata1[width-2:0] <= i_rdata[width-1:1];
+     end
+   else
+     always @(posedge i_clk) if (rtrig1) rdata1 <= i_rdata[1];
+   endgenerate
+
+   always @(posedge i_clk) begin
+      rtrig1 <= rtrig0;
+      rcnt <= rcnt+5'd1;
+

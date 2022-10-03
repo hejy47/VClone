@@ -1,0 +1,42 @@
+Source Block: hdl/library/common/up_gt_channel.v@766:800@HdlStmProcess
+    end
+  end
+
+  // rx sysref & sync
+
+  always @(posedge rx_clk) begin
+    if (rx_rst_m == 1'b1) begin
+      rx_sysref_sel_m1 <= 'd0;
+      rx_sysref_sel <= 'd0;
+      rx_up_sysref_m1 <= 'd0;
+      rx_up_sysref <= 'd0;
+      rx_ip_sysref <= 'd0;
+      rx_up_sync_m1 <= 'd0;
+      rx_up_sync <= 'd0;
+      rx_sync <= 'd0;
+    end else begin
+      rx_sysref_sel_m1 <= up_rx_sysref_sel;
+      rx_sysref_sel <= rx_sysref_sel_m1;
+      rx_up_sysref_m1 <= up_rx_sysref;
+      rx_up_sysref <= rx_up_sysref_m1;
+      if (rx_sysref_sel_m1 == 1'b1) begin
+        rx_ip_sysref <= rx_sysref;
+      end else begin
+        rx_ip_sysref <= rx_up_sysref;
+      end
+      rx_up_sync_m1 <= up_rx_sync;
+      rx_up_sync <= rx_up_sync_m1;
+      rx_sync <= rx_up_sync & rx_ip_sync;
+    end
+  end
+
+  // tx sysref & sync
+
+  always @(posedge tx_clk) begin
+    if (tx_rst_m == 1'b1) begin
+
+Diff Content:
+- 771   always @(posedge rx_clk) begin
++ 771   always @(posedge rx_clk or posedge rx_rst_m) begin
+
+Clone Blocks:

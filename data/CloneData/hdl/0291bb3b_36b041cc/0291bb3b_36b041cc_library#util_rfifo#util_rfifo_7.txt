@@ -1,0 +1,31 @@
+Source Block: hdl/library/util_rfifo/util_rfifo.v@123:133@HdlStmAssign
+  end
+  endgenerate
+
+  // read is non-destructive
+
+  assign fifo_rd = m_rd;
+  assign m_runf_s = s_runf | fifo_runf;
+
+  always @(posedge m_clk) begin
+    m_runf_m1 <= m_runf_s;
+    m_runf_m2 <= m_runf_m1;
+
+Diff Content:
+- 128   assign fifo_rd = m_rd;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_rfifo/util_rfifo.v@124:134
+  endgenerate
+
+  // read is non-destructive
+
+  assign fifo_rd = m_rd;
+  assign m_runf_s = s_runf | fifo_runf;
+
+  always @(posedge m_clk) begin
+    m_runf_m1 <= m_runf_s;
+    m_runf_m2 <= m_runf_m1;
+    m_runf <= m_runf_m2;
+

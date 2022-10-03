@@ -1,0 +1,32 @@
+Source Block: hdl/library/axi_dmac/src_fifo_inf.v@72:82@HdlStmAssign
+);
+
+wire ready;
+wire valid;
+
+assign enabled = enable;
+
+assign valid = en & ready;
+
+always @(posedge clk)
+begin
+
+Diff Content:
+- 77 assign enabled = enable;
++ 77   assign enabled = enable;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/src_fifo_inf.v@74:84
+wire ready;
+wire valid;
+
+assign enabled = enable;
+
+assign valid = en & ready;
+
+always @(posedge clk)
+begin
+  if (enable) begin
+    overflow <= en & ~ready;
+

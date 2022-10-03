@@ -1,0 +1,94 @@
+Source Block: hdl/projects/ad9213_dual_ebz/s10soc/system_top.v@241:278@HdlStmProcess
+ genvar i;
+ for (i = 0; i < 512; i = i + 16) begin
+    assign adc_data[(2*i)+31:(2*i)] ={adc_data_1_swap[i+15:i],adc_data_0_swap[i+15:i]};
+ end
+
+ always @(posedge rx_device_clk_0) begin
+   adc_swap_d1 <= adc_swap;
+   adc_swap_d2 <= adc_swap_d1;
+
+   if (adc_swap_d2 == 1'b0) begin
+     adc_data_0_swap <= adc_data_0;
+     adc_data_1_swap <= adc_data_1;
+   end else begin
+     adc_data_0_swap <= adc_data_1;
+     adc_data_1_swap <= adc_data_0;
+   end
+
+   adc_data_0_d1 <= adc_data_0;
+   adc_data_1_d1 <= adc_data_1;
+
+   case ({adc_enable_1,adc_enable_0})
+     2'b01: adc_data_d1 <= {adc_data_0,adc_data_0_d1};
+     2'b10: adc_data_d1 <= {adc_data_1,adc_data_1_d1};
+     2'b11: adc_data_d1 <= adc_data;
+     default: adc_data_d1 <= adc_data_d1;
+   endcase
+   case ({adc_enable_1,adc_enable_0})
+     2'b01: adc_valid_d1 <= ~adc_valid_d1;
+     2'b10: adc_valid_d1 <= ~adc_valid_d1;
+     2'b11: adc_valid_d1<= adc_valid;
+     default: adc_valid_d1 <= adc_valid;
+   endcase
+ end
+
+  system_bd i_system_bd (
+    .sys_clk_clk                          ( sys_clk ),
+    .sys_rst_reset_n                      ( sys_resetn_s ),
+    .h2f_reset_reset                      ( h2f_reset_s ),
+
+Diff Content:
+- 246  always @(posedge rx_device_clk_0) begin
+- 247    adc_swap_d1 <= adc_swap;
+- 248    adc_swap_d2 <= adc_swap_d1;
+- 250    if (adc_swap_d2 == 1'b0) begin
+- 251      adc_data_0_swap <= adc_data_0;
+- 252      adc_data_1_swap <= adc_data_1;
+- 253    end else begin
+- 254      adc_data_0_swap <= adc_data_1;
+- 255      adc_data_1_swap <= adc_data_0;
+- 256    end
+- 258    adc_data_0_d1 <= adc_data_0;
+- 259    adc_data_1_d1 <= adc_data_1;
+- 261    case ({adc_enable_1,adc_enable_0})
+- 262      2'b01: adc_data_d1 <= {adc_data_0,adc_data_0_d1};
+- 263      2'b10: adc_data_d1 <= {adc_data_1,adc_data_1_d1};
+- 264      2'b11: adc_data_d1 <= adc_data;
+- 265      default: adc_data_d1 <= adc_data_d1;
+- 266    endcase
+- 267    case ({adc_enable_1,adc_enable_0})
+- 268      2'b01: adc_valid_d1 <= ~adc_valid_d1;
+- 269      2'b10: adc_valid_d1 <= ~adc_valid_d1;
+- 270      2'b11: adc_valid_d1<= adc_valid;
+- 271      default: adc_valid_d1 <= adc_valid;
+- 272    endcase
+- 273  end
++ 273   end
++ 273   always @(posedge rx_device_clk_0) begin
++ 273     adc_swap_d1 <= adc_swap;
++ 273     adc_swap_d2 <= adc_swap_d1;
++ 273     if (adc_swap_d2 == 1'b0) begin
++ 273       adc_data_0_swap <= adc_data_0;
++ 273       adc_data_1_swap <= adc_data_1;
++ 273     end else begin
++ 273       adc_data_0_swap <= adc_data_1;
++ 273       adc_data_1_swap <= adc_data_0;
++ 273     end
++ 273     adc_data_0_d1 <= adc_data_0;
++ 273     adc_data_1_d1 <= adc_data_1;
++ 273     case ({adc_enable_1,adc_enable_0})
++ 273       2'b01: adc_data_d1 <= {adc_data_0,adc_data_0_d1};
++ 273       2'b10: adc_data_d1 <= {adc_data_1,adc_data_1_d1};
++ 273       2'b11: adc_data_d1 <= adc_data;
++ 273       default: adc_data_d1 <= adc_data_d1;
++ 273     endcase
++ 273     case ({adc_enable_1,adc_enable_0})
++ 273       2'b01: adc_valid_d1 <= ~adc_valid_d1;
++ 273       2'b10: adc_valid_d1 <= ~adc_valid_d1;
++ 273       2'b11: adc_valid_d1<= adc_valid;
++ 273       default: adc_valid_d1 <= adc_valid;
++ 273     endcase
++ 273   end
+
+Clone Blocks:

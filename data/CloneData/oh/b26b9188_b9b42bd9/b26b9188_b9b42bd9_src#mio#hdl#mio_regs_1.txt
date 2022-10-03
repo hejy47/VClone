@@ -1,0 +1,131 @@
+Source Block: oh/src/mio/hdl/mio_regs.v@129:139@HdlStmAssign
+   assign tx_en         = ~config_reg[0];         // tx disable
+   assign rx_en         = ~config_reg[1];         // rx disable
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+   assign ddr_mode      = config_reg[12];         // dual data rate mode   
+   assign lsbfirst      = config_reg[13];         // lsb-first transmit
+   assign framepol      = config_reg[14];         // frame polarity
+   assign ctrlmode[4:0] = config_reg[20:16];      // ctrlmode
+  
+
+Diff Content:
+- 134    assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
++ 134    assign iowidth[1:0]  = config_reg[5:4];        // iowidth(or 8,16,32,64 pins)
++ 134    assign datamode[1:0] = config_reg[7:6];        // rx datamode(8,16,32,64)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mio_regs.v@127:137
+       config_reg[20:0] <= data_in[20:0];
+
+   assign tx_en         = ~config_reg[0];         // tx disable
+   assign rx_en         = ~config_reg[1];         // rx disable
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+   assign ddr_mode      = config_reg[12];         // dual data rate mode   
+   assign lsbfirst      = config_reg[13];         // lsb-first transmit
+   assign framepol      = config_reg[14];         // frame polarity
+
+Clone Blocks 2:
+oh/src/mio/hdl/mio_regs.v@132:142
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+   assign ddr_mode      = config_reg[12];         // dual data rate mode   
+   assign lsbfirst      = config_reg[13];         // lsb-first transmit
+   assign framepol      = config_reg[14];         // frame polarity
+   assign ctrlmode[4:0] = config_reg[20:16];      // ctrlmode
+  
+   //###############################
+   //# STATUS
+   //################################ 
+
+Clone Blocks 3:
+oh/src/mio/hdl/mio_regs.v@125:135
+       end
+     else if(config_write)
+       config_reg[20:0] <= data_in[20:0];
+
+   assign tx_en         = ~config_reg[0];         // tx disable
+   assign rx_en         = ~config_reg[1];         // rx disable
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+   assign ddr_mode      = config_reg[12];         // dual data rate mode   
+
+Clone Blocks 4:
+oh/src/mio/hdl/mio_regs.v@130:140
+   assign rx_en         = ~config_reg[1];         // rx disable
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+   assign ddr_mode      = config_reg[12];         // dual data rate mode   
+   assign lsbfirst      = config_reg[13];         // lsb-first transmit
+   assign framepol      = config_reg[14];         // frame polarity
+   assign ctrlmode[4:0] = config_reg[20:16];      // ctrlmode
+  
+   //###############################
+
+Clone Blocks 5:
+oh/src/mio/hdl/mio_regs.v@131:141
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+   assign ddr_mode      = config_reg[12];         // dual data rate mode   
+   assign lsbfirst      = config_reg[13];         // lsb-first transmit
+   assign framepol      = config_reg[14];         // frame polarity
+   assign ctrlmode[4:0] = config_reg[20:16];      // ctrlmode
+  
+   //###############################
+   //# STATUS
+
+Clone Blocks 6:
+oh/src/mio/hdl/mio_regs.v@126:136
+     else if(config_write)
+       config_reg[20:0] <= data_in[20:0];
+
+   assign tx_en         = ~config_reg[0];         // tx disable
+   assign rx_en         = ~config_reg[1];         // rx disable
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+   assign ddr_mode      = config_reg[12];         // dual data rate mode   
+   assign lsbfirst      = config_reg[13];         // lsb-first transmit
+
+Clone Blocks 7:
+oh/src/mio/hdl/mio_regs.v@128:138
+
+   assign tx_en         = ~config_reg[0];         // tx disable
+   assign rx_en         = ~config_reg[1];         // rx disable
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+   assign ddr_mode      = config_reg[12];         // dual data rate mode   
+   assign lsbfirst      = config_reg[13];         // lsb-first transmit
+   assign framepol      = config_reg[14];         // frame polarity
+   assign ctrlmode[4:0] = config_reg[20:16];      // ctrlmode
+
+Clone Blocks 8:
+oh/src/mio/hdl/mio_regs.v@124:134
+	  config_reg[20:0] <= DEF_CFG;
+       end
+     else if(config_write)
+       config_reg[20:0] <= data_in[20:0];
+
+   assign tx_en         = ~config_reg[0];         // tx disable
+   assign rx_en         = ~config_reg[1];         // rx disable
+   assign emode         = config_reg[3:2]==2'b00; // emesh packets
+   assign dmode         = config_reg[3:2]==2'b01; // data mode (streaming)
+   assign amode         = config_reg[3:2]==2'b10; // auto address mode
+   assign datasize[7:0] = config_reg[11:4];       // number of flits per packet
+

@@ -1,0 +1,73 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@90:100@HdlStmAssign
+
+wire enabled_all;
+wire disabled_all;
+
+assign enabled_all = req_enabled & enabled_src & enabled_dest;
+assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+
+assign req_enable = do_enable;
+
+assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,1'b0,req_enabled,enabled_src,enabled_dest,1'b0,state};
+
+
+Diff Content:
+- 95 assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@89:99
+wire enabled_src;
+
+wire enabled_all;
+wire disabled_all;
+
+assign enabled_all = req_enabled & enabled_src & enabled_dest;
+assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+
+assign req_enable = do_enable;
+
+assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,1'b0,req_enabled,enabled_src,enabled_dest,1'b0,state};
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@87:97
+
+wire enabled_dest;
+wire enabled_src;
+
+wire enabled_all;
+wire disabled_all;
+
+assign enabled_all = req_enabled & enabled_src & enabled_dest;
+assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+
+assign req_enable = do_enable;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@94:104
+assign enabled_all = req_enabled & enabled_src & enabled_dest;
+assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+
+assign req_enable = do_enable;
+
+assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,1'b0,req_enabled,enabled_src,enabled_dest,1'b0,state};
+
+always @(posedge clk) begin
+  if (state == STATE_DO_RESET) begin
+    do_reset <= 1'b1;
+  end else begin
+
+Clone Blocks 4:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@92:102
+wire disabled_all;
+
+assign enabled_all = req_enabled & enabled_src & enabled_dest;
+assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+
+assign req_enable = do_enable;
+
+assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,1'b0,req_enabled,enabled_src,enabled_dest,1'b0,state};
+
+always @(posedge clk) begin
+  if (state == STATE_DO_RESET) begin
+

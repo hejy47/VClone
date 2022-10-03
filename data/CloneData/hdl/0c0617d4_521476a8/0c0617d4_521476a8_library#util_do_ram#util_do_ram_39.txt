@@ -1,0 +1,42 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@210:225@HdlStmProcess
+end
+
+assign rd_enable = rd_fifo_s_ready & rd_active &
+    (rd_fifo_room >= (m_axis_valid&m_axis_ready ? 1 : RAM_LATENCY));
+
+always @(posedge m_axis_aclk) begin
+  if (~rd_request_enable | rd_last_beat)
+    rd_addr <= 'h0;
+  else if (rd_enable)
+    rd_addr <= rd_addr + 1;
+end
+
+// Delay read enable with latency cycles
+// <TODO> make this depend on parameter
+reg rd_valid_l1 = 1'b0;
+reg rd_valid_l2 = 1'b0;
+
+Diff Content:
+- 215 always @(posedge m_axis_aclk) begin
+- 216   if (~rd_request_enable | rd_last_beat)
+- 217     rd_addr <= 'h0;
+- 218   else if (rd_enable)
+- 219     rd_addr <= rd_addr + 1;
+- 220 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_do_ram/util_do_ram.v@207:218
+    rd_active <= 1'b1;
+  else if (rd_last_beat)
+    rd_active <= rd_req_cnt == 2;
+end
+
+assign rd_enable = rd_fifo_s_ready & rd_active &
+    (rd_fifo_room >= (m_axis_valid&m_axis_ready ? 1 : RAM_LATENCY));
+
+always @(posedge m_axis_aclk) begin
+  if (~rd_request_enable | rd_last_beat)
+    rd_addr <= 'h0;
+  else if (rd_enable)
+

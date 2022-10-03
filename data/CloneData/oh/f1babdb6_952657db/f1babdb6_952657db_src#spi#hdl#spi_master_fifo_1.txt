@@ -1,0 +1,19 @@
+Source Block: oh/src/spi/hdl/spi_master_fifo.v@67:78@HdlStmAssign
+	.data_in			(data_in[AW-1:0]),
+	// Inputs
+	.packet_in			(packet_in[PW-1:0]));
+   
+   
+   assign datasize[7:0] = emode ? (PW/SW-1'b1) :
+			  ((1<<datamode_in[1:0]));
+   
+
+   assign tx_write =  spi_en &
+		      write_in & 
+		      access_in &
+
+Diff Content:
+- 72    assign datasize[7:0] = emode ? (PW/SW-1'b1) :
+- 73 			  ((1<<datamode_in[1:0]));
+
+Clone Blocks:

@@ -1,0 +1,105 @@
+Source Block: oh/elink/hdl/elink_example.v@71:81@HdlIdDef
+   wire 	        rxrd_access;		// From elink of elink.v
+   wire [PW-1:0]	rxrd_packet;		// From elink of elink.v
+   wire		        rxwr_access;		// From elink of elink.v
+   wire [PW-1:0]	rxwr_packet;		// From elink of elink.v
+   wire		        rxrr_access;		// From elink of elink.v
+   wire [PW-1:0]	rxrr_packet;		// From elink of elink.v
+
+   
+   //######
+   //ELINK
+   //######
+
+Diff Content:
++ 76    wire 		clkin;
++ 76    wire 		sys_clk_io;
++ 76    wire 		sys_clk;
++ 76    IBUFGDS clk_buf1 (
++ 76 		         .I      (clkin_p),
++ 76 		         .IB     (clkin_n),
++ 76 		         .O      (clkin)
++ 76 			 );
++ 76    BUFG clk_buf2 (.I (clkin),
++ 76 		  .O (pll_clkin)
++ 76 		  );
++ 76    IBUFGDS clk_buf3 (
++ 76 		         .I      (sys_clk_p),
++ 76 		         .IB     (sys_clk_n),
++ 76 		         .O      (sys_clk_io)
++ 76 			 );
++ 76    BUFG clk_buf4 (.I (sys_clk_io),
++ 76 		  .O (sys_clk)
++ 76 		  );
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx.v@56:66
+   /*AUTOOUTPUT*/
+   /*AUTOINPUT*/
+
+   /*AUTOWIRE*/
+   // Beginning of automatic wires (for undeclared instantiated-module outputs)
+   wire			ecfg_access;		// From erx_cfgif of ecfg_if.v
+   wire [PW-1:0]	ecfg_packet;		// From erx_cfgif of ecfg_if.v
+   wire			edma_access;		// From erx_dma of edma.v
+   wire			edma_wait;		// From erx_disty of erx_disty.v
+   wire			emesh_remap_access;	// From erx_remap of erx_remap.v
+   wire [PW-1:0]	emesh_remap_packet;	// From erx_remap of erx_remap.v
+
+Clone Blocks 2:
+oh/elink/hdl/elink_example.v@69:79
+   wire		        rxrd_wait;		// To elink of elink.v
+   wire 		rxwr_wait;		// To elink of elink.v
+   wire 	        rxrd_access;		// From elink of elink.v
+   wire [PW-1:0]	rxrd_packet;		// From elink of elink.v
+   wire		        rxwr_access;		// From elink of elink.v
+   wire [PW-1:0]	rxwr_packet;		// From elink of elink.v
+   wire		        rxrr_access;		// From elink of elink.v
+   wire [PW-1:0]	rxrr_packet;		// From elink of elink.v
+
+   
+   //######
+
+Clone Blocks 3:
+oh/elink/hdl/elink_example.v@64:74
+   // End of automatics
+   
+   //local wires
+   wire 		emem_access;
+   wire [PW-1:0]	emem_packet;
+   wire		        rxrd_wait;		// To elink of elink.v
+   wire 		rxwr_wait;		// To elink of elink.v
+   wire 	        rxrd_access;		// From elink of elink.v
+   wire [PW-1:0]	rxrd_packet;		// From elink of elink.v
+   wire		        rxwr_access;		// From elink of elink.v
+   wire [PW-1:0]	rxwr_packet;		// From elink of elink.v
+
+Clone Blocks 4:
+oh/elink/hdl/elink_example.v@70:80
+   wire 		rxwr_wait;		// To elink of elink.v
+   wire 	        rxrd_access;		// From elink of elink.v
+   wire [PW-1:0]	rxrd_packet;		// From elink of elink.v
+   wire		        rxwr_access;		// From elink of elink.v
+   wire [PW-1:0]	rxwr_packet;		// From elink of elink.v
+   wire		        rxrr_access;		// From elink of elink.v
+   wire [PW-1:0]	rxrr_packet;		// From elink of elink.v
+
+   
+   //######
+   //ELINK
+
+Clone Blocks 5:
+oh/elink/hdl/elink_example.v@49:59
+
+   /*AUTOINPUT*/
+
+   /*AUTOWIRE*/
+   // Beginning of automatic wires (for undeclared instantiated-module outputs)
+   wire			done;			// From egen_txwr of egen.v
+   wire			txrd_access;		// From egen_txrd of egen.v
+   wire [PW-1:0]	txrd_packet;		// From egen_txrd of egen.v
+   wire			txrd_wait;		// From elink of elink.v
+   wire			txrr_access;		// From emem of ememory.v
+   wire [PW-1:0]	txrr_packet;		// From emem of ememory.v
+

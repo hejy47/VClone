@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/etx_protocol.v@114:124@HdlStmAssign
+   assign tx_io_wait = tx_access & ~done & ~tx_burst;//tx_burst_reg
+
+   //Ugly hack. When there is an async wait coming in and we are in the middle of a transction
+   //we sample in a new value to realign the pipeline since the current transaction already went
+   //out to the IO.(must be a better way???)
+   assign adjust     = tx_io_wait_reg & (tx_rd_wait | tx_wr_wait);
+  		      
+   //#############################
+   //# Burst Detection
+   //#############################
+
+
+Diff Content:
+- 119    assign adjust     = tx_io_wait_reg & (tx_rd_wait | tx_wr_wait);
+
+Clone Blocks:

@@ -1,0 +1,50 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@173:183@HdlIdDef
+parameter v_sync_start = v_rez+3;
+parameter v_sync_end   = v_rez+3+5;
+parameter v_max        = 749;
+
+reg [23:0] zaddr;
+reg [23:0] zaddr2;
+reg [15:0] data;
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+
+
+Diff Content:
+- 178 reg [23:0] zaddr2;
++ 178 reg ZORRO3 = 1; 
++ 178 reg [23:0] zaddr; // zorro 2 address
++ 178 reg [31:0] zaddr_sync;
++ 178 reg [31:0] zaddr_sync2;
++ 178 reg [23:0] z2_mapped_addr;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@174:184
+parameter v_sync_end   = v_rez+3+5;
+parameter v_max        = 749;
+
+reg [23:0] zaddr;
+reg [23:0] zaddr2;
+reg [15:0] data;
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+
+assign zDIR     = !(dataout_enable);
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/z2.v@172:182
+parameter v_rez        = 720;
+parameter v_sync_start = v_rez+3;
+parameter v_sync_end   = v_rez+3+5;
+parameter v_max        = 749;
+
+reg [23:0] zaddr;
+reg [23:0] zaddr2;
+reg [15:0] data;
+reg [15:0] data_in;
+reg dataout = 0;
+reg dataout_enable = 0;
+

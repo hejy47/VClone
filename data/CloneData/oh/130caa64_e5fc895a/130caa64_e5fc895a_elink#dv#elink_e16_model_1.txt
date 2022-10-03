@@ -1,0 +1,23 @@
+Source Block: oh/elink/dv/elink_e16_model.v@219:235@HdlStmProcess
+   /********************************************************************/
+   /*Checkers                                                          */
+   /********************************************************************/
+
+   // synthesis translate_off
+   always @*     
+     begin
+	if((|(grants[ARW-1:0]&~requests[ARW-1:0])) & $time>0)
+	  $display("ERROR>>Grant granted with out request in cell %m at time %0d",$time);
+	if((~(|grants[ARW-1:0]) & (|requests[ARW-1:0])) & $time>0)
+	  $display("ERROR>>Zero granted when there was a request in cell %m at time %0d",$time);	
+     end   
+   // synthesis translate_on
+
+   	    
+endmodule // e16_arbiter_roundrobin
+// ###############################################################
+
+Diff Content:
++ 230 */
+
+Clone Blocks:

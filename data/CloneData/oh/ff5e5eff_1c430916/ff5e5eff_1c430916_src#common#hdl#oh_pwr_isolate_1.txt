@@ -1,0 +1,32 @@
+Source Block: oh/src/common/hdl/oh_pwr_isolate.v@22:32@HdlStmAssign
+   
+`ifdef TARGET_SIM   
+   assign out = ((vdd===1'b1) && (vss===1'b0)) ? (niso & in) :
+		                                 1'bX;
+`else
+   assign out = niso & in;
+`endif
+   
+endmodule // oh_buf
+
+///////////////////////////////////////////////////////////////////////////////
+
+Diff Content:
+- 27    assign out = niso & in;
++ 27    assign out[DW-1:0] = {(DW){niso}} & in[DW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_pwr_buf.v@20:30
+   output [DW-1:0] out;    // buffered output signal
+   
+`ifdef TARGET_SIM   
+   assign out = ((vdd===1'b1) && (vss===1'b0)) ? in : 1'bX;
+`else
+   assign out = in;
+`endif
+   
+endmodule // oh_buf
+
+///////////////////////////////////////////////////////////////////////////////
+

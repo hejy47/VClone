@@ -1,0 +1,166 @@
+Source Block: hdl/library/util_adc_pack/util_adc_pack.v@415:491@HdlStmIf
+
+  end
+
+  // EIGHT CHANNELS
+  generate
+  if ( CHANNELS == 8)
+  begin
+    always @(posedge clk)
+    begin
+      // ddata 4
+      if ((en1[4] | en2[4] | en4[4]) == 1'b1)
+      begin
+        ddata[5*DATA_WIDTH-1:4*DATA_WIDTH] <= packed_data[(DATA_WIDTH-1):0];
+      end
+      if (path_enabled[7] == 1'b1)
+      begin
+        ddata[5*DATA_WIDTH-1:4*DATA_WIDTH] <= packed_data[5*DATA_WIDTH-1:4*DATA_WIDTH];
+      end
+
+      // ddata 5
+      if (en1[5] == 1'b1)
+      begin
+        ddata[6*DATA_WIDTH-1:5*DATA_WIDTH] <= packed_data[(DATA_WIDTH-1):0];
+      end
+      if ((en2[5] | en4[5]) == 1'b1)
+      begin
+        ddata[6*DATA_WIDTH-1:5*DATA_WIDTH] <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
+      end
+      if (path_enabled[7] == 1'b1)
+      begin
+        ddata[6*DATA_WIDTH-1:5*DATA_WIDTH] <= packed_data[6*DATA_WIDTH-1:5*DATA_WIDTH];
+      end
+
+      // ddata 6
+      if ((en1[6] | en2[6]) == 1'b1)
+      begin
+        ddata[7*DATA_WIDTH-1:6*DATA_WIDTH] <= packed_data[(DATA_WIDTH-1):0];
+      end
+      if (en4[6] == 1'b1)
+      begin
+        ddata[7*DATA_WIDTH-1:6*DATA_WIDTH] <= packed_data[3*DATA_WIDTH-1:2*DATA_WIDTH];
+      end
+      if (path_enabled[7] == 1'b1)
+      begin
+        ddata[7*DATA_WIDTH-1:6*DATA_WIDTH] <= packed_data[7*DATA_WIDTH-1:6*DATA_WIDTH];
+      end
+
+      // ddata 7
+      if (en1[7] == 1'b1)
+      begin
+        ddata[8*DATA_WIDTH-1:7*DATA_WIDTH]  <= packed_data[(DATA_WIDTH-1):0];
+      end
+      if (en2[7] == 1'b1)
+      begin
+        ddata[8*DATA_WIDTH-1:7*DATA_WIDTH]  <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
+      end
+      if (en4[7] == 1'b1)
+      begin
+        ddata[8*DATA_WIDTH-1:7*DATA_WIDTH]  <= packed_data[4*DATA_WIDTH-1:3*DATA_WIDTH];
+      end
+      if (path_enabled[7] == 1'b1)
+      begin
+        ddata[8*DATA_WIDTH-1:7*DATA_WIDTH]  <= packed_data[127:7*DATA_WIDTH];
+      end
+    end
+
+    always @(temp_data_0, temp_data_1, enable_cnt_0)
+    begin
+      packed_data = temp_data_0 | temp_data_1 << enable_cnt_0 * DATA_WIDTH;
+    end
+
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 420   if ( CHANNELS == 8)
+- 429       if (path_enabled[7] == 1'b1)
+- 443       if (path_enabled[7] == 1'b1)
+- 457       if (path_enabled[7] == 1'b1)
+- 475       if (path_enabled[7] == 1'b1)
+- 477         ddata[8*DATA_WIDTH-1:7*DATA_WIDTH]  <= packed_data[127:7*DATA_WIDTH];
+- 481     always @(temp_data_0, temp_data_1, enable_cnt_0)
+- 483       packed_data = temp_data_0 | temp_data_1 << enable_cnt_0 * DATA_WIDTH;
+- 484     end
++ 420   if ( CHANNELS == 8 )
++ 423       if ((en1[0] | en2[0] | en4[0] | path_enabled[CHANNELS-1]) == 1'b1)
++ 423       begin
++ 423         ddata[(DATA_WIDTH-1):0]     <=  packed_data[(DATA_WIDTH-1):0];
++ 423       end
++ 423       if( en1[1] == 1'b1)
++ 423       begin
++ 423         ddata[2*DATA_WIDTH-1:DATA_WIDTH]    <= packed_data[(DATA_WIDTH-1):0];
++ 423       end
++ 423       if ( (en2[1] | en4[1] | path_enabled[CHANNELS-1]) == 1'b1)
++ 423       begin
++ 423         ddata[2*DATA_WIDTH-1:DATA_WIDTH]    <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
++ 423       end
++ 423       if ((en1[2] | en2[2]) == 1'b1)
++ 423       begin
++ 423         ddata[3*DATA_WIDTH-1:2*DATA_WIDTH]    <= packed_data[(DATA_WIDTH-1):0];
++ 423       end
++ 423       if ((en4[2] | path_enabled[CHANNELS-1]) == 1'b1)
++ 423       begin
++ 423         ddata[3*DATA_WIDTH-1:2*DATA_WIDTH]    <= packed_data[3*DATA_WIDTH-1:2*DATA_WIDTH];
++ 423       end
++ 423       if (en1[3] == 1'b1)
++ 423       begin
++ 423         ddata[4*DATA_WIDTH-1:3*DATA_WIDTH] <= packed_data[(DATA_WIDTH-1):0];
++ 423       end
++ 423       if (en2[3] == 1'b1)
++ 423       begin
++ 423         ddata[4*DATA_WIDTH-1:3*DATA_WIDTH] <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
++ 423       end
++ 423       if ((en4[3] | path_enabled[CHANNELS-1]) == 1'b1)
++ 423       begin
++ 423         ddata[4*DATA_WIDTH-1:3*DATA_WIDTH] <= packed_data[4*DATA_WIDTH-1:3*DATA_WIDTH];
++ 423       end
++ 429       if (path_enabled[CHANNELS-1] == 1'b1)
++ 443       if (path_enabled[CHANNELS-1] == 1'b1)
++ 457       if (path_enabled[CHANNELS-1] == 1'b1)
++ 475       if (path_enabled[CHANNELS-1] == 1'b1)
++ 477         ddata[8*DATA_WIDTH-1:7*DATA_WIDTH]  <= packed_data[8*DATA_WIDTH-1:7*DATA_WIDTH];
++ 481   end
++ 481   else
++ 481   begin
++ 481     always @(posedge clk)
++ 484       if ((en1[0] | en2[0] | path_enabled[3] ) == 1'b1)
++ 484       begin
++ 484         ddata[(DATA_WIDTH-1):0]     <=  packed_data[(DATA_WIDTH-1):0];
++ 484       end
++ 484       if( en1[1] == 1'b1)
++ 484       begin
++ 484         ddata[2*DATA_WIDTH-1:DATA_WIDTH]    <= packed_data[(DATA_WIDTH-1):0];
++ 484       end
++ 484       if ( (en2[1] | | path_enabled[3] )== 1'b1)
++ 484       begin
++ 484         ddata[2*DATA_WIDTH-1:DATA_WIDTH]    <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
++ 484       end
++ 484       if ((en1[2] | en2[2]) == 1'b1)
++ 484       begin
++ 484         ddata[3*DATA_WIDTH-1:2*DATA_WIDTH]    <= packed_data[(DATA_WIDTH-1):0];
++ 484       end
++ 484       if (( path_enabled[3]) == 1'b1)
++ 484       begin
++ 484         ddata[3*DATA_WIDTH-1:2*DATA_WIDTH]    <= packed_data[3*DATA_WIDTH-1:2*DATA_WIDTH];
++ 484       end
++ 484       if (en1[3] == 1'b1)
++ 484       begin
++ 484         ddata[4*DATA_WIDTH-1:3*DATA_WIDTH] <= packed_data[(DATA_WIDTH-1):0];
++ 484       end
++ 484       if (en2[3] == 1'b1)
++ 484       begin
++ 484         ddata[4*DATA_WIDTH-1:3*DATA_WIDTH] <= packed_data[2*DATA_WIDTH-1:DATA_WIDTH];
++ 484       end
++ 484       if (path_enabled[3] == 1'b1)
++ 484       begin
++ 484         ddata[4*DATA_WIDTH-1:3*DATA_WIDTH] <= packed_data[4*DATA_WIDTH-1:3*DATA_WIDTH];
++ 484       end
++ 484     end
+
+Clone Blocks:

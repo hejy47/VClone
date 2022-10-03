@@ -1,0 +1,53 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx.v@224:244@HdlStmProcess
+  .out_clk(device_clk),
+  .out_resetn(1'b1),
+  .out_bits(dev_all_buffer_ready_n)
+);
+
+always @(posedge device_clk) begin
+  if (device_reset == 1'b1) begin
+    buffer_release_n <= 1'b1;
+  end else begin
+    if (buffer_release_opportunity == 1'b1) begin
+      buffer_release_n <= dev_all_buffer_ready_n;
+    end
+  end
+  buffer_release_d1 <= ~buffer_release_n;
+  eof_reset <= buffer_release_n;
+end
+
+pipeline_stage #(
+  .WIDTH(NUM_LANES + (3 * CW) + HW + DW),
+  .REGISTERED(NUM_INPUT_PIPELINE)
+) i_input_pipeline_stage (
+
+Diff Content:
+- 229 always @(posedge device_clk) begin
+- 230   if (device_reset == 1'b1) begin
+- 231     buffer_release_n <= 1'b1;
+- 232   end else begin
+- 233     if (buffer_release_opportunity == 1'b1) begin
+- 234       buffer_release_n <= dev_all_buffer_ready_n;
+- 237   buffer_release_d1 <= ~buffer_release_n;
+- 238   eof_reset <= buffer_release_n;
+- 239 end
++ 234   assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
++ 234   sync_bits #(
++ 234     .NUM_OF_BITS (1),
++ 234     .ASYNC_CLK(ASYNC_CLK)
++ 234   ) i_all_buffer_ready_cdc (
++ 234     .in_bits(all_buffer_ready_n),
++ 234     .out_clk(device_clk),
++ 234     .out_resetn(1'b1),
++ 234     .out_bits(dev_all_buffer_ready_n));
++ 234   always @(posedge device_clk) begin
++ 234     if (device_reset == 1'b1) begin
++ 234       buffer_release_n <= 1'b1;
++ 234     end else begin
++ 234       if (buffer_release_opportunity == 1'b1) begin
++ 234         buffer_release_n <= dev_all_buffer_ready_n;
++ 234       end
++ 235     buffer_release_d1 <= ~buffer_release_n;
++ 235     eof_reset <= buffer_release_n;
+
+Clone Blocks:

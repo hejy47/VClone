@@ -1,0 +1,32 @@
+Source Block: hdl/library/util_upack/util_upack.v@173:189@HdlStmIf
+  end
+
+  // store & fwd
+
+  generate
+  if (P_CNT < M_CNT) begin
+  for (n = P_CNT; n < M_CNT; n = n + 1) begin: g_def
+  assign dac_dsf_valid_s[n] = 'd0;
+  assign dac_dsf_sync_s[n] = 'd0;
+  assign dac_dsf_data_s[n] = 'd0;
+  end
+  end
+
+  for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
+  util_upack_dsf #(
+    .P_CNT (P_CNT),
+    .M_CNT (M_CNT),
+
+Diff Content:
+- 179   for (n = P_CNT; n < M_CNT; n = n + 1) begin: g_def
+- 180   assign dac_dsf_valid_s[n] = 'd0;
+- 181   assign dac_dsf_sync_s[n] = 'd0;
+- 182   assign dac_dsf_data_s[n] = 'd0;
+- 183   end
++ 183     for (n = P_CNT; n < M_CNT; n = n + 1) begin: g_def
++ 183       assign dac_dsf_valid_s[n] = 'd0;
++ 183       assign dac_dsf_sync_s[n] = 'd0;
++ 183       assign dac_dsf_data_s[n] = 'd0;
++ 183     end
+
+Clone Blocks:

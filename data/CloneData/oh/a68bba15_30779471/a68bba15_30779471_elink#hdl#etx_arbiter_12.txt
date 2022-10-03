@@ -1,0 +1,36 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@143:163@HdlStmProcess
+		      (txrd_grant & ~txrd_wait) |
+		      (txrr_grant & ~txrr_wait);
+
+   
+   //access
+    always @ (posedge clk)
+      if (!nreset)
+	begin
+	   etx_access        <= 1'b0;   
+	   etx_rr            <= 1'b0;	   
+	end
+      else if (~(etx_wr_wait | etx_rd_wait))
+	begin
+	   etx_access         <= access_in ;
+	   etx_rr             <= txrr_grant & ~txrr_wait;
+	end	   
+   
+   //packet
+   always @ (posedge clk)
+     if (access_in & ~(etx_wr_wait | etx_rd_wait))
+	  etx_packet[PW-1:0] <= etx_mux[PW-1:0];	 
+
+Diff Content:
+- 151 	   etx_access        <= 1'b0;   
+- 152 	   etx_rr            <= 1'b0;	   
+- 154       else if (~(etx_wr_wait | etx_rd_wait))
+- 156 	   etx_access         <= access_in ;
+- 157 	   etx_rr             <= txrr_grant & ~txrr_wait;
++ 152 	   etx_access    <= 1'b0;   
++ 152 	   cfg_access    <= 1'b0;	   
++ 154       else if (~etx_all_wait)
++ 157 	   etx_access   <= access_in & ~cfg_match;
++ 157 	   cfg_access   <= access_in & cfg_match;
+
+Clone Blocks:

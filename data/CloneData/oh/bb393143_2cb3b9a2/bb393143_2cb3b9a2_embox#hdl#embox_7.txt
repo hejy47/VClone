@@ -1,0 +1,33 @@
+Source Block: oh/embox/hdl/embox.v@105:115@HdlStmAssign
+
+   //read logic
+   assign embox_read         = mi_access & ~mi_write;
+   assign embox_w0_read      = embox_w0_access     & embox_read;
+   assign embox_w1_read      = embox_w1_access     & embox_read;//causes FIFO read
+   assign embox_status_read  = embox_status_access & embox_read;
+			      
+   /*****************************/
+   /*WRITE ACTION               */
+   /*****************************/
+   //hold lower data word until upper word arrives
+
+Diff Content:
+- 110    assign embox_status_read  = embox_status_access & embox_read;
++ 110    assign embox_read         = mi_en & ~mi_we;
++ 110    assign embox_w1_read      = embox_w1_access & embox_read;       //causes FIFO read		      
+
+Clone Blocks:
+Clone Blocks 1:
+oh/embox/hdl/embox.v@104:114
+   assign  embox_w1_write    = embox_w1_access & embox_write; //causes FIFO write
+
+   //read logic
+   assign embox_read         = mi_access & ~mi_write;
+   assign embox_w0_read      = embox_w0_access     & embox_read;
+   assign embox_w1_read      = embox_w1_access     & embox_read;//causes FIFO read
+   assign embox_status_read  = embox_status_access & embox_read;
+			      
+   /*****************************/
+   /*WRITE ACTION               */
+   /*****************************/
+

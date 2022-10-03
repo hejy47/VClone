@@ -1,0 +1,72 @@
+Source Block: verilog-ethernet/rtl/axis_demux_4.v@96:125@HdlStmProcess
+assign input_axis_tready = input_axis_tready_reg;
+
+// mux for output control signals
+reg current_output_tready;
+reg current_output_tvalid;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_output_tvalid = output_0_axis_tvalid;
+            current_output_tready = output_0_axis_tready;
+        end
+        2'd1: begin
+            current_output_tvalid = output_1_axis_tvalid;
+            current_output_tready = output_1_axis_tready;
+        end
+        2'd2: begin
+            current_output_tvalid = output_2_axis_tvalid;
+            current_output_tready = output_2_axis_tready;
+        end
+        2'd3: begin
+            current_output_tvalid = output_3_axis_tvalid;
+            current_output_tready = output_3_axis_tready;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+
+Diff Content:
++ 118         default: begin
++ 118             current_output_tvalid = 1'b0;
++ 118             current_output_tready = 1'b0;
++ 118         end
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_demux_64_4.v@103:132
+assign input_axis_tready = input_axis_tready_reg;
+
+// mux for output control signals
+reg current_output_tready;
+reg current_output_tvalid;
+always @* begin
+    case (select_reg)
+        2'd0: begin
+            current_output_tvalid = output_0_axis_tvalid;
+            current_output_tready = output_0_axis_tready;
+        end
+        2'd1: begin
+            current_output_tvalid = output_1_axis_tvalid;
+            current_output_tready = output_1_axis_tready;
+        end
+        2'd2: begin
+            current_output_tvalid = output_2_axis_tvalid;
+            current_output_tready = output_2_axis_tready;
+        end
+        2'd3: begin
+            current_output_tvalid = output_3_axis_tvalid;
+            current_output_tready = output_3_axis_tready;
+        end
+    endcase
+end
+
+always @* begin
+    select_next = select_reg;
+    frame_next = frame_reg;
+
+

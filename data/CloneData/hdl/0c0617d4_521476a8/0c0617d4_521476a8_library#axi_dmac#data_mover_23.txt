@@ -1,0 +1,101 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@114:124@HdlStmAssign
+assign source_id = id;
+assign source_eot = eot || early_tlast;
+
+assign last = eot ? last_eot : last_non_eot;
+
+assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last || early_tlast;
+assign m_axi_partial_burst = early_tlast;
+
+
+Diff Content:
+- 119 assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/data_mover.v@110:120
+assign xfer_req = active;
+
+assign response_id = id;
+
+assign source_id = id;
+assign source_eot = eot || early_tlast;
+
+assign last = eot ? last_eot : last_non_eot;
+
+assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/data_mover.v@116:126
+
+assign last = eot ? last_eot : last_non_eot;
+
+assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last || early_tlast;
+assign m_axi_partial_burst = early_tlast;
+
+assign block_descr_to_dst = transfer_abort_s;
+
+
+Clone Blocks 3:
+hdl/library/axi_dmac/data_mover.v@115:125
+assign source_eot = eot || early_tlast;
+
+assign last = eot ? last_eot : last_non_eot;
+
+assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last || early_tlast;
+assign m_axi_partial_burst = early_tlast;
+
+assign block_descr_to_dst = transfer_abort_s;
+
+Clone Blocks 4:
+hdl/library/axi_dmac/data_mover.v@117:127
+assign last = eot ? last_eot : last_non_eot;
+
+assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last || early_tlast;
+assign m_axi_partial_burst = early_tlast;
+
+assign block_descr_to_dst = transfer_abort_s;
+
+generate if (ALLOW_ABORT == 1) begin
+
+Clone Blocks 5:
+hdl/library/axi_dmac/data_mover.v@118:128
+
+assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last || early_tlast;
+assign m_axi_partial_burst = early_tlast;
+
+assign block_descr_to_dst = transfer_abort_s;
+
+generate if (ALLOW_ABORT == 1) begin
+  wire programmed_last;
+
+Clone Blocks 6:
+hdl/library/axi_dmac/data_mover.v@112:122
+assign response_id = id;
+
+assign source_id = id;
+assign source_eot = eot || early_tlast;
+
+assign last = eot ? last_eot : last_non_eot;
+
+assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last || early_tlast;
+

@@ -1,0 +1,63 @@
+Source Block: serv/rtl/serv_mpram.v@144:155@HdlStmAssign
+	 rreq <= 3'd0;
+      end
+   end
+
+   assign raddr[8] = rcnt_lo[2];
+   assign raddr[7:5] = rcnt_lo[0] ? i_rs1_raddr[4:2] :
+		       rcnt_lo[1] ? i_rs2_raddr[4:2] : 3'd0;
+   assign raddr[4:3] = rcnt_lo[0] ? i_rs1_raddr[1:0] :
+		       rcnt_lo[1] ? i_rs2_raddr[1:0] :
+		       i_trap ? CSR_MTVEC : i_csr_addr;
+   assign raddr[2:0] = rcnt_hi;
+
+
+Diff Content:
+- 149    assign raddr[7:5] = rcnt_lo[0] ? i_rs1_raddr[4:2] :
+- 150 		       rcnt_lo[1] ? i_rs2_raddr[4:2] : 3'd0;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_mpram.v@143:153
+	 o_rgnt <= 1'b0;
+	 rreq <= 3'd0;
+      end
+   end
+
+   assign raddr[8] = rcnt_lo[2];
+   assign raddr[7:5] = rcnt_lo[0] ? i_rs1_raddr[4:2] :
+		       rcnt_lo[1] ? i_rs2_raddr[4:2] : 3'd0;
+   assign raddr[4:3] = rcnt_lo[0] ? i_rs1_raddr[1:0] :
+		       rcnt_lo[1] ? i_rs2_raddr[1:0] :
+		       i_trap ? CSR_MTVEC : i_csr_addr;
+
+Clone Blocks 2:
+serv/rtl/serv_mpram.v@149:159
+   assign raddr[7:5] = rcnt_lo[0] ? i_rs1_raddr[4:2] :
+		       rcnt_lo[1] ? i_rs2_raddr[4:2] : 3'd0;
+   assign raddr[4:3] = rcnt_lo[0] ? i_rs1_raddr[1:0] :
+		       rcnt_lo[1] ? i_rs2_raddr[1:0] :
+		       i_trap ? CSR_MTVEC : i_csr_addr;
+   assign raddr[2:0] = rcnt_hi;
+
+   assign o_rs1 = rdata0[0];
+   assign o_rs2 = rdata1[0];
+   assign o_csr = rdata2[0] & i_csr_en;
+   assign o_csr_pc = rdata2[0];
+
+Clone Blocks 3:
+serv/rtl/serv_mpram.v@146:158
+   end
+
+   assign raddr[8] = rcnt_lo[2];
+   assign raddr[7:5] = rcnt_lo[0] ? i_rs1_raddr[4:2] :
+		       rcnt_lo[1] ? i_rs2_raddr[4:2] : 3'd0;
+   assign raddr[4:3] = rcnt_lo[0] ? i_rs1_raddr[1:0] :
+		       rcnt_lo[1] ? i_rs2_raddr[1:0] :
+		       i_trap ? CSR_MTVEC : i_csr_addr;
+   assign raddr[2:0] = rcnt_hi;
+
+   assign o_rs1 = rdata0[0];
+   assign o_rs2 = rdata1[0];
+   assign o_csr = rdata2[0] & i_csr_en;
+

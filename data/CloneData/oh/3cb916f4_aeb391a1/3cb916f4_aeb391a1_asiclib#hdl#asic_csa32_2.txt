@@ -1,0 +1,28 @@
+Source Block: oh/asiclib/hdl/asic_csa32.v@10:17@HdlStmAssign
+    output sum,
+    output carry
+    );
+
+   assign s = a ^ b ^ c;
+   assign c = (a & b) | (b & c) | (c & a);
+
+endmodule
+
+Diff Content:
+- 15    assign c = (a & b) | (b & c) | (c & a);
++ 15    assign sum = a ^ b ^ c;
++ 15    assign carry = (a & b) | (b & c) | (c & a);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/asiclib/hdl/asic_csa32.v@9:17
+    input  c,
+    output sum,
+    output carry
+    );
+
+   assign s = a ^ b ^ c;
+   assign c = (a & b) | (b & c) | (c & a);
+
+endmodule
+

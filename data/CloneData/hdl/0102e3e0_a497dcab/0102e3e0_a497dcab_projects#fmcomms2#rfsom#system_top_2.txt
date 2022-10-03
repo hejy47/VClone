@@ -1,0 +1,46 @@
+Source Block: hdl/projects/fmcomms2/rfsom/system_top.v@213:223@HdlStmAssign
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
+  // assignments
+
+  assign hdmi_pd = 1'b0;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+    .dio_t ({gpio_t[50:49], gpio_t[46:32]}),
+
+Diff Content:
++ 218   assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
++ 218   assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms2/mitx045/system_top.v@179:189
+
+  // internal signals
+
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+    .dio_t (gpio_t[48:32]),
+
+Clone Blocks 2:
+hdl/projects/adv7511/kcu105/system_top.v@141:151
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
+  // default logic
+
+  assign fan_pwm = 1'b1;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+    .dio_t (gpio_t[16:0]),
+

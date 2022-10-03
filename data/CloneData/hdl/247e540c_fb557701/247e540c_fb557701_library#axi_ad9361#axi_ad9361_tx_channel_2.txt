@@ -1,0 +1,52 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tx_channel.v@247:257@HdlStmAssign
+  end
+
+  // dac iq correction
+
+  assign dac_enable = (DISABLE == 1) ? 'd0 : dac_enable_int;
+  assign dac_data = (DISABLE == 1) ? 'd0 : dac_data_int;
+
+  always @(posedge dac_clk) begin
+    dac_enable_int <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+    if (dac_iqcor_valid_s == 1'b1) begin
+      dac_data_int <= dac_iqcor_data_s[15:4];
+
+Diff Content:
+- 252   assign dac_data = (DISABLE == 1) ? 'd0 : dac_data_int;
++ 252   assign dac_enable = (DISABLE == 1) ? 1'd0 : dac_enable_int;
++ 252   assign dac_data = (DISABLE == 1) ? 12'd0 : dac_data_int;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_tx_channel.v@249:264
+  // dac iq correction
+
+  assign dac_enable = (DISABLE == 1) ? 'd0 : dac_enable_int;
+  assign dac_data = (DISABLE == 1) ? 'd0 : dac_data_int;
+
+  always @(posedge dac_clk) begin
+    dac_enable_int <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+    if (dac_iqcor_valid_s == 1'b1) begin
+      dac_data_int <= dac_iqcor_data_s[15:4];
+    end
+  end
+
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N),
+    .DISABLE (IQCORRECTION_DISABLE))
+  i_ad_iqcor (
+
+Clone Blocks 2:
+hdl/library/axi_ad9361/axi_ad9361_tx_channel.v@246:256
+    end
+  end
+
+  // dac iq correction
+
+  assign dac_enable = (DISABLE == 1) ? 'd0 : dac_enable_int;
+  assign dac_data = (DISABLE == 1) ? 'd0 : dac_data_int;
+
+  always @(posedge dac_clk) begin
+    dac_enable_int <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+    if (dac_iqcor_valid_s == 1'b1) begin
+

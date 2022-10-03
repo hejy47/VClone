@@ -1,0 +1,44 @@
+Source Block: zipcpu/rtl/core/dcache.v@157:171@HdlStmAssign
+
+	wire	cache_miss_inow, w_cachable;
+	assign	cache_miss_inow = (!last_tag_valid)
+					||(last_tag != i_addr[(AW+1):LS+2])
+					||(!c_v[i_cline]);
+	assign	w_cachable = ((!OPT_LOCAL_BUS)||(i_addr[(DW-1):(DW-8)]!=8'hff))
+				&&((!i_lock)||(!OPT_LOCK))
+				&&(((SDRAM_BIT>0)&&(i_addr[SDRAM_BIT]))
+				  ||((FLASH_BIT>0)&&(i_addr[FLASH_BIT]))
+				  ||((BLKRAM_BIT>0)&&(i_addr[BLKRAM_BIT])));
+
+	reg	r_cachable, r_svalid, r_dvalid, r_rd, r_cache_miss,
+		r_rd_pending;
+	reg	[(AW-1):0]		r_addr;
+	wire	[(LGNLINES-1):0]	r_cline;
+
+Diff Content:
+- 163 				&&((!i_lock)||(!OPT_LOCK))
+- 164 				&&(((SDRAM_BIT>0)&&(i_addr[SDRAM_BIT]))
+- 165 				  ||((FLASH_BIT>0)&&(i_addr[FLASH_BIT]))
+- 166 				  ||((BLKRAM_BIT>0)&&(i_addr[BLKRAM_BIT])));
++ 166 		&&((!i_lock)||(!OPT_LOCK))
++ 166 		&&(((SDRAM_ADDR  != 0)&&((i_addr[AW+1:2] & SDRAM_MASK) ==SDRAM_ADDR))
++ 166 		  ||((FLASH_ADDR != 0)&&((i_addr[AW+1:2] & FLASH_MASK) ==FLASH_ADDR))
++ 166 		  ||((BLKRAM_ADDR!= 0)&&((i_addr[AW+1:2] & BLKRAM_MASK)==BLKRAM_ADDR)));
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/dcache.v@154:166
+
+	assign	i_cline = i_addr[(CS+1):LS+2];
+	assign	i_caddr = i_addr[(CS+1):2];
+
+	wire	cache_miss_inow, w_cachable;
+	assign	cache_miss_inow = (!last_tag_valid)
+					||(last_tag != i_addr[(AW+1):LS+2])
+					||(!c_v[i_cline]);
+	assign	w_cachable = ((!OPT_LOCAL_BUS)||(i_addr[(DW-1):(DW-8)]!=8'hff))
+				&&((!i_lock)||(!OPT_LOCK))
+				&&(((SDRAM_BIT>0)&&(i_addr[SDRAM_BIT]))
+				  ||((FLASH_BIT>0)&&(i_addr[FLASH_BIT]))
+				  ||((BLKRAM_BIT>0)&&(i_addr[BLKRAM_BIT])));
+

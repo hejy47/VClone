@@ -1,0 +1,27 @@
+Source Block: hdl/projects/fmcjesdadc1/a5soc/system_top.v@269:284@HdlStmProcess
+  wire              rx_pll_locked_s;
+  wire    [ 15:0]   rx_xcvr_status_s;
+
+  // instantiations
+
+  always @(posedge rx_clk) begin
+    rx_sysref_m1 <= rx_sysref_s;
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  always @(posedge rx_clk) begin
+    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+    dma0_wdata <= { adc0_data_b_s[31:16],
+                    adc0_data_a_s[31:16],
+
+Diff Content:
+- 274   always @(posedge rx_clk) begin
+- 275     rx_sysref_m1 <= rx_sysref_s;
+- 276     rx_sysref_m2 <= rx_sysref_m1;
+- 277     rx_sysref_m3 <= rx_sysref_m2;
+- 278     rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+- 279   end
+
+Clone Blocks:

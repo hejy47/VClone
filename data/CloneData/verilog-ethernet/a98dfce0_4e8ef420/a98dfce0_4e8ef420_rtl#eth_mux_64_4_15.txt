@@ -1,0 +1,843 @@
+Source Block: verilog-ethernet/rtl/eth_mux_64_4.v@114:124@HdlIdDef
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Diff Content:
+- 119 reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mux_64_4.v@111:121
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/eth_mux_4.v@104:114
+
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/ip_mux_4.v@171:181
+reg frame_reg = 0, frame_next;
+
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/eth_mux_4.v@108:118
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/eth_mux_4.v@105:115
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/ip_mux_64_4.v@175:185
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/eth_mux_64_4.v@113:123
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/eth_mux_64_4.v@116:126
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/ip_mux_64_4.v@181:191
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/eth_mux_64_4.v@115:125
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/eth_mux_4.v@111:121
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+Clone Blocks 12:
+verilog-ethernet/rtl/eth_mux_4.v@106:116
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+Clone Blocks 13:
+verilog-ethernet/rtl/ip_mux_4.v@171:181
+reg frame_reg = 0, frame_next;
+
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+Clone Blocks 14:
+verilog-ethernet/rtl/udp_mux_64_4.v@199:209
+reg input_1_udp_hdr_ready_reg = 0, input_1_udp_hdr_ready_next;
+reg input_2_udp_hdr_ready_reg = 0, input_2_udp_hdr_ready_next;
+reg input_3_udp_hdr_ready_reg = 0, input_3_udp_hdr_ready_next;
+
+reg input_0_udp_payload_tready_reg = 0, input_0_udp_payload_tready_next;
+reg input_1_udp_payload_tready_reg = 0, input_1_udp_payload_tready_next;
+reg input_2_udp_payload_tready_reg = 0, input_2_udp_payload_tready_next;
+reg input_3_udp_payload_tready_reg = 0, input_3_udp_payload_tready_next;
+
+reg output_udp_hdr_valid_reg = 0, output_udp_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 15:
+verilog-ethernet/rtl/eth_mux_4.v@108:118
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+
+Clone Blocks 16:
+verilog-ethernet/rtl/ip_mux_4.v@175:185
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/ip_mux_4.v@174:184
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 18:
+verilog-ethernet/rtl/ip_mux_64_4.v@176:186
+reg frame_reg = 0, frame_next;
+
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+Clone Blocks 19:
+verilog-ethernet/rtl/eth_mux_4.v@110:120
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+
+Clone Blocks 20:
+verilog-ethernet/rtl/eth_mux_4.v@109:119
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 21:
+verilog-ethernet/rtl/eth_mux_64_4.v@118:128
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+// internal datapath
+
+Clone Blocks 22:
+verilog-ethernet/rtl/udp_mux_64_4.v@199:209
+reg input_1_udp_hdr_ready_reg = 0, input_1_udp_hdr_ready_next;
+reg input_2_udp_hdr_ready_reg = 0, input_2_udp_hdr_ready_next;
+reg input_3_udp_hdr_ready_reg = 0, input_3_udp_hdr_ready_next;
+
+reg input_0_udp_payload_tready_reg = 0, input_0_udp_payload_tready_next;
+reg input_1_udp_payload_tready_reg = 0, input_1_udp_payload_tready_next;
+reg input_2_udp_payload_tready_reg = 0, input_2_udp_payload_tready_next;
+reg input_3_udp_payload_tready_reg = 0, input_3_udp_payload_tready_next;
+
+reg output_udp_hdr_valid_reg = 0, output_udp_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 23:
+verilog-ethernet/rtl/ip_mux_4.v@173:183
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+
+Clone Blocks 24:
+verilog-ethernet/rtl/ip_mux_4.v@176:186
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+Clone Blocks 25:
+verilog-ethernet/rtl/eth_mux_4.v@106:116
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+Clone Blocks 26:
+verilog-ethernet/rtl/eth_mux_64_4.v@109:119
+
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+
+Clone Blocks 27:
+verilog-ethernet/rtl/ip_mux_4.v@174:184
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 28:
+verilog-ethernet/rtl/eth_mux_64_4.v@111:121
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+Clone Blocks 29:
+verilog-ethernet/rtl/eth_mux_64_4.v@113:123
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+
+Clone Blocks 30:
+verilog-ethernet/rtl/eth_mux_64_4.v@110:120
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+
+Clone Blocks 31:
+verilog-ethernet/rtl/eth_mux_64_4.v@110:120
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+
+Clone Blocks 32:
+verilog-ethernet/rtl/ip_mux_4.v@170:180
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+
+Clone Blocks 33:
+verilog-ethernet/rtl/ip_mux_4.v@176:186
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+Clone Blocks 34:
+verilog-ethernet/rtl/eth_mux_4.v@113:123
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+// internal datapath
+
+Clone Blocks 35:
+verilog-ethernet/rtl/ip_mux_64_4.v@178:188
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+
+Clone Blocks 36:
+verilog-ethernet/rtl/ip_mux_4.v@170:180
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+
+Clone Blocks 37:
+verilog-ethernet/rtl/ip_mux_64_4.v@179:189
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 38:
+verilog-ethernet/rtl/ip_mux_64_4.v@180:190
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+
+Clone Blocks 39:
+verilog-ethernet/rtl/eth_mux_4.v@111:121
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+Clone Blocks 40:
+verilog-ethernet/rtl/udp_mux_4.v@194:204
+reg input_1_udp_hdr_ready_reg = 0, input_1_udp_hdr_ready_next;
+reg input_2_udp_hdr_ready_reg = 0, input_2_udp_hdr_ready_next;
+reg input_3_udp_hdr_ready_reg = 0, input_3_udp_hdr_ready_next;
+
+reg input_0_udp_payload_tready_reg = 0, input_0_udp_payload_tready_next;
+reg input_1_udp_payload_tready_reg = 0, input_1_udp_payload_tready_next;
+reg input_2_udp_payload_tready_reg = 0, input_2_udp_payload_tready_next;
+reg input_3_udp_payload_tready_reg = 0, input_3_udp_payload_tready_next;
+
+reg output_udp_hdr_valid_reg = 0, output_udp_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 41:
+verilog-ethernet/rtl/eth_mux_64_4.v@114:124
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 42:
+verilog-ethernet/rtl/eth_mux_64_4.v@118:128
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+// internal datapath
+
+Clone Blocks 43:
+verilog-ethernet/rtl/eth_mux_4.v@104:114
+
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+
+Clone Blocks 44:
+verilog-ethernet/rtl/eth_mux_64_4.v@116:126
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+Clone Blocks 45:
+verilog-ethernet/rtl/ip_mux_64_4.v@180:190
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+
+Clone Blocks 46:
+verilog-ethernet/rtl/eth_mux_4.v@109:119
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 47:
+verilog-ethernet/rtl/ip_mux_4.v@175:185
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+
+Clone Blocks 48:
+verilog-ethernet/rtl/ip_mux_64_4.v@175:185
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+
+Clone Blocks 49:
+verilog-ethernet/rtl/ip_mux_4.v@173:183
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+
+Clone Blocks 50:
+verilog-ethernet/rtl/eth_mux_4.v@105:115
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+
+Clone Blocks 51:
+verilog-ethernet/rtl/eth_mux_4.v@113:123
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+// internal datapath
+
+Clone Blocks 52:
+verilog-ethernet/rtl/eth_mux_4.v@110:120
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+
+Clone Blocks 53:
+verilog-ethernet/rtl/ip_mux_64_4.v@176:186
+reg frame_reg = 0, frame_next;
+
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+Clone Blocks 54:
+verilog-ethernet/rtl/ip_mux_64_4.v@181:191
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+reg [15:0] output_eth_type_reg = 0, output_eth_type_next;
+
+Clone Blocks 55:
+verilog-ethernet/rtl/eth_mux_64_4.v@109:119
+
+reg [1:0] select_reg = 0, select_next;
+reg frame_reg = 0, frame_next;
+
+reg input_0_eth_hdr_ready_reg = 0, input_0_eth_hdr_ready_next;
+reg input_1_eth_hdr_ready_reg = 0, input_1_eth_hdr_ready_next;
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+
+Clone Blocks 56:
+verilog-ethernet/rtl/ip_mux_64_4.v@178:188
+reg input_0_ip_hdr_ready_reg = 0, input_0_ip_hdr_ready_next;
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+
+Clone Blocks 57:
+verilog-ethernet/rtl/eth_mux_64_4.v@115:125
+reg input_2_eth_hdr_ready_reg = 0, input_2_eth_hdr_ready_next;
+reg input_3_eth_hdr_ready_reg = 0, input_3_eth_hdr_ready_next;
+
+reg input_0_eth_payload_tready_reg = 0, input_0_eth_payload_tready_next;
+reg input_1_eth_payload_tready_reg = 0, input_1_eth_payload_tready_next;
+reg input_2_eth_payload_tready_reg = 0, input_2_eth_payload_tready_next;
+reg input_3_eth_payload_tready_reg = 0, input_3_eth_payload_tready_next;
+
+reg output_eth_hdr_valid_reg = 0, output_eth_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+reg [47:0] output_eth_src_mac_reg = 0, output_eth_src_mac_next;
+
+Clone Blocks 58:
+verilog-ethernet/rtl/ip_mux_64_4.v@179:189
+reg input_1_ip_hdr_ready_reg = 0, input_1_ip_hdr_ready_next;
+reg input_2_ip_hdr_ready_reg = 0, input_2_ip_hdr_ready_next;
+reg input_3_ip_hdr_ready_reg = 0, input_3_ip_hdr_ready_next;
+
+reg input_0_ip_payload_tready_reg = 0, input_0_ip_payload_tready_next;
+reg input_1_ip_payload_tready_reg = 0, input_1_ip_payload_tready_next;
+reg input_2_ip_payload_tready_reg = 0, input_2_ip_payload_tready_next;
+reg input_3_ip_payload_tready_reg = 0, input_3_ip_payload_tready_next;
+
+reg output_ip_hdr_valid_reg = 0, output_ip_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+
+Clone Blocks 59:
+verilog-ethernet/rtl/udp_mux_4.v@194:204
+reg input_1_udp_hdr_ready_reg = 0, input_1_udp_hdr_ready_next;
+reg input_2_udp_hdr_ready_reg = 0, input_2_udp_hdr_ready_next;
+reg input_3_udp_hdr_ready_reg = 0, input_3_udp_hdr_ready_next;
+
+reg input_0_udp_payload_tready_reg = 0, input_0_udp_payload_tready_next;
+reg input_1_udp_payload_tready_reg = 0, input_1_udp_payload_tready_next;
+reg input_2_udp_payload_tready_reg = 0, input_2_udp_payload_tready_next;
+reg input_3_udp_payload_tready_reg = 0, input_3_udp_payload_tready_next;
+
+reg output_udp_hdr_valid_reg = 0, output_udp_hdr_valid_next;
+reg [47:0] output_eth_dest_mac_reg = 0, output_eth_dest_mac_next;
+

@@ -1,0 +1,22 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_adc.v@132:146@HdlStmProcess
+    .adc_data_pn(adc_pn_data_s),
+    .adc_pn_oos(adc_pn_oos_s),
+    .adc_pn_err(adc_pn_err_s));
+
+  // prbs generation
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_pn_data <= pn(adc_pn_data);
+    end
+  end
+
+  // qpsk demodulator
+  qpsk_demod i_qpsk_demod1 (
+    .clk(clk),
+    .data_qpsk_i(src_adc_ddata[15: 0]),
+
+Diff Content:
+- 138     if(adc_dvalid == 1'b1) begin
++ 138     if(adc_valid == 1'b1) begin
+
+Clone Blocks:

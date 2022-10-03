@@ -1,0 +1,45 @@
+Source Block: oh/emesh/dv/ememory.v@66:76@HdlStmAssign
+	.packet_in	(packet_in[PW-1:0])
+	);
+      
+   //Access-in
+   assign mem_rd = (access_in & ~write_in & ~wait_in);
+   assign mem_wr = (access_in & write_in );
+   
+   assign en =  mem_rd | mem_wr;
+
+   //Pushback Circuit (pass through problems?)
+   assign wait_out = access_in & wait_in;
+
+Diff Content:
+- 71    assign mem_wr = (access_in & write_in );
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emesh/dv/ememory.v@65:75
+	.srcaddr_out	(srcaddr_in[AW-1:0]),
+	.packet_in	(packet_in[PW-1:0])
+	);
+      
+   //Access-in
+   assign mem_rd = (access_in & ~write_in & ~wait_in);
+   assign mem_wr = (access_in & write_in );
+   
+   assign en =  mem_rd | mem_wr;
+
+   //Pushback Circuit (pass through problems?)
+
+Clone Blocks 2:
+oh/emesh/dv/ememory.v@68:78
+      
+   //Access-in
+   assign mem_rd = (access_in & ~write_in & ~wait_in);
+   assign mem_wr = (access_in & write_in );
+   
+   assign en =  mem_rd | mem_wr;
+
+   //Pushback Circuit (pass through problems?)
+   assign wait_out = access_in & wait_in;
+   
+   //Address-in (shifted by three bits, 64 bit wide memory)
+

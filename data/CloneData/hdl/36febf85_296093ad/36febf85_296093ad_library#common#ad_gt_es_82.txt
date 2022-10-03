@@ -1,0 +1,209 @@
+Source Block: hdl/library/common/ad_gt_es.v@689:873@HdlStmProcess
+    end
+  end
+
+  // drp signals controlled by the fsm
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_es_drp_sel <= 'd0;
+      up_es_drp_wr <= 'd0;
+      up_es_drp_addr <= 'd0;
+      up_es_drp_wdata <= 'd0;
+    end else begin
+      case (up_es_fsm)
+        ES_FSM_CTRLINIT_READ: begin 
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= ES_DRP_CTRL_ADDR;
+          up_es_drp_wdata <= 16'h0000;
+        end
+        ES_FSM_CTRLINIT_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_CTRL_ADDR;
+          if (GTH_GTX_N == 1) begin
+          up_es_drp_wdata <= {up_es_ctrl_rdata[15:10], 2'b11, up_es_ctrl_rdata[7:5], up_es_prescale};
+          end else begin
+          up_es_drp_wdata <= {up_es_ctrl_rdata[15:10], 2'b11, up_es_ctrl_rdata[7:0]};
+          end
+        end
+        ES_FSM_SDATA0_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_SDATA0_ADDR;
+          up_es_drp_wdata <= up_es_sdata0;
+        end
+        ES_FSM_SDATA1_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_SDATA1_ADDR;
+          up_es_drp_wdata <= up_es_sdata1;
+        end
+        ES_FSM_SDATA2_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_SDATA2_ADDR;
+          up_es_drp_wdata <= up_es_sdata2;
+        end
+        ES_FSM_SDATA3_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_SDATA3_ADDR;
+          up_es_drp_wdata <= up_es_sdata3;
+        end
+        ES_FSM_SDATA4_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_SDATA4_ADDR;
+          up_es_drp_wdata <= up_es_sdata4;
+        end
+        ES_FSM_QDATA0_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_QDATA0_ADDR;
+          up_es_drp_wdata <= up_es_qdata0;
+        end
+        ES_FSM_QDATA1_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_QDATA1_ADDR;
+          up_es_drp_wdata <= up_es_qdata1;
+        end
+        ES_FSM_QDATA2_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_QDATA2_ADDR;
+          up_es_drp_wdata <= up_es_qdata2;
+        end
+        ES_FSM_QDATA3_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_QDATA3_ADDR;
+          up_es_drp_wdata <= up_es_qdata3;
+        end
+        ES_FSM_QDATA4_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_QDATA4_ADDR;
+          up_es_drp_wdata <= up_es_qdata4;
+        end
+        ES_FSM_HOFFSET_READ: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= ES_DRP_HOFFSET_ADDR;
+          up_es_drp_wdata <= 16'h0000;
+        end
+        ES_FSM_HOFFSET_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_HOFFSET_ADDR;
+          if (GTH_GTX_N == 1) begin
+          up_es_drp_wdata <= {up_es_hoffset, up_es_hoffset_rdata[3:0]};
+          end else begin
+          up_es_drp_wdata <= {up_es_hoffset_rdata[15:12], up_es_hoffset};
+          end
+        end
+        ES_FSM_VOFFSET_READ: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= ES_DRP_VOFFSET_ADDR;
+          up_es_drp_wdata <= 16'h0000;
+        end
+        ES_FSM_VOFFSET_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_VOFFSET_ADDR;
+          if (GTH_GTX_N == 1) begin
+          up_es_drp_wdata <= {up_es_voffset_rdata[15:11], up_es_voffset_s[7], up_es_ut_s, up_es_voffset_s[6:0], up_es_voffset_range};
+          end else begin
+          up_es_drp_wdata <= {up_es_prescale, up_es_voffset_rdata[10:9], up_es_ut_s, up_es_voffset_s};
+          end
+        end
+        ES_FSM_CTRLSTART_READ: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= ES_DRP_CTRL_ADDR;
+          up_es_drp_wdata <= 16'h0000;
+        end
+        ES_FSM_CTRLSTART_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_CTRL_ADDR;
+          if (GTH_GTX_N == 1) begin
+          up_es_drp_wdata <= {6'd1, up_es_ctrl_rdata[9:0]};
+          end else begin
+          up_es_drp_wdata <= {up_es_ctrl_rdata[15:6], 6'd1};
+          end
+        end
+        ES_FSM_STATUS_READ: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= ES_DRP_STATUS_ADDR;
+          up_es_drp_wdata <= 16'h0000;
+        end
+        ES_FSM_CTRLSTOP_READ: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= ES_DRP_CTRL_ADDR;
+          up_es_drp_wdata <= 16'h0000;
+        end
+        ES_FSM_CTRLSTOP_WRITE: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b1;
+          up_es_drp_addr <= ES_DRP_CTRL_ADDR;
+          if (GTH_GTX_N == 1) begin
+          up_es_drp_wdata <= {6'd0, up_es_ctrl_rdata[9:0]};
+          end else begin
+          up_es_drp_wdata <= {up_es_ctrl_rdata[15:6], 6'd0};
+          end
+        end
+        ES_FSM_SCNT_READ: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= ES_DRP_SCNT_ADDR;
+          up_es_drp_wdata <= 16'h0000;
+        end
+        ES_FSM_ECNT_READ: begin
+          up_es_drp_sel <= 1'b1;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= ES_DRP_ECNT_ADDR;
+          up_es_drp_wdata <= 16'h0000;
+        end
+        default: begin
+          up_es_drp_sel <= 1'b0;
+          up_es_drp_wr <= 1'b0;
+          up_es_drp_addr <= 9'h000;
+          up_es_drp_wdata <= 16'h0000;
+        end
+      endcase
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 712           if (GTH_GTX_N == 1) begin
+- 713           up_es_drp_wdata <= {up_es_ctrl_rdata[15:10], 2'b11, up_es_ctrl_rdata[7:5], up_es_prescale};
+- 788           if (GTH_GTX_N == 1) begin
+- 804           if (GTH_GTX_N == 1) begin
+- 805           up_es_drp_wdata <= {up_es_voffset_rdata[15:11], up_es_voffset_s[7], up_es_ut_s, up_es_voffset_s[6:0], up_es_voffset_range};
+- 807           up_es_drp_wdata <= {up_es_prescale, up_es_voffset_rdata[10:9], up_es_ut_s, up_es_voffset_s};
+- 820           if (GTH_GTX_N == 1) begin
+- 842           if (GTH_GTX_N == 1) begin
++ 713           if (GTH_OR_GTX_N == 1) begin
++ 713           up_es_drp_wdata <= {up_es_ctrl_rdata[15:10], 2'b11,
++ 713             up_es_ctrl_rdata[7:5], up_es_prescale};
++ 788           if (GTH_OR_GTX_N == 1) begin
++ 805           if (GTH_OR_GTX_N == 1) begin
++ 805           up_es_drp_wdata <= {up_es_voffset_rdata[15:11], up_es_voffset_s[7],
++ 805             up_es_ut_s, up_es_voffset_s[6:0], up_es_voffset_range};
++ 807           up_es_drp_wdata <= {up_es_prescale, up_es_voffset_rdata[10:9],
++ 807             up_es_ut_s, up_es_voffset_s};
++ 820           if (GTH_OR_GTX_N == 1) begin
++ 842           if (GTH_OR_GTX_N == 1) begin
+
+Clone Blocks:

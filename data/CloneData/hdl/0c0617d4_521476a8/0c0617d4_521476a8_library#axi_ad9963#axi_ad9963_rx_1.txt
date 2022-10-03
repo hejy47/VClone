@@ -1,0 +1,48 @@
+Source Block: hdl/library/axi_ad9963/axi_ad9963_rx.v@269:306@HdlStmIf
+    .up_rdata (up_rdata_s[2]),
+    .up_rack (up_rack_s[2]));
+
+  // adc delay control
+
+  generate if (IODELAY_ENABLE == 1) begin
+
+  up_delay_cntrl #(.DATA_WIDTH(13), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked),
+    .up_dld (up_dld),
+    .up_dwdata (up_dwdata),
+    .up_drdata (up_drdata),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[3]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[3]),
+    .up_rack (up_rack_s[3]));
+
+  end else begin
+    assign up_dld = 'h00;
+    assign up_dwdata = 'h00;
+    assign delay_rst = 1'b1;
+    assign up_wack_s[3] = 0;
+    assign up_rack_s[3] = 0;
+    assign up_rdata_s[3] = 'h00;
+  end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 276   up_delay_cntrl #(.DATA_WIDTH(13), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
++ 276   up_delay_cntrl #(
++ 276     .DATA_WIDTH(13),
++ 276     .BASE_ADDRESS(6'h02)
++ 276   ) i_delay_cntrl (
+
+Clone Blocks:

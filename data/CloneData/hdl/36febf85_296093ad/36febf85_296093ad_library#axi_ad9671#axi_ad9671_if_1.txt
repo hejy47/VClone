@@ -1,0 +1,46 @@
+Source Block: hdl/library/axi_ad9671/axi_ad9671_if.v@179:189@HdlStmAssign
+  assign adc_data_h_s = {int_data[119:112], int_data[127:120]};
+
+  assign adc_wdata = {adc_data_h_s, adc_data_g_s, adc_data_f_s, adc_data_e_s,
+                      adc_data_d_s, adc_data_c_s, adc_data_b_s, adc_data_a_s};
+
+  assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
+  assign adc_sync_s  = (PCORE_ID == 0) ? adc_sync_out : adc_sync_in;
+
+  always @(posedge rx_clk) begin
+    adc_data_a <= adc_rdata[ 15:  0];
+    adc_data_b <= adc_rdata[ 31: 16];
+
+Diff Content:
+- 184   assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9671/axi_ad9671_if.v@176:187
+  assign adc_data_e_s = {int_data[ 71: 64], int_data[ 79: 72]};
+  assign adc_data_f_s = {int_data[ 87: 80], int_data[ 95: 88]};
+  assign adc_data_g_s = {int_data[103: 96], int_data[111:104]};
+  assign adc_data_h_s = {int_data[119:112], int_data[127:120]};
+
+  assign adc_wdata = {adc_data_h_s, adc_data_g_s, adc_data_f_s, adc_data_e_s,
+                      adc_data_d_s, adc_data_c_s, adc_data_b_s, adc_data_a_s};
+
+  assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
+  assign adc_sync_s  = (PCORE_ID == 0) ? adc_sync_out : adc_sync_in;
+
+  always @(posedge rx_clk) begin
+
+Clone Blocks 2:
+hdl/library/axi_ad9671/axi_ad9671_if.v@180:190
+
+  assign adc_wdata = {adc_data_h_s, adc_data_g_s, adc_data_f_s, adc_data_e_s,
+                      adc_data_d_s, adc_data_c_s, adc_data_b_s, adc_data_a_s};
+
+  assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
+  assign adc_sync_s  = (PCORE_ID == 0) ? adc_sync_out : adc_sync_in;
+
+  always @(posedge rx_clk) begin
+    adc_data_a <= adc_rdata[ 15:  0];
+    adc_data_b <= adc_rdata[ 31: 16];
+    adc_data_c <= adc_rdata[ 47: 32];
+

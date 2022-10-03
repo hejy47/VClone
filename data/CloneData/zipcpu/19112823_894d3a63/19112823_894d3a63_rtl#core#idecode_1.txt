@@ -1,0 +1,18 @@
+Source Block: zipcpu/rtl/core/idecode.v@633:643@HdlIdDef
+	//	4. Both must be to the same address, or the address incremented
+	//		by one
+	// Note that we're not using iword here ... there's a lot of logic
+	// taking place, and it's only valid if the new word is not compressed.
+	//
+	reg	r_valid;
+	generate if (OPT_OPIPE)
+	begin : GEN_OPIPE
+		reg	r_pipe;
+
+		wire	[13:0]	pipe_addr_diff;
+
+Diff Content:
+- 638 	reg	r_valid;
++ 638 	reg	r_valid, r_insn_is_pipeable;
+
+Clone Blocks:

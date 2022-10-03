@@ -1,0 +1,32 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/axi_jesd204_rx.v@114:124@HdlIdDef
+  input [NUM_LANES-1:0] core_status_lane_ifs_ready,
+  input [14*NUM_LANES-1:0] core_status_lane_latency,
+  input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt
+);
+
+localparam PCORE_VERSION = 32'h00010561; // 1.05.a
+localparam PCORE_MAGIC = 32'h32303452; // 204R
+
+localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
+
+/* Register interface signals */
+
+Diff Content:
+- 119 localparam PCORE_VERSION = 32'h00010561; // 1.05.a
++ 119 localparam PCORE_VERSION = 32'h00010661; // 1.06.a
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_rx/axi_jesd204_rx.v@115:125
+  input [14*NUM_LANES-1:0] core_status_lane_latency,
+  input [8*NUM_LANES-1:0] core_status_lane_frame_align_err_cnt
+);
+
+localparam PCORE_VERSION = 32'h00010561; // 1.05.a
+localparam PCORE_MAGIC = 32'h32303452; // 204R
+
+localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
+
+/* Register interface signals */
+reg [31:0] up_rdata = 'h0;
+

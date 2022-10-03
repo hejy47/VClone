@@ -1,0 +1,38 @@
+Source Block: hdl/library/prcfg/default/prcfg_dac.v@83:94@HdlStmProcess
+  reg               dst_dac_dunf;
+  reg               dst_dac_dvalid;
+
+  assign status = {24'h0, RP_ID};
+
+  always @(posedge clk) begin
+    src_dac_en     <= dst_dac_en;
+    dst_dac_ddata  <= src_dac_ddata;
+    dst_dac_dunf   <= src_dac_dunf;
+    dst_dac_dvalid <= src_dac_dvalid;
+  end
+endmodule
+
+Diff Content:
+- 89     src_dac_en     <= dst_dac_en;
+- 90     dst_dac_ddata  <= src_dac_ddata;
+- 91     dst_dac_dunf   <= src_dac_dunf;
+- 92     dst_dac_dvalid <= src_dac_dvalid;
++ 92     src_dac_enable  <= dst_dac_enable;
++ 92     dst_dac_data    <= src_dac_data;
++ 92     src_dac_valid   <= dst_dac_valid;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/default/prcfg_dac.v@81:91
+  reg               src_dac_en;
+  reg     [31:0]    dst_dac_ddata;
+  reg               dst_dac_dunf;
+  reg               dst_dac_dvalid;
+
+  assign status = {24'h0, RP_ID};
+
+  always @(posedge clk) begin
+    src_dac_en     <= dst_dac_en;
+    dst_dac_ddata  <= src_dac_ddata;
+    dst_dac_dunf   <= src_dac_dunf;
+

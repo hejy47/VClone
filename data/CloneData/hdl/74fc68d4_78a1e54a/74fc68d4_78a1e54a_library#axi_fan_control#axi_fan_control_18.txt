@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@593:612@HdlStmProcess
+    pwm_change_done <= 'h0;
+  end
+end
+
+//tacho measurement and pwm change delay counter
+always @(posedge up_clk) begin
+  if ((up_resetn & counter_resetn) == 1'b0) begin
+    counter_reg <= 'h0;
+    counter_overflow <= 1'b0;
+  end else begin
+    if (counter_reg == OVERFLOW_LIM) begin
+      counter_reg <= 'h0;
+      counter_overflow <= 1'b1;
+    end else begin
+      counter_reg <= counter_reg + 1'b1;
+    end
+  end
+end
+
+endmodule
+
+Diff Content:
++ 610 always @(posedge up_clk) begin
++ 610   if (up_resetn  == 1'b0) begin
++ 610     presc_reg <= 'h0;
++ 610   end else begin
++ 610     if (presc_reg == 'h8000) begin
++ 610       presc_reg <= 'h0;
++ 610     end else begin
++ 610       presc_reg <= presc_reg + 1'b1;
++ 610     end
++ 610   end
++ 610 end
+
+Clone Blocks:

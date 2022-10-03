@@ -1,0 +1,128 @@
+Source Block: miaow/src/verilog/rtl/salu/salu_controller.v@381:461@HdlStmProcess
+		endcase
+	end
+
+end
+
+always@(control_en or dst_reg or bit64_op) begin
+	casex({control_en, dst_reg})
+		// SGPR
+		{1'b1, 12'b110xxxxxxxxx} : begin
+			sgpr_en <= bit64_op ? 2'b11 : 2'b01;
+			exec_en_dreg <= 1'b0;
+			exec_ws_dreg <= 2'b00;
+			vcc_en  <= 1'b0;
+			vcc_ws_dreg  <= 2'b00;
+			m0_en   <= 1'b0;
+
+                                
+                        //**change [psp]
+                        salu2sgpr_req_trig <= 1'b1; //request pending
+                        //**
+		end
+		// VCC_LO
+		{1'b1, 12'b111000000001} : begin
+			sgpr_en <= 2'b00;
+			exec_en_dreg <= 1'b0;
+			exec_ws_dreg <= 2'b00;
+			vcc_en  <= 1'b1;
+			vcc_ws_dreg <= bit64_op ? 2'b11 : 2'b01;
+			m0_en   <= 1'b0;
+		end
+		// VCC_HI
+		{1'b1, 12'b111000000010} : begin
+			sgpr_en <= 2'b00;
+			exec_en_dreg <= 1'b0;
+			exec_ws_dreg <= 2'b00;
+			vcc_en  <= 1'b1;
+			vcc_ws_dreg <= bit64_op ? 2'b11 : 2'b10;
+			m0_en   <= 1'b0;
+		end
+		// EXEC_LO
+		{1'b1, 12'b111000001000} : begin
+			sgpr_en <= 2'b00;
+			exec_en_dreg <= 1'b1;
+			exec_ws_dreg <= bit64_op ? 2'b11 : 2'b01;
+			vcc_en  <= 1'b0;
+			vcc_ws_dreg  <= 2'b00;
+			m0_en   <= 1'b0;
+		end
+		// EXEC_HI
+		{1'b1, 12'b111000010000} : begin
+			sgpr_en <= 2'b00;
+			exec_en_dreg <= 1'b1;
+			exec_ws_dreg <= bit64_op ? 2'b11 : 2'b10;
+			vcc_en  <= 1'b0;
+			vcc_ws_dreg  <= 2'b00;
+			m0_en   <= 1'b0;
+		end
+		// M0
+		{1'b1, 12'b111000000100} : begin
+			sgpr_en <= 2'b00;
+			exec_en_dreg <= 1'b0;
+			exec_ws_dreg <= 2'b00;
+			vcc_en  <= 1'b0;
+			vcc_ws_dreg  <= 2'b00;
+			m0_en <= 1'b1;
+		end
+		default : begin
+			sgpr_en <= 2'b00;
+			exec_en_dreg <= 1'b0;
+			exec_ws_dreg <= 2'b00;
+			vcc_en  <= 1'b0;
+			vcc_ws_dreg  <= 2'b00;
+			m0_en   <= 1'b0;
+		end
+	endcase
+end
+
+assign exec_wordsel = exec_ws_dreg | exec_ws_op;
+assign vcc_wordsel = vcc_ws_dreg | vcc_ws_op;
+assign exec_en = |exec_wordsel;
+
+
+Diff Content:
+- 391 			exec_en_dreg <= 1'b0;
+- 392 			exec_ws_dreg <= 2'b00;
+- 393 			vcc_en  <= 1'b0;
+- 394 			vcc_ws_dreg  <= 2'b00;
+- 395 			m0_en   <= 1'b0;
+- 399                         salu2sgpr_req_trig <= 1'b1; //request pending
+- 404 			sgpr_en <= 2'b00;
+- 405 			exec_en_dreg <= 1'b0;
+- 406 			exec_ws_dreg <= 2'b00;
+- 409 			m0_en   <= 1'b0;
+- 413 			sgpr_en <= 2'b00;
+- 414 			exec_en_dreg <= 1'b0;
+- 415 			exec_ws_dreg <= 2'b00;
+- 418 			m0_en   <= 1'b0;
+- 422 			sgpr_en <= 2'b00;
+- 425 			vcc_en  <= 1'b0;
+- 426 			vcc_ws_dreg  <= 2'b00;
+- 427 			m0_en   <= 1'b0;
+- 431 			sgpr_en <= 2'b00;
+- 434 			vcc_en  <= 1'b0;
+- 435 			vcc_ws_dreg  <= 2'b00;
+- 436 			m0_en   <= 1'b0;
+- 440 			sgpr_en <= 2'b00;
+- 441 			exec_en_dreg <= 1'b0;
+- 442 			exec_ws_dreg <= 2'b00;
+- 443 			vcc_en  <= 1'b0;
+- 444 			vcc_ws_dreg  <= 2'b00;
+- 447 		default : begin
+- 448 			sgpr_en <= 2'b00;
+- 449 			exec_en_dreg <= 1'b0;
+- 450 			exec_ws_dreg <= 2'b00;
+- 451 			vcc_en  <= 1'b0;
+- 452 			vcc_ws_dreg  <= 2'b00;
+- 453 			m0_en   <= 1'b0;
+- 454 		end
++ 386 	exec_en_dreg <= 1'b0;
++ 386 	exec_ws_dreg <= 2'b00;
++ 386 	vcc_en  <= 1'b0;
++ 386 	vcc_ws_dreg  <= 2'b00;
++ 386 	m0_en   <= 1'b0;
++ 386 	sgpr_en <= 2'b00;
++ 399 			salu2sgpr_req_trig <= 1'b1; //request pending
+
+Clone Blocks:

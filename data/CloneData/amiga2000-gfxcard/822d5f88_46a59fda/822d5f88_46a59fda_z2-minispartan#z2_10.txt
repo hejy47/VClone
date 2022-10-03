@@ -1,0 +1,22 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@564:574@HdlIdDef
+parameter VCAPW = 399;
+
+reg [15:0] videocap_buf [0:VCAPW];
+//reg [15:0] videocap_buf2 [0:VCAPW];
+
+reg [15:0] videocap_rgbin = 0;
+
+// CAPTURE
+always @(posedge zE7M) begin
+  videocap_hs <= {videocap_hs[8:0], videoHS};
+  videocap_vs <= {videocap_vs[8:0], videoVS};
+
+Diff Content:
++ 569 reg [15:0] videocap_rgbin2 = 0;
++ 569 reg videocap_hires = 1;
++ 569 reg [9:0] videocap_resstat = 0;
++ 569 reg [9:0] videocap_hires_lines = 0;
++ 569 reg [7:0] videocap_thry = 10;
++ 569 reg [7:0] videocap_thrx = 10;
+
+Clone Blocks:

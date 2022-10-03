@@ -1,0 +1,31 @@
+Source Block: hdl/projects/ad9265_fmc/zc706/system_top.v@111:121@HdlStmAssign
+  .dio_i (gpio_o[14:0]),
+  .dio_o (gpio_i[14:0]),
+  .dio_t (gpio_t[14:0]),
+  .dio_p (gpio_bd));
+
+assign gpio_i[63:15] = gpio_o[63:15];
+
+ad9265_spi i_spi (
+    .spi_csn(spi0_csn[1:0]),
+    .spi_clk(spi_clk),
+    .spi_mosi(spi_mosi),
+
+Diff Content:
+- 116 assign gpio_i[63:15] = gpio_o[63:15];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@118:128
+    .dio_t (gpio_t[14:0]),
+    .dio_i (gpio_o[14:0]),
+    .dio_o (gpio_i[14:0]),
+    .dio_p (gpio_bd));
+
+  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[31:15] = gpio_o[31:15];
+
+  assign spi_adc_clk = spi_clk;
+  assign spi_clk_clk = spi_clk;
+
+

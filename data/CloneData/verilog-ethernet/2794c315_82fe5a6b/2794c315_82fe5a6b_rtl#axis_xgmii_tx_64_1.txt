@@ -1,0 +1,889 @@
+Source Block: verilog-ethernet/rtl/axis_xgmii_tx_64.v@417:719@HdlStmProcess
+            extra_cycle = 1'b1;
+        end
+    endcase
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 1'b0;
+    update_crc = 1'b0;
+
+    swap_lanes = 1'b0;
+    unswap_lanes = 1'b0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    ifg_count_next = ifg_count_reg;
+    deficit_idle_count_next = deficit_idle_count_reg;
+
+    s_axis_tready_next = 1'b0;
+
+    s_tdata_next = s_tdata_reg;
+    s_tkeep_next = s_tkeep_reg;
+
+    m_axis_ptp_ts_next = m_axis_ptp_ts_reg;
+    m_axis_ptp_ts_tag_next = m_axis_ptp_ts_tag_reg;
+    m_axis_ptp_ts_valid_next = 1'b0;
+    m_axis_ptp_ts_valid_int_next = 1'b0;
+
+    // XGMII idle
+    xgmii_txd_next = {CTRL_WIDTH{XGMII_IDLE}};
+    xgmii_txc_next = {CTRL_WIDTH{1'b1}};
+
+    start_packet_next = 2'b00;
+    error_underflow_next = 1'b0;
+
+    if (m_axis_ptp_ts_valid_int_reg) begin
+        m_axis_ptp_ts_valid_next = 1'b1;
+        if (PTP_TS_WIDTH == 96 && $signed({1'b0, m_axis_ptp_ts_reg[45:16]}) - $signed(31'd1000000000) > 0) begin
+            // ns field rollover
+            m_axis_ptp_ts_next[45:16] <= $signed({1'b0, m_axis_ptp_ts_reg[45:16]}) - $signed(31'd1000000000);
+            m_axis_ptp_ts_next[95:48] <= m_axis_ptp_ts_reg[95:48] + 1;
+        end
+    end
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 16'd8;
+            reset_crc = 1'b1;
+            s_axis_tready_next = 1'b1;
+
+            // XGMII idle
+            xgmii_txd_next = {CTRL_WIDTH{XGMII_IDLE}};
+            xgmii_txc_next = {CTRL_WIDTH{1'b1}};
+
+            s_tdata_next = s_axis_tdata_masked;
+            s_tkeep_next = s_axis_tkeep;
+
+            if (s_axis_tvalid) begin
+                // XGMII start and preamble
+                if (ifg_count_reg > 8'd0) begin
+                    // need to send more idles - swap lanes
+                    swap_lanes = 1'b1;
+                    if (PTP_TS_WIDTH == 96) begin
+                        m_axis_ptp_ts_next[45:0] <= ptp_ts[45:0] + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS) * 1.5;
+                        m_axis_ptp_ts_next[95:48] <= ptp_ts[95:48];
+                    end else begin
+                        m_axis_ptp_ts_next = ptp_ts + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS) * 1.5;
+                    end
+                    m_axis_ptp_ts_tag_next = s_axis_tuser >> 1;
+                    m_axis_ptp_ts_valid_int_next = 1'b1;
+                    start_packet_next = 2'b10;
+                end else begin
+                    // no more idles - unswap
+                    unswap_lanes = 1'b1;
+                    if (PTP_TS_WIDTH == 96) begin
+                        m_axis_ptp_ts_next[45:0] <= ptp_ts[45:0] + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS);
+                        m_axis_ptp_ts_next[95:48] <= ptp_ts[95:48];
+                    end else begin
+                        m_axis_ptp_ts_next = ptp_ts + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS);
+                    end
+                    m_axis_ptp_ts_tag_next = s_axis_tuser >> 1;
+                    m_axis_ptp_ts_valid_int_next = 1'b1;
+                    start_packet_next = 2'b01;
+                end
+                xgmii_txd_next = {ETH_SFD, {6{ETH_PRE}}, XGMII_START};
+                xgmii_txc_next = 8'b00000001;
+                s_axis_tready_next = 1'b1;
+                state_next = STATE_PAYLOAD;
+            end else begin
+                ifg_count_next = 8'd0;
+                deficit_idle_count_next = 2'd0;
+                unswap_lanes = 1'b1;
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // transfer payload
+            update_crc = 1'b1;
+            s_axis_tready_next = 1'b1;
+
+            frame_ptr_next = frame_ptr_reg + 16'd8;
+
+            xgmii_txd_next = s_tdata_reg;
+            xgmii_txc_next = 8'b00000000;
+
+            s_tdata_next = s_axis_tdata_masked;
+            s_tkeep_next = s_axis_tkeep;
+
+            if (s_axis_tvalid) begin
+                if (s_axis_tlast) begin
+                    frame_ptr_next = frame_ptr_reg + keep2count(s_axis_tkeep);
+                    s_axis_tready_next = 1'b0;
+                    if (s_axis_tuser[0]) begin
+                        xgmii_txd_next = {{3{XGMII_IDLE}}, XGMII_TERM, {4{XGMII_ERROR}}};
+                        xgmii_txc_next = 8'b11111111;
+                        frame_ptr_next = 16'd0;
+                        ifg_count_next = 8'd8;
+                        state_next = STATE_IFG;
+                    end else begin
+                        s_axis_tready_next = 1'b0;
+
+                        if (ENABLE_PADDING && (frame_ptr_reg < MIN_FL_NOCRC_MS || (frame_ptr_reg == MIN_FL_NOCRC_MS && keep2count(s_axis_tkeep) < MIN_FL_NOCRC_LS))) begin
+                            s_tkeep_next = 8'hff;
+                            frame_ptr_next = frame_ptr_reg + 16'd8;
+
+                            if (frame_ptr_reg < (MIN_FL_NOCRC_LS > 0 ? MIN_FL_NOCRC_MS : MIN_FL_NOCRC_MS-8)) begin
+                                state_next = STATE_PAD;
+                            end else begin
+                                s_tkeep_next = 8'hff >> ((8-MIN_FL_NOCRC_LS) % 8);
+
+                                state_next = STATE_FCS_1;
+                            end
+                        end else begin
+                            state_next = STATE_FCS_1;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                // tvalid deassert, fail frame
+                xgmii_txd_next = {{3{XGMII_IDLE}}, XGMII_TERM, {4{XGMII_ERROR}}};
+                xgmii_txc_next = 8'b11111111;
+                frame_ptr_next = 16'd0;
+                ifg_count_next = 8'd8;
+                error_underflow_next = 1'b1;
+                state_next = STATE_WAIT_END;
+            end
+        end
+        STATE_PAD: begin
+            // pad frame to MIN_FRAME_LENGTH
+            s_axis_tready_next = 1'b0;
+
+            xgmii_txd_next = s_tdata_reg;
+            xgmii_txc_next = {CTRL_WIDTH{1'b0}};
+
+            s_tdata_next = 64'd0;
+            s_tkeep_next = 8'hff;
+
+            update_crc = 1'b1;
+            frame_ptr_next = frame_ptr_reg + 16'd8;
+
+            if (frame_ptr_reg < (MIN_FL_NOCRC_LS > 0 ? MIN_FL_NOCRC_MS : MIN_FL_NOCRC_MS-8)) begin
+                state_next = STATE_PAD;
+            end else begin
+                s_tkeep_next = 8'hff >> ((8-MIN_FL_NOCRC_LS) % 8);
+
+                state_next = STATE_FCS_1;
+            end
+        end
+        STATE_FCS_1: begin
+            // last cycle
+            s_axis_tready_next = 1'b0;
+
+            xgmii_txd_next = fcs_output_txd_0;
+            xgmii_txc_next = fcs_output_txc_0;
+
+            frame_ptr_next = 16'd0;
+
+            ifg_count_next = (ifg_delay > 8'd12 ? ifg_delay : 8'd12) - ifg_offset + (lanes_swapped ? 8'd4 : 8'd0) + deficit_idle_count_reg;
+            if (extra_cycle) begin
+                state_next = STATE_FCS_2;
+            end else begin
+                state_next = STATE_IFG;
+            end
+        end
+        STATE_FCS_2: begin
+            // last cycle
+            s_axis_tready_next = 1'b0;
+
+            xgmii_txd_next = fcs_output_txd_1;
+            xgmii_txc_next = fcs_output_txc_1;
+
+            reset_crc = 1'b1;
+            frame_ptr_next = 16'd0;
+
+            if (ENABLE_DIC) begin
+                if (ifg_count_next > 8'd7) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    if (ifg_count_next >= 8'd4) begin
+                        deficit_idle_count_next = ifg_count_next - 8'd4;
+                    end else begin
+                        deficit_idle_count_next = ifg_count_next;
+                        ifg_count_next = 8'd0;
+                    end
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                if (ifg_count_next > 8'd4) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end
+        end
+        STATE_IFG: begin
+            // send IFG
+            if (ifg_count_reg > 8'd8) begin
+                ifg_count_next = ifg_count_reg - 8'd8;
+            end else begin
+                ifg_count_next = 8'd0;
+            end
+
+            reset_crc = 1'b1;
+
+            if (ENABLE_DIC) begin
+                if (ifg_count_next > 8'd7) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    if (ifg_count_next >= 8'd4) begin
+                        deficit_idle_count_next = ifg_count_next - 8'd4;
+                    end else begin
+                        deficit_idle_count_next = ifg_count_next;
+                        ifg_count_next = 8'd0;
+                    end
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                if (ifg_count_next > 8'd4) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end
+        end
+        STATE_WAIT_END: begin
+            // wait for end of frame
+            s_axis_tready_next = 1'b1;
+
+            if (ifg_count_reg > 8'd8) begin
+                ifg_count_next = ifg_count_reg - 8'd8;
+            end else begin
+                ifg_count_next = 8'd0;
+            end
+
+            reset_crc = 1'b1;
+
+            if (s_axis_tvalid) begin
+                if (s_axis_tlast) begin
+                    s_axis_tready_next = 1'b0;
+
+                    if (ENABLE_DIC) begin
+                        if (ifg_count_next > 8'd7) begin
+                            state_next = STATE_IFG;
+                        end else begin
+                            if (ifg_count_next >= 8'd4) begin
+                                deficit_idle_count_next = ifg_count_next - 8'd4;
+                            end else begin
+                                deficit_idle_count_next = ifg_count_next;
+                                ifg_count_next = 8'd0;
+                            end
+                            s_axis_tready_next = 1'b1;
+                            state_next = STATE_IDLE;
+                        end
+                    end else begin
+                        if (ifg_count_next > 8'd4) begin
+                            state_next = STATE_IFG;
+                        end else begin
+                            s_axis_tready_next = 1'b1;
+                            state_next = STATE_IDLE;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_WAIT_END;
+                end
+            end else begin
+                state_next = STATE_WAIT_END;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+
+Diff Content:
+- 482                         m_axis_ptp_ts_next[45:0] <= ptp_ts[45:0] + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS) * 1.5;
+- 485                         m_axis_ptp_ts_next = ptp_ts + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS) * 1.5;
++ 482                         m_axis_ptp_ts_next[45:0] <= ptp_ts[45:0] + (((PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS) * 3) >> 1);
++ 485                         m_axis_ptp_ts_next = ptp_ts + (((PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS) * 3) >> 1);
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_xgmii_tx_32.v@305:576
+            extra_cycle = 1'b0;
+        end
+    endcase
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 1'b0;
+    update_crc = 1'b0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    ifg_count_next = ifg_count_reg;
+    deficit_idle_count_next = deficit_idle_count_reg;
+
+    s_axis_tready_next = 1'b0;
+
+    s_tdata_next = s_tdata_reg;
+    s_tkeep_next = s_tkeep_reg;
+
+    m_axis_ptp_ts_next = m_axis_ptp_ts_reg;
+    m_axis_ptp_ts_tag_next = m_axis_ptp_ts_tag_reg;
+    m_axis_ptp_ts_valid_next = 1'b0;
+
+    // XGMII idle
+    xgmii_txd_next = {CTRL_WIDTH{XGMII_IDLE}};
+    xgmii_txc_next = {CTRL_WIDTH{1'b1}};
+
+    start_packet_next = 1'b0;
+    error_underflow_next = 1'b0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 16'd4;
+            reset_crc = 1'b1;
+
+            // XGMII idle
+            xgmii_txd_next = {CTRL_WIDTH{XGMII_IDLE}};
+            xgmii_txc_next = {CTRL_WIDTH{1'b1}};
+
+            s_tdata_next = s_axis_tdata_masked;
+            s_tkeep_next = s_axis_tkeep;
+
+            if (s_axis_tvalid) begin
+                // XGMII start and preamble
+                xgmii_txd_next = {{3{ETH_PRE}}, XGMII_START};
+                xgmii_txc_next = 4'b0001;
+                s_axis_tready_next = 1'b1;
+                state_next = STATE_PREAMBLE;
+            end else begin
+                ifg_count_next = 8'd0;
+                deficit_idle_count_next = 2'd0;
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PREAMBLE: begin
+            // send preamble
+
+            s_tdata_next = s_axis_tdata_masked;
+            s_tkeep_next = s_axis_tkeep;
+
+            xgmii_txd_next = {ETH_SFD, {3{ETH_PRE}}};
+            xgmii_txc_next = 4'b0000;
+            s_axis_tready_next = 1'b1;
+            m_axis_ptp_ts_next = ptp_ts;
+            m_axis_ptp_ts_tag_next = s_axis_tuser >> 1;
+            m_axis_ptp_ts_valid_next = 1'b1;
+            start_packet_next = 1'b1;
+            state_next = STATE_PAYLOAD;
+        end
+        STATE_PAYLOAD: begin
+            // transfer payload
+            update_crc = 1'b1;
+            s_axis_tready_next = 1'b1;
+
+            frame_ptr_next = frame_ptr_reg + 16'd4;
+
+            xgmii_txd_next = s_tdata_reg;
+            xgmii_txc_next = 4'b0000;
+
+            s_tdata_next = s_axis_tdata_masked;
+            s_tkeep_next = s_axis_tkeep;
+
+            if (s_axis_tvalid) begin
+                if (s_axis_tlast) begin
+                    frame_ptr_next = frame_ptr_reg + keep2count(s_axis_tkeep);
+                    s_axis_tready_next = 1'b0;
+                    if (s_axis_tuser[0]) begin
+                        xgmii_txd_next = {XGMII_TERM, {3{XGMII_ERROR}}};
+                        xgmii_txc_next = 4'b1111;
+                        frame_ptr_next = 16'd0;
+                        ifg_count_next = 8'd10;
+                        state_next = STATE_IFG;
+                    end else begin
+                        s_axis_tready_next = 1'b0;
+
+                        if (ENABLE_PADDING && (frame_ptr_reg < MIN_FL_NOCRC_MS || (frame_ptr_reg == MIN_FL_NOCRC_MS && keep2count(s_axis_tkeep) < MIN_FL_NOCRC_LS))) begin
+                            s_tkeep_next = 4'hf;
+                            frame_ptr_next = frame_ptr_reg + 16'd4;
+
+                            if (frame_ptr_reg < (MIN_FL_NOCRC_LS > 0 ? MIN_FL_NOCRC_MS : MIN_FL_NOCRC_MS-4)) begin
+                                state_next = STATE_PAD;
+                            end else begin
+                                s_tkeep_next = 4'hf >> ((4-MIN_FL_NOCRC_LS) % 4);
+
+                                state_next = STATE_FCS_1;
+                            end
+                        end else begin
+                            state_next = STATE_FCS_1;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                // tvalid deassert, fail frame
+                xgmii_txd_next = {XGMII_TERM, {3{XGMII_ERROR}}};
+                xgmii_txc_next = 4'b1111;
+                frame_ptr_next = 16'd0;
+                ifg_count_next = 8'd10;
+                error_underflow_next = 1'b1;
+                state_next = STATE_WAIT_END;
+            end
+        end
+        STATE_PAD: begin
+            // pad frame to MIN_FRAME_LENGTH
+            s_axis_tready_next = 1'b0;
+
+            xgmii_txd_next = s_tdata_reg;
+            xgmii_txc_next = {CTRL_WIDTH{1'b0}};
+
+            s_tdata_next = 32'd0;
+            s_tkeep_next = 4'hf;
+
+            update_crc = 1'b1;
+            frame_ptr_next = frame_ptr_reg + 16'd4;
+
+            if (frame_ptr_reg < (MIN_FL_NOCRC_LS > 0 ? MIN_FL_NOCRC_MS : MIN_FL_NOCRC_MS-4)) begin
+                state_next = STATE_PAD;
+            end else begin
+                s_tkeep_next = 4'hf >> ((4-MIN_FL_NOCRC_LS) % 4);
+
+                state_next = STATE_FCS_1;
+            end
+        end
+        STATE_FCS_1: begin
+            // last cycle
+            s_axis_tready_next = 1'b0;
+
+            xgmii_txd_next = fcs_output_txd_0;
+            xgmii_txc_next = fcs_output_txc_0;
+
+            frame_ptr_next = 16'd0;
+
+            ifg_count_next = (ifg_delay > 8'd12 ? ifg_delay : 8'd12) - ifg_offset + deficit_idle_count_reg;
+            state_next = STATE_FCS_2;
+        end
+        STATE_FCS_2: begin
+            // last cycle
+            s_axis_tready_next = 1'b0;
+
+            xgmii_txd_next = fcs_output_txd_1;
+            xgmii_txc_next = fcs_output_txc_1;
+
+            frame_ptr_next = 16'd0;
+
+            if (extra_cycle) begin
+                state_next = STATE_FCS_3;
+            end else begin
+                state_next = STATE_IFG;
+            end
+        end
+        STATE_FCS_3: begin
+            // last cycle
+            s_axis_tready_next = 1'b0;
+
+            xgmii_txd_next = {{3{XGMII_IDLE}}, XGMII_TERM};
+            xgmii_txc_next = 4'b1111;
+
+            reset_crc = 1'b1;
+            frame_ptr_next = 16'd0;
+
+            if (ENABLE_DIC) begin
+                if (ifg_count_next > 8'd3) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    deficit_idle_count_next = ifg_count_next;
+                    ifg_count_next = 8'd0;
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                if (ifg_count_next > 8'd0) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    state_next = STATE_IDLE;
+                end
+            end
+        end
+        STATE_IFG: begin
+            // send IFG
+            if (ifg_count_reg > 8'd4) begin
+                ifg_count_next = ifg_count_reg - 8'd4;
+            end else begin
+                ifg_count_next = 8'd0;
+            end
+
+            reset_crc = 1'b1;
+
+            if (ENABLE_DIC) begin
+                if (ifg_count_next > 8'd3) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    deficit_idle_count_next = ifg_count_next;
+                    ifg_count_next = 8'd0;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                if (ifg_count_next > 8'd0) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    state_next = STATE_IDLE;
+                end
+            end
+        end
+        STATE_WAIT_END: begin
+            // wait for end of frame
+            s_axis_tready_next = 1'b1;
+
+            if (ifg_count_reg > 8'd4) begin
+                ifg_count_next = ifg_count_reg - 8'd4;
+            end else begin
+                ifg_count_next = 8'd0;
+            end
+
+            reset_crc = 1'b1;
+
+            if (s_axis_tvalid) begin
+                if (s_axis_tlast) begin
+                    s_axis_tready_next = 1'b0;
+
+                    if (ENABLE_DIC) begin
+                        if (ifg_count_next > 8'd3) begin
+                            state_next = STATE_IFG;
+                        end else begin
+                            deficit_idle_count_next = ifg_count_next;
+                            ifg_count_next = 8'd0;
+                            state_next = STATE_IDLE;
+                        end
+                    end else begin
+                        if (ifg_count_next > 8'd0) begin
+                            state_next = STATE_IFG;
+                        end else begin
+                            state_next = STATE_IDLE;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_WAIT_END;
+                end
+            end else begin
+                state_next = STATE_WAIT_END;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_baser_tx_64.v@472:770
+            extra_cycle = 1'b1;
+        end
+    endcase
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 1'b0;
+    update_crc = 1'b0;
+
+    swap_lanes = 1'b0;
+    unswap_lanes = 1'b0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    ifg_count_next = ifg_count_reg;
+    deficit_idle_count_next = deficit_idle_count_reg;
+
+    s_axis_tready_next = 1'b0;
+
+    s_tdata_next = s_tdata_reg;
+    s_tkeep_next = s_tkeep_reg;
+
+    m_axis_ptp_ts_next = m_axis_ptp_ts_reg;
+    m_axis_ptp_ts_tag_next = m_axis_ptp_ts_tag_reg;
+    m_axis_ptp_ts_valid_next = 1'b0;
+    m_axis_ptp_ts_valid_int_next = 1'b0;
+
+    output_data_next = s_tdata_reg;
+    output_type_next = OUTPUT_TYPE_IDLE;
+
+    start_packet_next = 2'b00;
+    error_underflow_next = 1'b0;
+
+    if (m_axis_ptp_ts_valid_int_reg) begin
+        m_axis_ptp_ts_valid_next = 1'b1;
+        if (PTP_TS_WIDTH == 96 && $signed({1'b0, m_axis_ptp_ts_reg[45:16]}) - $signed(31'd1000000000) > 0) begin
+            // ns field rollover
+            m_axis_ptp_ts_next[45:16] <= $signed({1'b0, m_axis_ptp_ts_reg[45:16]}) - $signed(31'd1000000000);
+            m_axis_ptp_ts_next[95:48] <= m_axis_ptp_ts_reg[95:48] + 1;
+        end
+    end
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 16'd8;
+            reset_crc = 1'b1;
+            s_axis_tready_next = 1'b1;
+
+            output_data_next = s_tdata_reg;
+            output_type_next = OUTPUT_TYPE_IDLE;
+
+            s_tdata_next = s_axis_tdata_masked;
+            s_tkeep_next = s_axis_tkeep;
+
+            if (s_axis_tvalid) begin
+                // XGMII start and preamble
+                if (ifg_count_reg > 8'd0) begin
+                    // need to send more idles - swap lanes
+                    swap_lanes = 1'b1;
+                    if (PTP_TS_WIDTH == 96) begin
+                        m_axis_ptp_ts_next[45:0] <= ptp_ts[45:0] + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS) * 1.5;
+                        m_axis_ptp_ts_next[95:48] <= ptp_ts[95:48];
+                    end else begin
+                        m_axis_ptp_ts_next = ptp_ts + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS) * 1.5;
+                    end
+                    m_axis_ptp_ts_tag_next = s_axis_tuser >> 1;
+                    m_axis_ptp_ts_valid_int_next = 1'b1;
+                    start_packet_next = 2'b10;
+                end else begin
+                    // no more idles - unswap
+                    unswap_lanes = 1'b1;
+                    if (PTP_TS_WIDTH == 96) begin
+                        m_axis_ptp_ts_next[45:0] <= ptp_ts[45:0] + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS);
+                        m_axis_ptp_ts_next[95:48] <= ptp_ts[95:48];
+                    end else begin
+                        m_axis_ptp_ts_next = ptp_ts + (PTP_PERIOD_NS * 2**16 + PTP_PERIOD_FNS);
+                    end
+                    m_axis_ptp_ts_tag_next = s_axis_tuser >> 1;
+                    m_axis_ptp_ts_valid_int_next = 1'b1;
+                    start_packet_next = 2'b01;
+                end
+                output_data_next = {ETH_SFD, {7{ETH_PRE}}};
+                output_type_next = OUTPUT_TYPE_START_0;
+                s_axis_tready_next = 1'b1;
+                state_next = STATE_PAYLOAD;
+            end else begin
+                ifg_count_next = 8'd0;
+                deficit_idle_count_next = 2'd0;
+                unswap_lanes = 1'b1;
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // transfer payload
+            update_crc = 1'b1;
+            s_axis_tready_next = 1'b1;
+
+            frame_ptr_next = frame_ptr_reg + 16'd8;
+
+            output_data_next = s_tdata_reg;
+            output_type_next = OUTPUT_TYPE_DATA;
+
+            s_tdata_next = s_axis_tdata_masked;
+            s_tkeep_next = s_axis_tkeep;
+
+            if (s_axis_tvalid) begin
+                if (s_axis_tlast) begin
+                    frame_ptr_next = frame_ptr_reg + keep2count(s_axis_tkeep);
+                    s_axis_tready_next = 1'b0;
+                    if (s_axis_tuser[0]) begin
+                        output_type_next = OUTPUT_TYPE_ERROR;
+                        frame_ptr_next = 16'd0;
+                        ifg_count_next = 8'd8;
+                        state_next = STATE_IFG;
+                    end else begin
+                        s_axis_tready_next = 1'b0;
+
+                        if (ENABLE_PADDING && (frame_ptr_reg < MIN_FL_NOCRC_MS || (frame_ptr_reg == MIN_FL_NOCRC_MS && keep2count(s_axis_tkeep) < MIN_FL_NOCRC_LS))) begin
+                            s_tkeep_next = 8'hff;
+                            frame_ptr_next = frame_ptr_reg + 16'd8;
+
+                            if (frame_ptr_reg < (MIN_FL_NOCRC_LS > 0 ? MIN_FL_NOCRC_MS : MIN_FL_NOCRC_MS-8)) begin
+                                state_next = STATE_PAD;
+                            end else begin
+                                s_tkeep_next = 8'hff >> ((8-MIN_FL_NOCRC_LS) % 8);
+
+                                state_next = STATE_FCS_1;
+                            end
+                        end else begin
+                            state_next = STATE_FCS_1;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                // tvalid deassert, fail frame
+                output_type_next = OUTPUT_TYPE_ERROR;
+                frame_ptr_next = 16'd0;
+                ifg_count_next = 8'd8;
+                error_underflow_next = 1'b1;
+                state_next = STATE_WAIT_END;
+            end
+        end
+        STATE_PAD: begin
+            // pad frame to MIN_FRAME_LENGTH
+            s_axis_tready_next = 1'b0;
+
+            output_data_next = s_tdata_reg;
+            output_type_next = OUTPUT_TYPE_DATA;
+
+            s_tdata_next = 64'd0;
+            s_tkeep_next = 8'hff;
+
+            update_crc = 1'b1;
+            frame_ptr_next = frame_ptr_reg + 16'd8;
+
+            if (frame_ptr_reg < (MIN_FL_NOCRC_LS > 0 ? MIN_FL_NOCRC_MS : MIN_FL_NOCRC_MS-8)) begin
+                state_next = STATE_PAD;
+            end else begin
+                s_tkeep_next = 8'hff >> ((8-MIN_FL_NOCRC_LS) % 8);
+
+                state_next = STATE_FCS_1;
+            end
+        end
+        STATE_FCS_1: begin
+            // last cycle
+            s_axis_tready_next = 1'b0;
+
+            output_data_next = fcs_output_data_0;
+            output_type_next = fcs_output_type_0;
+
+            frame_ptr_next = 16'd0;
+
+            ifg_count_next = (ifg_delay > 8'd12 ? ifg_delay : 8'd12) - ifg_offset + (lanes_swapped ? 8'd4 : 8'd0) + deficit_idle_count_reg;
+            if (extra_cycle) begin
+                state_next = STATE_FCS_2;
+            end else begin
+                state_next = STATE_IFG;
+            end
+        end
+        STATE_FCS_2: begin
+            // last cycle
+            s_axis_tready_next = 1'b0;
+
+            output_data_next = fcs_output_data_1;
+            output_type_next = fcs_output_type_1;
+
+            reset_crc = 1'b1;
+            frame_ptr_next = 16'd0;
+
+            if (ENABLE_DIC) begin
+                if (ifg_count_next > 8'd7) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    if (ifg_count_next >= 8'd4) begin
+                        deficit_idle_count_next = ifg_count_next - 8'd4;
+                    end else begin
+                        deficit_idle_count_next = ifg_count_next;
+                        ifg_count_next = 8'd0;
+                    end
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                if (ifg_count_next > 8'd4) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end
+        end
+        STATE_IFG: begin
+            // send IFG
+            if (ifg_count_reg > 8'd8) begin
+                ifg_count_next = ifg_count_reg - 8'd8;
+            end else begin
+                ifg_count_next = 8'd0;
+            end
+
+            reset_crc = 1'b1;
+
+            if (ENABLE_DIC) begin
+                if (ifg_count_next > 8'd7) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    if (ifg_count_next >= 8'd4) begin
+                        deficit_idle_count_next = ifg_count_next - 8'd4;
+                    end else begin
+                        deficit_idle_count_next = ifg_count_next;
+                        ifg_count_next = 8'd0;
+                    end
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                if (ifg_count_next > 8'd4) begin
+                    state_next = STATE_IFG;
+                end else begin
+                    s_axis_tready_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end
+            end
+        end
+        STATE_WAIT_END: begin
+            // wait for end of frame
+            s_axis_tready_next = 1'b1;
+
+            if (ifg_count_reg > 8'd4) begin
+                ifg_count_next = ifg_count_reg - 8'd4;
+            end else begin
+                ifg_count_next = 8'd0;
+            end
+
+            reset_crc = 1'b1;
+
+            if (s_axis_tvalid) begin
+                if (s_axis_tlast) begin
+                    s_axis_tready_next = 1'b0;
+
+                    if (ENABLE_DIC) begin
+                        if (ifg_count_next > 8'd7) begin
+                            state_next = STATE_IFG;
+                        end else begin
+                            if (ifg_count_next >= 8'd4) begin
+                                deficit_idle_count_next = ifg_count_next - 8'd4;
+                            end else begin
+                                deficit_idle_count_next = ifg_count_next;
+                                ifg_count_next = 8'd0;
+                            end
+                            s_axis_tready_next = 1'b1;
+                            state_next = STATE_IDLE;
+                        end
+                    end else begin
+                        if (ifg_count_next > 8'd4) begin
+                            state_next = STATE_IFG;
+                        end else begin
+                            s_axis_tready_next = 1'b1;
+                            state_next = STATE_IDLE;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_WAIT_END;
+                end
+            end else begin
+                state_next = STATE_WAIT_END;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+

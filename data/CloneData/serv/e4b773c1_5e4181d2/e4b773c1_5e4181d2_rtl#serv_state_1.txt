@@ -1,0 +1,45 @@
+Source Block: serv/rtl/serv_state.v@45:55@HdlIdDef
+   output reg 	     o_cnt_done,
+   output wire 	     o_bufreg_en);
+
+   wire 	     cnt4;
+
+   reg 	stage_two_req;
+
+   reg [4:2] o_cnt;
+   reg [3:0] o_cnt_r;
+
+   reg 	     ibus_cyc;
+
+Diff Content:
++ 50    reg 	init_done;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_state.v@48:58
+   wire 	     cnt4;
+
+   reg 	stage_two_req;
+
+   reg [4:2] o_cnt;
+   reg [3:0] o_cnt_r;
+
+   reg 	     ibus_cyc;
+   //Update PC in RUN or TRAP states
+   assign o_ctrl_pc_en  = o_cnt_en & !o_init;
+
+
+Clone Blocks 2:
+serv/rtl/serv_state.v@47:57
+
+   wire 	     cnt4;
+
+   reg 	stage_two_req;
+
+   reg [4:2] o_cnt;
+   reg [3:0] o_cnt_r;
+
+   reg 	     ibus_cyc;
+   //Update PC in RUN or TRAP states
+   assign o_ctrl_pc_en  = o_cnt_en & !o_init;
+

@@ -1,0 +1,20 @@
+Source Block: hdl/library/axi_ad9361/xilinx/axi_ad9361_lvds_if.v@363:375@HdlStmProcess
+    if (dac_valid == 1'b1) begin
+      tx_data <= dac_data;
+    end
+  end
+
+  always @(posedge clk) begin
+    tx_clk_p <= {dac_clksel, ~dac_clksel};
+  end
+
+  always @(posedge clk) begin
+    case ({dac_r1_mode, tx_data_sel})
+      3'b000: begin
+        tx_frame_p <= 1'b1;
+
+Diff Content:
+- 369     tx_clk_p <= {dac_clksel, ~dac_clksel};
++ 369     tx_clk_p <= {~dac_clksel, dac_clksel};
+
+Clone Blocks:

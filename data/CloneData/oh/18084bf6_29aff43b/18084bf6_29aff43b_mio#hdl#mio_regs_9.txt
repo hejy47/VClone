@@ -1,0 +1,54 @@
+Source Block: oh/mio/hdl/mio_regs.v@142:156@HdlStmProcess
+   
+   //###############################
+   //# CLKDIV
+   //################################ 
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       clkdiv_reg[7:0] <= 'b0;   
+     else if(clkdiv_write)
+       clkdiv_reg[7:0] <= data_in[7:0];
+
+   assign clkdiv[7:0] = clkdiv_reg[7:0];
+
+   //###############################
+   //# CLKPHASE
+
+Diff Content:
+- 149        clkdiv_reg[7:0] <= 'b0;   
++ 149        clkdiv_reg[7:0] <= DEF_CLK;   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/mio/hdl/mio_regs.v@148:158
+     if(!nreset)
+       clkdiv_reg[7:0] <= 'b0;   
+     else if(clkdiv_write)
+       clkdiv_reg[7:0] <= data_in[7:0];
+
+   assign clkdiv[7:0] = clkdiv_reg[7:0];
+
+   //###############################
+   //# CLKPHASE
+   //################################ 
+   always @ (posedge clk)
+
+Clone Blocks 2:
+oh/spi/hdl/spi_master_regs.v@143:157
+   			       
+   //####################################
+   //# CLKDIV 
+   //####################################
+
+   always @ (posedge clk or negedge nreset)
+     if (~nreset)
+       clkdiv_reg[7:0] <= CLKDIV;   
+     else if(clkdiv_write)
+       clkdiv_reg[7:0] <= reg_wdata[7:0];
+
+   //####################################
+   //# COMMAND (for emode) 
+   //####################################
+
+

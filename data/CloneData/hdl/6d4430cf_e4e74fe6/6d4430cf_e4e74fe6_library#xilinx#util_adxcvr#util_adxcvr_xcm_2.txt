@@ -1,0 +1,60 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xcm.v@83:118@HdlStmProcess
+  // drp access
+
+  assign up_cm_rdata = up_rdata_int;
+  assign up_cm_ready = up_ready_int;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_enb_int <= 1'd0;
+      up_addr_int <= 12'd0;
+      up_wr_int <= 1'd0;
+      up_wdata_int <= 16'd0;
+      up_rdata_int <= 16'd0;
+      up_ready_int <= 1'd0;
+    end else begin
+      if ((up_cm_sel == XCVR_ID) || (up_cm_sel == 8'hff)) begin
+        up_enb_int <= up_cm_enb;
+        up_addr_int <= up_cm_addr;
+        up_wr_int <= up_cm_wr;
+        up_wdata_int <= up_cm_wdata;
+        up_rdata_int <= up_rdata_s;
+        up_ready_int <= up_ready_s;
+      end else begin
+        up_enb_int <= 1'd0;
+        up_addr_int <= 12'd0;
+        up_wr_int <= 1'd0;
+        up_wdata_int <= 16'd0;
+        up_rdata_int <= 16'd0;
+        up_ready_int <= 1'd0;
+      end
+    end
+  end
+
+  // instantiations
+
+  generate
+  if (XCVR_TYPE == 0) begin
+
+Diff Content:
+- 97       if ((up_cm_sel == XCVR_ID) || (up_cm_sel == 8'hff)) begin
+- 102         up_rdata_int <= up_rdata_s;
+- 103         up_ready_int <= up_ready_s;
+- 109         up_rdata_int <= 16'd0;
+- 110         up_ready_int <= 1'd0;
++ 95       up_sel_int <= 1'b0;
++ 97       if (up_cm_enb == 1'b1) begin
++ 110       end
++ 110       if (up_cm_enb == 1'b1) begin
++ 110         up_sel_int <= 1'b1;
++ 110       end else if (up_ready_s == 1'b1) begin
++ 110         up_sel_int <= 1'b0;
++ 110       end
++ 110       if (up_sel_int == 1'b1) begin
++ 110         up_ready_int <= up_ready_s;
++ 110         up_rdata_int <= up_rdata_s;
++ 110       end else begin
++ 110         up_ready_int <= 1'b0;
++ 110         up_rdata_int <= 'h00;
+
+Clone Blocks:

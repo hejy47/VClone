@@ -1,0 +1,27 @@
+Source Block: miaow/scripts/xilinx/axi_slave_v1_0_S00_AXI.v@235:254@HdlStmProcess
+      if(~execute && slv_reg_wren && ~slv_reg_wren_buffer && axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 7'h08) begin
+        instrBuffWrEn <= 4'b1111;
+      end
+    end
+
+    always @( posedge S_AXI_ACLK ) begin
+      if ( S_AXI_ARESETN == 1'b0 ) begin
+        executeState <= IDLE_STATE;
+        cycle_counter <= 32'd0;
+      end
+      else begin
+        executeState <= executeStateNext;
+        cycle_counter <= cycle_counter_next;
+      end
+    end
+
+    always @(*) begin
+      executeStateNext <= executeState;
+      cycle_counter_next <= cycle_counter;
+      executeStart <= 1'b0;
+
+Diff Content:
+- 241       if ( S_AXI_ARESETN == 1'b0 ) begin
++ 241       if ( S_AXI_ARESETN == 1'b0 | mb_reset == 1'b0) begin
+
+Clone Blocks:

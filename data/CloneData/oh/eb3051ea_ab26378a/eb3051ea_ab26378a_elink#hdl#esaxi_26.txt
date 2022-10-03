@@ -1,0 +1,18 @@
+Source Block: oh/elink/hdl/esaxi.v@386:396@HdlStmAssign
+   
+
+   //###################################################
+   //#WRITE DATA
+   //###################################################  
+   assign emwr_write         = 1'b1;
+   
+   always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn) 
+       begin
+          emwr_data_reg[31:0]     <= 32'd0;	  
+
+Diff Content:
+- 391    assign emwr_write         = 1'b1;
++ 391    assign txwr_write         = 1'b1;
+
+Clone Blocks:

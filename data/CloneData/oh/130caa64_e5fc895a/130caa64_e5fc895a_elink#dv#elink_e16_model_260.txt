@@ -1,0 +1,18 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2392:2402@HdlStmAssign
+
+   //###########################
+   //# frame and data selection
+   //###########################
+   
+   assign emesh_frame  =  ~(fifo_empty | last_tran);
+
+   e16_mux7 #(2*LW) e16_mux7(// Outputs
+		     .out (emesh_tran[2*LW-1:0]),
+		     // Inputs
+		     .in0 (fifo_tran_out[2*LW-1:0]),      .sel0 (launch_sel[0]),
+
+Diff Content:
+- 2397    assign emesh_frame  =  ~(fifo_empty | last_tran);
++ 2397    assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+Clone Blocks:

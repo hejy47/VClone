@@ -1,0 +1,550 @@
+Source Block: verilog-ethernet/rtl/udp_ip_rx_64.v@253:413@HdlStmProcess
+        4'd7: count2keep = 8'b01111111;
+        4'd8: count2keep = 8'b11111111;
+    endcase
+endfunction
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_ip_hdr_ready_next = 0;
+    input_ip_payload_tready_next = 0;
+
+    store_ip_hdr = 0;
+    store_hdr_word_0 = 0;
+
+    store_last_word = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_udp_hdr_valid_next = output_udp_hdr_valid_reg & ~output_udp_hdr_ready;
+
+    error_header_early_termination_next = 0;
+    error_payload_early_termination_next = 0;
+
+    output_udp_payload_tdata_int = 0;
+    output_udp_payload_tkeep_int = 0;
+    output_udp_payload_tvalid_int = 0;
+    output_udp_payload_tlast_int = 0;
+    output_udp_payload_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for header
+            frame_ptr_next = 0;
+            input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+
+            if (input_ip_hdr_ready & input_ip_hdr_valid) begin
+                input_ip_hdr_ready_next = 0;
+                input_ip_payload_tready_next = 1;
+                store_ip_hdr = 1;
+                state_next = STATE_READ_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header state
+            input_ip_payload_tready_next = 1;
+
+            if (input_ip_payload_tready & input_ip_payload_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+8;
+                state_next = STATE_READ_HEADER;
+
+                case (frame_ptr_reg)
+                    8'h00: begin
+                        store_hdr_word_0 = 1;
+                        output_udp_hdr_valid_next = 1;
+                        input_ip_payload_tready_next = output_udp_payload_tready_int_early;
+                        state_next = STATE_READ_PAYLOAD;
+                    end
+                endcase
+
+                if (input_ip_payload_tlast) begin
+                    error_header_early_termination_next = 1;
+                    output_udp_hdr_valid_next = 0;
+                    input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                    input_ip_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end
+
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_READ_PAYLOAD: begin
+            // read payload
+            input_ip_payload_tready_next = output_udp_payload_tready_int_early;
+
+            output_udp_payload_tdata_int = input_ip_payload_tdata;
+            output_udp_payload_tkeep_int = input_ip_payload_tkeep;
+            output_udp_payload_tvalid_int = input_ip_payload_tvalid;
+            output_udp_payload_tlast_int = input_ip_payload_tlast;
+            output_udp_payload_tuser_int = input_ip_payload_tuser;
+
+            if (input_ip_payload_tready & input_ip_payload_tvalid) begin
+                // word transfer through
+                frame_ptr_next = frame_ptr_reg+keep2count(input_ip_payload_tkeep);
+                if (frame_ptr_next >= output_udp_length_reg) begin
+                    // have entire payload
+                    frame_ptr_next = output_udp_length_reg;
+                    output_udp_payload_tkeep_int = input_ip_payload_tkeep & count2keep(output_udp_length_reg - frame_ptr_reg);
+                    if (input_ip_payload_tlast) begin
+                        input_ip_payload_tready_next = 0;
+                        input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        store_last_word = 1;
+                        output_udp_payload_tvalid_int = 0;
+                        state_next = STATE_READ_PAYLOAD_LAST;
+                    end
+                end else begin
+                    if (input_ip_payload_tlast) begin
+                        // end of frame, but length does not match
+                        error_payload_early_termination_next = 1;
+                        output_udp_payload_tuser_int = 1;
+                        input_ip_payload_tready_next = 0;
+                        input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        state_next = STATE_READ_PAYLOAD;
+                    end
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD;
+            end
+        end
+        STATE_READ_PAYLOAD_LAST: begin
+            // read and discard until end of frame
+            input_ip_payload_tready_next = output_udp_payload_tready_int_early;
+
+            output_udp_payload_tdata_int = last_word_data_reg;
+            output_udp_payload_tkeep_int = last_word_keep_reg;
+            output_udp_payload_tvalid_int = input_ip_payload_tvalid & input_ip_payload_tlast;
+            output_udp_payload_tlast_int = input_ip_payload_tlast;
+            output_udp_payload_tuser_int = input_ip_payload_tuser;
+
+            if (input_ip_payload_tready & input_ip_payload_tvalid) begin
+                if (input_ip_payload_tlast) begin
+                    input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                    input_ip_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_LAST;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_LAST;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // wait for end of frame; read and discard
+            input_ip_payload_tready_next = 1;
+
+            if (input_ip_payload_tready & input_ip_payload_tvalid) begin
+                if (input_ip_payload_tlast) begin
+                    input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                    input_ip_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT_LAST;
+                end
+            end else begin
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 261     input_ip_hdr_ready_next = 0;
+- 262     input_ip_payload_tready_next = 0;
+- 264     store_ip_hdr = 0;
+- 265     store_hdr_word_0 = 0;
+- 267     store_last_word = 0;
+- 273     error_header_early_termination_next = 0;
+- 274     error_payload_early_termination_next = 0;
+- 276     output_udp_payload_tdata_int = 0;
+- 277     output_udp_payload_tkeep_int = 0;
+- 278     output_udp_payload_tvalid_int = 0;
+- 279     output_udp_payload_tlast_int = 0;
+- 280     output_udp_payload_tuser_int = 0;
+- 285             frame_ptr_next = 0;
+- 289                 input_ip_hdr_ready_next = 0;
+- 290                 input_ip_payload_tready_next = 1;
+- 291                 store_ip_hdr = 1;
+- 299             input_ip_payload_tready_next = 1;
+- 303                 frame_ptr_next = frame_ptr_reg+8;
+- 308                         store_hdr_word_0 = 1;
+- 309                         output_udp_hdr_valid_next = 1;
+- 316                     error_header_early_termination_next = 1;
+- 317                     output_udp_hdr_valid_next = 0;
+- 319                     input_ip_payload_tready_next = 0;
+- 345                         input_ip_payload_tready_next = 0;
+- 349                         store_last_word = 1;
+- 350                         output_udp_payload_tvalid_int = 0;
+- 356                         error_payload_early_termination_next = 1;
+- 357                         output_udp_payload_tuser_int = 1;
+- 358                         input_ip_payload_tready_next = 0;
+- 382                     input_ip_payload_tready_next = 0;
+- 393             input_ip_payload_tready_next = 1;
+- 398                     input_ip_payload_tready_next = 0;
++ 262     input_ip_hdr_ready_next = 1'b0;
++ 262     input_ip_payload_tready_next = 1'b0;
++ 265     store_ip_hdr = 1'b0;
++ 265     store_hdr_word_0 = 1'b0;
++ 267     store_last_word = 1'b0;
++ 274     error_header_early_termination_next = 1'b0;
++ 274     error_payload_early_termination_next = 1'b0;
++ 280     output_udp_payload_tdata_int = 64'd0;
++ 280     output_udp_payload_tkeep_int = 8'd0;
++ 280     output_udp_payload_tvalid_int = 1'b0;
++ 280     output_udp_payload_tlast_int = 1'b0;
++ 280     output_udp_payload_tuser_int = 1'b0;
++ 285             frame_ptr_next = 16'd0;
++ 291                 input_ip_hdr_ready_next = 1'b0;
++ 291                 input_ip_payload_tready_next = 1'b1;
++ 291                 store_ip_hdr = 1'b1;
++ 299             input_ip_payload_tready_next = 1'b1;
++ 303                 frame_ptr_next = frame_ptr_reg + 16'd8;
++ 309                         store_hdr_word_0 = 1'b1;
++ 309                         output_udp_hdr_valid_next = 1'b1;
++ 317                     error_header_early_termination_next = 1'b1;
++ 317                     output_udp_hdr_valid_next = 1'b0;
++ 319                     input_ip_payload_tready_next = 1'b0;
++ 345                         input_ip_payload_tready_next = 1'b0;
++ 350                         store_last_word = 1'b1;
++ 350                         output_udp_payload_tvalid_int = 1'b0;
++ 358                         error_payload_early_termination_next = 1'b1;
++ 358                         output_udp_payload_tuser_int = 1'b1;
++ 358                         input_ip_payload_tready_next = 1'b0;
++ 382                     input_ip_payload_tready_next = 1'b0;
++ 393             input_ip_payload_tready_next = 1'b1;
++ 398                     input_ip_payload_tready_next = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/udp_ip_tx.v@210:358
+assign output_ip_dest_ip = output_ip_dest_ip_reg;
+
+assign busy = busy_reg;
+assign error_payload_early_termination = error_payload_early_termination_reg;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_udp_hdr_ready_next = 0;
+    input_udp_payload_tready_next = 0;
+
+    store_udp_hdr = 0;
+
+    store_last_word = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_ip_hdr_valid_next = output_ip_hdr_valid_reg & ~output_ip_hdr_ready;
+
+    error_payload_early_termination_next = 0;
+
+    output_ip_payload_tdata_int = 0;
+    output_ip_payload_tvalid_int = 0;
+    output_ip_payload_tlast_int = 0;
+    output_ip_payload_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+            input_udp_hdr_ready_next = ~output_ip_hdr_valid_reg;
+
+            if (input_udp_hdr_ready & input_udp_hdr_valid) begin
+                store_udp_hdr = 1;
+                input_udp_hdr_ready_next = 0;
+                output_ip_hdr_valid_next = 1;
+                if (output_ip_payload_tready_int) begin
+                    output_ip_payload_tvalid_int = 1;
+                    output_ip_payload_tdata_int = input_udp_source_port[15: 8];
+                    frame_ptr_next = 1;
+                end
+                state_next = STATE_WRITE_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_WRITE_HEADER: begin
+            // write header state
+            if (output_ip_payload_tready_int) begin
+                // word transfer out
+                frame_ptr_next = frame_ptr_reg+1;
+                output_ip_payload_tvalid_int = 1;
+                state_next = STATE_WRITE_HEADER;
+                case (frame_ptr_reg)
+                    8'h00: output_ip_payload_tdata_int = input_udp_source_port[15: 8];
+                    8'h01: output_ip_payload_tdata_int = udp_source_port_reg[ 7: 0];
+                    8'h02: output_ip_payload_tdata_int = udp_dest_port_reg[15: 8];
+                    8'h03: output_ip_payload_tdata_int = udp_dest_port_reg[ 7: 0];
+                    8'h04: output_ip_payload_tdata_int = udp_length_reg[15: 8];
+                    8'h05: output_ip_payload_tdata_int = udp_length_reg[ 7: 0];
+                    8'h06: output_ip_payload_tdata_int = udp_checksum_reg[15: 8];
+                    8'h07: begin
+                        output_ip_payload_tdata_int = udp_checksum_reg[ 7: 0];
+                        input_udp_payload_tready_next = output_ip_payload_tready_int_early;
+                        state_next = STATE_WRITE_PAYLOAD;
+                    end
+                endcase
+            end else begin
+                state_next = STATE_WRITE_HEADER;
+            end
+        end
+        STATE_WRITE_PAYLOAD: begin
+            // write payload
+            input_udp_payload_tready_next = output_ip_payload_tready_int_early;
+
+            output_ip_payload_tdata_int = input_udp_payload_tdata;
+            output_ip_payload_tvalid_int = input_udp_payload_tvalid;
+            output_ip_payload_tlast_int = input_udp_payload_tlast;
+            output_ip_payload_tuser_int = input_udp_payload_tuser;
+
+            if (input_udp_payload_tready & input_udp_payload_tvalid) begin
+                // word transfer through
+                frame_ptr_next = frame_ptr_reg+1;
+                if (input_udp_payload_tlast) begin
+                    if (frame_ptr_next != udp_length_reg) begin
+                        // end of frame, but length does not match
+                        output_ip_payload_tuser_int = 1;
+                        error_payload_early_termination_next = 1;
+                    end
+                    input_udp_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                    input_udp_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    if (frame_ptr_next == udp_length_reg) begin
+                        store_last_word = 1;
+                        output_ip_payload_tvalid_int = 0;
+                        state_next = STATE_WRITE_PAYLOAD_LAST;
+                    end else begin
+                        state_next = STATE_WRITE_PAYLOAD;
+                    end
+                end
+            end else begin
+                state_next = STATE_WRITE_PAYLOAD;
+            end
+        end
+        STATE_WRITE_PAYLOAD_LAST: begin
+            // read and discard until end of frame
+            input_udp_payload_tready_next = output_ip_payload_tready_int_early;
+
+            output_ip_payload_tdata_int = last_word_data_reg;
+            output_ip_payload_tvalid_int = input_udp_payload_tvalid & input_udp_payload_tlast;
+            output_ip_payload_tlast_int = input_udp_payload_tlast;
+            output_ip_payload_tuser_int = input_udp_payload_tuser;
+
+            if (input_udp_payload_tready & input_udp_payload_tvalid) begin
+                if (input_udp_payload_tlast) begin
+                    input_udp_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                    input_udp_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WRITE_PAYLOAD_LAST;
+                end
+            end else begin
+                state_next = STATE_WRITE_PAYLOAD_LAST;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // wait for end of frame; read and discard
+            input_udp_payload_tready_next = 1;
+
+            if (input_udp_payload_tvalid) begin
+                if (input_udp_payload_tlast) begin
+                    input_udp_hdr_ready_next = ~output_ip_hdr_valid_reg;
+                    input_udp_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT_LAST;
+                end
+            end else begin
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/udp_ip_rx.v@226:390
+
+assign busy = busy_reg;
+assign error_header_early_termination = error_header_early_termination_reg;
+assign error_payload_early_termination = error_payload_early_termination_reg;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_ip_hdr_ready_next = 0;
+    input_ip_payload_tready_next = 0;
+
+    store_ip_hdr = 0;
+    store_udp_source_port_0 = 0;
+    store_udp_source_port_1 = 0;
+    store_udp_dest_port_0 = 0;
+    store_udp_dest_port_1 = 0;
+    store_udp_length_0 = 0;
+    store_udp_length_1 = 0;
+    store_udp_checksum_0 = 0;
+    store_udp_checksum_1 = 0;
+
+    store_last_word = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_udp_hdr_valid_next = output_udp_hdr_valid_reg & ~output_udp_hdr_ready;
+
+    error_header_early_termination_next = 0;
+    error_payload_early_termination_next = 0;
+
+    output_udp_payload_tdata_int = 0;
+    output_udp_payload_tvalid_int = 0;
+    output_udp_payload_tlast_int = 0;
+    output_udp_payload_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for header
+            frame_ptr_next = 0;
+            input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+
+            if (input_ip_hdr_ready & input_ip_hdr_valid) begin
+                input_ip_hdr_ready_next = 0;
+                input_ip_payload_tready_next = 1;
+                store_ip_hdr = 1;
+                state_next = STATE_READ_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header state
+            input_ip_payload_tready_next = 1;
+
+            if (input_ip_payload_tready & input_ip_payload_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+1;
+                state_next = STATE_READ_HEADER;
+
+                case (frame_ptr_reg)
+                    8'h00: store_udp_source_port_1 = 1;
+                    8'h01: store_udp_source_port_0 = 1;
+                    8'h02: store_udp_dest_port_1 = 1;
+                    8'h03: store_udp_dest_port_0 = 1;
+                    8'h04: store_udp_length_1 = 1;
+                    8'h05: store_udp_length_0 = 1;
+                    8'h06: store_udp_checksum_1 = 1;
+                    8'h07: begin
+                        store_udp_checksum_0 = 1;
+                        output_udp_hdr_valid_next = 1;
+                        input_ip_payload_tready_next = output_udp_payload_tready_int_early;
+                        state_next = STATE_READ_PAYLOAD;
+                    end
+                endcase
+
+                if (input_ip_payload_tlast) begin
+                    error_header_early_termination_next = 1;
+                    output_udp_hdr_valid_next = 0;
+                    input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                    input_ip_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end
+
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_READ_PAYLOAD: begin
+            // read payload
+            input_ip_payload_tready_next = output_udp_payload_tready_int_early;
+
+            output_udp_payload_tdata_int = input_ip_payload_tdata;
+            output_udp_payload_tvalid_int = input_ip_payload_tvalid;
+            output_udp_payload_tlast_int = input_ip_payload_tlast;
+            output_udp_payload_tuser_int = input_ip_payload_tuser;
+
+            if (input_ip_payload_tready & input_ip_payload_tvalid) begin
+                // word transfer through
+                frame_ptr_next = frame_ptr_reg+1;
+                if (input_ip_payload_tlast) begin
+                    if (frame_ptr_next != output_udp_length_reg) begin
+                        // end of frame, but length does not match
+                        output_udp_payload_tuser_int = 1;
+                        error_payload_early_termination_next = 1;
+                    end
+                    input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                    input_ip_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    if (frame_ptr_next == output_udp_length_reg) begin
+                        store_last_word = 1;
+                        output_udp_payload_tvalid_int = 0;
+                        state_next = STATE_READ_PAYLOAD_LAST;
+                    end else begin
+                        state_next = STATE_READ_PAYLOAD;
+                    end
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD;
+            end
+        end
+        STATE_READ_PAYLOAD_LAST: begin
+            // read and discard until end of frame
+            input_ip_payload_tready_next = output_udp_payload_tready_int_early;
+
+            output_udp_payload_tdata_int = last_word_data_reg;
+            output_udp_payload_tvalid_int = input_ip_payload_tvalid & input_ip_payload_tlast;
+            output_udp_payload_tlast_int = input_ip_payload_tlast;
+            output_udp_payload_tuser_int = input_ip_payload_tuser;
+
+            if (input_ip_payload_tready & input_ip_payload_tvalid) begin
+                if (input_ip_payload_tlast) begin
+                    input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                    input_ip_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_READ_PAYLOAD_LAST;
+                end
+            end else begin
+                state_next = STATE_READ_PAYLOAD_LAST;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // wait for end of frame; read and discard
+            input_ip_payload_tready_next = 1;
+
+            if (input_ip_payload_tready & input_ip_payload_tvalid) begin
+                if (input_ip_payload_tlast) begin
+                    input_ip_hdr_ready_next = ~output_udp_hdr_valid_reg;
+                    input_ip_payload_tready_next = 0;
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT_LAST;
+                end
+            end else begin
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+

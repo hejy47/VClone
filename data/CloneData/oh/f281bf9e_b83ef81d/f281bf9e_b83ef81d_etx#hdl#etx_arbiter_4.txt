@@ -1,0 +1,133 @@
+Source Block: oh/etx/hdl/etx_arbiter.v@106:145@HdlStmProcess
+   // FIFO read enables, when we're idle or done with the current datum
+   assign     emrr_rd_en = rr_ready & (~ready | emtx_ack);
+   assign     emrq_rd_en = rq_ready & (~ready | emtx_ack);
+   assign     emwr_rd_en = wr_ready & (~ready | emtx_ack);
+   
+   always @ (posedge clk) begin
+      if( reset ) begin
+
+         ready     <= 1'b0;
+         fifo_data <= 'd0;
+
+      end else begin
+
+         if( emrr_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emrr_rd_data;
+
+         end else if( emrq_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emrq_rd_data;
+
+         end else if( emwr_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emwr_rd_data;
+
+         end else if( emtx_ack ) begin
+
+            ready <= 1'b0;
+
+         end
+      end // else: !if( reset )
+   end // always @ (posedge clock)
+      
+   //#############################
+   //# Break-out the emesh signals
+   //#############################
+   
+
+Diff Content:
+- 134          end else if( emtx_ack ) begin
++ 134          end else if( e_tx_ack ) begin
+
+Clone Blocks:
+Clone Blocks 1:
+oh/earb/hdl/earb.v@106:145
+   // FIFO read enables, when we're idle or done with the current datum
+   wire           emrr_rd_en = rr_ready & (~ready | emtx_ack);
+   wire           emrq_rd_en = rq_ready & (~ready | emtx_ack);
+   wire           emwr_rd_en = wr_ready & (~ready | emtx_ack);
+   
+   always @ (posedge clock) begin
+      if( reset ) begin
+
+         ready     <= 1'b0;
+         fifo_data <= 'd0;
+
+      end else begin
+
+         if( emrr_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emrr_rd_data;
+
+         end else if( emrq_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emrq_rd_data;
+
+         end else if( emwr_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emwr_rd_data;
+
+         end else if( emtx_ack ) begin
+
+            ready <= 1'b0;
+
+         end
+      end // else: !if( reset )
+   end // always @ (posedge clock)
+      
+   //#############################
+   //# Break-out the emesh signals
+   //#############################
+   
+
+Clone Blocks 2:
+oh/e_transmit/hdl/e_tx_arbiter.v@97:136
+   // FIFO read enables, when we're idle or done with the current datum
+   wire           emrr_rd_en = rr_ready & (~ready | emtx_ack);
+   wire           emrq_rd_en = rq_ready & (~ready | emtx_ack);
+   wire           emwr_rd_en = wr_ready & (~ready | emtx_ack);
+   
+   always @ (posedge clk) begin
+      if( reset ) begin
+
+         ready     <= 1'b0;
+         fifo_data <= 'd0;
+
+      end else begin
+
+         if( emrr_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emrr_rd_data;
+
+         end else if( emrq_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emrq_rd_data;
+
+         end else if( emwr_rd_en ) begin
+
+            ready <= 1'b1;
+            fifo_data <= emwr_rd_data;
+
+         end else if( emtx_ack ) begin
+
+            ready <= 1'b0;
+
+         end
+      end // else: !if( reset )
+   end // always @ (posedge clock)
+      
+   //#############################
+   //# Break-out the emesh signals
+   //#############################
+   
+

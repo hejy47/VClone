@@ -1,0 +1,39 @@
+Source Block: oh/elink/dv/elink_e16_model.v@5003:5021@HdlStmAssign
+   //#############################
+   //# mesh transaction 7:1 mux
+   //#############################
+
+   //# We are launching in the following order (MSBs first):
+   assign mesh_tran_in[14*LW-1:0]={
+                                srcaddr_reg[7:0],{(LW){1'b0}},
+				   srcaddr_reg[23:8],
+			    data_reg[7:0],srcaddr_reg[31:24],
+				   data_reg[23:8],
+	 dstaddr_reg[3:0],datamode_reg[1:0],write_reg,access_reg,data_reg[31:24],
+				   dstaddr_reg[19:4],
+			  ctrlmode_reg[3:0],dstaddr_reg[31:20]
+                                   };
+
+   e16_mux7 #(2*LW) e16_mux7(// Outputs
+		     .out (mesh_tran[2*LW-1:0]),
+		     // Inputs
+		     .in0 (mesh_tran_in[2*LW-1:0]),      .sel0 (launcher_sel[0]),
+
+Diff Content:
+- 5008    assign mesh_tran_in[14*LW-1:0]={
+- 5009                                 srcaddr_reg[7:0],{(LW){1'b0}},
+- 5010 				   srcaddr_reg[23:8],
+- 5011 			    data_reg[7:0],srcaddr_reg[31:24],
+- 5012 				   data_reg[23:8],
+- 5013 	 dstaddr_reg[3:0],datamode_reg[1:0],write_reg,access_reg,data_reg[31:24],
+- 5014 				   dstaddr_reg[19:4],
+- 5015 			  ctrlmode_reg[3:0],dstaddr_reg[31:20]
+- 5016                                    };
++ 5016    always @ (posedge txo_lclk)
++ 5016      begin
++ 5016 	byte_odd_del[LW-1:0]   <= byte_odd[LW-1:0];
++ 5016 	tran_byte_odd[LW-1:0]  <= byte_odd_del[LW-1:0];
++ 5016 	tran_byte_even[LW-1:0] <= byte_even[LW-1:0];
++ 5016      end
+
+Clone Blocks:

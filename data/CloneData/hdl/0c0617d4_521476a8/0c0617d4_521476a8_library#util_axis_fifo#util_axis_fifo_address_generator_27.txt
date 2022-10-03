@@ -1,0 +1,131 @@
+Source Block: hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@185:192@HdlStmAssign
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+endmodule
+
+Diff Content:
+- 190 assign m_axis_level = m_axis_fifo_fill;
++ 190   localparam FIFO_DEPTH = {ADDRESS_WIDTH{1'b1}};
++ 190   reg [ADDRESS_WIDTH:0] s_axis_waddr_reg = 'h0;
++ 190   reg [ADDRESS_WIDTH:0] m_axis_raddr_reg = 'h0;
++ 190   wire [ADDRESS_WIDTH:0] s_axis_raddr_reg;
++ 190   wire [ADDRESS_WIDTH:0] m_axis_waddr_reg;
++ 190   wire s_axis_write_s;
++ 190   wire s_axis_ready_s;
++ 190   wire m_axis_read_s;
++ 190   wire m_axis_valid_s;
++ 190   wire [ADDRESS_WIDTH-1:0] m_axis_level_s;
++ 190   assign s_axis_write_s = s_axis_ready && s_axis_valid && ~s_axis_full;
++ 190   always @(posedge s_axis_aclk)
++ 190   begin
++ 190     if (!s_axis_aresetn)
++ 190       s_axis_waddr_reg <= 'h0;
++ 190     else
++ 190       if (s_axis_write_s)
++ 190         s_axis_waddr_reg <= s_axis_waddr_reg + 1'b1;
++ 190   end
++ 190   assign m_axis_read_s = m_axis_ready && m_axis_valid && ~m_axis_empty;
++ 190   always @(posedge m_axis_aclk)
++ 190   begin
++ 190     if (!m_axis_aresetn)
++ 190       m_axis_raddr_reg <= 'h0;
++ 190     else
++ 190       if (m_axis_read_s)
++ 190         m_axis_raddr_reg <= m_axis_raddr_reg + 1'b1;
++ 190   end
++ 190   assign s_axis_waddr = s_axis_waddr_reg[ADDRESS_WIDTH-1:0];
++ 190   assign m_axis_raddr = m_axis_raddr_reg[ADDRESS_WIDTH-1:0];
++ 190   generate if (ASYNC_CLK == 1) begin : g_async_clock
++ 190     sync_gray #(
++ 190       .DATA_WIDTH(ADDRESS_WIDTH + 1)
++ 190     ) i_waddr_sync_gray (
++ 190       .in_clk(s_axis_aclk),
++ 190       .in_resetn(s_axis_aresetn),
++ 190       .out_clk(m_axis_aclk),
++ 190       .out_resetn(m_axis_aresetn),
++ 190       .in_count(s_axis_waddr_reg),
++ 190       .out_count(m_axis_waddr_reg));
++ 190     sync_gray #(
++ 190       .DATA_WIDTH(ADDRESS_WIDTH + 1)
++ 190     ) i_raddr_sync_gray (
++ 190       .in_clk(m_axis_aclk),
++ 190       .in_resetn(m_axis_aresetn),
++ 190       .out_clk(s_axis_aclk),
++ 190       .out_resetn(s_axis_aresetn),
++ 190       .in_count(m_axis_raddr_reg),
++ 190       .out_count(s_axis_raddr_reg));
++ 190   end else begin
++ 190     assign m_axis_waddr_reg = s_axis_waddr_reg;
++ 190     assign s_axis_raddr_reg = m_axis_raddr_reg;
++ 190   end
++ 190   endgenerate
++ 190   wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
++ 190   assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
++ 190   assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
++ 190   assign s_axis_ready = ~s_axis_full;
++ 190   assign s_axis_room = ~s_axis_fifo_fill;
++ 190   wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
++ 190   assign m_axis_empty = m_axis_fifo_fill == 0;
++ 190   assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
++ 190   assign m_axis_valid = ~m_axis_empty;
++ 190   assign m_axis_level = m_axis_fifo_fill;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@182:192
+// m_axis_valid - FIFO has a valid output data, if it's not empty
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+endmodule
+
+Clone Blocks 2:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@183:192
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+endmodule
+
+Clone Blocks 3:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@184:192
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+endmodule
+
+Clone Blocks 4:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@181:191
+// m_axis_empty - FIFO is empty if read pointer equal to write pointer
+// m_axis_valid - FIFO has a valid output data, if it's not empty
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] m_axis_fifo_fill = m_axis_waddr_reg - m_axis_raddr_reg;
+assign m_axis_empty = m_axis_fifo_fill == 0;
+assign m_axis_almost_empty = (m_axis_fifo_fill < ALMOST_EMPTY_THRESHOLD);
+assign m_axis_valid = ~m_axis_empty;
+assign m_axis_level = m_axis_fifo_fill;
+
+

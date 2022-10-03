@@ -1,0 +1,50 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/jesd204_up_ilas_mem.v@84:106@HdlStmIf
+    end
+  end
+end
+
+generate
+if(DATA_PATH_WIDTH == 4)  begin : dp_4_gen
+always @(posedge up_clk) begin
+  if (up_rreq == 1'b1) begin
+    up_rdata <= mem[up_raddr];
+  end
+end
+end else if(DATA_PATH_WIDTH == 8) begin : dp_8_gen
+always @(posedge up_clk) begin
+  if (up_rreq == 1'b1) begin
+    up_rdata <= mem[up_raddr[1]] >> (up_raddr[0]*32);
+  end
+end
+end
+endgenerate
+
+always @(posedge core_clk) begin
+  if (core_ilas_config_valid == 1'b1) begin
+    mem[core_ilas_config_addr] <= core_ilas_config_data;
+
+Diff Content:
+- 89 if(DATA_PATH_WIDTH == 4)  begin : dp_4_gen
+- 90 always @(posedge up_clk) begin
+- 91   if (up_rreq == 1'b1) begin
+- 92     up_rdata <= mem[up_raddr];
+- 94 end
+- 95 end else if(DATA_PATH_WIDTH == 8) begin : dp_8_gen
+- 96 always @(posedge up_clk) begin
+- 97   if (up_rreq == 1'b1) begin
+- 98     up_rdata <= mem[up_raddr[1]] >> (up_raddr[0]*32);
+- 100 end
+- 101 end
++ 92   generate
++ 92   if(DATA_PATH_WIDTH == 4)  begin : dp_4_gen
++ 92   always @(posedge up_clk) begin
++ 92     if (up_rreq == 1'b1) begin
++ 92       up_rdata <= mem[up_raddr];
++ 92     end
++ 98   end else if(DATA_PATH_WIDTH == 8) begin : dp_8_gen
++ 98   always @(posedge up_clk) begin
++ 98     if (up_rreq == 1'b1) begin
++ 98       up_rdata <= mem[up_raddr[1]] >> (up_raddr[0]*32);
++ 98     end
+
+Clone Blocks:

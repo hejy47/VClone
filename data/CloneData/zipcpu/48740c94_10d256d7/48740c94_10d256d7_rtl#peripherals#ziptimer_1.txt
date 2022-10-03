@@ -1,0 +1,74 @@
+Source Block: zipcpu/rtl/peripherals/ziptimer.v@88:98@HdlStmAssign
+	output	reg		o_int;
+
+	reg			r_running;
+
+	wire	wb_write;
+	assign	wb_write = ((i_wb_cyc)&&(i_wb_stb)&&(i_wb_we));
+
+	wire	auto_reload;
+	wire	[(VW-1):0]	reload_value;
+
+	initial	r_running = 1'b0;
+
+Diff Content:
+- 93 	assign	wb_write = ((i_wb_cyc)&&(i_wb_stb)&&(i_wb_we));
++ 93 	assign	wb_write = ((i_wb_stb)&&(i_wb_we));
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/ziptimer.v@85:95
+	output	wire			o_wb_stall;
+	output	wire	[(BW-1):0]	o_wb_data;
+	// Interrupt line
+	output	reg		o_int;
+
+	reg			r_running;
+
+	wire	wb_write;
+	assign	wb_write = ((i_wb_cyc)&&(i_wb_stb)&&(i_wb_we));
+
+	wire	auto_reload;
+
+Clone Blocks 2:
+zipcpu/rtl/peripherals/ziptimer.v@90:100
+	reg			r_running;
+
+	wire	wb_write;
+	assign	wb_write = ((i_wb_cyc)&&(i_wb_stb)&&(i_wb_we));
+
+	wire	auto_reload;
+	wire	[(VW-1):0]	reload_value;
+
+	initial	r_running = 1'b0;
+	always @(posedge i_clk)
+		if (i_rst)
+
+Clone Blocks 3:
+zipcpu/rtl/peripherals/ziptimer.v@87:97
+	// Interrupt line
+	output	reg		o_int;
+
+	reg			r_running;
+
+	wire	wb_write;
+	assign	wb_write = ((i_wb_cyc)&&(i_wb_stb)&&(i_wb_we));
+
+	wire	auto_reload;
+	wire	[(VW-1):0]	reload_value;
+
+
+Clone Blocks 4:
+zipcpu/rtl/peripherals/ziptimer.v@91:101
+
+	wire	wb_write;
+	assign	wb_write = ((i_wb_cyc)&&(i_wb_stb)&&(i_wb_we));
+
+	wire	auto_reload;
+	wire	[(VW-1):0]	reload_value;
+
+	initial	r_running = 1'b0;
+	always @(posedge i_clk)
+		if (i_rst)
+			r_running <= 1'b0;
+

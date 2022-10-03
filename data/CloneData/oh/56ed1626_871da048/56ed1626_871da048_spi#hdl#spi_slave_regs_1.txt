@@ -1,0 +1,74 @@
+Source Block: oh/spi/hdl/spi_slave_regs.v@18:28@HdlIdDef
+   //parameters
+   parameter  UREGS  = 13;        // number of user regs
+   parameter  CHIPID = 0;         // reset chipid value   
+   parameter  AW     = 32;        // address width
+   localparam PW     = (2*AW+40); // packet width
+   localparam SREGS  = UREGS+16;  // total regs
+           
+   // clk, rest, chipid
+   input 	   clk;           // core clock
+   input 	   nreset;        // asych active low 
+
+
+Diff Content:
+- 23    localparam SREGS  = UREGS+16;  // total regs
++ 23    localparam SREGS  = UREGS+32;  // total regs
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_master.v@14:24
+
+   //parameters
+   parameter  DEPTH = 32;                // fifo depth   
+   parameter  REGS  = 16;                // total regs   
+   parameter  AW    = 32;                // addresss width
+   localparam PW    = (2*AW+40);         // packet width
+ 
+   //clk,reset, cfg
+   input 		clk;             // core clock
+   input 	        nreset;          // async active low reset
+   
+
+Clone Blocks 2:
+oh/emesh/hdl/ememory.v@13:23
+   parameter NAME  = "emem";
+   parameter WAIT  = 0;     //turns on random wait circuit
+   parameter MON   = 0;     //turns on monitor
+
+   //derived parameters
+   localparam DW      = AW;     //always the same
+   localparam PW      = 2*AW+40;//packet width   
+
+   //Basic Interface
+   input            clk;
+   input 	    nreset;  
+
+Clone Blocks 3:
+oh/spi/hdl/spi_slave_regs.v@17:27
+
+   //parameters
+   parameter  UREGS  = 13;        // number of user regs
+   parameter  CHIPID = 0;         // reset chipid value   
+   parameter  AW     = 32;        // address width
+   localparam PW     = (2*AW+40); // packet width
+   localparam SREGS  = UREGS+16;  // total regs
+           
+   // clk, rest, chipid
+   input 	   clk;           // core clock
+   input 	   nreset;        // asych active low 
+
+Clone Blocks 4:
+oh/spi/hdl/spi_slave.v@13:23
+   );
+
+   //parameters
+   parameter  UREGS = 13;                // total spi slave regs   
+   parameter  AW    = 32;                // addresss width
+   localparam PW    = (2*AW+40);         // packet width
+ 
+   //clk,reset, cfg
+   input 		clk;             // core clock
+   input 	        nreset;          // async active low reset
+   output [511:0] 	spi_regs;        // all registers for control
+

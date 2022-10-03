@@ -1,0 +1,73 @@
+Source Block: oh/elink/hdl/erx_io.v@124:164@HdlStmProcess
+   //###################################
+   //#SAMPLE AND HOLD DATA
+   //###################################
+
+   //(..and shuffle data for 104 bit packet)
+   always @ (posedge rx_lclk)
+     if(access)   
+       begin
+	  //pipelin burst (delay by one frame)
+	  burst                 <= burst_detect;	  
+	  //access
+	  rx_packet_lclk[0]     <= rx_sample[40];
+	  //write
+	  rx_packet_lclk[1]     <= rx_sample[41];
+	  //datamode
+	  rx_packet_lclk[3:2]   <= rx_sample[43:42];
+	  //ctrlmode
+	  rx_packet_lclk[7:4]   <= rx_sample[15:12];
+	  //dstaddr
+	  rx_packet_lclk[39:8]  <= {rx_sample[11:8],
+			             rx_sample[23:16],
+			             rx_sample[31:24],
+			             rx_sample[39:32],
+			             rx_sample[47:44]};
+	  //data
+	  rx_packet_lclk[71:40] <= {rx_sample[55:48],
+			              rx_sample[63:56],
+			              rx_sample[71:64],
+			              rx_sample[79:72]};	
+	  //srcaddr
+	  rx_packet_lclk[103:72]<= {rx_sample[87:80],
+			              rx_sample[95:88],
+			              rx_sample[103:96],
+			              rx_sample[111:104]
+				      };	
+     end
+
+   //###################################
+   //#SYNCHRONIZE TO SLOW CLK
+   //###################################
+ 
+
+Diff Content:
+- 135 	  rx_packet_lclk[0]     <= rx_sample[40];
+- 137 	  rx_packet_lclk[1]     <= rx_sample[41];
+- 139 	  rx_packet_lclk[3:2]   <= rx_sample[43:42];
+- 141 	  rx_packet_lclk[7:4]   <= rx_sample[15:12];
+- 143 	  rx_packet_lclk[39:8]  <= {rx_sample[11:8],
+- 144 			             rx_sample[23:16],
+- 145 			             rx_sample[31:24],
+- 146 			             rx_sample[39:32],
+- 147 			             rx_sample[47:44]};
+- 149 	  rx_packet_lclk[71:40] <= {rx_sample[55:48],
+- 150 			              rx_sample[63:56],
+- 151 			              rx_sample[71:64],
+- 152 			              rx_sample[79:72]};	
+- 154 	  rx_packet_lclk[103:72]<= {rx_sample[87:80],
+- 155 			              rx_sample[95:88],
+- 156 			              rx_sample[103:96],
+- 157 			              rx_sample[111:104]
+- 158 				      };	
+- 159      end
++ 135 	  rx_packet_lclk[0]     <= rx_sample[64];
++ 137 	  rx_packet_lclk[1]     <= rx_sample[65];
++ 139 	  rx_packet_lclk[3:2]   <= rx_sample[67:66];
++ 141 	  rx_packet_lclk[7:4]   <= rx_sample[103:100];
++ 147 	  rx_packet_lclk[39:8]  <= rx_sample[99:68];
++ 152 	  rx_packet_lclk[71:40] <= rx_sample[63:32];
++ 159 	  rx_packet_lclk[103:72]<= rx_sample[31:0];
++ 159        end
+
+Clone Blocks:

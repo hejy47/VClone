@@ -1,0 +1,108 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@76:86@HdlStmAssign
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+assign cache = 4'b0011;
+assign len = length;
+assign size = $clog2(DMA_DATA_WIDTH/8);
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+Diff Content:
+- 81 assign size = $clog2(DMA_DATA_WIDTH/8);
++ 81 assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
++ 81               DMA_DATA_WIDTH ==  512 ? 3'b110 :
++ 81               DMA_DATA_WIDTH ==  256 ? 3'b101 :
++ 81               DMA_DATA_WIDTH ==  128 ? 3'b100 :
++ 81               DMA_DATA_WIDTH ==   64 ? 3'b011 :
++ 81               DMA_DATA_WIDTH ==   32 ? 3'b010 :
++ 81               DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@80:90
+assign len = length;
+assign size = $clog2(DMA_DATA_WIDTH/8);
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+reg addr_valid_d1;
+reg last = 1'b0;
+
+
+Clone Blocks 2:
+hdl/library/axi_dmac/address_generator.v@81:91
+assign size = $clog2(DMA_DATA_WIDTH/8);
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+reg addr_valid_d1;
+reg last = 1'b0;
+
+// If we already asserted addr_valid we have to wait until it is accepted before
+
+Clone Blocks 3:
+hdl/library/axi_dmac/address_generator.v@75:85
+`include "inc_id.h"
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+assign cache = 4'b0011;
+assign len = length;
+assign size = $clog2(DMA_DATA_WIDTH/8);
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+
+Clone Blocks 4:
+hdl/library/axi_dmac/address_generator.v@78:88
+assign prot = 3'b000;
+assign cache = 4'b0011;
+assign len = length;
+assign size = $clog2(DMA_DATA_WIDTH/8);
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+reg addr_valid_d1;
+
+Clone Blocks 5:
+hdl/library/axi_dmac/address_generator.v@74:84
+
+`include "inc_id.h"
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+assign cache = 4'b0011;
+assign len = length;
+assign size = $clog2(DMA_DATA_WIDTH/8);
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+
+Clone Blocks 6:
+hdl/library/axi_dmac/address_generator.v@79:89
+assign cache = 4'b0011;
+assign len = length;
+assign size = $clog2(DMA_DATA_WIDTH/8);
+
+reg [LENGTH_WIDTH-1:0] length = 'h0;
+reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
+reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
+
+reg addr_valid_d1;
+reg last = 1'b0;
+

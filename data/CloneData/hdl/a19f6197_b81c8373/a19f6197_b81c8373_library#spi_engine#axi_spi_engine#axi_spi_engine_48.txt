@@ -1,0 +1,40 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@337:359@HdlStmIf
+        end
+end
+
+assign sync_ready = 1'b1;
+
+generate if (ASYNC_SPI_CLK) begin
+
+wire spi_reset;
+ad_rst i_spi_resetn (
+        .rst_async(up_sw_reset),
+        .clk(spi_clk),
+        .rstn(),
+        .rst(spi_reset)
+);
+assign spi_resetn = ~spi_reset;
+end else begin
+assign spi_resetn = ~up_sw_reset;
+end
+endgenerate
+
+/* Evaluates to true if FIFO level/room is 3/4 or above */
+`define axi_spi_engine_check_watermark(x, n) \
+        (x[n] == 1'b1 || x[n-1:n-2] == 2'b11)
+
+Diff Content:
+- 342 generate if (ASYNC_SPI_CLK) begin
+- 344 wire spi_reset;
+- 345 ad_rst i_spi_resetn (
+- 346         .rst_async(up_sw_reset),
+- 347         .clk(spi_clk),
+- 348         .rstn(),
+- 349         .rst(spi_reset)
+- 350 );
+- 351 assign spi_resetn = ~spi_reset;
+- 352 end else begin
+- 353 assign spi_resetn = ~up_sw_reset;
+- 354 end
+
+Clone Blocks:

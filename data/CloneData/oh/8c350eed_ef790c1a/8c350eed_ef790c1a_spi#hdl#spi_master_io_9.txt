@@ -1,0 +1,47 @@
+Source Block: oh/spi/hdl/spi_master_io.v@127:137@HdlStmAssign
+     else if(baud_match)       
+       tx_shiftreg[PW-1:0] <= {tx_shiftreg[PW-2:0],miso};
+
+   assign mosi = tx_shiftreg[PW-1];
+
+   assign rx_data[7:0] = tx_shiftreg[7:0];
+   
+   
+endmodule // spi_slave_io
+
+// Local Variables:
+
+Diff Content:
+- 132    assign rx_data[7:0] = tx_shiftreg[7:0];
++ 132    oh_par2ser  #(.PW(8),
++ 132 		 .SW(1))
++ 132    par2ser (// Outputs
++ 132 	    .dout	(mosi),           // serial output
++ 132 	    .access_out	(),
++ 132 	    .wait_out	(),
++ 132 	    .clk	(clk),
++ 132 	    .nreset	(nreset),         // async active low reset
++ 132 	    .din	(fifo_dout[7:0]), // 8 bit data from fifo
++ 132 	    .shift	(shift),          // shift on neg edge
++ 132 	    .datasize	(3'b111),         // 8 bits
++ 132 	    .load	(load_byte),      // load data from fifo
++ 132 	    .lsbfirst	(lsbfirst),       // serializer direction
++ 132 	    .fill	(miso),           // fill with slave data
++ 132 	    .wait_in	(1'b0)            // no wait
++ 132 	    );
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_master_io.v@125:135
+     if (tx_access)
+       tx_shiftreg[PW-1:0] <= tx_data[PW-1:0];
+     else if(baud_match)       
+       tx_shiftreg[PW-1:0] <= {tx_shiftreg[PW-2:0],miso};
+
+   assign mosi = tx_shiftreg[PW-1];
+
+   assign rx_data[7:0] = tx_shiftreg[7:0];
+   
+   
+endmodule // spi_slave_io
+

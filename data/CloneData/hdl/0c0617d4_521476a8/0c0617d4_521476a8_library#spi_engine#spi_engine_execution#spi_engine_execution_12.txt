@@ -1,0 +1,77 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@91:101@HdlIdDef
+
+localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
+                               DATA_WIDTH > 8  ? 4 : 3;
+
+localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
+localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+
+reg sclk_int = 1'b0;
+wire sdo_int_s;
+reg sdo_t_int = 1'b0;
+
+
+Diff Content:
+- 96 localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
++ 96   reg sclk_int = 1'b0;
++ 96   wire sdo_int_s;
++ 96   reg sdo_t_int = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@94:104
+
+localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
+localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+
+reg sclk_int = 1'b0;
+wire sdo_int_s;
+reg sdo_t_int = 1'b0;
+
+reg idle;
+
+reg [7:0] clk_div_counter = 'h00;
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@93:103
+                               DATA_WIDTH > 8  ? 4 : 3;
+
+localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
+localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+
+reg sclk_int = 1'b0;
+wire sdo_int_s;
+reg sdo_t_int = 1'b0;
+
+reg idle;
+
+
+Clone Blocks 3:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@87:98
+
+localparam REG_CLK_DIV = 2'b00;
+localparam REG_CONFIG = 2'b01;
+localparam REG_WORD_LENGTH = 2'b10;
+
+localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
+                               DATA_WIDTH > 8  ? 4 : 3;
+
+localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
+localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+
+reg sclk_int = 1'b0;
+
+Clone Blocks 4:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@90:100
+localparam REG_WORD_LENGTH = 2'b10;
+
+localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
+                               DATA_WIDTH > 8  ? 4 : 3;
+
+localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
+localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+
+reg sclk_int = 1'b0;
+wire sdo_int_s;
+reg sdo_t_int = 1'b0;
+

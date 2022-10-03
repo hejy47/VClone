@@ -1,0 +1,37 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@121:141@HdlStmProcess
+    end
+  end
+  endcase
+end
+
+always @(*) begin
+  case (state)
+  STATE_RESET: state_good = 1'b1;
+  STATE_WAIT_FOR_PHY: state_good = phy_ready;
+  STATE_CGS: state_good = &(cgs_ready | cfg_lanes_disable);
+  STATE_SYNCHRONIZED: state_good = ENABLE_FRAME_ALIGN_ERR_RESET ?
+                                   &(~frame_align_err_thresh_met | cfg_lanes_disable) :
+                                   1'b1;
+  default: state_good = 1'b0;
+  endcase
+end
+
+assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
+assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
+
+assign goto_next_state_s = good_cnt_limit_reached_s || (state == STATE_SYNCHRONIZED);
+
+Diff Content:
+- 126 always @(*) begin
+- 127   case (state)
+- 128   STATE_RESET: state_good = 1'b1;
+- 129   STATE_WAIT_FOR_PHY: state_good = phy_ready;
+- 130   STATE_CGS: state_good = &(cgs_ready | cfg_lanes_disable);
+- 131   STATE_SYNCHRONIZED: state_good = ENABLE_FRAME_ALIGN_ERR_RESET ?
+- 132                                    &(~frame_align_err_thresh_met | cfg_lanes_disable) :
+- 133                                    1'b1;
+- 134   default: state_good = 1'b0;
+- 135   endcase
+- 136 end
+
+Clone Blocks:

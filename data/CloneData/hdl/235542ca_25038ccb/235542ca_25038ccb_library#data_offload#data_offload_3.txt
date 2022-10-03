@@ -1,0 +1,32 @@
+Source Block: hdl/library/data_offload/data_offload.v@191:201@HdlIdDef
+  assign src_clk = s_axis_aclk;
+  assign dst_clk = m_axis_aclk;
+
+  // internal registers
+
+  reg [31:0] src_data_counter = 0;
+  reg        dst_mem_valid_d = 1'b0;
+
+  generate
+  if (TX_OR_RXN_PATH) begin
+    assign src_wr_last_s = s_axis_last;
+
+Diff Content:
+- 196   reg [31:0] src_data_counter = 0;
++ 196   reg [33:0] src_data_counter = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/data_offload/data_offload.v@192:202
+  assign dst_clk = m_axis_aclk;
+
+  // internal registers
+
+  reg [31:0] src_data_counter = 0;
+  reg        dst_mem_valid_d = 1'b0;
+
+  generate
+  if (TX_OR_RXN_PATH) begin
+    assign src_wr_last_s = s_axis_last;
+    assign src_wr_tkeep_s = s_axis_tkeep;
+

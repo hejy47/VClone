@@ -1,0 +1,49 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@101:111@HdlStmAssign
+   //########################################
+   //# PACKETIZER
+   //########################################
+
+   //detect selection based on valid pattern edge
+   assign data_select[7:0] = io_valid_reg[7:0] ^ {io_valid_reg[7:1],1'b1};
+
+   integer 	      i;   
+   always @ (posedge rx_clk)
+     for (i=0;i<8;i=i+1)
+       shiftreg[i*8+:8] <= data_select[i] ? mux_data[i*8+:8] : shiftreg[i*8+:8];
+
+Diff Content:
+- 106    assign data_select[7:0] = io_valid_reg[7:0] ^ {io_valid_reg[7:1],1'b1};
++ 106    assign data_select[7:0] = reload ? valid_input[7:0] :
++ 106 			              valid_next[7:0] & ~io_valid[7:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mrx_io.v@104:116
+
+   //detect selection based on valid pattern edge
+   assign data_select[7:0] = io_valid_reg[7:0] ^ {io_valid_reg[7:1],1'b1};
+
+   integer 	      i;   
+   always @ (posedge rx_clk)
+     for (i=0;i<8;i=i+1)
+       shiftreg[i*8+:8] <= data_select[i] ? mux_data[i*8+:8] : shiftreg[i*8+:8];
+   
+   //########################################
+   //# SYNCHRONIZERS
+   //########################################
+
+
+Clone Blocks 2:
+oh/src/mio/hdl/mrx_io.v@103:113
+   //########################################
+
+   //detect selection based on valid pattern edge
+   assign data_select[7:0] = io_valid_reg[7:0] ^ {io_valid_reg[7:1],1'b1};
+
+   integer 	      i;   
+   always @ (posedge rx_clk)
+     for (i=0;i<8;i=i+1)
+       shiftreg[i*8+:8] <= data_select[i] ? mux_data[i*8+:8] : shiftreg[i*8+:8];
+   
+   //########################################
+

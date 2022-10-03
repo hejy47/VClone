@@ -1,0 +1,143 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/SDRAM_Controller_v.v@144:154@HdlIdDef
+
+   // Indicate the need to refresh when the counter is 2048,
+   // Force a refresh when the counter is 4096 - (if a refresh is forced, 
+   // multiple refresshes will be forced until the counter is below 2048
+   wire pending_refresh = startup_refresh_count[11];  
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+   wire [1:0]  addr_bank;
+
+Diff Content:
+- 149    wire forcing_refresh = startup_refresh_count[12];  
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/attic/PapPro-sdram_verilog_v0.1/SDRAM_Controller_v.v@142:152
+
+   // Indicate the need to refresh when the counter is 2048,
+   // Force a refresh when the counter is 4096 - (if a refresh is forced, 
+   // multiple refresshes will be forced until the counter is below 2048
+   wire pending_refresh = startup_refresh_count[11];  
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+   wire [1:0]  addr_bank;
+
+Clone Blocks 2:
+amiga2000-gfxcard/z2-minispartan/SDRAM_Controller_v.v@147:157
+   // multiple refresshes will be forced until the counter is below 2048
+   wire pending_refresh = startup_refresh_count[11];  
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+   wire [1:0]  addr_bank;
+
+   // shift register to hold the DQM bits
+   //parameter dqm_sr_high = 1;
+
+Clone Blocks 3:
+amiga2000-gfxcard/attic/PapPro-sdram_verilog_v0.1/SDRAM_Controller_v.v@147:157
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+   wire [1:0]  addr_bank;
+
+   // shift register to hold the DQM bits
+   parameter dqm_sr_high = 3;
+   reg [dqm_sr_high:0] dqm_sr = 4'b0000; // an extra two bits in case CAS=3
+   
+
+Clone Blocks 4:
+amiga2000-gfxcard/z2-minispartan/SDRAM_Controller_v.v@143:153
+   reg  [13:0] startup_refresh_count = startup_refresh_max-sdram_startup_cycles;
+
+   // Indicate the need to refresh when the counter is 2048,
+   // Force a refresh when the counter is 4096 - (if a refresh is forced, 
+   // multiple refresshes will be forced until the counter is below 2048
+   wire pending_refresh = startup_refresh_count[11];  
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+
+Clone Blocks 5:
+amiga2000-gfxcard/z2-minispartan/SDRAM_Controller_v.v@148:158
+   wire pending_refresh = startup_refresh_count[11];  
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+   wire [1:0]  addr_bank;
+
+   // shift register to hold the DQM bits
+   //parameter dqm_sr_high = 1;
+   //reg [dqm_sr_high:0] dqm_sr = 2'b11; // an extra two bits in case CAS=3
+
+Clone Blocks 6:
+amiga2000-gfxcard/attic/PapPro-sdram_verilog_v0.1/SDRAM_Controller_v.v@145:155
+   // multiple refresshes will be forced until the counter is below 2048
+   wire pending_refresh = startup_refresh_count[11];  
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+   wire [1:0]  addr_bank;
+
+   // shift register to hold the DQM bits
+   parameter dqm_sr_high = 3;
+
+Clone Blocks 7:
+amiga2000-gfxcard/attic/PapPro-sdram_verilog_v0.1/SDRAM_Controller_v.v@141:151
+   reg  [13:0] startup_refresh_count = startup_refresh_max-sdram_startup_cycles;
+
+   // Indicate the need to refresh when the counter is 2048,
+   // Force a refresh when the counter is 4096 - (if a refresh is forced, 
+   // multiple refresshes will be forced until the counter is below 2048
+   wire pending_refresh = startup_refresh_count[11];  
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+
+Clone Blocks 8:
+amiga2000-gfxcard/attic/PapPro-sdram_verilog_v0.1/SDRAM_Controller_v.v@146:156
+   wire pending_refresh = startup_refresh_count[11];  
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+   wire [1:0]  addr_bank;
+
+   // shift register to hold the DQM bits
+   parameter dqm_sr_high = 3;
+   reg [dqm_sr_high:0] dqm_sr = 4'b0000; // an extra two bits in case CAS=3
+
+Clone Blocks 9:
+amiga2000-gfxcard/z2-minispartan/SDRAM_Controller_v.v@149:159
+   wire forcing_refresh = startup_refresh_count[12];  
+
+   // The incoming address is split into these three values
+   wire [12:0] addr_row;
+   wire [12:0] addr_col;
+   wire [1:0]  addr_bank;
+
+   // shift register to hold the DQM bits
+   //parameter dqm_sr_high = 1;
+   //reg [dqm_sr_high:0] dqm_sr = 2'b11; // an extra two bits in case CAS=3
+   
+

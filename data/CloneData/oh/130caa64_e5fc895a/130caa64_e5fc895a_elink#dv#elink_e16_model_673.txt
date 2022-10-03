@@ -1,0 +1,45 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4968:4978@HdlStmAssign
+   assign mesh_req = access_reg & route_out & ((multicast_tran & ~cfg_multicast_dis) |
+					       ~multicast_tran);
+
+   //# Wait
+   assign mesh_ack_n    = mesh_req & ~mesh_grant;
+   assign mesh_ack      = mesh_req &  mesh_grant;
+   assign mesh_wait_int = mesh_req & ~mesh_last_tran | mesh_ack_n;
+
+   //############################################
+   //# Transaction launcher state machine
+   //############################################
+
+Diff Content:
+- 4973    assign mesh_ack      = mesh_req &  mesh_grant;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4969:4979
+					       ~multicast_tran);
+
+   //# Wait
+   assign mesh_ack_n    = mesh_req & ~mesh_grant;
+   assign mesh_ack      = mesh_req &  mesh_grant;
+   assign mesh_wait_int = mesh_req & ~mesh_last_tran | mesh_ack_n;
+
+   //############################################
+   //# Transaction launcher state machine
+   //############################################
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4967:4977
+   //# Request
+   assign mesh_req = access_reg & route_out & ((multicast_tran & ~cfg_multicast_dis) |
+					       ~multicast_tran);
+
+   //# Wait
+   assign mesh_ack_n    = mesh_req & ~mesh_grant;
+   assign mesh_ack      = mesh_req &  mesh_grant;
+   assign mesh_wait_int = mesh_req & ~mesh_last_tran | mesh_ack_n;
+
+   //############################################
+   //# Transaction launcher state machine
+

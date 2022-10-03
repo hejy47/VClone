@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@503:513@HdlStmAssign
+      old_comp_high_a <= comp_high_a;
+    end
+  end
+
+  assign passthrough_high_a_s = !old_comp_high_a & comp_high_a & first_a_h_trigger;
+  assign passthrough_low_a_s = old_comp_high_a & !comp_high_a & first_a_l_trigger;
+  assign comp_low_a_s = !comp_high_a;
+
+  always @(posedge clk) begin
+    if (data_valid_b == 1'b1) begin
+      hyst_b_high_limit <= limit_b_cmp + hysteresis_b[DW:0];
+
+Diff Content:
+- 508   assign passthrough_low_a_s = old_comp_high_a & !comp_high_a & first_a_l_trigger;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@504:514
+    end
+  end
+
+  assign passthrough_high_a_s = !old_comp_high_a & comp_high_a & first_a_h_trigger;
+  assign passthrough_low_a_s = old_comp_high_a & !comp_high_a & first_a_l_trigger;
+  assign comp_low_a_s = !comp_high_a;
+
+  always @(posedge clk) begin
+    if (data_valid_b == 1'b1) begin
+      hyst_b_high_limit <= limit_b_cmp + hysteresis_b[DW:0];
+      hyst_b_low_limit  <= limit_b_cmp - hysteresis_b[DW:0];
+
+Clone Blocks 2:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@502:512
+      end
+      old_comp_high_a <= comp_high_a;
+    end
+  end
+
+  assign passthrough_high_a_s = !old_comp_high_a & comp_high_a & first_a_h_trigger;
+  assign passthrough_low_a_s = old_comp_high_a & !comp_high_a & first_a_l_trigger;
+  assign comp_low_a_s = !comp_high_a;
+
+  always @(posedge clk) begin
+    if (data_valid_b == 1'b1) begin
+

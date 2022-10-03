@@ -1,0 +1,59 @@
+Source Block: oh/elink/hdl/erx_io.v@107:117@HdlIdDef
+   //#############################
+   //# Deserializer instantiations
+   //#############################
+
+   wire [63:0]   rx_data_des;
+   wire [7:0]    rx_frame_des;
+   wire          rx_lclk_sn = ~rx_lclk_s;//TODO: Not important, only for MEMORY_QDR mode?
+   
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+     begin : gen_serdes
+
+Diff Content:
+- 112    wire [7:0]    rx_frame_des;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_io.v@108:118
+   //# Deserializer instantiations
+   //#############################
+
+   wire [63:0]   rx_data_des;
+   wire [7:0]    rx_frame_des;
+   wire          rx_lclk_sn = ~rx_lclk_s;//TODO: Not important, only for MEMORY_QDR mode?
+   
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+     begin : gen_serdes
+        ISERDESE2 
+
+Clone Blocks 2:
+oh/elink/hdl/erx_io.v@110:120
+
+   wire [63:0]   rx_data_des;
+   wire [7:0]    rx_frame_des;
+   wire          rx_lclk_sn = ~rx_lclk_s;//TODO: Not important, only for MEMORY_QDR mode?
+   
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+     begin : gen_serdes
+        ISERDESE2 
+          #(
+            .DATA_RATE("DDR"),  // DDR, SDR
+
+Clone Blocks 3:
+oh/elink/hdl/erx_io.v@106:116
+
+   //#############################
+   //# Deserializer instantiations
+   //#############################
+
+   wire [63:0]   rx_data_des;
+   wire [7:0]    rx_frame_des;
+   wire          rx_lclk_sn = ~rx_lclk_s;//TODO: Not important, only for MEMORY_QDR mode?
+   
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+

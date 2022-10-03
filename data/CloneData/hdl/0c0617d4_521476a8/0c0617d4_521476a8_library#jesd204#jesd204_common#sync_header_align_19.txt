@@ -1,0 +1,35 @@
+Source Block: hdl/library/jesd204/jesd204_common/sync_header_align.v@119:135@HdlStmProcess
+        end
+      end
+  endcase
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    state <= STATE_SH_HUNT;
+  end else begin
+    state <= next_state;
+  end
+end
+
+assign o_block_sync = state[BIT_SH_LOCK];
+assign i_slip = state[BIT_SH_SLIP];
+
+endmodule
+
+Diff Content:
+- 124 always @(posedge clk) begin
+- 125   if (reset == 1'b1) begin
+- 126     state <= STATE_SH_HUNT;
+- 127   end else begin
+- 128     state <= next_state;
+- 130 end
++ 128       STATE_SH_LOCK:
++ 128         if (~valid_header) begin
++ 128           if (header_icnt[LOG2_RX_THRESH_SH_ERR]) begin
++ 128             next_state = STATE_SH_HUNT;
++ 128           end
++ 128         end
++ 128     endcase
+
+Clone Blocks:

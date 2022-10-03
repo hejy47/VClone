@@ -1,0 +1,33 @@
+Source Block: hdl/library/util_wfifo/util_wfifo.v@162:172@HdlIdDef
+
+  always @(posedge dma_clk) begin
+    dma_wr_int <= fifo_rd;
+  end
+  
+  genvar s;
+  generate
+  for (s = 0; s < DMA_DATA_WIDTH; s = s + 1) begin: g_rdata
+  assign dma_wdata_s[s] = fifo_rdata[(DMA_DATA_WIDTH-1)-s];
+  end
+  endgenerate
+
+Diff Content:
+- 167   genvar s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_wfifo/util_wfifo.v@164:176
+    dma_wr_int <= fifo_rd;
+  end
+  
+  genvar s;
+  generate
+  for (s = 0; s < DMA_DATA_WIDTH; s = s + 1) begin: g_rdata
+  assign dma_wdata_s[s] = fifo_rdata[(DMA_DATA_WIDTH-1)-s];
+  end
+  endgenerate
+
+  // reset & resetn
+
+  always @(posedge dma_clk or posedge adc_rst) begin
+

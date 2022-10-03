@@ -1,0 +1,27 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@251:266@HdlStmProcess
+        cmd_fifo_almost_empty
+};
+
+assign up_irq_pending = up_irq_mask & up_irq_source;
+
+always @(posedge clk) begin
+        if (rstn == 1'b0)
+                irq <= 1'b0;
+        else
+                irq <= |up_irq_pending;
+end
+
+always @(posedge clk) begin
+        if (rstn == 1'b0) begin
+                up_wack_ff <= 1'b0;
+                up_scratch <= 'h00;
+
+Diff Content:
+- 256 always @(posedge clk) begin
+- 257         if (rstn == 1'b0)
+- 258                 irq <= 1'b0;
+- 259         else
+- 260                 irq <= |up_irq_pending;
+- 261 end
+
+Clone Blocks:

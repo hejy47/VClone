@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@86:96@HdlIdDef
+reg do_enable = 1'b0;
+
+wire enabled_dest;
+wire enabled_src;
+
+wire enabled_all;
+wire disabled_all;
+
+assign enabled_all = req_enabled & enabled_src & enabled_dest;
+assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+
+
+Diff Content:
+- 91 wire enabled_all;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@84:94
+reg needs_reset = 1'b0;
+reg do_reset = 1'b0;
+reg do_enable = 1'b0;
+
+wire enabled_dest;
+wire enabled_src;
+
+wire enabled_all;
+wire disabled_all;
+
+assign enabled_all = req_enabled & enabled_src & enabled_dest;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@87:97
+
+wire enabled_dest;
+wire enabled_src;
+
+wire enabled_all;
+wire disabled_all;
+
+assign enabled_all = req_enabled & enabled_src & enabled_dest;
+assign disabled_all = ~(req_enabled | enabled_src | enabled_dest);
+
+assign req_enable = do_enable;
+

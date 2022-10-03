@@ -1,0 +1,21 @@
+Source Block: oh/src/mio/hdl/mtx_io.v@52:66@HdlStmProcess
+       io_valid_reg[7:0] <= 'b0;
+
+   assign transfer_active = |io_valid_reg[7:0];
+   
+   //pipeline access signal
+   always @ (posedge io_clk or negedge io_nreset)
+     if(!io_nreset)
+       tx_access <= 1'b0;   
+     else
+       tx_access <= transfer_active;
+   
+   //########################################
+   //# SHIFT REGISTER  (SHIFT DOWN)
+   //########################################
+
+
+Diff Content:
++ 61    assign io_wait = tx_wait_sync | ~reload;
+
+Clone Blocks:

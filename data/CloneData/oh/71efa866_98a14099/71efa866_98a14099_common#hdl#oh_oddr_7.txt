@@ -1,0 +1,33 @@
+Source Block: oh/common/hdl/oh_oddr.v@34:43@HdlStmAssign
+     q2[DW-1:0] <= din2[DW-1:0];
+  
+   always @ (negedge clk)
+     q2_reg[DW-1:0] <= q2[DW-1:0];
+       
+   assign q = clk ? q1[DW-1:0] : q2_reg[DW-1:0];
+      
+endmodule // oh_oddr
+
+
+
+Diff Content:
+- 39    assign q = clk ? q1[DW-1:0] : q2_reg[DW-1:0];
++ 39    assign out[DW-1:0] = clk ? q1_sl[DW-1:0] : 
++ 39 	                      q2_sh[DW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_oddr.v@31:42
+     q1[DW-1:0] <= din1[DW-1:0];
+
+   always @ (posedge clk)
+     q2[DW-1:0] <= din2[DW-1:0];
+  
+   always @ (negedge clk)
+     q2_reg[DW-1:0] <= q2[DW-1:0];
+       
+   assign q = clk ? q1[DW-1:0] : q2_reg[DW-1:0];
+      
+endmodule // oh_oddr
+
+

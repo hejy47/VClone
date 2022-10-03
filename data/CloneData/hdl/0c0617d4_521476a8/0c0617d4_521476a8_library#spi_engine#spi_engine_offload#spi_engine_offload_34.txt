@@ -1,0 +1,91 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@272:288@HdlStmProcess
+  end else if (cmd_ready == 1'b1) begin
+    spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
+  end
+end
+
+always @(posedge spi_clk) begin
+  if (spi_active == 1'b0) begin
+    spi_sdo_rd_addr <= 'h00;
+  end else if (sdo_data_ready == 1'b1) begin
+    spi_sdo_rd_addr <= spi_sdo_rd_addr + 1'b1;
+  end
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1)
+    ctrl_cmd_wr_addr <= 'h00;
+  else if (ctrl_cmd_wr_en == 1'b1)
+
+Diff Content:
+- 277 always @(posedge spi_clk) begin
+- 278   if (spi_active == 1'b0) begin
+- 279     spi_sdo_rd_addr <= 'h00;
+- 280   end else if (sdo_data_ready == 1'b1) begin
+- 281     spi_sdo_rd_addr <= spi_sdo_rd_addr + 1'b1;
+- 283 end
++ 281   always @(posedge ctrl_clk) begin
++ 281     if (ctrl_sdo_wr_en == 1'b1)
++ 281       sdo_mem[ctrl_sdo_wr_addr] <= ctrl_sdo_wr_data;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad5766/axi_ad5766.v@242:258
+          spi_active <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge spi_clk) begin
+    if (cmd_valid == 1'b0) begin
+      spi_cmd_rd_addr <= 'h00;
+    end else if (cmd_ready == 1'b1) begin
+      spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
+    end
+  end
+
+  always @(posedge spi_clk) begin
+    if (spi_active == 1'b0) begin
+      spi_sdo_rd_addr <= 'h00;
+    end else if (sdo_data_ready == 1'b1) begin
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@264:280
+      spi_active <= 1'b0;
+    end
+  end
+end
+
+always @(posedge spi_clk) begin
+  if (cmd_valid == 1'b0) begin
+    spi_cmd_rd_addr <= 'h00;
+  end else if (cmd_ready == 1'b1) begin
+    spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
+  end
+end
+
+always @(posedge spi_clk) begin
+  if (spi_active == 1'b0) begin
+    spi_sdo_rd_addr <= 'h00;
+  end else if (sdo_data_ready == 1'b1) begin
+
+Clone Blocks 3:
+hdl/library/axi_ad5766/axi_ad5766.v@250:266
+    end else if (cmd_ready == 1'b1) begin
+      spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
+    end
+  end
+
+  always @(posedge spi_clk) begin
+    if (spi_active == 1'b0) begin
+      spi_sdo_rd_addr <= 'h00;
+    end else if (sdo_data_ready == 1'b1) begin
+      spi_sdo_rd_addr <= spi_sdo_rd_addr + 1'b1;
+    end
+  end
+
+  always @(posedge ctrl_clk) begin
+    if (ctrl_cmd_wr_en == 1'b1) begin
+      cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+    end
+

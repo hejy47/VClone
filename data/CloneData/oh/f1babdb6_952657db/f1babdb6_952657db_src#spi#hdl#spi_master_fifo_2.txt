@@ -1,0 +1,22 @@
+Source Block: oh/src/spi/hdl/spi_master_fifo.v@80:93@HdlStmAssign
+     
+   //epiphany mode works in msb or lsb mode
+   //data mode up to 64 bits works in lsb mode
+   //for msb transfer, use byte writes only
+
+   assign tx_data[PW-1:0] = emode ? packet_in[PW-1:0] :
+			    {{(40){1'b0}},
+			     srcaddr_in[AW-1:0], 
+			     data_in[AW-1:0]};
+   
+   //##################################
+   //# FIFO PACKET WRITE
+   //##################################
+
+
+Diff Content:
+- 85    assign tx_data[PW-1:0] = emode ? packet_in[PW-1:0] :
+- 86 			    {{(40){1'b0}},
++ 86    assign tx_data[PW-1:0] = {{(40){1'b0}},
+
+Clone Blocks:

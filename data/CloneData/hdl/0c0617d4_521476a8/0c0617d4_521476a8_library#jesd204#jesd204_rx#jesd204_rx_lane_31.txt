@@ -1,0 +1,101 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane.v@134:166@HdlStmFor
+assign status_frame_align = frame_align;
+
+genvar i;
+generate
+
+for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
+  assign char[i] = phy_data[i*8+7:i*8];
+  assign char_is_valid[i] = ~(phy_notintable[i] | phy_disperr[i]);
+
+  always @(*) begin
+    char_is_error[i] = ~char_is_valid[i];
+
+    char_is_cgs[i] = 1'b0;
+    charisk28[i] = 1'b0;
+    unexpected_char[i] = 1'b0;
+
+    if (phy_charisk[i] == 1'b1 && char_is_valid[i] == 1'b1) begin
+      if (char[i][4:0] == 'd28) begin
+        charisk28[i] = 1'b1;
+        if (char[i][7:5] == 'd5) begin
+          char_is_cgs[i] = 1'b1;
+        end
+      end else begin
+        unexpected_char[i] = 1'b1;
+      end
+    end
+  end
+end
+endgenerate
+
+always @(posedge clk) begin
+  if (cgs_ready == 1'b1) begin
+    /*
+
+Diff Content:
+- 139 for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
+- 140   assign char[i] = phy_data[i*8+7:i*8];
+- 141   assign char_is_valid[i] = ~(phy_notintable[i] | phy_disperr[i]);
+- 143   always @(*) begin
+- 144     char_is_error[i] = ~char_is_valid[i];
+- 146     char_is_cgs[i] = 1'b0;
+- 147     charisk28[i] = 1'b0;
+- 148     unexpected_char[i] = 1'b0;
+- 150     if (phy_charisk[i] == 1'b1 && char_is_valid[i] == 1'b1) begin
+- 151       if (char[i][4:0] == 'd28) begin
+- 152         charisk28[i] = 1'b1;
+- 153         if (char[i][7:5] == 'd5) begin
+- 154           char_is_cgs[i] = 1'b1;
+- 156       end else begin
+- 157         unexpected_char[i] = 1'b1;
+- 161 end
++ 154   localparam MAX_DATA_PATH_WIDTH = 8;
++ 154   localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
++ 154   wire [7:0] char[0:DATA_PATH_WIDTH-1];
++ 154   wire [DATA_PATH_WIDTH-1:0] char_is_valid;
++ 154   reg [DATA_PATH_WIDTH-1:0] char_is_cgs = 1'b0;        // K28.5 /K/
++ 154   reg [DATA_PATH_WIDTH-1:0] char_is_error = 1'b0;
++ 154   reg [DATA_PATH_WIDTH-1:0] charisk28 = 4'b0000;
++ 154   wire cgs_beat_is_cgs = &char_is_cgs;
++ 154   wire cgs_beat_has_error = |char_is_error;
++ 154   reg ifs_ready = 1'b0;
++ 154   reg [2:0] frame_align = 'h00;
++ 154   reg [2:0] frame_align_int;
++ 154   wire [DATA_PATH_WIDTH*8-1:0] phy_data_s;
++ 154   wire [DATA_PATH_WIDTH-1:0] charisk28_aligned_s;
++ 154   wire [DATA_PATH_WIDTH*8-1:0] data_aligned_s;
++ 154   wire [DATA_PATH_WIDTH-1:0] charisk28_aligned;
++ 154   wire [DATA_PATH_WIDTH*8-1:0] data_aligned;
++ 154   wire [DATA_PATH_WIDTH*8-1:0] data_replaced;
++ 154   wire [DATA_PATH_WIDTH*8-1:0] data_scrambled_s;
++ 154   wire [DATA_PATH_WIDTH*8-1:0] data_scrambled;
++ 154   reg  [DATA_PATH_WIDTH-1:0] unexpected_char;
++ 154   reg  [DATA_PATH_WIDTH-1:0] phy_char_err;
++ 154   wire ilas_monitor_reset_s;
++ 154   wire ilas_monitor_reset;
++ 154   wire buffer_ready_n_s;
++ 154   reg  [DPW_LOG2:0] jj;
++ 154   reg  align_found;
++ 154   assign status_ifs_ready = ifs_ready;
++ 154   assign status_frame_align = frame_align;
++ 154   genvar i;
++ 154   generate
++ 154   for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
++ 154     assign char[i] = phy_data[i*8+7:i*8];
++ 154     assign char_is_valid[i] = ~(phy_notintable[i] | phy_disperr[i]);
++ 154     always @(*) begin
++ 154       char_is_error[i] = ~char_is_valid[i];
++ 154       char_is_cgs[i] = 1'b0;
++ 154       charisk28[i] = 1'b0;
++ 154       unexpected_char[i] = 1'b0;
++ 154       if (phy_charisk[i] == 1'b1 && char_is_valid[i] == 1'b1) begin
++ 154         if (char[i][4:0] == 'd28) begin
++ 154           charisk28[i] = 1'b1;
++ 154           if (char[i][7:5] == 'd5) begin
++ 154             char_is_cgs[i] = 1'b1;
++ 154           end
++ 154         end else begin
++ 154           unexpected_char[i] = 1'b1;
+
+Clone Blocks:

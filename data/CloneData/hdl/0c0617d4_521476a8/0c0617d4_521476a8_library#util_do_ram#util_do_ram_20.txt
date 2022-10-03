@@ -1,0 +1,75 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@115:128@HdlStmProcess
+    wr_request_ready <= 1'b0;
+  else if (wr_response_eot)
+    wr_request_ready <= 1'b1;
+end
+
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+
+Diff Content:
+- 120 always @(posedge s_axis_aclk) begin
+- 121   if (wr_request_valid & wr_request_ready)
+- 122     wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
++ 122   localparam RAM_LATENCY = 2;
++ 122   localparam SRC_ADDR_ALIGN = $clog2(SRC_DATA_WIDTH/8);
++ 122   localparam DST_ADDR_ALIGN = $clog2(DST_DATA_WIDTH/8);
++ 122   localparam SRC_ADDRESS_WIDTH = LENGTH_WIDTH - SRC_ADDR_ALIGN;
++ 122   localparam DST_ADDRESS_WIDTH = LENGTH_WIDTH - DST_ADDR_ALIGN;
++ 122   wire  wr_enable;
++ 122   wire  [DST_DATA_WIDTH-1:0] rd_data;
++ 122   wire  [1:0] rd_fifo_room;
++ 122   wire        rd_enable;
++ 122   wire        rd_last_beat;
++ 122   wire        rd_fifo_s_ready;
++ 122   wire        rd_fifo_s_valid;
++ 122   reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
++ 122   reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
++ 122   reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
++ 122   reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
++ 122   reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
++ 122   reg rd_pending = 1'b0;
++ 122   always @(posedge s_axis_aclk) begin
++ 122     if (~s_axis_aresetn)
++ 122       wr_request_ready <= 1'b1;
++ 122     else if (wr_request_valid)
++ 122       wr_request_ready <= 1'b0;
++ 122     else if (wr_response_eot)
++ 122       wr_request_ready <= 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_do_ram/util_do_ram.v@120:130
+always @(posedge s_axis_aclk) begin
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable)
+    s_axis_ready <= 1'b0;
+
+Clone Blocks 2:
+hdl/library/util_do_ram/util_do_ram.v@121:131
+  if (wr_request_valid & wr_request_ready)
+    wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable)
+    s_axis_ready <= 1'b0;
+  else if (wr_request_valid & wr_request_ready)
+

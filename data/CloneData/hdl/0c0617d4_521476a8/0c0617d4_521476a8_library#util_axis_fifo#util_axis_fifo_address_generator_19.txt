@@ -1,0 +1,73 @@
+Source Block: hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@168:178@HdlStmAssign
+// s_axis_ready - FIFO is always ready, unless it's full
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
+assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
+assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
+assign s_axis_ready = ~s_axis_full;
+assign s_axis_room = ~s_axis_fifo_fill;
+
+//------------------------------------------------------------------------------
+
+Diff Content:
+- 173 assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@167:177
+// s_axis_full  - FIFO is full if next write pointer equal to read pointer
+// s_axis_ready - FIFO is always ready, unless it's full
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
+assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
+assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
+assign s_axis_ready = ~s_axis_full;
+assign s_axis_room = ~s_axis_fifo_fill;
+
+
+Clone Blocks 2:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@169:179
+//
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
+assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
+assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
+assign s_axis_ready = ~s_axis_full;
+assign s_axis_room = ~s_axis_fifo_fill;
+
+//------------------------------------------------------------------------------
+// FIFO read logic - downstream
+
+Clone Blocks 3:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@171:181
+
+wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
+assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
+assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
+assign s_axis_ready = ~s_axis_full;
+assign s_axis_room = ~s_axis_fifo_fill;
+
+//------------------------------------------------------------------------------
+// FIFO read logic - downstream
+//
+// m_axis_empty - FIFO is empty if read pointer equal to write pointer
+
+Clone Blocks 4:
+hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@170:180
+//------------------------------------------------------------------------------
+
+wire [ADDRESS_WIDTH:0] s_axis_fifo_fill = s_axis_waddr_reg - s_axis_raddr_reg;
+assign s_axis_full = (s_axis_fifo_fill == {ADDRESS_WIDTH{1'b1}});
+assign s_axis_almost_full = s_axis_fifo_fill > {1'b0, ~ALMOST_FULL_THRESHOLD};
+assign s_axis_ready = ~s_axis_full;
+assign s_axis_room = ~s_axis_fifo_fill;
+
+//------------------------------------------------------------------------------
+// FIFO read logic - downstream
+//
+

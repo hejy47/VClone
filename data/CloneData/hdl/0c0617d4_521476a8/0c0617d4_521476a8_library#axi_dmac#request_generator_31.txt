@@ -1,0 +1,184 @@
+Source Block: hdl/library/axi_dmac/request_generator.v@167:232@HdlStmProcess
+ *
+ * Completion requests are generated for every segment that is
+ * consumed/ignored. These are handled by the response_manager once the
+ * interrupted segment got transferred to the destination.
+ */
+always @(*) begin
+  nx_state = state;
+  nx_completion_req_valid = 0;
+  case (state)
+    STATE_IDLE: begin
+      if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
+        nx_state = STATE_REWIND_ID;
+      end else if (req_valid == 1'b1) begin
+        nx_state = STATE_GEN_ID;
+      end
+    end
+    STATE_GEN_ID: begin
+      if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
+        nx_state = STATE_REWIND_ID;
+      end else if (eot == 1'b1 && incr_en == 1'b1) begin
+        nx_state = STATE_IDLE;
+      end
+    end
+    STATE_REWIND_ID: begin
+      if (transfer_id_match) begin
+        if (rew_req_xlast) begin
+          nx_state = STATE_IDLE;
+        end else begin
+          nx_state = STATE_CONSUME;
+        end
+      end else begin
+        if (rew_req_xlast) begin
+          nx_state = STATE_GEN_ID;
+        end else if (cur_req_xlast) begin
+          nx_state = STATE_IDLE;
+          nx_completion_req_valid = 1;
+        end else begin
+          nx_state = STATE_CONSUME;
+          nx_completion_req_valid = 1;
+        end
+      end
+    end
+    STATE_CONSUME: begin
+      if (req_valid) begin
+        nx_completion_req_valid = 1;
+        nx_state = STATE_WAIT_LAST;
+      end
+    end
+    STATE_WAIT_LAST:begin
+      if (cur_req_xlast) begin
+        nx_state = STATE_IDLE;
+      end else begin
+        nx_state = STATE_CONSUME;
+      end
+    end
+
+    default: begin
+      nx_state = STATE_IDLE;
+    end
+  endcase
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    state <= STATE_IDLE;
+  end else begin
+
+Diff Content:
+- 172 always @(*) begin
+- 173   nx_state = state;
+- 174   nx_completion_req_valid = 0;
+- 175   case (state)
+- 176     STATE_IDLE: begin
+- 177       if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
+- 178         nx_state = STATE_REWIND_ID;
+- 179       end else if (req_valid == 1'b1) begin
+- 180         nx_state = STATE_GEN_ID;
+- 181       end
+- 183     STATE_GEN_ID: begin
+- 184       if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
+- 185         nx_state = STATE_REWIND_ID;
+- 186       end else if (eot == 1'b1 && incr_en == 1'b1) begin
+- 187         nx_state = STATE_IDLE;
+- 189     end
+- 190     STATE_REWIND_ID: begin
+- 191       if (transfer_id_match) begin
+- 192         if (rew_req_xlast) begin
+- 195           nx_state = STATE_CONSUME;
+- 197       end else begin
+- 198         if (rew_req_xlast) begin
+- 199           nx_state = STATE_GEN_ID;
+- 200         end else if (cur_req_xlast) begin
+- 201           nx_state = STATE_IDLE;
+- 205           nx_completion_req_valid = 1;
+- 208     end
+- 209     STATE_CONSUME: begin
+- 210       if (req_valid) begin
+- 211         nx_completion_req_valid = 1;
+- 212         nx_state = STATE_WAIT_LAST;
+- 213       end
+- 214     end
+- 215     STATE_WAIT_LAST:begin
+- 216       if (cur_req_xlast) begin
+- 218       end else begin
+- 219         nx_state = STATE_CONSUME;
+- 221     end
+- 223     default: begin
+- 224       nx_state = STATE_IDLE;
+- 226   endcase
+- 227 end
++ 181   always @(posedge clk) begin
++ 181     if (resetn == 1'b0) begin
++ 181       cur_transfer_id <= 1'b0;
++ 181     end else if (req_valid == 1'b1 && req_ready == 1'b1) begin
++ 181       cur_transfer_id <= ~cur_transfer_id;
++ 187   end
++ 187   /*
++ 187    * Once rewind request is received we need to stop incrementing the burst ID.
++ 187    *
++ 187    * If the current segment matches the segment that was interrupted and
++ 187    * if it was a last segment we ignore consecutive segments until the last
++ 187    * segment is received, in other case we can jump to the next segment.
++ 187    *
++ 187    * If the current segment is newer than the one got interrupted and the
++ 187    * interrupted one was a last segment we need to replay the current
++ 187    * segment with the adjusted burst ID. If the interrupted segment was not last
++ 187    * we need to consume/ignore all segments until a last segment is received.
++ 187    *
++ 187    * Completion requests are generated for every segment that is
++ 187    * consumed/ignored. These are handled by the response_manager once the
++ 187    * interrupted segment got transferred to the destination.
++ 187    */
++ 187   always @(*) begin
++ 187     nx_state = state;
++ 187     nx_completion_req_valid = 0;
++ 187     case (state)
++ 187       STATE_IDLE: begin
++ 187         if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
++ 187           nx_state = STATE_REWIND_ID;
++ 187         end else if (req_valid == 1'b1) begin
++ 187           nx_state = STATE_GEN_ID;
++ 187         end
++ 192       STATE_GEN_ID: begin
++ 192         if (rewind_req_valid == 1'b1 && rewind_req_ready == 1'b1) begin
++ 192           nx_state = STATE_REWIND_ID;
++ 192         end else if (eot == 1'b1 && incr_en == 1'b1) begin
++ 193         end
++ 193       end
++ 193       STATE_REWIND_ID: begin
++ 193         if (transfer_id_match) begin
++ 193           if (rew_req_xlast) begin
++ 193             nx_state = STATE_IDLE;
++ 193           end else begin
++ 193             nx_state = STATE_CONSUME;
++ 193           end
++ 195           if (rew_req_xlast) begin
++ 195             nx_state = STATE_GEN_ID;
++ 195           end else if (cur_req_xlast) begin
++ 195             nx_state = STATE_IDLE;
++ 195             nx_completion_req_valid = 1;
++ 195           end else begin
++ 195             nx_state = STATE_CONSUME;
++ 195             nx_completion_req_valid = 1;
++ 195           end
++ 201       end
++ 201       STATE_CONSUME: begin
++ 201         if (req_valid) begin
++ 202           nx_state = STATE_WAIT_LAST;
++ 202         end
++ 202       end
++ 202       STATE_WAIT_LAST:begin
++ 202         if (cur_req_xlast) begin
++ 202           nx_state = STATE_IDLE;
++ 216       default: begin
++ 221     endcase
++ 221   end
++ 224   always @(posedge clk) begin
++ 224     if (resetn == 1'b0) begin
++ 224       state <= STATE_IDLE;
++ 224     end else begin
++ 224       state <= nx_state;
+
+Clone Blocks:

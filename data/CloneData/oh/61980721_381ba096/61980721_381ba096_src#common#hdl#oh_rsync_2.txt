@@ -1,0 +1,37 @@
+Source Block: oh/src/common/hdl/oh_rsync.v@12:26@HdlStmProcess
+    output nrst_out
+    );
+  
+   reg [PS-1:0] sync_pipe;
+   
+   always @ (posedge clk or negedge nrst_in)		 
+     if(!nrst_in)
+       sync_pipe[PS-1:0] <= 1'b0;
+     else
+       sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      
+   
+   assign nrst_out = sync_pipe[PS-1];
+   		    	
+endmodule // oh_rsync
+
+
+Diff Content:
+- 17    always @ (posedge clk or negedge nrst_in)		 
+- 18      if(!nrst_in)
+- 19        sync_pipe[PS-1:0] <= 1'b0;
+- 20      else
+- 21        sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_rsync.v@18:26
+     if(!nrst_in)
+       sync_pipe[PS-1:0] <= 1'b0;
+     else
+       sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      
+   
+   assign nrst_out = sync_pipe[PS-1];
+   		    	
+endmodule // oh_rsync
+
+

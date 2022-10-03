@@ -1,0 +1,45 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@176:195@HdlStmProcess
+  .eof                        (tx_eof_early2),
+  .somf                       (tx_somf_early2),
+  .eomf                       (tx_eomf_early2)
+);
+
+always @(posedge clk) begin
+  tx_sof_early1  <= tx_sof_early2;
+  tx_eof_early1  <= tx_eof_early2;
+  tx_somf_early1 <= tx_somf_early2;
+  tx_eomf_early1 <= tx_eomf_early2;
+  tx_sof  <= tx_sof_early1;
+  tx_eof  <= tx_eof_early1;
+  tx_somf <= tx_somf_early1;
+  tx_eomf <= tx_eomf_early1;
+end
+
+generate
+genvar i;
+
+if (LINK_MODE[0] == 1) begin : mode_8b10b
+
+Diff Content:
+- 182   tx_sof_early1  <= tx_sof_early2;
+- 183   tx_eof_early1  <= tx_eof_early2;
+- 184   tx_somf_early1 <= tx_somf_early2;
+- 185   tx_eomf_early1 <= tx_eomf_early2;
+- 186   tx_sof  <= tx_sof_early1;
+- 187   tx_eof  <= tx_eof_early1;
+- 188   tx_somf <= tx_somf_early1;
+- 189   tx_eomf <= tx_eomf_early1;
++ 189   tx_sof_fm_d1  <= tx_sof_fm;
++ 189   tx_eof_fm_d1  <= tx_eof_fm;
++ 189   tx_somf_fm_d1 <= tx_somf_fm;
++ 189   tx_eomf_fm_d1 <= tx_eomf_fm;
++ 189   tx_sof_fm_d2  <= tx_sof_fm_d1;
++ 189   tx_eof_fm_d2  <= tx_eof_fm_d1;
++ 189   tx_somf_fm_d2 <= tx_somf_fm_d1;
++ 189   tx_eomf_fm_d2 <= tx_eomf_fm_d1;
++ 190 assign tx_sof = (LINK_MODE == 1) ? tx_sof_fm_d2 : tx_sof_fm;
++ 190 assign tx_eof = (LINK_MODE == 1) ? tx_eof_fm_d2 : tx_eof_fm;
++ 190 assign tx_somf = (LINK_MODE == 1) ? tx_somf_fm_d2 : tx_somf_fm;
++ 190 assign tx_eomf = (LINK_MODE == 1) ? tx_eomf_fm_d2 : tx_eomf_fm;
+
+Clone Blocks:

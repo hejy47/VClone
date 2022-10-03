@@ -1,0 +1,35 @@
+Source Block: zipcpu/rtl/core/prefetch.v@120:141@HdlStmProcess
+		if ((o_wb_cyc)&&(i_wb_ack))
+			o_i <= i_wb_data;
+
+	initial o_valid   = 1'b0;
+	initial o_illegal = 1'b0;
+	always @(posedge i_clk)
+		if (i_rst)
+		begin
+			o_valid   <= 1'b0;
+			o_illegal <= 1'b0;
+		end else if ((o_wb_cyc)&&(i_wb_ack))
+		begin
+			o_valid   <= (!i_wb_err)&&(!invalid);
+			o_illegal <= ( i_wb_err)&&(!invalid);
+		end else if ((i_stalled_n)||(i_clear_cache))
+		begin
+			o_valid <= 1'b0;
+			o_illegal <= 1'b0;
+		end
+
+	assign	o_pc = o_wb_addr;
+endmodule
+
+Diff Content:
+- 126 		if (i_rst)
+- 130 		end else if ((o_wb_cyc)&&(i_wb_ack))
+- 132 			o_valid   <= (!i_wb_err)&&(!invalid);
+- 134 		end else if ((i_stalled_n)||(i_clear_cache))
++ 126 		if ((i_rst)||(i_new_pc))
++ 130 		end else if ((o_wb_cyc)&&((i_wb_ack)||(i_wb_err)))
++ 132 			o_valid   <= (!invalid);
++ 134 		end else if ((i_stalled_n)||(i_clear_cache)||(i_new_pc))
+
+Clone Blocks:

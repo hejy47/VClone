@@ -1,0 +1,50 @@
+Source Block: zipcpu/rtl/core/memops.v@214:230@HdlStmProcess
+	initial	o_valid = 1'b0;
+	always @(posedge i_clk)
+		o_valid <= (!i_reset)&&((o_wb_cyc_gbl)||(o_wb_cyc_lcl))
+				&&(i_wb_ack)&&(!o_wb_we);
+	initial	o_err = 1'b0;
+	always @(posedge i_clk)
+		if (i_reset)
+			o_err <= 1'b0;
+		else if ((o_wb_cyc_gbl)||(o_wb_cyc_lcl))
+			o_err <= i_wb_err;
+		else
+			o_err <= ((i_stb)&&(misaligned));
+
+	assign	o_busy = (r_wb_cyc_gbl)||(r_wb_cyc_lcl);
+
+	always @(posedge i_clk)
+		if (i_stb)
+
+Diff Content:
+- 220 		if (i_reset)
+- 221 			o_err <= 1'b0;
+- 222 		else if ((o_wb_cyc_gbl)||(o_wb_cyc_lcl))
+- 223 			o_err <= i_wb_err;
+- 224 		else
+- 225 			o_err <= ((i_stb)&&(misaligned));
++ 225 	if (i_reset)
++ 225 		o_err <= 1'b0;
++ 225 	else if (i_stb)
++ 225 		o_err <= misaligned;
++ 225 	else if ((o_wb_cyc_gbl)||(o_wb_cyc_lcl))
++ 225 		o_err <= i_wb_err;
++ 225 	else
++ 225 		o_err <= 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/memops.v@213:223
+
+	initial	o_valid = 1'b0;
+	always @(posedge i_clk)
+		o_valid <= (!i_reset)&&((o_wb_cyc_gbl)||(o_wb_cyc_lcl))
+				&&(i_wb_ack)&&(!o_wb_we);
+	initial	o_err = 1'b0;
+	always @(posedge i_clk)
+		if (i_reset)
+			o_err <= 1'b0;
+		else if ((o_wb_cyc_gbl)||(o_wb_cyc_lcl))
+			o_err <= i_wb_err;
+

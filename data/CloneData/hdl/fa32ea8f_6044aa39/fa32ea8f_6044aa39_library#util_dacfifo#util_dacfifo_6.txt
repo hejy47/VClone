@@ -1,0 +1,33 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@141:166@HdlStmProcess
+
+  // write address generation
+
+  assign dma_wren_s = dma_valid & dma_ready;
+
+  always @(posedge dma_clk) begin
+    if(dma_rst == 1'b1) begin
+      dma_waddr <= 'b0;
+      dma_waddr_g <= 'b0;
+      dma_xfer_out_fifo <= 1'b0;
+    end else begin
+      if (dma_wren_s == 1'b1) begin
+        dma_waddr <= dma_waddr + 1'b1;
+      end
+      if (dma_xfer_last == 1'b1) begin
+        dma_waddr <= 'b0;
+        dma_xfer_out_fifo <= 1'b1;
+      end
+      dma_waddr_g <= dma_waddr_b2g_s;
+    end
+  end
+
+  ad_b2g #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dma_waddr_b2g (
+    .din (dma_waddr),
+
+Diff Content:
+- 147     if(dma_rst == 1'b1) begin
++ 147     if(dma_rst_int_s == 1'b1) begin
+
+Clone Blocks:

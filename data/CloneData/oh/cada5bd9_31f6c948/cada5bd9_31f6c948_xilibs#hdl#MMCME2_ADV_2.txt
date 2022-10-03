@@ -1,0 +1,61 @@
+Source Block: oh/xilibs/hdl/MMCME2_ADV.v@97:107@HdlStmProcess
+   //##############
+   //#VCO 
+   //##############
+   reg 	  vco_clk = 1'b0;
+   always
+     #(VCO_PERIOD/2) vco_clk = ~vco_clk;
+
+   //##############
+   //#DIVIDERS
+   //##############
+   wire [3:0] DIVCFG[6:0]; 
+
+Diff Content:
+- 102      #(VCO_PERIOD/2) vco_clk = ~vco_clk;
++ 102    localparam VCO_PERIOD = (CLKIN1_PERIOD * DIVCLK_DIVIDE) / CLKFBOUT_MULT_F;
++ 102    localparam CLK0_DELAY = VCO_PERIOD * CLKOUT0_DIVIDE_F * (CLKOUT0_PHASE/360);
++ 102    localparam CLK1_DELAY = VCO_PERIOD * CLKOUT1_DIVIDE * (CLKOUT1_PHASE/360);
++ 102    localparam CLK2_DELAY = VCO_PERIOD * CLKOUT2_DIVIDE * (CLKOUT2_PHASE/360);
++ 102    localparam CLK3_DELAY = VCO_PERIOD * CLKOUT3_DIVIDE * (CLKOUT3_PHASE/360);
++ 102    localparam CLK4_DELAY = VCO_PERIOD * CLKOUT4_DIVIDE * (CLKOUT4_PHASE/360);
++ 102    localparam CLK5_DELAY = VCO_PERIOD * CLKOUT5_DIVIDE * (CLKOUT5_PHASE/360);
++ 102    localparam CLK6_DELAY = VCO_PERIOD * CLKOUT6_DIVIDE * (CLKOUT6_PHASE/360);
++ 102    localparam phases = CLKFBOUT_MULT_F / DIVCLK_DIVIDE;
++ 102    integer 	j;   
++ 102    reg [2*phases-1:0] 	delay;
++ 102    always @ (CLKIN1)
++ 102      begin	
++ 102 	for(j=0; j<(2*phases); j=j+1)
++ 102 	  delay[j] <= #(CLKIN1_PERIOD*j/(2*phases)) CLKIN1;
++ 102      end
++ 102    reg [(phases)-1:0] 	clk_comb;
++ 102     always @ (delay)
++ 102       begin
++ 102 	 for(j=0; j<(phases); j=j+1)
++ 102 	   clk_comb[j] <= delay[2*j] & ~delay[2*j+1];	 
++ 102       end
++ 102    reg vco_clk;   
++ 102    integer k;   
++ 102    always @*
++ 102      begin
++ 102 	vco_clk = 1'b0;
++ 102 	for(k=0; k<(phases); k=k+1)
++ 102 	  vco_clk = vco_clk | clk_comb[k];
++ 102      end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/xilibs/hdl/PLLE2_BASE.v@71:81
+     begin
+	vco_clk = 1'b0;	
+     end
+   
+   always
+     #(VCO_PERIOD/2) vco_clk = ~vco_clk;
+
+   //##############
+   //#DIVIDERS
+   //##############
+   wire [3:0] DIVCFG[5:0]; 
+

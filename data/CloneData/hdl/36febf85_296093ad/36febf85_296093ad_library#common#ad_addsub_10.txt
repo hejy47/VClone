@@ -1,0 +1,24 @@
+Source Block: hdl/library/common/ad_addsub.v@91:107@HdlStmProcess
+      Amax_d2 <= Amax_d;
+  end
+
+  // ADDER/SUBSTRACTER
+
+  always @(posedge clk) begin
+    if ( ADD_SUB == ADDER ) begin
+      out_d <= A_d + B_reg;
+    end else begin
+      out_d <= A_d - B_reg;
+    end
+  end
+
+  // Resolve
+
+  always @(posedge clk) begin
+    if ( ADD_SUB == ADDER ) begin
+
+Diff Content:
+- 97     if ( ADD_SUB == ADDER ) begin
++ 97     if ( ADD_OR_SUB_N == ADDER ) begin
+
+Clone Blocks:

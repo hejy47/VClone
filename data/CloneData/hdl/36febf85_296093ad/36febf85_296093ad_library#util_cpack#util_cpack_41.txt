@@ -1,0 +1,26 @@
+Source Block: hdl/library/util_cpack/util_cpack.v@292:308@HdlStmIf
+    .adc_dsf_data (adc_dsf_data_s[n]));
+  end
+  endgenerate
+
+  generate
+  if (CH_MCNT > P_CNT) begin
+  for (n = P_CNT; n < CH_MCNT; n = n + 1) begin: g_def
+  assign adc_dsf_valid_s[n] = 'd0;
+  assign adc_dsf_sync_s[n] = 'd0;
+  assign adc_dsf_data_s[n] = 'd0;
+  end
+  end
+  endgenerate
+
+  always @(posedge adc_clk) begin
+    adc_valid <= | adc_dsf_valid_s;
+    adc_sync <= | adc_dsf_sync_s;
+
+Diff Content:
+- 297   if (CH_MCNT > P_CNT) begin
+- 298   for (n = P_CNT; n < CH_MCNT; n = n + 1) begin: g_def
++ 298   if (NUM_OF_CHANNELS_M > NUM_OF_CHANNELS_P) begin
++ 298   for (n = NUM_OF_CHANNELS_P; n < NUM_OF_CHANNELS_M; n = n + 1) begin: g_def
+
+Clone Blocks:

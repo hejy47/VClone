@@ -1,0 +1,66 @@
+Source Block: oh/src/common/hdl/oh_standby.v@17:28@HdlStmProcess
+   //Wire declarations
+   reg [PD-1:0]	wakeup_pipe;
+   reg          idle_reg;
+   
+   // detect an idle state change (wake up on any)
+   always @ (posedge clk )     
+     idle_reg <= idle;   
+   assign state_change = (idle ^ idle_reg);
+      
+   always @ (posedge clk)    
+     wakeup_pipe[PD-1:0] <= {wakeup_pipe[PD-2:0],(state_change | wakeup)};
+
+
+Diff Content:
+- 22    always @ (posedge clk )     
++ 22    always @ (posedge clkin)     
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_standby.v@19:29
+   reg          idle_reg;
+   
+   // detect an idle state change (wake up on any)
+   always @ (posedge clk )     
+     idle_reg <= idle;   
+   assign state_change = (idle ^ idle_reg);
+      
+   always @ (posedge clk)    
+     wakeup_pipe[PD-1:0] <= {wakeup_pipe[PD-2:0],(state_change | wakeup)};
+
+   //block enable signal
+
+Clone Blocks 2:
+oh/src/common/hdl/oh_standby.v@21:32
+   // detect an idle state change (wake up on any)
+   always @ (posedge clk )     
+     idle_reg <= idle;   
+   assign state_change = (idle ^ idle_reg);
+      
+   always @ (posedge clk)    
+     wakeup_pipe[PD-1:0] <= {wakeup_pipe[PD-2:0],(state_change | wakeup)};
+
+   //block enable signal
+   assign  clk_en    =  ~nreset                | //always on during reset
+                        wakeup                 | //immediate wakeup
+			state_change           | //incoming transition
+
+Clone Blocks 3:
+oh/src/common/hdl/oh_standby.v@25:39
+      
+   always @ (posedge clk)    
+     wakeup_pipe[PD-1:0] <= {wakeup_pipe[PD-2:0],(state_change | wakeup)};
+
+   //block enable signal
+   assign  clk_en    =  ~nreset                | //always on during reset
+                        wakeup                 | //immediate wakeup
+			state_change           | //incoming transition
+                        (|wakeup_pipe[PD-1:0]) | //anything in pipe
+		        ~idle;                   //core not in idle
+
+   //clock gater (technology specific)
+   oh_clockgate clockgate  (.eclk(clkout),
+			    .clk(clk),
+			    .en(clk_en),
+

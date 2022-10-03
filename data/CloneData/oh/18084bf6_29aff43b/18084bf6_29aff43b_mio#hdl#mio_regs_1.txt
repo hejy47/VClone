@@ -1,0 +1,31 @@
+Source Block: oh/mio/hdl/mio_regs.v@9:19@HdlIdDef
+   tx_empty, rx_full, rx_prog_full, rx_empty
+   );
+
+   // parameters
+   parameter   AW     = 32;      // address width
+   localparam  PW     = 2*AW+40; // packet width   
+      
+   // clk,reset
+   input            clk;
+   input            nreset;
+   
+
+Diff Content:
+- 14    localparam  PW     = 2*AW+40; // packet width   
++ 14    parameter   N         = 8;                      // number of I/O pins  
++ 14    parameter   AW        = 32;                     // address width
++ 14    localparam  PW        = 2*AW+40;                // packet width
++ 14    parameter   DEF_EN    = 1;                      // default enable value (1 is on)
++ 14    parameter   DEF_CLK   = 7;                      // default CLKDIV value (divide by 8)
++ 14    parameter   DEF_DDR   = 1;                      // default transsfer mode 
++ 14    parameter   DEF_SIZE  = (PW+8)/(N*(1+DEF_DDR)); // flits per packet (ddr mode)  
++ 14    parameter   DEF_MODE  = 0;                      // default as emode
++ 14    parameter   DEF_MSB   = 0;                      // MSB first default
++ 14    localparam  DEF_RISE0 = 0;                      // 0 degrees
++ 14    localparam  DEF_FALL0 = ((DEF_CLK+8'd1)>>8'd1); // 180 degrees
++ 14    localparam  DEF_RISE1 = ((DEF_CLK+8'd1)>>8'd2); // 90 degrees
++ 14    localparam  DEF_FALL1 = ((DEF_CLK+8'd1)>>8'd2)+
++ 14 			   ((DEF_CLK+8'd1)>>8'd1); // 270 degrees
+
+Clone Blocks:

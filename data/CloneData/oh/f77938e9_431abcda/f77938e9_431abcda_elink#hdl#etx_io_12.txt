@@ -1,0 +1,49 @@
+Source Block: oh/elink/hdl/etx_io.v@200:227@HdlStmProcess
+     begin
+	tx_state_reg[2:0] <= tx_state[2:0];
+	tx_frame          <= (|tx_state_reg[2:0]); 
+     end        
+   
+   always @ (posedge tx_lclk_io)
+     case(tx_state_reg[2:0])
+       //Cycle1
+       3'b001: tx_data16[15:0]  <= tx_double[47:32];       
+       //Cycle2
+       3'b010: tx_data16[15:0]  <= tx_double[31:16];       
+       //Cycle3
+       3'b011: tx_data16[15:0]  <= tx_double[15:0];       
+       //Cycle4				      
+       3'b100: tx_data16[15:0]  <= tx_double[63:48];       
+       //Cycle5
+       3'b101: tx_data16[15:0]  <= tx_double[47:32];       
+       //Cycle6
+       3'b110: tx_data16[15:0]  <= tx_double[31:16];       
+       //Cycle7
+       3'b111: tx_data16[15:0]  <= tx_double[15:0];       
+       default  tx_data16[15:0] <= 16'b0;
+     endcase // case (tx_state[2:0])
+     
+   //#############################
+   //# CLOCK DRIVERS
+   //#############################  
+   //BUFIO i_lclk    (.I(tx_lclk_io), .O(tx_lclk_ddr));
+
+Diff Content:
+- 205    always @ (posedge tx_lclk_io)
+- 206      case(tx_state_reg[2:0])
+- 208        3'b001: tx_data16[15:0]  <= tx_double[47:32];       
+- 210        3'b010: tx_data16[15:0]  <= tx_double[31:16];       
+- 212        3'b011: tx_data16[15:0]  <= tx_double[15:0];       
+- 214        3'b100: tx_data16[15:0]  <= tx_double[63:48];       
+- 216        3'b101: tx_data16[15:0]  <= tx_double[47:32];       
+- 218        3'b110: tx_data16[15:0]  <= tx_double[31:16];       
+- 220        3'b111: tx_data16[15:0]  <= tx_double[15:0];       
+- 221        default  tx_data16[15:0] <= 16'b0;
+- 222      endcase // case (tx_state[2:0])
++ 222    dsync sync_wr (
++ 222 		.dout			(tx_wr_wait),
++ 222 		.clk			(tx_lclk_io),
++ 222 		.din			(tx_wr_wait_async));
++ 222    assign tx_wait =  tx_rd_wait | tx_wr_wait; 
+
+Clone Blocks:

@@ -1,0 +1,35 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_wr.v@252:279@HdlStmProcess
+  assign dma_mem_raddr_s = (MEM_RATIO == 1) ?  dma_mem_raddr :
+                           (MEM_RATIO == 2) ? {dma_mem_raddr, 1'b0} :
+                           (MEM_RATIO == 4) ? {dma_mem_raddr, 2'b0} :
+                                              {dma_mem_raddr, 3'b0};
+
+  always @(posedge dma_clk) begin
+    if (dma_rst == 1'b1) begin
+      dma_mem_addr_diff <= 'b0;
+      dma_mem_raddr_m1 <= 'b0;
+      dma_mem_raddr_m2 <= 'b0;
+      dma_mem_raddr <= 'b0;
+    end else begin
+      dma_mem_raddr_m1 <= g2b(axi_mem_raddr_g);
+      dma_mem_raddr_m2 <= dma_mem_raddr_m1;
+      dma_mem_raddr <= dma_mem_raddr_m2;
+      dma_mem_addr_diff <= dma_mem_addr_diff_s[DMA_MADDRESS_WIDTH-1:0];
+      if (dma_mem_addr_diff >= 180) begin
+        dma_ready <= 1'b0;
+      end else begin
+        dma_ready <= 1'b1;
+      end
+    end
+  end
+
+  // read address generation for the asymetric memory
+
+  always @(posedge axi_clk) begin
+    if (axi_resetn == 1'b0) begin
+
+Diff Content:
+- 258     if (dma_rst == 1'b1) begin
++ 258     if (dma_rst_s == 1'b1) begin
+
+Clone Blocks:

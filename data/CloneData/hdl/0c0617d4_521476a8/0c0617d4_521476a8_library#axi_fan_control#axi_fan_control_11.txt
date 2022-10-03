@@ -1,0 +1,115 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@96:106@HdlIdDef
+
+localparam        THRESH_PWM_000          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_100          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_L * 41 + 11195) / 20);
+
+//pwm params
+
+Diff Content:
+- 101 localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_fan_control/axi_fan_control.v@99:109
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_100          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_L * 41 + 11195) / 20);
+
+//pwm params
+localparam        PWM_ONTIME_25           = PWM_PERIOD / 4;
+localparam        PWM_ONTIME_50           = PWM_PERIOD / 2;
+localparam        PWM_ONTIME_75           = PWM_PERIOD * 3 / 4;
+
+Clone Blocks 2:
+hdl/library/axi_fan_control/axi_fan_control.v@97:107
+localparam        THRESH_PWM_000          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_100          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_L * 41 + 11195) / 20);
+
+//pwm params
+localparam        PWM_ONTIME_25           = PWM_PERIOD / 4;
+
+Clone Blocks 3:
+hdl/library/axi_fan_control/axi_fan_control.v@94:104
+localparam        OVERFLOW_LIM            = CLK_FREQUENCY * 5;
+localparam        AVERAGE_DIV             = 2**AVG_POW;
+
+localparam        THRESH_PWM_000          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_100          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_L * 41 + 11195) / 20);
+
+Clone Blocks 4:
+hdl/library/axi_fan_control/axi_fan_control.v@98:108
+localparam        THRESH_PWM_025_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_100          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_L * 41 + 11195) / 20);
+
+//pwm params
+localparam        PWM_ONTIME_25           = PWM_PERIOD / 4;
+localparam        PWM_ONTIME_50           = PWM_PERIOD / 2;
+
+Clone Blocks 5:
+hdl/library/axi_fan_control/axi_fan_control.v@92:102
+localparam        CLK_FREQUENCY           = 100000000;
+localparam        PWM_PERIOD              = CLK_FREQUENCY / PWM_FREQUENCY_HZ;
+localparam        OVERFLOW_LIM            = CLK_FREQUENCY * 5;
+localparam        AVERAGE_DIV             = 2**AVG_POW;
+
+localparam        THRESH_PWM_000          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+
+Clone Blocks 6:
+hdl/library/axi_fan_control/axi_fan_control.v@95:105
+localparam        AVERAGE_DIV             = 2**AVG_POW;
+
+localparam        THRESH_PWM_000          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_100          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_L * 41 + 11195) / 20);
+
+
+Clone Blocks 7:
+hdl/library/axi_fan_control/axi_fan_control.v@93:103
+localparam        PWM_PERIOD              = CLK_FREQUENCY / PWM_FREQUENCY_HZ;
+localparam        OVERFLOW_LIM            = CLK_FREQUENCY * 5;
+localparam        AVERAGE_DIV             = 2**AVG_POW;
+
+localparam        THRESH_PWM_000          = (INTERNAL_SYSMONE == 1) ? (((TEMP_00_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_00_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_025_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_25_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_25_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_050_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_50_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_50_H * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_L        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_L + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_L * 41 + 11195) / 20);
+localparam        THRESH_PWM_075_H        = (INTERNAL_SYSMONE == 1) ? (((TEMP_75_H + 280.2308787) * 65535) / 509.3140064) : ((TEMP_75_H * 41 + 11195) / 20);
+

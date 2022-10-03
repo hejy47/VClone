@@ -1,0 +1,76 @@
+Source Block: zipcpu/rtl/zipbones.v@110:121@HdlStmProcess
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(i_dbg_data[6]));
+	//
+	initial	cmd_halt  = START_HALTED;
+	always @(posedge i_clk)
+		if (i_rst)
+			cmd_halt <= (START_HALTED == 1)? 1'b1 : 1'b0;
+
+Diff Content:
+- 116 		cmd_reset <= ((dbg_cmd_write)&&(i_dbg_data[6]));
++ 116 		cmd_reset <= ((dbg_cmd_write)&&(i_dbg_data[`RESET_BIT]));
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipsystem.v@314:324
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(dbg_idata[6]));
+	//
+	initial	cmd_halt  = START_HALTED;
+	always @(posedge i_clk)
+		if (i_rst)
+			cmd_halt <= (START_HALTED == 1)? 1'b1 : 1'b0;
+		else if (dbg_cmd_write)
+			cmd_halt <= ((dbg_idata[10])||(dbg_idata[8]));
+
+Clone Blocks 2:
+zipcpu/rtl/zipbones.v@109:119
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (i_dbg_cyc)&&(i_dbg_stb)&&(i_dbg_we)&&(~i_dbg_addr);
+	//
+	// Always start us off with an initial reset
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(i_dbg_data[6]));
+	//
+	initial	cmd_halt  = START_HALTED;
+	always @(posedge i_clk)
+
+Clone Blocks 3:
+zipcpu/rtl/zipbones.v@113:123
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(i_dbg_data[6]));
+	//
+	initial	cmd_halt  = START_HALTED;
+	always @(posedge i_clk)
+		if (i_rst)
+			cmd_halt <= (START_HALTED == 1)? 1'b1 : 1'b0;
+		else if (dbg_cmd_write)
+			cmd_halt <= ((i_dbg_data[10])||(i_dbg_data[8]));
+
+Clone Blocks 4:
+zipcpu/rtl/zipsystem.v@311:322
+	reg	[5:0]	cmd_addr;
+	wire	[3:0]	cpu_dbg_cc;
+	assign	dbg_cmd_write = (dbg_cyc)&&(dbg_stb)&&(dbg_we)&&(~dbg_addr);
+	//
+	initial	cmd_reset = 1'b1;
+	always @(posedge i_clk)
+		cmd_reset <= ((dbg_cmd_write)&&(dbg_idata[6]));
+	//
+	initial	cmd_halt  = START_HALTED;
+	always @(posedge i_clk)
+		if (i_rst)
+			cmd_halt <= (START_HALTED == 1)? 1'b1 : 1'b0;
+

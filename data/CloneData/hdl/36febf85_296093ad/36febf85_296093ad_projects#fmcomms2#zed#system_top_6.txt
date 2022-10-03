@@ -1,0 +1,227 @@
+Source Block: hdl/projects/fmcomms2/zed/system_top.v@219:229@HdlStmAssign
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(51)) i_iobuf_gpio (
+
+Diff Content:
+- 224   assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms2/mitx045/system_top.v@186:196
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks 2:
+hdl/projects/fmcomms2/mitx045/system_top.v@190:200
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+
+Clone Blocks 3:
+hdl/projects/fmcomms2/zed/system_top.v@220:230
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(51)) i_iobuf_gpio (
+    .dio_t ({gpio_t[50:0]}),
+
+Clone Blocks 4:
+hdl/projects/fmcomms2/zc702/system_top.v@199:209
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(31)) i_iobuf (
+    .dio_t ({gpio_t[50:32],gpio_t[15:12], gpio_t[3:0]}),
+
+Clone Blocks 5:
+hdl/projects/fmcomms2/vc707/system_top.v@214:224
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // default logic
+
+  assign fan_pwm = 1'b1;
+  assign iic_rstn = 1'b1;
+  assign spi_csn_0 = spi_csn[0];
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks 6:
+hdl/projects/fmcomms2/rfsom/system_top.v@227:237
+  wire            tdd_sync_o_s;
+  wire            tdd_sync_i_s;
+
+  // assignments
+
+  assign hdmi_pd = 1'b0;
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+
+Clone Blocks 7:
+hdl/projects/fmcomms2/rfsom/system_top.v@229:239
+
+  // assignments
+
+  assign hdmi_pd = 1'b0;
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
+    .dio_t ({gpio_t[52:51], gpio_t[48:32]}),
+
+Clone Blocks 8:
+hdl/projects/fmcomms2/zc706/system_top.v@220:230
+  wire            tdd_sync_i_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
+    .dio_t (gpio_t[50:32]),
+
+Clone Blocks 9:
+hdl/projects/fmcomms2/ac701/system_top.v@198:208
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // assignments
+
+  assign fan_pwm      = 1'b1;
+  assign iic_rstn     = 1'b1;
+  assign spi_csn_0    = spi_csn[0];
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks 10:
+hdl/projects/fmcomms2/zc706/system_top.v@219:229
+  wire            tdd_sync_o_s;
+  wire            tdd_sync_i_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
+
+Clone Blocks 11:
+hdl/projects/fmcomms2/zed/system_top.v@215:225
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks 12:
+hdl/projects/fmcomms2/rfsom/system_top.v@228:238
+  wire            tdd_sync_i_s;
+
+  // assignments
+
+  assign hdmi_pd = 1'b0;
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(19)) i_iobuf (
+
+Clone Blocks 13:
+hdl/projects/fmcomms2/mitx045/system_top.v@191:201
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf (
+    .dio_t (gpio_t[48:32]),
+
+Clone Blocks 14:
+hdl/projects/fmcomms2/zc702/system_top.v@198:208
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(31)) i_iobuf (
+
+Clone Blocks 15:
+hdl/projects/fmcomms2/zc702/system_top.v@194:204
+
+  wire            tdd_enable_s;
+  wire            gpio_enable;
+  wire            gpio_txnrx;
+  wire            enable_s;
+  wire            txnrx_s;
+
+  // internal logic
+
+  assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
+  assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+

@@ -1,0 +1,56 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@159:176@HdlStmProcess
+  end else if (sync_request == 1'b1) begin
+    sync_request_received <= 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (cfg_skip_ilas == 1'b1 ||
+    mframe_counter == cfg_lmfc_per_ilas) begin
+    last_ilas_mframe <= 1'b1;
+  end else begin
+    last_ilas_mframe <= 1'b0;
+  end
+end
+
+always @(*) begin
+  if (sync_request == 1'b1 || reset == 1'b1) begin
+    eof_reset = 1'b1;
+  end else if (lmfc_edge == 1'b1 && sync_request_received == 1'b1) begin
+
+Diff Content:
+- 164 always @(posedge clk) begin
+- 165   if (cfg_skip_ilas == 1'b1 ||
+- 166     mframe_counter == cfg_lmfc_per_ilas) begin
+- 167     last_ilas_mframe <= 1'b1;
+- 168   end else begin
+- 169     last_ilas_mframe <= 1'b0;
+- 171 end
++ 169   always @(posedge clk) begin
++ 169     if (reset == 1'b1) begin
++ 169       sync_request_received <= 1'b0;
++ 169     end else if (sync_request == 1'b1) begin
++ 169       sync_request_received <= 1'b1;
++ 169     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@151:167
+    lmfc_edge_d1 <= 1'b0;
+    lmfc_edge_d2 <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sync_request_received <= 1'b0;
+  end else if (sync_request == 1'b1) begin
+    sync_request_received <= 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (cfg_skip_ilas == 1'b1 ||
+    mframe_counter == cfg_lmfc_per_ilas) begin
+    last_ilas_mframe <= 1'b1;
+

@@ -1,0 +1,34 @@
+Source Block: hdl/library/util_adcfifo/util_adcfifo.v@188:212@HdlStmProcess
+  end
+  
+  assign dma_wready_s = (DMA_READY_ENABLE == 0) ? 1'b1 : dma_wready;
+  assign dma_rd_s = (dma_raddr >= dma_waddr_rel_s) ? 1'b0 : dma_wready_s;
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+      dma_rd <= 'd0;
+      dma_rd_d <= 'd0;
+      dma_rdata_d <= 'd0;
+      dma_raddr <= 'd0;
+    end else begin
+      dma_rd <= dma_rd_s;
+      dma_rd_d <= dma_rd;
+      dma_rdata_d <= dma_rdata_s;
+      if (dma_rd_s == 1'b1) begin
+        dma_raddr <= dma_raddr + 1'b1;
+      end
+    end
+  end
+
+  // instantiations
+
+  ad_mem_asym #(
+    .ADDR_WIDTH_A (ADC_ADDR_WIDTH),
+
+Diff Content:
+- 204         dma_raddr <= dma_raddr + 1'b1;
++ 204         if (dma_raddr < ADC_ADDR_LIMIT) begin
++ 204           dma_raddr <= dma_raddr + 1'b1;
++ 204         end
+
+Clone Blocks:

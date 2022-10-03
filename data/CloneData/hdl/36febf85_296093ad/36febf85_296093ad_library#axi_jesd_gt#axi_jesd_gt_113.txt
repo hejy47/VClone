@@ -1,0 +1,139 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@371:381@HdlStmAssign
+
+  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s[((PCORE_NUM_OF_RX_LANES*50)-1):0]};
+  assign rx_mon_trigger = {rx_sync, rx_sysref, rx_mon_trigger_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0]};
+
+  assign tx_mon_data = {tx_sync, tx_sysref, tx_ip_sof, tx_gt_charisk, tx_gt_data};
+  assign tx_mon_trigger = {tx_sync, tx_sysref, tx_ip_sof};
+
+  // signal name changes
+
+  assign up_rstn = axi_aresetn;
+  assign up_clk = axi_aclk;
+
+Diff Content:
+- 376   assign tx_mon_trigger = {tx_sync, tx_sysref, tx_ip_sof};
++ 376   wire    [(( 1*8)-1):0]                      qpll_clk;
++ 376   wire    [(( 1*8)-1):0]                      qpll_ref_clk;
++ 376   wire    [(( 1*8)-1):0]                      qpll_locked;
++ 376   wire    [(( 1*8)-1):0]                      cpll_rst_m;
++ 376   wire    [(( 1*8)-1):0]                      cpll_ref_clk_in;
++ 376   wire    [(( 1*8)-1):0]                      rx_p;
++ 376   wire    [(( 1*8)-1):0]                      rx_n;
++ 376   wire    [(( 1*8)-1):0]                      rx_out_clk;
++ 376   wire    [(( 1*8)-1):0]                      rx_clk;
++ 376   wire    [(( 1*8)-1):0]                      rx_rst;
++ 376   wire    [(( 1*8)-1):0]                      rx_sof;
++ 376   wire    [((32*8)-1):0]                      rx_data;
++ 376   wire    [(( 1*8)-1):0]                      rx_sysref;
++ 376   wire    [(( 1*8)-1):0]                      rx_sync;
++ 376   wire    [(( 4*8)-1):0]                      rx_gt_charisk;
++ 376   wire    [(( 4*8)-1):0]                      rx_gt_disperr;
++ 376   wire    [(( 4*8)-1):0]                      rx_gt_notintable;
++ 376   wire    [((32*8)-1):0]                      rx_gt_data;
++ 376   wire    [(( 1*8)-1):0]                      rx_gt_comma_align_enb;
++ 376   wire    [(( 4*8)-1):0]                      rx_gt_ilas_f;
++ 376   wire    [(( 4*8)-1):0]                      rx_gt_ilas_q;
++ 376   wire    [(( 4*8)-1):0]                      rx_gt_ilas_a;
++ 376   wire    [(( 4*8)-1):0]                      rx_gt_ilas_r;
++ 376   wire    [(( 4*8)-1):0]                      rx_gt_cgs_k;
++ 376   wire    [(( 1*8)-1):0]                      rx_ip_rst;
++ 376   wire    [(( 4*8)-1):0]                      rx_ip_sof;
++ 376   wire    [((32*8)-1):0]                      rx_ip_data;
++ 376   wire    [(( 1*8)-1):0]                      rx_ip_sysref;
++ 376   wire    [(( 1*8)-1):0]                      rx_ip_sync;
++ 376   wire    [(( 1*8)-1):0]                      rx_ip_rst_done;
++ 376   wire    [(( 1*8)-1):0]                      rx_rst_m;
++ 376   wire    [(( 1*8)-1):0]                      rx_pll_rst;
++ 376   wire    [(( 1*8)-1):0]                      rx_gt_rst;
++ 376   wire    [(( 1*8)-1):0]                      rx_gt_rst_m;
++ 376   wire    [(( 1*8)-1):0]                      rx_user_ready;
++ 376   wire    [(( 1*8)-1):0]                      rx_rst_done_m;
++ 376   wire    [(( 1*8)-1):0]                      rx_pll_locked_m;
++ 376   wire    [(( 1*8)-1):0]                      rx_user_ready_m;
++ 376   wire    [(( 1*8)-1):0]                      rx_rst_done;
++ 376   wire    [(( 1*8)-1):0]                      rx_pll_locked;
++ 376   wire    [(( 1*8)-1):0]                      tx_p;
++ 376   wire    [(( 1*8)-1):0]                      tx_n;
++ 376   wire    [(( 1*8)-1):0]                      tx_out_clk;
++ 376   wire    [(( 1*8)-1):0]                      tx_clk;
++ 376   wire    [(( 1*8)-1):0]                      tx_rst;
++ 376   wire    [((32*8)-1):0]                      tx_data;
++ 376   wire    [(( 1*8)-1):0]                      tx_sysref;
++ 376   wire    [(( 1*8)-1):0]                      tx_sync;
++ 376   wire    [(( 4*8)-1):0]                      tx_gt_charisk;
++ 376   wire    [((32*8)-1):0]                      tx_gt_data;
++ 376   wire    [(( 1*8)-1):0]                      tx_ip_rst;
++ 376   wire    [((32*8)-1):0]                      tx_ip_data;
++ 376   wire    [(( 1*8)-1):0]                      tx_ip_sysref;
++ 376   wire    [(( 1*8)-1):0]                      tx_ip_sync;
++ 376   wire    [(( 1*8)-1):0]                      tx_ip_rst_done;
++ 376   wire    [(( 1*8)-1):0]                      tx_rst_m;
++ 376   wire    [(( 1*8)-1):0]                      tx_pll_rst;
++ 376   wire    [(( 1*8)-1):0]                      tx_gt_rst;
++ 376   wire    [(( 1*8)-1):0]                      tx_gt_rst_m;
++ 376   wire    [(( 1*8)-1):0]                      tx_user_ready;
++ 376   wire    [(( 1*8)-1):0]                      tx_rst_done_m;
++ 376   wire    [(( 1*8)-1):0]                      tx_pll_locked_m;
++ 376   wire    [(( 1*8)-1):0]                      tx_user_ready_m;
++ 376   wire    [(( 1*8)-1):0]                      tx_rst_done;
++ 376   wire    [(( 1*8)-1):0]                      tx_pll_locked;
++ 376   wire                                        up_rstn;
++ 376   wire                                        up_clk;
++ 376   wire                                        up_wreq;
++ 376   wire    [((14*1)-1):0]                      up_waddr;
++ 376   wire    [((32*1)-1):0]                      up_wdata;
++ 376   wire    [(( 1*9)-1):0]                      up_wack;
++ 376   wire                                        up_rreq;
++ 376   wire    [((14*1)-1):0]                      up_raddr;
++ 376   wire    [((32*9)-1):0]                      up_rdata;
++ 376   wire    [(( 1*9)-1):0]                      up_rack;
++ 376   wire    [(( 1*8)-1):0]                      up_es_dma_req;
++ 376   wire    [((32*8)-1):0]                      up_es_dma_addr;
++ 376   wire    [((32*8)-1):0]                      up_es_dma_data;
++ 376   wire    [(( 1*8)-1):0]                      up_es_dma_ack;
++ 376   wire    [(( 1*8)-1):0]                      up_es_dma_err;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@368:378
+  wire                                          up_rack_s;
+
+  // debug interface
+
+  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s[((PCORE_NUM_OF_RX_LANES*50)-1):0]};
+  assign rx_mon_trigger = {rx_sync, rx_sysref, rx_mon_trigger_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0]};
+
+  assign tx_mon_data = {tx_sync, tx_sysref, tx_ip_sof, tx_gt_charisk, tx_gt_data};
+  assign tx_mon_trigger = {tx_sync, tx_sysref, tx_ip_sof};
+
+  // signal name changes
+
+Clone Blocks 2:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@367:377
+  wire    [ 31:0]                               up_rdata_s;
+  wire                                          up_rack_s;
+
+  // debug interface
+
+  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s[((PCORE_NUM_OF_RX_LANES*50)-1):0]};
+  assign rx_mon_trigger = {rx_sync, rx_sysref, rx_mon_trigger_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0]};
+
+  assign tx_mon_data = {tx_sync, tx_sysref, tx_ip_sof, tx_gt_charisk, tx_gt_data};
+  assign tx_mon_trigger = {tx_sync, tx_sysref, tx_ip_sof};
+
+
+Clone Blocks 3:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@370:380
+  // debug interface
+
+  assign rx_mon_data = {rx_sync, rx_sysref, rx_ip_sof, rx_ip_data, rx_mon_data_s[((PCORE_NUM_OF_RX_LANES*50)-1):0]};
+  assign rx_mon_trigger = {rx_sync, rx_sysref, rx_mon_trigger_s[((PCORE_NUM_OF_RX_LANES* 1)-1):0]};
+
+  assign tx_mon_data = {tx_sync, tx_sysref, tx_ip_sof, tx_gt_charisk, tx_gt_data};
+  assign tx_mon_trigger = {tx_sync, tx_sysref, tx_ip_sof};
+
+  // signal name changes
+
+  assign up_rstn = axi_aresetn;
+

@@ -1,0 +1,278 @@
+Source Block: hdl/library/common/ad_serdes_in.v@146:283@HdlStmIf
+    .O(data_in_ibuf_s),
+    .I(data_in_p),
+    .IB(data_in_n)
+  );
+
+  if(DEVICE_TYPE == DEVICE_7SERIES) begin
+    (* IODELAY_GROUP = IODELAY_GROUP *)
+
+    IDELAYE2 #(
+      .CINVCTRL_SEL ("FALSE"),
+      .DELAY_SRC ("IDATAIN"),
+      .HIGH_PERFORMANCE_MODE ("FALSE"),
+      .IDELAY_TYPE ("VAR_LOAD"),
+      .IDELAY_VALUE (0),
+      .REFCLK_FREQUENCY (200.0),
+      .PIPE_SEL ("FALSE"),
+      .SIGNAL_PATTERN ("DATA"))
+    i_rx_data_idelay (
+      .CE (1'b0),
+      .INC (1'b0),
+      .DATAIN (1'b0),
+      .LDPIPEEN (1'b0),
+      .CINVCTRL (1'b0),
+      .REGRST (1'b0),
+      .C (up_clk),
+      .IDATAIN (data_in_ibuf_s),
+      .DATAOUT (data_in_idelay_s),
+      .LD (up_dld),
+      .CNTVALUEIN (up_dwdata),
+      .CNTVALUEOUT (up_drdata));
+
+    // Note: The first sample in time will be data_s7, the last data_s0!
+    if(IF_TYPE == SDR) begin
+      ISERDESE2 #(
+        .DATA_RATE("SDR"),
+        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DYN_CLKDIV_INV_EN("FALSE"),
+        .DYN_CLK_INV_EN("FALSE"),
+        .INIT_Q1(1'b0),
+        .INIT_Q2(1'b0),
+        .INIT_Q3(1'b0),
+        .INIT_Q4(1'b0),
+        .INTERFACE_TYPE("NETWORKING"),
+        .IOBDELAY("IFD"),
+        .NUM_CE(2),
+        .OFB_USED("FALSE"),
+        .SERDES_MODE("MASTER"),
+        .SRVAL_Q1(1'b0),
+        .SRVAL_Q2(1'b0),
+        .SRVAL_Q3(1'b0),
+        .SRVAL_Q4(1'b0))
+      ISERDESE2_inst (
+        .O(),
+        .Q1(data_s0),
+        .Q2(data_s1),
+        .Q3(data_s2),
+        .Q4(data_s3),
+        .Q5(data_s4),
+        .Q6(data_s5),
+        .Q7(data_s6),
+        .Q8(data_s7),
+        .SHIFTOUT1(),
+        .SHIFTOUT2(),
+        .BITSLIP(1'b0),
+        .CE1(1'b1),
+        .CE2(1'b1),
+        .CLKDIVP(1'b0),
+        .CLK(clk),
+        .CLKB(~clk),
+        .CLKDIV(div_clk),
+        .OCLK(1'b0),
+        .DYNCLKDIVSEL(1'b0),
+        .DYNCLKSEL(1'b0),
+        .D(1'b0),
+        .DDLY(data_in_idelay_s),
+        .OFB(1'b0),
+        .OCLKB(1'b0),
+        .RST(rst),
+        .SHIFTIN1(1'b0),
+        .SHIFTIN2(1'b0)
+      );
+    end else begin
+
+      ISERDESE2 #(
+        .DATA_RATE("DDR"),
+        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DYN_CLKDIV_INV_EN("FALSE"),
+        .DYN_CLK_INV_EN("FALSE"),
+        .INIT_Q1(1'b0),
+        .INIT_Q2(1'b0),
+        .INIT_Q3(1'b0),
+        .INIT_Q4(1'b0),
+        .INTERFACE_TYPE("NETWORKING"),
+        .IOBDELAY("IFD"),
+        .NUM_CE(2),
+        .OFB_USED("FALSE"),
+        .SERDES_MODE("MASTER"),
+        .SRVAL_Q1(1'b0),
+        .SRVAL_Q2(1'b0),
+        .SRVAL_Q3(1'b0),
+        .SRVAL_Q4(1'b0))
+      ISERDESE2_inst (
+        .O(),
+        .Q1(data_s0),
+        .Q2(data_s1),
+        .Q3(data_s2),
+        .Q4(data_s3),
+        .Q5(data_s4),
+        .Q6(data_s5),
+        .Q7(data_s6),
+        .Q8(data_s7),
+        .SHIFTOUT1(),
+        .SHIFTOUT2(),
+        .BITSLIP(1'b0),
+        .CE1(1'b1),
+        .CE2(1'b1),
+        .CLKDIVP(1'b0),
+        .CLK(clk),
+        .CLKB(~clk),
+        .CLKDIV(div_clk),
+        .OCLK(1'b0),
+        .DYNCLKDIVSEL(1'b0),
+        .DYNCLKSEL(1'b0),
+        .D(1'b0),
+        .DDLY(data_in_idelay_s),
+        .OFB(1'b0),
+        .OCLKB(1'b0),
+        .RST(rst),
+        .SHIFTIN1(1'b0),
+        .SHIFTIN2(1'b0)
+      );
+    end
+  end
+
+    if(DEVICE_TYPE == DEVICE_6SERIES) begin
+      (* IODELAY_GROUP = IODELAY_GROUP *)
+      IODELAYE1 #(
+        .CINVCTRL_SEL ("FALSE"),
+
+Diff Content:
+- 178     if(IF_TYPE == SDR) begin
+- 179       ISERDESE2 #(
+- 181         .DATA_WIDTH(PARALLEL_WIDTH),
+- 231         .DATA_WIDTH(PARALLEL_WIDTH),
++ 179     if(DDR_OR_SDR_N == SDR) begin
++ 179       ISERDESE2  #(
++ 181         .DATA_WIDTH(DATA_WIDTH),
++ 231         .DATA_WIDTH(DATA_WIDTH),
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_serdes_in.v@275:398
+        .SHIFTIN2(1'b0)
+      );
+    end
+  end
+
+    if(DEVICE_TYPE == DEVICE_6SERIES) begin
+      (* IODELAY_GROUP = IODELAY_GROUP *)
+      IODELAYE1 #(
+        .CINVCTRL_SEL ("FALSE"),
+        .DELAY_SRC ("I"),
+        .HIGH_PERFORMANCE_MODE ("TRUE"),
+        .IDELAY_TYPE ("VAR_LOADABLE"),
+        .IDELAY_VALUE (0),
+        .ODELAY_TYPE ("FIXED"),
+        .ODELAY_VALUE (0),
+        .REFCLK_FREQUENCY (200.0),
+        .SIGNAL_PATTERN ("DATA"))
+      i_rx_data_idelay (
+        .T (1'b1),
+        .CE (1'b0),
+        .INC (1'b0),
+        .CLKIN (1'b0),
+        .DATAIN (1'b0),
+        .ODATAIN (1'b0),
+        .CINVCTRL (1'b0),
+        .C (up_clk),
+        .IDATAIN (data_in_ibuf_s),
+        .DATAOUT (data_in_idelay_s),
+        .RST (up_dld),
+        .CNTVALUEIN (up_dwdata),
+        .CNTVALUEOUT (up_drdata));
+
+      ISERDESE1 #(
+        .DATA_RATE("DDR"),
+        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DYN_CLKDIV_INV_EN("FALSE"),
+        .DYN_CLK_INV_EN("FALSE"),
+        .INIT_Q1(1'b0),
+        .INIT_Q2(1'b0),
+        .INIT_Q3(1'b0),
+        .INIT_Q4(1'b0),
+        .INTERFACE_TYPE("NETWORKING"),
+        .IOBDELAY("NONE"),
+        .NUM_CE(1),
+        .OFB_USED("FALSE"),
+        .SERDES_MODE("MASTER"),
+        .SRVAL_Q1(1'b0),
+        .SRVAL_Q2(1'b0),
+        .SRVAL_Q3(1'b0),
+        .SRVAL_Q4(1'b0))
+      i_serdes_m (
+        .O(),
+        .Q1(data_s0),
+        .Q2(data_s1),
+        .Q3(data_s2),
+        .Q4(data_s3),
+        .Q5(data_s4),
+        .Q6(data_s5),
+        .SHIFTOUT1(data_shift1_s),
+        .SHIFTOUT2(data_shift2_s),
+        .BITSLIP(1'b0),
+        .CE1(1'b1),
+        .CE2(1'b1),
+        .CLK(clk),
+        .CLKB(1'b0),
+        .CLKDIV(div_clk),
+        .OCLK(1'b0),
+        .DYNCLKDIVSEL(1'b0),
+        .DYNCLKSEL(1'b0),
+        .D(data_in_idelay_s),
+        .DDLY(1'b0),
+        .OFB(1'b0),
+        .RST(rst),
+        .SHIFTIN1(1'b0),
+        .SHIFTIN2(1'b0)
+      );
+
+      ISERDESE1 #(
+        .DATA_RATE("DDR"),
+        .DATA_WIDTH(PARALLEL_WIDTH),
+        .DYN_CLKDIV_INV_EN("FALSE"),
+        .DYN_CLK_INV_EN("FALSE"),
+        .INIT_Q1(1'b0),
+        .INIT_Q2(1'b0),
+        .INIT_Q3(1'b0),
+        .INIT_Q4(1'b0),
+        .INTERFACE_TYPE("NETWORKING"),
+        .IOBDELAY("NONE"),
+        .NUM_CE(1),
+        .OFB_USED("FALSE"),
+        .SERDES_MODE("SLAVE"),
+        .SRVAL_Q1(1'b0),
+        .SRVAL_Q2(1'b0),
+        .SRVAL_Q3(1'b0),
+        .SRVAL_Q4(1'b0))
+      i_serdes_s (
+        .O(),
+        .Q1(),
+        .Q2(),
+        .Q3(data_s6),
+        .Q4(data_s7),
+        .Q5(),
+        .Q6(),
+        .SHIFTOUT1(),
+        .SHIFTOUT2(),
+        .BITSLIP(1'b0),
+        .CE1(1'b1),
+        .CE2(1'b1),
+        .CLK(clk),
+        .CLKB(1'b0),
+        .CLKDIV(div_clk),
+        .OCLK(1'b0),
+        .DYNCLKDIVSEL(1'b0),
+        .DYNCLKSEL(1'b0),
+        .D(1'b0),
+        .DDLY(1'b0),
+        .OFB(1'b0),
+        .RST(rst),
+        .SHIFTIN1(data_shift1_s),
+        .SHIFTIN2(data_shift2_s));
+      end
+
+endmodule
+
+

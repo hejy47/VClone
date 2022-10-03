@@ -1,0 +1,46 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@241:261@HdlStmProcess
+assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
+assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (idle == 1'b1) begin
+    counter <= 'h00;
+  end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
+    if (bit_counter == word_length) begin
+        counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
+    end else begin
+      counter <= counter + (transfer_active ? 'h1 : 'h10);
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    idle <= 1'b1;
+  end else begin
+
+Diff Content:
+- 246 always @(posedge clk) begin
+- 247   if (idle == 1'b1) begin
+- 248     counter <= 'h00;
+- 249   end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
+- 250     if (bit_counter == word_length) begin
+- 251         counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
+- 252     end else begin
+- 253       counter <= counter + (transfer_active ? 'h1 : 'h10);
+- 256 end
++ 253   assign sleep_counter_compare = sleep_counter == cmd_d1[7:0] && clk_div_last == 1'b1;
++ 253   assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8] && clk_div_last == 1'b1;
++ 253   always @(posedge clk) begin
++ 253     if (idle == 1'b1) begin
++ 253       counter <= 'h00;
++ 253     end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
++ 253       if (bit_counter == word_length) begin
++ 253           counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : 'h10) + BIT_COUNTER_CARRY;
++ 253       end else begin
++ 253         counter <= counter + (transfer_active ? 'h1 : 'h10);
++ 253       end
+
+Clone Blocks:

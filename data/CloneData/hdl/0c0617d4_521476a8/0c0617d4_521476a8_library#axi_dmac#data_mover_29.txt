@@ -1,0 +1,164 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@122:188@HdlStmIf
+assign m_axi_last = last || early_tlast;
+assign m_axi_partial_burst = early_tlast;
+
+assign block_descr_to_dst = transfer_abort_s;
+
+generate if (ALLOW_ABORT == 1) begin
+  wire programmed_last;
+
+  reg transfer_abort = 1'b0;
+  reg req_xlast_d = 1'b0;
+  reg [1:0] transfer_id = 2'b0;
+
+  assign programmed_last = (last == 1'b1 && eot == 1'b1 && req_xlast_d == 1'b1);
+  /*
+   * A 'last' on the external interface indicates the end of an packet. If such a
+   * 'last' indicator is observed before the end of the current transfer stop
+   * accepting data on the external interface until a new descriptor is
+   * received that is the first segment of a transfer.
+   */
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      transfer_abort <= 1'b0;
+    end else if (req_valid == 1'b1 && req_ready == 1'b1 && req_xlast_d == 1'b1) begin
+      transfer_abort <= 1'b0;
+    end else if (m_axi_valid == 1'b1) begin
+      if (programmed_last == 1'b1) begin
+        transfer_abort <= 1'b0;
+      end else if (s_axi_last == 1'b1) begin
+        transfer_abort <= 1'b1;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (req_ready == 1'b1 && req_valid == 1'b1) begin
+      req_xlast_d <= req_xlast;
+    end
+  end
+
+  assign transfer_abort_s = transfer_abort;
+  assign early_tlast = (s_axi_ready == 1'b1) && (m_axi_valid == 1'b1) &&
+                       (s_axi_last == 1'b1) && (programmed_last == 1'b0);
+
+  assign rewind_req_valid = early_tlast;
+  assign rewind_req_data = {transfer_id,req_xlast_d,id_next};
+
+  // The width of the id must fit the number of transfers that can be in flight
+  // in the burst memory
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      transfer_id <= 2'b0;
+    end else if (req_valid == 1'b1 && req_ready == 1'b1) begin
+      transfer_id <= transfer_id + 1'b1;
+    end
+  end
+
+end else begin
+  assign transfer_abort_s = 1'b0;
+  assign early_tlast = 1'b0;
+  assign rewind_req_valid = 1'b0;
+  assign rewind_req_data = 'h0;
+end endgenerate
+
+/*
+ * If req_sync_transfer_start is set all incoming beats will be skipped until
+ * one has s_axi_sync set. This will be the first beat that is passsed through.
+ */
+
+Diff Content:
+- 127 generate if (ALLOW_ABORT == 1) begin
+- 128   wire programmed_last;
+- 130   reg transfer_abort = 1'b0;
+- 131   reg req_xlast_d = 1'b0;
+- 132   reg [1:0] transfer_id = 2'b0;
+- 134   assign programmed_last = (last == 1'b1 && eot == 1'b1 && req_xlast_d == 1'b1);
+- 136    * A 'last' on the external interface indicates the end of an packet. If such a
+- 137    * 'last' indicator is observed before the end of the current transfer stop
+- 138    * accepting data on the external interface until a new descriptor is
+- 139    * received that is the first segment of a transfer.
+- 142     if (resetn == 1'b0) begin
+- 143       transfer_abort <= 1'b0;
+- 144     end else if (req_valid == 1'b1 && req_ready == 1'b1 && req_xlast_d == 1'b1) begin
+- 145       transfer_abort <= 1'b0;
+- 147       if (programmed_last == 1'b1) begin
+- 148         transfer_abort <= 1'b0;
+- 149       end else if (s_axi_last == 1'b1) begin
+- 150         transfer_abort <= 1'b1;
+- 151       end
+- 156     if (req_ready == 1'b1 && req_valid == 1'b1) begin
+- 157       req_xlast_d <= req_xlast;
+- 161   assign transfer_abort_s = transfer_abort;
+- 162   assign early_tlast = (s_axi_ready == 1'b1) && (m_axi_valid == 1'b1) &&
+- 163                        (s_axi_last == 1'b1) && (programmed_last == 1'b0);
+- 165   assign rewind_req_valid = early_tlast;
+- 166   assign rewind_req_data = {transfer_id,req_xlast_d,id_next};
+- 172       transfer_id <= 2'b0;
+- 174       transfer_id <= transfer_id + 1'b1;
+- 178 end else begin
+- 179   assign transfer_abort_s = 1'b0;
+- 180   assign early_tlast = 1'b0;
+- 181   assign rewind_req_valid = 1'b0;
+- 182   assign rewind_req_data = 'h0;
+- 183 end endgenerate
++ 128     assign transfer_abort_s = transfer_abort;
++ 128     assign early_tlast = (s_axi_ready == 1'b1) && (m_axi_valid == 1'b1) &&
++ 128                          (s_axi_last == 1'b1) && (programmed_last == 1'b0);
++ 132     assign rewind_req_valid = early_tlast;
++ 132     assign rewind_req_data = {transfer_id,req_xlast_d,id_next};
++ 132     always @(posedge clk) begin
++ 132       if (resetn == 1'b0) begin
++ 132         transfer_id <= 2'b0;
++ 132       end else if (req_valid == 1'b1 && req_ready == 1'b1) begin
++ 132         transfer_id <= transfer_id + 1'b1;
++ 132       end
++ 132     end
++ 132   end else begin
++ 132     assign transfer_abort_s = 1'b0;
++ 132     assign early_tlast = 1'b0;
++ 132     assign rewind_req_valid = 1'b0;
++ 132     assign rewind_req_data = 'h0;
++ 132   end endgenerate
++ 139    * If req_sync_transfer_start is set all incoming beats will be skipped until
++ 139    * one has s_axi_sync set. This will be the first beat that is passsed through.
++ 145     if (req_ready == 1'b1) begin
++ 145       needs_sync <= req_sync_transfer_start;
++ 151       needs_sync <= 1'b0;
++ 153   assign last_load = m_axi_valid && last_eot && eot;
++ 153   assign req_ready = (last_load && ~early_tlast) ||
++ 153                      ((~active && ~transfer_abort_s) && pending_burst) ||
++ 153                      (transfer_abort_s && rewind_req_ready);
++ 157     if (req_ready) begin
++ 157       last_eot <= req_last_burst_length == 'h0;
++ 157       last_non_eot <= 1'b0;
++ 157       beat_counter <= 'h1;
++ 157     end else if (m_axi_valid == 1'b1) begin
++ 157       last_eot <= beat_counter == last_burst_length;
++ 157       last_non_eot <= beat_counter == BEAT_COUNTER_MAX;
++ 157       beat_counter <= beat_counter + 1'b1;
++ 163   always @(posedge clk) begin
++ 163     if (req_ready)
++ 163       last_burst_length <= req_last_burst_length;
++ 163   end
++ 166   always @(posedge clk) begin
++ 166     if (req_ready) begin
++ 166       beat_counter_minus_one <= 'h0;
++ 166     end else if (m_axi_valid == 1'b1) begin
++ 166       beat_counter_minus_one <= beat_counter;
++ 166     end
++ 166   end
++ 166   always @(posedge clk) begin
++ 166     if (last_load || early_tlast) begin
++ 166       bl_valid <= 1'b1;
++ 166       measured_last_burst_length <= beat_counter_minus_one;
++ 166     end else if (bl_ready) begin
++ 166       bl_valid <= 1'b0;
++ 166     end
++ 166   end
++ 172       active <= 1'b0;
++ 174       active <= 1'b1;
++ 174     end else if (last_load == 1'b1) begin
++ 174       active <= 1'b0;
+
+Clone Blocks:

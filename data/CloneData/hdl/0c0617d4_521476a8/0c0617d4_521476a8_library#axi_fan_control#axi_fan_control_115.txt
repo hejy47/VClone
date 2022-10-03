@@ -1,0 +1,46 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@738:760@HdlStmProcess
+    pwm_change_done <= 'h0;
+  end
+end
+
+//tacho measurement and pwm change delay counter
+always @(posedge up_clk) begin
+  if ((up_resetn & counter_resetn) == 1'b0) begin
+    counter_reg <= 'h0;
+    counter_overflow <= 1'b0;
+  end else begin
+    if (counter_reg == OVERFLOW_LIM) begin
+      counter_reg <= 'h0;
+      counter_overflow <= 1'b1;
+    end else begin
+      counter_reg <= counter_reg + 1'b1;
+    end
+  end
+end
+
+//prescaler; sets the rate at which the fsm is run
+always @(posedge up_clk) begin
+  if (up_resetn  == 1'b0) begin
+    presc_reg <= 'h0;
+
+Diff Content:
+- 743 always @(posedge up_clk) begin
+- 744   if ((up_resetn & counter_resetn) == 1'b0) begin
+- 745     counter_reg <= 'h0;
+- 746     counter_overflow <= 1'b0;
+- 747   end else begin
+- 748     if (counter_reg == OVERFLOW_LIM) begin
+- 750       counter_overflow <= 1'b1;
+- 752       counter_reg <= counter_reg + 1'b1;
+- 755 end
++ 748   always @(posedge up_clk) begin
++ 748     if ((up_resetn & counter_resetn) == 1'b0) begin
++ 750       counter_overflow <= 1'b0;
++ 752       if (counter_reg == OVERFLOW_LIM) begin
++ 752         counter_reg <= 'h0;
++ 752         counter_overflow <= 1'b1;
++ 752       end else begin
++ 752         counter_reg <= counter_reg + 1'b1;
++ 752       end
+
+Clone Blocks:

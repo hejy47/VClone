@@ -1,0 +1,71 @@
+Source Block: verilog-ethernet/rtl/ip_64.v@317:343@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        arp_request_valid_reg <= 0;
+        drop_packet_reg <= 0;
+        input_ip_hdr_ready_reg <= 0;
+        outgoing_ip_hdr_valid_reg <= 1'b0;
+        outgoing_eth_dest_mac_reg <= 48'h000000000000;
+    end else begin
+        state_reg <= state_next;
+
+        arp_request_valid_reg <= arp_request_valid_next;
+        drop_packet_reg <= drop_packet_next;
+
+        input_ip_hdr_ready_reg <= input_ip_hdr_ready_next;
+
+        outgoing_ip_hdr_valid_reg <= outgoing_ip_hdr_valid_next;
+        outgoing_eth_dest_mac_reg <= outgoing_eth_dest_mac_next;
+    end
+end
+
+endmodule
+
+Diff Content:
+- 325         arp_request_valid_reg <= 0;
+- 326         drop_packet_reg <= 0;
+- 327         input_ip_hdr_ready_reg <= 0;
+- 329         outgoing_eth_dest_mac_reg <= 48'h000000000000;
+- 339         outgoing_eth_dest_mac_reg <= outgoing_eth_dest_mac_next;
++ 327         arp_request_valid_reg <= 1'b0;
++ 327         drop_packet_reg <= 1'b0;
++ 327         input_ip_hdr_ready_reg <= 1'b0;
++ 340     outgoing_eth_dest_mac_reg <= outgoing_eth_dest_mac_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip.v@308:334
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        arp_request_valid_reg <= 0;
+        drop_packet_reg <= 0;
+        input_ip_hdr_ready_reg <= 0;
+        outgoing_ip_hdr_valid_reg <= 1'b0;
+        outgoing_eth_dest_mac_reg <= 48'h000000000000;
+    end else begin
+        state_reg <= state_next;
+
+        arp_request_valid_reg <= arp_request_valid_next;
+        drop_packet_reg <= drop_packet_next;
+
+        input_ip_hdr_ready_reg <= input_ip_hdr_ready_next;
+
+        outgoing_ip_hdr_valid_reg <= outgoing_ip_hdr_valid_next;
+        outgoing_eth_dest_mac_reg <= outgoing_eth_dest_mac_next;
+    end
+end
+
+endmodule
+

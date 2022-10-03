@@ -1,0 +1,19 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2364:2374@HdlStmAssign
+
+   //################################
+   //# next transaction read control
+   //################################
+
+   assign fifo_read = last_tran & ~emesh_wait_in;
+
+   //############################################
+   //# transaction launcher state machine
+   //############################################
+   assign last_tran = (launch_pointer[2:0] == 3'b110);
+
+Diff Content:
+- 2369    assign fifo_read = last_tran & ~emesh_wait_in;
++ 2369    assign wr_addr[FAD-1:0]       = wr_binary_pointer[FAD-1:0];
++ 2369    assign wr_binary_next[FAD:0]  = wr_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_write};
+
+Clone Blocks:

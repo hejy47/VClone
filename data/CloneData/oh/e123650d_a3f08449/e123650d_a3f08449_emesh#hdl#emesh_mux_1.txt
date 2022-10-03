@@ -1,0 +1,32 @@
+Source Block: oh/emesh/hdl/emesh_mux.v@60:70@HdlStmAssign
+   
+   //access signal
+   assign access_out = |(access_in[N-1:0]);
+
+   //raise wait signals 
+   assign wait_out[N-1:0] = access_in[N-1:0] & (~grants[N-1:0] | {(N){wait_in}});
+
+   //parametrized mux
+   always @*
+     begin
+	packet_out[PW-1:0] = 'b0;
+
+Diff Content:
+- 65    assign wait_out[N-1:0] = access_in[N-1:0] & (~grants[N-1:0] | {(N){wait_in}});
++ 65    assign ready_out[N-1:0] = ~(access_in[N-1:0] & ~grants[N-1:0]) & {(N){ready_in}});
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emesh/hdl/emesh_mux.v@57:67
+`endif
+	end
+   endgenerate
+   
+   //access signal
+   assign access_out = |(access_in[N-1:0]);
+
+   //raise wait signals 
+   assign wait_out[N-1:0] = access_in[N-1:0] & (~grants[N-1:0] | {(N){wait_in}});
+
+   //parametrized mux
+

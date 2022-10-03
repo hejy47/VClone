@@ -1,0 +1,26 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@235:253@HdlStmProcess
+  end else if (bl_ready) begin
+    bl_valid <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    active <= 1'b0;
+  end else if (req_valid == 1'b1) begin
+    active <= 1'b1;
+  end else if (last_load == 1'b1) begin
+    active <= 1'b0;
+  end
+end
+
+always @(*)
+begin
+  if (m_axi_valid == 1'b1 && (last == 1'b1 || early_tlast == 1'b1))
+    id_next <= inc_id(id);
+
+Diff Content:
+- 243   end else if (req_valid == 1'b1) begin
++ 243   end else if (req_valid == 1'b1 && req_ready == 1'b1) begin
+
+Clone Blocks:

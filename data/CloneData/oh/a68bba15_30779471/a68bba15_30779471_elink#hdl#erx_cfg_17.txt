@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/erx_cfg.v@166:180@HdlStmProcess
+   //# TESTMODE (ADD OR/LFSR)
+   //###############################  
+   wire 	testmode_add;
+   wire 	testmode_lfsr;
+   
+   always @ (posedge clk)
+     if(rx_testdata_write)
+       rx_testdata_reg[31:0] <= mi_din[31:0];
+     else if(erx_access)   
+       rx_testdata_reg[31:0] <= rx_testdata_reg[31:0] + erx_packet[71:40];
+   				                    
+   //###############################
+   //# DATA READBACK MUX
+   //###############################
+
+
+Diff Content:
+- 173        rx_testdata_reg[31:0] <= mi_din[31:0];
++ 173        rx_testdata_reg[31:0] <= data_in[31:0];
+
+Clone Blocks:

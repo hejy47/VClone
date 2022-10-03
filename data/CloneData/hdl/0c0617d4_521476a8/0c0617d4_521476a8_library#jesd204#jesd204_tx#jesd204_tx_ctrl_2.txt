@@ -1,0 +1,45 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@84:94@HdlIdDef
+  output [NUM_LINKS-1:0] status_sync,
+  output reg [1:0] status_state
+);
+
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+localparam ILAS_COUNTER_WIDTH = (DATA_PATH_WIDTH == 4) ? 6 : 5;
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+localparam BEATS_PER_MF_WIDTH = 10-DPW_LOG2;
+
+// For DATA_PATH_WIDTH = 8, special case if F*K%8=4
+//   Multiframe boundaries can occur in the middle of a beat
+
+Diff Content:
+- 89 localparam ILAS_COUNTER_WIDTH = (DATA_PATH_WIDTH == 4) ? 6 : 5;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@85:95
+  output reg [1:0] status_state
+);
+
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+localparam ILAS_COUNTER_WIDTH = (DATA_PATH_WIDTH == 4) ? 6 : 5;
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+localparam BEATS_PER_MF_WIDTH = 10-DPW_LOG2;
+
+// For DATA_PATH_WIDTH = 8, special case if F*K%8=4
+//   Multiframe boundaries can occur in the middle of a beat
+//   jesd204_lmfc will assert lmfc_edge once per two LMFC periods
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@83:93
+
+  output [NUM_LINKS-1:0] status_sync,
+  output reg [1:0] status_state
+);
+
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+localparam ILAS_COUNTER_WIDTH = (DATA_PATH_WIDTH == 4) ? 6 : 5;
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+localparam BEATS_PER_MF_WIDTH = 10-DPW_LOG2;
+
+// For DATA_PATH_WIDTH = 8, special case if F*K%8=4
+

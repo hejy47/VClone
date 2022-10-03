@@ -1,0 +1,40 @@
+Source Block: oh/src/elink/hdl/erx_io.v@363:385@HdlStmFor
+   //# IDDR SAMPLERS
+   //#############################  
+ 
+   //DATA
+   genvar        i;
+   generate for(i=0; i<8; i=i+1)
+     begin : gen_iddr           
+	// Ultrascale doesn't have .SRTYPE("SYNC")
+	IDDRE1 #(.DDR_CLK_EDGE  ("SAME_EDGE_PIPELINED"))
+	iddr_data (
+		   .Q1 (rx_word_iddr[i]),
+		   .Q2 (rx_word_iddr[i+8]),
+		   .C  (rx_lclk_iddr),//rx_lclk_iddr
+		   .CB  (~rx_lclk_iddr),
+		   .D  (rxi_delay_out[i] ^ invert_pins),
+		   .R  (1'b0)
+		   );
+     end
+     endgenerate
+
+   //FRAME
+   IDDRE1 #(.DDR_CLK_EDGE  ("SAME_EDGE_PIPELINED"))
+	// Ultrascale doesn't have .SRTYPE("SYNC")
+
+Diff Content:
+- 368    generate for(i=0; i<8; i=i+1)
+- 369      begin : gen_iddr           
+- 371 	IDDRE1 #(.DDR_CLK_EDGE  ("SAME_EDGE_PIPELINED"))
+- 372 	iddr_data (
+- 373 		   .Q1 (rx_word_iddr[i]),
+- 374 		   .Q2 (rx_word_iddr[i+8]),
+- 375 		   .C  (rx_lclk_iddr),//rx_lclk_iddr
+- 376 		   .CB  (~rx_lclk_iddr),
+- 377 		   .D  (rxi_delay_out[i] ^ invert_pins),
+- 378 		   .R  (1'b0)
+- 379 		   );
+- 380      end
+
+Clone Blocks:

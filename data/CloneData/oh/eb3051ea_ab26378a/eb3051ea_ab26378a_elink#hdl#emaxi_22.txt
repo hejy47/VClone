@@ -1,0 +1,77 @@
+Source Block: oh/elink/hdl/emaxi.v@164:217@HdlStmProcess
+   assign aw_go       = m_axi_awvalid & m_axi_awready;
+   assign w_go        = m_axi_wvalid & m_axi_wready;
+   assign emwr_rd_en  = ( emwr_access & ~awvalid_b & ~wvalid_b);
+
+   // generate write-address signals
+   always @( posedge m_axi_aclk )     
+     if(~m_axi_aresetn) 
+       begin
+          m_axi_awvalid      <= 1'b0;
+          m_axi_awaddr[31:0] <= 32'd0;
+          m_axi_awlen[7:0]   <= 8'd0;
+          m_axi_awsize[2:0]  <= 3'd0;	  
+          awvalid_b          <= 1'b0;
+          awaddr_b[31:0]     <= 32'd0;
+          awlen_b[7:0]       <= 8'd0;
+          awsize_b[2:0]      <= 3'd0;
+       end 
+     else 
+       begin
+          if( ~m_axi_awvalid | aw_go ) 
+	    begin
+               if( awvalid_b ) 
+		 begin
+		    m_axi_awvalid       <= 1'b1;
+		    m_axi_awaddr[31:0]  <= awaddr_b[31:0];
+		    m_axi_awlen[7:0]    <= awlen_b[7:0];
+		    m_axi_awsize[2:0]   <= awsize_b[2:0];
+		 end 
+	      else 
+		begin
+		   m_axi_awvalid       <= emwr_rd_en;
+		   m_axi_awaddr[31:0]  <= emwr_dstaddr[31:0];
+		   m_axi_awlen[7:0]    <= 8'b0;
+		   m_axi_awsize[2:0]   <= { 1'b0, emwr_datamode[1:0]};
+		end
+	    end
+          if( emwr_rd_en & m_axi_awvalid & ~aw_go )
+            awvalid_b <= 1'b1;
+          else if( aw_go )
+            awvalid_b <= 1'b0;
+          
+	 //Pipeline stage
+         if( emwr_rd_en )
+	   begin
+              awaddr_b[31:0]  <= emwr_dstaddr[31:0];
+              awlen_b[7:0]    <= 8'b0;
+              awsize_b[2:0]   <= { 1'b0, emwr_datamode[1:0] };
+         end        
+       end // else: !if(~m_axi_aresetn)
+
+
+     
+   //--------------------
+   //write alignment circuit
+
+Diff Content:
+- 176           awvalid_b          <= 1'b0;
+- 177           awaddr_b[31:0]     <= 32'd0;
+- 178           awlen_b[7:0]       <= 8'd0;
+- 179           awsize_b[2:0]      <= 3'd0;
+- 194 		   m_axi_awvalid       <= emwr_rd_en;
+- 195 		   m_axi_awaddr[31:0]  <= emwr_dstaddr[31:0];
+- 197 		   m_axi_awsize[2:0]   <= { 1'b0, emwr_datamode[1:0]};
+- 200           if( emwr_rd_en & m_axi_awvalid & ~aw_go )
+- 206          if( emwr_rd_en )
+- 208               awaddr_b[31:0]  <= emwr_dstaddr[31:0];
+- 210               awsize_b[2:0]   <= { 1'b0, emwr_datamode[1:0] };
++ 195 		   m_axi_awvalid       <= rxwr_access;
++ 195 		   m_axi_awaddr[31:0]  <= rxwr_dstaddr[31:0];
++ 197 		   m_axi_awsize[2:0]   <= { 1'b0, rxwr_datamode[1:0]};
++ 200           if( rxwr_access & m_axi_awvalid & ~aw_go )
++ 206          if( rxwr_access )
++ 208               awaddr_b[31:0]  <= rxwr_dstaddr[31:0];
++ 210               awsize_b[2:0]   <= { 1'b0, rxwr_datamode[1:0] };
+
+Clone Blocks:

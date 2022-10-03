@@ -1,0 +1,95 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl_64b.v@91:133@HdlStmProcess
+assign emb_lock_masked = emb_lock_d | cfg_lanes_disable;
+
+assign all_block_sync = &phy_block_sync_masked;
+assign all_emb_lock = &emb_lock_masked;
+
+always @(*) begin
+  next_state = state;
+  rst_good_cnt = 1'b1;
+  event_unexpected_lane_state_error_nx = 1'b0;
+  case (state)
+    STATE_RESET:
+      next_state = STATE_WAIT_BS;
+    STATE_WAIT_BS:
+      if (all_block_sync) begin
+        rst_good_cnt = 1'b0;
+        if (&good_cnt) begin
+          next_state = STATE_BLOCK_SYNC;
+        end
+      end
+    STATE_BLOCK_SYNC:
+      if (~all_block_sync) begin
+        next_state = STATE_WAIT_BS;
+      end else if (all_emb_lock & ~buffer_release_d_n) begin
+        rst_good_cnt = 1'b0;
+        if (&good_cnt) begin
+          next_state = STATE_DATA;
+        end
+      end
+    STATE_DATA:
+      if (~all_block_sync) begin
+        next_state = STATE_WAIT_BS;
+        event_unexpected_lane_state_error_nx = 1'b1;
+      end else if (~all_emb_lock | buffer_release_d_n) begin
+        next_state = STATE_BLOCK_SYNC;
+        event_unexpected_lane_state_error_nx = 1'b1;
+      end
+  endcase
+end
+
+// Wait n consecutive valid cycles before jumping into next state
+always @(posedge clk) begin
+  if (reset || rst_good_cnt) begin
+    good_cnt <= 'h0;
+
+Diff Content:
+- 96 always @(*) begin
+- 97   next_state = state;
+- 98   rst_good_cnt = 1'b1;
+- 99   event_unexpected_lane_state_error_nx = 1'b0;
+- 100   case (state)
+- 101     STATE_RESET:
+- 102       next_state = STATE_WAIT_BS;
+- 103     STATE_WAIT_BS:
+- 104       if (all_block_sync) begin
+- 105         rst_good_cnt = 1'b0;
+- 106         if (&good_cnt) begin
+- 107           next_state = STATE_BLOCK_SYNC;
+- 108         end
+- 109       end
+- 110     STATE_BLOCK_SYNC:
+- 111       if (~all_block_sync) begin
+- 113       end else if (all_emb_lock & ~buffer_release_d_n) begin
+- 114         rst_good_cnt = 1'b0;
+- 115         if (&good_cnt) begin
+- 116           next_state = STATE_DATA;
+- 118       end
+- 119     STATE_DATA:
+- 120       if (~all_block_sync) begin
+- 121         next_state = STATE_WAIT_BS;
+- 122         event_unexpected_lane_state_error_nx = 1'b1;
+- 123       end else if (~all_emb_lock | buffer_release_d_n) begin
+- 124         next_state = STATE_BLOCK_SYNC;
+- 125         event_unexpected_lane_state_error_nx = 1'b1;
+- 126       end
+- 127   endcase
+- 128 end
++ 111   assign phy_block_sync_masked = phy_block_sync | cfg_lanes_disable;
++ 111   assign emb_lock_masked = emb_lock_d | cfg_lanes_disable;
++ 111   assign all_block_sync = &phy_block_sync_masked;
++ 111   assign all_emb_lock = &emb_lock_masked;
++ 111   always @(*) begin
++ 111     next_state = state;
++ 111     rst_good_cnt = 1'b1;
++ 111     event_unexpected_lane_state_error_nx = 1'b0;
++ 111     case (state)
++ 111       STATE_RESET:
++ 116       STATE_WAIT_BS:
++ 116         if (all_block_sync) begin
++ 116           rst_good_cnt = 1'b0;
++ 116           if (&good_cnt) begin
++ 116             next_state = STATE_BLOCK_SYNC;
++ 116           end
+
+Clone Blocks:

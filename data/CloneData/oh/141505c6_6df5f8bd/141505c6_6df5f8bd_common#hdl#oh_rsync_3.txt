@@ -1,0 +1,16 @@
+Source Block: oh/common/hdl/oh_rsync.v@22:31@HdlStmAssign
+   always @ (posedge clk or negedge nrst_in)		 
+     if(!nrst_in)
+       sync_pipe[PS-1:0] <= 1'b0;
+     else
+       sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      	      
+   assign nrst_out = sync_pipe[PS-1];
+`endif // unmatched `else, `elsif or `endif
+      
+endmodule // oh_rsync
+
+
+Diff Content:
+- 27    assign nrst_out = sync_pipe[PS-1];
+
+Clone Blocks:

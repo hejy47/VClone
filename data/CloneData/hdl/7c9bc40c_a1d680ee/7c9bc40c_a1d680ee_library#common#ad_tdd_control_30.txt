@@ -1,0 +1,69 @@
+Source Block: hdl/library/common/ad_tdd_control.v@199:209@HdlStmAssign
+  reg   [ 5:0]    tdd_burst_counter = 6'h0;
+
+  reg             tdd_counter_state = OFF;
+  reg             tdd_burst_state = OFF;
+
+  assign  tdd_counter_status = tdd_counter;
+
+  // ***************************************************************************
+  // all the control registers needs to be updated at the same time
+  // ***************************************************************************
+
+
+Diff Content:
+- 204   assign  tdd_counter_status = tdd_counter;
++ 204   reg             counter_at_tdd_vco_rx_on_1 = 1'b0;
++ 204   reg             counter_at_tdd_vco_rx_off_1 = 1'b0;
++ 204   reg             counter_at_tdd_vco_tx_on_1 = 1'b0;
++ 204   reg             counter_at_tdd_vco_tx_off_1 = 1'b0;
++ 204   reg             counter_at_tdd_rx_on_1 = 1'b0;
++ 204   reg             counter_at_tdd_rx_off_1 = 1'b0;
++ 204   reg             counter_at_tdd_tx_on_1 = 1'b0;
++ 204   reg             counter_at_tdd_tx_off_1 = 1'b0;
++ 204   reg             counter_at_tdd_tx_dp_on_1 = 1'b0;
++ 204   reg             counter_at_tdd_tx_dp_off_1 = 1'b0;
++ 204   reg             counter_at_tdd_vco_rx_on_2 = 1'b0;
++ 204   reg             counter_at_tdd_vco_rx_off_2 = 1'b0;
++ 204   reg             counter_at_tdd_vco_tx_on_2 = 1'b0;
++ 204   reg             counter_at_tdd_vco_tx_off_2 = 1'b0;
++ 204   reg             counter_at_tdd_rx_on_2 = 1'b0;
++ 204   reg             counter_at_tdd_rx_off_2 = 1'b0;
++ 204   reg             counter_at_tdd_tx_on_2 = 1'b0;
++ 204   reg             counter_at_tdd_tx_off_2 = 1'b0;
++ 204   reg             counter_at_tdd_tx_dp_on_2 = 1'b0;
++ 204   reg             counter_at_tdd_tx_dp_off_2 = 1'b0;
++ 204   wire   [21:0]   tdd_tx_dp_on_1_s;
++ 204   wire   [21:0]   tdd_tx_dp_on_2_s;
++ 204   wire   [21:0]   tdd_tx_dp_off_1_s;
++ 204   wire   [21:0]   tdd_tx_dp_off_2_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_tdd_control.v@197:207
+
+  reg   [21:0]    tdd_counter = 22'h0;
+  reg   [ 5:0]    tdd_burst_counter = 6'h0;
+
+  reg             tdd_counter_state = OFF;
+  reg             tdd_burst_state = OFF;
+
+  assign  tdd_counter_status = tdd_counter;
+
+  // ***************************************************************************
+  // all the control registers needs to be updated at the same time
+
+Clone Blocks 2:
+hdl/library/common/ad_tdd_control.v@196:206
+  // tdd counter related
+
+  reg   [21:0]    tdd_counter = 22'h0;
+  reg   [ 5:0]    tdd_burst_counter = 6'h0;
+
+  reg             tdd_counter_state = OFF;
+  reg             tdd_burst_state = OFF;
+
+  assign  tdd_counter_status = tdd_counter;
+
+  // ***************************************************************************
+

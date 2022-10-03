@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_adaq8092/axi_adaq8092_apb_decode.v@51:63@HdlStmProcess
+
+  integer i; 
+
+  assign adc_data_decoded = adc_abp_enb ? adc_data_decoded_s : adc_data ;
+
+  always @(posedge adc_clk) begin 
+    for (i = 0; i <= 13; i = i + 1) begin
+      adc_data_decoded_s[2*i+1] = ~adc_data[2*i+1];
+      adc_data_decoded_s[2*i] = adc_data[2*i];
+    end
+  end  
+
+endmodule
+
+Diff Content:
+- 56   always @(posedge adc_clk) begin 
+- 61   end  
++ 56   always @(posedge adc_clk) begin
++ 61   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adaq8092/axi_adaq8092_apb_decode.v@49:59
+
+  // internal variable
+
+  integer i; 
+
+  assign adc_data_decoded = adc_abp_enb ? adc_data_decoded_s : adc_data ;
+
+  always @(posedge adc_clk) begin 
+    for (i = 0; i <= 13; i = i + 1) begin
+      adc_data_decoded_s[2*i+1] = ~adc_data[2*i+1];
+      adc_data_decoded_s[2*i] = adc_data[2*i];
+

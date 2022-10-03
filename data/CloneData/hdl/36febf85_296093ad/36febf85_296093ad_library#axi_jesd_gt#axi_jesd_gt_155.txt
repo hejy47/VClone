@@ -1,0 +1,25 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@486:500@HdlStmIf
+  assign tx_gt_charisk_mux_s[((0*4)+3):(0*4)] = tx_gt_charisk_extn_s[((PCORE_TX_LANE_SEL_0*4)+3):(PCORE_TX_LANE_SEL_0*4)];
+
+  // clock buffers
+
+  generate
+  if (PCORE_DEVICE_TYPE == 0) begin
+  BUFG i_bufg_rx_clk (
+    .I (rx_out_clk[0]),
+    .O (rx_clk_g));
+  end
+
+  if (PCORE_DEVICE_TYPE == 0) begin
+  BUFG i_bufg_tx_clk (
+    .I (tx_out_clk[0]),
+    .O (tx_clk_g));
+
+Diff Content:
+- 491   if (PCORE_DEVICE_TYPE == 0) begin
+- 492   BUFG i_bufg_rx_clk (
+- 493     .I (rx_out_clk[0]),
+- 494     .O (rx_clk_g));
+- 495   end
+
+Clone Blocks:

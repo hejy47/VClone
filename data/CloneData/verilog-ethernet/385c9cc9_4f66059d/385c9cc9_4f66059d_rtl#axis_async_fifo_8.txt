@@ -1,0 +1,56 @@
+Source Block: verilog-ethernet/rtl/axis_async_fifo.v@145:167@HdlStmProcess
+            wr_ptr_gray_next = wr_ptr_next ^ (wr_ptr_next >> 1);
+        end
+    end
+end
+
+always @(posedge input_clk) begin
+    if (input_rst_sync3_reg) begin
+        wr_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+    end else begin
+        wr_ptr_reg <= wr_ptr_next;
+        wr_ptr_gray_reg <= wr_ptr_gray_next;
+    end
+
+    if (write) begin
+        mem[wr_ptr_reg[ADDR_WIDTH-1:0]] <= {input_axis_tlast, input_axis_tuser, input_axis_tdata};
+    end
+end
+
+// pointer synchronization
+always @(posedge input_clk) begin
+    if (input_rst_sync3_reg) begin
+        rd_ptr_gray_sync1_reg <= {ADDR_WIDTH+1{1'b0}};
+
+Diff Content:
+- 160         mem[wr_ptr_reg[ADDR_WIDTH-1:0]] <= {input_axis_tlast, input_axis_tuser, input_axis_tdata};
++ 160         mem[wr_ptr_reg[ADDR_WIDTH-1:0]] <= mem_write_data;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_async_fifo_64.v@150:172
+            wr_ptr_gray_next = wr_ptr_next ^ (wr_ptr_next >> 1);
+        end
+    end
+end
+
+always @(posedge input_clk) begin
+    if (input_rst_sync3_reg) begin
+        wr_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_gray_reg <= {ADDR_WIDTH+1{1'b0}};
+    end else begin
+        wr_ptr_reg <= wr_ptr_next;
+        wr_ptr_gray_reg <= wr_ptr_gray_next;
+    end
+
+    if (write) begin
+        mem[wr_ptr_reg[ADDR_WIDTH-1:0]] <= {input_axis_tlast, input_axis_tuser, input_axis_tkeep, input_axis_tdata};
+    end
+end
+
+// pointer synchronization
+always @(posedge input_clk) begin
+    if (input_rst_sync3_reg) begin
+        rd_ptr_gray_sync1_reg <= {ADDR_WIDTH+1{1'b0}};
+

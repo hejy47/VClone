@@ -1,0 +1,50 @@
+Source Block: hdl/library/common/up_hdmi_tx.v@269:311@HdlStmProcess
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_rack <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[11:0])
+          12'h000: up_rdata <= PCORE_VERSION;
+          12'h001: up_rdata <= PCORE_ID;
+          12'h002: up_rdata <= up_scratch;
+          12'h010: up_rdata <= {31'd0, up_resetn};
+          12'h011: up_rdata <= {29'd0, up_ss_bypass, up_full_range, up_csc_bypass};
+          12'h012: up_rdata <= {30'd0, up_srcsel};
+          12'h013: up_rdata <= {8'd0, up_const_rgb};
+          12'h015: up_rdata <= up_hdmi_clk_count_s;
+          12'h016: up_rdata <= hdmi_clk_ratio;
+          12'h017: up_rdata <= {31'd0, up_hdmi_status_s};
+          12'h018: up_rdata <= {30'd0, up_vdma_ovf, up_vdma_unf};
+          12'h019: up_rdata <= {30'd0, up_hdmi_tpm_oos, up_vdma_tpm_oos};
+          12'h100: up_rdata <= {up_hl_active, up_hl_width};
+          12'h101: up_rdata <= {16'd0, up_hs_width};
+          12'h102: up_rdata <= {up_he_max, up_he_min};
+          12'h110: up_rdata <= {up_vf_active, up_vf_width};
+          12'h111: up_rdata <= {16'd0, up_vs_width};
+          12'h112: up_rdata <= {up_ve_max, up_ve_min};
+          default: up_rdata <= 0;
+        endcase
+      end else begin
+        up_rdata <= 32'd0;
+      end
+    end
+  end
+
+  // resets
+
+  ad_rst i_hdmi_rst_reg   (.preset(up_preset_s),      .clk(hdmi_clk),   .rst(hdmi_rst));
+  ad_rst i_vdma_rst_reg   (.preset(up_preset_s),      .clk(vdma_clk),   .rst(vdma_rst));
+
+Diff Content:
+- 283           12'h001: up_rdata <= PCORE_ID;
++ 283           12'h001: up_rdata <= ID;
+
+Clone Blocks:

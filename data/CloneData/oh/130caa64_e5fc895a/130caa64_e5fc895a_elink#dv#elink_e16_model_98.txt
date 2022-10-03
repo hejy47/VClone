@@ -1,0 +1,25 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1335:1347@HdlStmProcess
+   //# srcaddr
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & srcaddr_3116_en)
+        srcaddr[31:16] <= fifo_data_reg[2*LW-1:0];
+
+   always @ (posedge rxi_lclk)
+     if(fifo_data_val & srcaddr_1500_en)
+       srcaddr[15:0] <= fifo_data_reg[2*LW-1:0];
+       
+
+   //###################################################################
+   //#            Order of the transaction fields in the fifo
+   //#            -------------------------------------------
+
+Diff Content:
+- 1340    always @ (posedge rxi_lclk)
+- 1341      if(fifo_data_val & srcaddr_1500_en)
+- 1342        srcaddr[15:0] <= fifo_data_reg[2*LW-1:0];
++ 1342 module e16_synchronizer #(parameter DW=32) (/*AUTOARG*/
++ 1342    out,
++ 1342    in, clk, reset
++ 1342    );
+
+Clone Blocks:

@@ -1,0 +1,74 @@
+Source Block: picorv32/picosoc/hx8kdemo.v@63:83@HdlStmProcess
+
+	reg [31:0] gpio;
+
+	assign leds = gpio >> 12;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+		if (iomem_valid && !iomem_ready && iomem_addr[31:24] == 8'h 02) begin
+			iomem_ready <= 1;
+			iomem_rdata <= gpio;
+			if (iomem_wstrb[0]) gpio[ 7: 0] <= iomem_wdata[ 7: 0];
+			if (iomem_wstrb[1]) gpio[15: 8] <= iomem_wdata[15: 8];
+			if (iomem_wstrb[2]) gpio[23:16] <= iomem_wdata[23:16];
+			if (iomem_wstrb[3]) gpio[31:24] <= iomem_wdata[31:24];
+		end
+	end
+
+	picosoc uut (
+		.clk          (clk         ),
+		.resetn       (resetn      ),
+
+
+Diff Content:
+- 69 		iomem_ready <= 0;
+- 70 		if (iomem_valid && !iomem_ready && iomem_addr[31:24] == 8'h 02) begin
+- 71 			iomem_ready <= 1;
+- 72 			iomem_rdata <= gpio;
+- 73 			if (iomem_wstrb[0]) gpio[ 7: 0] <= iomem_wdata[ 7: 0];
+- 74 			if (iomem_wstrb[1]) gpio[15: 8] <= iomem_wdata[15: 8];
+- 75 			if (iomem_wstrb[2]) gpio[23:16] <= iomem_wdata[23:16];
+- 76 			if (iomem_wstrb[3]) gpio[31:24] <= iomem_wdata[31:24];
++ 76 		if (!resetn) begin
++ 76 			gpio <= 0;
++ 76 			gpio_shr <= 0;
++ 76 		end else begin
++ 76 			iomem_ready <= 0;
++ 76 			if (iomem_valid && !iomem_ready && iomem_addr[31:24] == 8'h 02) begin
++ 76 				iomem_ready <= 1;
++ 76 				iomem_rdata <= gpio;
++ 76 				if (iomem_wstrb[0]) gpio[ 7: 0] <= iomem_wdata[ 7: 0];
++ 76 				if (iomem_wstrb[1]) gpio[15: 8] <= iomem_wdata[15: 8];
++ 76 				if (iomem_wstrb[2]) gpio[23:16] <= iomem_wdata[23:16];
++ 76 				if (iomem_wstrb[3]) gpio[31:24] <= iomem_wdata[31:24];
++ 76 			end
++ 76 			if (&leds && gpio_shr < 10) begin
++ 76 				gpio_shr <= gpio_shr + 1;
++ 76 			end
+
+Clone Blocks:
+Clone Blocks 1:
+picorv32/picosoc/testbench.v@74:94
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+		if (iomem_valid && !iomem_ready && iomem_addr[31:24] == 8'h 02) begin
+			iomem_ready <= 1;
+			iomem_rdata <= gpio;
+			if (iomem_wstrb[0]) gpio[ 7: 0] <= iomem_wdata[ 7: 0];
+			if (iomem_wstrb[1]) gpio[15: 8] <= iomem_wdata[15: 8];
+			if (iomem_wstrb[2]) gpio[23:16] <= iomem_wdata[23:16];
+			if (iomem_wstrb[3]) gpio[31:24] <= iomem_wdata[31:24];
+		end
+	end
+
+	always @(gpio) begin
+		$write("<GPIO:%02x>", gpio[7:0]);
+		if (gpio == 63) begin
+			$display("[OK]");
+

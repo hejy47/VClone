@@ -1,0 +1,55 @@
+Source Block: hdl/library/axi_dmac/2d_transfer.v@97:142@HdlStmProcess
+			req_eot <= last_req[eot_id];
+		end
+	end
+end
+
+always @(posedge req_aclk)
+begin
+	if (req_aresetn == 1'b0) begin
+		dest_address <= 'h00;
+		src_address <= 'h00;
+		x_length <= 'h00;
+		y_length <= 'h00;
+		dest_stride <= 'h00;
+		src_stride <= 'h00;
+		req_ready <= 1'b1;
+		out_req_valid <= 1'b0;
+		out_req_sync_transfer_start <= 1'b0;
+	end else begin
+		if (req_ready) begin
+			if (req_valid) begin
+				dest_address <= req_dest_address;
+				src_address <= req_src_address;
+				x_length <= req_x_length;
+				y_length <= req_y_length;
+				dest_stride <= req_dest_stride;
+				src_stride <= req_src_stride;
+				out_req_sync_transfer_start <= req_sync_transfer_start;
+				req_ready <= 1'b0;
+				out_req_valid <= 1'b1;
+			end
+		end else begin
+			if (out_req_valid && out_req_ready) begin
+				dest_address <= dest_address + dest_stride[C_DMA_LENGTH_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_DEST];
+				src_address <= src_address + src_stride[C_DMA_LENGTH_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_SRC];
+				y_length <= y_length - 1'b1;
+				out_req_sync_transfer_start <= 1'b0;
+				if (y_length == 0) begin
+					out_req_valid <= 1'b0;
+					req_ready <= 1'b1;
+				end
+			end
+		end
+	end
+end
+
+endmodule
+
+Diff Content:
+- 129 				dest_address <= dest_address + dest_stride[C_DMA_LENGTH_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_DEST];
+- 130 				src_address <= src_address + src_stride[C_DMA_LENGTH_WIDTH-1:C_BYTES_PER_BEAT_WIDTH_SRC];
++ 130 				dest_address <= dest_address + dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
++ 130 				src_address <= src_address + src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
+
+Clone Blocks:

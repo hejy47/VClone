@@ -1,0 +1,44 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@216:242@HdlStmIf
+  assign up_wack = 1'b0;
+
+end
+endgenerate
+
+generate if (MM_IF_TYPE == UP_FIFO) begin
+
+  // assign clock and reset
+
+  assign clk = up_clk;
+  assign rstn = up_rstn;
+
+  assign up_wreq_s = up_wreq;
+  assign up_waddr_s = up_waddr;
+  assign up_wdata_s = up_wdata;
+  assign up_wack = up_wack_ff;
+  assign up_rreq_s = up_rreq;
+  assign up_raddr_s = up_raddr;
+  assign up_rdata = up_rdata_ff;
+  assign up_rack = up_rack_ff;
+
+end
+endgenerate
+
+
+
+// IRQ handling
+
+Diff Content:
+- 221 generate if (MM_IF_TYPE == UP_FIFO) begin
+- 225   assign clk = up_clk;
+- 226   assign rstn = up_rstn;
+- 228   assign up_wreq_s = up_wreq;
+- 229   assign up_waddr_s = up_waddr;
+- 230   assign up_wdata_s = up_wdata;
+- 231   assign up_wack = up_wack_ff;
+- 232   assign up_rreq_s = up_rreq;
+- 233   assign up_raddr_s = up_raddr;
+- 234   assign up_rdata = up_rdata_ff;
+- 235   assign up_rack = up_rack_ff;
+- 237 end
+
+Clone Blocks:

@@ -1,0 +1,507 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@158:168@HdlIdDef
+reg  [31:0]                     up_rdata_ff = 'd0;
+reg                             up_wack_ff = 1'b0;
+reg                             up_rack_ff = 1'b0;
+wire                            up_wreq_s;
+wire                            up_rreq_s;
+wire [31:0]                     up_wdata_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_raddr_s;
+
+// Scratch register
+reg [31:0] up_scratch = 'h00;
+
+Diff Content:
+- 163 wire [31:0]                     up_wdata_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad7616/axi_ad7616.v@110:120
+  wire                              up_rstn;
+  wire                              up_rst;
+  wire                              up_rreq_s;
+  wire    [(UP_ADDRESS_WIDTH-1):0]  up_raddr_s;
+  wire                              up_wreq_s;
+  wire    [(UP_ADDRESS_WIDTH-1):0]  up_waddr_s;
+  wire    [31:0]                    up_wdata_s;
+
+  wire                              up_wack_if_s;
+  wire                              up_rack_if_s;
+  wire    [31:0]                    up_rdata_if_s;
+
+Clone Blocks 2:
+hdl/library/axi_ad9371/axi_ad9371.v@155:165
+  wire    [127:0]   dac_data_s;
+  wire              up_wreq_s;
+  wire    [ 13:0]   up_waddr_s;
+  wire    [ 31:0]   up_wdata_s;
+  wire    [  2:0]   up_wack_s;
+  wire              up_rreq_s;
+  wire    [ 13:0]   up_raddr_s;
+  wire    [ 31:0]   up_rdata_s[0:2];
+  wire    [  2:0]   up_rack_s;
+
+  // signal name changes
+
+Clone Blocks 3:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@156:166
+wire up_sw_resetn = ~up_sw_reset;
+
+reg  [31:0]                     up_rdata_ff = 'd0;
+reg                             up_wack_ff = 1'b0;
+reg                             up_rack_ff = 1'b0;
+wire                            up_wreq_s;
+wire                            up_rreq_s;
+wire [31:0]                     up_wdata_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_raddr_s;
+
+
+Clone Blocks 4:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@157:167
+
+reg  [31:0]                     up_rdata_ff = 'd0;
+reg                             up_wack_ff = 1'b0;
+reg                             up_rack_ff = 1'b0;
+wire                            up_wreq_s;
+wire                            up_rreq_s;
+wire [31:0]                     up_wdata_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_raddr_s;
+
+// Scratch register
+
+Clone Blocks 5:
+hdl/library/jesd204/axi_jesd204_tx/axi_jesd204_tx.v@112:122
+
+/* Register interface signals */
+reg [31:0] up_rdata = 'd0;
+reg up_wack = 1'b0;
+reg up_rack = 1'b0;
+wire up_wreq;
+wire up_rreq;
+wire [31:0] up_wdata;
+wire [11:0] up_waddr;
+wire [11:0] up_raddr;
+wire [31:0] up_rdata_common;
+
+Clone Blocks 6:
+hdl/library/axi_ad9467/axi_ad9467.v@119:129
+  wire            up_rreq_s;
+  wire    [13:0]  up_raddr_s;
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_rack_s[0:2];
+  wire            up_wack_s[0:2];
+  wire            up_wreq_s;
+  wire    [13:0]  up_waddr_s;
+  wire    [31:0]  up_wdata_s;
+
+  //defaults
+
+
+Clone Blocks 7:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@98:108
+
+
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+  wire [NUM_CHANNELS+1:0] up_rack_s;
+
+
+Clone Blocks 8:
+hdl/library/axi_ad9434/axi_ad9434.v@95:105
+  // internal signals
+  wire            up_wreq_s;
+  wire            up_rreq_s;
+  wire    [13:0]  up_waddr_s;
+  wire    [13:0]  up_raddr_s;
+  wire    [31:0]  up_wdata_s;
+  wire    [31:0]  up_rdata_s;
+  wire            up_wack_s;
+  wire            up_rack_s;
+
+  wire    [ 1:0]  up_status_pn_err_s;
+
+Clone Blocks 9:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@95:105
+  reg up_rack = 1'b0;
+  reg [31:0] up_rdata = 32'h00;
+  reg [31:0] up_rdata_all;
+
+
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+
+Clone Blocks 10:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v@102:112
+  wire up_rstn;
+
+  wire adc_rst;
+
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+
+Clone Blocks 11:
+hdl/library/axi_ad5766/axi_ad5766.v@112:122
+  // internal wires
+
+  wire                                  up_wreq_s;
+  wire        [13:0]                    up_waddr_s;
+  wire        [31:0]                    up_wdata_s;
+  wire                                  up_rreq_s;
+  wire        [13:0]                    up_raddr_s;
+  wire        [31:0]                    up_rdata_s[0:1];
+  wire                                  up_rack_s[0:1];
+  wire                                  up_wack_s[0:1];
+  wire                                  trigger_s;
+
+Clone Blocks 12:
+hdl/library/axi_adrv9009/axi_adrv9009.v@182:192
+  wire              up_wreq_s;
+  wire    [ 13:0]   up_waddr_s;
+  wire    [ 31:0]   up_wdata_s;
+  wire    [  2:0]   up_wack_s;
+  wire              up_rreq_s;
+  wire    [ 13:0]   up_raddr_s;
+  wire    [ 31:0]   up_rdata_s[0:2];
+  wire    [  2:0]   up_rack_s;
+
+  // signal name changes
+
+
+Clone Blocks 13:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v@103:113
+
+  wire adc_rst;
+
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+  wire [NUM_CHANNELS+1:0] up_rack_s;
+
+Clone Blocks 14:
+hdl/library/axi_ad9371/axi_ad9371.v@156:166
+  wire              up_wreq_s;
+  wire    [ 13:0]   up_waddr_s;
+  wire    [ 31:0]   up_wdata_s;
+  wire    [  2:0]   up_wack_s;
+  wire              up_rreq_s;
+  wire    [ 13:0]   up_raddr_s;
+  wire    [ 31:0]   up_rdata_s[0:2];
+  wire    [  2:0]   up_rack_s;
+
+  // signal name changes
+
+
+Clone Blocks 15:
+hdl/library/axi_adrv9009/axi_adrv9009.v@181:191
+  wire    [127:0]   dac_data_s;
+  wire              up_wreq_s;
+  wire    [ 13:0]   up_waddr_s;
+  wire    [ 31:0]   up_wdata_s;
+  wire    [  2:0]   up_wack_s;
+  wire              up_rreq_s;
+  wire    [ 13:0]   up_raddr_s;
+  wire    [ 31:0]   up_rdata_s[0:2];
+  wire    [  2:0]   up_rack_s;
+
+  // signal name changes
+
+Clone Blocks 16:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@96:106
+  reg [31:0] up_rdata = 32'h00;
+  reg [31:0] up_rdata_all;
+
+
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+
+Clone Blocks 17:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@153:163
+wire sdi_fifo_out_valid;
+
+reg up_sw_reset = 1'b1;
+wire up_sw_resetn = ~up_sw_reset;
+
+reg  [31:0]                     up_rdata_ff = 'd0;
+reg                             up_wack_ff = 1'b0;
+reg                             up_rack_ff = 1'b0;
+wire                            up_wreq_s;
+wire                            up_rreq_s;
+wire [31:0]                     up_wdata_s;
+
+Clone Blocks 18:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@97:107
+  reg [31:0] up_rdata_all;
+
+
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+  wire [NUM_CHANNELS+1:0] up_rack_s;
+
+Clone Blocks 19:
+hdl/library/axi_ad9265/axi_ad9265.v@121:131
+  wire            delay_locked_s;
+  wire    [13:0]  up_raddr_s;
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_rack_s[0:2];
+  wire            up_wack_s[0:2];
+  wire            up_wreq_s;
+  wire    [13:0]  up_waddr_s;
+  wire    [31:0]  up_wdata_s;
+  wire            up_rreq_s;
+
+  // signal name changes
+
+Clone Blocks 20:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@101:111
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+  wire [NUM_CHANNELS+1:0] up_rack_s;
+
+  // internal clocks and resets
+
+  wire up_clk;
+
+Clone Blocks 21:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@155:165
+reg up_sw_reset = 1'b1;
+wire up_sw_resetn = ~up_sw_reset;
+
+reg  [31:0]                     up_rdata_ff = 'd0;
+reg                             up_wack_ff = 1'b0;
+reg                             up_rack_ff = 1'b0;
+wire                            up_wreq_s;
+wire                            up_rreq_s;
+wire [31:0]                     up_wdata_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_raddr_s;
+
+Clone Blocks 22:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@100:110
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+  wire [NUM_CHANNELS+1:0] up_rack_s;
+
+  // internal clocks and resets
+
+
+Clone Blocks 23:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@154:164
+
+reg up_sw_reset = 1'b1;
+wire up_sw_resetn = ~up_sw_reset;
+
+reg  [31:0]                     up_rdata_ff = 'd0;
+reg                             up_wack_ff = 1'b0;
+reg                             up_rack_ff = 1'b0;
+wire                            up_wreq_s;
+wire                            up_rreq_s;
+wire [31:0]                     up_wdata_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
+
+Clone Blocks 24:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@159:169
+reg                             up_wack_ff = 1'b0;
+reg                             up_rack_ff = 1'b0;
+wire                            up_wreq_s;
+wire                            up_rreq_s;
+wire [31:0]                     up_wdata_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_raddr_s;
+
+// Scratch register
+reg [31:0] up_scratch = 'h00;
+
+
+Clone Blocks 25:
+hdl/library/axi_ad5766/axi_ad5766.v@110:120
+  input                                 ctrl_mem_reset);
+
+  // internal wires
+
+  wire                                  up_wreq_s;
+  wire        [13:0]                    up_waddr_s;
+  wire        [31:0]                    up_wdata_s;
+  wire                                  up_rreq_s;
+  wire        [13:0]                    up_raddr_s;
+  wire        [31:0]                    up_rdata_s[0:1];
+  wire                                  up_rack_s[0:1];
+
+Clone Blocks 26:
+hdl/library/jesd204/axi_jesd204_rx/axi_jesd204_rx.v@113:123
+
+/* Register interface signals */
+reg [31:0] up_rdata = 'h0;
+reg up_wack = 1'b0;
+reg up_rack = 1'b0;
+reg up_rreq_d1 = 1'b0;
+wire up_wreq;
+wire up_rreq;
+wire [31:0] up_wdata;
+wire [11:0] up_waddr;
+wire [11:0] up_raddr;
+
+Clone Blocks 27:
+hdl/library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac_regmap.v@99:109
+
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+  wire [NUM_CHANNELS+1:0] up_rack_s;
+
+  // internal clocks and resets
+
+Clone Blocks 28:
+hdl/library/axi_ad9467/axi_ad9467.v@118:128
+  wire            up_status_or_s;
+  wire            up_rreq_s;
+  wire    [13:0]  up_raddr_s;
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_rack_s[0:2];
+  wire            up_wack_s[0:2];
+  wire            up_wreq_s;
+  wire    [13:0]  up_waddr_s;
+  wire    [31:0]  up_wdata_s;
+
+  //defaults
+
+Clone Blocks 29:
+hdl/library/axi_ad9625/axi_ad9625.v@109:119
+  wire        [ 31:0]     up_rdata_s[0:1];
+  wire                    up_rack_s[0:1];
+  wire                    up_wack_s[0:1];
+  wire                    up_wreq_s;
+  wire        [ 13:0]     up_waddr_s;
+  wire        [ 31:0]     up_wdata_s;
+  wire                    up_rreq_s;
+  wire        [ 13:0]     up_raddr_s;
+
+  // signal name changes
+
+
+Clone Blocks 30:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_regmap.v@104:114
+  wire adc_rst;
+
+  wire up_wreq_s;
+  wire [9:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire [NUM_CHANNELS+1:0] up_wack_s;
+  wire up_rreq_s;
+  wire [9:0] up_raddr_s;
+  wire [31:0] up_rdata_s[0:NUM_CHANNELS+1];
+  wire [NUM_CHANNELS+1:0] up_rack_s;
+
+
+Clone Blocks 31:
+hdl/library/axi_ad5766/axi_ad5766.v@111:121
+
+  // internal wires
+
+  wire                                  up_wreq_s;
+  wire        [13:0]                    up_waddr_s;
+  wire        [31:0]                    up_wdata_s;
+  wire                                  up_rreq_s;
+  wire        [13:0]                    up_raddr_s;
+  wire        [31:0]                    up_rdata_s[0:1];
+  wire                                  up_rack_s[0:1];
+  wire                                  up_wack_s[0:1];
+
+Clone Blocks 32:
+hdl/library/axi_ad9625/axi_ad9625.v@108:118
+  wire                    up_adc_or_s;
+  wire        [ 31:0]     up_rdata_s[0:1];
+  wire                    up_rack_s[0:1];
+  wire                    up_wack_s[0:1];
+  wire                    up_wreq_s;
+  wire        [ 13:0]     up_waddr_s;
+  wire        [ 31:0]     up_wdata_s;
+  wire                    up_rreq_s;
+  wire        [ 13:0]     up_raddr_s;
+
+  // signal name changes
+
+Clone Blocks 33:
+hdl/library/axi_ad9265/axi_ad9265.v@122:132
+  wire    [13:0]  up_raddr_s;
+  wire    [31:0]  up_rdata_s[0:2];
+  wire            up_rack_s[0:2];
+  wire            up_wack_s[0:2];
+  wire            up_wreq_s;
+  wire    [13:0]  up_waddr_s;
+  wire    [31:0]  up_wdata_s;
+  wire            up_rreq_s;
+
+  // signal name changes
+
+
+Clone Blocks 34:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@160:170
+reg                             up_rack_ff = 1'b0;
+wire                            up_wreq_s;
+wire                            up_rreq_s;
+wire [31:0]                     up_wdata_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_waddr_s;
+wire [(UP_ADDRESS_WIDTH-1):0]   up_raddr_s;
+
+// Scratch register
+reg [31:0] up_scratch = 'h00;
+
+reg  [7:0] sync_id = 'h00;
+
+Clone Blocks 35:
+hdl/library/axi_ad7616/axi_ad7616.v@111:121
+  wire                              up_rst;
+  wire                              up_rreq_s;
+  wire    [(UP_ADDRESS_WIDTH-1):0]  up_raddr_s;
+  wire                              up_wreq_s;
+  wire    [(UP_ADDRESS_WIDTH-1):0]  up_waddr_s;
+  wire    [31:0]                    up_wdata_s;
+
+  wire                              up_wack_if_s;
+  wire                              up_rack_if_s;
+  wire    [31:0]                    up_rdata_if_s;
+  wire                              up_wack_cntrl_s;
+

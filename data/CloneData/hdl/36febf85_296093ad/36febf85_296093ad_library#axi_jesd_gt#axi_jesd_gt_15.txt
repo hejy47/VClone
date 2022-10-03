@@ -1,0 +1,131 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@266:276@HdlIdDef
+  wire    [  7:0]                               qpll_ref_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_out_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_out_clk;
+  wire                                          up_rstn;
+  wire                                          up_clk;
+  wire                                          up_drp_rst;
+
+  // internal signals
+
+  wire    [  8:0]                               up_status_extn_s;
+  wire    [  8:0]                               rx_rst_done_extn_s;
+
+Diff Content:
+- 271   wire                                          up_drp_rst;
++ 271   output                                      m_axi_awvalid,
++ 271   output  [ 31:0]                             m_axi_awaddr,
++ 271   output  [  2:0]                             m_axi_awprot,
++ 271   input                                       m_axi_awready,
++ 271   output                                      m_axi_wvalid,
++ 271   output  [ 31:0]                             m_axi_wdata,
++ 271   output  [  3:0]                             m_axi_wstrb,
++ 271   input                                       m_axi_wready,
++ 271   input                                       m_axi_bvalid,
++ 271   input   [  1:0]                             m_axi_bresp,
++ 271   output                                      m_axi_bready,
++ 271   output                                      m_axi_arvalid,
++ 271   output  [ 31:0]                             m_axi_araddr,
++ 271   output  [  2:0]                             m_axi_arprot,
++ 271   input                                       m_axi_arready,
++ 271   input                                       m_axi_rvalid,
++ 271   input   [ 31:0]                             m_axi_rdata,
++ 271   input   [  1:0]                             m_axi_rresp,
++ 271   output                                      m_axi_rready);
++ 271   localparam  [31:0]  PMA_RSV[7:0] = {PMA_RSV_7, PMA_RSV_6, PMA_RSV_5, PMA_RSV_4,
++ 271     PMA_RSV_3, PMA_RSV_2, PMA_RSV_1, PMA_RSV_0};
++ 271   localparam  integer CPLL_FBDIV[7:0] = {CPLL_FBDIV_7, CPLL_FBDIV_6, CPLL_FBDIV_5, CPLL_FBDIV_4,
++ 271     CPLL_FBDIV_3, CPLL_FBDIV_2, CPLL_FBDIV_1, CPLL_FBDIV_0};
++ 271   localparam  integer RX_OUT_DIV[7:0] = {RX_OUT_DIV_7, RX_OUT_DIV_6, RX_OUT_DIV_5,
++ 271     RX_OUT_DIV_4, RX_OUT_DIV_3, RX_OUT_DIV_2, RX_OUT_DIV_1, RX_OUT_DIV_0};
++ 271   localparam  integer RX_CLK25_DIV[7:0] = {RX_CLK25_DIV_7, RX_CLK25_DIV_6, RX_CLK25_DIV_5,
++ 271     RX_CLK25_DIV_4, RX_CLK25_DIV_3, RX_CLK25_DIV_2, RX_CLK25_DIV_1, RX_CLK25_DIV_0};
++ 271   localparam  integer RX_CLKBUF_ENABLE[7:0] = {RX_CLKBUF_ENABLE_7, RX_CLKBUF_ENABLE_6,
++ 271     RX_CLKBUF_ENABLE_5, RX_CLKBUF_ENABLE_4, RX_CLKBUF_ENABLE_3,
++ 271     RX_CLKBUF_ENABLE_2, RX_CLKBUF_ENABLE_1, RX_CLKBUF_ENABLE_0};
++ 271   localparam  [71:0] RX_CDR_CFG[7:0] = {RX_CDR_CFG_7, RX_CDR_CFG_6, RX_CDR_CFG_5,
++ 271     RX_CDR_CFG_4, RX_CDR_CFG_3, RX_CDR_CFG_2, RX_CDR_CFG_1, RX_CDR_CFG_0};
++ 271   localparam  integer TX_OUT_DIV[7:0] = {TX_OUT_DIV_7, TX_OUT_DIV_6, TX_OUT_DIV_5,
++ 271     TX_OUT_DIV_4, TX_OUT_DIV_3, TX_OUT_DIV_2, TX_OUT_DIV_1, TX_OUT_DIV_0};
++ 271   localparam  integer TX_CLK25_DIV[7:0] = {TX_CLK25_DIV_7, TX_CLK25_DIV_6, TX_CLK25_DIV_5,
++ 271     TX_CLK25_DIV_4, TX_CLK25_DIV_3, TX_CLK25_DIV_2, TX_CLK25_DIV_1, TX_CLK25_DIV_0};
++ 271   localparam  integer TX_CLKBUF_ENABLE[7:0] = {TX_CLKBUF_ENABLE_7, TX_CLKBUF_ENABLE_6,
++ 271     TX_CLKBUF_ENABLE_5, TX_CLKBUF_ENABLE_4, TX_CLKBUF_ENABLE_3,
++ 271     TX_CLKBUF_ENABLE_2, TX_CLKBUF_ENABLE_1, TX_CLKBUF_ENABLE_0};
++ 271   localparam  integer TX_DATA_SEL[7:0] = {TX_DATA_SEL_7, TX_DATA_SEL_6, TX_DATA_SEL_5,
++ 271     TX_DATA_SEL_4, TX_DATA_SEL_3, TX_DATA_SEL_2, TX_DATA_SEL_1, TX_DATA_SEL_0};
++ 271   reg                                         up_wack_d = 'd0;
++ 271   reg                                         up_rack_d = 'd0;
++ 271   reg     [ 31:0]                             up_rdata_d = 'd0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@261:271
+  wire                                          qpll_clk_0;
+  wire                                          qpll_ref_clk_0;
+  wire                                          qpll_clk_1;
+  wire                                          qpll_ref_clk_1;
+  wire    [  7:0]                               qpll_clk;
+  wire    [  7:0]                               qpll_ref_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_out_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_out_clk;
+  wire                                          up_rstn;
+  wire                                          up_clk;
+  wire                                          up_drp_rst;
+
+Clone Blocks 2:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@265:275
+  wire    [  7:0]                               qpll_clk;
+  wire    [  7:0]                               qpll_ref_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_out_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_out_clk;
+  wire                                          up_rstn;
+  wire                                          up_clk;
+  wire                                          up_drp_rst;
+
+  // internal signals
+
+  wire    [  8:0]                               up_status_extn_s;
+
+Clone Blocks 3:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@262:272
+  wire                                          qpll_ref_clk_0;
+  wire                                          qpll_clk_1;
+  wire                                          qpll_ref_clk_1;
+  wire    [  7:0]                               qpll_clk;
+  wire    [  7:0]                               qpll_ref_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_out_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_out_clk;
+  wire                                          up_rstn;
+  wire                                          up_clk;
+  wire                                          up_drp_rst;
+
+
+Clone Blocks 4:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@264:274
+  wire                                          qpll_ref_clk_1;
+  wire    [  7:0]                               qpll_clk;
+  wire    [  7:0]                               qpll_ref_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_out_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_out_clk;
+  wire                                          up_rstn;
+  wire                                          up_clk;
+  wire                                          up_drp_rst;
+
+  // internal signals
+
+
+Clone Blocks 5:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@263:273
+  wire                                          qpll_clk_1;
+  wire                                          qpll_ref_clk_1;
+  wire    [  7:0]                               qpll_clk;
+  wire    [  7:0]                               qpll_ref_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       rx_out_clk;
+  wire    [((PCORE_NUM_OF_LANES* 1)-1):0]       tx_out_clk;
+  wire                                          up_rstn;
+  wire                                          up_clk;
+  wire                                          up_drp_rst;
+
+  // internal signals
+

@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_clock_monitor/axi_clock_monitor.v@216:236@HdlStmFor
+  end
+
+  // clock monitors
+
+  generate
+    for (n = 0; n < NUM_OF_CLOCKS; n = n + 1) begin: clk_mon
+      up_clock_mon #(
+        .TOTAL_WIDTH(21)
+      ) i_clock_mon (
+        .up_rstn(~up_reset_core),
+        .up_clk(up_clk),
+        .up_d_count(clk_mon_count[n]),
+        .d_rst(1'b0),
+        .d_clk(clock[n])
+      );
+    end
+    for (n = NUM_OF_CLOCKS; n < 16; n = n + 1) begin: clk_mon_z
+      assign clk_mon_count[n] = 21'd0;
+    end
+  endgenerate
+
+
+Diff Content:
+- 229         .d_clk(clock[n])
+- 230       );
++ 230         .d_clk(clock[n]));
+
+Clone Blocks:

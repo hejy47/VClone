@@ -1,0 +1,626 @@
+Source Block: hdl/library/axi_adrv9001/axi_adrv9001_rx.v@107:409@HdlStmIf
+  output  reg [ 31:0]     up_rdata,
+  output  reg             up_rack
+);
+
+generate
+if (ENABLED == 0) begin : core_disabled
+
+  assign adc_rst = 1'b0;
+  assign adc_single_lane = 1'b0;
+  assign adc_sdr_ddr_n = 1'b0;
+  assign adc_symb_op = 1'b0;
+  assign adc_symb_8_16b = 1'b0;
+  assign up_adc_r1_mode = 1'b0;
+  assign adc_valid = 1'b0;
+  assign adc_enable_i0 = 1'b0;
+  assign adc_data_i0 = 16'b0;
+  assign adc_enable_q0 = 1'b0;
+  assign adc_data_q0 = 16'b0;
+  assign adc_enable_i1 = 1'b0;
+  assign adc_data_i1 = 16'b0;
+  assign adc_enable_q1 = 1'b0;
+  assign adc_data_q1 = 16'b0;
+
+  always @(*) begin
+    up_wack = 1'b0;
+    up_rdata = 32'b0;
+    up_rack = 1'b0;
+  end
+
+end else begin : core_enabled
+
+  // configuration settings
+
+  localparam  CONFIG =  (CMOS_LVDS_N * 128) +
+                        (MODE_R1 * 16) +
+                        (DATAFORMAT_DISABLE * 4) +
+                        (DCFILTER_DISABLE * 2) +
+                        (IQCORRECTION_DISABLE * 1);
+
+  // internal registers
+
+  reg               up_status_pn_err = 'd0;
+  reg               up_status_pn_oos = 'd0;
+  reg               up_status_or = 'd0;
+
+  // internal signals
+
+  wire    [ 15:0]   adc_data_iq_i0_s;
+  wire    [ 15:0]   adc_data_iq_q0_s;
+  wire    [ 15:0]   adc_data_iq_i1_s;
+  wire    [ 15:0]   adc_data_iq_q1_s;
+  wire    [  4:0]   adc_num_lanes;
+  wire    [  3:0]   up_adc_pn_err_s;
+  wire    [  3:0]   up_adc_pn_oos_s;
+  wire    [  3:0]   up_adc_or_s;
+  wire    [  4:0]   up_wack_s;
+  wire    [  4:0]   up_rack_s;
+  wire    [ 31:0]   up_rdata_s[0:4];
+  wire              adc_valid_out_i0;
+  wire              adc_valid_out_i1;
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_status_pn_err <= 'd0;
+      up_status_pn_oos <= 'd0;
+      up_status_or <= 'd0;
+      up_wack <= 'd0;
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_status_pn_err <= up_adc_r1_mode ? | up_adc_pn_err_s[1:0] : | up_adc_pn_err_s[3:0];
+      up_status_pn_oos <= up_adc_r1_mode ? | up_adc_pn_oos_s[1:0] : | up_adc_pn_oos_s[3:0];
+      up_status_or <= | up_adc_or_s;
+      up_wack <= | up_wack_s;
+      up_rack <= | up_rack_s;
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
+                  up_rdata_s[3] | up_rdata_s[4];
+    end
+  end
+
+  // channel width is 32 bits
+
+  assign adc_valid = adc_enable_i0 ? adc_valid_out_i0 : adc_valid_out_i1;
+
+  // channel 0 (i)
+
+  axi_adrv9001_rx_channel #(
+    .Q_OR_I_N (0),
+    .COMMON_ID (CHANNEL_BASE_ADDR),
+    .DISABLE (0),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DATA_WIDTH (16))
+  i_rx_channel_0 (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_valid_in (adc_valid_A),
+    .adc_data_in (adc_data_i_A[15:0]),
+    .adc_valid_out (adc_valid_out_i0),
+    .adc_data_out (adc_data_i0),
+    .adc_data_iq_in (adc_data_iq_q0_s),
+    .adc_data_iq_out (adc_data_iq_i0_s),
+    .adc_enable (adc_enable_i0),
+    .dac_valid_in (dac_data_valid_A),
+    .dac_data_in (dac_data_i_A),
+    .up_adc_pn_err (up_adc_pn_err_s[0]),
+    .up_adc_pn_oos (up_adc_pn_oos_s[0]),
+    .up_adc_or (up_adc_or_s[0]),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[0]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[0]),
+    .up_rack (up_rack_s[0]));
+
+  // channel 1 (q)
+
+  axi_adrv9001_rx_channel #(
+    .Q_OR_I_N (1),
+    .COMMON_ID (CHANNEL_BASE_ADDR),
+    .CHANNEL_ID (1),
+    .DISABLE (0),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DATA_WIDTH (16))
+  i_rx_channel_1 (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_valid_in (adc_valid_A),
+    .adc_data_in (adc_data_q_A[15:0]),
+    .adc_valid_out (),
+    .adc_data_out (adc_data_q0),
+    .adc_data_iq_in (adc_data_iq_i0_s),
+    .adc_data_iq_out (adc_data_iq_q0_s),
+    .adc_enable (adc_enable_q0),
+    .dac_valid_in (dac_data_valid_A),
+    .dac_data_in (dac_data_q_A),
+    .up_adc_pn_err (up_adc_pn_err_s[1]),
+    .up_adc_pn_oos (up_adc_pn_oos_s[1]),
+    .up_adc_or (up_adc_or_s[1]),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[1]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[1]),
+    .up_rack (up_rack_s[1]));
+
+  // channel 2 (i)
+
+  axi_adrv9001_rx_channel #(
+    .Q_OR_I_N (0),
+    .COMMON_ID (CHANNEL_BASE_ADDR),
+    .CHANNEL_ID (2),
+    .DISABLE (MODE_R1),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DATA_WIDTH (16))
+  i_rx_channel_2 (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_valid_in (adc_valid_B),
+    .adc_data_in (adc_data_i_B[15:0]),
+    .adc_valid_out (adc_valid_out_i1),
+    .adc_data_out (adc_data_i1),
+    .adc_data_iq_in (adc_data_iq_q1_s),
+    .adc_data_iq_out (adc_data_iq_i1_s),
+    .adc_enable (adc_enable_i1),
+    .dac_valid_in (dac_data_valid_B),
+    .dac_data_in (dac_data_i_B),
+    .up_adc_pn_err (up_adc_pn_err_s[2]),
+    .up_adc_pn_oos (up_adc_pn_oos_s[2]),
+    .up_adc_or (up_adc_or_s[2]),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[2]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[2]),
+    .up_rack (up_rack_s[2]));
+
+  // channel 3 (q)
+
+  axi_adrv9001_rx_channel #(
+    .Q_OR_I_N (1),
+    .COMMON_ID (CHANNEL_BASE_ADDR),
+    .CHANNEL_ID (3),
+    .DISABLE (MODE_R1),
+    .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+    .DCFILTER_DISABLE (DCFILTER_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DATA_WIDTH (16))
+  i_rx_channel_3 (
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_valid_in (adc_valid_B),
+    .adc_data_in (adc_data_q_B[15:0]),
+    .adc_valid_out (),
+    .adc_data_out (adc_data_q1),
+    .adc_data_iq_in (adc_data_iq_i1_s),
+    .adc_data_iq_out (adc_data_iq_q1_s),
+    .adc_enable (adc_enable_q1),
+    .dac_valid_in (dac_data_valid_B),
+    .dac_data_in (dac_data_q_B),
+    .up_adc_pn_err (up_adc_pn_err_s[3]),
+    .up_adc_pn_oos (up_adc_pn_oos_s[3]),
+    .up_adc_or (up_adc_or_s[3]),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[3]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[3]),
+    .up_rack (up_rack_s[3]));
+
+  // common processor control
+
+  up_adc_common #(
+    .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
+    .COMMON_ID (COMMON_BASE_ADDR),
+    .CONFIG(CONFIG),
+    .DRP_DISABLE(1),
+    .USERPORTS_DISABLE(1),
+    .GPIO_DISABLE(1),
+    .START_CODE_DISABLE(1))
+  i_up_adc_common (
+    .mmcm_rst (),
+    .adc_clk (adc_clk),
+    .adc_rst (adc_rst),
+    .adc_r1_mode (),
+    .adc_ddr_edgesel (),
+    .adc_pin_mode (),
+    .adc_status (1'b1),
+    .adc_sync_status (1'd0),
+    .adc_status_ovf (adc_dovf),
+    .adc_clk_ratio (adc_clk_ratio),
+    .adc_start_code (),
+    .adc_sref_sync (),
+    .adc_sync (adc_sync),
+    .adc_num_lanes (adc_num_lanes),
+    .adc_sdr_ddr_n (adc_sdr_ddr_n),
+    .adc_symb_op (adc_symb_op),
+    .adc_symb_8_16b (adc_symb_8_16b),
+    .up_pps_rcounter(32'h0),
+    .up_pps_status(1'b0),
+    .up_pps_irq_mask(),
+    .up_adc_r1_mode (up_adc_r1_mode),
+    .up_adc_ce (),
+    .up_status_pn_err (up_status_pn_err),
+    .up_status_pn_oos (up_status_pn_oos),
+    .up_status_or (up_status_or),
+    .up_drp_sel (),
+    .up_drp_wr (),
+    .up_drp_addr (),
+    .up_drp_wdata (),
+    .up_drp_rdata (32'd0),
+    .up_drp_ready (1'd0),
+    .up_drp_locked (1'd1),
+    .up_usr_chanmax_out (),
+    .up_usr_chanmax_in (8'd3),
+    .up_adc_gpio_in (32'd0),
+    .up_adc_gpio_out (),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[4]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[4]),
+    .up_rack (up_rack_s[4]));
+
+  assign adc_single_lane = adc_num_lanes[0];
+
+end
+endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 112 if (ENABLED == 0) begin : core_disabled
+- 114   assign adc_rst = 1'b0;
+- 115   assign adc_single_lane = 1'b0;
+- 116   assign adc_sdr_ddr_n = 1'b0;
+- 117   assign adc_symb_op = 1'b0;
+- 118   assign adc_symb_8_16b = 1'b0;
+- 119   assign up_adc_r1_mode = 1'b0;
+- 120   assign adc_valid = 1'b0;
+- 121   assign adc_enable_i0 = 1'b0;
+- 122   assign adc_data_i0 = 16'b0;
+- 123   assign adc_enable_q0 = 1'b0;
+- 124   assign adc_data_q0 = 16'b0;
+- 125   assign adc_enable_i1 = 1'b0;
+- 126   assign adc_data_i1 = 16'b0;
+- 127   assign adc_enable_q1 = 1'b0;
+- 128   assign adc_data_q1 = 16'b0;
+- 130   always @(*) begin
+- 131     up_wack = 1'b0;
+- 132     up_rdata = 32'b0;
+- 133     up_rack = 1'b0;
+- 134   end
+- 136 end else begin : core_enabled
+- 140   localparam  CONFIG =  (CMOS_LVDS_N * 128) +
+- 141                         (MODE_R1 * 16) +
+- 142                         (DATAFORMAT_DISABLE * 4) +
+- 143                         (DCFILTER_DISABLE * 2) +
+- 144                         (IQCORRECTION_DISABLE * 1);
+- 148   reg               up_status_pn_err = 'd0;
+- 149   reg               up_status_pn_oos = 'd0;
+- 150   reg               up_status_or = 'd0;
+- 154   wire    [ 15:0]   adc_data_iq_i0_s;
+- 155   wire    [ 15:0]   adc_data_iq_q0_s;
+- 156   wire    [ 15:0]   adc_data_iq_i1_s;
+- 157   wire    [ 15:0]   adc_data_iq_q1_s;
+- 158   wire    [  4:0]   adc_num_lanes;
+- 159   wire    [  3:0]   up_adc_pn_err_s;
+- 160   wire    [  3:0]   up_adc_pn_oos_s;
+- 161   wire    [  3:0]   up_adc_or_s;
+- 162   wire    [  4:0]   up_wack_s;
+- 163   wire    [  4:0]   up_rack_s;
+- 164   wire    [ 31:0]   up_rdata_s[0:4];
+- 165   wire              adc_valid_out_i0;
+- 166   wire              adc_valid_out_i1;
+- 170   always @(negedge up_rstn or posedge up_clk) begin
+- 171     if (up_rstn == 0) begin
+- 172       up_status_pn_err <= 'd0;
+- 173       up_status_pn_oos <= 'd0;
+- 174       up_status_or <= 'd0;
+- 175       up_wack <= 'd0;
+- 176       up_rack <= 'd0;
+- 177       up_rdata <= 'd0;
+- 178     end else begin
+- 179       up_status_pn_err <= up_adc_r1_mode ? | up_adc_pn_err_s[1:0] : | up_adc_pn_err_s[3:0];
+- 180       up_status_pn_oos <= up_adc_r1_mode ? | up_adc_pn_oos_s[1:0] : | up_adc_pn_oos_s[3:0];
+- 181       up_status_or <= | up_adc_or_s;
+- 182       up_wack <= | up_wack_s;
+- 183       up_rack <= | up_rack_s;
+- 184       up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
+- 185                   up_rdata_s[3] | up_rdata_s[4];
+- 187   end
+- 191   assign adc_valid = adc_enable_i0 ? adc_valid_out_i0 : adc_valid_out_i1;
+- 195   axi_adrv9001_rx_channel #(
+- 196     .Q_OR_I_N (0),
+- 197     .COMMON_ID (CHANNEL_BASE_ADDR),
+- 198     .DISABLE (0),
+- 199     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+- 200     .DCFILTER_DISABLE (DCFILTER_DISABLE),
+- 201     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+- 202     .DATA_WIDTH (16))
+- 203   i_rx_channel_0 (
+- 204     .adc_clk (adc_clk),
+- 205     .adc_rst (adc_rst),
+- 206     .adc_valid_in (adc_valid_A),
+- 207     .adc_data_in (adc_data_i_A[15:0]),
+- 208     .adc_valid_out (adc_valid_out_i0),
+- 209     .adc_data_out (adc_data_i0),
+- 210     .adc_data_iq_in (adc_data_iq_q0_s),
+- 211     .adc_data_iq_out (adc_data_iq_i0_s),
+- 212     .adc_enable (adc_enable_i0),
+- 213     .dac_valid_in (dac_data_valid_A),
+- 214     .dac_data_in (dac_data_i_A),
+- 215     .up_adc_pn_err (up_adc_pn_err_s[0]),
+- 216     .up_adc_pn_oos (up_adc_pn_oos_s[0]),
+- 217     .up_adc_or (up_adc_or_s[0]),
+- 218     .up_rstn (up_rstn),
+- 219     .up_clk (up_clk),
+- 220     .up_wreq (up_wreq),
+- 221     .up_waddr (up_waddr),
+- 222     .up_wdata (up_wdata),
+- 223     .up_wack (up_wack_s[0]),
+- 224     .up_rreq (up_rreq),
+- 225     .up_raddr (up_raddr),
+- 226     .up_rdata (up_rdata_s[0]),
+- 227     .up_rack (up_rack_s[0]));
+- 231   axi_adrv9001_rx_channel #(
+- 232     .Q_OR_I_N (1),
+- 233     .COMMON_ID (CHANNEL_BASE_ADDR),
+- 234     .CHANNEL_ID (1),
+- 235     .DISABLE (0),
+- 236     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+- 237     .DCFILTER_DISABLE (DCFILTER_DISABLE),
+- 238     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+- 239     .DATA_WIDTH (16))
+- 240   i_rx_channel_1 (
+- 241     .adc_clk (adc_clk),
+- 242     .adc_rst (adc_rst),
+- 243     .adc_valid_in (adc_valid_A),
+- 244     .adc_data_in (adc_data_q_A[15:0]),
+- 245     .adc_valid_out (),
+- 246     .adc_data_out (adc_data_q0),
+- 247     .adc_data_iq_in (adc_data_iq_i0_s),
+- 248     .adc_data_iq_out (adc_data_iq_q0_s),
+- 249     .adc_enable (adc_enable_q0),
+- 250     .dac_valid_in (dac_data_valid_A),
+- 251     .dac_data_in (dac_data_q_A),
+- 252     .up_adc_pn_err (up_adc_pn_err_s[1]),
+- 253     .up_adc_pn_oos (up_adc_pn_oos_s[1]),
+- 254     .up_adc_or (up_adc_or_s[1]),
+- 255     .up_rstn (up_rstn),
+- 256     .up_clk (up_clk),
+- 257     .up_wreq (up_wreq),
+- 258     .up_waddr (up_waddr),
+- 259     .up_wdata (up_wdata),
+- 260     .up_wack (up_wack_s[1]),
+- 261     .up_rreq (up_rreq),
+- 262     .up_raddr (up_raddr),
+- 263     .up_rdata (up_rdata_s[1]),
+- 264     .up_rack (up_rack_s[1]));
+- 268   axi_adrv9001_rx_channel #(
+- 269     .Q_OR_I_N (0),
+- 270     .COMMON_ID (CHANNEL_BASE_ADDR),
+- 271     .CHANNEL_ID (2),
+- 272     .DISABLE (MODE_R1),
+- 273     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+- 274     .DCFILTER_DISABLE (DCFILTER_DISABLE),
+- 275     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+- 276     .DATA_WIDTH (16))
+- 277   i_rx_channel_2 (
+- 278     .adc_clk (adc_clk),
+- 279     .adc_rst (adc_rst),
+- 280     .adc_valid_in (adc_valid_B),
+- 281     .adc_data_in (adc_data_i_B[15:0]),
+- 282     .adc_valid_out (adc_valid_out_i1),
+- 283     .adc_data_out (adc_data_i1),
+- 284     .adc_data_iq_in (adc_data_iq_q1_s),
+- 285     .adc_data_iq_out (adc_data_iq_i1_s),
+- 286     .adc_enable (adc_enable_i1),
+- 287     .dac_valid_in (dac_data_valid_B),
+- 288     .dac_data_in (dac_data_i_B),
+- 289     .up_adc_pn_err (up_adc_pn_err_s[2]),
+- 290     .up_adc_pn_oos (up_adc_pn_oos_s[2]),
+- 291     .up_adc_or (up_adc_or_s[2]),
+- 292     .up_rstn (up_rstn),
+- 293     .up_clk (up_clk),
+- 294     .up_wreq (up_wreq),
+- 295     .up_waddr (up_waddr),
+- 296     .up_wdata (up_wdata),
+- 297     .up_wack (up_wack_s[2]),
+- 298     .up_rreq (up_rreq),
+- 299     .up_raddr (up_raddr),
+- 300     .up_rdata (up_rdata_s[2]),
+- 301     .up_rack (up_rack_s[2]));
+- 305   axi_adrv9001_rx_channel #(
+- 306     .Q_OR_I_N (1),
+- 307     .COMMON_ID (CHANNEL_BASE_ADDR),
+- 308     .CHANNEL_ID (3),
+- 309     .DISABLE (MODE_R1),
+- 310     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
+- 311     .DCFILTER_DISABLE (DCFILTER_DISABLE),
+- 312     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+- 313     .DATA_WIDTH (16))
+- 314   i_rx_channel_3 (
+- 315     .adc_clk (adc_clk),
+- 316     .adc_rst (adc_rst),
+- 317     .adc_valid_in (adc_valid_B),
+- 318     .adc_data_in (adc_data_q_B[15:0]),
+- 319     .adc_valid_out (),
+- 320     .adc_data_out (adc_data_q1),
+- 321     .adc_data_iq_in (adc_data_iq_i1_s),
+- 322     .adc_data_iq_out (adc_data_iq_q1_s),
+- 323     .adc_enable (adc_enable_q1),
+- 324     .dac_valid_in (dac_data_valid_B),
+- 325     .dac_data_in (dac_data_q_B),
+- 326     .up_adc_pn_err (up_adc_pn_err_s[3]),
+- 327     .up_adc_pn_oos (up_adc_pn_oos_s[3]),
+- 328     .up_adc_or (up_adc_or_s[3]),
+- 329     .up_rstn (up_rstn),
+- 330     .up_clk (up_clk),
+- 331     .up_wreq (up_wreq),
+- 332     .up_waddr (up_waddr),
+- 333     .up_wdata (up_wdata),
+- 334     .up_wack (up_wack_s[3]),
+- 335     .up_rreq (up_rreq),
+- 336     .up_raddr (up_raddr),
+- 337     .up_rdata (up_rdata_s[3]),
+- 338     .up_rack (up_rack_s[3]));
+- 342   up_adc_common #(
+- 343     .ID (ID),
+- 344     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+- 345     .FPGA_FAMILY (FPGA_FAMILY),
+- 346     .SPEED_GRADE (SPEED_GRADE),
+- 347     .DEV_PACKAGE (DEV_PACKAGE),
+- 348     .COMMON_ID (COMMON_BASE_ADDR),
+- 349     .CONFIG(CONFIG),
+- 350     .DRP_DISABLE(1),
+- 351     .USERPORTS_DISABLE(1),
+- 352     .GPIO_DISABLE(1),
+- 353     .START_CODE_DISABLE(1))
+- 354   i_up_adc_common (
+- 355     .mmcm_rst (),
+- 356     .adc_clk (adc_clk),
+- 357     .adc_rst (adc_rst),
+- 358     .adc_r1_mode (),
+- 359     .adc_ddr_edgesel (),
+- 360     .adc_pin_mode (),
+- 361     .adc_status (1'b1),
+- 362     .adc_sync_status (1'd0),
+- 363     .adc_status_ovf (adc_dovf),
+- 364     .adc_clk_ratio (adc_clk_ratio),
+- 365     .adc_start_code (),
+- 366     .adc_sref_sync (),
+- 367     .adc_sync (adc_sync),
+- 368     .adc_num_lanes (adc_num_lanes),
+- 369     .adc_sdr_ddr_n (adc_sdr_ddr_n),
+- 370     .adc_symb_op (adc_symb_op),
+- 371     .adc_symb_8_16b (adc_symb_8_16b),
+- 372     .up_pps_rcounter(32'h0),
+- 373     .up_pps_status(1'b0),
+- 374     .up_pps_irq_mask(),
+- 375     .up_adc_r1_mode (up_adc_r1_mode),
+- 376     .up_adc_ce (),
+- 377     .up_status_pn_err (up_status_pn_err),
+- 378     .up_status_pn_oos (up_status_pn_oos),
+- 379     .up_status_or (up_status_or),
+- 380     .up_drp_sel (),
+- 381     .up_drp_wr (),
+- 382     .up_drp_addr (),
+- 383     .up_drp_wdata (),
+- 384     .up_drp_rdata (32'd0),
+- 385     .up_drp_ready (1'd0),
+- 386     .up_drp_locked (1'd1),
+- 387     .up_usr_chanmax_out (),
+- 388     .up_usr_chanmax_in (8'd3),
+- 389     .up_adc_gpio_in (32'd0),
+- 390     .up_adc_gpio_out (),
+- 391     .up_rstn (up_rstn),
+- 392     .up_clk (up_clk),
+- 393     .up_wreq (up_wreq),
+- 394     .up_waddr (up_waddr),
+- 395     .up_wdata (up_wdata),
+- 396     .up_wack (up_wack_s[4]),
+- 397     .up_rreq (up_rreq),
+- 398     .up_raddr (up_raddr),
+- 399     .up_rdata (up_rdata_s[4]),
+- 400     .up_rack (up_rack_s[4]));
+- 402   assign adc_single_lane = adc_num_lanes[0];
+- 404 end
++ 134   generate
++ 134   if (ENABLED == 0) begin : core_disabled
++ 134     assign adc_rst = 1'b0;
++ 134     assign adc_single_lane = 1'b0;
++ 134     assign adc_sdr_ddr_n = 1'b0;
++ 134     assign adc_symb_op = 1'b0;
++ 134     assign adc_symb_8_16b = 1'b0;
++ 134     assign up_adc_r1_mode = 1'b0;
++ 134     assign adc_valid = 1'b0;
++ 134     assign adc_enable_i0 = 1'b0;
++ 134     assign adc_data_i0 = 16'b0;
++ 134     assign adc_enable_q0 = 1'b0;
++ 134     assign adc_data_q0 = 16'b0;
++ 134     assign adc_enable_i1 = 1'b0;
++ 134     assign adc_data_i1 = 16'b0;
++ 134     assign adc_enable_q1 = 1'b0;
++ 134     assign adc_data_q1 = 16'b0;
++ 134     always @(*) begin
++ 134       up_wack = 1'b0;
++ 134       up_rdata = 32'b0;
++ 134       up_rack = 1'b0;
++ 134     end
++ 185   end else begin : core_enabled
++ 185     localparam  CONFIG =  (CMOS_LVDS_N * 128) +
++ 185                           (MODE_R1 * 16) +
++ 185                           (DATAFORMAT_DISABLE * 4) +
++ 185                           (DCFILTER_DISABLE * 2) +
++ 185                           (IQCORRECTION_DISABLE * 1);
++ 185     reg               up_status_pn_err = 'd0;
++ 185     reg               up_status_pn_oos = 'd0;
++ 185     reg               up_status_or = 'd0;
++ 185     wire    [ 15:0]   adc_data_iq_i0_s;
++ 185     wire    [ 15:0]   adc_data_iq_q0_s;
++ 185     wire    [ 15:0]   adc_data_iq_i1_s;
++ 185     wire    [ 15:0]   adc_data_iq_q1_s;
++ 185     wire    [  4:0]   adc_num_lanes;
++ 185     wire    [  3:0]   up_adc_pn_err_s;
++ 185     wire    [  3:0]   up_adc_pn_oos_s;
++ 185     wire    [  3:0]   up_adc_or_s;
++ 185     wire    [  4:0]   up_wack_s;
++ 185     wire    [  4:0]   up_rack_s;
++ 185     wire    [ 31:0]   up_rdata_s[0:4];
++ 185     wire              adc_valid_out_i0;
++ 185     wire              adc_valid_out_i1;
++ 185     always @(negedge up_rstn or posedge up_clk) begin
++ 185       if (up_rstn == 0) begin
++ 185         up_status_pn_err <= 'd0;
++ 185         up_status_pn_oos <= 'd0;
++ 185         up_status_or <= 'd0;
++ 185         up_wack <= 'd0;
++ 185         up_rack <= 'd0;
++ 185         up_rdata <= 'd0;
++ 185       end else begin
++ 185         up_status_pn_err <= up_adc_r1_mode ? | up_adc_pn_err_s[1:0] : | up_adc_pn_err_s[3:0];
++ 185         up_status_pn_oos <= up_adc_r1_mode ? | up_adc_pn_oos_s[1:0] : | up_adc_pn_oos_s[3:0];
++ 185         up_status_or <= | up_adc_or_s;
++ 185         up_wack <= | up_wack_s;
++ 185         up_rack <= | up_rack_s;
++ 185         up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
++ 185                     up_rdata_s[3] | up_rdata_s[4];
++ 185       end
+
+Clone Blocks:

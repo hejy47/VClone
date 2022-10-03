@@ -1,0 +1,33 @@
+Source Block: zipcpu/rtl/zipsystem.v@621:642@HdlStmIf
+`ifdef	INCLUDE_ACCOUNTING_COUNTERS
+	//
+	// Counter Interrupt controller
+	//
+	generate
+	if (EXTERNAL_INTERRUPTS <= 9)
+	begin
+		icontrol #(8)	ctri(i_clk, cpu_reset, (ctri_sel),
+					sys_data, ctri_data, alt_int_vector[7:0],
+					ctri_int);
+	end else begin
+		icontrol #(8+(EXTERNAL_INTERRUPTS-9))
+				ctri(i_clk, cpu_reset, (ctri_sel),
+					sys_data, ctri_data,
+					alt_int_vector[(EXTERNAL_INTERRUPTS-2):0],
+					ctri_int);
+	end endgenerate
+
+`else	//	INCLUDE_ACCOUNTING_COUNTERS
+
+	generate
+	if (EXTERNAL_INTERRUPTS <= 9)
+
+Diff Content:
+- 626 	if (EXTERNAL_INTERRUPTS <= 9)
+- 627 	begin
+- 631 	end else begin
++ 627 	generate if (EXTERNAL_INTERRUPTS <= 9)
++ 627 	begin : ALT_PIC
++ 631 	end else begin : ALT_PIC
+
+Clone Blocks:

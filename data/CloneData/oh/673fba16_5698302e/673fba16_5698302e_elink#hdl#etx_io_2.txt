@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/etx_io.v@134:144@HdlIdDef
+	 `CYCLE6 : tx_state[2:0] <= `CYCLE7;
+	 `CYCLE7 : tx_state[2:0] <= tx_burst_reg & ~tx_wait  ? `CYCLE4 : 
+				                           `IDLE;	
+       endcase // case (tx_state)
+   
+   reg [31:0] trans_counter;
+   
+`ifdef TARGET_SIM
+   always @ (posedge tx_lclk_io)
+     if(!nreset)       
+       trans_counter[31:0]<='b0;   
+
+Diff Content:
+- 139    reg [31:0] trans_counter;
+
+Clone Blocks:

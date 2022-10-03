@@ -1,0 +1,132 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_rx.v@342:428@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+        output_axis_tdata_reg <= 0;
+        output_axis_tkeep_reg <= 0;
+        output_axis_tvalid_reg <= 0;
+        output_axis_tlast_reg <= 0;
+        output_axis_tuser_reg <= 0;
+
+        last_cycle_tkeep_reg <= 0;
+
+        error_bad_frame_reg <= 0;
+        error_bad_fcs_reg <= 0;
+
+        crc_state <= 32'hFFFFFFFF;
+        crc_state3 <= 32'hFFFFFFFF;
+        crc_valid7_save <= 0;
+
+        detect_term_save <= 0;
+
+        xgmii_rxd_d0 <= 64'h0707070707070707;
+        xgmii_rxd_d1 <= 64'h0707070707070707;
+
+        xgmii_rxc_d0 <= 8'b11111111;
+        xgmii_rxc_d1 <= 8'b11111111;
+
+        lanes_swapped <= 0;
+        swap_rxd <= 0;
+        swap_rxc <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        output_axis_tdata_reg <= output_axis_tdata_next;
+        output_axis_tkeep_reg <= output_axis_tkeep_next;
+        output_axis_tvalid_reg <= output_axis_tvalid_next;
+        output_axis_tlast_reg <= output_axis_tlast_next;
+        output_axis_tuser_reg <= output_axis_tuser_next;
+
+        last_cycle_tkeep_reg <= last_cycle_tkeep_next;
+
+        error_bad_frame_reg <= error_bad_frame_next;
+        error_bad_fcs_reg <= error_bad_fcs_next;
+
+        if (xgmii_rxc[0] && xgmii_rxd[7:0] == 8'hfb) begin
+            lanes_swapped <= 0;
+            xgmii_rxd_d0 <= xgmii_rxd;
+            xgmii_rxc_d0 <= xgmii_rxc;
+        end else if (xgmii_rxc[4] && xgmii_rxd[39:32] == 8'hfb) begin
+            lanes_swapped <= 1;
+            xgmii_rxd_d0 <= 64'h0707070707070707;
+            xgmii_rxc_d0 <= 8'b11111111;
+        end else if (lanes_swapped) begin
+            xgmii_rxd_d0 <= {xgmii_rxd[31:0], swap_rxd};
+            xgmii_rxc_d0 <= {xgmii_rxc[3:0], swap_rxc};
+        end else begin
+            xgmii_rxd_d0 <= xgmii_rxd;
+            xgmii_rxc_d0 <= xgmii_rxc;
+        end
+
+        swap_rxd <= xgmii_rxd[63:32];
+        swap_rxc <= xgmii_rxc[7:4];
+
+        xgmii_rxd_d1 <= xgmii_rxd_d0;
+        xgmii_rxc_d1 <= xgmii_rxc_d0;
+
+        detect_term_save <= detect_term;
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+            crc_state3 <= 32'hFFFFFFFF;
+            crc_valid7_save <= 0;
+        end else if (update_crc) begin
+            crc_state <= crc_next7;
+            crc_state3 <= crc_next3;
+            crc_valid7_save <= crc_valid7;
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 351         output_axis_tdata_reg <= 0;
+- 352         output_axis_tkeep_reg <= 0;
+- 353         output_axis_tvalid_reg <= 0;
+- 354         output_axis_tlast_reg <= 0;
+- 355         output_axis_tuser_reg <= 0;
+- 357         last_cycle_tkeep_reg <= 0;
+- 359         error_bad_frame_reg <= 0;
+- 360         error_bad_fcs_reg <= 0;
+- 364         crc_valid7_save <= 0;
+- 366         detect_term_save <= 0;
+- 374         lanes_swapped <= 0;
+- 375         swap_rxd <= 0;
+- 376         swap_rxc <= 0;
+- 380         output_axis_tdata_reg <= output_axis_tdata_next;
+- 381         output_axis_tkeep_reg <= output_axis_tkeep_next;
+- 383         output_axis_tlast_reg <= output_axis_tlast_next;
+- 384         output_axis_tuser_reg <= output_axis_tuser_next;
+- 386         last_cycle_tkeep_reg <= last_cycle_tkeep_next;
+- 392             lanes_swapped <= 0;
+- 396             lanes_swapped <= 1;
+- 407         swap_rxd <= xgmii_rxd[63:32];
+- 408         swap_rxc <= xgmii_rxc[7:4];
+- 413         detect_term_save <= detect_term;
+- 419             crc_valid7_save <= 0;
++ 355         output_axis_tvalid_reg <= 1'b0;
++ 360         error_bad_frame_reg <= 1'b0;
++ 360         error_bad_fcs_reg <= 1'b0;
++ 366         crc_valid7_save <= 1'b0;
++ 376         lanes_swapped <= 1'b0;
++ 392             lanes_swapped <= 1'b0;
++ 396             lanes_swapped <= 1'b1;
++ 419             crc_valid7_save <= 1'b0;
++ 425     output_axis_tdata_reg <= output_axis_tdata_next;
++ 425     output_axis_tkeep_reg <= output_axis_tkeep_next;
++ 425     output_axis_tlast_reg <= output_axis_tlast_next;
++ 425     output_axis_tuser_reg <= output_axis_tuser_next;
++ 425     last_cycle_tkeep_reg <= last_cycle_tkeep_next;
++ 425     detect_term_save <= detect_term;
++ 425     swap_rxd <= xgmii_rxd[63:32];
++ 425     swap_rxc <= xgmii_rxc[7:4];
+
+Clone Blocks:

@@ -1,0 +1,32 @@
+Source Block: zipcpu/rtl/peripherals/wbdmac.v@553:563@HdlStmProcess
+					||(i_dev_ints[cfg_dev_trigger]));
+
+	// Ack any access.  We'll quietly ignore any access where we are busy,
+	// but ack it anyway.  In other words, before writing to the device,
+	// double check that it isn't busy, and then write.
+	initial	o_swb_ack <= 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		o_swb_ack <= 1'b0;
+	else if (!i_swb_cyc)
+		o_swb_ack <= 1'b0;
+
+Diff Content:
+- 558 	initial	o_swb_ack <= 1'b0;
++ 558 	initial	o_swb_ack = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/wbdmac.v@562:572
+	else if (!i_swb_cyc)
+		o_swb_ack <= 1'b0;
+	else
+		o_swb_ack <= (s_stb);
+
+	assign	o_swb_stall = 1'b0;
+
+	initial	abort = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		abort <= 1'b0;
+

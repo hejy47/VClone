@@ -1,0 +1,40 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@276:294@HdlStmProcess
+  end else if (up_tlf_s_ready == 1'b1) begin
+    response_ready <= 1'b1;
+  end
+end
+
+always @(posedge clk)
+begin
+  if (response_valid == 1'b1 && response_ready == 1'b1) begin
+    up_tlf_s_valid <= up_bl_partial;
+    up_clear_tl <= response_eot;
+  end else if (up_tlf_s_ready == 1'b1) begin
+    up_tlf_s_valid <= 1'b0;
+  end
+end
+
+// Buffer the length and transfer ID of partial transfers
+util_axis_fifo #(
+  .DATA_WIDTH(MEASURED_LENGTH_WIDTH + 2),
+  .ADDRESS_WIDTH(2),
+
+Diff Content:
+- 281 always @(posedge clk)
+- 282 begin
+- 283   if (response_valid == 1'b1 && response_ready == 1'b1) begin
+- 284     up_tlf_s_valid <= up_bl_partial;
+- 285     up_clear_tl <= response_eot;
+- 286   end else if (up_tlf_s_ready == 1'b1) begin
+- 287     up_tlf_s_valid <= 1'b0;
+- 289 end
++ 287   always @(posedge clk)
++ 287   begin
++ 287     if (response_valid == 1'b1 && response_ready == 1'b1) begin
++ 287       up_tlf_s_valid <= up_bl_partial;
++ 287       up_clear_tl <= response_eot;
++ 287     end else if (up_tlf_s_ready == 1'b1) begin
++ 287       up_tlf_s_valid <= 1'b0;
++ 287     end
+
+Clone Blocks:

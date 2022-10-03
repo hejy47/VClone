@@ -1,0 +1,25 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1561:1571@HdlStmAssign
+   always @ (posedge rxi_lclk)
+     if(~frame_reg)            //will stop sampling when byte0 is received
+       rd_tran <= rxi_data[7];
+
+   //# frame rising edge detection
+   assign new_tran = my_tran & frame_reg & ~frame_reg_del;
+
+   //# bytes packaging into short words + new transaction indication
+   assign fifo_data_in[2*LW:0] = {new_tran,data_even_reg[LW-1:0],data_odd_reg[LW-1:0]};
+
+   //###############################################################################
+
+Diff Content:
+- 1566    assign new_tran = my_tran & frame_reg & ~frame_reg_del;
++ 1566    input 	    c0_emesh_wait_in;  // wait
++ 1566    input 	    c3_emesh_wait_in;  // wait
++ 1566    input 	    c0_mesh_wait_in;   // wait
++ 1566    input 	    c3_mesh_wait_in;   // wait
++ 1566    input 	    c0_rdmesh_wait_in; // wait
++ 1566    input 	    c1_rdmesh_wait_in; // wait
++ 1566    input 	    c2_rdmesh_wait_in; // wait
++ 1566    input 	    c3_rdmesh_wait_in; // wait
+
+Clone Blocks:

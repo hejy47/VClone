@@ -1,0 +1,26 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@238:246@HdlStmAssign
+    assign data_replaced[ii*8 +: 8] = char_is_align[ii] ? (tx_eomf[ii] ? 8'h7c : 8'hfc) : data[ii*8 +: 8];
+  end
+end
+endgenerate
+
+assign data_out = (cfg_disable_char_replacement || !cfg_disable_scrambler || ENABLED==0) ? data : data_replaced;
+assign charisk_out = (IS_RX || !cfg_disable_scrambler || cfg_disable_char_replacement || ENABLED==0) ? 'b0 : char_is_align;
+
+endmodule
+
+Diff Content:
+- 243 assign data_out = (cfg_disable_char_replacement || !cfg_disable_scrambler || ENABLED==0) ? data : data_replaced;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@239:246
+  end
+end
+endgenerate
+
+assign data_out = (cfg_disable_char_replacement || !cfg_disable_scrambler || ENABLED==0) ? data : data_replaced;
+assign charisk_out = (IS_RX || !cfg_disable_scrambler || cfg_disable_char_replacement || ENABLED==0) ? 'b0 : char_is_align;
+
+endmodule
+

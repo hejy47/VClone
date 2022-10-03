@@ -1,0 +1,17 @@
+Source Block: miaow/src/verilog/rtl/lsu/lsu.v@83:93@HdlStmAssign
+     end
+     else if(clr_freez) begin
+       freez <= 0;
+     end
+   end
+   assign issue_ready = ~freez;
+
+
+   // Keep single cycle delay on exec signals
+   always @ ( posedge clk or posedge rst ) begin
+      if(rst) begin
+
+Diff Content:
+- 88    assign issue_ready = ~freez;
+
+Clone Blocks:

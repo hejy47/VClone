@@ -1,0 +1,75 @@
+Source Block: oh/elink/hdl/esaxi.v@205:239@HdlStmProcess
+
+   assign  last_wr_beat = s_axi_wready & s_axi_wvalid & s_axi_wlast;
+   
+   // axi_awready is asserted when there is no write transfer in progress
+
+   always @(posedge s_axi_aclk ) 
+     begin
+      if(~s_axi_aresetn)  
+	begin
+           s_axi_awready <= 1'b0; //TODO: why not set default as 1?
+           write_active  <= 1'b0;           
+	end 
+      else 
+	begin
+           // we're always ready for an address cycle if we're not doing something else
+           //  note: might make this faster by going ready on last beat instead of after,
+           //  but if we want the very best each channel should be fifo'd.
+           if( ~s_axi_awready & ~write_active & ~b_wait )
+             s_axi_awready <= 1'b1;
+           else if( s_axi_awvalid )
+             s_axi_awready <= 1'b0;
+	   
+           // the write cycle is "active" as soon as we capture an address, it
+           // ends on the last beat.
+           if( s_axi_awready & s_axi_awvalid )
+             write_active <= 1'b1;
+           else if( last_wr_beat )
+             write_active <= 1'b0;         
+	end // else: !if(~s_axi_aresetn)
+     end // always @ (posedge s_axi_aclk )
+   
+   // capture address & other aw info, update address during cycle
+   
+   always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn)  
+
+Diff Content:
+- 214            s_axi_awready <= 1'b0; //TODO: why not set default as 1?
++ 214            s_axi_awready <= 1'b1; //TODO: why not set default as 1?
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/esaxi.v@303:332
+   //#READ REQUEST CHANNEL
+   //###################################################  
+
+   assign  last_rd_beat = s_axi_rvalid & s_axi_rlast & s_axi_rready;
+
+   always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn) 
+       begin	  
+         s_axi_arready <= 1'b0;
+         read_active   <= 1'b0;         
+       end 
+     else 
+       begin    
+	  //arready
+          if( ~s_axi_arready & ~read_active )
+            s_axi_arready <= 1'b1;
+          else if( s_axi_arvalid )
+            s_axi_arready <= 1'b0;
+
+	  //read_active
+          if( s_axi_arready & s_axi_arvalid )
+            read_active <= 1'b1;
+          else if( last_rd_beat )
+            read_active <= 1'b0;         
+       end // else: !if( s_axi_aresetn == 1'b0 )
+   
+   //Read address channel state machine
+   always @( posedge s_axi_aclk ) 
+      if (~s_axi_aresetn) 
+	begin
+

@@ -1,0 +1,190 @@
+Source Block: verilog-ethernet/rtl/arp_eth_rx.v@294:378@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        input_eth_payload_tready_reg <= 0;
+        output_frame_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        busy_reg <= 0;
+        frame_error_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        output_frame_valid_reg <= output_frame_valid_next;
+
+        frame_error_reg <= frame_error_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // generate valid outputs
+        case (state_next)
+            STATE_IDLE: begin
+                // idle; accept new data
+                input_eth_hdr_ready_reg <= ~output_frame_valid;
+                input_eth_payload_tready_reg <= 0;
+            end
+            STATE_READ_HEADER: begin
+                // read header; accept new data
+                input_eth_hdr_ready_reg <= 0;
+                input_eth_payload_tready_reg <= 1;
+            end
+            STATE_WAIT_LAST: begin
+                // wait for end of frame; read and discard
+                input_eth_hdr_ready_reg <= 0;
+                input_eth_payload_tready_reg <= 1;
+            end
+        endcase
+
+        // datapath
+        if (store_eth_hdr) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+        end
+
+        if (store_arp_htype_0) output_arp_htype_reg[ 7: 0] <= input_eth_payload_tdata;
+        if (store_arp_htype_1) output_arp_htype_reg[15: 8] <= input_eth_payload_tdata;
+        if (store_arp_ptype_0) output_arp_ptype_reg[ 7: 0] <= input_eth_payload_tdata;
+        if (store_arp_ptype_1) output_arp_ptype_reg[15: 8] <= input_eth_payload_tdata;
+        if (store_arp_hlen) output_arp_hlen_reg <= input_eth_payload_tdata;
+        if (store_arp_plen) output_arp_plen_reg <= input_eth_payload_tdata;
+        if (store_arp_oper_0) output_arp_oper_reg[ 7: 0] <= input_eth_payload_tdata;
+        if (store_arp_oper_1) output_arp_oper_reg[15: 8] <= input_eth_payload_tdata;
+        if (store_arp_sha_0) output_arp_sha_reg[ 7: 0] <= input_eth_payload_tdata;
+        if (store_arp_sha_1) output_arp_sha_reg[15: 8] <= input_eth_payload_tdata;
+        if (store_arp_sha_2) output_arp_sha_reg[23:16] <= input_eth_payload_tdata;
+        if (store_arp_sha_3) output_arp_sha_reg[31:24] <= input_eth_payload_tdata;
+        if (store_arp_sha_4) output_arp_sha_reg[39:32] <= input_eth_payload_tdata;
+        if (store_arp_sha_5) output_arp_sha_reg[47:40] <= input_eth_payload_tdata;
+        if (store_arp_spa_0) output_arp_spa_reg[ 7: 0] <= input_eth_payload_tdata;
+        if (store_arp_spa_1) output_arp_spa_reg[15: 8] <= input_eth_payload_tdata;
+        if (store_arp_spa_2) output_arp_spa_reg[23:16] <= input_eth_payload_tdata;
+        if (store_arp_spa_3) output_arp_spa_reg[31:24] <= input_eth_payload_tdata;
+        if (store_arp_tha_0) output_arp_tha_reg[ 7: 0] <= input_eth_payload_tdata;
+        if (store_arp_tha_1) output_arp_tha_reg[15: 8] <= input_eth_payload_tdata;
+        if (store_arp_tha_2) output_arp_tha_reg[23:16] <= input_eth_payload_tdata;
+        if (store_arp_tha_3) output_arp_tha_reg[31:24] <= input_eth_payload_tdata;
+        if (store_arp_tha_4) output_arp_tha_reg[39:32] <= input_eth_payload_tdata;
+        if (store_arp_tha_5) output_arp_tha_reg[47:40] <= input_eth_payload_tdata;
+        if (store_arp_tpa_0) output_arp_tpa_reg[ 7: 0] <= input_eth_payload_tdata;
+        if (store_arp_tpa_1) output_arp_tpa_reg[15: 8] <= input_eth_payload_tdata;
+        if (store_arp_tpa_2) output_arp_tpa_reg[23:16] <= input_eth_payload_tdata;
+        if (store_arp_tpa_3) output_arp_tpa_reg[31:24] <= input_eth_payload_tdata;
+    end
+end
+
+endmodule
+
+Diff Content:
+- 309         frame_error_reg <= 0;
+- 317         frame_error_reg <= frame_error_next;
++ 309         error_header_early_termination_reg <= 0;
++ 317         error_header_early_termination_reg <= error_header_early_termination_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/arp_eth_rx_64.v@223:315
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        input_eth_payload_tready_reg <= 0;
+        output_frame_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        busy_reg <= 0;
+        frame_error_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        output_frame_valid_reg <= output_frame_valid_next;
+
+        frame_error_reg <= frame_error_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // generate valid outputs
+        case (state_next)
+            STATE_IDLE: begin
+                // idle; accept new data
+                input_eth_hdr_ready_reg <= ~output_frame_valid;
+                input_eth_payload_tready_reg <= 0;
+            end
+            STATE_READ_HEADER: begin
+                // read header; accept new data
+                input_eth_hdr_ready_reg <= 0;
+                input_eth_payload_tready_reg <= 1;
+            end
+            STATE_WAIT_LAST: begin
+                // wait for end of frame; read and discard
+                input_eth_hdr_ready_reg <= 0;
+                input_eth_payload_tready_reg <= 1;
+            end
+        endcase
+
+        // datapath
+        if (store_eth_hdr) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+        end
+
+        if (store_arp_hdr_word_0) begin
+            output_arp_htype_reg[15: 8] <= input_eth_payload_tdata[ 7: 0];
+            output_arp_htype_reg[ 7: 0] <= input_eth_payload_tdata[15: 8];
+            output_arp_ptype_reg[15: 8] <= input_eth_payload_tdata[23:16];
+            output_arp_ptype_reg[ 7: 0] <= input_eth_payload_tdata[31:24];
+            output_arp_hlen_reg <= input_eth_payload_tdata[39:32];
+            output_arp_plen_reg <= input_eth_payload_tdata[47:40];
+            output_arp_oper_reg[15: 8] <= input_eth_payload_tdata[55:48];
+            output_arp_oper_reg[ 7: 0] <= input_eth_payload_tdata[63:56];
+        end
+        if (store_arp_hdr_word_1) begin
+            output_arp_sha_reg[47:40] <= input_eth_payload_tdata[ 7: 0];
+            output_arp_sha_reg[39:32] <= input_eth_payload_tdata[15: 8];
+            output_arp_sha_reg[31:24] <= input_eth_payload_tdata[23:16];
+            output_arp_sha_reg[23:16] <= input_eth_payload_tdata[31:24];
+            output_arp_sha_reg[15: 8] <= input_eth_payload_tdata[39:32];
+            output_arp_sha_reg[ 7: 0] <= input_eth_payload_tdata[47:40];
+            output_arp_spa_reg[31:24] <= input_eth_payload_tdata[55:48];
+            output_arp_spa_reg[23:16] <= input_eth_payload_tdata[63:56];
+        end
+        if (store_arp_hdr_word_2) begin
+            output_arp_spa_reg[15: 8] <= input_eth_payload_tdata[ 7: 0];
+            output_arp_spa_reg[ 7: 0] <= input_eth_payload_tdata[15: 8];
+            output_arp_tha_reg[47:40] <= input_eth_payload_tdata[23:16];
+            output_arp_tha_reg[39:32] <= input_eth_payload_tdata[31:24];
+            output_arp_tha_reg[31:24] <= input_eth_payload_tdata[39:32];
+            output_arp_tha_reg[23:16] <= input_eth_payload_tdata[47:40];
+            output_arp_tha_reg[15: 8] <= input_eth_payload_tdata[55:48];
+            output_arp_tha_reg[ 7: 0] <= input_eth_payload_tdata[63:56];
+        end
+        if (store_arp_hdr_word_3) begin
+            output_arp_tpa_reg[31:24] <= input_eth_payload_tdata[ 7: 0];
+            output_arp_tpa_reg[23:16] <= input_eth_payload_tdata[15: 8];
+            output_arp_tpa_reg[15: 8] <= input_eth_payload_tdata[23:16];
+            output_arp_tpa_reg[ 7: 0] <= input_eth_payload_tdata[31:24];
+        end
+    end
+end
+
+endmodule
+

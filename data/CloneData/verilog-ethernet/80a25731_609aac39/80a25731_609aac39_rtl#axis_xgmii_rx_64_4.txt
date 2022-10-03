@@ -1,0 +1,286 @@
+Source Block: verilog-ethernet/rtl/axis_xgmii_rx_64.v@294:429@HdlStmProcess
+        tkeep_mask = 8'b11111111;
+    end
+    endcase
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 1'b0;
+    update_crc_last = 1'b0;
+
+    last_cycle_tkeep_next = last_cycle_tkeep_reg;
+
+    m_axis_tdata_next = {DATA_WIDTH{1'b0}};
+    m_axis_tkeep_next = {KEEP_WIDTH{1'b1}};
+    m_axis_tvalid_next = 1'b0;
+    m_axis_tlast_next = 1'b0;
+    m_axis_tuser_next = 1'b0;
+
+    error_bad_frame_next = 1'b0;
+    error_bad_fcs_next = 1'b0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for packet
+            reset_crc = 1'b1;
+
+            if (xgmii_rxc_d1[0] && xgmii_rxd_d1[7:0] == XGMII_START) begin
+                // start condition
+                if (control_masked) begin
+                    // control or error characters in first data word
+                    m_axis_tdata_next = {DATA_WIDTH{1'b0}};
+                    m_axis_tkeep_next = 8'h01;
+                    m_axis_tvalid_next = 1'b1;
+                    m_axis_tlast_next = 1'b1;
+                    m_axis_tuser_next = 1'b1;
+                    error_bad_frame_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    reset_crc = 1'b0;
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // read payload
+            m_axis_tdata_next = xgmii_rxd_d1;
+            m_axis_tkeep_next = {KEEP_WIDTH{1'b1}};
+            m_axis_tvalid_next = 1'b1;
+            m_axis_tlast_next = 1'b0;
+            m_axis_tuser_next = 1'b0;
+
+            last_cycle_tkeep_next = {4'b0000, tkeep_mask[7:4]};
+
+            if (control_masked) begin
+                // control or error characters in packet
+                m_axis_tlast_next = 1'b1;
+                m_axis_tuser_next = 1'b1;
+                error_bad_frame_next = 1'b1;
+                reset_crc = 1'b1;
+                state_next = STATE_IDLE;
+            end else if (detect_term) begin
+                if (detect_term[4:0]) begin
+                    // end this cycle
+                    reset_crc = 1'b1;
+                    m_axis_tkeep_next = {tkeep_mask[3:0], 4'b1111};
+                    m_axis_tlast_next = 1'b1;
+                    if ((detect_term[0] && crc_valid7_save) ||
+                        (detect_term[1] && crc_valid0) ||
+                        (detect_term[2] && crc_valid1) ||
+                        (detect_term[3] && crc_valid2) ||
+                        (detect_term[4] && crc_valid3)) begin
+                        // CRC valid
+                    end else begin
+                        m_axis_tuser_next = 1'b1;
+                        error_bad_frame_next = 1'b1;
+                        error_bad_fcs_next = 1'b1;
+                    end
+                    state_next = STATE_IDLE;
+                end else begin
+                    // need extra cycle
+                    update_crc_last = 1'b1;
+                    state_next = STATE_LAST;
+                end
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_LAST: begin
+            // last cycle of packet
+            m_axis_tdata_next = xgmii_rxd_d1;
+            m_axis_tkeep_next = last_cycle_tkeep_reg;
+            m_axis_tvalid_next = 1'b1;
+            m_axis_tlast_next = 1'b1;
+            m_axis_tuser_next = 1'b0;
+
+            reset_crc = 1'b1;
+
+            if ((detect_term_save[5] && crc_valid0) ||
+                (detect_term_save[6] && crc_valid1) ||
+                (detect_term_save[7] && crc_valid2)) begin
+                // CRC valid
+            end else begin
+                m_axis_tuser_next = 1'b1;
+                error_bad_frame_next = 1'b1;
+                error_bad_fcs_next = 1'b1;
+            end
+
+            if (xgmii_rxc_d1[0] && xgmii_rxd_d1[7:0] == XGMII_START) begin
+                // start condition
+                if (control_masked) begin
+                    // control or error characters in first data word
+                    m_axis_tdata_next = {DATA_WIDTH{1'b0}};
+                    m_axis_tkeep_next = 8'h01;
+                    m_axis_tvalid_next = 1'b1;
+                    m_axis_tlast_next = 1'b1;
+                    m_axis_tuser_next = 1'b1;
+                    error_bad_frame_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    reset_crc = 1'b0;
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    state_reg <= state_next;
+
+    m_axis_tdata_reg <= m_axis_tdata_next;
+
+Diff Content:
+- 311     m_axis_tuser_next = 1'b0;
+- 329                     m_axis_tuser_next = 1'b1;
+- 346             m_axis_tuser_next = 1'b0;
+- 353                 m_axis_tuser_next = 1'b1;
+- 370                         m_axis_tuser_next = 1'b1;
+- 390             m_axis_tuser_next = 1'b0;
+- 399                 m_axis_tuser_next = 1'b1;
+- 412                     m_axis_tuser_next = 1'b1;
++ 311     m_axis_tuser_next = m_axis_tuser_reg;
++ 311     m_axis_tuser_next[0] = 1'b0;
++ 321                 if (PTP_TS_ENABLE) begin
++ 321                     m_axis_tuser_next[1 +: PTP_TS_WIDTH] = ptp_ts_reg;
++ 321                 end
++ 329                     m_axis_tuser_next[0] = 1'b1;
++ 346             m_axis_tuser_next[0] = 1'b0;
++ 353                 m_axis_tuser_next[0] = 1'b1;
++ 370                         m_axis_tuser_next[0] = 1'b1;
++ 390             m_axis_tuser_next[0] = 1'b0;
++ 399                 m_axis_tuser_next[0] = 1'b1;
++ 412                     m_axis_tuser_next[0] = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_xgmii_rx_32.v@259:380
+        tkeep_mask = 4'b1111;
+    end
+    endcase
+end
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 1'b0;
+
+    last_cycle_tkeep_next = last_cycle_tkeep_reg;
+
+    m_axis_tdata_next = {DATA_WIDTH{1'b0}};
+    m_axis_tkeep_next = {KEEP_WIDTH{1'b1}};
+    m_axis_tvalid_next = 1'b0;
+    m_axis_tlast_next = 1'b0;
+    m_axis_tuser_next = 1'b0;
+
+    start_packet_next = 1'b0;
+    error_bad_frame_next = 1'b0;
+    error_bad_fcs_next = 1'b0;
+
+    ptp_ts_next = ptp_ts_reg;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for packet
+            reset_crc = 1'b1;
+
+            if (xgmii_rxc_d2[0] && xgmii_rxd_d2[7:0] == XGMII_START) begin
+                // start condition
+                if (control_masked) begin
+                    // control or error characters in first data word
+                    m_axis_tdata_next = {DATA_WIDTH{1'b0}};
+                    m_axis_tkeep_next = 4'h1;
+                    m_axis_tvalid_next = 1'b1;
+                    m_axis_tlast_next = 1'b1;
+                    m_axis_tuser_next = 1'b1;
+                    error_bad_frame_next = 1'b1;
+                    state_next = STATE_IDLE;
+                end else begin
+                    reset_crc = 1'b0;
+                    state_next = STATE_PREAMBLE;
+                end
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PREAMBLE: begin
+            // drop preamble
+            ptp_ts_next = ptp_ts;
+            start_packet_next = 1'b1;
+            state_next = STATE_PAYLOAD;
+        end
+        STATE_PAYLOAD: begin
+            // read payload
+            m_axis_tdata_next = xgmii_rxd_d2;
+            m_axis_tkeep_next = {KEEP_WIDTH{1'b1}};
+            m_axis_tvalid_next = 1'b1;
+            m_axis_tlast_next = 1'b0;
+            m_axis_tuser_next = 1'b0;
+
+            last_cycle_tkeep_next = tkeep_mask;
+
+            if (control_masked) begin
+                // control or error characters in packet
+                m_axis_tlast_next = 1'b1;
+                m_axis_tuser_next = 1'b1;
+                error_bad_frame_next = 1'b1;
+                reset_crc = 1'b1;
+                state_next = STATE_IDLE;
+            end else if (detect_term) begin
+                if (detect_term[0]) begin
+                    // end this cycle
+                    reset_crc = 1'b1;
+                    m_axis_tkeep_next = 4'b1111;
+                    m_axis_tlast_next = 1'b1;
+                    if (detect_term[0] && crc_valid3_save) begin
+                        // CRC valid
+                    end else begin
+                        m_axis_tuser_next = 1'b1;
+                        error_bad_frame_next = 1'b1;
+                        error_bad_fcs_next = 1'b1;
+                    end
+                    state_next = STATE_IDLE;
+                end else begin
+                    // need extra cycle
+                    state_next = STATE_LAST;
+                end
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_LAST: begin
+            // last cycle of packet
+            m_axis_tdata_next = xgmii_rxd_d2;
+            m_axis_tkeep_next = last_cycle_tkeep_reg;
+            m_axis_tvalid_next = 1'b1;
+            m_axis_tlast_next = 1'b1;
+            m_axis_tuser_next = 1'b0;
+
+            reset_crc = 1'b1;
+
+            if ((detect_term_save[1] && crc_valid0_save) ||
+                (detect_term_save[2] && crc_valid1_save) ||
+                (detect_term_save[3] && crc_valid2_save)) begin
+                // CRC valid
+            end else begin
+                m_axis_tuser_next = 1'b1;
+                error_bad_frame_next = 1'b1;
+                error_bad_fcs_next = 1'b1;
+            end
+
+            state_next = STATE_IDLE;
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    state_reg <= state_next;
+
+    m_axis_tdata_reg <= m_axis_tdata_next;
+

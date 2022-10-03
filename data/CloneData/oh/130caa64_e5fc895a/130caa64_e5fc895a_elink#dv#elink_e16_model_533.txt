@@ -1,0 +1,35 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4306:4317@HdlStmAssign
+     else if(start_new_read)
+       txo_launch_init_req <= 1'b1;
+     else if(txo_launch_ack)
+       txo_launch_init_req <= 1'b0;
+
+   assign txo_launch_req = txo_launch_init_req | 
+			    txo_op_ack_first | (|(txo_launch_cnt[2:0]));
+
+   assign txo_rotate_dis = ~txo_launch_init_req & 
+			   (txo_op_ack_first | (|(txo_launch_cnt[2:0])));
+
+   //#######################################
+
+Diff Content:
+- 4311    assign txo_launch_req = txo_launch_init_req | 
+- 4312 			    txo_op_ack_first | (|(txo_launch_cnt[2:0]));
++ 4312    assign traninfo1_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo1_tlc[FAD-1:0]];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4309:4320
+       txo_launch_init_req <= 1'b0;
+
+   assign txo_launch_req = txo_launch_init_req | 
+			    txo_op_ack_first | (|(txo_launch_cnt[2:0]));
+
+   assign txo_rotate_dis = ~txo_launch_init_req & 
+			   (txo_op_ack_first | (|(txo_launch_cnt[2:0])));
+
+   //#######################################
+   //# Architectural entries state tracking
+   //# (written/read transactions tracking)
+   //#######################################
+

@@ -1,0 +1,321 @@
+Source Block: verilog-ethernet/rtl/axis_ram_switch.v@755:1068@HdlStmFor
+                cmd_table_finish_ptr_reg <= 0;
+            end
+        end
+    end // s_ifaces
+
+    for (n = 0; n < M_COUNT; n = n + 1) begin : m_ifaces
+
+        // command arbitration
+        wire [S_COUNT-1:0] request;
+        wire [S_COUNT-1:0] acknowledge;
+        wire [S_COUNT-1:0] grant;
+        wire grant_valid;
+        wire [CL_S_COUNT-1:0] grant_encoded;
+
+        arbiter #(
+            .PORTS(S_COUNT),
+            .TYPE(ARB_TYPE),
+            .BLOCK("ACKNOWLEDGE"),
+            .LSB_PRIORITY(LSB_PRIORITY)
+        )
+        cmd_arb_inst (
+            .clk(clk),
+            .rst(rst),
+            .request(request),
+            .acknowledge(acknowledge),
+            .grant(grant),
+            .grant_valid(grant_valid),
+            .grant_encoded(grant_encoded)
+        );
+
+        // mux
+        wire [RAM_ADDR_WIDTH-1:0] cmd_addr_mux  = int_cmd_addr[grant_encoded*RAM_ADDR_WIDTH +: RAM_ADDR_WIDTH];
+        wire [ADDR_WIDTH-1:0]     cmd_len_mux   = int_cmd_len[grant_encoded*ADDR_WIDTH +: ADDR_WIDTH];
+        wire [CMD_ADDR_WIDTH-1:0] cmd_id_mux    = int_cmd_id[grant_encoded*CMD_ADDR_WIDTH +: CMD_ADDR_WIDTH];
+        wire [KEEP_WIDTH-1:0]     cmd_tkeep_mux = int_cmd_tkeep[grant_encoded*KEEP_WIDTH +: KEEP_WIDTH];
+        wire [ID_WIDTH-1:0]       cmd_tid_mux   = int_cmd_tid[grant_encoded*ID_WIDTH +: ID_WIDTH];
+        wire [DEST_WIDTH-1:0]     cmd_tdest_mux = int_cmd_tdest[grant_encoded*DEST_WIDTH +: DEST_WIDTH];
+        wire [USER_WIDTH-1:0]     cmd_tuser_mux = int_cmd_tuser[grant_encoded*USER_WIDTH +: USER_WIDTH];
+        wire                      cmd_valid_mux = int_cmd_valid[grant_encoded*M_COUNT+n] && grant_valid;
+        wire                      cmd_ready_mux;
+
+        assign int_cmd_ready[n*S_COUNT +: S_COUNT] = (grant_valid && cmd_ready_mux) << grant_encoded;
+
+        for (m = 0; m < S_COUNT; m = m + 1) begin
+            assign request[m] = int_cmd_valid[m*M_COUNT+n] && !grant[m];
+            assign acknowledge[m] = grant[m] && int_cmd_valid[m*M_COUNT+n] && cmd_ready_mux;
+        end
+
+        reg [RAM_ADDR_WIDTH-1:0] rd_ptr_reg = {RAM_ADDR_WIDTH-1{1'b0}}, rd_ptr_next;
+
+        reg [ADDR_WIDTH-1:0] len_reg = {ADDR_WIDTH{1'b0}}, len_next;
+
+        reg [CL_S_COUNT-1:0] src_reg = 0, src_next;
+        reg [CMD_ADDR_WIDTH-1:0] id_reg = 0, id_next;
+
+        reg [KEEP_WIDTH-1:0] last_cycle_tkeep_reg = {KEEP_WIDTH{1'b0}}, last_cycle_tkeep_next;
+        reg [ID_WIDTH-1:0] tid_reg = {ID_WIDTH{1'b0}}, tid_next;
+        reg [DEST_WIDTH-1:0] tdest_reg = {DEST_WIDTH{1'b0}}, tdest_next;
+        reg [USER_WIDTH-1:0] tuser_reg = {USER_WIDTH{1'b0}}, tuser_next;
+
+        reg [DATA_WIDTH-1:0] out_axis_tdata_reg = {DATA_WIDTH{1'b0}}, out_axis_tdata_next;
+        reg [KEEP_WIDTH-1:0] out_axis_tkeep_reg = {KEEP_WIDTH{1'b0}}, out_axis_tkeep_next;
+        reg                  out_axis_tvalid_reg = 1'b0, out_axis_tvalid_next;
+        wire                 out_axis_tready;
+        reg                  out_axis_tlast_reg = 1'b0, out_axis_tlast_next;
+        reg [ID_WIDTH-1:0]   out_axis_tid_reg   = {ID_WIDTH{1'b0}}, out_axis_tid_next;
+        reg [DEST_WIDTH-1:0] out_axis_tdest_reg = {DEST_WIDTH{1'b0}}, out_axis_tdest_next;
+        reg [USER_WIDTH-1:0] out_axis_tuser_reg = {USER_WIDTH{1'b0}}, out_axis_tuser_next;
+
+        reg  [RAM_ADDR_WIDTH-1:0] ram_rd_addr_reg = {RAM_ADDR_WIDTH{1'b0}}, ram_rd_addr_next;
+        reg                       ram_rd_en_reg = 1'b0, ram_rd_en_next;
+        wire                      ram_rd_ack;
+        wire [DATA_WIDTH-1:0]     ram_rd_data;
+        wire                      ram_rd_data_valid;
+
+        reg cmd_valid_reg = 1'b0, cmd_valid_next;
+
+        reg [CMD_ADDR_WIDTH-1:0] cmd_status_id_reg = {CMD_ADDR_WIDTH{1'b0}}, cmd_status_id_next;
+        reg [S_COUNT-1:0]        cmd_status_valid_reg = 0, cmd_status_valid_next;
+
+        wire [S_COUNT-1:0] port_cmd_status_ready;
+        for (m = 0; m < S_COUNT; m = m + 1) begin
+            assign port_cmd_status_ready[m] = int_cmd_status_ready[m*M_COUNT+n];
+        end
+
+        reg [DATA_WIDTH-1:0] out_fifo_tdata[31:0];
+        reg [KEEP_WIDTH-1:0] out_fifo_tkeep[31:0];
+        reg out_fifo_tlast[31:0];
+        reg [ID_WIDTH-1:0] out_fifo_tid[31:0];
+        reg [DEST_WIDTH-1:0] out_fifo_tdest[31:0];
+        reg [USER_WIDTH-1:0] out_fifo_tuser[31:0];
+
+        reg [5:0] out_fifo_data_wr_ptr_reg = 0;
+        reg [DATA_WIDTH-1:0] out_fifo_data_wr_tdata;
+        reg out_fifo_data_wr_en;
+        reg [5:0] out_fifo_ctrl_wr_ptr_reg = 0;
+        reg [KEEP_WIDTH-1:0] out_fifo_ctrl_wr_tkeep;
+        reg out_fifo_ctrl_wr_tlast;
+        reg [ID_WIDTH-1:0] out_fifo_ctrl_wr_tid;
+        reg [DEST_WIDTH-1:0] out_fifo_ctrl_wr_tdest;
+        reg [USER_WIDTH-1:0] out_fifo_ctrl_wr_tuser;
+        reg out_fifo_ctrl_wr_en;
+        reg [5:0] out_fifo_rd_ptr_reg = 0;
+        reg out_fifo_rd_en;
+
+        assign port_ram_rd_addr[n*RAM_ADDR_WIDTH +: RAM_ADDR_WIDTH] = ram_rd_addr_reg;
+        assign port_ram_rd_en[n] = ram_rd_en_reg;
+        assign ram_rd_ack = port_ram_rd_ack[n];
+        assign ram_rd_data = port_ram_rd_data[n*DATA_WIDTH +: DATA_WIDTH];
+        assign ram_rd_data_valid = port_ram_rd_data_valid[n];
+
+        assign cmd_ready_mux = !cmd_valid_reg;
+
+        assign int_cmd_status_id[n*CMD_ADDR_WIDTH +: CMD_ADDR_WIDTH] = cmd_status_id_reg;
+        assign int_cmd_status_valid[n*S_COUNT +: S_COUNT] = cmd_status_valid_reg;
+
+        always @* begin
+            rd_ptr_next = rd_ptr_reg;
+
+            len_next = len_reg;
+
+            src_next = src_reg;
+            id_next = id_reg;
+
+            last_cycle_tkeep_next = last_cycle_tkeep_reg;
+            tid_next = tid_reg;
+            tdest_next = tdest_reg;
+            tuser_next = tuser_reg;
+
+            out_axis_tdata_next  = out_axis_tdata_reg;
+            out_axis_tkeep_next  = out_axis_tkeep_reg;
+            out_axis_tvalid_next = out_axis_tvalid_reg && !out_axis_tready;
+            out_axis_tlast_next  = out_axis_tlast_reg;
+            out_axis_tid_next    = out_axis_tid_reg;
+            out_axis_tdest_next  = out_axis_tdest_reg;
+            out_axis_tuser_next  = out_axis_tuser_reg;
+
+            ram_rd_addr_next = ram_rd_addr_reg;
+            ram_rd_en_next = ram_rd_en_reg && !ram_rd_ack;
+
+            cmd_valid_next = cmd_valid_reg;
+
+            cmd_status_id_next = cmd_status_id_reg;
+            cmd_status_valid_next = cmd_status_valid_reg & ~port_cmd_status_ready;
+
+            out_fifo_data_wr_tdata = ram_rd_data;
+            out_fifo_data_wr_en = 1'b0;
+            out_fifo_ctrl_wr_tkeep = len_reg == 0 ? last_cycle_tkeep_reg : {KEEP_WIDTH{1'b1}};
+            out_fifo_ctrl_wr_tlast = len_reg == 0;
+            out_fifo_ctrl_wr_tid = tid_reg;
+            out_fifo_ctrl_wr_tdest = tdest_reg;
+            out_fifo_ctrl_wr_tuser = tuser_reg;
+            out_fifo_ctrl_wr_en = 1'b0;
+            out_fifo_rd_en = 1'b0;
+
+            // receive commands
+            if (!cmd_valid_reg && cmd_valid_mux) begin
+                cmd_valid_next = 1'b1;
+                rd_ptr_next = cmd_addr_mux;
+                len_next = cmd_len_mux;
+                last_cycle_tkeep_next = cmd_tkeep_mux;
+                id_next = cmd_id_mux;
+                tid_next = cmd_tid_mux;
+                tdest_next = cmd_tdest_mux;
+                tuser_next = cmd_tuser_mux;
+
+                src_next = grant_encoded;
+            end
+
+            // process commands and issue memory reads
+            if (cmd_valid_reg && (!ram_rd_en_reg || ram_rd_ack) && ($unsigned(out_fifo_ctrl_wr_ptr_reg - out_fifo_rd_ptr_reg) < 32)) begin
+                // update counters
+                rd_ptr_next[ADDR_WIDTH-1:0] = rd_ptr_reg[ADDR_WIDTH-1:0] + 1;
+                len_next = len_reg - 1;
+
+                // issue memory read
+                ram_rd_addr_next = rd_ptr_reg;
+                ram_rd_en_next = 1'b1;
+
+                // write output control FIFO
+                out_fifo_ctrl_wr_tkeep = len_reg == 0 ? last_cycle_tkeep_reg : {KEEP_WIDTH{1'b1}};
+                out_fifo_ctrl_wr_tlast = len_reg == 0;
+                out_fifo_ctrl_wr_tid = tid_reg;
+                out_fifo_ctrl_wr_tdest = tdest_reg;
+                out_fifo_ctrl_wr_tuser = tuser_reg;
+                out_fifo_ctrl_wr_en = 1'b1;
+
+                if (len_reg == 0) begin
+                    // indicate operation complete
+                    cmd_status_id_next = id_reg;
+                    cmd_status_valid_next = 1 << src_reg;
+                    cmd_valid_next = 1'b0;
+                end
+            end
+
+            // write RAM read data to output data FIFO
+            if (ram_rd_data_valid) begin
+                out_fifo_data_wr_tdata = ram_rd_data;
+                out_fifo_data_wr_en = 1'b1;
+            end
+
+            // generate output AXI stream data from control and data FIFOs
+            if ((out_axis_tready || !out_axis_tvalid_reg) && (out_fifo_rd_ptr_reg != out_fifo_ctrl_wr_ptr_reg) && (out_fifo_rd_ptr_reg != out_fifo_data_wr_ptr_reg)) begin
+                out_fifo_rd_en = 1'b1;
+                out_axis_tdata_next = out_fifo_tdata[out_fifo_rd_ptr_reg[4:0]];
+                out_axis_tkeep_next = out_fifo_tkeep[out_fifo_rd_ptr_reg[4:0]];
+                out_axis_tvalid_next = 1'b1;
+                out_axis_tlast_next = out_fifo_tlast[out_fifo_rd_ptr_reg[4:0]];
+                out_axis_tid_next   = out_fifo_tid[out_fifo_rd_ptr_reg[4:0]];
+                out_axis_tdest_next = out_fifo_tdest[out_fifo_rd_ptr_reg[4:0]];
+                out_axis_tuser_next = out_fifo_tuser[out_fifo_rd_ptr_reg[4:0]];
+            end
+        end
+
+        always @(posedge clk) begin
+            rd_ptr_reg <= rd_ptr_next;
+
+            len_reg <= len_next;
+
+            src_reg <= src_next;
+            id_reg <= id_next;
+
+            last_cycle_tkeep_reg <= last_cycle_tkeep_next;
+            tid_reg <= tid_next;
+            tdest_reg <= tdest_next;
+            tuser_reg <= tuser_next;
+
+            out_axis_tdata_reg <= out_axis_tdata_next;
+            out_axis_tkeep_reg <= out_axis_tkeep_next;
+            out_axis_tvalid_reg <= out_axis_tvalid_next;
+            out_axis_tlast_reg <= out_axis_tlast_next;
+            out_axis_tid_reg   <= out_axis_tid_next;
+            out_axis_tdest_reg <= out_axis_tdest_next;
+            out_axis_tuser_reg <= out_axis_tuser_next;
+
+            ram_rd_addr_reg <= ram_rd_addr_next;
+            ram_rd_en_reg <= ram_rd_en_next;
+
+            cmd_valid_reg <= cmd_valid_next;
+
+            cmd_status_id_reg <= cmd_status_id_next;
+            cmd_status_valid_reg <= cmd_status_valid_next;
+
+            if (out_fifo_data_wr_en) begin
+                out_fifo_data_wr_ptr_reg <= out_fifo_data_wr_ptr_reg + 1;
+                out_fifo_tdata[out_fifo_data_wr_ptr_reg[4:0]] <= out_fifo_data_wr_tdata;
+            end
+
+            if (out_fifo_ctrl_wr_en) begin
+                out_fifo_ctrl_wr_ptr_reg <= out_fifo_ctrl_wr_ptr_reg + 1;
+                out_fifo_tkeep[out_fifo_ctrl_wr_ptr_reg[4:0]] <= out_fifo_ctrl_wr_tkeep;
+                out_fifo_tlast[out_fifo_ctrl_wr_ptr_reg[4:0]] <= out_fifo_ctrl_wr_tlast;
+                out_fifo_tid[out_fifo_ctrl_wr_ptr_reg[4:0]] <= out_fifo_ctrl_wr_tid;
+                out_fifo_tdest[out_fifo_ctrl_wr_ptr_reg[4:0]] <= out_fifo_ctrl_wr_tdest;
+                out_fifo_tuser[out_fifo_ctrl_wr_ptr_reg[4:0]] <= out_fifo_ctrl_wr_tuser;
+            end
+
+            if (out_fifo_rd_en) begin
+                out_fifo_rd_ptr_reg <= out_fifo_rd_ptr_reg + 1;
+            end
+
+            if (rst) begin
+                len_reg <= 0;
+                out_axis_tvalid_reg <= 1'b0;
+                ram_rd_en_reg <= 1'b0;
+                cmd_valid_reg <= 1'b0;
+                cmd_status_valid_reg <= 0;
+                out_fifo_data_wr_ptr_reg <= 0;
+                out_fifo_ctrl_wr_ptr_reg <= 0;
+                out_fifo_rd_ptr_reg <= 0;
+            end
+        end
+
+        axis_adapter #(
+            .S_DATA_WIDTH(DATA_WIDTH),
+            .S_KEEP_ENABLE(1),
+            .S_KEEP_WIDTH(KEEP_WIDTH),
+            .M_DATA_WIDTH(M_DATA_WIDTH),
+            .M_KEEP_ENABLE(M_KEEP_ENABLE),
+            .M_KEEP_WIDTH(M_KEEP_WIDTH),
+            .ID_ENABLE(ID_ENABLE),
+            .ID_WIDTH(ID_WIDTH),
+            .DEST_ENABLE(1),
+            .DEST_WIDTH(DEST_WIDTH),
+            .USER_ENABLE(USER_ENABLE),
+            .USER_WIDTH(USER_WIDTH)
+        )
+        adapter_inst (
+            .clk(clk),
+            .rst(rst),
+            // AXI input
+            .s_axis_tdata(out_axis_tdata_reg),
+            .s_axis_tkeep(out_axis_tkeep_reg),
+            .s_axis_tvalid(out_axis_tvalid_reg),
+            .s_axis_tready(out_axis_tready),
+            .s_axis_tlast(out_axis_tlast_reg),
+            .s_axis_tid(out_axis_tid_reg),
+            .s_axis_tdest(out_axis_tdest_reg),
+            .s_axis_tuser(out_axis_tuser_reg),
+            // AXI output
+            .m_axis_tdata(m_axis_tdata[M_DATA_WIDTH*n +: M_DATA_WIDTH]),
+            .m_axis_tkeep(m_axis_tkeep[M_KEEP_WIDTH*n +: M_KEEP_WIDTH]),
+            .m_axis_tvalid(m_axis_tvalid[n]),
+            .m_axis_tready(m_axis_tready[n]),
+            .m_axis_tlast(m_axis_tlast[n]),
+            .m_axis_tid(m_axis_tid[ID_WIDTH*n +: ID_WIDTH]),
+            .m_axis_tdest(m_axis_tdest[DEST_WIDTH*n +: DEST_WIDTH]),
+            .m_axis_tuser(m_axis_tuser[USER_WIDTH*n +: USER_WIDTH])
+        );
+    end // m_ifaces
+
+endgenerate
+
+endmodule
+
+Diff Content:
+- 925             if (cmd_valid_reg && (!ram_rd_en_reg || ram_rd_ack) && ($unsigned(out_fifo_ctrl_wr_ptr_reg - out_fifo_rd_ptr_reg) < 32)) begin
++ 925             if (cmd_valid_reg && !cmd_status_valid_next && (!ram_rd_en_reg || ram_rd_ack) && ($unsigned(out_fifo_ctrl_wr_ptr_reg - out_fifo_rd_ptr_reg) < 32)) begin
+
+Clone Blocks:

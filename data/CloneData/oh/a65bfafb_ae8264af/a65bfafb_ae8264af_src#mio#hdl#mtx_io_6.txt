@@ -1,0 +1,21 @@
+Source Block: oh/src/mio/hdl/mtx_io.v@85:96@HdlStmProcess
+   //########################################
+   //# DDR OUTPUT
+   //########################################
+
+   // pipeline sdr to compensate for ddr
+   always @ (posedge io_clk)
+     tx_packet_sdr[IOW-1:0] <= shiftreg[IOW-1:0];
+      
+   // ddr circuit (one stage pipeline delay!)
+   oh_oddr#(.DW(IOW/2))
+   data_oddr (.out	(tx_packet_ddr[IOW/2-1:0]),
+              .clk	(io_clk),
+
+Diff Content:
++ 91    assign ddr_data_even[IOW/2-1:0] = shiftreg[IOW/2-1:0];
++ 91    assign ddr_data_odd[IOW/2-1:0] = (iowidth[1:0]==2'b00) ? shiftreg[15:8]  :
++ 91 				    (iowidth[1:0]==2'b01) ? shiftreg[31:16] :
++ 91 				                            shiftreg[63:32];
+
+Clone Blocks:

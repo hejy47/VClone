@@ -1,0 +1,73 @@
+Source Block: oh/elink/hdl/emaxi.v@492:502@HdlStmAssign
+   reg [31:0] 	 txrr_dstaddr;
+   
+   assign  txrr_datamode_fifo[1:0] = readinfo_out[1:0];
+   assign  txrr_ctrlmode_fifo[3:0] = readinfo_out[5:2];
+   assign  txrr_srcaddr_fifo[2:0]  = readinfo_out[8:6];
+   assign  txrr_dstaddr_fifo[31:0] = readinfo_out[40:9];
+
+   //Pipeline axi transaction to account for FIFO read latency   
+   reg [63:0] 	 m_axi_rdata_fifo;
+   reg 		 txrr_access_fifo;   
+   always @( posedge m_axi_aclk)
+
+Diff Content:
+- 497    assign  txrr_dstaddr_fifo[31:0] = readinfo_out[40:9];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/emaxi.v@489:499
+   wire [2:0] 	 txrr_srcaddr_fifo;
+   reg [1:0] 	 txrr_datamode;
+   reg [3:0] 	 txrr_ctrlmode;
+   reg [31:0] 	 txrr_dstaddr;
+   
+   assign  txrr_datamode_fifo[1:0] = readinfo_out[1:0];
+   assign  txrr_ctrlmode_fifo[3:0] = readinfo_out[5:2];
+   assign  txrr_srcaddr_fifo[2:0]  = readinfo_out[8:6];
+   assign  txrr_dstaddr_fifo[31:0] = readinfo_out[40:9];
+
+   //Pipeline axi transaction to account for FIFO read latency   
+
+Clone Blocks 2:
+oh/elink/hdl/emaxi.v@490:500
+   reg [1:0] 	 txrr_datamode;
+   reg [3:0] 	 txrr_ctrlmode;
+   reg [31:0] 	 txrr_dstaddr;
+   
+   assign  txrr_datamode_fifo[1:0] = readinfo_out[1:0];
+   assign  txrr_ctrlmode_fifo[3:0] = readinfo_out[5:2];
+   assign  txrr_srcaddr_fifo[2:0]  = readinfo_out[8:6];
+   assign  txrr_dstaddr_fifo[31:0] = readinfo_out[40:9];
+
+   //Pipeline axi transaction to account for FIFO read latency   
+   reg [63:0] 	 m_axi_rdata_fifo;
+
+Clone Blocks 3:
+oh/elink/hdl/emaxi.v@495:505
+   assign  txrr_ctrlmode_fifo[3:0] = readinfo_out[5:2];
+   assign  txrr_srcaddr_fifo[2:0]  = readinfo_out[8:6];
+   assign  txrr_dstaddr_fifo[31:0] = readinfo_out[40:9];
+
+   //Pipeline axi transaction to account for FIFO read latency   
+   reg [63:0] 	 m_axi_rdata_fifo;
+   reg 		 txrr_access_fifo;   
+   always @( posedge m_axi_aclk)
+     if(!m_axi_aresetn) 
+       begin
+	  txrr_access_fifo      <= 1'b0;	  
+
+Clone Blocks 4:
+oh/elink/hdl/emaxi.v@491:501
+   reg [3:0] 	 txrr_ctrlmode;
+   reg [31:0] 	 txrr_dstaddr;
+   
+   assign  txrr_datamode_fifo[1:0] = readinfo_out[1:0];
+   assign  txrr_ctrlmode_fifo[3:0] = readinfo_out[5:2];
+   assign  txrr_srcaddr_fifo[2:0]  = readinfo_out[8:6];
+   assign  txrr_dstaddr_fifo[31:0] = readinfo_out[40:9];
+
+   //Pipeline axi transaction to account for FIFO read latency   
+   reg [63:0] 	 m_axi_rdata_fifo;
+   reg 		 txrr_access_fifo;   
+

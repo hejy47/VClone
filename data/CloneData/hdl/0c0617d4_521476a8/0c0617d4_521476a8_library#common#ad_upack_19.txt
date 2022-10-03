@@ -1,0 +1,73 @@
+Source Block: hdl/library/common/ad_upack.v@113:135@HdlStmProcess
+      end
+    end
+  end
+end
+
+always @(*) begin
+  idata_d_nx = idata_d;
+  if (ivalid) begin
+    idata_d_nx = {{(SH_W-I_W)*UNIT_W{1'b0}},idata};
+    if (STEP>0) begin
+      for (i = STEP; i < O_W; i=i+STEP) begin
+        if (in_use[i-1]) begin
+          idata_d_nx = (idata << UNIT_W*i) | idata_d;
+        end
+      end
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (ovalid_s) begin
+    idata_d <= idata_d_nx >> O_W*UNIT_W;
+  end
+
+Diff Content:
+- 118 always @(*) begin
+- 119   idata_d_nx = idata_d;
+- 120   if (ivalid) begin
+- 121     idata_d_nx = {{(SH_W-I_W)*UNIT_W{1'b0}},idata};
+- 125           idata_d_nx = (idata << UNIT_W*i) | idata_d;
+- 130 end
++ 121   always @(*) begin
++ 121     inmask = {I_W{ivalid}};
++ 125           inmask = {I_W{ivalid}} << i;
++ 125         end
++ 125       end
++ 125     end
++ 125   end
++ 125   always @(*) begin
++ 125     idata_d_nx = idata_d;
++ 125     if (ivalid) begin
++ 125       idata_d_nx = {{(SH_W-I_W)*UNIT_W{1'b0}},idata};
++ 125       if (STEP>0) begin
++ 125         for (i = STEP; i < O_W; i=i+STEP) begin
++ 125           if (in_use[i-1]) begin
++ 125             idata_d_nx = (idata << UNIT_W*i) | idata_d;
++ 125           end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_upack.v@102:121
+  end else if (ovalid_s) begin
+    in_use <= in_use_nx;
+  end
+end
+
+always @(*) begin
+  inmask = {I_W{ivalid}};
+  if (STEP>0) begin
+    for (i = STEP; i < O_W; i=i+STEP) begin
+      if (in_use[i-1]) begin
+        inmask = {I_W{ivalid}} << i;
+      end
+    end
+  end
+end
+
+always @(*) begin
+  idata_d_nx = idata_d;
+  if (ivalid) begin
+    idata_d_nx = {{(SH_W-I_W)*UNIT_W{1'b0}},idata};
+

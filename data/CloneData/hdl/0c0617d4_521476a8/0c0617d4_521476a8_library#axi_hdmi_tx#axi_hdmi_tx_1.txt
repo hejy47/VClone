@@ -1,0 +1,27 @@
+Source Block: hdl/library/axi_hdmi_tx/axi_hdmi_tx.v@317:334@HdlStmIf
+    .hdmi_clip_min (hdmi_clip_min_s));
+
+  // hdmi output clock
+
+  generate
+  if (FPGA_TECHNOLOGY == XILINX_ULTRASCALE || FPGA_TECHNOLOGY == XILINX_ULTRASCALE_PLUS) begin
+  ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
+    .SR (1'b0),
+    .D1 (~OUT_CLK_POLARITY),
+    .D2 (OUT_CLK_POLARITY),
+    .C (reference_clk),
+    .Q (hdmi_out_clk));
+  end
+  if (FPGA_TECHNOLOGY == INTEL_5SERIES) begin
+  altddio_out #(.WIDTH(1)) i_clk_oddr (
+    .aclr (1'b0),
+    .aset (1'b0),
+    .sclr (1'b0),
+
+Diff Content:
+- 323   ODDRE1 #(.SRVAL(1'b0)) i_clk_oddr (
++ 323   ODDRE1 #(
++ 323     .SRVAL(1'b0)
++ 323   ) i_clk_oddr (
+
+Clone Blocks:

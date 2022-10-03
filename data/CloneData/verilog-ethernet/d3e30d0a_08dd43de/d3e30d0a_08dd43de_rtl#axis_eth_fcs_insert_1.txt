@@ -1,0 +1,143 @@
+Source Block: verilog-ethernet/rtl/axis_eth_fcs_insert.v@100:231@HdlStmProcess
+    .data_in(output_axis_tdata_int),
+    .crc_state(crc_state),
+    .crc_next(crc_next)
+);
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    input_axis_tready_next = 0;
+
+    output_axis_tdata_int = 0;
+    output_axis_tvalid_int = 0;
+    output_axis_tlast_int = 0;
+    output_axis_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            input_axis_tready_next = output_axis_tready_int_early;
+            frame_ptr_next = 0;
+            reset_crc = 1;
+
+            output_axis_tdata_int = input_axis_tdata;
+            output_axis_tvalid_int = input_axis_tvalid;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                frame_ptr_next = 1;
+                reset_crc = 0;
+                update_crc = 1;
+                state_next = STATE_PAYLOAD;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // transfer payload
+            input_axis_tready_next = output_axis_tready_int_early;
+
+            output_axis_tdata_int = input_axis_tdata;
+            output_axis_tvalid_int = input_axis_tvalid;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (input_axis_tready & input_axis_tvalid) begin
+                frame_ptr_next = frame_ptr_reg + 1;
+                update_crc = 1;
+                if (input_axis_tlast) begin
+                    if (input_axis_tuser) begin
+                        output_axis_tlast_int = 1;
+                        output_axis_tuser_int = 1;
+                        reset_crc = 1;
+                        state_next = STATE_IDLE;
+                    end else begin
+                        input_axis_tready_next = 0;
+                        if (ENABLE_PADDING && frame_ptr_next < MIN_FRAME_LENGTH-5) begin
+                            state_next = STATE_PAD;
+                        end else begin
+                            frame_ptr_next = 0;
+                            state_next = STATE_FCS;
+                        end
+                    end
+                end else begin
+                    state_next = STATE_PAYLOAD;
+                end
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_PAD: begin
+            // insert padding
+            input_axis_tready_next = 0;
+
+            output_axis_tdata_int = 0;
+            output_axis_tvalid_int = 1;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (output_axis_tready_int) begin
+                frame_ptr_next = frame_ptr_reg + 1;
+                update_crc = 1;
+                if (frame_ptr_next < MIN_FRAME_LENGTH-5) begin
+                    state_next = STATE_PAD;
+                end else begin
+                    frame_ptr_next = 0;
+                    state_next = STATE_FCS;
+                end
+            end
+        end
+        STATE_FCS: begin
+            // send FCS
+            input_axis_tready_next = 0;
+
+            case (frame_ptr_reg)
+                2'd0: output_axis_tdata_int = ~crc_state[7:0];
+                2'd1: output_axis_tdata_int = ~crc_state[15:8];
+                2'd2: output_axis_tdata_int = ~crc_state[23:16];
+                2'd3: output_axis_tdata_int = ~crc_state[31:24];
+            endcase
+            output_axis_tvalid_int = 1;
+            output_axis_tlast_int = 0;
+            output_axis_tuser_int = 0;
+
+            if (output_axis_tready_int) begin
+                frame_ptr_next = frame_ptr_reg + 1;
+
+                if (frame_ptr_reg < 3) begin
+                    state_next = STATE_FCS;
+                end else begin
+                    reset_crc = 1;
+                    frame_ptr_next = 0;
+                    output_axis_tlast_int = 1;
+                    input_axis_tready_next = output_axis_tready_int_early;
+                    state_next = STATE_IDLE;
+                end
+            end else begin
+                state_next = STATE_FCS;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        
+
+Diff Content:
+- 161                         if (ENABLE_PADDING && frame_ptr_next < MIN_FRAME_LENGTH-5) begin
+- 187                 if (frame_ptr_next < MIN_FRAME_LENGTH-5) begin
++ 161                         if (ENABLE_PADDING && frame_ptr_reg < MIN_FRAME_LENGTH-5) begin
++ 187                 if (frame_ptr_reg < MIN_FRAME_LENGTH-5) begin
++ 192             end else begin
++ 192                 state_next = STATE_PAD;
+
+Clone Blocks:

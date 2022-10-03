@@ -1,0 +1,269 @@
+Source Block: oh/elink/hdl/etx_core.v@73:83@HdlIdDef
+   wire [14:0]		mi_addr;		// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+   wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+   wire			mi_we;			// From etx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From etx_cfg of etx_cfg.v
+   wire			remap_enable;		// From etx_cfg of etx_cfg.v
+   wire			tx_access;		// From etx_protocol of etx_protocol.v
+   wire			tx_burst;		// From etx_protocol of etx_protocol.v
+
+Diff Content:
+- 78    wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_core.v@75:85
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+   wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+   wire			mi_we;			// From etx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From etx_cfg of etx_cfg.v
+   wire			remap_enable;		// From etx_cfg of etx_cfg.v
+   wire			tx_access;		// From etx_protocol of etx_protocol.v
+   wire			tx_burst;		// From etx_protocol of etx_protocol.v
+   wire			tx_enable;		// From etx_cfg of etx_cfg.v
+   // End of automatics
+
+Clone Blocks 2:
+oh/elink/hdl/erx_core.v@72:82
+   wire [DW-1:0]	mi_dma_dout;		// From erx_dma of edma.v
+   wire			mi_dma_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_mailbox_dout;	// From erx_mailbox of emailbox.v
+   wire [DW-1:0]	mi_mmu_dout;		// From erx_mmu of emmu.v
+   wire			mi_mmu_en;		// From erx_cfgif of ecfg_if.v
+   wire			mi_we;			// From erx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From erx_cfg of erx_cfg.v
+   wire [31:0]		remap_base;		// From erx_cfg of erx_cfg.v
+   wire [1:0]		remap_mode;		// From erx_cfg of erx_cfg.v
+   wire [11:0]		remap_pattern;		// From erx_cfg of erx_cfg.v
+   wire [11:0]		remap_sel;		// From erx_cfg of erx_cfg.v
+
+Clone Blocks 3:
+oh/elink/hdl/etx_core.v@67:77
+   wire			etx_remap_access;	// From etx_remap of etx_remap.v
+   wire [PW-1:0]	etx_remap_packet;	// From etx_remap of etx_remap.v
+   wire			etx_rr;			// From etx_arbiter of etx_arbiter.v
+   wire			etx_wr_wait;		// From etx_protocol of etx_protocol.v
+   wire [8:0]		gpio_data;		// From etx_cfg of etx_cfg.v
+   wire			gpio_enable;		// From etx_cfg of etx_cfg.v
+   wire [14:0]		mi_addr;		// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+
+Clone Blocks 4:
+oh/elink/hdl/etx_core.v@70:80
+   wire			etx_wr_wait;		// From etx_protocol of etx_protocol.v
+   wire [8:0]		gpio_data;		// From etx_cfg of etx_cfg.v
+   wire			gpio_enable;		// From etx_cfg of etx_cfg.v
+   wire [14:0]		mi_addr;		// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+   wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+   wire			mi_we;			// From etx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From etx_cfg of etx_cfg.v
+
+Clone Blocks 5:
+oh/elink/hdl/erx_core.v@67:77
+   wire			mailbox_irq_en;		// From erx_cfg of erx_cfg.v
+   wire [14:0]		mi_addr;		// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From erx_cfg of erx_cfg.v
+   wire			mi_cfg_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_dma_dout;		// From erx_dma of edma.v
+   wire			mi_dma_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_mailbox_dout;	// From erx_mailbox of emailbox.v
+   wire [DW-1:0]	mi_mmu_dout;		// From erx_mmu of emmu.v
+   wire			mi_mmu_en;		// From erx_cfgif of ecfg_if.v
+   wire			mi_we;			// From erx_cfgif of ecfg_if.v
+
+Clone Blocks 6:
+oh/elink/hdl/erx_core.v@70:80
+   wire			mi_cfg_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_dma_dout;		// From erx_dma of edma.v
+   wire			mi_dma_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_mailbox_dout;	// From erx_mailbox of emailbox.v
+   wire [DW-1:0]	mi_mmu_dout;		// From erx_mmu of emmu.v
+   wire			mi_mmu_en;		// From erx_cfgif of ecfg_if.v
+   wire			mi_we;			// From erx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From erx_cfg of erx_cfg.v
+   wire [31:0]		remap_base;		// From erx_cfg of erx_cfg.v
+   wire [1:0]		remap_mode;		// From erx_cfg of erx_cfg.v
+
+Clone Blocks 7:
+oh/elink/hdl/erx_core.v@73:83
+   wire			mi_dma_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_mailbox_dout;	// From erx_mailbox of emailbox.v
+   wire [DW-1:0]	mi_mmu_dout;		// From erx_mmu of emmu.v
+   wire			mi_mmu_en;		// From erx_cfgif of ecfg_if.v
+   wire			mi_we;			// From erx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From erx_cfg of erx_cfg.v
+   wire [31:0]		remap_base;		// From erx_cfg of erx_cfg.v
+   wire [1:0]		remap_mode;		// From erx_cfg of erx_cfg.v
+   wire [11:0]		remap_pattern;		// From erx_cfg of erx_cfg.v
+   wire [11:0]		remap_sel;		// From erx_cfg of erx_cfg.v
+   wire			test_mode;		// From erx_cfg of erx_cfg.v
+
+Clone Blocks 8:
+oh/elink/hdl/etx_core.v@68:78
+   wire [PW-1:0]	etx_remap_packet;	// From etx_remap of etx_remap.v
+   wire			etx_rr;			// From etx_arbiter of etx_arbiter.v
+   wire			etx_wr_wait;		// From etx_protocol of etx_protocol.v
+   wire [8:0]		gpio_data;		// From etx_cfg of etx_cfg.v
+   wire			gpio_enable;		// From etx_cfg of etx_cfg.v
+   wire [14:0]		mi_addr;		// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+   wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+
+Clone Blocks 9:
+oh/elink/hdl/erx_core.v@68:78
+   wire [14:0]		mi_addr;		// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From erx_cfg of erx_cfg.v
+   wire			mi_cfg_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_dma_dout;		// From erx_dma of edma.v
+   wire			mi_dma_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_mailbox_dout;	// From erx_mailbox of emailbox.v
+   wire [DW-1:0]	mi_mmu_dout;		// From erx_mmu of emmu.v
+   wire			mi_mmu_en;		// From erx_cfgif of ecfg_if.v
+   wire			mi_we;			// From erx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From erx_cfg of erx_cfg.v
+
+Clone Blocks 10:
+oh/elink/hdl/erx_core.v@74:84
+   wire [63:0]		mi_mailbox_dout;	// From erx_mailbox of emailbox.v
+   wire [DW-1:0]	mi_mmu_dout;		// From erx_mmu of emmu.v
+   wire			mi_mmu_en;		// From erx_cfgif of ecfg_if.v
+   wire			mi_we;			// From erx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From erx_cfg of erx_cfg.v
+   wire [31:0]		remap_base;		// From erx_cfg of erx_cfg.v
+   wire [1:0]		remap_mode;		// From erx_cfg of erx_cfg.v
+   wire [11:0]		remap_pattern;		// From erx_cfg of erx_cfg.v
+   wire [11:0]		remap_sel;		// From erx_cfg of erx_cfg.v
+   wire			test_mode;		// From erx_cfg of erx_cfg.v
+   // End of automatics
+
+Clone Blocks 11:
+oh/elink/hdl/erx_core.v@69:79
+   wire [DW-1:0]	mi_cfg_dout;		// From erx_cfg of erx_cfg.v
+   wire			mi_cfg_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_dma_dout;		// From erx_dma of edma.v
+   wire			mi_dma_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_mailbox_dout;	// From erx_mailbox of emailbox.v
+   wire [DW-1:0]	mi_mmu_dout;		// From erx_mmu of emmu.v
+   wire			mi_mmu_en;		// From erx_cfgif of ecfg_if.v
+   wire			mi_we;			// From erx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From erx_cfg of erx_cfg.v
+   wire [31:0]		remap_base;		// From erx_cfg of erx_cfg.v
+
+Clone Blocks 12:
+oh/elink/hdl/etx_core.v@66:76
+   wire			etx_rd_wait;		// From etx_protocol of etx_protocol.v
+   wire			etx_remap_access;	// From etx_remap of etx_remap.v
+   wire [PW-1:0]	etx_remap_packet;	// From etx_remap of etx_remap.v
+   wire			etx_rr;			// From etx_arbiter of etx_arbiter.v
+   wire			etx_wr_wait;		// From etx_protocol of etx_protocol.v
+   wire [8:0]		gpio_data;		// From etx_cfg of etx_cfg.v
+   wire			gpio_enable;		// From etx_cfg of etx_cfg.v
+   wire [14:0]		mi_addr;		// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+
+Clone Blocks 13:
+oh/elink/hdl/etx_core.v@69:79
+   wire			etx_rr;			// From etx_arbiter of etx_arbiter.v
+   wire			etx_wr_wait;		// From etx_protocol of etx_protocol.v
+   wire [8:0]		gpio_data;		// From etx_cfg of etx_cfg.v
+   wire			gpio_enable;		// From etx_cfg of etx_cfg.v
+   wire [14:0]		mi_addr;		// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+   wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+   wire			mi_we;			// From etx_cfgif of ecfg_if.v
+
+Clone Blocks 14:
+oh/elink/hdl/etx_core.v@71:81
+   wire [8:0]		gpio_data;		// From etx_cfg of etx_cfg.v
+   wire			gpio_enable;		// From etx_cfg of etx_cfg.v
+   wire [14:0]		mi_addr;		// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+   wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+   wire			mi_we;			// From etx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From etx_cfg of etx_cfg.v
+   wire			remap_enable;		// From etx_cfg of etx_cfg.v
+
+Clone Blocks 15:
+oh/elink/hdl/erx_core.v@63:73
+   wire			emmu_access;		// From erx_mmu of emmu.v
+   wire [PW-1:0]	emmu_packet;		// From erx_mmu of emmu.v
+   wire			erx_access;		// From erx_protocol of erx_protocol.v
+   wire [PW-1:0]	erx_packet;		// From erx_protocol of erx_protocol.v
+   wire			mailbox_irq_en;		// From erx_cfg of erx_cfg.v
+   wire [14:0]		mi_addr;		// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From erx_cfg of erx_cfg.v
+   wire			mi_cfg_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_dma_dout;		// From erx_dma of edma.v
+   wire			mi_dma_en;		// From erx_cfgif of ecfg_if.v
+
+Clone Blocks 16:
+oh/elink/hdl/etx_core.v@72:82
+   wire			gpio_enable;		// From etx_cfg of etx_cfg.v
+   wire [14:0]		mi_addr;		// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+   wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+   wire			mi_we;			// From etx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From etx_cfg of etx_cfg.v
+   wire			remap_enable;		// From etx_cfg of etx_cfg.v
+   wire			tx_access;		// From etx_protocol of etx_protocol.v
+
+Clone Blocks 17:
+oh/elink/hdl/etx_core.v@74:84
+   wire [DW-1:0]	mi_cfg_dout;		// From etx_cfg of etx_cfg.v
+   wire			mi_cfg_en;		// From etx_cfgif of ecfg_if.v
+   wire [63:0]		mi_din;			// From etx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_mmu_dout;		// From etx_mmu of emmu.v
+   wire			mi_mmu_en;		// From etx_cfgif of ecfg_if.v
+   wire			mi_we;			// From etx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From etx_cfg of etx_cfg.v
+   wire			remap_enable;		// From etx_cfg of etx_cfg.v
+   wire			tx_access;		// From etx_protocol of etx_protocol.v
+   wire			tx_burst;		// From etx_protocol of etx_protocol.v
+   wire			tx_enable;		// From etx_cfg of etx_cfg.v
+
+Clone Blocks 18:
+oh/elink/hdl/erx_core.v@71:81
+   wire [63:0]		mi_din;			// From erx_cfgif of ecfg_if.v
+   wire [DW-1:0]	mi_dma_dout;		// From erx_dma of edma.v
+   wire			mi_dma_en;		// From erx_cfgif of ecfg_if.v
+   wire [63:0]		mi_mailbox_dout;	// From erx_mailbox of emailbox.v
+   wire [DW-1:0]	mi_mmu_dout;		// From erx_mmu of emmu.v
+   wire			mi_mmu_en;		// From erx_cfgif of ecfg_if.v
+   wire			mi_we;			// From erx_cfgif of ecfg_if.v
+   wire			mmu_enable;		// From erx_cfg of erx_cfg.v
+   wire [31:0]		remap_base;		// From erx_cfg of erx_cfg.v
+   wire [1:0]		remap_mode;		// From erx_cfg of erx_cfg.v
+   wire [11:0]		remap_pattern;		// From erx_cfg of erx_cfg.v
+

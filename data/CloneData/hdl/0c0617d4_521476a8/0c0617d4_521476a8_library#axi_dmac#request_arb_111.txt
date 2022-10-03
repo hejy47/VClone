@@ -1,0 +1,45 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@1018:1028@HdlStmAssign
+
+// Don't let the request generator run in advance more than one descriptor
+// The descriptor FIFO should not block the start of the request generator
+// since it becomes ready earlier.
+assign req_gen_valid = req_valid & req_ready;
+assign req_src_valid = req_valid & req_ready;
+assign req_ready = req_gen_ready & req_src_ready;
+
+util_axis_fifo #(
+  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
+  .ADDRESS_WIDTH(0),
+
+Diff Content:
+- 1023 assign req_src_valid = req_valid & req_ready;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_arb.v@1017:1027
+);
+
+// Don't let the request generator run in advance more than one descriptor
+// The descriptor FIFO should not block the start of the request generator
+// since it becomes ready earlier.
+assign req_gen_valid = req_valid & req_ready;
+assign req_src_valid = req_valid & req_ready;
+assign req_ready = req_gen_ready & req_src_ready;
+
+util_axis_fifo #(
+  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
+
+Clone Blocks 2:
+hdl/library/axi_dmac/request_arb.v@1019:1029
+// Don't let the request generator run in advance more than one descriptor
+// The descriptor FIFO should not block the start of the request generator
+// since it becomes ready earlier.
+assign req_gen_valid = req_valid & req_ready;
+assign req_src_valid = req_valid & req_ready;
+assign req_ready = req_gen_ready & req_src_ready;
+
+util_axis_fifo #(
+  .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
+  .ADDRESS_WIDTH(0),
+  .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+

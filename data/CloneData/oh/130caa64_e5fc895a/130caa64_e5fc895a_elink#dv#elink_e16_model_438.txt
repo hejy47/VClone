@@ -1,0 +1,62 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3910:3920@HdlStmAssign
+     if (cclk_en)
+       if (wr_write)
+	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
+   
+   //# Read (for dispatch)
+   assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+   //# Read (first short word of the next transaction to dispatch)
+   assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
+
+   //# Read (second short word of the next transaction to dispatch)
+
+Diff Content:
+- 3915    assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3904:3917
+   always @ (posedge cclk)
+     if (cclk_en)
+       if(!wr_fifo_full)
+	 even_byte[LW-1:0] <= tran_in[LW-1:0];
+
+   always @ (posedge cclk)
+     if (cclk_en)
+       if (wr_write)
+	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
+   
+   //# Read (for dispatch)
+   assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+   //# Read (first short word of the next transaction to dispatch)
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@3916:3926
+
+   //# Read (first short word of the next transaction to dispatch)
+   assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
+
+   //# Read (second short word of the next transaction to dispatch)
+   assign traninfo1_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo1_tlc[FAD-1:0]];
+
+   //# Read (third short word of the next transaction to dispatch)
+   assign traninfo2_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo2_tlc[FAD-1:0]];
+
+   assign next_ctrlmode_tlc[3:0]   = traninfo0_tlc[LW-1:LW-4];
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@3913:3923
+   
+   //# Read (for dispatch)
+   assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+   //# Read (first short word of the next transaction to dispatch)
+   assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
+
+   //# Read (second short word of the next transaction to dispatch)
+   assign traninfo1_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo1_tlc[FAD-1:0]];
+
+   //# Read (third short word of the next transaction to dispatch)
+

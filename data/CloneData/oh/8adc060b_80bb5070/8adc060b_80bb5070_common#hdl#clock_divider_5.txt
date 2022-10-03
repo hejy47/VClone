@@ -1,0 +1,38 @@
+Source Block: oh/common/hdl/clock_divider.v@50:60@HdlStmAssign
+	  default : divcfg_dec[7:0] = 8'b0000000;   // others
+	endcase
+   
+   //Divide by two special case
+   assign div2_sel = divcfg[3:0]==4'b0001;
+   assign div1_sel = divcfg[3:0]==4'b0000;
+    
+   always @ (posedge clkin or posedge reset)
+     if(reset)
+       counter[7:0] <= 8'b000001;
+     else      
+
+Diff Content:
++ 55    always @ (posedge clkin or posedge reset)
++ 55      if(reset)              
++ 55        divcfg_change <=1'b0;
++ 55      else
++ 55        begin
++ 55 	  divcfg_change <= (divcfg_reg[3:0]^divcfg[3:0]);	  
++ 55 	  divcfg_reg[3:0] <=divcfg[3:0];	  
++ 55        end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/clock_divider.v@49:59
+          4'b0111 : divcfg_dec[7:0] = 8'b01000000;  // Divide by 128
+	  default : divcfg_dec[7:0] = 8'b0000000;   // others
+	endcase
+   
+   //Divide by two special case
+   assign div2_sel = divcfg[3:0]==4'b0001;
+   assign div1_sel = divcfg[3:0]==4'b0000;
+    
+   always @ (posedge clkin or posedge reset)
+     if(reset)
+       counter[7:0] <= 8'b000001;
+

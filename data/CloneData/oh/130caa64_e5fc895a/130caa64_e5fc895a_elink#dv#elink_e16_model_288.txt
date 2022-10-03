@@ -1,0 +1,77 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2500:2510@HdlStmAssign
+   assign dstaddr[AW-1:0] = {fifo_tran_out[2*LW-5:0],
+                             fifo_tran_out[4*LW-1:2*LW],
+                             fifo_tran_out[6*LW-1:6*LW-4]};
+
+   assign datamode[1:0]   =  fifo_tran_out[6*LW-5:6*LW-6];
+   assign write           =  fifo_tran_out[6*LW-7]; 
+   assign access_int      =  fifo_tran_out[5*LW]; 
+
+   assign data[DW-1:0]    = {fifo_tran_out[5*LW-1:4*LW],
+                             fifo_tran_out[8*LW-1:6*LW],
+                             fifo_tran_out[10*LW-1:9*LW]};
+
+Diff Content:
+- 2505    assign write           =  fifo_tran_out[6*LW-7]; 
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@2499:2509
+
+   assign dstaddr[AW-1:0] = {fifo_tran_out[2*LW-5:0],
+                             fifo_tran_out[4*LW-1:2*LW],
+                             fifo_tran_out[6*LW-1:6*LW-4]};
+
+   assign datamode[1:0]   =  fifo_tran_out[6*LW-5:6*LW-6];
+   assign write           =  fifo_tran_out[6*LW-7]; 
+   assign access_int      =  fifo_tran_out[5*LW]; 
+
+   assign data[DW-1:0]    = {fifo_tran_out[5*LW-1:4*LW],
+                             fifo_tran_out[8*LW-1:6*LW],
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@2495:2507
+   assign mesh_fifo_read = access & ~mesh_wait_in;
+
+   //# Mesh transaction fields extraction
+   assign ctrlmode[3:0]   =  fifo_tran_out[2*LW-1:2*LW-4];
+
+   assign dstaddr[AW-1:0] = {fifo_tran_out[2*LW-5:0],
+                             fifo_tran_out[4*LW-1:2*LW],
+                             fifo_tran_out[6*LW-1:6*LW-4]};
+
+   assign datamode[1:0]   =  fifo_tran_out[6*LW-5:6*LW-6];
+   assign write           =  fifo_tran_out[6*LW-7]; 
+   assign access_int      =  fifo_tran_out[5*LW]; 
+
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@2503:2515
+
+   assign datamode[1:0]   =  fifo_tran_out[6*LW-5:6*LW-6];
+   assign write           =  fifo_tran_out[6*LW-7]; 
+   assign access_int      =  fifo_tran_out[5*LW]; 
+
+   assign data[DW-1:0]    = {fifo_tran_out[5*LW-1:4*LW],
+                             fifo_tran_out[8*LW-1:6*LW],
+                             fifo_tran_out[10*LW-1:9*LW]};
+
+   assign srcaddr_int[AW-1:0] = {fifo_tran_out[9*LW-1:8*LW],
+                                 fifo_tran_out[12*LW-1:10*LW],
+                                 fifo_tran_out[14*LW-1:13*LW]};
+
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@2501:2511
+                             fifo_tran_out[4*LW-1:2*LW],
+                             fifo_tran_out[6*LW-1:6*LW-4]};
+
+   assign datamode[1:0]   =  fifo_tran_out[6*LW-5:6*LW-6];
+   assign write           =  fifo_tran_out[6*LW-7]; 
+   assign access_int      =  fifo_tran_out[5*LW]; 
+
+   assign data[DW-1:0]    = {fifo_tran_out[5*LW-1:4*LW],
+                             fifo_tran_out[8*LW-1:6*LW],
+                             fifo_tran_out[10*LW-1:9*LW]};
+
+

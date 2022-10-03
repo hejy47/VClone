@@ -1,0 +1,30 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@57:69@HdlStmProcess
+      
+   //#################################
+   //# RX SHIFT REGISTER
+   //#################################
+ 
+   always @ (posedge sclk)
+     if(~ss)
+       spi_rx[PW-1:0] <= {spi_rx[PW-2:0],mosi};
+   
+   //#################################
+   //# STATE MACHINE
+   //#################################
+
+
+Diff Content:
+- 62    always @ (posedge sclk)
+- 63      if(~ss)
+- 64        spi_rx[PW-1:0] <= {spi_rx[PW-2:0],mosi};
++ 64    oh_ser2par #(.PW(PW),
++ 64 		.SW(1))
++ 64    ser2par (// Outputs
++ 64 	    .dout			(rx_data[PW-1:0]),
++ 64 	    .clk			(sclk),
++ 64 	    .din			(mosi),
++ 64 	    .lsbfirst			(1'b0), //msb first
++ 64 	    .shift			(~ss)
++ 64 	    );
+
+Clone Blocks:

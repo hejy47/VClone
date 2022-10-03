@@ -1,0 +1,66 @@
+Source Block: hdl/library/axi_generic_adc/axi_generic_adc.v@95:115@HdlStmProcess
+
+assign up_clk = s_axi_aclk;
+assign up_rstn = s_axi_aresetn;
+
+integer j;
+always @(*)
+begin
+  up_rdata_r = 'h00;
+  up_rack_r = 'h00;
+  up_wack_r = 'h00;
+  for (j = 0; j <= NUM_OF_CHANNELS; j=j+1) begin
+    up_rack_r = up_rack_r | up_rack_s[j];
+    up_wack_r = up_wack_r | up_wack_s[j];
+    up_rdata_r = up_rdata_r | up_rdata_s[j];
+  end
+end
+
+always @(negedge up_rstn or posedge up_clk) begin
+  if (up_rstn == 0) begin
+    up_rdata <= 'd0;
+    up_rack <= 'd0;
+
+Diff Content:
+- 100 always @(*)
+- 101 begin
+- 102   up_rdata_r = 'h00;
+- 103   up_rack_r = 'h00;
+- 104   up_wack_r = 'h00;
+- 105   for (j = 0; j <= NUM_OF_CHANNELS; j=j+1) begin
+- 106     up_rack_r = up_rack_r | up_rack_s[j];
+- 107     up_wack_r = up_wack_r | up_wack_s[j];
+- 108     up_rdata_r = up_rdata_r | up_rdata_s[j];
+- 110 end
++ 108   reg  [31:0] up_rdata = 'd0;
++ 108   reg        up_rack = 'd0;
++ 108   reg        up_wack = 'd0;
++ 108   wire adc_rst;
++ 108   wire up_rstn;
++ 108   wire up_clk;
++ 108   wire [13:0] up_waddr_s;
++ 108   wire [13:0] up_raddr_s;
++ 108   wire        up_sel_s;
++ 108   wire        up_wr_s;
++ 108   wire [13:0] up_addr_s;
++ 108   wire [31:0] up_wdata_s;
++ 108   wire [31:0] up_rdata_s[0:NUM_OF_CHANNELS];
++ 108   wire        up_rack_s[0:NUM_OF_CHANNELS];
++ 108   wire        up_wack_s[0:NUM_OF_CHANNELS];
++ 108   reg [31:0]  up_rdata_r;
++ 108   reg         up_rack_r;
++ 108   reg         up_wack_r;
++ 108   assign up_clk = s_axi_aclk;
++ 108   assign up_rstn = s_axi_aresetn;
++ 108   integer j;
++ 108   always @(*) begin
++ 108     up_rdata_r = 'h00;
++ 108     up_rack_r = 'h00;
++ 108     up_wack_r = 'h00;
++ 108     for (j = 0; j <= NUM_OF_CHANNELS; j=j+1) begin
++ 108       up_rack_r = up_rack_r | up_rack_s[j];
++ 108       up_wack_r = up_wack_r | up_wack_s[j];
++ 108       up_rdata_r = up_rdata_r | up_rdata_s[j];
++ 108     end
+
+Clone Blocks:

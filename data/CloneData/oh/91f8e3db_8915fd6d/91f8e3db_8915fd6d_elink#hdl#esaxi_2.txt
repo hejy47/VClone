@@ -1,0 +1,31 @@
+Source Block: oh/elink/hdl/esaxi.v@359:369@HdlStmAssign
+   
+
+   //###################################################
+   //#WRITE REQUEST
+   //###################################################  
+   assign txwr_write         = 1'b1;
+   
+   always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn) 
+       begin
+          txwr_data_reg[31:0]     <= 32'd0;	  
+
+Diff Content:
+- 364    assign txwr_write         = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/esaxi.v@446:456
+   //#READ RESPONSE (DATA CHANNEL)
+   //###################################################  
+   //Read response AXI state machine
+   //Only one outstanding read
+
+   assign rxrr_wait = 1'b0;
+   
+   always @( posedge s_axi_aclk ) 
+      if (!s_axi_aresetn) 
+	begin
+           s_axi_rvalid       <= 1'b0;
+

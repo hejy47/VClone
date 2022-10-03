@@ -1,0 +1,39 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@130:151@HdlStmProcess
+    end
+  end
+  endcase
+end
+
+always @(posedge clk) begin
+  case (state)
+  STATE_DEGLITCH: begin
+    if (deglitch_counter != 'h00) begin
+      deglitch_counter <= deglitch_counter - 1'b1;
+    end
+  end
+  default: begin
+    deglitch_counter <= 'h3f;
+  end
+  endcase
+end
+
+always @(*) begin
+  case (state)
+  STATE_RESET: state_good <= 1'b1;
+  STATE_WAIT_FOR_PHY: state_good <= phy_ready;
+
+Diff Content:
+- 135 always @(posedge clk) begin
+- 136   case (state)
+- 137   STATE_DEGLITCH: begin
+- 138     if (deglitch_counter != 'h00) begin
+- 139       deglitch_counter <= deglitch_counter - 1'b1;
+- 140     end
+- 141   end
+- 142   default: begin
+- 143     deglitch_counter <= 'h3f;
+- 144   end
+- 145   endcase
+- 146 end
+
+Clone Blocks:

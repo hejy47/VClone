@@ -1,0 +1,61 @@
+Source Block: oh/src/spi/hdl/spi_slave_regs.v@104:114@HdlStmAssign
+   assign spi_en   = hw_en & ~spi_config[0]; // disable spi (for security)
+   assign irq_en   = spi_config[1];          // enable interrupt
+   assign cpol     = spi_config[2];          // cpol
+   assign cpha     = spi_config[3];          // cpha
+   assign lsbfirst = spi_config[4];          // lsb shifted in first
+   assign valid    = spi_config[5];          // user regs enable
+
+   //#####################################   
+   //# STATUS [1]
+   //#####################################
+
+
+Diff Content:
++ 109    always @ (negedge spi_clk)
++ 109      if(user_write)
++ 109        user_regs[spi_addr[4:0]] <= spi_wdata[7:0]; 
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/spi/hdl/spi_slave_regs.v@102:112
+       spi_config[7:0] <= spi_wdata[7:0];
+
+   assign spi_en   = hw_en & ~spi_config[0]; // disable spi (for security)
+   assign irq_en   = spi_config[1];          // enable interrupt
+   assign cpol     = spi_config[2];          // cpol
+   assign cpha     = spi_config[3];          // cpha
+   assign lsbfirst = spi_config[4];          // lsb shifted in first
+   assign valid    = spi_config[5];          // user regs enable
+
+   //#####################################   
+   //# STATUS [1]
+
+Clone Blocks 2:
+oh/src/spi/hdl/spi_slave_regs.v@101:111
+     else if(config_write)
+       spi_config[7:0] <= spi_wdata[7:0];
+
+   assign spi_en   = hw_en & ~spi_config[0]; // disable spi (for security)
+   assign irq_en   = spi_config[1];          // enable interrupt
+   assign cpol     = spi_config[2];          // cpol
+   assign cpha     = spi_config[3];          // cpha
+   assign lsbfirst = spi_config[4];          // lsb shifted in first
+   assign valid    = spi_config[5];          // user regs enable
+
+   //#####################################   
+
+Clone Blocks 3:
+oh/src/spi/hdl/spi_slave_regs.v@103:113
+
+   assign spi_en   = hw_en & ~spi_config[0]; // disable spi (for security)
+   assign irq_en   = spi_config[1];          // enable interrupt
+   assign cpol     = spi_config[2];          // cpol
+   assign cpha     = spi_config[3];          // cpha
+   assign lsbfirst = spi_config[4];          // lsb shifted in first
+   assign valid    = spi_config[5];          // user regs enable
+
+   //#####################################   
+   //# STATUS [1]
+   //#####################################
+

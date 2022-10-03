@@ -1,0 +1,385 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx.v@334:510@HdlStmIf
+  .in_event(lmfc_edge),
+  .out_clk(clk),
+  .out_event(lmfc_edge_synced)
+);
+
+if (LINK_MODE[0] == 1) begin : mode_8b10b
+
+wire unexpected_lane_state_error;
+reg unexpected_lane_state_error_d = 1'b0;
+
+jesd204_rx_ctrl #(
+  .NUM_LANES(NUM_LANES),
+  .NUM_LINKS(NUM_LINKS),
+  .ENABLE_FRAME_ALIGN_ERR_RESET(ENABLE_FRAME_ALIGN_ERR_RESET)
+) i_rx_ctrl (
+  .clk(clk),
+  .reset(reset),
+
+  .cfg_lanes_disable(cfg_lanes_disable),
+  .cfg_links_disable(cfg_links_disable),
+
+  .phy_ready(1'b1),
+  .phy_en_char_align(phy_en_char_align),
+
+  .lmfc_edge(lmfc_edge_synced),
+  .frame_align_err_thresh_met(frame_align_err_thresh_met),
+  .sync(sync),
+
+  .latency_monitor_reset(latency_monitor_reset),
+
+  .cgs_reset(cgs_reset),
+  .cgs_ready(cgs_ready),
+
+  .ifs_reset(ifs_reset),
+
+  .status_state(status_ctrl_state),
+
+  .event_data_phase(event_data_phase)
+);
+
+assign err_statistics_reset = ctrl_err_statistics_reset ||
+                              event_data_phase;
+
+for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+
+  localparam D_START = i * DATA_PATH_WIDTH*8;
+  localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+  localparam OD_START = i * TPL_DATA_PATH_WIDTH*8;
+  localparam OD_STOP = OD_START + TPL_DATA_PATH_WIDTH*8-1;
+  localparam C_START = i * DATA_PATH_WIDTH;
+  localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
+
+  jesd204_rx_lane #(
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
+    .CHAR_INFO_REGISTERED(CHAR_INFO_REGISTERED),
+    .ALIGN_MUX_REGISTERED(ALIGN_MUX_REGISTERED),
+    .SCRAMBLER_REGISTERED(SCRAMBLER_REGISTERED),
+    .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
+    .ENABLE_FRAME_ALIGN_CHECK(ENABLE_FRAME_ALIGN_CHECK),
+    .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE),
+    .ASYNC_CLK(ASYNC_CLK)
+  ) i_lane (
+    .clk(clk),
+    .reset(reset),
+
+    .device_clk(device_clk),
+    .device_reset(device_reset),
+
+    .phy_data(phy_data_r[D_STOP:D_START]),
+    .phy_charisk(phy_charisk_r[C_STOP:C_START]),
+    .phy_notintable(phy_notintable_r[C_STOP:C_START]),
+    .phy_disperr(phy_disperr_r[C_STOP:C_START]),
+
+    .cgs_reset(cgs_reset[i]),
+    .cgs_ready(cgs_ready[i]),
+
+    .ifs_reset(ifs_reset[i]),
+
+    .rx_data(rx_data_s[OD_STOP:OD_START]),
+
+    .buffer_release_n(buffer_release_n),
+    .buffer_ready_n(buffer_ready_n[i]),
+
+    .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
+    .cfg_octets_per_frame(cfg_octets_per_frame),
+    .cfg_disable_char_replacement(cfg_disable_char_replacement),
+    .cfg_disable_scrambler(cfg_disable_scrambler),
+
+    .err_statistics_reset(err_statistics_reset),
+    .ctrl_err_statistics_mask(ctrl_err_statistics_mask[2:0]),
+    .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
+
+    .ilas_config_valid(ilas_config_valid[i]),
+    .ilas_config_addr(ilas_config_addr[2*i+1:2*i]),
+    .ilas_config_data(ilas_config_data[D_STOP:D_START]),
+
+    .status_cgs_state(status_lane_cgs_state[2*i+1:2*i]),
+    .status_ifs_ready(ifs_ready[i]),
+    .status_frame_align(frame_align[3*i+2:3*i]),
+
+    .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i])
+  );
+
+  if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
+    always @(posedge clk) begin
+      if (reset) begin
+        frame_align_err_thresh_met[i] <= 1'b0;
+        event_frame_alignment_error_per_lane[i] <= 1'b0;
+      end else begin
+        if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
+          frame_align_err_thresh_met[i] <= cgs_ready[i];
+          event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
+        end else begin
+          frame_align_err_thresh_met[i] <= 1'b0;
+          event_frame_alignment_error_per_lane[i] <= 1'b0;
+        end
+      end
+    end
+  end else begin : gen_no_frame_align_err_thresh
+    always @(*) begin
+      frame_align_err_thresh_met[i] <= 1'b0;
+      event_frame_alignment_error_per_lane[i] <= 1'b0;
+    end
+  end
+end
+
+assign event_frame_alignment_error = |event_frame_alignment_error_per_lane;
+
+/* If one of the enabled lanes falls out of DATA phase while the link is in DATA phase
+ * report an error event */
+assign unexpected_lane_state_error = |(~(cgs_ready|cfg_lanes_disable)) & &status_ctrl_state;
+always @(posedge clk) begin
+  unexpected_lane_state_error_d <= unexpected_lane_state_error;
+end
+assign event_unexpected_lane_state_error = unexpected_lane_state_error & ~unexpected_lane_state_error_d;
+
+
+/* Delay matching based on the number of pipeline stages */
+reg [NUM_LANES-1:0] ifs_ready_d1 = 1'b0;
+reg [NUM_LANES-1:0] ifs_ready_d2 = 1'b0;
+reg [NUM_LANES-1:0] ifs_ready_mux;
+
+always @(posedge clk) begin
+  ifs_ready_d1 <= ifs_ready;
+  ifs_ready_d2 <= ifs_ready_d1;
+end
+
+always @(*) begin
+  case (SCRAMBLER_REGISTERED + ALIGN_MUX_REGISTERED)
+  1: ifs_ready_mux = ifs_ready_d1;
+  2: ifs_ready_mux = ifs_ready_d2;
+  default: ifs_ready_mux = ifs_ready;
+  endcase
+end
+
+jesd204_lane_latency_monitor #(
+  .NUM_LANES(NUM_LANES),
+  .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+) i_lane_latency_monitor (
+  .clk(clk),
+  .reset(latency_monitor_reset),
+
+  .lane_ready(ifs_ready_mux),
+  .lane_frame_align(frame_align),
+  .lane_latency_ready(status_lane_ifs_ready),
+  .lane_latency(status_lane_latency)
+);
+
+assign status_lane_emb_state = 'b0;
+
+end
+
+if (LINK_MODE[1] == 1) begin : mode_64b66b
+
+wire [NUM_LANES-1:0] emb_lock;
+wire link_buffer_release_n;
+
+Diff Content:
+- 339 if (LINK_MODE[0] == 1) begin : mode_8b10b
+- 341 wire unexpected_lane_state_error;
+- 342 reg unexpected_lane_state_error_d = 1'b0;
+- 344 jesd204_rx_ctrl #(
+- 345   .NUM_LANES(NUM_LANES),
+- 346   .NUM_LINKS(NUM_LINKS),
+- 347   .ENABLE_FRAME_ALIGN_ERR_RESET(ENABLE_FRAME_ALIGN_ERR_RESET)
+- 348 ) i_rx_ctrl (
+- 349   .clk(clk),
+- 350   .reset(reset),
+- 352   .cfg_lanes_disable(cfg_lanes_disable),
+- 353   .cfg_links_disable(cfg_links_disable),
+- 355   .phy_ready(1'b1),
+- 356   .phy_en_char_align(phy_en_char_align),
+- 358   .lmfc_edge(lmfc_edge_synced),
+- 359   .frame_align_err_thresh_met(frame_align_err_thresh_met),
+- 360   .sync(sync),
+- 362   .latency_monitor_reset(latency_monitor_reset),
+- 364   .cgs_reset(cgs_reset),
+- 365   .cgs_ready(cgs_ready),
+- 367   .ifs_reset(ifs_reset),
+- 369   .status_state(status_ctrl_state),
+- 371   .event_data_phase(event_data_phase)
+- 372 );
+- 374 assign err_statistics_reset = ctrl_err_statistics_reset ||
+- 375                               event_data_phase;
+- 377 for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+- 379   localparam D_START = i * DATA_PATH_WIDTH*8;
+- 380   localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+- 381   localparam OD_START = i * TPL_DATA_PATH_WIDTH*8;
+- 382   localparam OD_STOP = OD_START + TPL_DATA_PATH_WIDTH*8-1;
+- 383   localparam C_START = i * DATA_PATH_WIDTH;
+- 384   localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
+- 386   jesd204_rx_lane #(
+- 387     .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+- 388     .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
+- 389     .CHAR_INFO_REGISTERED(CHAR_INFO_REGISTERED),
+- 390     .ALIGN_MUX_REGISTERED(ALIGN_MUX_REGISTERED),
+- 391     .SCRAMBLER_REGISTERED(SCRAMBLER_REGISTERED),
+- 392     .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
+- 393     .ENABLE_FRAME_ALIGN_CHECK(ENABLE_FRAME_ALIGN_CHECK),
+- 394     .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE),
+- 395     .ASYNC_CLK(ASYNC_CLK)
+- 396   ) i_lane (
+- 397     .clk(clk),
+- 398     .reset(reset),
+- 400     .device_clk(device_clk),
+- 401     .device_reset(device_reset),
+- 403     .phy_data(phy_data_r[D_STOP:D_START]),
+- 404     .phy_charisk(phy_charisk_r[C_STOP:C_START]),
+- 405     .phy_notintable(phy_notintable_r[C_STOP:C_START]),
+- 406     .phy_disperr(phy_disperr_r[C_STOP:C_START]),
+- 408     .cgs_reset(cgs_reset[i]),
+- 409     .cgs_ready(cgs_ready[i]),
+- 411     .ifs_reset(ifs_reset[i]),
+- 413     .rx_data(rx_data_s[OD_STOP:OD_START]),
+- 415     .buffer_release_n(buffer_release_n),
+- 416     .buffer_ready_n(buffer_ready_n[i]),
+- 418     .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
+- 419     .cfg_octets_per_frame(cfg_octets_per_frame),
+- 420     .cfg_disable_char_replacement(cfg_disable_char_replacement),
+- 421     .cfg_disable_scrambler(cfg_disable_scrambler),
+- 423     .err_statistics_reset(err_statistics_reset),
+- 424     .ctrl_err_statistics_mask(ctrl_err_statistics_mask[2:0]),
+- 425     .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
+- 427     .ilas_config_valid(ilas_config_valid[i]),
+- 428     .ilas_config_addr(ilas_config_addr[2*i+1:2*i]),
+- 429     .ilas_config_data(ilas_config_data[D_STOP:D_START]),
+- 431     .status_cgs_state(status_lane_cgs_state[2*i+1:2*i]),
+- 432     .status_ifs_ready(ifs_ready[i]),
+- 433     .status_frame_align(frame_align[3*i+2:3*i]),
+- 435     .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i])
+- 436   );
+- 438   if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
+- 439     always @(posedge clk) begin
+- 440       if (reset) begin
+- 441         frame_align_err_thresh_met[i] <= 1'b0;
+- 442         event_frame_alignment_error_per_lane[i] <= 1'b0;
+- 443       end else begin
+- 444         if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
+- 445           frame_align_err_thresh_met[i] <= cgs_ready[i];
+- 446           event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
+- 447         end else begin
+- 452     end
+- 453   end else begin : gen_no_frame_align_err_thresh
+- 454     always @(*) begin
+- 455       frame_align_err_thresh_met[i] <= 1'b0;
+- 456       event_frame_alignment_error_per_lane[i] <= 1'b0;
+- 459 end
+- 461 assign event_frame_alignment_error = |event_frame_alignment_error_per_lane;
+- 463 /* If one of the enabled lanes falls out of DATA phase while the link is in DATA phase
+- 464  * report an error event */
+- 465 assign unexpected_lane_state_error = |(~(cgs_ready|cfg_lanes_disable)) & &status_ctrl_state;
+- 466 always @(posedge clk) begin
+- 467   unexpected_lane_state_error_d <= unexpected_lane_state_error;
+- 468 end
+- 469 assign event_unexpected_lane_state_error = unexpected_lane_state_error & ~unexpected_lane_state_error_d;
+- 472 /* Delay matching based on the number of pipeline stages */
+- 473 reg [NUM_LANES-1:0] ifs_ready_d1 = 1'b0;
+- 474 reg [NUM_LANES-1:0] ifs_ready_d2 = 1'b0;
+- 475 reg [NUM_LANES-1:0] ifs_ready_mux;
+- 477 always @(posedge clk) begin
+- 478   ifs_ready_d1 <= ifs_ready;
+- 479   ifs_ready_d2 <= ifs_ready_d1;
+- 480 end
+- 482 always @(*) begin
+- 483   case (SCRAMBLER_REGISTERED + ALIGN_MUX_REGISTERED)
+- 484   1: ifs_ready_mux = ifs_ready_d1;
+- 485   2: ifs_ready_mux = ifs_ready_d2;
+- 486   default: ifs_ready_mux = ifs_ready;
+- 487   endcase
+- 488 end
+- 490 jesd204_lane_latency_monitor #(
+- 491   .NUM_LANES(NUM_LANES),
+- 492   .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+- 493 ) i_lane_latency_monitor (
+- 494   .clk(clk),
+- 495   .reset(latency_monitor_reset),
+- 497   .lane_ready(ifs_ready_mux),
+- 498   .lane_frame_align(frame_align),
+- 499   .lane_latency_ready(status_lane_ifs_ready),
+- 500   .lane_latency(status_lane_latency)
+- 501 );
+- 503 assign status_lane_emb_state = 'b0;
+- 505 end
++ 339     .cfg_lanes_disable (cfg_lanes_disable),
++ 339     .cfg_links_disable (cfg_links_disable),
++ 342     .phy_ready (1'b1),
++ 342     .phy_en_char_align (phy_en_char_align),
++ 350     .lmfc_edge (lmfc_edge_synced),
++ 350     .frame_align_err_thresh_met (frame_align_err_thresh_met),
++ 350     .sync (sync),
++ 353     .latency_monitor_reset (latency_monitor_reset),
++ 356     .cgs_reset (cgs_reset),
++ 356     .cgs_ready (cgs_ready),
++ 360     .ifs_reset (ifs_reset),
++ 362     .status_state (status_ctrl_state),
++ 365     .event_data_phase (event_data_phase));
++ 367   assign err_statistics_reset = ctrl_err_statistics_reset ||
++ 367                                 event_data_phase;
++ 369   for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
++ 372     localparam D_START = i * DATA_PATH_WIDTH*8;
++ 372     localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
++ 372     localparam OD_START = i * TPL_DATA_PATH_WIDTH*8;
++ 372     localparam OD_STOP = OD_START + TPL_DATA_PATH_WIDTH*8-1;
++ 372     localparam C_START = i * DATA_PATH_WIDTH;
++ 372     localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
++ 398     jesd204_rx_lane #(
++ 398       .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
++ 398       .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
++ 398       .CHAR_INFO_REGISTERED(CHAR_INFO_REGISTERED),
++ 398       .ALIGN_MUX_REGISTERED(ALIGN_MUX_REGISTERED),
++ 398       .SCRAMBLER_REGISTERED(SCRAMBLER_REGISTERED),
++ 398       .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
++ 398       .ENABLE_FRAME_ALIGN_CHECK(ENABLE_FRAME_ALIGN_CHECK),
++ 398       .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE),
++ 398       .ASYNC_CLK(ASYNC_CLK)
++ 398     ) i_lane (
++ 398       .clk(clk),
++ 398       .reset(reset),
++ 401       .device_clk(device_clk),
++ 401       .device_reset(device_reset),
++ 406       .phy_data(phy_data_r[D_STOP:D_START]),
++ 406       .phy_charisk(phy_charisk_r[C_STOP:C_START]),
++ 406       .phy_notintable(phy_notintable_r[C_STOP:C_START]),
++ 406       .phy_disperr(phy_disperr_r[C_STOP:C_START]),
++ 409       .cgs_reset(cgs_reset[i]),
++ 409       .cgs_ready(cgs_ready[i]),
++ 411       .ifs_reset(ifs_reset[i]),
++ 413       .rx_data(rx_data_s[OD_STOP:OD_START]),
++ 416       .buffer_release_n(buffer_release_n),
++ 416       .buffer_ready_n(buffer_ready_n[i]),
++ 421       .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
++ 421       .cfg_octets_per_frame(cfg_octets_per_frame),
++ 421       .cfg_disable_char_replacement(cfg_disable_char_replacement),
++ 421       .cfg_disable_scrambler(cfg_disable_scrambler),
++ 425       .err_statistics_reset(err_statistics_reset),
++ 425       .ctrl_err_statistics_mask(ctrl_err_statistics_mask[2:0]),
++ 425       .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
++ 429       .ilas_config_valid(ilas_config_valid[i]),
++ 429       .ilas_config_addr(ilas_config_addr[2*i+1:2*i]),
++ 429       .ilas_config_data(ilas_config_data[D_STOP:D_START]),
++ 433       .status_cgs_state(status_lane_cgs_state[2*i+1:2*i]),
++ 433       .status_ifs_ready(ifs_ready[i]),
++ 433       .status_frame_align(frame_align[3*i+2:3*i]),
++ 436       .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i]));
++ 447     if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
++ 447       always @(posedge clk) begin
++ 447         if (reset) begin
++ 449         end else begin
++ 449           if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
++ 449             frame_align_err_thresh_met[i] <= cgs_ready[i];
++ 449             event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
++ 449           end else begin
++ 449             frame_align_err_thresh_met[i] <= 1'b0;
++ 449             event_frame_alignment_error_per_lane[i] <= 1'b0;
++ 449           end
++ 456     end else begin : gen_no_frame_align_err_thresh
++ 456       always @(*) begin
++ 456         frame_align_err_thresh_met[i] <= 1'b0;
++ 456         event_frame_alignment_error_per_lane[i] <= 1'b0;
++ 456       end
++ 505   assign event_frame_alignment_error = |event_frame_alignment_error_per_lane;
+
+Clone Blocks:

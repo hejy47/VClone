@@ -1,0 +1,139 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@245:316@HdlStmIf
+  .up_raddr (up_raddr_s),
+  .up_rdata (up_rdata),
+  .up_rack (up_rack));
+
+generate
+if (INTERNAL_SYSMONE == 1) begin
+  SYSMONE4 #(
+    .COMMON_N_SOURCE(16'hFFFF),
+    .INIT_40(16'h1000), // config reg 0
+    .INIT_41(16'h2F9F), // config reg 1
+    .INIT_42(16'h1400), // config reg 2
+    .INIT_43(16'h200F), // config reg 3
+    .INIT_44(16'h0000), // config reg 4
+    .INIT_45(16'hE200), // Analog Bus Register
+    .INIT_46(16'h0000), // Sequencer Channel selection (Vuser0-3)
+    .INIT_47(16'h0000), // Sequencer Average selection (Vuser0-3)
+    .INIT_48(16'h0101), // Sequencer channel selection
+    .INIT_49(16'h0000), // Sequencer channel selection
+    .INIT_4A(16'h0000), // Sequencer Average selection
+    .INIT_4B(16'h0000), // Sequencer Average selection
+    .INIT_4C(16'h0000), // Sequencer Bipolar selection
+    .INIT_4D(16'h0000), // Sequencer Bipolar selection
+    .INIT_4E(16'h0000), // Sequencer Acq time selection
+    .INIT_4F(16'h0000), // Sequencer Acq time selection
+    .INIT_50(16'hB794), // Temp alarm trigger
+    .INIT_51(16'h4E81), // Vccint upper alarm limit
+    .INIT_52(16'hA147), // Vccaux upper alarm limit
+    .INIT_53(16'hBF13), // Temp alarm OT upper
+    .INIT_54(16'hAB02), // Temp alarm reset
+    .INIT_55(16'h4963), // Vccint lower alarm limit
+    .INIT_56(16'h9555), // Vccaux lower alarm limit
+    .INIT_57(16'hB00A), // Temp alarm OT reset
+    .INIT_58(16'h4E81), // VCCBRAM upper alarm limit
+    .INIT_5C(16'h4963), // VCCBRAM lower alarm limit
+    .INIT_59(16'h4963), // vccpsintlp upper alarm limit
+    .INIT_5D(16'h451E), // vccpsintlp lower alarm limit
+    .INIT_5A(16'h4963), // vccpsintfp upper alarm limit
+    .INIT_5E(16'h451E), // vccpsintfp lower alarm limit
+    .INIT_5B(16'h9A74), // vccpsaux upper alarm limit
+    .INIT_5F(16'h91EB), // vccpsaux lower alarm limit
+    .INIT_60(16'h4D39), // Vuser0 upper alarm limit
+    .INIT_61(16'h4DA7), // Vuser1 upper alarm limit
+    .INIT_62(16'h9A74), // Vuser2 upper alarm limit
+    .INIT_63(16'h9A74), // Vuser3 upper alarm limit
+    .INIT_68(16'h4C5E), // Vuser0 lower alarm limit
+    .INIT_69(16'h4BF2), // Vuser1 lower alarm limit
+    .INIT_6A(16'h98BF), // Vuser2 lower alarm limit
+    .INIT_6B(16'h98BF), // Vuser3 lower alarm limit
+    .INIT_7A(16'h0000), // DUAL0 Register
+    .INIT_7B(16'h0000), // DUAL1 Register
+    .INIT_7C(16'h0000), // DUAL2 Register
+    .INIT_7D(16'h0000), // DUAL3 Register
+    .SIM_DEVICE("ZYNQ_ULTRASCALE"),
+    .SIM_MONITOR_FILE("design.txt"))
+  inst_sysmon (
+    .DADDR(drp_daddr),
+    .DCLK(up_clk),
+    .DEN(drp_den_reg[0]),
+    .DI(drp_di),
+    .DWE(drp_dwe_reg[0]),
+    .RESET(!up_resetn),
+    .DO(drp_do),
+    .DRDY(drp_drdy),
+    .EOC(drp_eoc),
+    .EOS(drp_eos)
+  );
+end
+endgenerate
+
+//pulse generator instance
+util_pulse_gen #(
+  .PULSE_WIDTH(0),
+
+Diff Content:
+- 250 if (INTERNAL_SYSMONE == 1) begin
+- 251   SYSMONE4 #(
+- 252     .COMMON_N_SOURCE(16'hFFFF),
+- 253     .INIT_40(16'h1000), // config reg 0
+- 254     .INIT_41(16'h2F9F), // config reg 1
+- 255     .INIT_42(16'h1400), // config reg 2
+- 256     .INIT_43(16'h200F), // config reg 3
+- 257     .INIT_44(16'h0000), // config reg 4
+- 258     .INIT_45(16'hE200), // Analog Bus Register
+- 259     .INIT_46(16'h0000), // Sequencer Channel selection (Vuser0-3)
+- 260     .INIT_47(16'h0000), // Sequencer Average selection (Vuser0-3)
+- 261     .INIT_48(16'h0101), // Sequencer channel selection
+- 262     .INIT_49(16'h0000), // Sequencer channel selection
+- 263     .INIT_4A(16'h0000), // Sequencer Average selection
+- 264     .INIT_4B(16'h0000), // Sequencer Average selection
+- 265     .INIT_4C(16'h0000), // Sequencer Bipolar selection
+- 266     .INIT_4D(16'h0000), // Sequencer Bipolar selection
+- 267     .INIT_4E(16'h0000), // Sequencer Acq time selection
+- 268     .INIT_4F(16'h0000), // Sequencer Acq time selection
+- 269     .INIT_50(16'hB794), // Temp alarm trigger
+- 270     .INIT_51(16'h4E81), // Vccint upper alarm limit
+- 271     .INIT_52(16'hA147), // Vccaux upper alarm limit
+- 272     .INIT_53(16'hBF13), // Temp alarm OT upper
+- 273     .INIT_54(16'hAB02), // Temp alarm reset
+- 274     .INIT_55(16'h4963), // Vccint lower alarm limit
+- 275     .INIT_56(16'h9555), // Vccaux lower alarm limit
+- 276     .INIT_57(16'hB00A), // Temp alarm OT reset
+- 277     .INIT_58(16'h4E81), // VCCBRAM upper alarm limit
+- 278     .INIT_5C(16'h4963), // VCCBRAM lower alarm limit
+- 279     .INIT_59(16'h4963), // vccpsintlp upper alarm limit
+- 280     .INIT_5D(16'h451E), // vccpsintlp lower alarm limit
+- 281     .INIT_5A(16'h4963), // vccpsintfp upper alarm limit
+- 282     .INIT_5E(16'h451E), // vccpsintfp lower alarm limit
+- 283     .INIT_5B(16'h9A74), // vccpsaux upper alarm limit
+- 284     .INIT_5F(16'h91EB), // vccpsaux lower alarm limit
+- 285     .INIT_60(16'h4D39), // Vuser0 upper alarm limit
+- 286     .INIT_61(16'h4DA7), // Vuser1 upper alarm limit
+- 287     .INIT_62(16'h9A74), // Vuser2 upper alarm limit
+- 288     .INIT_63(16'h9A74), // Vuser3 upper alarm limit
+- 289     .INIT_68(16'h4C5E), // Vuser0 lower alarm limit
+- 290     .INIT_69(16'h4BF2), // Vuser1 lower alarm limit
+- 291     .INIT_6A(16'h98BF), // Vuser2 lower alarm limit
+- 292     .INIT_6B(16'h98BF), // Vuser3 lower alarm limit
+- 293     .INIT_7A(16'h0000), // DUAL0 Register
+- 294     .INIT_7B(16'h0000), // DUAL1 Register
+- 295     .INIT_7C(16'h0000), // DUAL2 Register
+- 296     .INIT_7D(16'h0000), // DUAL3 Register
+- 297     .SIM_DEVICE("ZYNQ_ULTRASCALE"),
+- 298     .SIM_MONITOR_FILE("design.txt"))
+- 299   inst_sysmon (
+- 300     .DADDR(drp_daddr),
+- 301     .DCLK(up_clk),
+- 302     .DEN(drp_den_reg[0]),
+- 303     .DI(drp_di),
+- 304     .DWE(drp_dwe_reg[0]),
+- 305     .RESET(!up_resetn),
+- 306     .DO(drp_do),
+- 307     .DRDY(drp_drdy),
+- 308     .EOC(drp_eoc),
+- 309     .EOS(drp_eos)
+- 310   );
+- 311 end
+
+Clone Blocks:

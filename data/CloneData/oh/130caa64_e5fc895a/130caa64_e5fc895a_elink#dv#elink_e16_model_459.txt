@@ -1,0 +1,54 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4004:4015@HdlStmAssign
+     if(reset)
+       rd_addr_traninfo0_tlc[FAD-1:0] <= {(FAD){1'b0}};
+     else if(check_next_dstaddr_tlc)
+       rd_addr_traninfo0_tlc[FAD-1:0] <= rd_addr_traninfo0_next_tlc[FAD-1:0];
+
+   assign rd_addr_traninfo1_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b01};
+
+   assign rd_addr_traninfo2_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b10};
+
+   //####################################################
+
+Diff Content:
+- 4009    assign rd_addr_traninfo1_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+- 4010                                            {{(FAD-2){1'b0}},2'b01};
++ 4010    assign txo_rotate_dis_tlc = c0_txo_rotate_dis | c1_txo_rotate_dis |
++ 4010 			       c2_txo_rotate_dis | c3_txo_rotate_dis;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4007:4018
+       rd_addr_traninfo0_tlc[FAD-1:0] <= rd_addr_traninfo0_next_tlc[FAD-1:0];
+
+   assign rd_addr_traninfo1_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b01};
+
+   assign rd_addr_traninfo2_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b10};
+
+   //####################################################
+   //# Synchronization between rd/wr domains
+   //####################################################
+
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@3998:4012
+   //assign rd_addr_traninfo0_next_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] + 
+   //                                             {{(FAD-3){1'b0}},3'b111};
+   assign rd_addr_traninfo0_next_tlc[FAD:0] = rd_addr_traninfo0_tlc[FAD:0] + 
+                                                {{(FAD-2){1'b0}},3'b111};
+
+   always @(posedge txo_lclk or posedge reset)
+     if(reset)
+       rd_addr_traninfo0_tlc[FAD-1:0] <= {(FAD){1'b0}};
+     else if(check_next_dstaddr_tlc)
+       rd_addr_traninfo0_tlc[FAD-1:0] <= rd_addr_traninfo0_next_tlc[FAD-1:0];
+
+   assign rd_addr_traninfo1_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+                                           {{(FAD-2){1'b0}},2'b01};
+
+   assign rd_addr_traninfo2_tlc[FAD-1:0] = rd_addr_traninfo0_tlc[FAD-1:0] +
+

@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@201:211@HdlStmAssign
+
+assign src_beat = src_mem_data_valid;
+assign src_last_beat = src_beat & src_mem_data_last;
+assign src_waddr = {src_id_reduced,src_beat_counter};
+
+assign src_data_request_id = src_dest_id;
+
+always @(*) begin
+  if (src_last_beat == 1'b1) begin
+    src_id_next = inc_id(src_id);
+  end else begin
+
+Diff Content:
+- 206 assign src_data_request_id = src_dest_id;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@199:209
+  assign dest_id_reduced = dest_id_reduced_msb;
+end endgenerate
+
+assign src_beat = src_mem_data_valid;
+assign src_last_beat = src_beat & src_mem_data_last;
+assign src_waddr = {src_id_reduced,src_beat_counter};
+
+assign src_data_request_id = src_dest_id;
+
+always @(*) begin
+  if (src_last_beat == 1'b1) begin
+

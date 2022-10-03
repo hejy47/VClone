@@ -1,0 +1,162 @@
+Source Block: hdl/library/common/up_tdd_cntrl.v@209:352@HdlStmProcess
+  assign up_rreq_s = (up_raddr[13:8] == 6'h20) ? up_rreq : 1'b0;
+  assign up_preset_s = ~up_resetn;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 1'h0;
+      up_scratch <= 32'h0;
+      up_resetn <= 1'h0;
+      up_tdd_start <= 1'h0;
+      up_tdd_update_regs <= 1'h0;
+      up_tdd_counter_reset <= 1'h0;
+      up_tdd_enable <= 1'h0;
+      up_tdd_secondary <= 1'h0;
+      up_tdd_counter_init <= 22'h0;
+      up_tdd_frame_length <= 22'h0;
+      up_tdd_burst_en <= 1'h0;
+      up_tdd_burst_count <= 6'h0;
+      up_tdd_infinite_burst <= 1'h0;
+      up_tdd_vco_rx_on_1 <= 22'h0;
+      up_tdd_vco_rx_off_1 <= 22'h0;
+      up_tdd_vco_tx_on_1 <= 22'h0;
+      up_tdd_vco_tx_off_1 <= 22'h0;
+      up_tdd_rx_on_1 <= 22'h0;
+      up_tdd_rx_off_1 <= 22'h0;
+      up_tdd_tx_on_1 <= 22'h0;
+      up_tdd_tx_off_1 <= 22'h0;
+      up_tdd_tx_dp_on_1 <= 22'h0;
+      up_tdd_vco_rx_on_2 <= 22'h0;
+      up_tdd_vco_rx_off_2 <= 22'h0;
+      up_tdd_vco_tx_on_2 <= 22'h0;
+      up_tdd_vco_tx_off_2 <= 22'h0;
+      up_tdd_rx_on_2 <= 22'h0;
+      up_tdd_rx_off_2 <= 22'h0;
+      up_tdd_tx_on_2 <= 22'h0;
+      up_tdd_tx_off_2 <= 22'h0;
+      up_tdd_tx_dp_on_2 <= 22'h0;
+    end else begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+        up_resetn <= up_wdata[0];
+      end
+      if (up_tdd_update_regs == 1'b1) begin
+        if (up_cntrl_xfer_done == 1) begin
+          up_tdd_update_regs <= 1'h0;
+        end
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+          up_tdd_update_regs <= up_wdata[3];
+          up_tdd_counter_reset <= up_wdata[2];
+          up_tdd_enable <= up_wdata[0];
+      end
+      if (up_tdd_start == 1) begin
+        if (up_cntrl_xfer_done == 1) begin
+          up_tdd_start <= 1'h0;
+        end
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+        up_tdd_start <= up_wdata[1];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
+        up_tdd_burst_count <= up_wdata[21:16];
+        up_tdd_infinite_burst <= up_wdata[2];
+        up_tdd_burst_en <= up_wdata[1];
+        up_tdd_secondary <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h13)) begin
+        up_tdd_counter_init <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
+        up_tdd_frame_length <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h15)) begin
+        up_tdd_tx_dp_delay <= up_wdata[ 7:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
+        up_tdd_vco_rx_on_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
+        up_tdd_vco_rx_off_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+        up_tdd_vco_tx_on_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+        up_tdd_vco_tx_off_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h24)) begin
+        up_tdd_rx_on_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h25)) begin
+        up_tdd_rx_off_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h26)) begin
+        up_tdd_tx_on_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h27)) begin
+        up_tdd_tx_off_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+        up_tdd_tx_dp_on_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
+        up_tdd_tx_dp_off_1 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h20)) begin
+        up_tdd_vco_rx_on_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h21)) begin
+        up_tdd_vco_rx_off_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h22)) begin
+        up_tdd_vco_tx_on_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+        up_tdd_vco_tx_off_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
+        up_tdd_rx_on_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
+        up_tdd_rx_off_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h34)) begin
+        up_tdd_tx_on_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h35)) begin
+        up_tdd_tx_off_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h36)) begin
+        up_tdd_tx_dp_on_2 <= up_wdata[21:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h37)) begin
+        up_tdd_tx_dp_off_2 <= up_wdata[21:0];
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 220       up_tdd_update_regs <= 1'h0;
+- 228       up_tdd_infinite_burst <= 1'h0;
+- 255       if (up_tdd_update_regs == 1'b1) begin
+- 256         if (up_cntrl_xfer_done == 1) begin
+- 257           up_tdd_update_regs <= 1'h0;
+- 258         end
+- 259       end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+- 260           up_tdd_update_regs <= up_wdata[3];
+- 261           up_tdd_counter_reset <= up_wdata[2];
+- 273         up_tdd_infinite_burst <= up_wdata[2];
++ 261       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
++ 266           up_tdd_counter_reset <= 1'h0;
++ 268         up_tdd_counter_reset <= up_wdata[2];
+
+Clone Blocks:

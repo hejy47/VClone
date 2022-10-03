@@ -1,0 +1,30 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_rx_link.v@327:349@HdlStmIf
+    .odata (rx_data32_0_packed),
+    .ovalid (rx_data32_0_packed_valid),
+    .osof (rx_data32_0_packed_osof)
+  );
+
+  generate if (CMOS_LVDS_N) begin
+    assign rx_data_i = ~rx_single_lane ? {rx_data8_1_aligned,rx_data8_0_aligned} :
+                                         (rx_symb_op ? rx_data16_0_packed : rx_data32_0_packed[31:16]);
+    assign rx_data_q = ~rx_single_lane ? {rx_data8_3_aligned,rx_data8_2_aligned} :
+                                         (rx_symb_op ? 'b0 : rx_data32_0_packed[15:0]);
+    assign rx_data_valid = ~rx_single_lane ? rx_data8_0_aligned_valid : 
+                                             (rx_symb_op ? (rx_symb_8_16b ? rx_data8_0_aligned_valid : rx_data16_0_packed_valid) : rx_data32_0_packed_valid);
+  end else begin
+    assign rx_data_i = ~rx_single_lane ? rx_data16_0_packed :
+                                         rx_data32_0_packed[31:16];
+    assign rx_data_q = ~rx_single_lane ? rx_data16_1_packed :
+                                         rx_data32_0_packed[15:0];
+    assign rx_data_valid = ~rx_single_lane ? rx_data16_0_packed_valid :
+                                             rx_data32_0_packed_valid;
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 337     assign rx_data_valid = ~rx_single_lane ? rx_data8_0_aligned_valid : 
++ 337     assign rx_data_valid = ~rx_single_lane ? rx_data8_0_aligned_valid :
+
+Clone Blocks:

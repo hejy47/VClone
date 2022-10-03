@@ -1,0 +1,110 @@
+Source Block: oh/common/hdl/oh_iddr.v@32:44@HdlStmProcess
+   reg [DW-1:0]     q1_reg;
+
+   reg [DW-1:0]     q2_pos;
+   reg [DW-1:0]     q2_neg;
+   
+   always @ (posedge clk)
+     if(ce)
+       q1_pos[DW-1:0] <= #(HOLDHACK) din[DW-1:0];
+
+   always @ (posedge clk)
+     if(ce)
+       q1_reg[DW-1:0] <= #(HOLDHACK) q1_pos[DW-1:0];
+         
+
+Diff Content:
+- 39        q1_pos[DW-1:0] <= #(HOLDHACK) din[DW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_iddr.v@29:39
+   localparam [152:1] DDR_CLK_EDGE_REG = DDR_CLK_EDGE;
+
+   reg [DW-1:0]     q1_pos;
+   reg [DW-1:0]     q1_reg;
+
+   reg [DW-1:0]     q2_pos;
+   reg [DW-1:0]     q2_neg;
+   
+   always @ (posedge clk)
+     if(ce)
+       q1_pos[DW-1:0] <= #(HOLDHACK) din[DW-1:0];
+
+Clone Blocks 2:
+oh/common/hdl/oh_iddr.v@40:52
+
+   always @ (posedge clk)
+     if(ce)
+       q1_reg[DW-1:0] <= #(HOLDHACK) q1_pos[DW-1:0];
+         
+   always @ (negedge clk)
+     if(ce)
+       q2_neg[DW-1:0] <= #(HOLDHACK) din[DW-1:0];
+   
+   always @ (posedge clk)
+     if(ce)
+       q2_pos[DW-1:0] <= #(HOLDHACK) q2_neg[DW-1:0];
+
+
+Clone Blocks 3:
+oh/common/hdl/oh_oddr.v@25:36
+   reg [DW-1:0]    q1;   
+   reg [DW-1:0]    q2;
+   reg [DW-1:0]    q2_reg;
+   
+   //Generate different logic based on parameters
+   always @ (posedge clk)
+     q1[DW-1:0] <= din1[DW-1:0];
+
+   always @ (posedge clk)
+     q2[DW-1:0] <= din2[DW-1:0];
+  
+   always @ (negedge clk)
+
+Clone Blocks 4:
+oh/common/hdl/oh_iddr.v@30:40
+
+   reg [DW-1:0]     q1_pos;
+   reg [DW-1:0]     q1_reg;
+
+   reg [DW-1:0]     q2_pos;
+   reg [DW-1:0]     q2_neg;
+   
+   always @ (posedge clk)
+     if(ce)
+       q1_pos[DW-1:0] <= #(HOLDHACK) din[DW-1:0];
+
+
+Clone Blocks 5:
+oh/common/hdl/oh_iddr.v@36:48
+   
+   always @ (posedge clk)
+     if(ce)
+       q1_pos[DW-1:0] <= #(HOLDHACK) din[DW-1:0];
+
+   always @ (posedge clk)
+     if(ce)
+       q1_reg[DW-1:0] <= #(HOLDHACK) q1_pos[DW-1:0];
+         
+   always @ (negedge clk)
+     if(ce)
+       q2_neg[DW-1:0] <= #(HOLDHACK) din[DW-1:0];
+   
+
+Clone Blocks 6:
+oh/common/hdl/oh_iddr.v@44:56
+         
+   always @ (negedge clk)
+     if(ce)
+       q2_neg[DW-1:0] <= #(HOLDHACK) din[DW-1:0];
+   
+   always @ (posedge clk)
+     if(ce)
+       q2_pos[DW-1:0] <= #(HOLDHACK) q2_neg[DW-1:0];
+
+   //Select behavior based on parameters
+   assign q1[DW-1:0] = (DDR_CLK_EDGE_REG == "SAME_EDGE_PIPELINED") ? q1_reg[DW-1:0] :
+		       (DDR_CLK_EDGE_REG == "SAME_EDGE")           ? q1_pos[DW-1:0] :
+	                                                             'b0;
+

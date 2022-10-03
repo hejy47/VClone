@@ -1,0 +1,70 @@
+Source Block: verilog-ethernet/rtl/udp_complete.v@278:304@HdlStmProcess
+wire input_select_ip = ~input_select_udp;
+
+reg input_select_udp_reg = 0;
+reg input_select_ip_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        input_select_udp_reg <= 0;
+        input_select_ip_reg <= 0;
+    end else begin
+        if (ip_rx_ip_payload_tvalid) begin
+            if ((~input_select_udp_reg & ~input_select_ip_reg) |
+                (ip_rx_ip_payload_tvalid & ip_rx_ip_payload_tready & ip_rx_ip_payload_tlast)) begin
+                input_select_udp_reg <= input_select_udp;
+                input_select_ip_reg <= input_select_ip;
+            end
+        end else begin
+            input_select_udp_reg <= 0;
+            input_select_ip_reg <= 0;
+        end
+    end
+end
+
+// IP frame to UDP module
+assign udp_rx_ip_hdr_valid = input_select_udp & ip_rx_ip_hdr_valid;
+assign udp_rx_ip_eth_dest_mac = ip_rx_ip_eth_dest_mac;
+assign udp_rx_ip_eth_src_mac = ip_rx_ip_eth_src_mac;
+
+Diff Content:
+- 285         input_select_udp_reg <= 0;
+- 286         input_select_ip_reg <= 0;
+- 295             input_select_udp_reg <= 0;
+- 296             input_select_ip_reg <= 0;
++ 286         input_select_udp_reg <= 1'b0;
++ 286         input_select_ip_reg <= 1'b0;
++ 296             input_select_udp_reg <= 1'b0;
++ 296             input_select_ip_reg <= 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/udp_complete_64.v@288:314
+wire input_select_ip = ~input_select_udp;
+
+reg input_select_udp_reg = 0;
+reg input_select_ip_reg = 0;
+
+always @(posedge clk) begin
+    if (rst) begin
+        input_select_udp_reg <= 0;
+        input_select_ip_reg <= 0;
+    end else begin
+        if (ip_rx_ip_payload_tvalid) begin
+            if ((~input_select_udp_reg & ~input_select_ip_reg) |
+                (ip_rx_ip_payload_tvalid & ip_rx_ip_payload_tready & ip_rx_ip_payload_tlast)) begin
+                input_select_udp_reg <= input_select_udp;
+                input_select_ip_reg <= input_select_ip;
+            end
+        end else begin
+            input_select_udp_reg <= 0;
+            input_select_ip_reg <= 0;
+        end
+    end
+end
+
+// IP frame to UDP module
+assign udp_rx_ip_hdr_valid = input_select_udp & ip_rx_ip_hdr_valid;
+assign udp_rx_ip_eth_dest_mac = ip_rx_ip_eth_dest_mac;
+assign udp_rx_ip_eth_src_mac = ip_rx_ip_eth_src_mac;
+

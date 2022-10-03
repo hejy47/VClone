@@ -1,0 +1,30 @@
+Source Block: hdl/library/axi_ad9671/axi_ad9671_if.v@214:233@HdlStmProcess
+        adc_raddr_out   <= adc_raddr_out + 1;
+      end
+    end
+  end
+
+  always @(posedge rx_clk) begin
+    if (PCORE_4L_2L_N == 1'b1) begin
+      int_valid <= 1'b1;
+      int_data <= rx_data;
+    end else begin
+      int_valid         <= !rx_data_sof;
+      int_data[63:0]    <= {rx_data[31:0], int_data[63:32]};
+      int_data[127:64]  <= {rx_data[63:32], int_data[127:96]};
+    end
+  end
+
+  always @(posedge rx_clk) begin
+    if (adc_rst == 1'b1) begin
+      adc_status <= 1'b0;
+    end else begin
+
+Diff Content:
+- 222       int_data <= rx_data;
+- 224       int_valid         <= !rx_data_sof;
++ 222       int_data  <= rx_data;
++ 224       rx_sof_d          <= rx_sof;
++ 224       int_valid         <= rx_sof_d;
+
+Clone Blocks:

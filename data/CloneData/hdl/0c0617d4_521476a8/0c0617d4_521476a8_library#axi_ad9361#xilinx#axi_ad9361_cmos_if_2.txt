@@ -1,0 +1,75 @@
+Source Block: hdl/library/axi_ad9361/xilinx/axi_ad9361_cmos_if.v@479:510@HdlStmFor
+    .delay_locked (locked_s));
+
+  // transmit data interface, oddr -> obuf
+
+  generate
+  for (i = 0; i < 12; i = i + 1) begin: g_tx_data
+  ad_data_out #(
+    .SINGLE_ENDED (1),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_tx_data (
+    .tx_clk (l_clk),
+    .tx_data_p (tx_data_1[i]),
+    .tx_data_n (tx_data_0[i]),
+    .tx_data_out_p (tx_data_out[i]),
+    .tx_data_out_n (),
+    .up_clk (up_clk),
+    .up_dld (up_dac_dld[i]),
+    .up_dwdata (up_dac_dwdata[((i*5)+4):(i*5)]),
+    .up_drdata (up_dac_drdata[((i*5)+4):(i*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // transmit frame interface, oddr -> obuf
+
+  ad_data_out #(
+
+Diff Content:
+- 491     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+- 492   i_tx_data (
++ 492     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
++ 492   ) i_tx_data (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/xilinx/axi_ad9361_lvds_if.v@493:523
+    .delay_locked (locked_s));
+
+  // transmit data interface, oddr -> obuf
+
+  generate
+  for (i = 0; i < 6; i = i + 1) begin: g_tx_data
+  ad_data_out #(
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .IODELAY_ENABLE (DAC_IODELAY_ENABLE),
+    .IODELAY_CTRL (0),
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY))
+  i_tx_data (
+    .tx_clk (l_clk),
+    .tx_data_p (tx_data_1[i]),
+    .tx_data_n (tx_data_0[i]),
+    .tx_data_out_p (tx_data_out_p[i]),
+    .tx_data_out_n (tx_data_out_n[i]),
+    .up_clk (up_clk),
+    .up_dld (up_dac_dld[i]),
+    .up_dwdata (up_dac_dwdata[((i*5)+4):(i*5)]),
+    .up_drdata (up_dac_drdata[((i*5)+4):(i*5)]),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked ());
+  end
+  endgenerate
+
+  // transmit frame interface, oddr -> obuf
+
+  ad_data_out #(
+

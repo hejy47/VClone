@@ -1,0 +1,75 @@
+Source Block: hdl/library/common/util_dec256sinc24b.v@134:185@HdlStmProcess
+  end
+
+  /* Clock the Sinc output into an output register
+   * WORD_EN = output word rate */
+
+  always @(posedge clk) begin
+    if (word_en == 1'b1) begin
+      case (dec_rate)
+
+        16'd32: begin
+          data_out <= (diff3[15:0] == 16'h8000) ? 16'hFFFF : {diff3[14:0], 1'b0};
+        end
+
+        16'd64: begin
+          data_out <= (diff3[18:2] == 17'h10000) ? 16'hFFFF : diff3[17:2];
+        end
+
+        16'd128: begin
+          data_out <= (diff3[21:5] == 17'h10000) ? 16'hFFFF : diff3[20:5];
+        end
+
+        16'd256: begin
+          data_out <= (diff3[24:8] == 17'h10000) ? 16'hFFFF : diff3[23:8];
+        end
+
+        16'd512: begin
+          data_out <= (diff3[27:11] == 17'h10000) ? 16'hFFFF : diff3[26:11];
+        end
+
+        16'd1024: begin
+          data_out <= (diff3[30:14] == 17'h10000) ? 16'hFFFF : diff3[29:14];
+        end
+
+        16'd2048: begin
+          data_out <= (diff3[33:17] == 17'h10000) ? 16'hFFFF : diff3[32:17];
+        end
+
+        16'd4096: begin
+          data_out <= (diff3[36:20] == 17'h10000) ? 16'hFFFF : diff3[35:20];
+        end
+
+        default:begin
+          data_out <= (diff3[24:8] == 17'h10000) ? 16'hFFFF : diff3[23:8];
+        end
+      endcase
+    end
+  end
+
+  /* Synchronize Data Output */
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+
+Diff Content:
+- 144           data_out <= (diff3[15:0] == 16'h8000) ? 16'hFFFF : {diff3[14:0], 1'b0};
+- 148           data_out <= (diff3[18:2] == 17'h10000) ? 16'hFFFF : diff3[17:2];
+- 152           data_out <= (diff3[21:5] == 17'h10000) ? 16'hFFFF : diff3[20:5];
+- 156           data_out <= (diff3[24:8] == 17'h10000) ? 16'hFFFF : diff3[23:8];
+- 160           data_out <= (diff3[27:11] == 17'h10000) ? 16'hFFFF : diff3[26:11];
+- 164           data_out <= (diff3[30:14] == 17'h10000) ? 16'hFFFF : diff3[29:14];
+- 168           data_out <= (diff3[33:17] == 17'h10000) ? 16'hFFFF : diff3[32:17];
+- 172           data_out <= (diff3[36:20] == 17'h10000) ? 16'hFFFF : diff3[35:20];
+- 176           data_out <= (diff3[24:8] == 17'h10000) ? 16'hFFFF : diff3[23:8];
++ 144           data_out <= (diff3_s[15:0] == 16'h8000) ? 16'hFFFF : {diff3_s[14:0], 1'b0};
++ 148           data_out <= (diff3_s[18:2] == 17'h10000) ? 16'hFFFF : diff3_s[17:2];
++ 152           data_out <= (diff3_s[21:5] == 17'h10000) ? 16'hFFFF : diff3_s[20:5];
++ 156           data_out <= (diff3_s[24:8] == 17'h10000) ? 16'hFFFF : diff3_s[23:8];
++ 160           data_out <= (diff3_s[27:11] == 17'h10000) ? 16'hFFFF : diff3_s[26:11];
++ 164           data_out <= (diff3_s[30:14] == 17'h10000) ? 16'hFFFF : diff3_s[29:14];
++ 168           data_out <= (diff3_s[33:17] == 17'h10000) ? 16'hFFFF : diff3_s[32:17];
++ 172           data_out <= (diff3_s[36:20] == 17'h10000) ? 16'hFFFF : diff3_s[35:20];
++ 176           data_out <= (diff3_s[24:8] == 17'h10000) ? 16'hFFFF : diff3_s[23:8];
+
+Clone Blocks:

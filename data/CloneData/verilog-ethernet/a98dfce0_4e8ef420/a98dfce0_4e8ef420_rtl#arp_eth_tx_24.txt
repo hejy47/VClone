@@ -1,0 +1,136 @@
+Source Block: verilog-ethernet/rtl/arp_eth_tx.v@136:228@HdlStmProcess
+assign output_eth_src_mac = output_eth_src_mac_reg;
+assign output_eth_type = output_eth_type_reg;
+
+assign busy = busy_reg;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    input_frame_ready_next = 0;
+
+    store_frame = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_eth_hdr_valid_next = output_eth_hdr_valid_reg & ~output_eth_hdr_ready;
+
+    output_eth_payload_tdata_int = 0;
+    output_eth_payload_tvalid_int = 0;
+    output_eth_payload_tlast_int = 0;
+    output_eth_payload_tuser_int = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+            input_frame_ready_next = ~output_eth_hdr_valid_reg;
+
+            if (input_frame_ready & input_frame_valid) begin
+                store_frame = 1;
+                input_frame_ready_next = 0;
+                output_eth_hdr_valid_next = 1;
+                if (output_eth_payload_tready_int) begin
+                    output_eth_payload_tvalid_int = 1;
+                    output_eth_payload_tdata_int = input_arp_htype[15: 8];
+                    frame_ptr_next = 1;
+                end
+                state_next = STATE_WRITE_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_WRITE_HEADER: begin
+            // read header state
+            if (output_eth_payload_tready_int) begin
+                // word transfer out
+                frame_ptr_next = frame_ptr_reg+1;
+                output_eth_payload_tvalid_int = 1;
+                state_next = STATE_WRITE_HEADER;
+                case (frame_ptr_reg)
+                    8'h01: output_eth_payload_tdata_int = arp_htype_reg[ 7: 0];
+                    8'h02: output_eth_payload_tdata_int = arp_ptype_reg[15: 8];
+                    8'h03: output_eth_payload_tdata_int = arp_ptype_reg[ 7: 0];
+                    8'h04: output_eth_payload_tdata_int = 6; // hlen
+                    8'h05: output_eth_payload_tdata_int = 4; // plen
+                    8'h06: output_eth_payload_tdata_int = arp_oper_reg[15: 8];
+                    8'h07: output_eth_payload_tdata_int = arp_oper_reg[ 7: 0];
+                    8'h08: output_eth_payload_tdata_int = arp_sha_reg[47:40];
+                    8'h09: output_eth_payload_tdata_int = arp_sha_reg[39:32];
+                    8'h0A: output_eth_payload_tdata_int = arp_sha_reg[31:24];
+                    8'h0B: output_eth_payload_tdata_int = arp_sha_reg[23:16];
+                    8'h0C: output_eth_payload_tdata_int = arp_sha_reg[15: 8];
+                    8'h0D: output_eth_payload_tdata_int = arp_sha_reg[ 7: 0];
+                    8'h0E: output_eth_payload_tdata_int = arp_spa_reg[31:24];
+                    8'h0F: output_eth_payload_tdata_int = arp_spa_reg[23:16];
+                    8'h10: output_eth_payload_tdata_int = arp_spa_reg[15: 8];
+                    8'h11: output_eth_payload_tdata_int = arp_spa_reg[ 7: 0];
+                    8'h12: output_eth_payload_tdata_int = arp_tha_reg[47:40];
+                    8'h13: output_eth_payload_tdata_int = arp_tha_reg[39:32];
+                    8'h14: output_eth_payload_tdata_int = arp_tha_reg[31:24];
+                    8'h15: output_eth_payload_tdata_int = arp_tha_reg[23:16];
+                    8'h16: output_eth_payload_tdata_int = arp_tha_reg[15: 8];
+                    8'h17: output_eth_payload_tdata_int = arp_tha_reg[ 7: 0];
+                    8'h18: output_eth_payload_tdata_int = arp_tpa_reg[31:24];
+                    8'h19: output_eth_payload_tdata_int = arp_tpa_reg[23:16];
+                    8'h1A: output_eth_payload_tdata_int = arp_tpa_reg[15: 8];
+                    8'h1B: begin
+                        output_eth_payload_tdata_int = arp_tpa_reg[ 7: 0];
+                        output_eth_payload_tlast_int = 1;
+                        input_frame_ready_next = ~output_eth_hdr_valid_reg;
+                        state_next = STATE_IDLE;
+                    end
+                endcase
+            end else begin
+                state_next = STATE_WRITE_HEADER;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 144     input_frame_ready_next = 0;
+- 146     store_frame = 0;
+- 152     output_eth_payload_tdata_int = 0;
+- 153     output_eth_payload_tvalid_int = 0;
+- 154     output_eth_payload_tlast_int = 0;
+- 155     output_eth_payload_tuser_int = 0;
+- 160             frame_ptr_next = 0;
+- 164                 store_frame = 1;
+- 165                 input_frame_ready_next = 0;
+- 166                 output_eth_hdr_valid_next = 1;
+- 167                 if (output_eth_payload_tready_int) begin
+- 168                     output_eth_payload_tvalid_int = 1;
+- 170                     frame_ptr_next = 1;
+- 179             if (output_eth_payload_tready_int) begin
+- 181                 frame_ptr_next = frame_ptr_reg+1;
+- 182                 output_eth_payload_tvalid_int = 1;
+- 188                     8'h04: output_eth_payload_tdata_int = 6; // hlen
+- 189                     8'h05: output_eth_payload_tdata_int = 4; // plen
+- 213                         output_eth_payload_tlast_int = 1;
++ 144     input_frame_ready_next = 1'b0;
++ 146     store_frame = 1'b0;
++ 155     output_eth_payload_tdata_int = 8'd0;
++ 155     output_eth_payload_tvalid_int = 1'b0;
++ 155     output_eth_payload_tlast_int = 1'b0;
++ 155     output_eth_payload_tuser_int = 1'b0;
++ 160             frame_ptr_next = 8'd0;
++ 168                 store_frame = 1'b1;
++ 168                 input_frame_ready_next = 1'b0;
++ 168                 output_eth_hdr_valid_next = 1'b1;
++ 168                 if (output_eth_payload_tready_int_reg) begin
++ 168                     output_eth_payload_tvalid_int = 1'b1;
++ 170                     frame_ptr_next = 8'd1;
++ 179             if (output_eth_payload_tready_int_reg) begin
++ 182                 frame_ptr_next = frame_ptr_reg + 8'd1;
++ 182                 output_eth_payload_tvalid_int = 1'b1;
++ 189                     8'h04: output_eth_payload_tdata_int = 8'd6; // hlen
++ 189                     8'h05: output_eth_payload_tdata_int = 8'd4; // plen
++ 213                         output_eth_payload_tlast_int = 1'b1;
+
+Clone Blocks:

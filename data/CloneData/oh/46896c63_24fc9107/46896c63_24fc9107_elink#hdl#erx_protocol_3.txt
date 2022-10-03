@@ -1,0 +1,63 @@
+Source Block: oh/elink/hdl/erx_protocol.v@261:309@HdlStmProcess
+        end
+      endcase
+   end // always @ ( posedge rx_lclk_div4 )
+   
+   // 3rd cycle
+   always @( posedge rx_lclk_div4 ) begin
+
+      // default pass-throughs
+      if(~stream_2) 
+	begin
+           ctrlmode_2    <= ctrlmode_1;
+           dstaddr_2     <= dstaddr_1;
+           datamode_2    <= datamode_1;
+           write_2       <= write_1;
+           access_2      <= access_1 & rxactive_1;
+	end 
+      else 
+	begin
+           dstaddr_2     <= dstaddr_2 + 32'h00000008;
+	end
+
+      data_2        <= data_1;
+      srcaddr_2     <= srcaddr_1;
+      stream_2      <= stream_1;
+
+      case( rxalign_1[2:0] )
+        // 7-5: Full packet is complete in 2nd cycle
+        3'd4:
+          srcaddr_2[7:0]  <= rx_data_in[63:56];
+        3'd3:
+          srcaddr_2[15:0] <= rx_data_in[63:48];
+        3'd2:
+          srcaddr_2[23:0] <= rx_data_in[63:40];
+        3'd1:
+          srcaddr_2[31:0] <= rx_data_in[63:32];
+        3'd0: 
+	  begin
+             data_2[7:0]     <= rx_data_in[63:56];
+             srcaddr_2[31:0] <= rx_data_in[55:24];
+          end
+	default:;//TODO: include error message
+      endcase // case ( rxalign_1 )
+
+   end // always @ ( posedge rx_lclk_div4 )
+   
+
+   //Gating the rx with enable signal
+   synchronizer #(.DW(1)) sync (.out		(ecfg_rx_enable_sync),
+				.in		(ecfg_rx_enable),
+
+Diff Content:
+- 266    always @( posedge rx_lclk_div4 ) begin
++ 266    always @( posedge rx_lclk_div4 or posedge reset) 
++ 266      if (reset)
++ 266        begin
++ 266 	  access_2 <= 1'b0;
++ 266 	  stream_2 <= 1'b0;	  
++ 266        end
++ 266      else
++ 266        begin
+
+Clone Blocks:

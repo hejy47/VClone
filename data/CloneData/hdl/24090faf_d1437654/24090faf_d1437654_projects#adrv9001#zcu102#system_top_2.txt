@@ -1,0 +1,468 @@
+Source Block: hdl/projects/adrv9001/zcu102/system_top.v@194:204@HdlStmAssign
+
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+  assign spi_en = spi_csn[0];
+
+  system_wrapper i_system_wrapper (
+
+Diff Content:
+- 199   assign gpio_i[94:52] = gpio_o[94:52];
++ 199   assign gpio_i[54:52] = gpio_o[54:52];
++ 199   assign gpio_i[55] = vadj_err;
++ 199   assign gpio_i[94:56] = gpio_o[94:56];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/ad_fmclidar1_ebz/zcu102/system_top.v@174:184
+            }));
+
+  assign gpio_bd_o     = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:52] = gpio_o[94:52];
+
+  // block design instance
+
+  system_wrapper i_system_wrapper (
+
+Clone Blocks 2:
+hdl/projects/adrv9371x/zcu102/system_top.v@178:188
+              ad9371_gpio_17,       // 34
+              ad9371_gpio_16,       // 33
+              ad9371_gpio_18}));    // 32
+
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:60] = gpio_o[94:60];
+
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+
+Clone Blocks 3:
+hdl/projects/ad9081_fmca_ebz/zcu102/system_top.v@210:220
+  assign gpio_bd_o = gpio_o[7:0];
+
+  // Unused GPIOs
+  assign gpio_i[94:54] = gpio_o[94:54];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[7:0] = gpio_o[7:0];
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+    .gpio_t (gpio_t),
+
+Clone Blocks 4:
+hdl/projects/dac_fmc_ebz/zcu102/system_top.v@211:221
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[47:32] = gpio_o[47:32];
+  assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[ 7: 0] = gpio_o[7:0];
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+
+Clone Blocks 5:
+hdl/projects/ad_fmclidar1_ebz/zcu102/system_top.v@171:181
+              adc_pdwn,         // 34
+              adc_fdb,          // 33
+              adc_fda           // 32
+            }));
+
+  assign gpio_bd_o     = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:52] = gpio_o[94:52];
+
+
+Clone Blocks 6:
+hdl/projects/daq3/zcu102/system_top.v@171:181
+
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+    .gpio_t (gpio_t),
+
+Clone Blocks 7:
+hdl/projects/fmcomms8/zcu102/system_top.v@185:195
+
+  assign tx_sync = tx_sync_c & tx_sync_d;
+
+  assign gpio_i[94:68] = gpio_o[94:68];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  // instantiations
+  ad_iobuf #(.DATA_WIDTH(36)) i_iobuf (
+
+Clone Blocks 8:
+hdl/projects/adrv9371x/zcu102/system_top.v@182:192
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:60] = gpio_o[94:60];
+
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign spi_csn_ad9528 =  spi_csn[0];
+  assign spi_csn_ad9371 =  spi_csn[1];
+
+  system_wrapper i_system_wrapper (
+
+Clone Blocks 9:
+hdl/projects/adrv9009/zcu102/system_top.v@199:209
+              adrv9009_gpio_16,     // 33
+              adrv9009_gpio_18}));  // 32
+
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign spi_csn_ad9528 =  spi_csn[0];
+  assign spi_csn_adrv9009 =  spi_csn[1];
+
+  system_wrapper i_system_wrapper (
+
+Clone Blocks 10:
+hdl/projects/cn0506_rmii/zcu102/system_top.v@128:138
+  assign gpio_i[34] = link_st_b;
+  assign gpio_i[33:21] = gpio_o[33:21];
+  assign gpio_i[20:8] = gpio_bd_i;
+  assign gpio_i[ 7:0] = gpio_o[7:0];
+
+  assign gpio_bd_o = gpio_o[ 7:0];
+
+  // instantiations
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+
+Clone Blocks 11:
+hdl/projects/adrv9371x/zcu102/system_top.v@180:190
+              ad9371_gpio_18}));    // 32
+
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:60] = gpio_o[94:60];
+
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign spi_csn_ad9528 =  spi_csn[0];
+  assign spi_csn_ad9371 =  spi_csn[1];
+
+Clone Blocks 12:
+hdl/projects/ad_fmclidar1_ebz/zcu102/system_top.v@172:182
+              adc_fdb,          // 33
+              adc_fda           // 32
+            }));
+
+  assign gpio_bd_o     = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:52] = gpio_o[94:52];
+
+  // block design instance
+
+Clone Blocks 13:
+hdl/projects/fmcomms8/zcu102/system_top.v@184:194
+  .spi_sdio(spi_sdio));
+
+  assign tx_sync = tx_sync_c & tx_sync_d;
+
+  assign gpio_i[94:68] = gpio_o[94:68];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  // instantiations
+
+Clone Blocks 14:
+hdl/projects/fmcomms8/zcu102/system_top.v@183:193
+  .spi_miso_o(spi0_miso),
+  .spi_sdio(spi_sdio));
+
+  assign tx_sync = tx_sync_c & tx_sync_d;
+
+  assign gpio_i[94:68] = gpio_o[94:68];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+
+Clone Blocks 15:
+hdl/projects/cn0506_mii/zcu102/system_top.v@122:132
+  assign gpio_i[94:36] = gpio_o[94:36];
+
+  assign gpio_i[35] = link_st_a;
+  assign gpio_i[34] = link_st_b;
+
+  assign gpio_i[33:21] = gpio_o[33:21];
+
+  assign gpio_i[ 7:0] = gpio_o[7:0];
+
+  assign gpio_bd_o = gpio_o[ 7:0];
+  assign gpio_i[20:8] = gpio_bd_i;
+
+Clone Blocks 16:
+hdl/projects/adrv9001/zcu102/system_top.v@195:205
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+  assign spi_en = spi_csn[0];
+
+  system_wrapper i_system_wrapper (
+    .ref_clk (fpga_ref_clk),
+
+Clone Blocks 17:
+hdl/projects/ad9081_fmca_ebz/zcu102/system_top.v@208:218
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  // Unused GPIOs
+  assign gpio_i[94:54] = gpio_o[94:54];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[7:0] = gpio_o[7:0];
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+
+Clone Blocks 18:
+hdl/projects/cn0506_mii/zcu102/system_top.v@127:137
+  assign gpio_i[33:21] = gpio_o[33:21];
+
+  assign gpio_i[ 7:0] = gpio_o[7:0];
+
+  assign gpio_bd_o = gpio_o[ 7:0];
+  assign gpio_i[20:8] = gpio_bd_i;
+
+  // instantiations
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+
+Clone Blocks 19:
+hdl/projects/ad_fmclidar1_ebz/zcu102/system_top.v@173:183
+              adc_fda           // 32
+            }));
+
+  assign gpio_bd_o     = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:52] = gpio_o[94:52];
+
+  // block design instance
+
+
+Clone Blocks 20:
+hdl/projects/adrv9001/zcu102/system_top.v@191:201
+             dgpio_2,
+             dgpio_1,
+             dgpio_0 }));  // 32
+
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+
+Clone Blocks 21:
+hdl/projects/cn0506_rgmii/zcu102/system_top.v@124:134
+  assign gpio_i[33] = int_n_a;
+  assign gpio_i[32] = int_n_b;
+
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+  assign gpio_i[ 7:0] = gpio_o[7:0];
+
+  assign gpio_bd_o = gpio_o[ 7:0];
+  assign gpio_i[20:8] = gpio_bd_i;
+
+  IBUFDS i_ibufds_sysref_1 (
+
+Clone Blocks 22:
+hdl/projects/dac_fmc_ebz/zcu102/system_top.v@207:217
+
+  /* PMOD SPI */
+  assign pmod_spi_csn = spi1_csn[0];
+
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[47:32] = gpio_o[47:32];
+  assign gpio_i[31:26] = gpio_o[31:26];
+
+Clone Blocks 23:
+hdl/projects/dac_fmc_ebz/zcu102/system_top.v@212:222
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[47:32] = gpio_o[47:32];
+  assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[ 7: 0] = gpio_o[7:0];
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+
+Clone Blocks 24:
+hdl/projects/ad_fmclidar1_ebz/zcu102/system_top.v@175:185
+
+  assign gpio_bd_o     = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:52] = gpio_o[94:52];
+
+  // block design instance
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+
+Clone Blocks 25:
+hdl/projects/dac_fmc_ebz/zcu102/system_top.v@210:220
+
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[47:32] = gpio_o[47:32];
+  assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[ 7: 0] = gpio_o[7:0];
+
+  system_wrapper i_system_wrapper (
+
+Clone Blocks 26:
+hdl/projects/adrv9371x/zcu102/system_top.v@179:189
+              ad9371_gpio_16,       // 33
+              ad9371_gpio_18}));    // 32
+
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[94:60] = gpio_o[94:60];
+
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign spi_csn_ad9528 =  spi_csn[0];
+
+Clone Blocks 27:
+hdl/projects/adrv9001/zcu102/system_top.v@190:200
+             dgpio_3,
+             dgpio_2,
+             dgpio_1,
+             dgpio_0 }));  // 32
+
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+Clone Blocks 28:
+hdl/projects/ad9081_fmca_ebz/zcu102/system_top.v@209:219
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  // Unused GPIOs
+  assign gpio_i[94:54] = gpio_o[94:54];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[7:0] = gpio_o[7:0];
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+
+Clone Blocks 29:
+hdl/projects/adrv9001/zcu102/system_top.v@192:202
+             dgpio_1,
+             dgpio_0 }));  // 32
+
+  assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[ 7: 0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+  assign spi_en = spi_csn[0];
+
+Clone Blocks 30:
+hdl/projects/ad9081_fmca_ebz/zcu102/system_top.v@205:215
+  assign txen[1]          = gpio_o[59];
+  assign dac_fifo_bypass  = gpio_o[60];
+
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  // Unused GPIOs
+  assign gpio_i[94:54] = gpio_o[94:54];
+  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[7:0] = gpio_o[7:0];
+
+Clone Blocks 31:
+hdl/projects/daq3/zcu102/system_top.v@170:180
+              clkd_status}));   // 32
+
+  assign gpio_i[31:21] = gpio_o[31:21];
+
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  system_wrapper i_system_wrapper (
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+
+Clone Blocks 32:
+hdl/projects/dac_fmc_ebz/zcu102/system_top.v@208:218
+  /* PMOD SPI */
+  assign pmod_spi_csn = spi1_csn[0];
+
+  /* Board GPIOS. Buttons, LEDs, etc... */
+  assign gpio_i[20: 8] = gpio_bd_i;
+  assign gpio_bd_o = gpio_o[7:0];
+
+  assign gpio_i[94:52] = gpio_o[94:52];
+  assign gpio_i[47:32] = gpio_o[47:32];
+  assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[ 7: 0] = gpio_o[7:0];
+

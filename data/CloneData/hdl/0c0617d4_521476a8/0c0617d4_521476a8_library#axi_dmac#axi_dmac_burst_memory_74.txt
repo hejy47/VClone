@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@295:313@HdlStmProcess
+  end else if (dest_mem_data_ready == 1'b1) begin
+    dest_mem_data_last <= 1'b0;
+  end
+end
+
+always @(posedge dest_clk) begin
+  if (dest_beat == 1'b1) begin
+    if (dest_last == 1'b1) begin
+      dest_mem_data_strb <= {DATA_WIDTH_MEM_DEST/8{1'b1}} >> ~dest_burst_len_data[BYTES_PER_BEAT_WIDTH_DEST-1:0];
+    end else begin
+      dest_mem_data_strb <= {DATA_WIDTH_MEM_DEST/8{1'b1}};
+    end
+  end
+end
+
+assign dest_id_next_inc = inc_id(dest_id_next);
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+
+Diff Content:
+- 300 always @(posedge dest_clk) begin
+- 301   if (dest_beat == 1'b1) begin
+- 302     if (dest_last == 1'b1) begin
+- 303       dest_mem_data_strb <= {DATA_WIDTH_MEM_DEST/8{1'b1}} >> ~dest_burst_len_data[BYTES_PER_BEAT_WIDTH_DEST-1:0];
+- 305       dest_mem_data_strb <= {DATA_WIDTH_MEM_DEST/8{1'b1}};
+- 308 end
++ 303   always @(posedge src_clk) begin
++ 303     if (src_reset == 1'b1) begin
++ 303       src_id <= 'h00;
++ 303       src_id_reduced_msb <= 1'b0;
++ 305       src_id <= src_id_next;
++ 305       src_id_reduced_msb <= ^src_id_next[ID_WIDTH-1-:2];
+
+Clone Blocks:

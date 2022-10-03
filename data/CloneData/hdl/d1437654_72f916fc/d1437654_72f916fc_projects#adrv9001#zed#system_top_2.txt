@@ -1,0 +1,46 @@
+Source Block: hdl/projects/adrv9001/zed/system_top.v@176:186@HdlStmAssign
+
+  // multi-ssi synchronization
+  //
+  assign mssi_sync = gpio_o[54];
+
+  assign {vadj_test_2,vadj_test_1} = 2'b11;
+
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+  ) i_iobuf_carrier (
+    .dio_t(gpio_t[31:0]),
+
+Diff Content:
+- 181   assign {vadj_test_2,vadj_test_1} = 2'b11;
++ 181   assign platform_status = vadj_err;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/adrv9001/zcu102/system_top.v@161:171
+    dev_mcs_fpga_in <= mcs_sync_m[2] & ~mcs_sync_m[1];
+  end
+
+  // multi-ssi synchronization
+  //
+  assign mssi_sync = gpio_o[54];
+
+  assign {vadj_test_2,vadj_test_1} = 2'b11;
+
+  ad_iobuf #(.DATA_WIDTH(20)) i_iobuf (
+    .dio_t ({gpio_t[51:32]}),
+
+Clone Blocks 2:
+hdl/projects/adrv9001/zed/system_top.v@174:184
+
+  // instantiations
+
+  // multi-ssi synchronization
+  //
+  assign mssi_sync = gpio_o[54];
+
+  assign {vadj_test_2,vadj_test_1} = 2'b11;
+
+  ad_iobuf #(
+    .DATA_WIDTH(32)
+

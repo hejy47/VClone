@@ -1,0 +1,32 @@
+Source Block: verilog-ethernet/rtl/rgmii_phy_if.v@165:175@HdlIdDef
+reg [3:0] rgmii_txd_1;
+reg [3:0] rgmii_txd_2;
+reg rgmii_tx_ctl_1;
+reg rgmii_tx_ctl_2;
+
+reg gmii_clk_en;
+
+always @* begin
+    if (speed == 2'b00) begin
+        // 10M
+        rgmii_txd_1 = mac_gmii_txd[3:0];
+
+Diff Content:
+- 170 reg gmii_clk_en;
++ 170 reg gmii_clk_en = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/rgmii_phy_if.v@163:173
+end
+
+reg [3:0] rgmii_txd_1;
+reg [3:0] rgmii_txd_2;
+reg rgmii_tx_ctl_1;
+reg rgmii_tx_ctl_2;
+
+reg gmii_clk_en;
+
+always @* begin
+    if (speed == 2'b00) begin
+

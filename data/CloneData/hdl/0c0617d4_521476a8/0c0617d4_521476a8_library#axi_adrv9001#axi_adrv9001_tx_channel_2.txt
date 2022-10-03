@@ -1,0 +1,160 @@
+Source Block: hdl/library/axi_adrv9001/axi_adrv9001_tx_channel.v@115:251@HdlStmIf
+    .iqcor_enable (dac_iqcor_enb_s),
+    .iqcor_coeff_1 (dac_iqcor_coeff_1_s),
+    .iqcor_coeff_2 (dac_iqcor_coeff_2_s));
+  end
+
+  if (DISABLE == 1) begin
+    assign up_wack = 1'b0;
+    assign up_rdata =  32'b0;
+    assign up_rack = 1'b0;
+  end else begin
+
+  // PN7 x^7 + x^6 + 1
+  ad_pngen  #(
+    .POL_MASK ((1<<7) | (1<<6)),
+    .POL_W (7),
+    .DW (16)
+    ) PN7_gen (
+    .clk (dac_clk),
+    .reset (dac_rst),
+    .clk_en (dac_data_in_req),
+    .pn_init (1'b0),
+    .pn_data_out (pn7_data)
+  );
+
+  // PN15 x^15 + x^14 + 1
+  ad_pngen  #(
+    .POL_MASK ((1<<15) | (1<<14)),
+    .POL_W (15),
+    .DW (16)
+    ) PN15_gen (
+    .clk (dac_clk),
+    .reset (dac_rst),
+    .clk_en (dac_data_in_req),
+    .pn_init (1'b0),
+    .pn_data_out (pn15_data)
+  );
+
+  // full ramp generator
+  always @(posedge dac_clk) begin
+    if (dac_data_sync) begin
+      full_ramp_counter <= 'h0;
+    end else if (dac_data_in_req) begin
+      full_ramp_counter <= full_ramp_counter + 16'd1;
+    end
+  end
+
+  // dac mux
+
+  always @(posedge dac_clk) begin
+    dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+    case (dac_data_sel_s)
+      4'hB: dac_data_iq_out <= full_ramp_counter;           // full ramp
+      4'hA: dac_data_iq_out <= {4{full_ramp_counter[3:0]}}; // nibble ramp
+      4'h7: dac_data_iq_out <= pn15_data;
+      4'h6: dac_data_iq_out <= pn7_data;
+      4'h3: dac_data_iq_out <= 16'd0;
+      4'h2: dac_data_iq_out <= dac_data_in;
+      4'h1: dac_data_iq_out <= dac_pat_data_1_s;
+      default: dac_data_iq_out <= dac_dds_data_s;
+    endcase
+  end
+
+  // dds
+
+  ad_dds #(
+    .DISABLE (DDS_DISABLE),
+    .DDS_DW (16),
+    .PHASE_DW (16),
+    .DDS_TYPE (DAC_DDS_TYPE),
+    .CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
+    .CLK_RATIO (1))
+  i_dds (
+    .clk (dac_clk),
+    .dac_dds_format (dac_dds_format),
+    .dac_data_sync (dac_data_sync),
+    .dac_valid (dac_data_out_req),
+    .tone_1_scale (dac_dds_scale_1_s),
+    .tone_2_scale (dac_dds_scale_2_s),
+    .tone_1_init_offset (dac_dds_init_1_s),
+    .tone_2_init_offset (dac_dds_init_2_s),
+    .tone_1_freq_word (dac_dds_incr_1_s),
+    .tone_2_freq_word (dac_dds_incr_2_s),
+    .dac_dds_data (dac_dds_data_s));
+
+  // single channel processor
+
+  up_dac_channel #(
+    .COMMON_ID(COMMON_ID),
+    .CHANNEL_ID (CHANNEL_ID),
+    .DDS_DISABLE(DDS_DISABLE),
+    .USERPORTS_DISABLE(1),
+    .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE))
+    i_up_dac_channel (
+    .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
+    .dac_dds_scale_1 (dac_dds_scale_1_s),
+    .dac_dds_init_1 (dac_dds_init_1_s),
+    .dac_dds_incr_1 (dac_dds_incr_1_s),
+    .dac_dds_scale_2 (dac_dds_scale_2_s),
+    .dac_dds_init_2 (dac_dds_init_2_s),
+    .dac_dds_incr_2 (dac_dds_incr_2_s),
+    .dac_pat_data_1 (dac_pat_data_1_s),
+    .dac_pat_data_2 (dac_pat_data_2_s),
+    .dac_data_sel (dac_data_sel_s),
+    .dac_iq_mode (),
+    .dac_iqcor_enb (dac_iqcor_enb_s),
+    .dac_iqcor_coeff_1 (dac_iqcor_coeff_1_s),
+    .dac_iqcor_coeff_2 (dac_iqcor_coeff_2_s),
+    .up_usr_datatype_be (),
+    .up_usr_datatype_signed (),
+    .up_usr_datatype_shift (),
+    .up_usr_datatype_total_bits (),
+    .up_usr_datatype_bits (),
+    .up_usr_interpolation_m (),
+    .up_usr_interpolation_n (),
+    .dac_usr_datatype_be (1'b0),
+    .dac_usr_datatype_signed (1'b1),
+    .dac_usr_datatype_shift (8'd0),
+    .dac_usr_datatype_total_bits (8'd16),
+    .dac_usr_datatype_bits (8'd16),
+    .dac_usr_interpolation_m (16'd1),
+    .dac_usr_interpolation_n (16'd1),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata),
+    .up_rack (up_rack));
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 131     ) PN7_gen (
+- 136     .pn_data_out (pn7_data)
+- 137   );
+- 144     ) PN15_gen (
+- 149     .pn_data_out (pn15_data)
+- 150   );
+- 186     .CLK_RATIO (1))
+- 187   i_dds (
+- 207     .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE))
+- 208     i_up_dac_channel (
++ 131   ) PN7_gen (
++ 137     .pn_data_out (pn7_data));
++ 144   ) PN15_gen (
++ 150     .pn_data_out (pn15_data));
++ 187     .CLK_RATIO (1)
++ 187   ) i_dds (
++ 208     .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE)
++ 208   ) i_up_dac_channel (
+
+Clone Blocks:

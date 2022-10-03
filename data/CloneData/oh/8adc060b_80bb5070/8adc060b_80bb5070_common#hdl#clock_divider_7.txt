@@ -1,0 +1,35 @@
+Source Block: oh/common/hdl/clock_divider.v@77:89@HdlStmAssign
+     else if(negedge_match)
+       clkout_reg <= 1'b0;
+  
+   assign clkout    = div1_sel ? clkin : clkout_reg;
+ 
+   assign clkout90_div4_in = posedge90_match ? 1'b1 :
+                             negedge90_match ? 1'b0 :
+			                       clkout90_div4;
+    
+   assign clkout90_div2_in = negedge_match ? 1'b1 :
+                             posedge_match ? 1'b0 :
+			                     clkout90_div2;
+   
+
+Diff Content:
+- 82    assign clkout90_div4_in = posedge90_match ? 1'b1 :
+- 83                              negedge90_match ? 1'b0 :
+- 84 			                       clkout90_div4;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/clock_divider.v@75:85
+     else if(posedge_match)
+       clkout_reg <= 1'b1;
+     else if(negedge_match)
+       clkout_reg <= 1'b0;
+  
+   assign clkout    = div1_sel ? clkin : clkout_reg;
+ 
+   assign clkout90_div4_in = posedge90_match ? 1'b1 :
+                             negedge90_match ? 1'b0 :
+			                       clkout90_div4;
+    
+

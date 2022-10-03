@@ -1,0 +1,45 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4938:4948@HdlStmAssign
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+   //# NON-MULTICAST ROUTING
+   assign route_east_normal   =  ext_xgt;   
+   assign route_west_normal   =  ext_xlt;
+
+Diff Content:
+- 4943    assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4939:4949
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+   //# NON-MULTICAST ROUTING
+   assign route_east_normal   =  ext_xgt;   
+   assign route_west_normal   =  ext_xlt;
+   assign route_south_normal  =  ext_ygt & ext_xzero;
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4937:4947
+   assign ext_ydiff[4:0] = addr_y[3:0] + ycoord_k_n[3:0] + 1'b1 ; 
+   assign ext_xdiff[4:0] = addr_x[3:0] + xcoord_k_n[3:0] + 1'b1 ;
+   assign ext_xcarry     = ext_xdiff[4]; //result is positive or zero
+   assign ext_ycarry     = ext_ydiff[4]; //result is positive or zero    
+   assign ext_xgt        = ext_xcarry & ~ext_xzero;// src/dst X-address is greater than
+   assign ext_xlt        = ~ext_xcarry;  // src/dst X-address is less than
+   assign ext_ygt        = ext_ycarry & ~ext_yzero;// src/dst Y-address is greater than
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+   //# NON-MULTICAST ROUTING
+   assign route_east_normal   =  ext_xgt;   
+

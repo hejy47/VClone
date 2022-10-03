@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_ad9361/xilinx/axi_ad9361_lvds_if.v@216:226@HdlStmAssign
+    rx_data_0 <= rx_data_0_s;
+  end
+
+  // frame check
+
+  assign rx_frame_d_s = {rx_frame_s, rx_frame};
+
+  always @(posedge l_clk) begin
+    if (rx_valid == 1'd1) begin
+      if (rx_r1_mode == 1'd1) begin
+        rx_frame_d <= rx_frame_d_s;
+
+Diff Content:
+- 221   assign rx_frame_d_s = {rx_frame_s, rx_frame};
+
+Clone Blocks:

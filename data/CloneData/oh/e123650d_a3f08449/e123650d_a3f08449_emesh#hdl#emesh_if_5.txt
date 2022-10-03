@@ -1,0 +1,21 @@
+Source Block: oh/emesh/hdl/emesh_if.v@88:99@HdlStmAssign
+
+   assign rmesh_wait_out = rmesh_access_in & 
+			   (emesh_wait_in | cmesh_access_in);
+				
+
+   assign xmesh_wait_out = xmesh_access_in & 
+			   (emesh_wait_in | cmesh_access_in | rmesh_access_in);
+   
+				     
+endmodule // emesh_if
+
+											 
+
+Diff Content:
+- 93    assign xmesh_wait_out = xmesh_access_in & 
+- 94 			   (emesh_wait_in | cmesh_access_in | rmesh_access_in);
++ 94    assign xmesh_ready_out = ~(xmesh_access_in & 
++ 94 			      (~emesh_ready_in | ~cmesh_access_in | ~rmesh_access_in));
+
+Clone Blocks:

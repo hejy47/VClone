@@ -1,0 +1,53 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@480:523@HdlStmProcess
+        state <= DRP_READ_TEMP;
+    endcase
+  end
+
+//axi registers write
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_wack <= 'd0;
+    up_pwm_width <= 'd0;
+    up_tacho_val <= 'd0;
+    up_tacho_tol <= 'd0;
+    up_tacho_en <= 'd0;
+    up_scratch <= 'd0;
+    up_irq_mask <= 4'b1111;
+    up_resetn <= 1'd0;
+  end else begin
+    up_wack <= up_wreq_s;
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
+      up_resetn <= up_wdata_s[0];
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
+      up_scratch <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h21)) begin
+      up_pwm_width <= up_wdata_s;
+      up_tacho_en <= 1'b0;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h22)) begin
+      up_tacho_val <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h23)) begin
+      up_tacho_tol <= up_wdata_s;
+      up_tacho_en <= 1'b1;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h10)) begin
+      up_irq_mask <= up_wdata_s[3:0];
+    end
+  end
+end
+
+//axi registers read
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+
+Diff Content:
+- 513     end
++ 513     end else if (temp_increase_alarm) begin
++ 513       up_tacho_en <= 1'b0;
++ 513     end 
+
+Clone Blocks:

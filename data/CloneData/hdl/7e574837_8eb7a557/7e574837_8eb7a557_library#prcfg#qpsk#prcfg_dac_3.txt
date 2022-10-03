@@ -1,0 +1,50 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_dac.v@118:128@HdlStmAssign
+      pn_data = pn(pn_data);
+    end
+  end
+
+  // data source for the modulator
+  assign dac_data = (mode == 1) ? pn_data : src_dac_ddata[ 1: 0];
+
+  // modulated data
+  assign dac_data_mode1_2 = { dac_data_fltr_q, dac_data_fltr_i };
+
+  // qpsk modulator
+
+Diff Content:
+- 123   assign dac_data = (mode == 1) ? pn_data : src_dac_ddata[ 1: 0];
++ 123   assign dac_data = (mode == 1) ? pn_data[ 1:0] : src_dac_ddata[ 1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/prcfg/qpsk/prcfg_dac.v@121:131
+
+  // data source for the modulator
+  assign dac_data = (mode == 1) ? pn_data : src_dac_ddata[ 1: 0];
+
+  // modulated data
+  assign dac_data_mode1_2 = { dac_data_fltr_q, dac_data_fltr_i };
+
+  // qpsk modulator
+  qpsk_mod i_qpsk_mod (
+    .clk(clk),
+    .data_input(dac_data),
+
+Clone Blocks 2:
+hdl/library/prcfg/qpsk/prcfg_dac.v@111:125
+
+  // pass through mode
+  assign dac_data_mode0 = src_dac_ddata;
+
+  // prbs geenration
+  always @(posedge clk) begin
+    if(dst_dac_drd == 1) begin
+      pn_data = pn(pn_data);
+    end
+  end
+
+  // data source for the modulator
+  assign dac_data = (mode == 1) ? pn_data : src_dac_ddata[ 1: 0];
+
+  // modulated data
+

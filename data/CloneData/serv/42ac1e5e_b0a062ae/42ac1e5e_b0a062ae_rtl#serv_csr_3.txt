@@ -1,0 +1,42 @@
+Source Block: serv/rtl/serv_csr.v@55:70@HdlStmAssign
+		   (i_csr_source == CSR_SOURCE_SET) ? csr_out | i_d :
+		   (i_csr_source == CSR_SOURCE_CLR) ? csr_out & ~i_d :
+		   (i_csr_source == CSR_SOURCE_CSR) ? csr_out :
+		   1'bx;
+
+   assign csr_out = (i_mstatus_en & mstatus) |
+		    (i_mtvec_en & mtvec[0]) |
+		    (i_mscratch_en & mscratch[0]) |
+		    (i_mepc_en & mepc[0]) |
+		    (i_mcause_en & mcause) |
+		    (i_mtval_en & mtval[0]);
+
+   assign o_q = csr_out;
+
+   assign 	o_timer_irq_en = mstatus_mie & mie_mtie;
+
+
+Diff Content:
+- 61 		    (i_mtvec_en & mtvec[0]) |
+- 62 		    (i_mscratch_en & mscratch[0]) |
++ 62 		    i_rf_csr_out |
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_csr.v@49:63
+
+
+   wire 	csr_in;
+   wire 	csr_out;
+
+   assign csr_in = (i_csr_source == CSR_SOURCE_EXT) ? i_d :
+		   (i_csr_source == CSR_SOURCE_SET) ? csr_out | i_d :
+		   (i_csr_source == CSR_SOURCE_CLR) ? csr_out & ~i_d :
+		   (i_csr_source == CSR_SOURCE_CSR) ? csr_out :
+		   1'bx;
+
+   assign csr_out = (i_mstatus_en & mstatus) |
+		    (i_mtvec_en & mtvec[0]) |
+		    (i_mscratch_en & mscratch[0]) |
+		    (i_mepc_en & mepc[0]) |
+

@@ -1,0 +1,32 @@
+Source Block: miaow/src/verilog/rtl/salu/salu_controller.v@66:76@HdlIdDef
+
+//**change [psp]
+reg salu2sgpr_req;
+reg salu2sgpr_req_trig;
+
+reg sgpr_fw_check;
+assign sgpr_fw_check = {control_en_fw, dst_reg_fw[11:9]} && 4'b1110;
+//**
+
+//**change [psp]
+//create a lock mechanism that locks the request line
+
+Diff Content:
+- 71 reg sgpr_fw_check;
++ 71 wire sgpr_fw_check;
+
+Clone Blocks:
+Clone Blocks 1:
+miaow/src/verilog/rtl/salu/salu_controller.v@67:77
+//**change [psp]
+reg salu2sgpr_req;
+reg salu2sgpr_req_trig;
+
+reg sgpr_fw_check;
+assign sgpr_fw_check = {control_en_fw, dst_reg_fw[11:9]} && 4'b1110;
+//**
+
+//**change [psp]
+//create a lock mechanism that locks the request line
+//until rfa notifies its been satisfied
+

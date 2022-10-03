@@ -1,0 +1,39 @@
+Source Block: oh/elink/hdl/etx_io.v@81:95@HdlStmProcess
+   
+   //#############################
+   //# Synchronize to lclk_io
+   //#############################  
+   
+   always @ (posedge tx_lclk_io)
+     if(tx_sample)
+       begin
+	  tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];
+       end
+
+   reg 		  tx_burst_reg;   
+   always @ (posedge tx_lclk_io)
+     if(!nreset)
+       tx_burst_reg <= 1'b0;  
+
+Diff Content:
+- 87      if(tx_sample)
+- 89 	  tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];
++ 87      if(firstedge)
++ 89 	  tx_access_reg    <= tx_access & ~tx_wait;
++ 89 	  tx_burst_reg     <= tx_burst  & ~tx_wait;   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_io.v@87:97
+     if(tx_sample)
+       begin
+	  tx_packet_reg[PW-1:0] <= tx_packet[PW-1:0];
+       end
+
+   reg 		  tx_burst_reg;   
+   always @ (posedge tx_lclk_io)
+     if(!nreset)
+       tx_burst_reg <= 1'b0;  
+     else if(tx_state[2:0]==`CYCLE4)
+	tx_burst_reg <= tx_burst;   
+

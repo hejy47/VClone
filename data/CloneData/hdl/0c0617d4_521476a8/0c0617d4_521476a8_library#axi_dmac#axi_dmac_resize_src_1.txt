@@ -1,0 +1,210 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_resize_src.v@60:146@HdlStmIf
+  output mem_data_last,
+  output [BYTES_PER_BEAT_WIDTH_MEM-1:0] mem_data_valid_bytes,
+  output mem_data_partial_burst
+);
+
+generate if (DATA_WIDTH_SRC == DATA_WIDTH_MEM)  begin
+  assign mem_data_valid = src_data_valid;
+  assign mem_data = src_data;
+  assign mem_data_last = src_data_last;
+  assign mem_data_valid_bytes = src_data_valid_bytes;
+  assign mem_data_partial_burst = src_data_partial_burst;
+end else begin
+
+  localparam RATIO = DATA_WIDTH_MEM / DATA_WIDTH_SRC;
+  localparam RATIO_WIDTH = RATIO > 64 ? 7 :
+                           RATIO > 32 ? 6 :
+                           RATIO > 16 ? 5 :
+                           RATIO > 8 ? 4 :
+                           RATIO > 4 ? 3 :
+                           RATIO > 2 ? 2 : 1;
+
+  reg [RATIO-1:0] mask = 'h1;
+  reg valid = 1'b0;
+  reg last = 1'b0;
+  reg [DATA_WIDTH_MEM-1:0] data = 'h0;
+  reg [BYTES_PER_BEAT_WIDTH_SRC-1:0] valid_bytes = 'h00;
+  reg partial_burst = 1'b0;
+  reg [RATIO_WIDTH-1:0] num_beats = {RATIO_WIDTH{1'b1}};
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      valid <= 1'b0;
+      mask <= 'h1;
+    end else if (src_data_valid == 1'b1) begin
+      valid <= mask[RATIO-1] || src_data_last;
+      if (src_data_last) begin
+        mask <= 'h1;
+      end else begin
+        mask <= {mask[RATIO-2:0],mask[RATIO-1]};
+      end
+    end else begin
+      valid <= 1'b0;
+    end
+  end
+
+  // This counter will hold the number of source beat in a destination beat
+  // minus one
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      num_beats <= {RATIO_WIDTH{1'b1}};
+    end else if (valid == 1'b1 && last == 1'b1) begin
+      if (src_data_valid == 1'b1) begin
+        num_beats <= {RATIO_WIDTH{1'b0}};
+      end else begin
+        num_beats <= {RATIO_WIDTH{1'b1}};
+      end
+    end else if (src_data_valid == 1'b1) begin
+      num_beats <= num_beats + 1'b1;
+    end
+  end
+
+  integer i;
+
+  always @(posedge clk) begin
+    for (i = 0; i < RATIO; i = i+1) begin
+      if (mask[i] == 1'b1) begin
+        data[i*DATA_WIDTH_SRC+:DATA_WIDTH_SRC] <= src_data;
+      end
+    end
+
+    // Compensate for the one clock cycle pipeline delay of the data
+    last <= src_data_last;
+    if (src_data_valid == 1'b1) begin
+      valid_bytes <= src_data_valid_bytes;
+      partial_burst <= src_data_partial_burst;
+    end
+  end
+
+  assign mem_data_valid = valid;
+  assign mem_data = data;
+  assign mem_data_last = last;
+  assign mem_data_valid_bytes = {num_beats,valid_bytes};
+  assign mem_data_partial_burst = partial_burst;
+
+end endgenerate
+
+endmodule
+
+Diff Content:
+- 65 generate if (DATA_WIDTH_SRC == DATA_WIDTH_MEM)  begin
+- 66   assign mem_data_valid = src_data_valid;
+- 67   assign mem_data = src_data;
+- 68   assign mem_data_last = src_data_last;
+- 69   assign mem_data_valid_bytes = src_data_valid_bytes;
+- 70   assign mem_data_partial_burst = src_data_partial_burst;
+- 71 end else begin
+- 73   localparam RATIO = DATA_WIDTH_MEM / DATA_WIDTH_SRC;
+- 74   localparam RATIO_WIDTH = RATIO > 64 ? 7 :
+- 75                            RATIO > 32 ? 6 :
+- 76                            RATIO > 16 ? 5 :
+- 77                            RATIO > 8 ? 4 :
+- 78                            RATIO > 4 ? 3 :
+- 79                            RATIO > 2 ? 2 : 1;
+- 81   reg [RATIO-1:0] mask = 'h1;
+- 82   reg valid = 1'b0;
+- 83   reg last = 1'b0;
+- 84   reg [DATA_WIDTH_MEM-1:0] data = 'h0;
+- 85   reg [BYTES_PER_BEAT_WIDTH_SRC-1:0] valid_bytes = 'h00;
+- 86   reg partial_burst = 1'b0;
+- 87   reg [RATIO_WIDTH-1:0] num_beats = {RATIO_WIDTH{1'b1}};
+- 89   always @(posedge clk) begin
+- 90     if (reset == 1'b1) begin
+- 91       valid <= 1'b0;
+- 92       mask <= 'h1;
+- 93     end else if (src_data_valid == 1'b1) begin
+- 94       valid <= mask[RATIO-1] || src_data_last;
+- 95       if (src_data_last) begin
+- 98         mask <= {mask[RATIO-2:0],mask[RATIO-1]};
+- 100     end else begin
+- 101       valid <= 1'b0;
+- 103   end
+- 107   always @(posedge clk) begin
+- 108     if (reset == 1'b1) begin
+- 109       num_beats <= {RATIO_WIDTH{1'b1}};
+- 110     end else if (valid == 1'b1 && last == 1'b1) begin
+- 111       if (src_data_valid == 1'b1) begin
+- 112         num_beats <= {RATIO_WIDTH{1'b0}};
+- 113       end else begin
+- 116     end else if (src_data_valid == 1'b1) begin
+- 117       num_beats <= num_beats + 1'b1;
+- 119   end
+- 121   integer i;
+- 123   always @(posedge clk) begin
+- 124     for (i = 0; i < RATIO; i = i+1) begin
+- 125       if (mask[i] == 1'b1) begin
+- 126         data[i*DATA_WIDTH_SRC+:DATA_WIDTH_SRC] <= src_data;
+- 128     end
+- 131     last <= src_data_last;
+- 132     if (src_data_valid == 1'b1) begin
+- 133       valid_bytes <= src_data_valid_bytes;
+- 134       partial_burst <= src_data_partial_burst;
+- 136   end
+- 138   assign mem_data_valid = valid;
+- 139   assign mem_data = data;
+- 140   assign mem_data_last = last;
+- 141   assign mem_data_valid_bytes = {num_beats,valid_bytes};
+- 142   assign mem_data_partial_burst = partial_burst;
+- 144 end endgenerate
++ 95   generate if (DATA_WIDTH_SRC == DATA_WIDTH_MEM)  begin
++ 95     assign mem_data_valid = src_data_valid;
++ 95     assign mem_data = src_data;
++ 95     assign mem_data_last = src_data_last;
++ 95     assign mem_data_valid_bytes = src_data_valid_bytes;
++ 95     assign mem_data_partial_burst = src_data_partial_burst;
++ 95   end else begin
++ 95     localparam RATIO = DATA_WIDTH_MEM / DATA_WIDTH_SRC;
++ 95     localparam RATIO_WIDTH = RATIO > 64 ? 7 :
++ 95                              RATIO > 32 ? 6 :
++ 95                              RATIO > 16 ? 5 :
++ 95                              RATIO > 8 ? 4 :
++ 95                              RATIO > 4 ? 3 :
++ 95                              RATIO > 2 ? 2 : 1;
++ 95     reg [RATIO-1:0] mask = 'h1;
++ 95     reg valid = 1'b0;
++ 95     reg last = 1'b0;
++ 95     reg [DATA_WIDTH_MEM-1:0] data = 'h0;
++ 95     reg [BYTES_PER_BEAT_WIDTH_SRC-1:0] valid_bytes = 'h00;
++ 95     reg partial_burst = 1'b0;
++ 95     reg [RATIO_WIDTH-1:0] num_beats = {RATIO_WIDTH{1'b1}};
++ 95     always @(posedge clk) begin
++ 95       if (reset == 1'b1) begin
++ 95         valid <= 1'b0;
++ 96       end else if (src_data_valid == 1'b1) begin
++ 96         valid <= mask[RATIO-1] || src_data_last;
++ 96         if (src_data_last) begin
++ 96           mask <= 'h1;
++ 96         end else begin
++ 96           mask <= {mask[RATIO-2:0],mask[RATIO-1]};
++ 96         end
++ 98         valid <= 1'b0;
++ 113     always @(posedge clk) begin
++ 113       if (reset == 1'b1) begin
++ 114       end else if (valid == 1'b1 && last == 1'b1) begin
++ 114         if (src_data_valid == 1'b1) begin
++ 114           num_beats <= {RATIO_WIDTH{1'b0}};
++ 114         end else begin
++ 114           num_beats <= {RATIO_WIDTH{1'b1}};
++ 114         end
++ 114       end else if (src_data_valid == 1'b1) begin
++ 114         num_beats <= num_beats + 1'b1;
++ 121     integer i;
++ 126     always @(posedge clk) begin
++ 126       for (i = 0; i < RATIO; i = i+1) begin
++ 126         if (mask[i] == 1'b1) begin
++ 126           data[i*DATA_WIDTH_SRC+:DATA_WIDTH_SRC] <= src_data;
++ 126         end
++ 134       last <= src_data_last;
++ 134       if (src_data_valid == 1'b1) begin
++ 134         valid_bytes <= src_data_valid_bytes;
++ 134         partial_burst <= src_data_partial_burst;
++ 134       end
++ 142     assign mem_data_valid = valid;
++ 142     assign mem_data = data;
++ 142     assign mem_data_last = last;
++ 142     assign mem_data_valid_bytes = {num_beats,valid_bytes};
++ 142     assign mem_data_partial_burst = partial_burst;
++ 144   end endgenerate
+
+Clone Blocks:

@@ -1,0 +1,50 @@
+Source Block: oh/esaxi/hdl/esaxi_v1_0_S00_AXI.v@264:306@HdlStmProcess
+      end // else: !if( S_AXI_ARESETN == 1'b0 )
+   end // always @ ( posedge S_AXI_ACLK )
+   
+   // Capture address & other AW info, update address during cycle
+   
+   always @( posedge S_AXI_ACLK ) begin
+      if ( S_AXI_ARESETN == 1'b0 )  begin
+
+         axi_bid      <= 'd0;  // capture for write response
+         axi_awaddr   <= 'd0;
+         axi_awsize   <= 3'd0;
+         axi_awburst  <= 2'd0;
+         
+      end else begin
+
+         if( axi_awready & S_AXI_AWVALID ) begin
+
+            axi_bid      <= S_AXI_AWID;
+            axi_awaddr   <= { ecfg_coreid[11:C_S_AXI_ADDR_WIDTH-20],
+                              S_AXI_AWADDR };
+            axi_awsize   <= S_AXI_AWSIZE;  // 0=byte, 1=16b, 2=32b
+            axi_awburst  <= S_AXI_AWBURST; // type, 0=fixed, 1=incr, 2=wrap
+
+         end else if( S_AXI_WVALID & axi_wready ) begin
+
+            if( axi_awburst == 2'b01 ) begin //incremental burst
+               // The write address for all the beats in the transaction are increments by the data width.
+               // NOTE: This should be based on awsize instead to support narrow bursts, I think.
+               
+               axi_awaddr[31:ADDR_LSB] <= axi_awaddr[31 - 1:ADDR_LSB] + 1;
+               //awaddr aligned to data width
+               axi_awaddr[ADDR_LSB-1:0]  <= {ADDR_LSB{1'b0}};   
+
+            end  // Both FIXED & WRAPPING types are treated as FIXED, no update.
+
+         end // if ( S_AXI_WVALID & axi_wready )
+      end // else: !if( S_AXI_ARESETN == 1'b0 )
+   end // always @ ( posedge S_AXI_ACLK )
+   
+   // Write Channel Implementation
+
+   always @( posedge S_AXI_ACLK ) begin
+      if( S_AXI_ARESETN == 1'b0 ) begin
+
+Diff Content:
+- 293                axi_awaddr[31:ADDR_LSB] <= axi_awaddr[31 - 1:ADDR_LSB] + 1;
++ 293                axi_awaddr[31:ADDR_LSB] <= axi_awaddr[31:ADDR_LSB] + 32'd1;
+
+Clone Blocks:

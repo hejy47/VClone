@@ -1,0 +1,31 @@
+Source Block: serv/rtl/serv_decode.v@69:79@HdlIdDef
+   wire      shift_op;
+   wire      csr_op;
+
+   wire      jump_misaligned;
+
+   reg       signbit;
+
+   assign o_ibus_active = (state == IDLE);
+
+   assign mem_op = (opcode == OP_LOAD) | (opcode == OP_STORE);
+   assign shift_op = ((opcode == OP_OPIMM) & (o_funct3[1:0] == 2'b01)) |
+
+Diff Content:
++ 74    assign o_cnt_done = cnt_done;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_decode.v@71:81
+
+   wire      jump_misaligned;
+
+   reg       signbit;
+
+   assign o_ibus_active = (state == IDLE);
+
+   assign mem_op = (opcode == OP_LOAD) | (opcode == OP_STORE);
+   assign shift_op = ((opcode == OP_OPIMM) & (o_funct3[1:0] == 2'b01)) |
+                     ((opcode == OP_OP   ) & (o_funct3[1:0] == 2'b01));
+
+

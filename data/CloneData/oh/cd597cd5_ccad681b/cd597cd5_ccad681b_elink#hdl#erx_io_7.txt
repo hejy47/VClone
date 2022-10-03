@@ -1,0 +1,32 @@
+Source Block: oh/elink/hdl/erx_io.v@278:288@HdlStmAssign
+
+   //###################################
+   //#IDELAY CIRCUIT
+   //###################################
+
+   assign  rxi_delay_in[9:0] ={rxi_lclk,rxi_frame,rxi_data[7:0]};
+   
+   genvar        j;
+   generate for(j=0; j<10; j=j+1)
+     begin : gen_idelay
+	(* IODELAY_GROUP = "IDELAY_GROUP" *) // Group name for IDELAYCTRL
+
+Diff Content:
+- 283    assign  rxi_delay_in[9:0] ={rxi_lclk,rxi_frame,rxi_data[7:0]};
++ 283    assign  rxi_delay_in[8:0] ={rxi_frame,rxi_data[7:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_io.v@280:290
+   //#IDELAY CIRCUIT
+   //###################################
+
+   assign  rxi_delay_in[9:0] ={rxi_lclk,rxi_frame,rxi_data[7:0]};
+   
+   genvar        j;
+   generate for(j=0; j<10; j=j+1)
+     begin : gen_idelay
+	(* IODELAY_GROUP = "IDELAY_GROUP" *) // Group name for IDELAYCTRL
+	
+	IDELAYE2 #(.CINVCTRL_SEL("FALSE"),
+

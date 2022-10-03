@@ -1,0 +1,60 @@
+Source Block: hdl/library/common/up_gt.v@707:737@HdlStmProcess
+    .d_clk (drp_clk),
+    .d_data_status (drp_rx_rate));
+
+  // es start & stop
+
+  always @(posedge drp_clk) begin
+    if (drp_rst == 1'b1) begin
+      es_start_m1 <= 'd0;
+      es_start_m2 <= 'd0;
+      es_start_m3 <= 'd0;
+      es_stop_m1 <= 'd0;
+      es_stop_m2 <= 'd0;
+      es_stop_m3 <= 'd0;
+      es_start <= 'd0;
+      es_stop <= 'd0;
+    end else begin
+      es_start_m1 <= up_es_start;
+      es_start_m2 <= es_start_m1;
+      es_start_m3 <= es_start_m2;
+      es_stop_m1 <= up_es_stop;
+      es_stop_m2 <= es_stop_m1;
+      es_stop_m3 <= es_stop_m2;
+      es_start <= es_start_m2 & ~es_start_m3;
+      es_stop <= es_stop_m2 & ~es_stop_m3;
+    end
+  end
+
+  // es control & status
+
+  up_xfer_cntrl #(.DATA_WIDTH(258)) i_es_xfer_cntrl (
+    .up_rstn (up_rstn),
+
+Diff Content:
+- 714       es_start_m1 <= 'd0;
+- 715       es_start_m2 <= 'd0;
+- 716       es_start_m3 <= 'd0;
+- 717       es_stop_m1 <= 'd0;
+- 718       es_stop_m2 <= 'd0;
+- 719       es_stop_m3 <= 'd0;
+- 723       es_start_m1 <= up_es_start;
+- 724       es_start_m2 <= es_start_m1;
+- 725       es_start_m3 <= es_start_m2;
+- 726       es_stop_m1 <= up_es_stop;
+- 727       es_stop_m2 <= es_stop_m1;
+- 728       es_stop_m3 <= es_stop_m2;
+- 729       es_start <= es_start_m2 & ~es_start_m3;
+- 730       es_stop <= es_stop_m2 & ~es_stop_m3;
++ 719       es_start_d1 <= 'd0;
++ 719       es_start_d2 <= 'd0;
++ 719       es_stop_d1 <= 'd0;
++ 719       es_stop_d2 <= 'd0;
++ 730       es_start_d1 <= es_start_s;
++ 730       es_start_d2 <= es_start_d1;
++ 730       es_stop_d1 <= es_stop_s;
++ 730       es_stop_d2 <= es_stop_d1;
++ 730       es_start <= es_start_d1 & ~es_start_d2;
++ 730       es_stop <= es_stop_d1 & ~es_stop_d2;
+
+Clone Blocks:

@@ -1,0 +1,38 @@
+Source Block: oh/emailbox/hdl/emailbox.v@108:118@HdlStmAssign
+   assign mailbox_read  = mi_rd & (mi_addr[RFAW+1:2]==`E_MAILBOXLO); //fifo read
+
+   always @ (posedge rd_clk)
+     read_hi <= mi_rd & (mi_addr[RFAW+1:2]==`E_MAILBOXHI);
+   
+   assign mi_dout[31:0]  = read_hi ? mailbox_data[63:32] : mailbox_data[31:0];
+   assign mi_dout[63:32] = mailbox_data[63:32];
+   
+   /*****************************/
+   /*FIFO (64bit wide)          */
+   /*****************************/
+
+Diff Content:
+- 113    assign mi_dout[31:0]  = read_hi ? mailbox_data[63:32] : mailbox_data[31:0];
++ 113      begin
++ 113 	read_hi     <= mi_rd & (mi_addr[RFAW+1:2]==`E_MAILBOXHI);
++ 113 	read_status <= mi_rd & (mi_addr[RFAW+1:2]==`E_MAILBOXSTAT);
++ 113      end
++ 113    assign mi_dout[31:0]  = read_status ? {30'b0,mailbox_full, mailbox_not_empty} :
++ 113 			   read_hi     ? mailbox_data[63:32]                     : 
++ 113 			                 mailbox_data[31:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emailbox/hdl/emailbox.v@109:119
+
+   always @ (posedge rd_clk)
+     read_hi <= mi_rd & (mi_addr[RFAW+1:2]==`E_MAILBOXHI);
+   
+   assign mi_dout[31:0]  = read_hi ? mailbox_data[63:32] : mailbox_data[31:0];
+   assign mi_dout[63:32] = mailbox_data[63:32];
+   
+   /*****************************/
+   /*FIFO (64bit wide)          */
+   /*****************************/
+   assign mailbox_not_empty         = ~mailbox_empty;
+

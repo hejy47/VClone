@@ -1,0 +1,53 @@
+Source Block: hdl/library/common/ad_pack.v@104:114@HdlStmAssign
+
+  end
+endgenerate
+
+assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
+assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
+
+always @(posedge clk) begin
+  if (reset) begin
+    in_use <= 'h0;
+  end else if (ivalid_d) begin
+
+Diff Content:
+- 109 assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
++ 109   assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
++ 109   assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_pack.v@106:122
+endgenerate
+
+assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
+assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
+
+always @(posedge clk) begin
+  if (reset) begin
+    in_use <= 'h0;
+  end else if (ivalid_d) begin
+    in_use <= in_use_nx &(~out_mask);
+  end
+end
+
+always @(posedge clk) begin
+  if (ivalid_d) begin
+    idata_dd <= idata_dd_nx;
+  end
+
+Clone Blocks 2:
+hdl/library/common/ad_pack.v@103:113
+    end
+
+  end
+endgenerate
+
+assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
+assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
+
+always @(posedge clk) begin
+  if (reset) begin
+    in_use <= 'h0;
+

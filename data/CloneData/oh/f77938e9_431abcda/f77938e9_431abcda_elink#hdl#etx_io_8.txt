@@ -1,0 +1,29 @@
+Source Block: oh/elink/hdl/etx_io.v@136:152@HdlStmProcess
+                              (tx_state[2:0]==`IDLE);
+
+ 
+   reg [2:0] counter;
+   //makes sure all transactions are cleared
+   always @ (posedge tx_lclk_io)
+     if(!nreset)
+       counter[2:0] <= 3'b111;
+     else if(tx_sample & ~tx_wait_in)
+       counter[2:0] <= 3'b111;
+    else if(|counter[2:0])
+      counter[2:0] <= counter[2:0] - 1'b1;
+   
+   //Creating wide acknowledge/wait on cycle 4/0
+   reg 	     tx_rd_wait;
+   reg 	     tx_wr_wait;
+   always @ (posedge tx_lclk_io)
+
+Diff Content:
+- 141    always @ (posedge tx_lclk_io)
+- 142      if(!nreset)
+- 143        counter[2:0] <= 3'b111;
+- 144      else if(tx_sample & ~tx_wait_in)
+- 145        counter[2:0] <= 3'b111;
+- 146     else if(|counter[2:0])
+- 147       counter[2:0] <= counter[2:0] - 1'b1;
+
+Clone Blocks:

@@ -1,0 +1,59 @@
+Source Block: hdl/library/util_axis_fifo/address_gray_pipelined.v@78:94@HdlStmProcess
+  end else begin
+    _s_axis_waddr <= _s_axis_waddr_next;
+  end
+end
+
+always @(*)
+begin
+  if (m_axis_ready && m_axis_valid)
+    _m_axis_raddr_next <= _m_axis_raddr + 1;
+  else
+    _m_axis_raddr_next <= _m_axis_raddr;
+end
+
+always @(posedge m_axis_aclk)
+begin
+  if (m_axis_aresetn == 1'b0) begin
+    _m_axis_raddr <= 'h00;
+
+Diff Content:
+- 86     _m_axis_raddr_next <= _m_axis_raddr + 1;
++ 86     _m_axis_raddr_next <= _m_axis_raddr + 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/address_gray_pipelined.v@69:86
+    _s_axis_waddr_next <= _s_axis_waddr + 1;
+  else
+    _s_axis_waddr_next <= _s_axis_waddr;
+end
+
+always @(posedge s_axis_aclk)
+begin
+  if (s_axis_aresetn == 1'b0) begin
+    _s_axis_waddr <= 'h00;
+  end else begin
+    _s_axis_waddr <= _s_axis_waddr_next;
+  end
+end
+
+always @(*)
+begin
+  if (m_axis_ready && m_axis_valid)
+    _m_axis_raddr_next <= _m_axis_raddr + 1;
+
+Clone Blocks 2:
+hdl/library/util_axis_fifo/address_gray.v@94:104
+    _m_axis_raddr_next <= _m_axis_raddr + 1;
+  else
+    _m_axis_raddr_next <= _m_axis_raddr;
+end
+
+assign m_axis_raddr_gray_next = _m_axis_raddr_next ^ _m_axis_raddr_next[ADDRESS_WIDTH:1];
+
+always @(posedge m_axis_aclk)
+begin
+  if (m_axis_aresetn == 1'b0) begin
+    _m_axis_raddr <= 'h00;
+

@@ -1,0 +1,45 @@
+Source Block: oh/src/mio/hdl/mtx_fifo.v@68:86@HdlStmProcess
+
+   // create a dummy wide packet to avoid warnings
+   assign packet_wide[191:0] = packet_in[PW-1:0];
+    
+   // Emesh write pipeline (note! fifo_wait means half full!)
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       emesh_cycle[1:0] <= 'b0;
+     else if(emesh_cycle[0] && (AW==64))       // 2nd stall for 64bit
+       emesh_cycle[1:0] <= 2'b10;
+     else if(emode & access_in & ~fifo_wait)  // 1 stall for emesh
+       emesh_cycle[1:0] <= 2'b01;
+     else
+       emesh_cycle[1:0] <= 2'b00;
+   
+   // valid bits depending on type of transaction
+   assign valid[7:0] = (emesh_cycle[0] && (AW==32))       ? 8'h3F : //48 bits
+		       (emesh_cycle[1] && (AW==64))       ? 8'h02 : //16 bits
+         	       (~emode & datamode_in[1:0]==2'b00) ? 8'h01 : //double
+
+Diff Content:
+- 76      else if(emesh_cycle[0] && (AW==64))       // 2nd stall for 64bit
++ 76      else if(emesh_cycle[0] && (AW==64))      // 2nd stall for 64bit
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mtx_fifo.v@79:94
+       emesh_cycle[1:0] <= 2'b01;
+     else
+       emesh_cycle[1:0] <= 2'b00;
+   
+   // valid bits depending on type of transaction
+   assign valid[7:0] = (emesh_cycle[0] && (AW==32))       ? 8'h3F : //48 bits
+		       (emesh_cycle[1] && (AW==64))       ? 8'h02 : //16 bits
+         	       (~emode & datamode_in[1:0]==2'b00) ? 8'h01 : //double
+        	       (~emode & datamode_in[1:0]==2'b01) ? 8'h03 : //word
+         	       (~emode & datamode_in[1:0]==2'b10) ? 8'h0F : //short	 
+                                                            8'hFF;  //default
+			   
+   // folding data for fifo
+   assign fifo_data_in[63:0] = ~emode          ? data_wide[63:0]       :
+                                emesh_cycle[0] ? packet_wide[127:64]   :
+      		                emesh_cycle[1] ? packet_wide[191:128]  :
+

@@ -1,0 +1,36 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@190:200@HdlIdDef
+reg [8:0]  ram_burst_col = 'h1fe; //'b111111010; 8f0014
+reg [10:0] fetch_preroll = 64;
+
+reg [15:0] row_pitch = 2048; //1280;
+
+reg ram_refresh = 0;
+
+// SDRAM
+SDRAM_Controller_v sdram(
+  .clk(z_sample_clk),   
+  .reset(sdram_reset),
+
+Diff Content:
+- 195 reg ram_refresh = 0;
++ 195 reg [15:0] refresh_counter = 0;
++ 195 reg [23:0] refresh_addr = 0;
++ 195 reg [15:0] refresh_time = 128;
++ 195 reg [4:0] ram_refresh_lines = 2;
++ 195 reg display_in_refresh_lines = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@188:198
+
+reg [10:0] glitchx2_reg = 'h1fd; // better 1fc in 8bit?
+reg [8:0]  ram_burst_col = 'h1fe; //'b111111010; 8f0014
+reg [10:0] fetch_preroll = 64;
+
+reg [15:0] row_pitch = 2048; //1280;
+
+reg ram_refresh = 0;
+
+// SDRAM
+SDRAM_Controller_v sdram(
+

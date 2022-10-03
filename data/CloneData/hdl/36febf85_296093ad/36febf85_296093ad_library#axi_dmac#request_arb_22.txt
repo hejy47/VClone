@@ -1,0 +1,77 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@361:392@HdlStmIf
+
+end else begin
+assign src_resetn = req_aresetn;
+end endgenerate
+
+generate if (C_CLKS_ASYNC_DEST_REQ) begin
+wire dest_async_resetn_source;
+
+if (C_DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+assign dest_async_resetn_source = m_dest_axi_aresetn;
+end else begin
+assign dest_async_resetn_source = req_aresetn;
+end
+
+reg [2:0] dest_reset_shift = 3'b111;
+assign dest_resetn = ~dest_reset_shift[2];
+
+always @(negedge dest_async_resetn_source or posedge dest_clk) begin
+	if (dest_async_resetn_source == 1'b0)
+		dest_reset_shift <= 3'b111;
+	else
+		dest_reset_shift <= {dest_reset_shift[1:0], 1'b0};
+end
+
+end else begin
+assign dest_resetn = req_aresetn;
+end endgenerate
+
+generate if (C_DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+
+assign dest_clk = m_dest_axi_aclk;
+
+
+Diff Content:
+- 366 generate if (C_CLKS_ASYNC_DEST_REQ) begin
+- 369 if (C_DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
++ 366 generate if (ASYNC_CLK_DEST_REQ) begin
++ 369 if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_arb.v@337:369
+	end else begin
+		eot <= response_dest_valid & response_dest_ready & response_dest_resp_eot;
+	end
+end
+
+generate if (C_CLKS_ASYNC_REQ_SRC) begin
+
+wire src_async_resetn_source;
+
+if (C_DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
+assign src_async_resetn_source = m_src_axi_aresetn;
+end else begin
+assign src_async_resetn_source = req_aresetn;
+end
+
+reg [2:0] src_reset_shift = 3'b111;
+assign src_resetn = ~src_reset_shift[2];
+
+always @(negedge src_async_resetn_source or posedge src_clk) begin
+	if (src_async_resetn_source == 1'b0)
+		src_reset_shift <= 3'b111;
+	else
+		src_reset_shift <= {src_reset_shift[1:0], 1'b0};
+end
+
+end else begin
+assign src_resetn = req_aresetn;
+end endgenerate
+
+generate if (C_CLKS_ASYNC_DEST_REQ) begin
+wire dest_async_resetn_source;
+
+if (C_DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+

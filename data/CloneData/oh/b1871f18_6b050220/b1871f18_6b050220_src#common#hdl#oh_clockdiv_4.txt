@@ -1,0 +1,45 @@
+Source Block: oh/src/common/hdl/oh_clockdiv.v@104:116@HdlStmAssign
+   // creating divide by 2 shifted clock with negedge
+   always @ (negedge clk)
+     clkout1_shift <= clkout1_reg;
+      
+   //TODO: Fix clock glitch!
+   assign clkout1 = (clkdiv[7:0]==8'd0) ? clk           : //bypass
+		    (clkdiv[7:0]==8'd1) ? clkout1_shift : //div2
+		                          clkout1_reg;    //all others
+      
+endmodule // oh_clockdiv
+
+
+
+
+Diff Content:
+- 109    assign clkout1 = (clkdiv[7:0]==8'd0) ? clk           : //bypass
+- 110 		    (clkdiv[7:0]==8'd1) ? clkout1_shift : //div2
+- 111 		                          clkout1_reg;    //all others
++ 111    assign clk1_sel[3] =  1'b0;               // not implemented
++ 111    assign clk1_sel[2] = (clkdiv[7:0]==8'd0); // div1 (bypass)
++ 111    assign clk1_sel[1] = (clkdiv[7:0]==8'd1); // div2 clock 
++ 111    assign clk1_sel[0] = |clkdiv[7:1];        // all others
++ 111    oh_clockmux #(.N(4))
++ 111    iclkmux1 (.clkout(clkout1),
++ 111 	     .clk(clk),
++ 111              .en( clk1_sel[3:0]),
++ 111              .clkin({1'b0, clk, clkout1_shift, clkout1_reg}));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_clockdiv.v@100:111
+       clkout1_reg <= 1'b1;
+     else if(clkfall1)
+       clkout1_reg <= 1'b0;
+   
+   // creating divide by 2 shifted clock with negedge
+   always @ (negedge clk)
+     clkout1_shift <= clkout1_reg;
+      
+   //TODO: Fix clock glitch!
+   assign clkout1 = (clkdiv[7:0]==8'd0) ? clk           : //bypass
+		    (clkdiv[7:0]==8'd1) ? clkout1_shift : //div2
+		                          clkout1_reg;    //all others
+

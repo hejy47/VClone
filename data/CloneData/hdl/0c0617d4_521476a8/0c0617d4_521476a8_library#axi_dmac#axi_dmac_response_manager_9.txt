@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@80:96@HdlIdDef
+reg [2:0] state = STATE_IDLE;
+reg [2:0] nx_state;
+
+localparam DEST_SRC_RATIO = DMA_DATA_WIDTH_DEST/DMA_DATA_WIDTH_SRC;
+
+localparam DEST_SRC_RATIO_WIDTH = DEST_SRC_RATIO > 64 ? 7 :
+  DEST_SRC_RATIO > 32 ? 6 :
+  DEST_SRC_RATIO > 16 ? 5 :
+  DEST_SRC_RATIO > 8 ? 4 :
+  DEST_SRC_RATIO > 4 ? 3 :
+  DEST_SRC_RATIO > 2 ? 2 :
+  DEST_SRC_RATIO > 1 ? 1 : 0;
+
+localparam BYTES_PER_BEAT_WIDTH = DEST_SRC_RATIO_WIDTH + BYTES_PER_BEAT_WIDTH_SRC;
+localparam BURST_LEN_WIDTH = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH;
+
+wire do_acc_st;
+
+Diff Content:
+- 85 localparam DEST_SRC_RATIO_WIDTH = DEST_SRC_RATIO > 64 ? 7 :
+- 86   DEST_SRC_RATIO > 32 ? 6 :
+- 87   DEST_SRC_RATIO > 16 ? 5 :
+- 88   DEST_SRC_RATIO > 8 ? 4 :
+- 89   DEST_SRC_RATIO > 4 ? 3 :
+- 90   DEST_SRC_RATIO > 2 ? 2 :
+- 91   DEST_SRC_RATIO > 1 ? 1 : 0;
+
+Clone Blocks:

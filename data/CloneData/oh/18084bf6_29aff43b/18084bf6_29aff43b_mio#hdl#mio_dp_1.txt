@@ -1,0 +1,76 @@
+Source Block: oh/mio/hdl/mio_dp.v@13:23@HdlIdDef
+   //#####################################################################
+
+   //parameters
+   parameter PW    = 104;           // data width (core)
+   parameter N     = 8;             // Mini IO width
+   localparam CW   = $clog2(2*PW/N);// transfer count width
+   
+   // reset, clk, config
+   input           clk;          // main core clock   
+   input 	   io_clk;       // clock for TX
+   input 	   nreset;       // async active low reset
+
+Diff Content:
+- 18    localparam CW   = $clog2(2*PW/N);// transfer count width
++ 18    parameter PW     = 104;          // data width (core)
++ 18    parameter N      = 8;            // Mini IO width
++ 18    parameter TARGET = "GENERIC";    // GENERIC,XILINX,ALTERA,GENERIC,ASIC
+
+Clone Blocks:
+Clone Blocks 1:
+oh/mio/hdl/mrx.v@12:22
+
+   //parameters
+   parameter PW         = 104;              // data width (core)
+   parameter N          = 8;                // IO data width
+   parameter FIFO_DEPTH = 32;               // fifo depth  
+   localparam CW        = $clog2(2*PW/N);// transfer count width
+   
+   //reset, clk, cfg
+   input           clk;         // main core clock   
+   input 	   nreset;      // async active low reset
+   input [7:0] 	   datasize;    // size of data transmitted (in bytes, 0=1 byte)
+
+Clone Blocks 2:
+oh/common/hdl/oh_par2ser.v@17:27
+   //###########################
+
+   // parameters
+   parameter  PW   = 64;             // parallel packet width
+   parameter  SW   = 1;              // serial packet width
+   localparam CW   = $clog2(PW/SW);  // serialization factor (for counter)
+      
+   // reset, clk
+   input           clk;       // sampling clock   
+   input 	   nreset;    // async active low reset
+   
+
+Clone Blocks 3:
+oh/mio/hdl/mtx.v@12:22
+
+   //parameters
+   parameter PW         = 104;            // data width (core)
+   parameter N          = 16;             // IO data width
+   parameter FIFO_DEPTH = 32;             // fifo depth  
+   localparam CW        = $clog2(2*PW/N); // transfer count width
+
+   //reset, clk, cfg
+   input              clk;       // main core clock   
+   input              io_clk;    // clock for tx logic
+   input              nreset;    // async active low reset
+
+Clone Blocks 4:
+oh/mio/hdl/mrx_protocol.v@10:20
+   //#####################################################################
+
+   //parameters
+   parameter  PW  = 104;            // packet width (core)
+   parameter  N   = 16;             // io packet width
+   localparam CW  = $clog2(2*PW/N); // transfer count width
+   
+   //clock and reset
+   input           clk;           // core clock
+   input 	   nreset;        // async active low reset
+   
+

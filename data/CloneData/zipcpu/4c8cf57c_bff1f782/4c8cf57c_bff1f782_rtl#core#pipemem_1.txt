@@ -1,0 +1,61 @@
+Source Block: zipcpu/rtl/core/pipemem.v@201:226@HdlStmIf
+
+	assign	o_pipe_stalled = (cyc)
+			&&((i_wb_stall)||((~o_wb_stb_lcl)&&(~o_wb_stb_gbl)));
+
+	generate
+	if (IMPLEMENT_LOCK != 0)
+	begin
+		reg	lock_gbl, lock_lcl;
+
+		initial	lock_gbl = 1'b0;
+		initial	lock_lcl = 1'b0;
+		always @(posedge i_clk)
+		begin
+			lock_gbl <= (i_lock)&&((r_wb_cyc_gbl)||(lock_gbl));
+			lock_lcl <= (i_lock)&&((r_wb_cyc_lcl)||(lock_gbl));
+		end
+
+		assign	o_wb_cyc_gbl = (r_wb_cyc_gbl)||(lock_gbl);
+		assign	o_wb_cyc_lcl = (r_wb_cyc_lcl)||(lock_lcl);
+
+	end else begin
+		assign	o_wb_cyc_gbl = (r_wb_cyc_gbl);
+		assign	o_wb_cyc_lcl = (r_wb_cyc_lcl);
+	end endgenerate
+
+endmodule
+
+Diff Content:
+- 215 			lock_lcl <= (i_lock)&&((r_wb_cyc_lcl)||(lock_gbl));
++ 215 			lock_lcl <= (i_lock)&&((r_wb_cyc_lcl)||(lock_lcl));
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/memops.v@188:212
+		4'b1111: o_result <= { 24'h00, i_wb_data[ 7: 0] };
+		default: o_result <= i_wb_data;
+		endcase
+
+	generate
+	if (IMPLEMENT_LOCK != 0)
+	begin
+		reg	lock_gbl, lock_lcl;
+
+		initial	lock_gbl = 1'b0;
+		initial	lock_lcl = 1'b0;
+
+		always @(posedge i_clk)
+		begin
+			lock_gbl <= (i_lock)&&((r_wb_cyc_gbl)||(lock_gbl));
+			lock_lcl <= (i_lock)&&((r_wb_cyc_lcl)||(lock_lcl));
+		end
+
+		assign	o_wb_cyc_gbl = (r_wb_cyc_gbl)||(lock_gbl);
+		assign	o_wb_cyc_lcl = (r_wb_cyc_lcl)||(lock_lcl);
+	end else begin
+		assign	o_wb_cyc_gbl = (r_wb_cyc_gbl);
+		assign	o_wb_cyc_lcl = (r_wb_cyc_lcl);
+	end endgenerate
+endmodule
+

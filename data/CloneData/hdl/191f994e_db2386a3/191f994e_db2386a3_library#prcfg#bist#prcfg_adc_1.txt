@@ -1,0 +1,222 @@
+Source Block: hdl/library/prcfg/bist/prcfg_adc.v@148:158@HdlStmAssign
+  end
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? src_adc_ddata : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_data == adc_pn_data) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_data    <= src_adc_ddata;
+
+Diff Content:
+- 153   assign adc_pn_match_s   = (adc_data == adc_pn_data) ? 1'b1 : 1'b0;
++ 153   assign adc_pn_match_s   = (src_adc_ddata == adc_pn_data) ? 1'b1 : 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_pnmon.v@92:102
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+  always @(posedge adc_clk) begin
+    adc_valid_d <= adc_valid_in;
+
+Clone Blocks 2:
+hdl/library/prcfg/qpsk/prcfg_adc.v@120:130
+  always @(posedge clk) begin
+    channel_sel <= control[ 3:0];
+    mode        <= control[ 7:4];
+  end
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? {adc_pn_data[7:2], src_adc_ddata} : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_ddata == adc_pn_data[1:0]) ? 1'b1 : 1'b0;
+
+Clone Blocks 3:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@201:216
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+  always @(posedge adc_clk) begin
+    if (adc_valid == 1'b1) begin
+      adc_pn_en <= ~adc_pn_en;
+      adc_data_d <= adc_data;
+    end
+  end
+
+  always @(posedge adc_clk) begin
+    if (adc_pn_valid_s == 1'b1) begin
+      if (adc_pn_type == 1'b0) begin
+        adc_pn_data <= pn9(adc_pn_data_s);
+
+Clone Blocks 4:
+hdl/library/prcfg/bist/prcfg_adc.v@146:156
+    channel_sel  <= control[3:0];
+    mode         <= control[7:4];
+  end
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? src_adc_ddata : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_data == adc_pn_data) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+
+Clone Blocks 5:
+hdl/library/prcfg/qpsk/prcfg_adc.v@125:135
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? {adc_pn_data[7:2], src_adc_ddata} : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_ddata == adc_pn_data[1:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_ddata    <= src_adc_ddata;
+
+Clone Blocks 6:
+hdl/library/common/ad_pnmon.v@90:100
+
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+
+Clone Blocks 7:
+hdl/library/prcfg/qpsk/prcfg_adc.v@123:133
+  end
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? {adc_pn_data[7:2], src_adc_ddata} : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_ddata == adc_pn_data[1:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+
+Clone Blocks 8:
+hdl/library/prcfg/bist/prcfg_adc.v@149:159
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? src_adc_ddata : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_data == adc_pn_data) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_data    <= src_adc_ddata;
+      adc_pn_data <= pn(adc_pn_data_s);
+
+Clone Blocks 9:
+hdl/library/prcfg/qpsk/prcfg_adc.v@124:134
+
+  assign adc_dvalid  = src_adc_dwr & src_adc_dsync;
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? {adc_pn_data[7:2], src_adc_ddata} : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_ddata == adc_pn_data[1:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+
+Clone Blocks 10:
+hdl/library/common/ad_pnmon.v@89:99
+  wire            adc_pn_err_s;
+
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+Clone Blocks 11:
+hdl/library/prcfg/bist/prcfg_adc.v@147:157
+    mode         <= control[7:4];
+  end
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? src_adc_ddata : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_data == adc_pn_data) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+
+Clone Blocks 12:
+hdl/library/prcfg/bist/prcfg_adc.v@140:153
+    end
+  endfunction
+
+  assign adc_dvalid = src_adc_dwr & src_adc_dsync;
+
+  always @(posedge clk) begin
+    channel_sel  <= control[3:0];
+    mode         <= control[7:4];
+  end
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? src_adc_ddata : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_data == adc_pn_data) ? 1'b1 : 1'b0;
+
+Clone Blocks 13:
+hdl/library/common/ad_pnmon.v@91:101
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+  always @(posedge adc_clk) begin
+
+Clone Blocks 14:
+hdl/library/prcfg/qpsk/prcfg_adc.v@126:136
+
+  // prbs monitor
+  assign adc_pn_data_s    = (adc_pn_oos == 1'b1) ? {adc_pn_data[7:2], src_adc_ddata} : adc_pn_data;
+  assign adc_pn_update_s  = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_match_s   = (adc_ddata == adc_pn_data[1:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_err_s     = ~(adc_pn_oos | adc_pn_match_s);
+
+  always @(posedge clk) begin
+    if(adc_dvalid == 1'b1) begin
+      adc_ddata    <= src_adc_ddata;
+      adc_pn_data <= pn(adc_pn_data_s);
+

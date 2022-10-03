@@ -1,0 +1,87 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4949:4959@HdlStmAssign
+   assign route_south_normal  =  ext_ygt & ext_xzero;
+   assign route_north_normal  =  ext_ylt & ext_xzero;
+
+   //# MULTICAST ROUTING
+   assign route_east_multicast  = (ext_xlt | ext_xzero) & ext_yzero;
+   assign route_west_multicast  = (ext_xgt | ext_xzero) & ext_yzero;
+   assign route_south_multicast =  ext_ylt | ext_yzero;
+   assign route_north_multicast =  ext_ygt | ext_yzero;
+
+   //# normal-multicast selection
+   assign route_east  = multicast_tran ? route_east_multicast  : route_east_normal;
+
+Diff Content:
+- 4954    assign route_west_multicast  = (ext_xgt | ext_xzero) & ext_yzero;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4951:4961
+
+   //# MULTICAST ROUTING
+   assign route_east_multicast  = (ext_xlt | ext_xzero) & ext_yzero;
+   assign route_west_multicast  = (ext_xgt | ext_xzero) & ext_yzero;
+   assign route_south_multicast =  ext_ylt | ext_yzero;
+   assign route_north_multicast =  ext_ygt | ext_yzero;
+
+   //# normal-multicast selection
+   assign route_east  = multicast_tran ? route_east_multicast  : route_east_normal;
+   assign route_west  = multicast_tran ? route_west_multicast  : route_west_normal;
+   assign route_south = multicast_tran ? route_south_multicast : route_south_normal;
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4944:4954
+   assign ext_ylt        = ~ext_ycarry;  // src/dst Y-address is less than 
+
+   //# NON-MULTICAST ROUTING
+   assign route_east_normal   =  ext_xgt;   
+   assign route_west_normal   =  ext_xlt;
+   assign route_south_normal  =  ext_ygt & ext_xzero;
+   assign route_north_normal  =  ext_ylt & ext_xzero;
+
+   //# MULTICAST ROUTING
+   assign route_east_multicast  = (ext_xlt | ext_xzero) & ext_yzero;
+   assign route_west_multicast  = (ext_xgt | ext_xzero) & ext_yzero;
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@4950:4960
+   assign route_north_normal  =  ext_ylt & ext_xzero;
+
+   //# MULTICAST ROUTING
+   assign route_east_multicast  = (ext_xlt | ext_xzero) & ext_yzero;
+   assign route_west_multicast  = (ext_xgt | ext_xzero) & ext_yzero;
+   assign route_south_multicast =  ext_ylt | ext_yzero;
+   assign route_north_multicast =  ext_ygt | ext_yzero;
+
+   //# normal-multicast selection
+   assign route_east  = multicast_tran ? route_east_multicast  : route_east_normal;
+   assign route_west  = multicast_tran ? route_west_multicast  : route_west_normal;
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@4948:4958
+   assign route_west_normal   =  ext_xlt;
+   assign route_south_normal  =  ext_ygt & ext_xzero;
+   assign route_north_normal  =  ext_ylt & ext_xzero;
+
+   //# MULTICAST ROUTING
+   assign route_east_multicast  = (ext_xlt | ext_xzero) & ext_yzero;
+   assign route_west_multicast  = (ext_xgt | ext_xzero) & ext_yzero;
+   assign route_south_multicast =  ext_ylt | ext_yzero;
+   assign route_north_multicast =  ext_ygt | ext_yzero;
+
+   //# normal-multicast selection
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@4945:4955
+
+   //# NON-MULTICAST ROUTING
+   assign route_east_normal   =  ext_xgt;   
+   assign route_west_normal   =  ext_xlt;
+   assign route_south_normal  =  ext_ygt & ext_xzero;
+   assign route_north_normal  =  ext_ylt & ext_xzero;
+
+   //# MULTICAST ROUTING
+   assign route_east_multicast  = (ext_xlt | ext_xzero) & ext_yzero;
+   assign route_west_multicast  = (ext_xgt | ext_xzero) & ext_yzero;
+   assign route_south_multicast =  ext_ylt | ext_yzero;
+

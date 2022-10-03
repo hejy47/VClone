@@ -1,0 +1,85 @@
+Source Block: hdl/library/util_mii_to_rmii/mac_phy_link.v@135:145@HdlStmAssign
+    end else begin
+      tx_dibit_d <= tx_dibit;
+    end
+  end
+
+  assign dibit_sample = RATE_10_100 ? (reg_count_w == 5'b01001 ? 1'b1 : 1'b0) : rising_tx_clk_r1;
+  assign num_w = num_r + 1;
+  assign mii_tx_clk = mii_tx_clk_10_100_r;
+  assign reg_count_w = reg_count;
+  assign rmii_txd = rmii_txd_r;
+  assign rmii_tx_en = rmii_tx_en_r;
+
+Diff Content:
+- 140   assign dibit_sample = RATE_10_100 ? (reg_count_w == 5'b01001 ? 1'b1 : 1'b0) : rising_tx_clk_r1;
++ 140   assign dibit_sample = RATE_10_100 ? ((reg_count_w == 5'b01001) ? 1'b1 : 1'b0) : rising_tx_clk_r1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_mii_to_rmii/mac_phy_link.v@136:146
+      tx_dibit_d <= tx_dibit;
+    end
+  end
+
+  assign dibit_sample = RATE_10_100 ? (reg_count_w == 5'b01001 ? 1'b1 : 1'b0) : rising_tx_clk_r1;
+  assign num_w = num_r + 1;
+  assign mii_tx_clk = mii_tx_clk_10_100_r;
+  assign reg_count_w = reg_count;
+  assign rmii_txd = rmii_txd_r;
+  assign rmii_tx_en = rmii_tx_en_r;
+  assign tx_dibit = ~mii_tx_clk;
+
+Clone Blocks 2:
+hdl/library/util_mii_to_rmii/mac_phy_link.v@140:148
+  assign dibit_sample = RATE_10_100 ? (reg_count_w == 5'b01001 ? 1'b1 : 1'b0) : rising_tx_clk_r1;
+  assign num_w = num_r + 1;
+  assign mii_tx_clk = mii_tx_clk_10_100_r;
+  assign reg_count_w = reg_count;
+  assign rmii_txd = rmii_txd_r;
+  assign rmii_tx_en = rmii_tx_en_r;
+  assign tx_dibit = ~mii_tx_clk;
+
+endmodule
+
+Clone Blocks 3:
+hdl/library/util_mii_to_rmii/mac_phy_link.v@138:148
+  end
+
+  assign dibit_sample = RATE_10_100 ? (reg_count_w == 5'b01001 ? 1'b1 : 1'b0) : rising_tx_clk_r1;
+  assign num_w = num_r + 1;
+  assign mii_tx_clk = mii_tx_clk_10_100_r;
+  assign reg_count_w = reg_count;
+  assign rmii_txd = rmii_txd_r;
+  assign rmii_tx_en = rmii_tx_en_r;
+  assign tx_dibit = ~mii_tx_clk;
+
+endmodule
+
+Clone Blocks 4:
+hdl/library/util_mii_to_rmii/mac_phy_link.v@137:147
+    end
+  end
+
+  assign dibit_sample = RATE_10_100 ? (reg_count_w == 5'b01001 ? 1'b1 : 1'b0) : rising_tx_clk_r1;
+  assign num_w = num_r + 1;
+  assign mii_tx_clk = mii_tx_clk_10_100_r;
+  assign reg_count_w = reg_count;
+  assign rmii_txd = rmii_txd_r;
+  assign rmii_tx_en = rmii_tx_en_r;
+  assign tx_dibit = ~mii_tx_clk;
+
+
+Clone Blocks 5:
+hdl/library/util_mii_to_rmii/mac_phy_link.v@139:148
+
+  assign dibit_sample = RATE_10_100 ? (reg_count_w == 5'b01001 ? 1'b1 : 1'b0) : rising_tx_clk_r1;
+  assign num_w = num_r + 1;
+  assign mii_tx_clk = mii_tx_clk_10_100_r;
+  assign reg_count_w = reg_count;
+  assign rmii_txd = rmii_txd_r;
+  assign rmii_tx_en = rmii_tx_en_r;
+  assign tx_dibit = ~mii_tx_clk;
+
+endmodule
+

@@ -1,0 +1,168 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@1093:1111@HdlStmProcess
+    src_req_dest_address_cur <= src_req_dest_address;
+    src_req_xlast_cur <= src_req_xlast;
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_resetn == 1'b0) begin
+    src_dest_valid_hs <= 1'b0;
+  end else if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
+    src_dest_valid_hs <= 1'b1;
+  end else if (src_dest_ready_hs == 1'b1) begin
+    src_dest_valid_hs <= 1'b0;
+  end
+end
+
+// Forward the descriptor to the destination only after the source decided to
+// do so
+assign src_dest_valid_hs_masked = src_dest_valid_hs == 1'b1 && block_descr_to_dst == 1'b0;
+assign src_req_spltr_ready = src_req_ready && src_dest_ready_hs;
+
+Diff Content:
+- 1098 always @(posedge src_clk) begin
+- 1099   if (src_resetn == 1'b0) begin
+- 1100     src_dest_valid_hs <= 1'b0;
+- 1101   end else if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
+- 1102     src_dest_valid_hs <= 1'b1;
+- 1103   end else if (src_dest_ready_hs == 1'b1) begin
+- 1104     src_dest_valid_hs <= 1'b0;
+- 1106 end
++ 1104   sync_bits #(
++ 1104     .NUM_OF_BITS(ID_WIDTH),
++ 1104     .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
++ 1104   ) i_sync_req_response_id (
++ 1104     .out_clk(req_clk),
++ 1104     .out_resetn(1'b1),
++ 1104     .in_bits(dest_response_id),
++ 1104     .out_bits(response_id));
++ 1104   axi_register_slice #(
++ 1104     .DATA_WIDTH(DMA_DATA_WIDTH_SRC + BYTES_PER_BEAT_WIDTH_SRC + 2),
++ 1104     .FORWARD_REGISTERED(AXI_SLICE_SRC),
++ 1104     .BACKWARD_REGISTERED(0)
++ 1104   ) i_src_slice (
++ 1104     .clk(src_clk),
++ 1104     .resetn(src_resetn),
++ 1104     .s_axi_valid(src_valid),
++ 1104     .s_axi_ready(),
++ 1104     .s_axi_data({src_data,src_valid_bytes,src_last,src_partial_burst}),
++ 1104     .m_axi_valid(src_fifo_valid),
++ 1104     .m_axi_ready(1'b1), /* No backpressure */
++ 1104     .m_axi_data({src_fifo_data,src_fifo_valid_bytes,src_fifo_last,src_fifo_partial_burst}));
++ 1104   axi_dmac_burst_memory #(
++ 1104     .DATA_WIDTH_SRC(DMA_DATA_WIDTH_SRC),
++ 1104     .DATA_WIDTH_DEST(DMA_DATA_WIDTH_DEST),
++ 1104     .ID_WIDTH(ID_WIDTH),
++ 1104     .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
++ 1104     .ASYNC_CLK(ASYNC_CLK_SRC_DEST),
++ 1104     .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
++ 1104     .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
++ 1104     .DMA_LENGTH_ALIGN(DMA_LENGTH_ALIGN),
++ 1104     .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
++ 1104     .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM)
++ 1104   ) i_store_and_forward (
++ 1104     .src_clk(src_clk),
++ 1104     .src_reset(~src_resetn),
++ 1104     .src_data_valid(src_fifo_valid),
++ 1104     .src_data(src_fifo_data),
++ 1104     .src_data_last(src_fifo_last),
++ 1104     .src_data_valid_bytes(src_fifo_valid_bytes),
++ 1104     .src_data_partial_burst(src_fifo_partial_burst),
++ 1104     .src_data_request_id(src_data_request_id),
++ 1104     .dest_clk(dest_clk),
++ 1104     .dest_reset(~dest_resetn),
++ 1104     .dest_data_valid(dest_fifo_valid),
++ 1104     .dest_data_ready(dest_fifo_ready),
++ 1104     .dest_data(dest_fifo_data),
++ 1104     .dest_data_last(dest_fifo_last),
++ 1104     .dest_data_strb(dest_fifo_strb),
++ 1104     .dest_burst_info_length(dest_burst_info_length),
++ 1104     .dest_burst_info_partial(dest_burst_info_partial),
++ 1104     .dest_burst_info_id(dest_burst_info_id),
++ 1104     .dest_burst_info_write(dest_burst_info_write),
++ 1104     .dest_request_id(dest_request_id),
++ 1104     .dest_data_request_id(dest_data_request_id),
++ 1104     .dest_data_response_id(dest_data_response_id),
++ 1104     .dest_diag_level_bursts(dest_diag_level_bursts));
++ 1104   axi_register_slice #(
++ 1104     .DATA_WIDTH(DMA_DATA_WIDTH_DEST + DMA_DATA_WIDTH_DEST / 8 + 1),
++ 1104     .FORWARD_REGISTERED(AXI_SLICE_DEST),
++ 1104     .BACKWARD_REGISTERED(AXI_SLICE_DEST)
++ 1104   ) i_dest_slice (
++ 1104     .clk(dest_clk),
++ 1104     .resetn(dest_resetn),
++ 1104     .s_axi_valid(dest_fifo_valid),
++ 1104     .s_axi_ready(dest_fifo_ready),
++ 1104     .s_axi_data({
++ 1104       dest_fifo_last,
++ 1104       dest_fifo_strb,
++ 1104       dest_fifo_data}),
++ 1104     .m_axi_valid(dest_valid),
++ 1104     .m_axi_ready(dest_ready),
++ 1104     .m_axi_data({
++ 1104       dest_last,
++ 1104       dest_strb,
++ 1104       dest_data}));
++ 1104   assign req_gen_valid = req_valid & req_ready;
++ 1104   assign req_src_valid = req_valid & req_ready;
++ 1104   assign req_ready = req_gen_ready & req_src_ready;
++ 1104   util_axis_fifo #(
++ 1104     .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
++ 1104     .ADDRESS_WIDTH(0),
++ 1104     .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
++ 1104   ) i_dest_req_fifo (
++ 1104     .s_axis_aclk(src_clk),
++ 1104     .s_axis_aresetn(src_resetn),
++ 1104     .s_axis_valid(src_dest_valid_hs_masked),
++ 1104     .s_axis_ready(src_dest_ready_hs),
++ 1104     .s_axis_full(),
++ 1104     .s_axis_data({
++ 1104       src_req_dest_address_cur,
++ 1104       src_req_xlast_cur}),
++ 1104     .s_axis_room(),
++ 1104     .m_axis_aclk(dest_clk),
++ 1104     .m_axis_aresetn(dest_resetn),
++ 1104     .m_axis_valid(dest_req_valid),
++ 1104     .m_axis_ready(dest_req_ready),
++ 1104     .m_axis_data({
++ 1104       dest_req_dest_address,
++ 1104       dest_req_xlast}),
++ 1104     .m_axis_level(),
++ 1104     .m_axis_empty());
++ 1104   util_axis_fifo #(
++ 1104     .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BYTES_PER_BURST_WIDTH + 2),
++ 1104     .ADDRESS_WIDTH(0),
++ 1104     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
++ 1104   ) i_src_req_fifo (
++ 1104     .s_axis_aclk(req_clk),
++ 1104     .s_axis_aresetn(req_resetn),
++ 1104     .s_axis_valid(req_src_valid),
++ 1104     .s_axis_ready(req_src_ready),
++ 1104     .s_axis_full(),
++ 1104     .s_axis_data({
++ 1104       req_dest_address,
++ 1104       req_src_address,
++ 1104       req_length[BYTES_PER_BURST_WIDTH-1:0],
++ 1104       req_sync_transfer_start,
++ 1104       req_xlast}),
++ 1104     .s_axis_room(),
++ 1104     .m_axis_aclk(src_clk),
++ 1104     .m_axis_aresetn(src_resetn),
++ 1104     .m_axis_valid(src_req_spltr_valid),
++ 1104     .m_axis_ready(src_req_spltr_ready),
++ 1104     .m_axis_data({
++ 1104       src_req_dest_address,
++ 1104       src_req_src_address,
++ 1104       src_req_last_burst_length,
++ 1104       src_req_last_beat_bytes,
++ 1104       src_req_sync_transfer_start,
++ 1104       src_req_xlast}),
++ 1104     .m_axis_level(),
++ 1104     .m_axis_empty());
++ 1104   always @(posedge src_clk) begin
++ 1104     if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
++ 1104       src_req_dest_address_cur <= src_req_dest_address;
++ 1104       src_req_xlast_cur <= src_req_xlast;
++ 1104     end
+
+Clone Blocks:

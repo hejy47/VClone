@@ -1,0 +1,144 @@
+Source Block: zipcpu/rtl/zipsystem.v@358:368@HdlStmAssign
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(wdt_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
+	wire	[31:0]	pic_data;
+	wire	[31:0]	cmd_data;
+	// Values:
+	//	0x0003f -> cmd_addr mask
+	//	0x00040 -> reset
+
+Diff Content:
+- 363 	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
++ 363 	assign	cpu_halt = (cmd_halt);
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipbones.v@174:184
+	always @(posedge i_clk)
+		if (dbg_cmd_write)
+			cmd_addr <= dbg_idata[4:0];
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (cmd_halt);
+	wire	[31:0]	cmd_data;
+	// Values:
+
+Clone Blocks 2:
+zipcpu/rtl/zipsystem.v@355:365
+	always @(posedge i_clk)
+		if (dbg_cmd_write)
+			cmd_addr <= dbg_idata[5:0];
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(wdt_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
+	wire	[31:0]	pic_data;
+	wire	[31:0]	cmd_data;
+
+Clone Blocks 3:
+zipcpu/rtl/zipsystem.v@357:367
+			cmd_addr <= dbg_idata[5:0];
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(wdt_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
+	wire	[31:0]	pic_data;
+	wire	[31:0]	cmd_data;
+	// Values:
+	//	0x0003f -> cmd_addr mask
+
+Clone Blocks 4:
+zipcpu/rtl/zipsystem.v@360:370
+	assign	cpu_reset = (cmd_reset)||(wdt_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
+	wire	[31:0]	pic_data;
+	wire	[31:0]	cmd_data;
+	// Values:
+	//	0x0003f -> cmd_addr mask
+	//	0x00040 -> reset
+	//	0x00080 -> PIC interrrupt pending
+	//	0x00100 -> cmd_step
+
+Clone Blocks 5:
+zipcpu/rtl/zipsystem.v@359:369
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(wdt_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
+	wire	[31:0]	pic_data;
+	wire	[31:0]	cmd_data;
+	// Values:
+	//	0x0003f -> cmd_addr mask
+	//	0x00040 -> reset
+	//	0x00080 -> PIC interrrupt pending
+
+Clone Blocks 6:
+zipcpu/rtl/zipsystem.v@354:364
+	//
+	always @(posedge i_clk)
+		if (dbg_cmd_write)
+			cmd_addr <= dbg_idata[5:0];
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(wdt_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
+	wire	[31:0]	pic_data;
+
+Clone Blocks 7:
+zipcpu/rtl/zipbones.v@176:186
+			cmd_addr <= dbg_idata[4:0];
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (cmd_halt);
+	wire	[31:0]	cmd_data;
+	// Values:
+	//	0x0003f -> cmd_addr mask
+	//	0x00040 -> reset
+
+Clone Blocks 8:
+zipcpu/rtl/zipbones.v@176:186
+			cmd_addr <= dbg_idata[4:0];
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (cmd_halt);
+	wire	[31:0]	cmd_data;
+	// Values:
+	//	0x0003f -> cmd_addr mask
+	//	0x00040 -> reset
+
+Clone Blocks 9:
+zipcpu/rtl/zipsystem.v@357:367
+			cmd_addr <= dbg_idata[5:0];
+
+	wire	cpu_reset;
+	assign	cpu_reset = (cmd_reset)||(wdt_reset)||(i_rst);
+
+	wire	cpu_halt, cpu_dbg_stall;
+	assign	cpu_halt = (i_rst)||((cmd_halt)&&(~cmd_step));
+	wire	[31:0]	pic_data;
+	wire	[31:0]	cmd_data;
+	// Values:
+	//	0x0003f -> cmd_addr mask
+

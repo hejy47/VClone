@@ -1,0 +1,48 @@
+Source Block: oh/elink/hdl/etx_protocol.v@128:138@HdlStmAssign
+		     .dstaddr_out	(last_dstaddr[31:0]),
+		     .data_out		(),
+		     .srcaddr_out	(),
+		     .packet_in		(tx_packet[PW-1:0]));//input
+
+   assign burst_addr[31:0]  = (last_dstaddr[31:0] + 4'd8);
+   
+   assign burst_addr_match  = (burst_addr[31:0] == etx_dstaddr[31:0]);
+
+   assign burst_type_match  = {last_ctrlmode[3:0],last_datamode[1:0],last_write}
+			       ==
+
+Diff Content:
+- 133    assign burst_addr[31:0]  = (last_dstaddr[31:0] + 4'd8);
++ 133    assign burst_addr[31:0]  = (last_dstaddr[31:0] + 32'h8);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@130:140
+		     .srcaddr_out	(),
+		     .packet_in		(tx_packet[PW-1:0]));//input
+
+   assign burst_addr[31:0]  = (last_dstaddr[31:0] + 4'd8);
+   
+   assign burst_addr_match  = (burst_addr[31:0] == etx_dstaddr[31:0]);
+
+   assign burst_type_match  = {last_ctrlmode[3:0],last_datamode[1:0],last_write}
+			       ==
+		   	      {etx_ctrlmode[3:0],etx_datamode[1:0], etx_write};
+   			      
+
+Clone Blocks 2:
+oh/elink/hdl/etx_protocol.v@132:144
+
+   assign burst_addr[31:0]  = (last_dstaddr[31:0] + 4'd8);
+   
+   assign burst_addr_match  = (burst_addr[31:0] == etx_dstaddr[31:0]);
+
+   assign burst_type_match  = {last_ctrlmode[3:0],last_datamode[1:0],last_write}
+			       ==
+		   	      {etx_ctrlmode[3:0],etx_datamode[1:0], etx_write};
+   			      
+
+   //#############################
+   //# Wait signals (async)
+   //#############################
+

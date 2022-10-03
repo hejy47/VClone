@@ -1,0 +1,73 @@
+Source Block: hdl/library/axi_gpreg/axi_gpreg.v@296:322@HdlStmFor
+  assign up_rdata_s[(8+n)] = 32'd0;
+  assign up_rack_s[(8+n)] = 1'd0;
+  end
+  end
+
+  for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
+  axi_gpreg_clock_mon #(
+    .ID (32+n),
+    .BUF_ENABLE (BUF_ENABLE[n]))
+  i_gpreg_clock_mon (
+    .d_clk (d_clk_s[n]),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[(8+n)]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[(8+n)]),
+    .up_rack (up_rack_s[(8+n)]));
+  end
+
+  endgenerate
+
+  up_axi i_up_axi (
+    .up_rstn (up_rstn),
+
+Diff Content:
+- 301   for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
+- 302   axi_gpreg_clock_mon #(
+- 303     .ID (32+n),
+- 304     .BUF_ENABLE (BUF_ENABLE[n]))
+- 305   i_gpreg_clock_mon (
+- 306     .d_clk (d_clk_s[n]),
+- 307     .up_rstn (up_rstn),
+- 308     .up_clk (up_clk),
+- 309     .up_wreq (up_wreq),
+- 310     .up_waddr (up_waddr),
+- 311     .up_wdata (up_wdata),
+- 312     .up_wack (up_wack_s[(8+n)]),
+- 313     .up_rreq (up_rreq),
+- 314     .up_raddr (up_raddr),
+- 315     .up_rdata (up_rdata_s[(8+n)]),
+- 316     .up_rack (up_rack_s[(8+n)]));
+- 317   end
++ 317     if (NUM_OF_CLK_MONS < 8) begin
++ 317       for (n = NUM_OF_CLK_MONS; n < 8; n = n + 1) begin: g_unused_clock_mon
++ 317         assign up_wack_s[(8+n)] = 1'd0;
++ 317         assign up_rdata_s[(8+n)] = 32'd0;
++ 317         assign up_rack_s[(8+n)] = 1'd0;
++ 317       end
++ 317     end
++ 317     for (n = 0; n < NUM_OF_CLK_MONS; n = n + 1) begin: g_clock_mon
++ 317       axi_gpreg_clock_mon #(
++ 317         .ID (32+n),
++ 317         .BUF_ENABLE (BUF_ENABLE[n])
++ 317       ) i_gpreg_clock_mon (
++ 317         .d_clk (d_clk_s[n]),
++ 317         .up_rstn (up_rstn),
++ 317         .up_clk (up_clk),
++ 317         .up_wreq (up_wreq),
++ 317         .up_waddr (up_waddr),
++ 317         .up_wdata (up_wdata),
++ 317         .up_wack (up_wack_s[(8+n)]),
++ 317         .up_rreq (up_rreq),
++ 317         .up_raddr (up_raddr),
++ 317         .up_rdata (up_rdata_s[(8+n)]),
++ 317         .up_rack (up_rack_s[(8+n)]));
++ 317     end
+
+Clone Blocks:

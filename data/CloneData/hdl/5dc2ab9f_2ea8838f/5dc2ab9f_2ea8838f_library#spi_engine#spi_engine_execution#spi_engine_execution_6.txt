@@ -1,0 +1,87 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@146:156@HdlIdDef
+wire last_sdi_bit = (sdi_counter == word_length-1);
+
+wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+
+Diff Content:
+- 151 reg trigger_rx_d1 = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@143:153
+wire sdo_enabled = cmd_d1[8];
+wire sdi_enabled = cmd_d1[9];
+
+wire last_sdi_bit = (sdi_counter == word_length-1);
+
+wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@147:157
+
+wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+
+Clone Blocks 3:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@144:154
+wire sdi_enabled = cmd_d1[9];
+
+wire last_sdi_bit = (sdi_counter == word_length-1);
+
+wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+
+Clone Blocks 4:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@148:158
+wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+
+Clone Blocks 5:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@141:151
+reg [7:0] clk_div = DEFAULT_CLK_DIV;
+
+wire sdo_enabled = cmd_d1[8];
+wire sdi_enabled = cmd_d1[9];
+
+wire last_sdi_bit = (sdi_counter == word_length-1);
+
+wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+reg trigger_rx_d1 = 1'b0;
+

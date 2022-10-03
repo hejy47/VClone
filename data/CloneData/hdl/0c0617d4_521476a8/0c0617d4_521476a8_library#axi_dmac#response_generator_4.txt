@@ -1,0 +1,62 @@
+Source Block: hdl/library/axi_dmac/response_generator.v@63:81@HdlStmProcess
+assign resp_eot = eot;
+
+assign resp_valid = request_id != response_id && enabled;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+  end else if (enable == 1'b1) begin
+    enabled <= 1'b1;
+  end else if (request_id == response_id) begin
+    enabled <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    response_id <= 'h0;
+  end else if (resp_valid == 1'b1 && resp_ready == 1'b1) begin
+
+Diff Content:
+- 68 always @(posedge clk) begin
+- 69   if (resetn == 1'b0) begin
+- 70     enabled <= 1'b0;
+- 71   end else if (enable == 1'b1) begin
+- 72     enabled <= 1'b1;
+- 73   end else if (request_id == response_id) begin
+- 74     enabled <= 1'b0;
+- 76 end
++ 74   always @(posedge clk) begin
++ 74     if (resetn == 1'b0) begin
++ 74       enabled <= 1'b0;
++ 74     end else if (enable == 1'b1) begin
++ 74       enabled <= 1'b1;
++ 74     end else if (request_id == response_id) begin
++ 74       enabled <= 1'b0;
++ 74     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/response_handler.v@70:88
+
+assign bready = active && resp_ready;
+assign resp_valid = active && bvalid;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+  end else if (enable == 1'b1) begin
+      enabled <= 1'b1;
+  end else if (request_id == id) begin
+      enabled <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    id <= 'h0;
+  end else if (bready == 1'b1 && bvalid == 1'b1) begin
+

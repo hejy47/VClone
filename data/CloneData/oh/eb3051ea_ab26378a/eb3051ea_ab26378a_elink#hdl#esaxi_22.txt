@@ -1,0 +1,27 @@
+Source Block: oh/elink/hdl/esaxi.v@276:295@HdlStmProcess
+   
+   
+   //###################################################
+   //#WRITE CHANNEL
+   //###################################################
+   always @ (posedge s_axi_aclk)
+     if(~s_axi_aresetn) 
+       s_axi_wready <= 1'b0;      
+     else
+       begin
+	  if( last_wr_beat )
+	    s_axi_wready <= 1'b0;
+	  else if( write_active )
+	    s_axi_wready <= ~emwr_progfull;
+       end
+   
+   // implement write response logic generation
+   // the write response and response valid signals are asserted by the slave 
+   // at the end of each transaction, burst or single.
+
+
+Diff Content:
+- 289 	    s_axi_wready <= ~emwr_progfull;
++ 289 	    s_axi_wready <= ~txwr_wait;
+
+Clone Blocks:

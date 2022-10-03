@@ -1,0 +1,32 @@
+Source Block: oh/src/stdlib/dv/oh_simctrl.v@82:104@HdlStmProcess
+
+   //#################################
+   //ASYNC
+   //#################################
+
+   initial
+     begin	
+	#(1)
+	nreset   = 'b0;
+	vdd      = 'b0;
+	vss      = 'b0;	
+	#(clk1_phase * 10 + 10)   //ramping voltage
+	vdd      = 'bx;
+	#(clk1_phase * 10 + 10)   //voltage is safe
+	vdd      = 'b1;
+	#(clk1_phase * 40 + 10)   //hold reset for 20 clk cycles
+	nreset   = 'b1;
+     end
+
+   //#################################
+   //SYNCHRONOUS STIMULUS
+   //#################################
+
+
+Diff Content:
+- 88      begin	
+- 92 	vss      = 'b0;	
++ 88      begin
++ 92 	vss      = 'b0;
+
+Clone Blocks:

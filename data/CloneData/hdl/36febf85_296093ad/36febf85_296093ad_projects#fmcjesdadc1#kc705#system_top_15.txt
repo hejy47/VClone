@@ -1,0 +1,169 @@
+Source Block: hdl/projects/fmcjesdadc1/kc705/system_top.v@204:245@HdlStmProcess
+  assign iic_rstn = 1'b1;
+  assign spi_csn_0 = spi_csn[0];
+
+  // pack & unpack here
+
+  always @(posedge adc_clk) begin
+    case ({adc_0_enable_b, adc_0_enable_a})
+      2'b11: begin
+        dma_0_wr <= 1'b1;
+        dma_0_data[63:48] <= adc_0_data_b[31:16];
+        dma_0_data[47:32] <= adc_0_data_a[31:16];
+        dma_0_data[31:16] <= adc_0_data_b[15: 0];
+        dma_0_data[15: 0] <= adc_0_data_a[15: 0];
+      end
+      2'b10: begin
+        dma_0_wr <= ~dma_0_wr;
+        dma_0_data[63:48] <= adc_0_data_b[31:16];
+        dma_0_data[47:32] <= adc_0_data_b[15: 0];
+        dma_0_data[31:16] <= dma_0_data[63:48];
+        dma_0_data[15: 0] <= dma_0_data[47:32];
+      end
+      2'b01: begin
+        dma_0_wr <= ~dma_0_wr;
+        dma_0_data[63:48] <= adc_0_data_a[31:16];
+        dma_0_data[47:32] <= adc_0_data_a[15: 0];
+        dma_0_data[31:16] <= dma_0_data[63:48];
+        dma_0_data[15: 0] <= dma_0_data[47:32];
+      end
+      default: begin
+        dma_0_wr <= 1'b0;
+        dma_0_data[63:48] <= 16'd0;
+        dma_0_data[47:32] <= 16'd0;
+        dma_0_data[31:16] <= 16'd0;
+        dma_0_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_1_enable_b, adc_1_enable_a})
+      2'b11: begin
+        dma_1_wr <= 1'b1;
+
+Diff Content:
+- 209   always @(posedge adc_clk) begin
+- 210     case ({adc_0_enable_b, adc_0_enable_a})
+- 211       2'b11: begin
+- 212         dma_0_wr <= 1'b1;
+- 213         dma_0_data[63:48] <= adc_0_data_b[31:16];
+- 214         dma_0_data[47:32] <= adc_0_data_a[31:16];
+- 215         dma_0_data[31:16] <= adc_0_data_b[15: 0];
+- 216         dma_0_data[15: 0] <= adc_0_data_a[15: 0];
+- 217       end
+- 218       2'b10: begin
+- 219         dma_0_wr <= ~dma_0_wr;
+- 220         dma_0_data[63:48] <= adc_0_data_b[31:16];
+- 221         dma_0_data[47:32] <= adc_0_data_b[15: 0];
+- 222         dma_0_data[31:16] <= dma_0_data[63:48];
+- 223         dma_0_data[15: 0] <= dma_0_data[47:32];
+- 224       end
+- 225       2'b01: begin
+- 226         dma_0_wr <= ~dma_0_wr;
+- 227         dma_0_data[63:48] <= adc_0_data_a[31:16];
+- 228         dma_0_data[47:32] <= adc_0_data_a[15: 0];
+- 229         dma_0_data[31:16] <= dma_0_data[63:48];
+- 230         dma_0_data[15: 0] <= dma_0_data[47:32];
+- 231       end
+- 232       default: begin
+- 233         dma_0_wr <= 1'b0;
+- 234         dma_0_data[63:48] <= 16'd0;
+- 235         dma_0_data[47:32] <= 16'd0;
+- 236         dma_0_data[31:16] <= 16'd0;
+- 237         dma_0_data[15: 0] <= 16'd0;
+- 238       end
+- 239     endcase
+- 240   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcjesdadc1/zc706/system_top.v@172:213
+  assign spi_mosi = spi0_mosi;
+  assign spi0_miso = spi_miso;
+
+  // pack & unpack here
+
+  always @(posedge adc_clk) begin
+    case ({adc_0_enable_b, adc_0_enable_a})
+      2'b11: begin
+        dma_0_wr <= 1'b1;
+        dma_0_data[63:48] <= adc_0_data_b[31:16];
+        dma_0_data[47:32] <= adc_0_data_a[31:16];
+        dma_0_data[31:16] <= adc_0_data_b[15: 0];
+        dma_0_data[15: 0] <= adc_0_data_a[15: 0];
+      end
+      2'b10: begin
+        dma_0_wr <= ~dma_0_wr;
+        dma_0_data[63:48] <= adc_0_data_b[31:16];
+        dma_0_data[47:32] <= adc_0_data_b[15: 0];
+        dma_0_data[31:16] <= dma_0_data[63:48];
+        dma_0_data[15: 0] <= dma_0_data[47:32];
+      end
+      2'b01: begin
+        dma_0_wr <= ~dma_0_wr;
+        dma_0_data[63:48] <= adc_0_data_a[31:16];
+        dma_0_data[47:32] <= adc_0_data_a[15: 0];
+        dma_0_data[31:16] <= dma_0_data[63:48];
+        dma_0_data[15: 0] <= dma_0_data[47:32];
+      end
+      default: begin
+        dma_0_wr <= 1'b0;
+        dma_0_data[63:48] <= 16'd0;
+        dma_0_data[47:32] <= 16'd0;
+        dma_0_data[31:16] <= 16'd0;
+        dma_0_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_1_enable_b, adc_1_enable_a})
+      2'b11: begin
+        dma_1_wr <= 1'b1;
+
+Clone Blocks 2:
+hdl/projects/fmcjesdadc1/vc707/system_top.v@198:239
+  assign fan_pwm = 1'b1;
+  assign spi_csn_0 = spi_csn[0];
+
+  // pack & unpack here
+
+  always @(posedge adc_clk) begin
+    case ({adc_0_enable_b, adc_0_enable_a})
+      2'b11: begin
+        dma_0_wr <= 1'b1;
+        dma_0_data[63:48] <= adc_0_data_b[31:16];
+        dma_0_data[47:32] <= adc_0_data_a[31:16];
+        dma_0_data[31:16] <= adc_0_data_b[15: 0];
+        dma_0_data[15: 0] <= adc_0_data_a[15: 0];
+      end
+      2'b10: begin
+        dma_0_wr <= ~dma_0_wr;
+        dma_0_data[63:48] <= adc_0_data_b[31:16];
+        dma_0_data[47:32] <= adc_0_data_b[15: 0];
+        dma_0_data[31:16] <= dma_0_data[63:48];
+        dma_0_data[15: 0] <= dma_0_data[47:32];
+      end
+      2'b01: begin
+        dma_0_wr <= ~dma_0_wr;
+        dma_0_data[63:48] <= adc_0_data_a[31:16];
+        dma_0_data[47:32] <= adc_0_data_a[15: 0];
+        dma_0_data[31:16] <= dma_0_data[63:48];
+        dma_0_data[15: 0] <= dma_0_data[47:32];
+      end
+      default: begin
+        dma_0_wr <= 1'b0;
+        dma_0_data[63:48] <= 16'd0;
+        dma_0_data[47:32] <= 16'd0;
+        dma_0_data[31:16] <= 16'd0;
+        dma_0_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_1_enable_b, adc_1_enable_a})
+      2'b11: begin
+        dma_1_wr <= 1'b1;
+

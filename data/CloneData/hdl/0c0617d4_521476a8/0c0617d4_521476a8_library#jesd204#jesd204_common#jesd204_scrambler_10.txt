@@ -1,0 +1,48 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_scrambler.v@72:88@HdlStmProcess
+endgenerate
+
+assign full_state = {state,DESCRAMBLE ? swizzle_in : feedback};
+assign feedback = full_state[WIDTH-1+15:15] ^ full_state[WIDTH-1+14:14] ^ swizzle_in;
+
+always @(*) begin
+  if (enable == 1'b0) begin
+    swizzle_out = swizzle_in;
+  end else begin
+    swizzle_out = feedback;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    state <= 'h7f80;
+  end else begin
+
+Diff Content:
+- 77 always @(*) begin
+- 78   if (enable == 1'b0) begin
+- 79     swizzle_out = swizzle_in;
+- 80   end else begin
+- 81     swizzle_out = feedback;
+- 83 end
++ 81   always @(*) begin
++ 81     if (enable == 1'b0) begin
++ 81       swizzle_out = swizzle_in;
++ 81     end else begin
++ 81       swizzle_out = feedback;
++ 81     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_common/jesd204_scrambler.v@70:80
+  assign data_out[WIDTH-1-i*8:WIDTH-i*8-8] = swizzle_out[i*8+7:i*8];
+end
+endgenerate
+
+assign full_state = {state,DESCRAMBLE ? swizzle_in : feedback};
+assign feedback = full_state[WIDTH-1+15:15] ^ full_state[WIDTH-1+14:14] ^ swizzle_in;
+
+always @(*) begin
+  if (enable == 1'b0) begin
+    swizzle_out = swizzle_in;
+  end else begin
+

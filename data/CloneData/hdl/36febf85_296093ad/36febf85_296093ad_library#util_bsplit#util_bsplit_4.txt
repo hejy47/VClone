@@ -1,0 +1,89 @@
+Source Block: hdl/library/util_bsplit/util_bsplit.v@74:84@HdlStmAssign
+  wire    [((CH_MCNT*CH_DW)-1):0]   data_s;
+
+  // extend and split
+  
+  assign data_s[((CH_MCNT*CH_DW)-1):(CH_CNT*CH_DW)] = 'd0;
+  assign data_s[((CH_CNT*CH_DW)-1):0] = data;
+
+  assign split_data_0 = data_s[((CH_DW*1)-1):(CH_DW*0)];
+  assign split_data_1 = data_s[((CH_DW*2)-1):(CH_DW*1)];
+  assign split_data_2 = data_s[((CH_DW*3)-1):(CH_DW*2)];
+  assign split_data_3 = data_s[((CH_DW*4)-1):(CH_DW*3)];
+
+Diff Content:
+- 79   assign data_s[((CH_CNT*CH_DW)-1):0] = data;
++ 79   assign data_s[((NUM_OF_CHANNELS_M*CHANNEL_DATA_WIDTH)-1):(NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)] = 'd0;
++ 79   assign data_s[((NUM_OF_CHANNELS*CHANNEL_DATA_WIDTH)-1):0] = data;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_bsplit/util_bsplit.v@73:83
+
+  wire    [((CH_MCNT*CH_DW)-1):0]   data_s;
+
+  // extend and split
+  
+  assign data_s[((CH_MCNT*CH_DW)-1):(CH_CNT*CH_DW)] = 'd0;
+  assign data_s[((CH_CNT*CH_DW)-1):0] = data;
+
+  assign split_data_0 = data_s[((CH_DW*1)-1):(CH_DW*0)];
+  assign split_data_1 = data_s[((CH_DW*2)-1):(CH_DW*1)];
+  assign split_data_2 = data_s[((CH_DW*3)-1):(CH_DW*2)];
+
+Clone Blocks 2:
+hdl/library/util_bsplit/util_bsplit.v@76:86
+  // extend and split
+  
+  assign data_s[((CH_MCNT*CH_DW)-1):(CH_CNT*CH_DW)] = 'd0;
+  assign data_s[((CH_CNT*CH_DW)-1):0] = data;
+
+  assign split_data_0 = data_s[((CH_DW*1)-1):(CH_DW*0)];
+  assign split_data_1 = data_s[((CH_DW*2)-1):(CH_DW*1)];
+  assign split_data_2 = data_s[((CH_DW*3)-1):(CH_DW*2)];
+  assign split_data_3 = data_s[((CH_DW*4)-1):(CH_DW*3)];
+  assign split_data_4 = data_s[((CH_DW*5)-1):(CH_DW*4)];
+  assign split_data_5 = data_s[((CH_DW*6)-1):(CH_DW*5)];
+
+Clone Blocks 3:
+hdl/library/util_ccat/util_ccat.v@74:84
+  wire    [((CH_MCNT*CH_DW)-1):0]   data_s;
+
+  // concatenate
+
+  assign data_s[((CH_DW*1)-1):(CH_DW*0)] = data_0;
+  assign data_s[((CH_DW*2)-1):(CH_DW*1)] = data_1;
+  assign data_s[((CH_DW*3)-1):(CH_DW*2)] = data_2;
+  assign data_s[((CH_DW*4)-1):(CH_DW*3)] = data_3;
+  assign data_s[((CH_DW*5)-1):(CH_DW*4)] = data_4;
+  assign data_s[((CH_DW*6)-1):(CH_DW*5)] = data_5;
+  assign data_s[((CH_DW*7)-1):(CH_DW*6)] = data_6;
+
+Clone Blocks 4:
+hdl/library/util_ccat/util_ccat.v@73:83
+
+  wire    [((CH_MCNT*CH_DW)-1):0]   data_s;
+
+  // concatenate
+
+  assign data_s[((CH_DW*1)-1):(CH_DW*0)] = data_0;
+  assign data_s[((CH_DW*2)-1):(CH_DW*1)] = data_1;
+  assign data_s[((CH_DW*3)-1):(CH_DW*2)] = data_2;
+  assign data_s[((CH_DW*4)-1):(CH_DW*3)] = data_3;
+  assign data_s[((CH_DW*5)-1):(CH_DW*4)] = data_4;
+  assign data_s[((CH_DW*6)-1):(CH_DW*5)] = data_5;
+
+Clone Blocks 5:
+hdl/library/util_bsplit/util_bsplit.v@83:93
+  assign split_data_2 = data_s[((CH_DW*3)-1):(CH_DW*2)];
+  assign split_data_3 = data_s[((CH_DW*4)-1):(CH_DW*3)];
+  assign split_data_4 = data_s[((CH_DW*5)-1):(CH_DW*4)];
+  assign split_data_5 = data_s[((CH_DW*6)-1):(CH_DW*5)];
+  assign split_data_6 = data_s[((CH_DW*7)-1):(CH_DW*6)];
+  assign split_data_7 = data_s[((CH_DW*8)-1):(CH_DW*7)];
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+

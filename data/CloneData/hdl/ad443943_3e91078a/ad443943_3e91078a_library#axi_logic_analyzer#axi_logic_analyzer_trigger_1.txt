@@ -1,0 +1,28 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer_trigger.v@112:131@HdlStmProcess
+        default: trigger_active = 1'b1;
+      endcase
+    end
+  end
+
+  always @(*) begin
+    case (trigger_logic[6:4])
+      3'd0: trigger_active_mux = trigger_active;
+      3'd1: trigger_active_mux = trigger_in;
+      3'd2: trigger_active_mux = trigger_active & trigger_in;
+      3'd3: trigger_active_mux = trigger_active | trigger_in;
+      3'd4: trigger_active_mux = trigger_active ^ trigger_in;
+      default: trigger_active_mux = 1'b1;
+    endcase
+  end
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      data_m1 <= 'd0;
+      edge_detect <= 'd0;
+
+Diff Content:
+- 124       default: trigger_active_mux = 1'b1;
++ 124       3'd7: trigger_active_mux = 1'b0; // trigger disable
++ 124       default: trigger_active_mux = 1'b0;
+
+Clone Blocks:

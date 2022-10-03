@@ -1,0 +1,18 @@
+Source Block: zipcpu/rtl/core/pipemem.v@104:115@HdlStmProcess
+		default: misaligned = 1'b0;
+		endcase
+	end else
+		misaligned = 1'b0;
+
+	always @(posedge i_clk)
+		fifo_oreg[wraddr] <= { i_oreg, i_op[2:1], i_addr[1:0] };
+
+	always @(posedge i_clk)
+		if ((i_reset)||((i_wb_err)&&(cyc))||((i_pipe_stb)&&(misaligned)))
+			wraddr <= 0;
+		else if (i_pipe_stb)
+
+Diff Content:
++ 110 	initial	wraddr = 0;
+
+Clone Blocks:

@@ -1,0 +1,38 @@
+Source Block: hdl/library/util_cpack/util_cpack_dsf.v@94:124@HdlStmIf
+  wire    [(M_WIDTH-1):0]   adc_data_s;
+
+  // bypass 
+
+  generate
+  if (CH_ICNT == P_CNT) begin
+  assign adc_data_s = 'd0;
+
+  always @(posedge adc_clk) begin
+    adc_samples_int <= 'd0;
+    adc_data_int <= 'd0;
+    adc_dsf_enable <= 'd0;
+    adc_dsf_valid_int <= 'd0;
+    adc_dsf_sync_int <= 'd0;
+    adc_dsf_data_int <= 'd0;
+    if (adc_enable == 1'b1) begin
+      adc_dsf_valid <= adc_valid;
+      adc_dsf_sync <= 1'b1;
+      adc_dsf_data <= adc_data;
+    end else begin
+      adc_dsf_valid <= 'b0;
+      adc_dsf_sync <= 'b0;
+      adc_dsf_data <= 'd0;
+    end
+  end
+  end
+  endgenerate
+
+  // data store & forward
+
+  generate
+
+Diff Content:
+- 99   if (CH_ICNT == P_CNT) begin
++ 99   if (NUM_OF_CHANNELS_I == NUM_OF_CHANNELS_P) begin
+
+Clone Blocks:

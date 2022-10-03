@@ -1,0 +1,60 @@
+Source Block: hdl/library/data_offload/data_offload_regmap.v@113:163@HdlStmProcess
+  wire          src_sw_resetn_s;
+  wire          dst_sw_resetn_s;
+  wire  [31:0]  src_transfer_length_s;
+
+  // write interface
+  always @(posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_wack <= up_wreq;
+      up_scratch <= 'd0;
+      up_sw_resetn <= AUTO_BRINGUP;
+      up_oneshot <= ~TX_OR_RXN_PATH;
+      up_bypass <= 'd0;
+      up_sync <= 'd0;
+      up_sync_config <= 'd0;
+      up_transfer_length <= 32'h0;
+    end else begin
+      up_wack <= up_wreq;
+      /* Scratch Register */
+      if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h02)) begin
+        up_scratch <= up_wdata;
+      end
+      /* Transfer Length Register */
+      if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h07)) begin
+        up_transfer_length <= up_wdata;
+      end
+      /* Reset Offload Register */
+      if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h21)) begin
+        up_sw_resetn <= up_wdata[0];
+      end
+      /* Control Register */
+      if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h22)) begin
+        up_oneshot <= up_wdata[1];
+        up_bypass <= up_wdata[0];
+      end
+      /* SYNC Offload Register - self cleared, one pulse signal */
+      if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h40)) begin
+        up_sync <= up_wdata[0];
+      end else begin
+        up_sync <= 1'b0;
+      end
+      /* SYNC RX Configuration Register */
+      if ((up_wreq == 1'b1) && (up_waddr[11:0] == 14'h41)) begin
+        up_sync_config <= up_wdata[1:0];
+      end
+    end
+  end
+
+  //read interface for common registers
+  always @(posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_rack <= 1'b0;
+
+Diff Content:
+- 127       up_transfer_length <= 32'h0;
+- 136         up_transfer_length <= up_wdata;
++ 127       up_transfer_length <= 34'h0;
++ 136         up_transfer_length <= {up_wdata[27:0], 6'b0};
+
+Clone Blocks:

@@ -1,0 +1,40 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@58:72@HdlStmProcess
+   
+   //########################################
+   //# ACCESS (SDR)
+   //########################################
+
+   always @ (posedge rx_clk or negedge io_nreset)
+     if(!nreset)
+       io_access <= 1'b0;
+     else
+       io_access <= rx_frame;
+   
+   //########################################
+   //# DATA (DDR) 
+   //########################################
+   
+
+Diff Content:
+- 64      if(!nreset)
++ 64      if(!io_nreset)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mtx_io.v@53:67
+   
+   //########################################
+   //# ACCESS (SDR)
+   //########################################
+
+   always @ (posedge io_clk or negedge io_nreset)
+     if(!io_nreset)
+       tx_access   <= 1'b0;
+     else
+       tx_access   <= io_access;
+
+   //########################################
+   //# SDR DATA SELECTOR
+   //########################################
+
+

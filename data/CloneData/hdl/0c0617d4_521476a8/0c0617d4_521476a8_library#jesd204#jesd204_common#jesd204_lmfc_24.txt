@@ -1,0 +1,45 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@220:239@HdlStmProcess
+  end else begin
+    eoemb <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    lmfc_clk_p1 <= 1'b0;
+  end else if (lmfc_active == 1'b1) begin
+    if (lmfc_counter == cfg_whole_beats_per_multiframe) begin
+      lmfc_clk_p1 <= 1'b1;
+    end else if (lmfc_counter == cfg_whole_beats_per_multiframe[7:1]) begin
+      lmfc_clk_p1 <= 1'b0;
+    end
+  end
+
+  lmfc_clk <= lmfc_clk_p1;
+end
+
+endmodule
+
+Diff Content:
+- 225 always @(posedge clk) begin
+- 226   if (reset == 1'b1) begin
+- 227     lmfc_clk_p1 <= 1'b0;
+- 228   end else if (lmfc_active == 1'b1) begin
+- 229     if (lmfc_counter == cfg_whole_beats_per_multiframe) begin
+- 230       lmfc_clk_p1 <= 1'b1;
+- 231     end else if (lmfc_counter == cfg_whole_beats_per_multiframe[7:1]) begin
+- 234   end
+- 236   lmfc_clk <= lmfc_clk_p1;
+- 237 end
++ 231   always @(posedge clk) begin
++ 231     if (reset == 1'b1) begin
++ 232     end else if (lmfc_active == 1'b1) begin
++ 232       if (lmfc_counter == cfg_whole_beats_per_multiframe) begin
++ 232         lmfc_clk_p1 <= 1'b1;
++ 232       end else if (lmfc_counter == cfg_whole_beats_per_multiframe[7:1]) begin
++ 232         lmfc_clk_p1 <= 1'b0;
++ 232       end
++ 237     lmfc_clk <= lmfc_clk_p1;
++ 237   end
+
+Clone Blocks:

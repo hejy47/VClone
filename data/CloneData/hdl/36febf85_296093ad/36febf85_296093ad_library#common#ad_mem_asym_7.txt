@@ -1,0 +1,45 @@
+Source Block: hdl/library/common/ad_mem_asym.v@99:122@HdlStmIf
+      m_ram[{addra, 2'd3}] <= dina[((4*DATA_WIDTH_B)-1):(DATA_WIDTH_B*3)];
+    end
+  end
+  end
+
+  if (MEM_RATIO == 8) begin
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[{addra, 3'd0}] <= dina[((1*DATA_WIDTH_B)-1):(DATA_WIDTH_B*0)];
+      m_ram[{addra, 3'd1}] <= dina[((2*DATA_WIDTH_B)-1):(DATA_WIDTH_B*1)];
+      m_ram[{addra, 3'd2}] <= dina[((3*DATA_WIDTH_B)-1):(DATA_WIDTH_B*2)];
+      m_ram[{addra, 3'd3}] <= dina[((4*DATA_WIDTH_B)-1):(DATA_WIDTH_B*3)];
+      m_ram[{addra, 3'd4}] <= dina[((5*DATA_WIDTH_B)-1):(DATA_WIDTH_B*4)];
+      m_ram[{addra, 3'd5}] <= dina[((6*DATA_WIDTH_B)-1):(DATA_WIDTH_B*5)];
+      m_ram[{addra, 3'd6}] <= dina[((7*DATA_WIDTH_B)-1):(DATA_WIDTH_B*6)];
+      m_ram[{addra, 3'd7}] <= dina[((8*DATA_WIDTH_B)-1):(DATA_WIDTH_B*7)];
+    end
+  end
+  end
+  endgenerate
+
+  // read interface
+
+  always @(posedge clkb) begin
+
+Diff Content:
+- 107       m_ram[{addra, 3'd0}] <= dina[((1*DATA_WIDTH_B)-1):(DATA_WIDTH_B*0)];
+- 108       m_ram[{addra, 3'd1}] <= dina[((2*DATA_WIDTH_B)-1):(DATA_WIDTH_B*1)];
+- 109       m_ram[{addra, 3'd2}] <= dina[((3*DATA_WIDTH_B)-1):(DATA_WIDTH_B*2)];
+- 110       m_ram[{addra, 3'd3}] <= dina[((4*DATA_WIDTH_B)-1):(DATA_WIDTH_B*3)];
+- 111       m_ram[{addra, 3'd4}] <= dina[((5*DATA_WIDTH_B)-1):(DATA_WIDTH_B*4)];
+- 112       m_ram[{addra, 3'd5}] <= dina[((6*DATA_WIDTH_B)-1):(DATA_WIDTH_B*5)];
+- 113       m_ram[{addra, 3'd6}] <= dina[((7*DATA_WIDTH_B)-1):(DATA_WIDTH_B*6)];
+- 114       m_ram[{addra, 3'd7}] <= dina[((8*DATA_WIDTH_B)-1):(DATA_WIDTH_B*7)];
++ 114       m_ram[{addra, 3'd0}] <= dina[((1*B_DATA_WIDTH)-1):(B_DATA_WIDTH*0)];
++ 114       m_ram[{addra, 3'd1}] <= dina[((2*B_DATA_WIDTH)-1):(B_DATA_WIDTH*1)];
++ 114       m_ram[{addra, 3'd2}] <= dina[((3*B_DATA_WIDTH)-1):(B_DATA_WIDTH*2)];
++ 114       m_ram[{addra, 3'd3}] <= dina[((4*B_DATA_WIDTH)-1):(B_DATA_WIDTH*3)];
++ 114       m_ram[{addra, 3'd4}] <= dina[((5*B_DATA_WIDTH)-1):(B_DATA_WIDTH*4)];
++ 114       m_ram[{addra, 3'd5}] <= dina[((6*B_DATA_WIDTH)-1):(B_DATA_WIDTH*5)];
++ 114       m_ram[{addra, 3'd6}] <= dina[((7*B_DATA_WIDTH)-1):(B_DATA_WIDTH*6)];
++ 114       m_ram[{addra, 3'd7}] <= dina[((8*B_DATA_WIDTH)-1):(B_DATA_WIDTH*7)];
+
+Clone Blocks:

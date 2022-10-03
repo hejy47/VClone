@@ -1,0 +1,88 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@82:92@HdlStmAssign
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & ~req_ready;
+assign m_axi_valid = s_axi_valid & pending_burst & ~req_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		enabled <= 1'b0;
+	end else begin
+
+Diff Content:
++ 87 assign last_load = s_axi_ready && s_axi_valid && last && eot;
++ 87 assign req_ready = last_load || ~active;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/data_mover.v@79:89
+assign response_id = id;
+
+assign beat_counter_next = s_axi_ready && s_axi_valid ? beat_counter + 1'b1 : beat_counter;
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & ~req_ready;
+assign m_axi_valid = s_axi_valid & pending_burst & ~req_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+always @(posedge clk) begin
+
+Clone Blocks 2:
+hdl/library/axi_dmac/data_mover.v@81:91
+assign beat_counter_next = s_axi_ready && s_axi_valid ? beat_counter + 1'b1 : beat_counter;
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & ~req_ready;
+assign m_axi_valid = s_axi_valid & pending_burst & ~req_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		enabled <= 1'b0;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/data_mover.v@77:87
+reg pending_burst;
+
+assign response_id = id;
+
+assign beat_counter_next = s_axi_ready && s_axi_valid ? beat_counter + 1'b1 : beat_counter;
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & ~req_ready;
+assign m_axi_valid = s_axi_valid & pending_burst & ~req_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+Clone Blocks 4:
+hdl/library/axi_dmac/data_mover.v@76:86
+wire last;
+reg pending_burst;
+
+assign response_id = id;
+
+assign beat_counter_next = s_axi_ready && s_axi_valid ? beat_counter + 1'b1 : beat_counter;
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & ~req_ready;
+assign m_axi_valid = s_axi_valid & pending_burst & ~req_ready;
+assign m_axi_data = s_axi_data;
+
+Clone Blocks 5:
+hdl/library/axi_dmac/data_mover.v@80:90
+
+assign beat_counter_next = s_axi_ready && s_axi_valid ? beat_counter + 1'b1 : beat_counter;
+assign last = beat_counter == (eot ? last_burst_length : 4'hf);
+
+assign s_axi_ready = m_axi_ready & pending_burst & ~req_ready;
+assign m_axi_valid = s_axi_valid & pending_burst & ~req_ready;
+assign m_axi_data = s_axi_data;
+assign m_axi_last = last;
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+

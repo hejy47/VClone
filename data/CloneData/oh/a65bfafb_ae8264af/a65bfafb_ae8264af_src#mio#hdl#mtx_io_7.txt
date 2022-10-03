@@ -1,0 +1,19 @@
+Source Block: oh/src/mio/hdl/mtx_io.v@96:107@HdlStmAssign
+              .clk	(io_clk),
+	      .din1	(shiftreg[IOW/2-1:0]),
+	      .din2	(shiftreg[IOW-1:IOW/2]));
+
+   //select between ddr/sdr
+   assign tx_packet[IOW-1:0] = ddr_mode ? {{(IOW/2){1'b0}},tx_packet_ddr[IOW/2-1:0]}:
+		                           tx_packet_sdr[IOW-1:0];
+   
+   //########################################
+   //# Synchronizers
+   //########################################  
+
+
+Diff Content:
+- 102 		                           tx_packet_sdr[IOW-1:0];
++ 102 		                                           tx_packet_sdr[IOW-1:0];
+
+Clone Blocks:

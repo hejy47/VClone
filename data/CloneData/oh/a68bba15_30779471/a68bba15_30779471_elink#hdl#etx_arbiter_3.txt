@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@77:88@HdlStmAssign
+   wire [PW-1:0]   etx_mux;
+
+   //#########################################################################
+   //# Insert special control mode in packet (UGLY)
+   //#########################################################################
+   assign txrd_ctrlmode[3:0] =  ctrlmode_bypass ?  ctrlmode[3:0] : 
+				                   txrd_packet[6:3];
+     
+   assign txwr_ctrlmode[3:0] =  ctrlmode_bypass ?  ctrlmode[3:0] : 
+				                   txwr_packet[6:3];
+
+   assign txrd_splice_packet[PW-1:0] = {txrd_packet[PW-1:8],   
+
+Diff Content:
+- 82    assign txrd_ctrlmode[3:0] =  ctrlmode_bypass ?  ctrlmode[3:0] : 
+- 83 				                   txrd_packet[6:3];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_arbiter.v@80:91
+   //# Insert special control mode in packet (UGLY)
+   //#########################################################################
+   assign txrd_ctrlmode[3:0] =  ctrlmode_bypass ?  ctrlmode[3:0] : 
+				                   txrd_packet[6:3];
+     
+   assign txwr_ctrlmode[3:0] =  ctrlmode_bypass ?  ctrlmode[3:0] : 
+				                   txwr_packet[6:3];
+
+   assign txrd_splice_packet[PW-1:0] = {txrd_packet[PW-1:8],   
+					1'b0,
+					txrd_ctrlmode[3:0], 
+					txrd_packet[2:0]};
+

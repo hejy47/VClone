@@ -1,0 +1,71 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_eof_generator.v@85:117@HdlStmIf
+  end
+  eomf <= lmfc_edge_d1;
+end
+
+generate
+if (CW > DPW_LOG2) begin
+  reg [CW-DPW_LOG2-1:0] beat_counter = 'h00;
+  wire [CW-DPW_LOG2-1:0] cfg_beats_per_frame = cfg_octets_per_frame[CW-1:DPW_LOG2];
+
+  assign beat_counter_sof = beat_counter == 'h00;
+  assign beat_counter_eof = beat_counter == cfg_beats_per_frame;
+  assign small_octets_per_frame = cfg_beats_per_frame == 'h00;
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      beat_counter <= 'h00;
+    end else if (beat_counter_eof == 1'b1) begin
+      beat_counter <= 'h00;
+    end else begin
+      beat_counter <= beat_counter + 1'b1;
+    end
+  end
+
+end else begin
+  assign beat_counter_sof = 1'b1;
+  assign beat_counter_eof = 1'b1;
+  assign small_octets_per_frame = 1'b1;
+end
+endgenerate
+
+function [1:0] ffs;
+input [2:0] x;
+begin
+
+Diff Content:
+- 90 if (CW > DPW_LOG2) begin
+- 91   reg [CW-DPW_LOG2-1:0] beat_counter = 'h00;
+- 92   wire [CW-DPW_LOG2-1:0] cfg_beats_per_frame = cfg_octets_per_frame[CW-1:DPW_LOG2];
+- 94   assign beat_counter_sof = beat_counter == 'h00;
+- 95   assign beat_counter_eof = beat_counter == cfg_beats_per_frame;
+- 96   assign small_octets_per_frame = cfg_beats_per_frame == 'h00;
+- 99     if (reset == 1'b1) begin
+- 100       beat_counter <= 'h00;
+- 101     end else if (beat_counter_eof == 1'b1) begin
+- 102       beat_counter <= 'h00;
+- 104       beat_counter <= beat_counter + 1'b1;
+- 108 end else begin
+- 109   assign beat_counter_sof = 1'b1;
+- 110   assign beat_counter_eof = 1'b1;
+- 111   assign small_octets_per_frame = 1'b1;
+- 112 end
++ 96   localparam CW = MAX_OCTETS_PER_FRAME > 128 ? 8 :
++ 96     MAX_OCTETS_PER_FRAME > 64 ? 7 :
++ 96     MAX_OCTETS_PER_FRAME > 32 ? 6 :
++ 96     MAX_OCTETS_PER_FRAME > 16 ? 5 :
++ 96     MAX_OCTETS_PER_FRAME > 8 ? 4 :
++ 96     MAX_OCTETS_PER_FRAME > 4 ? 3 :
++ 96     MAX_OCTETS_PER_FRAME > 2 ? 2 : 1;
++ 96   localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 :
++ 96     DATA_PATH_WIDTH == 4 ? 2 : 1;
++ 96   reg lmfc_edge_d1 = 1'b0;
++ 96   wire beat_counter_sof;
++ 96   wire beat_counter_eof;
++ 96   wire small_octets_per_frame;
++ 102     if (cfg_generate_eomf == 1'b1) begin
++ 102       lmfc_edge_d1 <= lmfc_edge;
++ 104       lmfc_edge_d1 <= 1'b0;
++ 105     eomf <= lmfc_edge_d1;
+
+Clone Blocks:

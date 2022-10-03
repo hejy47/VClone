@@ -1,0 +1,32 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_deframer.v@101:124@HdlStmIf
+
+  // frame-alignment
+
+  generate
+  genvar n;
+  if (EN_FRAME_ALIGN) begin
+  for (n = 0; n < NUM_LANES; n = n + 1) begin: g_xcvr_if
+    localparam DW = OCTETS_PER_BEAT * 8;
+    ad_xcvr_rx_if #(
+      .OCTETS_PER_BEAT (OCTETS_PER_BEAT)
+    ) i_xcvr_if (
+      .rx_clk (clk),
+      .rx_ip_sof (link_sof),
+      .rx_ip_data (link_data[n*DW+:DW]),
+      .rx_sof (),
+      .rx_data (link_data_s[n*DW+:DW])
+    );
+  end
+  end else begin
+    assign link_data_s = link_data;
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 116       .rx_data (link_data_s[n*DW+:DW])
+- 117     );
++ 117       .rx_data (link_data_s[n*DW+:DW]));
+
+Clone Blocks:

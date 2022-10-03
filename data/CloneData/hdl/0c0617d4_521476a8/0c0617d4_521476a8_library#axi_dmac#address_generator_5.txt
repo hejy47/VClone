@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@81:91@HdlStmAssign
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+// If CACHE_COHERENT is set, signal downstream that this transaction must be
+// looked up in cache. Otherwise default to "normal non-cachable bufferable".
+assign cache = CACHE_COHERENT ? 4'b1110 : 4'b0011;
+assign size = DMA_DATA_WIDTH == 1024 ? 3'b111 :
+              DMA_DATA_WIDTH ==  512 ? 3'b110 :
+              DMA_DATA_WIDTH ==  256 ? 3'b101 :
+              DMA_DATA_WIDTH ==  128 ? 3'b100 :
+              DMA_DATA_WIDTH ==   64 ? 3'b011 :
+
+Diff Content:
+- 86 assign cache = CACHE_COHERENT ? 4'b1110 : 4'b0011;
+
+Clone Blocks:

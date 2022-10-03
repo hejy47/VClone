@@ -1,0 +1,186 @@
+Source Block: verilog-ethernet/rtl/axis_stat_counter.v@89:99@HdlIdDef
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_output_reg = 0;
+
+Diff Content:
+- 94 reg frame_reg = 0, frame_next;
++ 94 reg frame_reg = 1'b0, frame_next;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_stat_counter.v@84:94
+// state register
+localparam [1:0]
+    STATE_IDLE = 2'd0,
+    STATE_OUTPUT_DATA = 2'd1;
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_stat_counter.v@91:101
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_output_reg = 0;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_output_reg = 0;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_output_reg = 0;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_stat_counter.v@86:96
+    STATE_IDLE = 2'd0,
+    STATE_OUTPUT_DATA = 2'd1;
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_stat_counter.v@89:99
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_output_reg = 0;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_stat_counter.v@87:97
+    STATE_OUTPUT_DATA = 2'd1;
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_stat_counter.v@92:102
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_output_reg = 0;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_output_reg = 0;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_output_reg = 0;
+
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_stat_counter.v@84:94
+// state register
+localparam [1:0]
+    STATE_IDLE = 2'd0,
+    STATE_OUTPUT_DATA = 2'd1;
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_stat_counter.v@86:96
+    STATE_IDLE = 2'd0,
+    STATE_OUTPUT_DATA = 2'd1;
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/axis_stat_counter.v@88:98
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_stat_counter.v@92:102
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_output_reg = 0;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_output_reg = 0;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_output_reg = 0;
+
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_stat_counter.v@87:97
+    STATE_OUTPUT_DATA = 2'd1;
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+Clone Blocks 12:
+verilog-ethernet/rtl/axis_stat_counter.v@88:98
+
+reg [1:0] state_reg = STATE_IDLE, state_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_reg = 0, tick_count_next;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_reg = 0, byte_count_next;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_reg = 0, frame_count_next;
+reg frame_reg = 0, frame_next;
+
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+

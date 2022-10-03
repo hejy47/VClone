@@ -1,0 +1,55 @@
+Source Block: hdl/library/util_adc_pack/util_adc_pack.v@341:384@HdlStmProcess
+        en4 = 8'h0;
+      end
+    endcase
+  end
+
+  always @(posedge clk)
+  begin
+    path_enabled_d1 <= path_enabled;
+    if (path_enabled == 8'h0 || path_enabled_d1 != path_enabled )
+    begin
+      counter_0 <= 7'h0;
+    end
+    else
+    begin
+      if( chan_valid == 1'b1)
+      begin
+        if (counter_0 > (CHANNELS - 1) )
+        begin
+          counter_0 <= counter_0 - CHANNELS + enable_cnt;
+        end
+        else
+        begin
+          counter_0 <= counter_0 + enable_cnt;
+        end
+        if ((counter_0 == (CHANNELS - enable_cnt)) || (path_enabled == (8'h1 << (CHANNELS - 1)) ))
+        begin
+          dvalid  <= 1'b1;
+        end
+        else
+        begin
+          dvalid  <= 1'b0;
+        end
+      end
+      else
+      begin
+        dvalid      <= 1'b0;
+      end
+    end
+  end
+
+  generate
+  // 8 CHANNELS
+  if ( CHANNELS == 8 )
+  begin
+
+Diff Content:
+- 357         if (counter_0 > (CHANNELS - 1) )
+- 359           counter_0 <= counter_0 - CHANNELS + enable_cnt;
+- 365         if ((counter_0 == (CHANNELS - enable_cnt)) || (path_enabled == (8'h1 << (CHANNELS - 1)) ))
++ 357         if (counter_0 > (NUM_OF_CHANNELS - 1) )
++ 359           counter_0 <= counter_0 - NUM_OF_CHANNELS + enable_cnt;
++ 365         if ((counter_0 == (NUM_OF_CHANNELS - enable_cnt)) || (path_enabled == (8'h1 << (NUM_OF_CHANNELS - 1)) ))
+
+Clone Blocks:

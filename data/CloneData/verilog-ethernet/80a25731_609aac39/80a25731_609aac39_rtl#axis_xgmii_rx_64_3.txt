@@ -1,0 +1,326 @@
+Source Block: verilog-ethernet/rtl/axis_xgmii_rx_64.v@152:162@HdlStmAssign
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+
+Diff Content:
+- 157 assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
++ 157 assign m_axis_tuser = m_axis_tuser_reg;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_baser_rx_64.v@207:217
+wire crc_valid7 = crc_next7 == ~32'h2144df1c;
+
+reg crc_valid7_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_gmii_rx.v@133:143
+
+reg [31:0] crc_state = 32'hFFFFFFFF;
+wire [31:0] crc_next;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_baser_rx_64.v@210:220
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+assign rx_bad_block = rx_bad_block_reg;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/axis_xgmii_rx_32.v@149:159
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+wire last_cycle = state_reg == STATE_LAST;
+
+
+Clone Blocks 5:
+verilog-ethernet/rtl/axis_xgmii_rx_64.v@151:161
+reg crc_valid7_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/axis_xgmii_rx_64.v@155:165
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+lfsr #(
+    .LFSR_WIDTH(32),
+    .LFSR_POLY(32'h4c11db7),
+
+Clone Blocks 7:
+verilog-ethernet/rtl/axis_xgmii_rx_64.v@149:159
+wire crc_valid7 = crc_next7 == ~32'h2144df1c;
+
+reg crc_valid7_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/axis_xgmii_rx_32.v@145:155
+reg crc_valid2_save = 1'b0;
+reg crc_valid3_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+
+Clone Blocks 9:
+verilog-ethernet/rtl/axis_xgmii_rx_32.v@144:154
+reg crc_valid1_save = 1'b0;
+reg crc_valid2_save = 1'b0;
+reg crc_valid3_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+
+Clone Blocks 10:
+verilog-ethernet/rtl/axis_xgmii_rx_32.v@146:156
+reg crc_valid3_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+Clone Blocks 11:
+verilog-ethernet/rtl/axis_baser_rx_64.v@212:222
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+assign rx_bad_block = rx_bad_block_reg;
+
+lfsr #(
+
+Clone Blocks 12:
+verilog-ethernet/rtl/axis_xgmii_rx_64.v@154:164
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+lfsr #(
+    .LFSR_WIDTH(32),
+
+Clone Blocks 13:
+verilog-ethernet/rtl/axis_baser_rx_64.v@208:218
+
+reg crc_valid7_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+
+Clone Blocks 14:
+verilog-ethernet/rtl/axis_gmii_rx.v@135:145
+wire [31:0] crc_next;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+
+Clone Blocks 15:
+verilog-ethernet/rtl/axis_xgmii_rx_64.v@150:160
+
+reg crc_valid7_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+
+Clone Blocks 16:
+verilog-ethernet/rtl/axis_baser_rx_64.v@209:219
+reg crc_valid7_save = 1'b0;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+Clone Blocks 17:
+verilog-ethernet/rtl/axis_baser_rx_64.v@213:223
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+assign rx_bad_block = rx_bad_block_reg;
+
+lfsr #(
+    .LFSR_WIDTH(32),
+
+Clone Blocks 18:
+verilog-ethernet/rtl/axis_xgmii_rx_32.v@150:160
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+wire last_cycle = state_reg == STATE_LAST;
+
+lfsr #(
+
+Clone Blocks 19:
+verilog-ethernet/rtl/axis_gmii_rx.v@138:148
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+lfsr #(
+    .LFSR_WIDTH(32),
+    .LFSR_POLY(32'h4c11db7),
+
+Clone Blocks 20:
+verilog-ethernet/rtl/axis_xgmii_rx_32.v@147:157
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tkeep = m_axis_tkeep_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+
+Clone Blocks 21:
+verilog-ethernet/rtl/axis_gmii_rx.v@134:144
+reg [31:0] crc_state = 32'hFFFFFFFF;
+wire [31:0] crc_next;
+
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+Clone Blocks 22:
+verilog-ethernet/rtl/axis_gmii_rx.v@137:147
+assign m_axis_tdata = m_axis_tdata_reg;
+assign m_axis_tvalid = m_axis_tvalid_reg;
+assign m_axis_tlast = m_axis_tlast_reg;
+assign m_axis_tuser = PTP_TS_ENABLE ? {ptp_ts_reg, m_axis_tuser_reg} : m_axis_tuser_reg;
+
+assign start_packet = start_packet_reg;
+assign error_bad_frame = error_bad_frame_reg;
+assign error_bad_fcs = error_bad_fcs_reg;
+
+lfsr #(
+    .LFSR_WIDTH(32),
+

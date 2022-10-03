@@ -1,0 +1,24 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@391:405@HdlStmProcess
+
+// In case of an interface with high clock rate (SCLK > 50MHz), one of the
+// next SCLK edge must be used to flop the SDI line, to compensate the overall
+// delay of the read path
+
+always @(posedge clk) begin
+  trigger_rx_d1 <= trigger_rx;
+  trigger_rx_d2 <= trigger_rx_d1;
+  trigger_rx_d3 <= trigger_rx_d2;
+end
+
+always @(posedge clk) begin
+  if (inst_d1 == CMD_CHIPSELECT) begin
+    data_sdi_shift <= {DATA_WIDTH{1'b0}};
+    data_sdi_shift_1 <= {DATA_WIDTH{1'b0}};
+
+Diff Content:
++ 400 wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
++ 400                     (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
++ 400                     (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
++ 400                     (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+
+Clone Blocks:

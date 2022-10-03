@@ -1,0 +1,33 @@
+Source Block: oh/elink/hdl/etx_protocol.v@128:138@HdlStmAssign
+		          burst_type_match          & //same types
+		          burst_addr_match;            //inc by 8
+   			      
+   //Stall for all etx pipeline
+   assign etx_wr_wait = tx_wr_wait  | tx_io_wait;
+   assign etx_rd_wait = tx_rd_wait  | tx_io_wait;
+        
+endmodule // etx_protocol
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+// End:
+
+Diff Content:
++ 133    reg tx_wr_wait_reg;   
++ 133    always @ (posedge clk)
++ 133      tx_wr_wait_reg <=tx_wr_wait;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@127:137
+	       	         (etx_datamode[1:0]==2'b11) & //double only
+		          burst_type_match          & //same types
+		          burst_addr_match;            //inc by 8
+   			      
+   //Stall for all etx pipeline
+   assign etx_wr_wait = tx_wr_wait  | tx_io_wait;
+   assign etx_rd_wait = tx_rd_wait  | tx_io_wait;
+        
+endmodule // etx_protocol
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+

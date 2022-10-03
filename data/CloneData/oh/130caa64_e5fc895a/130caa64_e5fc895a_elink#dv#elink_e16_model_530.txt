@@ -1,0 +1,31 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4292:4302@HdlStmAssign
+       begin
+	  txo_launch_ack_del1 <= txo_launch_ack      & ~make_gap;
+	  txo_launch_ack_del2 <= txo_launch_ack_del1 & ~burst_req_denied;
+       end
+
+   assign txo_op_ack       = txo_launch_ack      &  txo_launch_ack_del1;
+   assign txo_op_ack_first = txo_launch_ack_del1 & ~txo_launch_ack_del2;
+
+   //# Request and rotate disable
+   //# On the first cycle of the acknowledge the launch count is not incremented
+   //# yet, therefore we have to force request and rotate disable "artificially"
+
+Diff Content:
+- 4297    assign txo_op_ack       = txo_launch_ack      &  txo_launch_ack_del1;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4293:4303
+	  txo_launch_ack_del1 <= txo_launch_ack      & ~make_gap;
+	  txo_launch_ack_del2 <= txo_launch_ack_del1 & ~burst_req_denied;
+       end
+
+   assign txo_op_ack       = txo_launch_ack      &  txo_launch_ack_del1;
+   assign txo_op_ack_first = txo_launch_ack_del1 & ~txo_launch_ack_del2;
+
+   //# Request and rotate disable
+   //# On the first cycle of the acknowledge the launch count is not incremented
+   //# yet, therefore we have to force request and rotate disable "artificially"
+   always @ (posedge txo_lclk or posedge reset)
+

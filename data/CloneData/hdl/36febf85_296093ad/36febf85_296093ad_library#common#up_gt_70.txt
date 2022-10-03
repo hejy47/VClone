@@ -1,0 +1,107 @@
+Source Block: hdl/library/common/up_gt.v@576:635@HdlStmProcess
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_rack <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[7:0])
+          8'h00: up_rdata <= PCORE_VERSION;
+          8'h01: up_rdata <= PCORE_ID;
+          8'h02: up_rdata <= up_scratch;
+          8'h04: up_rdata <= {30'd0, up_lpm_dfe_n, up_cpll_pd};
+          8'h05: up_rdata <= {30'd0, up_drp_resetn, up_gt_pll_resetn};
+          8'h08: up_rdata <= {31'd0, up_gt_rx_resetn};
+          8'h09: up_rdata <= {31'd0, up_rx_resetn};
+          8'h0a: up_rdata <= {24'd0, 2'd0, up_rx_sys_clk_sel, 1'd0, up_rx_out_clk_sel};
+          8'h0b: up_rdata <= {30'd0, up_rx_sysref_sel, up_rx_sysref};
+          8'h0c: up_rdata <= {31'd0, up_rx_sync};
+          8'h0d: up_rdata <= {15'd0, up_rx_status, up_rx_rst_done, up_rx_pll_locked};
+          8'h18: up_rdata <= {31'd0, up_gt_tx_resetn};
+          8'h19: up_rdata <= {31'd0, up_tx_resetn};
+          8'h1a: up_rdata <= {24'd0, 2'd0, up_tx_sys_clk_sel, 1'd0, up_tx_out_clk_sel};
+          8'h1b: up_rdata <= {30'd0, up_tx_sysref_sel, up_tx_sysref};
+          8'h1c: up_rdata <= {31'd0, up_tx_sync};
+          8'h1d: up_rdata <= {15'd0, up_tx_status, up_tx_rst_done, up_tx_pll_locked};
+          8'h23: up_rdata <= {24'd0, up_drp_lanesel};
+          8'h24: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr_int, up_drp_wdata_int};
+          8'h25: up_rdata <= {15'd0, up_drp_status, up_drp_rdata_int};
+          8'h28: up_rdata <= {29'd0, up_es_init, up_es_stop_hold, up_es_start_hold};
+          8'h29: up_rdata <= {27'd0, up_es_prescale};
+          8'h2a: up_rdata <= {6'd0, up_es_voffset_range, up_es_voffset_step, up_es_voffset_max, up_es_voffset_min};
+          8'h2b: up_rdata <= {4'd0, up_es_hoffset_max, 4'd0, up_es_hoffset_min};
+          8'h2c: up_rdata <= {20'd0, up_es_hoffset_step};
+          8'h2d: up_rdata <= up_es_start_addr;
+          8'h2e: up_rdata <= {up_es_sdata1, up_es_sdata0};
+          8'h2f: up_rdata <= {up_es_sdata3, up_es_sdata2};
+          8'h30: up_rdata <= up_es_sdata4;
+          8'h31: up_rdata <= {up_es_qdata1, up_es_qdata0};
+          8'h32: up_rdata <= {up_es_qdata3, up_es_qdata2};
+          8'h33: up_rdata <= up_es_qdata4;
+          8'h38: up_rdata <= {30'd0, up_es_dmaerr_hold, up_es_status};
+          8'h39: up_rdata <= {24'd0, up_drp_rxrate};
+          8'h3a: up_rdata <= PCORE_DEVICE_TYPE;
+          default: up_rdata <= 0;
+        endcase
+      end else begin
+        up_rdata <= 32'd0;
+      end
+    end
+  end
+
+  // resets
+
+  ad_rst i_gt_pll_rst_reg (.preset(up_gt_pll_preset), .clk(up_clk),   .rst(gt_pll_rst));
+  ad_rst i_gt_rx_rst_reg  (.preset(up_gt_rx_preset),  .clk(up_clk),   .rst(gt_rx_rst));
+
+Diff Content:
+- 589           8'h00: up_rdata <= PCORE_VERSION;
+- 590           8'h01: up_rdata <= PCORE_ID;
+- 591           8'h02: up_rdata <= up_scratch;
+- 592           8'h04: up_rdata <= {30'd0, up_lpm_dfe_n, up_cpll_pd};
+- 593           8'h05: up_rdata <= {30'd0, up_drp_resetn, up_gt_pll_resetn};
+- 594           8'h08: up_rdata <= {31'd0, up_gt_rx_resetn};
+- 595           8'h09: up_rdata <= {31'd0, up_rx_resetn};
+- 596           8'h0a: up_rdata <= {24'd0, 2'd0, up_rx_sys_clk_sel, 1'd0, up_rx_out_clk_sel};
+- 597           8'h0b: up_rdata <= {30'd0, up_rx_sysref_sel, up_rx_sysref};
+- 598           8'h0c: up_rdata <= {31'd0, up_rx_sync};
+- 599           8'h0d: up_rdata <= {15'd0, up_rx_status, up_rx_rst_done, up_rx_pll_locked};
+- 600           8'h18: up_rdata <= {31'd0, up_gt_tx_resetn};
+- 601           8'h19: up_rdata <= {31'd0, up_tx_resetn};
+- 602           8'h1a: up_rdata <= {24'd0, 2'd0, up_tx_sys_clk_sel, 1'd0, up_tx_out_clk_sel};
+- 603           8'h1b: up_rdata <= {30'd0, up_tx_sysref_sel, up_tx_sysref};
+- 604           8'h1c: up_rdata <= {31'd0, up_tx_sync};
+- 605           8'h1d: up_rdata <= {15'd0, up_tx_status, up_tx_rst_done, up_tx_pll_locked};
+- 606           8'h23: up_rdata <= {24'd0, up_drp_lanesel};
+- 607           8'h24: up_rdata <= {3'd0, up_drp_rwn, up_drp_addr_int, up_drp_wdata_int};
+- 608           8'h25: up_rdata <= {15'd0, up_drp_status, up_drp_rdata_int};
+- 609           8'h28: up_rdata <= {29'd0, up_es_init, up_es_stop_hold, up_es_start_hold};
+- 610           8'h29: up_rdata <= {27'd0, up_es_prescale};
+- 611           8'h2a: up_rdata <= {6'd0, up_es_voffset_range, up_es_voffset_step, up_es_voffset_max, up_es_voffset_min};
+- 612           8'h2b: up_rdata <= {4'd0, up_es_hoffset_max, 4'd0, up_es_hoffset_min};
+- 613           8'h2c: up_rdata <= {20'd0, up_es_hoffset_step};
+- 614           8'h2d: up_rdata <= up_es_start_addr;
+- 615           8'h2e: up_rdata <= {up_es_sdata1, up_es_sdata0};
+- 616           8'h2f: up_rdata <= {up_es_sdata3, up_es_sdata2};
+- 617           8'h30: up_rdata <= up_es_sdata4;
+- 618           8'h31: up_rdata <= {up_es_qdata1, up_es_qdata0};
+- 619           8'h32: up_rdata <= {up_es_qdata3, up_es_qdata2};
+- 620           8'h33: up_rdata <= up_es_qdata4;
+- 621           8'h38: up_rdata <= {30'd0, up_es_dmaerr_hold, up_es_status};
+- 622           8'h39: up_rdata <= {24'd0, up_drp_rxrate};
+- 623           8'h3a: up_rdata <= PCORE_DEVICE_TYPE;
++ 623           8'h14: up_rdata <= {3'd0, up_drp_qpll0_rwn,
++ 623                               up_drp_qpll0_addr, up_drp_qpll0_wdata};
++ 623           8'h15: up_rdata <= {15'd0, up_drp_qpll0_status, up_drp_qpll0_rdata};
++ 623           8'h24: up_rdata <= {3'd0, up_drp_qpll1_rwn,
++ 623                               up_drp_qpll1_addr, up_drp_qpll1_wdata};
++ 623           8'h25: up_rdata <= {15'd0, up_drp_qpll1_status, up_drp_qpll1_rdata};
++ 623           8'h3a: up_rdata <= GTH_OR_GTX_N;
+
+Clone Blocks:

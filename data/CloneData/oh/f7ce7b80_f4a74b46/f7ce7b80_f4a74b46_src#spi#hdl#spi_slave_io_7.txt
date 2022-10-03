@@ -1,0 +1,32 @@
+Source Block: oh/src/spi/hdl/spi_slave_io.v@146:156@HdlStmAssign
+   
+   //#################################
+   //# REGISTER FILE INTERFACE
+   //#################################
+
+   assign spi_clk       = sclk;
+
+   assign spi_addr[5:0] = command_reg[5:0];   
+
+   assign spi_write     = spi_en    &
+			  byte_done &
+
+Diff Content:
+- 151    assign spi_clk       = sclk;
++ 151    assign spi_clk       = rx_clk;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/spi/hdl/spi_slave_io.v@148:158
+   //# REGISTER FILE INTERFACE
+   //#################################
+
+   assign spi_clk       = sclk;
+
+   assign spi_addr[5:0] = command_reg[5:0];   
+
+   assign spi_write     = spi_en    &
+			  byte_done &
+			  ~ss       &
+			  (command_reg[7:6]==`SPI_WR) & 
+

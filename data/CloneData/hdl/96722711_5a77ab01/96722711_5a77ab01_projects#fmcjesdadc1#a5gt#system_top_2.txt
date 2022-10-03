@@ -1,0 +1,54 @@
+Source Block: hdl/projects/fmcjesdadc1/a5gt/system_top.v@208:219@HdlStmAssign
+  wire              rx_pll_locked_s;
+  wire    [ 15:0]   rx_xcvr_status_s;
+
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  altddio_out #(.width(1)) i_eth_tx_clk_out (
+    .aset (1'b0),
+    .sset (1'b0),
+    .sclr (1'b0),
+
+Diff Content:
++ 214   assign eth_phy_resetn = phy_rst_reg;
++ 214   always@ (posedge eth_mdc) begin
++ 214     phy_rst_cnt <= phy_rst_cnt +1;
++ 214     if (phy_rst_cnt == 4'h0) begin
++ 214       phy_rst_reg <= sys_pll_locked_s;
++ 214     end
++ 214   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/ad9671_fmc/a5gt/system_top.v@243:254
+  wire    [ 15:0]   rx_xcvr_status_s;
+  wire    [  1:0]   rx_data_sof;
+
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  altddio_out #(.width(1)) i_eth_tx_clk_out (
+    .aset (1'b0),
+    .sset (1'b0),
+    .sclr (1'b0),
+
+Clone Blocks 2:
+hdl/projects/usdrx1/a5gt/system_top.v@283:294
+  wire    [  3:0]   sync_raddr;
+  wire              sync_signal;
+
+  // ethernet transmit clock
+
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  altddio_out #(.width(1)) i_eth_tx_clk_out (
+    .aset (1'b0),
+    .sset (1'b0),
+    .sclr (1'b0),
+

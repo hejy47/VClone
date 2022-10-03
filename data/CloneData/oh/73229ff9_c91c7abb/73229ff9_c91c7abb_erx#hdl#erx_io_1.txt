@@ -1,0 +1,25 @@
+Source Block: oh/erx/hdl/erx_io.v@293:310@HdlStmProcess
+          rxenb_sync <= 'd0;
+	else
+          rxenb_sync <= {1'b1, rxenb_sync[1]};
+     end
+   
+   always @ (posedge rx_lclk_div4) 
+     begin      
+	rxgpio_sync       <= {ecfg_rx_gpio_mode, rxgpio_sync[1]};      
+	rx_data_reg[63:0] <= rx_data_des[63:0];
+	rx_data_par[63:0] <= rx_data_reg[63:0];
+	rx_frame_reg[7:0] <= rx_frame_des & {8{rxenb}} & {8{~rxgpio}};     
+	rx_frame_par[7:0] <= rx_frame_reg[7:0];
+     end
+
+//#############
+//# GPIO mode inputs
+//#############
+reg [8:0] datain_reg;
+
+Diff Content:
+- 300 	rxgpio_sync       <= {ecfg_rx_gpio_mode, rxgpio_sync[1]};      
++ 300 	rxgpio_sync       <= {ecfg_rx_gpio_enable, rxgpio_sync[1]};      
+
+Clone Blocks:

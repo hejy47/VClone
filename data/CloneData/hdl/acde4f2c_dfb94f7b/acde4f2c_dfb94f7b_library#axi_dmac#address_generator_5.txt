@@ -1,0 +1,26 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@131:149@HdlStmProcess
+			end
+		end
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		id <='h0;
+    addr_valid_d1 <= 1'b0;
+	end else begin
+    addr_valid_d1 <= addr_valid;
+    if (( addr_valid && ~addr_valid_d1) ||
+			(sync_id && id != request_id))
+			id <= inc_id(id);
+
+	end
+end
+
+endmodule
+
+Diff Content:
+- 142     if (( addr_valid && ~addr_valid_d1) ||
++ 142     if ((addr_valid && ~addr_valid_d1) ||
+
+Clone Blocks:

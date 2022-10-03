@@ -1,0 +1,18 @@
+Source Block: serv/rtl/serv_decode.v@106:116@HdlStmAssign
+                      ((opcode == OP_BRANCH) & (o_funct3 == 3'b110)) ? 1'b1 :
+                      ((opcode == OP_OPIMM)  & (o_funct3 == 3'b000)) ? 1'b0 :
+                      1'bx;
+
+
+   assign o_alu_cmp_neg = (opcode == OP_BRANCH) & o_funct3[0];
+
+   assign o_csr_en = ((opcode == OP_SYSTEM) & (|o_funct3) | o_ctrl_mret | o_ctrl_trap) & running;
+
+   always @(o_funct3) begin
+      casez (o_funct3)
+
+Diff Content:
+- 111    assign o_alu_cmp_neg = (opcode == OP_BRANCH) & o_funct3[0];
++ 111    assign o_alu_cmp_neg = branch_op & o_funct3[0];
+
+Clone Blocks:

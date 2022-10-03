@@ -1,0 +1,87 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@172:196@HdlStmProcess
+      lmfc_counter <= lmfc_counter_next;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sysref_alignment_error <= 1'b0;
+  end else begin
+    /*
+     * Alignement error is reported regardless of oneshot mode
+     * setting.
+     */
+    sysref_alignment_error <= 1'b0;
+    if (sysref_edge == 1'b1 && lmfc_active == 1'b1 &&
+        lmfc_counter_next != cfg_lmfc_offset) begin
+      sysref_alignment_error <= 1'b1;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (lmfc_counter == 'h00 && lmfc_active == 1'b1) begin
+    lmfc_edge <= 1'b1;
+  end else begin
+
+Diff Content:
+- 177 always @(posedge clk) begin
+- 178   if (reset == 1'b1) begin
+- 179     sysref_alignment_error <= 1'b0;
+- 180   end else begin
+- 181     /*
+- 182      * Alignement error is reported regardless of oneshot mode
+- 183      * setting.
+- 184      */
+- 185     sysref_alignment_error <= 1'b0;
+- 186     if (sysref_edge == 1'b1 && lmfc_active == 1'b1 &&
+- 187         lmfc_counter_next != cfg_lmfc_offset) begin
+- 188       sysref_alignment_error <= 1'b1;
+- 191 end
++ 188   always @(posedge clk) begin
++ 188     if (reset == 1'b1) begin
++ 188       sysref_alignment_error <= 1'b0;
++ 188     end else begin
++ 188       /*
++ 188        * Alignement error is reported regardless of oneshot mode
++ 188        * setting.
++ 188        */
++ 188       sysref_alignment_error <= 1'b0;
++ 188       if (sysref_edge == 1'b1 && lmfc_active == 1'b1 &&
++ 188           lmfc_counter_next != cfg_lmfc_offset) begin
++ 188         sysref_alignment_error <= 1'b1;
++ 188       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@153:180
+  end else begin
+    lmfc_counter_next = lmfc_counter + 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    lmfc_counter <= 'h01;
+    lmfc_active <= cfg_sysref_disable;
+  end else begin
+    /*
+     * In oneshot mode only the first occurence of the
+     * SYSREF signal is used for alignment.
+     */
+    if (sysref_edge == 1'b1 &&
+        (cfg_sysref_oneshot == 1'b0 || sysref_captured == 1'b0)) begin
+      lmfc_counter <= cfg_lmfc_offset;
+      lmfc_active <= 1'b1;
+    end else begin
+      lmfc_counter <= lmfc_counter_next;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    sysref_alignment_error <= 1'b0;
+  end else begin
+

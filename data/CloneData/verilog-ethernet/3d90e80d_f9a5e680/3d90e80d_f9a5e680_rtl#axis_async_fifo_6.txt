@@ -1,0 +1,177 @@
+Source Block: verilog-ethernet/rtl/axis_async_fifo.v@236:296@HdlStmProcess
+        m_rst_sync3_reg <= m_rst_sync2_reg;
+    end
+end
+
+// Write logic
+always @* begin
+    write = 1'b0;
+
+    drop_frame_next = 1'b0;
+    overflow_next = 1'b0;
+    bad_frame_next = 1'b0;
+    good_frame_next = 1'b0;
+
+    wr_ptr_next = wr_ptr_reg;
+    wr_ptr_cur_next = wr_ptr_cur_reg;
+    wr_ptr_gray_next = wr_ptr_gray_reg;
+
+    if (s_axis_tvalid) begin
+        // input data valid
+        if (!full || DROP_WHEN_FULL) begin
+            // not full, perform write
+            if (!FRAME_FIFO) begin
+                // normal FIFO mode
+                write = 1'b1;
+                wr_ptr_next = wr_ptr_reg + 1;
+                wr_ptr_gray_next = wr_ptr_next ^ (wr_ptr_next >> 1);
+            end else if (full || full_cur || drop_frame_reg) begin
+                // full, packet overflow, or currently dropping frame
+                // drop frame
+                drop_frame_next = 1'b1;
+                if (s_axis_tlast) begin
+                    // end of frame, reset write pointer
+                    wr_ptr_cur_next = wr_ptr_reg;
+                    drop_frame_next = 1'b0;
+                    overflow_next = 1'b1;
+                end
+            end else begin
+                write = 1'b1;
+                wr_ptr_cur_next = wr_ptr_cur_reg + 1;
+                if (s_axis_tlast) begin
+                    // end of frame
+                    if (DROP_BAD_FRAME && (USER_BAD_FRAME_MASK & s_axis_tuser == USER_BAD_FRAME_VALUE)) begin
+                        // bad packet, reset write pointer
+                        wr_ptr_cur_next = wr_ptr_reg;
+                        bad_frame_next = 1'b1;
+                    end else begin
+                        // good packet, update write pointer
+                        wr_ptr_next = wr_ptr_cur_reg + 1;
+                        wr_ptr_gray_next = wr_ptr_next ^ (wr_ptr_next >> 1);
+                        good_frame_next = 1'b1;
+                    end
+                end
+            end
+        end
+    end
+end
+
+always @(posedge s_clk) begin
+    if (s_rst_sync3_reg) begin
+        wr_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_cur_reg <= {ADDR_WIDTH+1{1'b0}};
+
+Diff Content:
+- 253     if (s_axis_tvalid) begin
+- 255         if (!full || DROP_WHEN_FULL) begin
+- 257             if (!FRAME_FIFO) begin
+- 259                 write = 1'b1;
+- 260                 wr_ptr_next = wr_ptr_reg + 1;
+- 261                 wr_ptr_gray_next = wr_ptr_next ^ (wr_ptr_next >> 1);
+- 262             end else if (full || full_cur || drop_frame_reg) begin
+- 265                 drop_frame_next = 1'b1;
+- 266                 if (s_axis_tlast) begin
+- 269                     drop_frame_next = 1'b0;
+- 270                     overflow_next = 1'b1;
+- 271                 end
+- 272             end else begin
+- 273                 write = 1'b1;
+- 274                 wr_ptr_cur_next = wr_ptr_cur_reg + 1;
+- 275                 if (s_axis_tlast) begin
+- 277                     if (DROP_BAD_FRAME && (USER_BAD_FRAME_MASK & s_axis_tuser == USER_BAD_FRAME_VALUE)) begin
+- 279                         wr_ptr_cur_next = wr_ptr_reg;
+- 280                         bad_frame_next = 1'b1;
+- 281                     end else begin
+- 283                         wr_ptr_next = wr_ptr_cur_reg + 1;
+- 284                         wr_ptr_gray_next = wr_ptr_next ^ (wr_ptr_next >> 1);
+- 285                         good_frame_next = 1'b1;
+- 286                     end
++ 266     wr_ptr_cur_gray_next = wr_ptr_cur_gray_reg;
++ 266     if (s_axis_tready && s_axis_tvalid) begin
++ 266         if (!FRAME_FIFO) begin
++ 266             write = 1'b1;
++ 266             wr_ptr_next = wr_ptr_reg + 1;
++ 266             wr_ptr_gray_next = wr_ptr_next ^ (wr_ptr_next >> 1);
++ 266         end else if (full_cur || full_wr || drop_frame_reg) begin
++ 266             drop_frame_next = 1'b1;
++ 266             if (s_axis_tlast) begin
++ 266                 wr_ptr_cur_next = wr_ptr_reg;
++ 266                 wr_ptr_cur_gray_next = wr_ptr_cur_next ^ (wr_ptr_cur_next >> 1);
++ 266                 drop_frame_next = 1'b0;
++ 266                 overflow_next = 1'b1;
++ 266             end
++ 266         end else begin
++ 266             write = 1'b1;
++ 266             wr_ptr_cur_next = wr_ptr_cur_reg + 1;
++ 266             wr_ptr_cur_gray_next = wr_ptr_cur_next ^ (wr_ptr_cur_next >> 1);
++ 266             if (s_axis_tlast) begin
++ 266                 if (DROP_BAD_FRAME && (USER_BAD_FRAME_MASK & s_axis_tuser == USER_BAD_FRAME_VALUE)) begin
++ 286                     wr_ptr_cur_gray_next = wr_ptr_cur_next ^ (wr_ptr_cur_next >> 1);
++ 286                     bad_frame_next = 1'b1;
++ 286                 end else begin
++ 286                     wr_ptr_next = wr_ptr_cur_reg + 1;
++ 286                     wr_ptr_gray_next = wr_ptr_next ^ (wr_ptr_next >> 1);
++ 286                     good_frame_next = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_fifo.v@171:228
+assign status_overflow = overflow_reg;
+assign status_bad_frame = bad_frame_reg;
+assign status_good_frame = good_frame_reg;
+
+// Write logic
+always @* begin
+    write = 1'b0;
+
+    drop_frame_next = 1'b0;
+    overflow_next = 1'b0;
+    bad_frame_next = 1'b0;
+    good_frame_next = 1'b0;
+
+    wr_ptr_next = wr_ptr_reg;
+    wr_ptr_cur_next = wr_ptr_cur_reg;
+
+    if (s_axis_tvalid) begin
+        // input data valid
+        if (!full || DROP_WHEN_FULL) begin
+            // not full, perform write
+            if (!FRAME_FIFO) begin
+                // normal FIFO mode
+                write = 1'b1;
+                wr_ptr_next = wr_ptr_reg + 1;
+            end else if (full || full_cur || drop_frame_reg) begin
+                // full, packet overflow, or currently dropping frame
+                // drop frame
+                drop_frame_next = 1'b1;
+                if (s_axis_tlast) begin
+                    // end of frame, reset write pointer
+                    wr_ptr_cur_next = wr_ptr_reg;
+                    drop_frame_next = 1'b0;
+                    overflow_next = 1'b1;
+                end
+            end else begin
+                write = 1'b1;
+                wr_ptr_cur_next = wr_ptr_cur_reg + 1;
+                if (s_axis_tlast) begin
+                    // end of frame
+                    if (DROP_BAD_FRAME && (USER_BAD_FRAME_MASK & s_axis_tuser == USER_BAD_FRAME_VALUE)) begin
+                        // bad packet, reset write pointer
+                        wr_ptr_cur_next = wr_ptr_reg;
+                        bad_frame_next = 1'b1;
+                    end else begin
+                        // good packet, update write pointer
+                        wr_ptr_next = wr_ptr_cur_reg + 1;
+                        good_frame_next = 1'b1;
+                    end
+                end
+            end
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        wr_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+        wr_ptr_cur_reg <= {ADDR_WIDTH+1{1'b0}};
+

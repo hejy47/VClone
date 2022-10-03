@@ -1,0 +1,46 @@
+Source Block: hdl/library/axi_dmac/dest_fifo_inf.v@95:105@HdlStmAssign
+  end else begin
+    en_d1 <= en;
+  end
+end
+
+assign underflow_s = en_d1 & (~data_valid | ~enable);
+assign data_ready = en_d1 & (data_valid | ~enable);
+assign valid_s = en_d1 & data_valid & enable;
+
+dmac_data_mover # (
+  .ID_WIDTH(ID_WIDTH),
+
+Diff Content:
+- 100 assign underflow_s = en_d1 & (~data_valid | ~enable);
++ 100 assign underflow = en_d1 & (~data_valid | ~enable);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/dest_fifo_inf.v@97:107
+  end
+end
+
+assign underflow_s = en_d1 & (~data_valid | ~enable);
+assign data_ready = en_d1 & (data_valid | ~enable);
+assign valid_s = en_d1 & data_valid & enable;
+
+dmac_data_mover # (
+  .ID_WIDTH(ID_WIDTH),
+  .DATA_WIDTH(DATA_WIDTH),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH),
+
+Clone Blocks 2:
+hdl/library/axi_dmac/dest_fifo_inf.v@96:106
+    en_d1 <= en;
+  end
+end
+
+assign underflow_s = en_d1 & (~data_valid | ~enable);
+assign data_ready = en_d1 & (data_valid | ~enable);
+assign valid_s = en_d1 & data_valid & enable;
+
+dmac_data_mover # (
+  .ID_WIDTH(ID_WIDTH),
+  .DATA_WIDTH(DATA_WIDTH),
+

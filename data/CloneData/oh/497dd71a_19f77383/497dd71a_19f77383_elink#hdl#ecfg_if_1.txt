@@ -1,0 +1,36 @@
+Source Block: oh/elink/hdl/ecfg_if.v@90:102@HdlStmAssign
+
+   //ENABLE SIGNALS
+   assign mi_match   = access_in & (dstaddr[31:20]==ID);
+    
+   //config select (group 2 and 3)
+   assign mi_cfg_en = mi_match & 
+		      (dstaddr[19:16]==4'hF) &
+		      (dstaddr[10:8]=={2'b01,rxsel});
+   
+
+   //dma select (group 5)
+   assign mi_dma_en = mi_match &
+		      (dstaddr[19:16]==4'hF) & 
+
+Diff Content:
+- 96 		      (dstaddr[19:16]==4'hF) &
+- 97 		      (dstaddr[10:8]=={2'b01,rxsel});
++ 97 		      (dstaddr[19:16]==`EGROUP_MMR) &
++ 97 		      (dstaddr[10:8]=={2'b01,rxsel});  
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/ecfg_if.v@87:97
+		     .srcaddr_out  (srcaddr[31:0]),
+		     .packet_in	   (packet_in[PW-1:0])
+		    );
+
+   //ENABLE SIGNALS
+   assign mi_match   = access_in & (dstaddr[31:20]==ID);
+    
+   //config select (group 2 and 3)
+   assign mi_cfg_en = mi_match & 
+		      (dstaddr[19:16]==4'hF) &
+		      (dstaddr[10:8]=={2'b01,rxsel});
+

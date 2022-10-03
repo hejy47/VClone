@@ -1,0 +1,104 @@
+Source Block: oh/emaxi/hdl/emaxi_v1_0_M00_AXI.v@390:437@HdlStmProcess
+        
+      endcase // case ( emwr_rd_data[`DATAMODE_RANGE] )
+   end // always @ (...
+
+   // Generate the write-data signals
+   always @( posedge M_AXI_ACLK ) begin
+	  if( M_AXI_ARESETN == 1'b0 ) begin
+
+         axi_wvalid  <= 1'b0;
+         axi_wdata   <= 'd0;
+         axi_wstrb   <= 'd0;
+         axi_wlast   <= 1'b1; // TODO: no bursts for now
+
+         wvalid_b   <= 1'b0;
+         wdata_b    <= 'd0;
+         wstrb_b    <= 'd0;
+         
+      end else begin // if ( M_AXI_ARESETN == 1'b0 )
+
+         if( ~axi_wvalid | w_go ) begin
+            if( wvalid_b ) begin
+               axi_wvalid <= 1'b1;
+               axi_wdata  <= wdata_b;
+               axi_wstrb  <= wstrb_b;
+            end else begin
+               axi_wvalid <= emwr_rd_en;
+               axi_wdata  <= wdata_aligned;
+               axi_wstrb  <= wstrb_aligned;
+            end
+         end // if ( ~axi_wvalid | w_go )
+
+         if( emwr_rd_en & axi_wvalid & ~w_go )
+           wvalid_b <= 1'b1;
+         else if( w_go )
+           wvalid_b <= 1'b0;
+
+         if( emwr_rd_en ) begin
+            wdata_b <= wdata_aligned;
+            wstrb_b <= wstrb_aligned;
+         end
+
+      end // else: !if( M_AXI_ARESETN == 1'b0 )
+   end // always @ ( posedge M_AXI_ACLK )
+   
+   //----------------------------
+   // Read Handler
+   //   eLink read requests generate a transaction on the AR channel,
+   //   buffer the src info to generate an eLink write when the
+
+Diff Content:
+- 401    reg       read_waiting;
+- 403    assign    emrq_rd_en = axi_rready & M_AXI_RVALID;
+- 405    always @( posedge M_AXI_ACLK ) begin
+- 406 	  if ( ~M_AXI_ARESETN ) begin
+- 408          axi_araddr   <= 'd0;
+- 409          axi_arlen    <= 'd0;
+- 410          axi_arsize   <= 'd0;
+- 411          axi_arvalid  <= 1'b0;
+- 412          read_waiting <= 1'b0;
+- 414 	  end else begin
+- 416          if( ~emrq_empty & ~read_waiting ) begin
+- 418             axi_arvalid <= 1'b1;
+- 419             axi_arsize  <= {1'b0, emrq_rd_data[`DATAMODE_RANGE]};
+- 420             axi_araddr  <= emrq_rd_data[`DSTADDR_RANGE];
+- 422          end else if( M_AXI_ARREADY ) begin
+- 424             axi_arvalid <= 1'b0;
+- 426          end
+- 428          if( ~emrq_empty & ~read_waiting )
+- 429            read_waiting <= 1'b1;
+- 430          else if( axi_rready & M_AXI_RVALID )
+- 431            read_waiting <= 1'b0;
++ 395 `define RI_DSTADDR_RANGE  40:38
++ 395 `define RI_DSTADDR_LSB    38
++ 395 `define RI_DATAMODE_RANGE 37:36
++ 395 `define RI_CTRLMODE_RANGE 35:32
++ 395 `define RI_SRCADDR_RANGE  31:0
++ 395    wire       readinfo_wren;
++ 395    wire       readinfo_rden;
++ 395    wire       readinfo_full;
++ 395    wire [40:0] readinfo_out;
++ 395    wire [40:0] readinfo_in = 
++ 395                {
++ 395                 emrq_rd_data[`DSTADDR_LSB+2 -: 3],
++ 395                 emrq_rd_data[`DATAMODE_RANGE],
++ 395                 emrq_rd_data[`CTRLMODE_RANGE],
++ 395                 emrq_rd_data[`SRCADDR_RANGE]
++ 395                 };
++ 395    syncfifo
++ 395      #(
++ 395        .AW                              (5),
++ 395        .DW                              (41))
++ 395    fifo_readinfo_i
++ 395      (
++ 395       .rdata                            (readinfo_out),
++ 395       .empty                            (),
++ 395       .full                             (readinfo_full),
++ 395       .clk                              (M_AXI_ACLK),
++ 395       .reset                            (~M_AXI_ARESETN),
++ 395       .wdata                            (readinfo_in),
++ 395       .wen                              (readinfo_wren),
++ 395       .ren                              (readinfo_rden));
+
+Clone Blocks:

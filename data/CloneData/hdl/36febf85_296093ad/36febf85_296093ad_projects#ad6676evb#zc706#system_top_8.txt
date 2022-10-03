@@ -1,0 +1,169 @@
+Source Block: hdl/projects/ad6676evb/zc706/system_top.v@190:231@HdlStmProcess
+  wire            adc_enable_b;
+  wire    [31:0]  adc_data_b;
+
+  // pack & unpack here
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_b, adc_enable_a})
+      2'b11: begin
+        adc_dwr <= 1'b1;
+        adc_ddata[63:48] <= adc_data_b[31:16];
+        adc_ddata[47:32] <= adc_data_a[31:16];
+        adc_ddata[31:16] <= adc_data_b[15: 0];
+        adc_ddata[15: 0] <= adc_data_a[15: 0];
+      end
+      2'b10: begin
+        adc_dwr <= ~adc_dwr;
+        adc_ddata[63:48] <= adc_data_b[31:16];
+        adc_ddata[47:32] <= adc_data_b[15: 0];
+        adc_ddata[31:16] <= adc_ddata[63:48];
+        adc_ddata[15: 0] <= adc_ddata[47:32];
+      end
+      2'b01: begin
+        adc_dwr <= ~adc_dwr;
+        adc_ddata[63:48] <= adc_data_a[31:16];
+        adc_ddata[47:32] <= adc_data_a[15: 0];
+        adc_ddata[31:16] <= adc_ddata[63:48];
+        adc_ddata[15: 0] <= adc_ddata[47:32];
+      end
+      default: begin
+        adc_dwr <= 1'b0;
+        adc_ddata[63:48] <= 16'd0;
+        adc_ddata[47:32] <= 16'd0;
+        adc_ddata[31:16] <= 16'd0;
+        adc_ddata[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  // instantiations
+
+  IBUFDS_GTE2 i_ibufds_rx_ref_clk (
+    .CEB (1'd0),
+
+Diff Content:
+- 195   always @(posedge adc_clk) begin
+- 196     case ({adc_enable_b, adc_enable_a})
+- 197       2'b11: begin
+- 198         adc_dwr <= 1'b1;
+- 199         adc_ddata[63:48] <= adc_data_b[31:16];
+- 200         adc_ddata[47:32] <= adc_data_a[31:16];
+- 201         adc_ddata[31:16] <= adc_data_b[15: 0];
+- 202         adc_ddata[15: 0] <= adc_data_a[15: 0];
+- 203       end
+- 204       2'b10: begin
+- 205         adc_dwr <= ~adc_dwr;
+- 206         adc_ddata[63:48] <= adc_data_b[31:16];
+- 207         adc_ddata[47:32] <= adc_data_b[15: 0];
+- 208         adc_ddata[31:16] <= adc_ddata[63:48];
+- 209         adc_ddata[15: 0] <= adc_ddata[47:32];
+- 210       end
+- 211       2'b01: begin
+- 212         adc_dwr <= ~adc_dwr;
+- 213         adc_ddata[63:48] <= adc_data_a[31:16];
+- 214         adc_ddata[47:32] <= adc_data_a[15: 0];
+- 215         adc_ddata[31:16] <= adc_ddata[63:48];
+- 216         adc_ddata[15: 0] <= adc_ddata[47:32];
+- 217       end
+- 218       default: begin
+- 219         adc_dwr <= 1'b0;
+- 220         adc_ddata[63:48] <= 16'd0;
+- 221         adc_ddata[47:32] <= 16'd0;
+- 222         adc_ddata[31:16] <= 16'd0;
+- 223         adc_ddata[15: 0] <= 16'd0;
+- 224       end
+- 225     endcase
+- 226   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/daq1/zc706/system_top.v@237:278
+        dac_ddata_0 <= 64'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_b, adc_enable_a})
+      2'b11: begin
+        adc_dwr <= 1'b1;
+        adc_ddata[63:48] <= adc_data_b[31:16];
+        adc_ddata[47:32] <= adc_data_a[31:16];
+        adc_ddata[31:16] <= adc_data_b[15: 0];
+        adc_ddata[15: 0] <= adc_data_a[15: 0];
+      end
+      2'b10: begin
+        adc_dwr <= ~adc_dwr;
+        adc_ddata[63:48] <= adc_data_b[31:16];
+        adc_ddata[47:32] <= adc_data_b[15: 0];
+        adc_ddata[31:16] <= adc_ddata[63:48];
+        adc_ddata[15: 0] <= adc_ddata[47:32];
+      end
+      2'b01: begin
+        adc_dwr <= ~adc_dwr;
+        adc_ddata[63:48] <= adc_data_a[31:16];
+        adc_ddata[47:32] <= adc_data_a[15: 0];
+        adc_ddata[31:16] <= adc_ddata[63:48];
+        adc_ddata[15: 0] <= adc_ddata[47:32];
+      end
+      default: begin
+        adc_dwr <= 1'b0;
+        adc_ddata[63:48] <= 16'd0;
+        adc_ddata[47:32] <= 16'd0;
+        adc_ddata[31:16] <= 16'd0;
+        adc_ddata[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  // instantiations
+
+  assign spi_csn_adc = spi_csn[2];
+  assign spi_csn_dac = spi_csn[1];
+
+Clone Blocks 2:
+hdl/projects/ad6676evb/vc707/system_top.v@211:252
+  wire            adc_enable_b;
+  wire    [31:0]  adc_data_b;
+
+  // pack & unpack here
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_b, adc_enable_a})
+      2'b11: begin
+        adc_dwr <= 1'b1;
+        adc_ddata[63:48] <= adc_data_b[31:16];
+        adc_ddata[47:32] <= adc_data_a[31:16];
+        adc_ddata[31:16] <= adc_data_b[15: 0];
+        adc_ddata[15: 0] <= adc_data_a[15: 0];
+      end
+      2'b10: begin
+        adc_dwr <= ~adc_dwr;
+        adc_ddata[63:48] <= adc_data_b[31:16];
+        adc_ddata[47:32] <= adc_data_b[15: 0];
+        adc_ddata[31:16] <= adc_ddata[63:48];
+        adc_ddata[15: 0] <= adc_ddata[47:32];
+      end
+      2'b01: begin
+        adc_dwr <= ~adc_dwr;
+        adc_ddata[63:48] <= adc_data_a[31:16];
+        adc_ddata[47:32] <= adc_data_a[15: 0];
+        adc_ddata[31:16] <= adc_ddata[63:48];
+        adc_ddata[15: 0] <= adc_ddata[47:32];
+      end
+      default: begin
+        adc_dwr <= 1'b0;
+        adc_ddata[63:48] <= 16'd0;
+        adc_ddata[47:32] <= 16'd0;
+        adc_ddata[31:16] <= 16'd0;
+        adc_ddata[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  // default logic
+
+  assign fan_pwm = 1'b1;
+  assign iic_rstn = 1'b1;
+

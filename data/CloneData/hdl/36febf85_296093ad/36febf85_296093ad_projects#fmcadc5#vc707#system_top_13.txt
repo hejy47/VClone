@@ -1,0 +1,122 @@
+Source Block: hdl/projects/fmcadc5/vc707/system_top.v@299:309@HdlStmAssign
+  assign dac_clk = spi_clk;
+  assign dac_data = spi_mosi;
+  assign dac_sync_1 = spi_csn[3];
+  assign dac_sync_0 = spi_csn[2];
+  assign spi_csn_1 = spi_csn[1];
+  assign spi_csn_0 = spi_csn[0];
+
+  // instantiations
+
+  IBUFDS_GTE2 i_ibufds_rx_ref_clk_0 (
+    .CEB (1'd0),
+
+Diff Content:
++ 304   assign drst_1 = 1'b0;
++ 304   assign arst_1 = 1'b0;
++ 304   assign drst_0 = 1'b0;
++ 304   assign arst_0 = 1'b0;
++ 304   always @(posedge up_clk or negedge up_rstn) begin
++ 304     if (up_rstn == 1'b0) begin
++ 304       gpio_o_60_56_d <= 5'd0;
++ 304       gpio_dld <= 1'b0;
++ 304     end else begin
++ 304       gpio_o_60_56_d <= gpio_o[60:56];
++ 304       if (gpio_o[60:56] == gpio_o_60_56_d) begin
++ 304         gpio_dld <= 1'b0;
++ 304       end else begin
++ 304         gpio_dld <= 1'b1;
++ 304       end
++ 304     end
++ 304   end
++ 304   ad_lvds_out #(
++ 304     .DEVICE_TYPE (0),
++ 304     .SINGLE_ENDED (0),
++ 304     .IODELAY_ENABLE (1),
++ 304     .IODELAY_CTRL (1),
++ 304     .IODELAY_GROUP ("FMCADC5_SYSREF_IODELAY_GROUP"))
++ 304   i_rx_sysref (
++ 304     .tx_clk (rx_clk),
++ 304     .tx_data_p (rx_sysref_s),
++ 304     .tx_data_n (rx_sysref_s),
++ 304     .tx_data_out_p (rx_sysref_p),
++ 304     .tx_data_out_n (rx_sysref_n),
++ 304     .up_clk (up_clk),
++ 304     .up_dld (gpio_dld),
++ 304     .up_dwdata (gpio_o[60:56]),
++ 304     .up_drdata (gpio_i[60:56]),
++ 304     .delay_clk (delay_clk),
++ 304     .delay_rst (delay_rst),
++ 304     .delay_locked (gpio_i[61]));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcadc5/vc707/system_top.v@296:306
+
+  assign iic_rstn = 1'b1;
+  assign fan_pwm = 1'b1;
+  assign dac_clk = spi_clk;
+  assign dac_data = spi_mosi;
+  assign dac_sync_1 = spi_csn[3];
+  assign dac_sync_0 = spi_csn[2];
+  assign spi_csn_1 = spi_csn[1];
+  assign spi_csn_0 = spi_csn[0];
+
+  // instantiations
+
+Clone Blocks 2:
+hdl/projects/fmcadc5/vc707/system_top.v@298:308
+  assign fan_pwm = 1'b1;
+  assign dac_clk = spi_clk;
+  assign dac_data = spi_mosi;
+  assign dac_sync_1 = spi_csn[3];
+  assign dac_sync_0 = spi_csn[2];
+  assign spi_csn_1 = spi_csn[1];
+  assign spi_csn_0 = spi_csn[0];
+
+  // instantiations
+
+  IBUFDS_GTE2 i_ibufds_rx_ref_clk_0 (
+
+Clone Blocks 3:
+hdl/projects/fmcadc5/vc707/system_top.v@295:305
+  // spi
+
+  assign iic_rstn = 1'b1;
+  assign fan_pwm = 1'b1;
+  assign dac_clk = spi_clk;
+  assign dac_data = spi_mosi;
+  assign dac_sync_1 = spi_csn[3];
+  assign dac_sync_0 = spi_csn[2];
+  assign spi_csn_1 = spi_csn[1];
+  assign spi_csn_0 = spi_csn[0];
+
+
+Clone Blocks 4:
+hdl/projects/fmcadc5/vc707/system_top.v@297:307
+  assign iic_rstn = 1'b1;
+  assign fan_pwm = 1'b1;
+  assign dac_clk = spi_clk;
+  assign dac_data = spi_mosi;
+  assign dac_sync_1 = spi_csn[3];
+  assign dac_sync_0 = spi_csn[2];
+  assign spi_csn_1 = spi_csn[1];
+  assign spi_csn_0 = spi_csn[0];
+
+  // instantiations
+
+
+Clone Blocks 5:
+hdl/projects/fmcadc5/vc707/system_top.v@294:304
+
+  // spi
+
+  assign iic_rstn = 1'b1;
+  assign fan_pwm = 1'b1;
+  assign dac_clk = spi_clk;
+  assign dac_data = spi_mosi;
+  assign dac_sync_1 = spi_csn[3];
+  assign dac_sync_0 = spi_csn[2];
+  assign spi_csn_1 = spi_csn[1];
+  assign spi_csn_0 = spi_csn[0];
+

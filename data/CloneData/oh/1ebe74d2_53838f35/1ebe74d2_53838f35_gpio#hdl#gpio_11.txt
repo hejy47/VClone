@@ -1,0 +1,53 @@
+Source Block: oh/gpio/hdl/gpio.v@152:168@HdlStmProcess
+
+   //################################
+   //# IRQS
+   //################################ 
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       irqmask_reg[63:0] <= 'b0;   
+     else if(irqmask_write & reg_double)
+       irqmask_reg[63:0] <= reg_wdata[63:0];
+     else if(irqmask_write)
+       irqmask_reg[31:0] <= reg_wdata[31:0];
+   
+   //detect any edge on input data
+   oh_edgedetect #(.DW(N))
+   oh_edgedetect (.out	(gpio_edge[N-1:0]),
+		  .clk	(clk),
+
+Diff Content:
+- 159        irqmask_reg[63:0] <= 'b0;   
+- 160      else if(irqmask_write & reg_double)
+- 161        irqmask_reg[63:0] <= reg_wdata[63:0];
+- 162      else if(irqmask_write)
+- 163        irqmask_reg[31:0] <= reg_wdata[31:0];
++ 163        imask_reg[63:0] <= 'b0;   
++ 163      else if(imask_write & reg_double)
++ 163        imask_reg[63:0] <= reg_wdata[63:0];
++ 163      else if(imask_write)
++ 163        imask_reg[31:0] <= reg_wdata[31:0];
++ 163    assign edge_data[N-1:0] = ~imask_reg[N-1:0] & in_reg[N-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/gpio/hdl/gpio.v@109:125
+   //################################
+   //# OUTPUT
+   //################################ 
+
+   //oen (active low, tristate by default)
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       oen_reg[63:0] <= 'b0;   
+     else if(oen_write & reg_double)
+       oen_reg[63:0] <= reg_wdata[63:0];
+     else if(oen_write)
+       oen_reg[31:0] <= reg_wdata[31:0];
+   
+   assign gpio_oen[N-1:0] = oen_reg[N-1:0];
+   
+   //odata
+   always @ (posedge clk)
+

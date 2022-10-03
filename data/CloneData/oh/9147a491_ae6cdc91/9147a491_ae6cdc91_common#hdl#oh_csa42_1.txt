@@ -1,0 +1,59 @@
+Source Block: oh/common/hdl/oh_csa42.v@19:29@HdlStmAssign
+
+   wire [DW-1:0]     sum_int;
+   wire [DW:0] 	     carry_int;
+   
+   //Edges
+   assign carry_int[0] = cin;
+   assign cout         = carry_int[DW];
+   
+   //Full Adders
+   oh_csa32 #(.DW(DW))
+   fa0 (//inputs
+
+Diff Content:
+- 24    assign carry_int[0] = cin;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_csa42.v@16:26
+     output [DW-1:0] s, //sum 
+     output [DW-1:0] c //carry
+     );
+
+   wire [DW-1:0]     sum_int;
+   wire [DW:0] 	     carry_int;
+   
+   //Edges
+   assign carry_int[0] = cin;
+   assign cout         = carry_int[DW];
+   
+
+Clone Blocks 2:
+oh/common/hdl/oh_csa42.v@15:25
+     output 	     cout, //intra stage carry out (=2x weight of s/c)
+     output [DW-1:0] s, //sum 
+     output [DW-1:0] c //carry
+     );
+
+   wire [DW-1:0]     sum_int;
+   wire [DW:0] 	     carry_int;
+   
+   //Edges
+   assign carry_int[0] = cin;
+   assign cout         = carry_int[DW];
+
+Clone Blocks 3:
+oh/common/hdl/oh_csa42.v@20:30
+   wire [DW-1:0]     sum_int;
+   wire [DW:0] 	     carry_int;
+   
+   //Edges
+   assign carry_int[0] = cin;
+   assign cout         = carry_int[DW];
+   
+   //Full Adders
+   oh_csa32 #(.DW(DW))
+   fa0 (//inputs
+	.in0(in0[DW-1:0]),
+

@@ -1,0 +1,24 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@351:361@HdlIdDef
+	//
+	wire	ro_flag, simple_miss, ro_miss, table_err, cachable;
+	reg	p_tlb_miss,p_tlb_err, pf_stb, pf_cachable;
+	reg	miss_pending;
+	//
+	reg	rtn_err;
+
+
+	//////////////////////////////////////////
+	//
+	//
+
+Diff Content:
++ 356 	wire	this_page_valid, pending_page_valid;
++ 356 	assign	this_page_valid = ((last_page_valid)
++ 356 				&&(i_wbm_addr[(DW-3):(DW-2-VAW)]==last_vpage)
++ 356 				&&((!last_ro)||(!i_wbm_we))
++ 356 				&&((!last_exe)||(!i_wbm_exe)));
++ 356 	assign	pending_page_valid = ((s_pending)&&(s_tlb_hit)
++ 356 				&&((!r_we)||(!ro_flag))
++ 356 				&&((!r_exe)||(exe_flag)));
+
+Clone Blocks:

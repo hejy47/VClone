@@ -1,0 +1,23 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3885:3895@HdlStmAssign
+   assign wr_write = (frame_in | frame_del) & ~wr_fifo_full;
+
+   //###################################
+   //# Full transaction write completed
+   //###################################
+   assign tran_written = ~frame_in & frame_del & ~wr_fifo_full;
+
+   //#################################
+   //# FIFO data
+   //#################################
+ 
+
+Diff Content:
+- 3890    assign tran_written = ~frame_in & frame_del & ~wr_fifo_full;
++ 3890    e16_clock_divider clock_divider (.clk_out	(txo_lclk),
++ 3890 				.clk_out90      (txo_lclk90),
++ 3890 				.clk_in		(c1_clk_in),
++ 3890 				.reset		(reset),
++ 3890 				.div_cfg	(4'b0)
++ 3890 				);
+
+Clone Blocks:

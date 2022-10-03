@@ -1,0 +1,23 @@
+Source Block: verilog-ethernet/rtl/axis_frame_length_adjust.v@98:113@HdlStmProcess
+
+// bus word width
+localparam DATA_WORD_WIDTH = DATA_WIDTH / KEEP_WIDTH;
+
+// bus width assertions
+initial begin
+    if (DATA_WORD_WIDTH * KEEP_WIDTH != DATA_WIDTH) begin
+        $error("Error: data width not evenly divisble");
+        $finish;
+    end
+end
+
+// state register
+localparam [2:0]
+    STATE_IDLE = 3'd0,
+    STATE_TRANSFER = 3'd1,
+
+Diff Content:
+- 105         $error("Error: data width not evenly divisble");
++ 105         $error("Error: data width not evenly divisble (instance %m)");
+
+Clone Blocks:

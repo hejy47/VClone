@@ -1,0 +1,33 @@
+Source Block: hdl/library/common/up_delay_cntrl.v@176:186@HdlStmAssign
+    up_wdata[4:0] : up_dwdata_int[((n*5)+4):(n*5)];
+  end
+  endgenerate
+
+  assign up_dld = (DISABLE == 1) ? 'd0 : up_dld_int;
+  assign up_dwdata = (DISABLE == 1) ? 'd0 : up_dwdata_int;
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_dld_int <= 'd0;
+      up_dwdata_int <= 'd0;
+
+Diff Content:
+- 181   assign up_dwdata = (DISABLE == 1) ? 'd0 : up_dwdata_int;
++ 181   assign up_dld = up_dld_int;
++ 181   assign up_dwdata = up_dwdata_int;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_delay_cntrl.v@175:185
+  assign up_dwdata_s[((n*5)+4):(n*5)] = (up_waddr[7:0] == n) ?
+    up_wdata[4:0] : up_dwdata_int[((n*5)+4):(n*5)];
+  end
+  endgenerate
+
+  assign up_dld = (DISABLE == 1) ? 'd0 : up_dld_int;
+  assign up_dwdata = (DISABLE == 1) ? 'd0 : up_dwdata_int;
+
+  always @(posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_dld_int <= 'd0;
+

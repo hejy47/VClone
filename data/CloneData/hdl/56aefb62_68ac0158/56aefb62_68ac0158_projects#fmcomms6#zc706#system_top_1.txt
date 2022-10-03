@@ -1,0 +1,33 @@
+Source Block: hdl/projects/fmcomms6/zc706/system_top.v@159:184@HdlStmProcess
+  wire            adc_enable_1;
+  wire    [15:0]  adc_data_1;
+
+  // pack-unpack place holder
+
+  always @(posedge adc_clk) begin 
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= ~adc_dma_wr;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= ~adc_dma_wr;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+      end
+      default: begin
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(16)) i_iobuf (
+    .dt (gpio_t[15:0]),
+
+Diff Content:
+- 164   always @(posedge adc_clk) begin 
++ 164   always @(posedge adc_clk) begin
+
+Clone Blocks:

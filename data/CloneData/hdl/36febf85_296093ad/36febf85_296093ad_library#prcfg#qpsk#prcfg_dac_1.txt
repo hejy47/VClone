@@ -1,0 +1,22 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_dac.v@119:133@HdlStmProcess
+    status <= { 24'h0, RP_ID };
+    mode   <= control[ 7:4];
+  end
+
+  // prbs generation
+  always @(posedge clk) begin
+    if(dst_dac_en == 1) begin
+      pn_data <= pn(pn_data);
+    end
+  end
+
+  // data for the modulator (prbs or dma)
+  assign mod_data = (mode == 1) ? pn_data[ 1:0] : src_dac_ddata[ 1:0];
+
+  // qpsk modulator
+
+Diff Content:
+- 125     if(dst_dac_en == 1) begin
++ 125     if((dst_dac_en == 1) && (dst_dac_enable == 1)) begin
+
+Clone Blocks:

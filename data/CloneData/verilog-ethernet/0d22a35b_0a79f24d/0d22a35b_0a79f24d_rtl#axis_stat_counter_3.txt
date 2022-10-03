@@ -1,0 +1,46 @@
+Source Block: verilog-ethernet/rtl/axis_stat_counter.v@98:108@HdlIdDef
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_output_reg = 0;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_output_reg = 0;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_output_reg = 0;
+
+reg busy_reg = 0;
+
+// internal datapath
+reg [7:0]  output_axis_tdata_int;
+reg        output_axis_tvalid_int;
+reg        output_axis_tready_int = 0;
+
+Diff Content:
+- 103 reg busy_reg = 0;
++ 103 reg busy_reg = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_stat_counter.v@96:106
+reg store_output;
+reg [$clog2(TOTAL_LENGTH)-1:0] frame_ptr_reg = 0, frame_ptr_next;
+
+reg [TICK_COUNT_WIDTH-1:0] tick_count_output_reg = 0;
+reg [BYTE_COUNT_WIDTH-1:0] byte_count_output_reg = 0;
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_output_reg = 0;
+
+reg busy_reg = 0;
+
+// internal datapath
+reg [7:0]  output_axis_tdata_int;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_stat_counter.v@101:111
+reg [FRAME_COUNT_WIDTH-1:0] frame_count_output_reg = 0;
+
+reg busy_reg = 0;
+
+// internal datapath
+reg [7:0]  output_axis_tdata_int;
+reg        output_axis_tvalid_int;
+reg        output_axis_tready_int = 0;
+reg        output_axis_tlast_int;
+reg        output_axis_tuser_int;
+wire       output_axis_tready_int_early;
+

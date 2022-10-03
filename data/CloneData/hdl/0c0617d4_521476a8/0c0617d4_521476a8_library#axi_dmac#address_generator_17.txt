@@ -1,0 +1,34 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@128:144@HdlStmProcess
+      length <= MAX_LENGTH;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (req_ready == 1'b1) begin
+    address <= req_address;
+  end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
+    address <= address + MAX_BEATS_PER_BURST;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    bl_ready <= 1'b1;
+  end else begin
+
+Diff Content:
+- 133 always @(posedge clk) begin
+- 134   if (req_ready == 1'b1) begin
+- 135     address <= req_address;
+- 136   end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
+- 137     address <= address + MAX_BEATS_PER_BURST;
+- 139 end
++ 137   always @(posedge clk) begin
++ 137     if (req_ready == 1'b1) begin
++ 137       address <= req_address;
++ 137     end else if (addr_valid == 1'b1 && addr_ready == 1'b1) begin
++ 137       address <= address + MAX_BEATS_PER_BURST;
++ 137     end
+
+Clone Blocks:

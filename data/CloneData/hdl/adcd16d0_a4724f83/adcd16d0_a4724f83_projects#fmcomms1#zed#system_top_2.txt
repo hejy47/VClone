@@ -1,0 +1,79 @@
+Source Block: hdl/projects/fmcomms1/zed/system_top.v@226:236@HdlIdDef
+  OBUFDS i_obufds_ref_clk (
+    .I (oddr_ref_clk),
+    .O (ref_clk_out_p),
+    .OB (ref_clk_out_n));
+
+  genvar n;
+  generate
+  for (n = 0; n <= 31; n = n + 1) begin: g_iobuf_gpio_bd
+  IOBUF i_iobuf_gpio_bd (
+    .I (gpio_o[n]),
+    .O (gpio_i[n]),
+
+Diff Content:
+- 231   genvar n;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/pmods/xfest14_zed/system_top.v@238:248
+  OBUFDS i_obufds_ref_clk (
+    .I (oddr_ref_clk),
+    .O (ref_clk_out_p),
+    .OB (ref_clk_out_n));
+
+  genvar n;
+  generate
+  for (n = 0; n <= 31; n = n + 1) begin: g_iobuf_gpio_bd
+  IOBUF i_iobuf_gpio_bd (
+    .I (gpio_o[n]),
+    .O (gpio_i[n]),
+
+Clone Blocks 2:
+hdl/projects/fmcomms1/zc702/system_top.v@199:209
+  OBUFDS i_obufds_ref_clk (
+    .I (oddr_ref_clk),
+    .O (ref_clk_out_p),
+    .OB (ref_clk_out_n));
+
+  genvar n;
+  generate
+  for (n = 0; n <= 15; n = n + 1) begin: g_iobuf_gpio_bd
+  IOBUF i_iobuf_gpio_bd (
+    .I (gpio_o[n]),
+    .O (gpio_i[n]),
+
+Clone Blocks 3:
+hdl/projects/pmods/xfest14_zed/system_top.v@240:256
+    .O (ref_clk_out_p),
+    .OB (ref_clk_out_n));
+
+  genvar n;
+  generate
+  for (n = 0; n <= 31; n = n + 1) begin: g_iobuf_gpio_bd
+  IOBUF i_iobuf_gpio_bd (
+    .I (gpio_o[n]),
+    .O (gpio_i[n]),
+    .T (gpio_t[n]),
+    .IO (gpio_bd[n]));
+  end
+  endgenerate
+
+// For debugging the ADIS16k CS BUSY conflict
+// OBUF i_pmod_jb7 (.I(pmod_ja1 == 1'b0 && gpio_i[34] == 1'b0), .O(pmod_jb7));
+
+
+Clone Blocks 4:
+hdl/projects/ad9680_eval/zc706/system_top.v@168:178
+  OBUFDS i_obufds_rx_sync (
+    .I (rx_sync),
+    .O (rx_sync_p),
+    .OB (rx_sync_n));
+
+  genvar n;
+  generate
+  for (n = 0; n <= 14; n = n + 1) begin: g_iobuf_gpio_bd
+  IOBUF i_iobuf_gpio_bd (
+    .I (gpio_o[n]),
+    .O (gpio_i[n]),
+

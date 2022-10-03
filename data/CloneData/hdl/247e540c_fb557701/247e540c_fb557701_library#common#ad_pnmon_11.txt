@@ -1,0 +1,73 @@
+Source Block: hdl/library/common/ad_pnmon.v@72:82@HdlStmAssign
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+  always @(posedge adc_clk) begin
+
+Diff Content:
+- 77   assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_pnmon.v@69:79
+  wire            adc_pn_update_s;
+  wire            adc_pn_err_s;
+
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+
+Clone Blocks 2:
+hdl/library/common/ad_pnmon.v@71:81
+
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+
+Clone Blocks 3:
+hdl/library/common/ad_pnmon.v@73:83
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+
+  always @(posedge adc_clk) begin
+    adc_valid_d <= adc_valid_in;
+
+Clone Blocks 4:
+hdl/library/common/ad_pnmon.v@70:80
+  wire            adc_pn_err_s;
+
+  // make sure data is not 0, sequence will fail.
+
+  assign adc_pn_match_d_s = (adc_data_in == adc_data_pn) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_data_in == 'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d & adc_pn_match_z;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn oos and counters (16 to clear and set).
+

@@ -1,0 +1,37 @@
+Source Block: hdl/library/axi_dacfifo/axi_dacfifo_wr.v@334:361@HdlStmProcess
+    end
+  end
+
+  // The memory module request data until reaches the high threshold.
+
+  always @(posedge dma_clk) begin
+    if (dma_rst_s == 1'b1) begin
+      dma_mem_addr_diff <= 'b0;
+      dma_mem_raddr_m1 <= 'b0;
+      dma_mem_raddr_m2 <= 'b0;
+      dma_mem_raddr <= 'b0;
+    end else begin
+      dma_mem_raddr_m1 <= g2b(axi_mem_raddr_g);
+      dma_mem_raddr_m2 <= dma_mem_raddr_m1;
+      dma_mem_raddr <= dma_mem_raddr_m2;
+      dma_mem_addr_diff <= dma_mem_addr_diff_s[DMA_MEM_ADDRESS_WIDTH-1:0];
+      if (dma_mem_addr_diff >= DMA_BUF_THRESHOLD_HI) begin
+        dma_ready <= 1'b0;
+      end else begin
+        dma_ready <= 1'b1;
+      end
+    end
+  end
+
+  // An absolute address counter with DMA's granularity, this address will be
+  // used on read back
+
+  always @(posedge dma_clk) begin
+
+Diff Content:
+- 346       dma_mem_raddr_m1 <= g2b(axi_mem_raddr_g);
+- 348       dma_mem_raddr <= dma_mem_raddr_m2;
++ 346       dma_mem_raddr_m1 <= axi_mem_raddr_g;
++ 348       dma_mem_raddr <= g2b(dma_mem_raddr_m2);
+
+Clone Blocks:

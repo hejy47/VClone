@@ -1,0 +1,37 @@
+Source Block: hdl/library/util_pack/util_pack_common/pack_ctrl.v@83:113@HdlStmIf
+        assign ctrl1[s+:MUX_ORDER] = (j - (prefix_count[m*PORT_ADDRESS_WIDTH+:PORT_ADDRESS_WIDTH] + n - rotate) / k0) % z;
+      end
+    end
+  end
+
+  if (PACK == 0 || MUX_ORDER == 1) begin
+    /* For 2:1 MUXes pack and unpack control is the same */
+    assign ctrl = ctrl1;
+  end else begin
+    /*
+     * Transform demux control into mux control. The implementation here uses a
+     * priority encoder.
+     */
+    for (i = 0; i < NUM_STAGES*NUM_OF_PORTS; i = i + z) begin: demux_gen_outer
+      localparam base = i*MUX_ORDER;
+      for (k = 0; k < z; k = k + 1) begin: demux_gen_inner
+        always @(ctrl1) begin
+          ctrl2[base+k*MUX_ORDER+:MUX_ORDER] <= {MUX_ORDER{1'b1}};
+          for (n = 0; n < z; n = n + 1) begin
+            if (ctrl1[base+n*MUX_ORDER+:MUX_ORDER] == k) begin
+              ctrl2[base+k*MUX_ORDER+:MUX_ORDER] <= n[MUX_ORDER-1:0];
+            end
+          end
+        end
+      end
+    end
+    assign ctrl = ctrl2;
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 89     /* For 2:1 MUXes pack and unpack control is the same */
+
+Clone Blocks:

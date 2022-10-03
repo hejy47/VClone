@@ -1,0 +1,34 @@
+Source Block: oh/src/common/hdl/oh_clockdiv.v@86:96@HdlStmAssign
+     else if(clkfall0)
+       clkout0_reg <= 1'b0;
+  
+   // clock mux
+   assign clk0_sel[1] =  (clkdiv[7:0]==8'd0);   // not implemented
+   assign clk0_sel[0] = ~(clkdiv[7:0]==8'd0);
+
+   oh_clockmux #(.N(2))
+   oh_clockmux0 (.clkout(clkout0),
+		 .clk(clk),
+		 .en(clk0_sel[1:0]),
+
+Diff Content:
++ 91    oh_lat0 #(.DW(2)) 
++ 91    latch_clk0 (.out (clk0_sel_sh[1:0]),
++ 91 	       .clk (clk),
++ 91 	       .in  (clk0_sel[1:0]));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_clockdiv.v@85:95
+       clkout0_reg <= 1'b1;
+     else if(clkfall0)
+       clkout0_reg <= 1'b0;
+  
+   // clock mux
+   assign clk0_sel[1] =  (clkdiv[7:0]==8'd0);   // not implemented
+   assign clk0_sel[0] = ~(clkdiv[7:0]==8'd0);
+
+   oh_clockmux #(.N(2))
+   oh_clockmux0 (.clkout(clkout0),
+		 .clk(clk),
+

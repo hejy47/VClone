@@ -1,0 +1,19 @@
+Source Block: oh/common/hdl/oh_par2ser.v@66:77@HdlStmAssign
+   //output data is valid while count>0
+   assign busy = |count[CW-1:0];
+
+
+   //wait until valid data is finished
+   assign wait_out  = busy |
+		      wait_in;
+
+   
+   //##########################
+   //# SHIFT REGISTER
+   //##########################
+
+Diff Content:
+- 71    assign wait_out  = busy |
++ 71    assign wait_out  = (busy & ~access_out) |
+
+Clone Blocks:

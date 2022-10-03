@@ -1,0 +1,52 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@434:458@HdlStmIf
+);
+
+assign dest_request_id = dest_src_id;
+assign dest_data_response_id = dest_id;
+
+generate if (ENABLE_DIAGNOSTICS_IF == 1) begin
+
+  reg [ID_WIDTH-1:0] _dest_diag_level_bursts = 'h0;
+
+  // calculate buffer fullness in bursts
+  always @(posedge dest_clk) begin
+    if (dest_reset == 1'b1) begin
+      _dest_diag_level_bursts <= 'h0;
+    end else begin
+      _dest_diag_level_bursts <= g2b(dest_src_id) - g2b(dest_id);
+    end
+  end
+  assign dest_diag_level_bursts = {{{8-ID_WIDTH}{1'b0}},_dest_diag_level_bursts};
+
+end else begin
+  assign dest_diag_level_bursts = 'h0;
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 439 generate if (ENABLE_DIAGNOSTICS_IF == 1) begin
+- 441   reg [ID_WIDTH-1:0] _dest_diag_level_bursts = 'h0;
+- 445     if (dest_reset == 1'b1) begin
+- 446       _dest_diag_level_bursts <= 'h0;
+- 447     end else begin
+- 448       _dest_diag_level_bursts <= g2b(dest_src_id) - g2b(dest_id);
+- 449     end
+- 451   assign dest_diag_level_bursts = {{{8-ID_WIDTH}{1'b0}},_dest_diag_level_bursts};
+- 453 end else begin
+- 454   assign dest_diag_level_bursts = 'h0;
+- 455 end
++ 439   always @(posedge dest_clk) begin
++ 439     if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
++ 439       dest_beat_counter <= 'h00;
++ 439     end else if (dest_beat == 1'b1) begin
++ 439       dest_beat_counter <= dest_beat_counter + 1'b1;
++ 439     end
++ 439   end
++ 441   assign dest_burst_info_length = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1:0];
++ 441   assign dest_burst_info_partial = dest_burst_len_data[BYTES_PER_BURST_WIDTH];
++ 441   assign dest_burst_info_id = dest_id;
++ 449     dest_burst_info_write <= (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1);
+
+Clone Blocks:

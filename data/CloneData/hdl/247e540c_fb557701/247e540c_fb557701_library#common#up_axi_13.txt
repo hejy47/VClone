@@ -1,0 +1,65 @@
+Source Block: hdl/library/common/up_axi.v@97:129@HdlStmProcess
+
+  // write channel interface
+
+  assign up_axi_bresp = 2'd0;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_axi_awready <= 'd0;
+      up_axi_wready <= 'd0;
+      up_axi_bvalid <= 'd0;
+    end else begin
+      if (up_axi_awready == 1'b1) begin
+        up_axi_awready <= 1'b0;
+      end else if (up_wack_s == 1'b1) begin
+        up_axi_awready <= 1'b1;
+      end
+      if (up_axi_wready == 1'b1) begin
+        up_axi_wready <= 1'b0;
+      end else if (up_wack_s == 1'b1) begin
+        up_axi_wready <= 1'b1;
+      end
+      if ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) begin
+        up_axi_bvalid <= 1'b0;
+      end else if (up_wack_d == 1'b1) begin
+        up_axi_bvalid <= 1'b1;
+      end
+    end
+  end
+
+  assign up_wack_s = (up_wcount == 5'h1f) ? 1'b1 : (up_wcount[4] & up_wack);
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+
+Diff Content:
+- 104       up_axi_awready <= 'd0;
+- 105       up_axi_wready <= 'd0;
+- 106       up_axi_bvalid <= 'd0;
+- 108       if (up_axi_awready == 1'b1) begin
+- 109         up_axi_awready <= 1'b0;
+- 111         up_axi_awready <= 1'b1;
+- 113       if (up_axi_wready == 1'b1) begin
+- 114         up_axi_wready <= 1'b0;
+- 116         up_axi_wready <= 1'b1;
+- 118       if ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) begin
+- 119         up_axi_bvalid <= 1'b0;
+- 121         up_axi_bvalid <= 1'b1;
++ 106       up_axi_awready_int <= 'd0;
++ 106       up_axi_wready_int <= 'd0;
++ 106       up_axi_bvalid_int <= 'd0;
++ 109       if (up_axi_awready_int == 1'b1) begin
++ 109         up_axi_awready_int <= 1'b0;
++ 111         up_axi_awready_int <= 1'b1;
++ 114       if (up_axi_wready_int == 1'b1) begin
++ 114         up_axi_wready_int <= 1'b0;
++ 116         up_axi_wready_int <= 1'b1;
++ 119       if ((up_axi_bready == 1'b1) && (up_axi_bvalid_int == 1'b1)) begin
++ 119         up_axi_bvalid_int <= 1'b0;
++ 121         up_axi_bvalid_int <= 1'b1;
++ 124   assign up_wreq = up_wreq_int;
++ 124   assign up_waddr = up_waddr_int;
++ 124   assign up_wdata = up_wdata_int;
+
+Clone Blocks:

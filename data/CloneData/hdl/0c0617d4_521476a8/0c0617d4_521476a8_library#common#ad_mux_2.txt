@@ -1,0 +1,60 @@
+Source Block: hdl/library/common/ad_mux.v@55:65@HdlIdDef
+);
+
+`define MIN(A,B) (A<B?A:B)
+
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = ($clog2(CH_CNT) / $clog2(MUX_SZ)) + // divide and round up
+                       |($clog2(CH_CNT) % $clog2(MUX_SZ));
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+
+Diff Content:
+- 60 localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_mux.v@57:68
+`define MIN(A,B) (A<B?A:B)
+
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = ($clog2(CH_CNT) / $clog2(MUX_SZ)) + // divide and round up
+                       |($clog2(CH_CNT) % $clog2(MUX_SZ));
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
+
+
+
+Clone Blocks 2:
+hdl/library/common/ad_mux.v@56:66
+
+`define MIN(A,B) (A<B?A:B)
+
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = ($clog2(CH_CNT) / $clog2(MUX_SZ)) + // divide and round up
+                       |($clog2(CH_CNT) % $clog2(MUX_SZ));
+
+wire [NUM_STAGES*DW+CH_W-1:0] mux_in;
+wire [NUM_STAGES*CLOG2_CH_CNT-1:0] ch_sel_pln;
+
+Clone Blocks 3:
+hdl/library/common/ad_mux.v@54:64
+  output [CH_W-1:0] data_out
+);
+
+`define MIN(A,B) (A<B?A:B)
+
+localparam MUX_SZ = CH_CNT < REQ_MUX_SZ ? CH_CNT : REQ_MUX_SZ;
+localparam CLOG2_CH_CNT = $clog2(CH_CNT);
+localparam CLOG2_MUX_SZ = $clog2(MUX_SZ);
+localparam NUM_STAGES = ($clog2(CH_CNT) / $clog2(MUX_SZ)) + // divide and round up
+                       |($clog2(CH_CNT) % $clog2(MUX_SZ));
+
+

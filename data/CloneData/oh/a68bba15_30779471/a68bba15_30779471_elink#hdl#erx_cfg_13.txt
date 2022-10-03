@@ -1,0 +1,34 @@
+Source Block: oh/elink/hdl/erx_cfg.v@131:143@HdlStmProcess
+     rx_gpio_reg[8:0] <= gpio_datain[8:0];
+
+   //###########################1
+   //# DYNAMIC REMAP BASE
+   //###########################
+   always @ (posedge clk)   
+     if (rx_offset_write)
+       rx_offset_reg[31:0] <= mi_din[31:0];
+
+   assign remap_base[31:0] = rx_offset_reg[31:0];
+
+   //###########################1
+   //# IDELAY TAP VALUES
+
+Diff Content:
+- 138        rx_offset_reg[31:0] <= mi_din[31:0];
++ 138        rx_offset_reg[31:0] <= data_in[31:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_cfg.v@135:145
+   //###########################
+   always @ (posedge clk)   
+     if (rx_offset_write)
+       rx_offset_reg[31:0] <= mi_din[31:0];
+
+   assign remap_base[31:0] = rx_offset_reg[31:0];
+
+   //###########################1
+   //# IDELAY TAP VALUES
+   //###########################
+   always @ (posedge clk) 
+

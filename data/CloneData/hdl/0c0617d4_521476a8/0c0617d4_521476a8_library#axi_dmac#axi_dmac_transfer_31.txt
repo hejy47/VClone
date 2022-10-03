@@ -1,0 +1,134 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_transfer.v@249:322@HdlStmIf
+ * shutdown and reset phase.
+ */
+assign req_valid_gated = req_enable & req_valid;
+assign req_ready = req_enable & req_ready_gated;
+
+generate if (DMA_2D_TRANSFER == 1) begin
+
+dmac_2d_transfer #(
+  .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+  .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),
+  .BYTES_PER_BURST_WIDTH (BYTES_PER_BURST_WIDTH),
+  .BYTES_PER_BEAT_WIDTH_DEST (BYTES_PER_BEAT_WIDTH_DEST),
+  .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC)
+) i_2d_transfer (
+  .req_aclk (req_clk),
+  .req_aresetn (req_resetn),
+
+  .req_eot (req_eot),
+  .req_measured_burst_length (req_measured_burst_length),
+  .req_response_partial (req_response_partial),
+  .req_response_valid (req_response_valid),
+  .req_response_ready (req_response_ready),
+
+  .req_valid (req_valid_gated),
+  .req_ready (req_ready_gated),
+  .req_dest_address (req_dest_address),
+  .req_src_address (req_src_address),
+  .req_x_length (req_x_length),
+  .req_y_length (req_y_length),
+  .req_dest_stride (req_dest_stride),
+  .req_src_stride (req_src_stride),
+  .req_sync_transfer_start (req_sync_transfer_start),
+  .req_last (req_last),
+
+  .out_abort_req (abort_req),
+  .out_req_valid (dma_req_valid),
+  .out_req_ready (dma_req_ready),
+  .out_req_dest_address (dma_req_dest_address),
+  .out_req_src_address (dma_req_src_address),
+  .out_req_length (dma_req_length),
+  .out_req_sync_transfer_start (dma_req_sync_transfer_start),
+  .out_req_last (dma_req_last),
+  .out_eot (dma_req_eot),
+  .out_measured_burst_length (dma_req_measured_burst_length),
+  .out_response_partial (dma_response_partial),
+  .out_response_valid (dma_response_valid),
+  .out_response_ready (dma_response_ready)
+  );
+
+end else begin
+
+/* Request */
+assign dma_req_valid = req_valid_gated;
+assign req_ready_gated = dma_req_ready;
+
+assign dma_req_dest_address = req_dest_address;
+assign dma_req_src_address = req_src_address;
+assign dma_req_length = req_x_length;
+assign dma_req_sync_transfer_start = req_sync_transfer_start;
+assign dma_req_last = req_last;
+
+/* Response */
+assign req_eot = dma_req_eot;
+assign req_measured_burst_length = dma_req_measured_burst_length;
+assign req_response_partial = dma_response_partial;
+assign req_response_valid = dma_response_valid;
+assign dma_response_ready = req_response_ready;
+
+end endgenerate
+
+request_arb #(
+  .DMA_DATA_WIDTH_SRC (DMA_DATA_WIDTH_SRC),
+  .DMA_DATA_WIDTH_DEST (DMA_DATA_WIDTH_DEST),
+  .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),
+
+Diff Content:
+- 254 generate if (DMA_2D_TRANSFER == 1) begin
+- 256 dmac_2d_transfer #(
+- 257   .DMA_AXI_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+- 258   .DMA_LENGTH_WIDTH (DMA_LENGTH_WIDTH),
+- 259   .BYTES_PER_BURST_WIDTH (BYTES_PER_BURST_WIDTH),
+- 260   .BYTES_PER_BEAT_WIDTH_DEST (BYTES_PER_BEAT_WIDTH_DEST),
+- 261   .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC)
+- 262 ) i_2d_transfer (
+- 263   .req_aclk (req_clk),
+- 264   .req_aresetn (req_resetn),
+- 266   .req_eot (req_eot),
+- 267   .req_measured_burst_length (req_measured_burst_length),
+- 268   .req_response_partial (req_response_partial),
+- 269   .req_response_valid (req_response_valid),
+- 270   .req_response_ready (req_response_ready),
+- 272   .req_valid (req_valid_gated),
+- 273   .req_ready (req_ready_gated),
+- 274   .req_dest_address (req_dest_address),
+- 275   .req_src_address (req_src_address),
+- 276   .req_x_length (req_x_length),
+- 277   .req_y_length (req_y_length),
+- 278   .req_dest_stride (req_dest_stride),
+- 279   .req_src_stride (req_src_stride),
+- 280   .req_sync_transfer_start (req_sync_transfer_start),
+- 281   .req_last (req_last),
+- 283   .out_abort_req (abort_req),
+- 284   .out_req_valid (dma_req_valid),
+- 285   .out_req_ready (dma_req_ready),
+- 286   .out_req_dest_address (dma_req_dest_address),
+- 287   .out_req_src_address (dma_req_src_address),
+- 288   .out_req_length (dma_req_length),
+- 289   .out_req_sync_transfer_start (dma_req_sync_transfer_start),
+- 290   .out_req_last (dma_req_last),
+- 291   .out_eot (dma_req_eot),
+- 292   .out_measured_burst_length (dma_req_measured_burst_length),
+- 293   .out_response_partial (dma_response_partial),
+- 294   .out_response_valid (dma_response_valid),
+- 295   .out_response_ready (dma_response_ready)
+- 296   );
+- 298 end else begin
+- 300 /* Request */
+- 301 assign dma_req_valid = req_valid_gated;
+- 302 assign req_ready_gated = dma_req_ready;
+- 304 assign dma_req_dest_address = req_dest_address;
+- 305 assign dma_req_src_address = req_src_address;
+- 306 assign dma_req_length = req_x_length;
+- 307 assign dma_req_sync_transfer_start = req_sync_transfer_start;
+- 308 assign dma_req_last = req_last;
+- 310 /* Response */
+- 311 assign req_eot = dma_req_eot;
+- 312 assign req_measured_burst_length = dma_req_measured_burst_length;
+- 313 assign req_response_partial = dma_response_partial;
+- 314 assign req_response_valid = dma_response_valid;
+- 315 assign dma_response_ready = req_response_ready;
+- 317 end endgenerate
+
+Clone Blocks:

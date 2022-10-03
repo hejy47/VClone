@@ -1,0 +1,53 @@
+Source Block: hdl/library/prcfg/bist/prcfg_dac.v@144:189@HdlStmProcess
+    if (dst_dac_drd == 1'h1) begin
+      counter <= counter + 1;
+    end
+  end
+
+  always @(counter) begin
+    case(counter)
+      3'd0  : begin
+                sin_tone <= 16'h0000;
+                cos_tone <= 16'h7FFF;
+              end
+      3'd1  : begin
+                sin_tone <= 16'h5A82;
+                cos_tone <= 16'h5A82;
+              end
+      3'd2  : begin
+                sin_tone <= 16'h7FFF;
+                cos_tone <= 16'h0000;
+              end
+      3'd3  : begin
+                sin_tone <= 16'h5A82;
+                cos_tone <= 16'hA57E;
+              end
+      3'd4  : begin
+                sin_tone <= 16'h0000;
+                cos_tone <= 16'h7FFF;
+              end
+      3'd5  : begin
+                sin_tone <= 16'hA57E;
+                cos_tone <= 16'hA57E;
+              end
+      3'd6  : begin
+                sin_tone <= 16'h8001;
+                cos_tone <= 16'h0000;
+              end
+      3'd7  : begin
+                sin_tone <= 16'hA57E;
+                cos_tone <= 16'h5A82;
+              end
+    endcase
+  end
+
+  assign dac_data_mode1 = {sin_tone, cos_tone};
+
+  // prbs generation
+  always @(posedge clk) begin
+
+Diff Content:
+- 169                 cos_tone <= 16'h7FFF;
++ 169                 cos_tone <= 16'h8001;
+
+Clone Blocks:

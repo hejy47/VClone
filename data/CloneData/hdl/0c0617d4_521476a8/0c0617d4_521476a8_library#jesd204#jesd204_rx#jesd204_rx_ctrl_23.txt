@@ -1,0 +1,45 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@133:143@HdlStmAssign
+                                   1'b1;
+  default: state_good = 1'b0;
+  endcase
+end
+
+assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
+assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
+
+assign goto_next_state_s = good_cnt_limit_reached_s || (state == STATE_SYNCHRONIZED);
+
+always @(posedge clk) begin
+
+Diff Content:
+- 138 assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@134:144
+  default: state_good = 1'b0;
+  endcase
+end
+
+assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
+assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
+
+assign goto_next_state_s = good_cnt_limit_reached_s || (state == STATE_SYNCHRONIZED);
+
+always @(posedge clk) begin
+  if (reset) begin
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@136:146
+end
+
+assign good_cnt_limit_s = (state == STATE_CGS) ? 'hff : 'h7;
+assign good_cnt_limit_reached_s = good_counter == good_cnt_limit_s;
+
+assign goto_next_state_s = good_cnt_limit_reached_s || (state == STATE_SYNCHRONIZED);
+
+always @(posedge clk) begin
+  if (reset) begin
+    good_counter <= 'h00;
+  end else if (state_good == 1'b1) begin
+

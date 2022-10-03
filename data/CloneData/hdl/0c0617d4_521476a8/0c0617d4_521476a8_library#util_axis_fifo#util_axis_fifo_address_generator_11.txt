@@ -1,0 +1,17 @@
+Source Block: hdl/library/util_axis_fifo/util_axis_fifo_address_generator.v@94:104@HdlStmAssign
+
+//------------------------------------------------------------------------------
+// Write address counter
+//------------------------------------------------------------------------------
+
+assign s_axis_write_s = s_axis_ready && s_axis_valid && ~s_axis_full;
+always @(posedge s_axis_aclk)
+begin
+  if (!s_axis_aresetn)
+    s_axis_waddr_reg <= 'h0;
+  else
+
+Diff Content:
+- 99 assign s_axis_write_s = s_axis_ready && s_axis_valid && ~s_axis_full;
+
+Clone Blocks:

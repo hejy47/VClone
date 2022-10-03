@@ -1,0 +1,466 @@
+Source Block: hdl/library/axi_ad9671/axi_ad9671_pnmon.v@190:200@HdlStmAssign
+  //    if 64 sequences mismatch consecutively, oos is set (asserted).
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_valid_s = adc_valid & adc_pn_en;
+  assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+
+Diff Content:
+- 195   assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
++ 195   assign adc_pn_data_in_s = {~adc_data_d[15], adc_data_d[14:0], ~adc_data[15], adc_data[14:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9250/axi_ad9250_pnmon.v@181:191
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[27:14] == adc_pn_data[27:14]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13: 0] == adc_pn_data[13: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 28'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+  always @(posedge adc_clk) begin
+
+Clone Blocks 2:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@178:188
+  //    The next sequence is generated from the current sequence.
+  //    If 64 sequences mismatch CONSECUTIVELY, OOS is set (asserted).
+  // If OOS is de-asserted, any spurious mismatches sets the ERROR register.
+  // Ideally, processor should make sure both OOS == 0x0 AND ERR == 0x0.
+
+  assign adc_pn_data_in_s[31:16] = {~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_data_in_s[15:0] = {~adc_data[15], adc_data[14:0]};
+  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
+
+Clone Blocks 3:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@190:200
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[28:15] == adc_pn_data[28:15]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+  always @(posedge adc_clk) begin
+
+Clone Blocks 4:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@182:192
+
+  assign adc_pn_data_in_s[31:16] = {~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_data_in_s[15:0] = {~adc_data[15], adc_data[14:0]};
+  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match);
+
+  // PN running sequence
+
+Clone Blocks 5:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@193:203
+
+  assign adc_pn_valid_s = adc_valid & adc_pn_en;
+  assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+
+Clone Blocks 6:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@191:201
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+  always @(posedge adc_clk) begin
+    adc_pn_en <= ~adc_pn_en;
+
+Clone Blocks 7:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@185:195
+  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match);
+
+  // PN running sequence
+
+  always @(posedge adc_clk) begin
+    adc_pn_type_m1 <= up_pn_type;
+
+Clone Blocks 8:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@183:193
+  assign adc_pn_data_in_s[31:16] = {~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_data_in_s[15:0] = {~adc_data[15], adc_data[14:0]};
+  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match);
+
+  // PN running sequence
+
+
+Clone Blocks 9:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@185:195
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_data_in_s[29:15] = {adc_pn_data[29], adc_data_d};
+  assign adc_pn_data_in_s[14:0] = {adc_pn_data[14], adc_data_in};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[28:15] == adc_pn_data[28:15]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+
+Clone Blocks 10:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@196:206
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+  always @(posedge adc_clk) begin
+
+Clone Blocks 11:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@183:193
+  //    the next sequence is generated from the current sequence.
+  //    if 64 sequences mismatch consecutively, oos is set (asserted).
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_data_in_s[29:15] = {adc_pn_data[29], adc_data_d};
+  assign adc_pn_data_in_s[14:0] = {adc_pn_data[14], adc_data_in};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[28:15] == adc_pn_data[28:15]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+
+Clone Blocks 12:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@187:197
+
+  assign adc_pn_data_in_s[29:15] = {adc_pn_data[29], adc_data_d};
+  assign adc_pn_data_in_s[14:0] = {adc_pn_data[14], adc_data_in};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[28:15] == adc_pn_data[28:15]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+
+Clone Blocks 13:
+hdl/library/axi_ad9250/axi_ad9250_pnmon.v@177:187
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_data_in_s = {~adc_data[13], adc_data[12:0], ~adc_data[27], adc_data[26:14]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[27:14] == adc_pn_data[27:14]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13: 0] == adc_pn_data[13: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 28'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+Clone Blocks 14:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@191:201
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_valid_s = adc_valid & adc_pn_en;
+  assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+
+Clone Blocks 15:
+hdl/library/axi_ad9250/axi_ad9250_pnmon.v@180:190
+  assign adc_pn_data_in_s = {~adc_data[13], adc_data[12:0], ~adc_data[27], adc_data[26:14]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[27:14] == adc_pn_data[27:14]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13: 0] == adc_pn_data[13: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 28'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+
+Clone Blocks 16:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@188:198
+  assign adc_pn_data_in_s[29:15] = {adc_pn_data[29], adc_data_d};
+  assign adc_pn_data_in_s[14:0] = {adc_pn_data[14], adc_data_in};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[28:15] == adc_pn_data[28:15]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+Clone Blocks 17:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@189:199
+  assign adc_pn_data_in_s[14:0] = {adc_pn_data[14], adc_data_in};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[28:15] == adc_pn_data[28:15]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+
+Clone Blocks 18:
+hdl/library/axi_ad9250/axi_ad9250_pnmon.v@179:189
+
+  assign adc_pn_data_in_s = {~adc_data[13], adc_data[12:0], ~adc_data[27], adc_data[26:14]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[27:14] == adc_pn_data[27:14]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13: 0] == adc_pn_data[13: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 28'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+Clone Blocks 19:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@180:190
+  // If OOS is de-asserted, any spurious mismatches sets the ERROR register.
+  // Ideally, processor should make sure both OOS == 0x0 AND ERR == 0x0.
+
+  assign adc_pn_data_in_s[31:16] = {~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_data_in_s[15:0] = {~adc_data[15], adc_data[14:0]};
+  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match);
+
+Clone Blocks 20:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@189:199
+  //    the next sequence is generated from the current sequence.
+  //    if 64 sequences mismatch consecutively, oos is set (asserted).
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_valid_s = adc_valid & adc_pn_en;
+  assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+
+Clone Blocks 21:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@184:194
+  //    if 64 sequences mismatch consecutively, oos is set (asserted).
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_data_in_s[29:15] = {adc_pn_data[29], adc_data_d};
+  assign adc_pn_data_in_s[14:0] = {adc_pn_data[14], adc_data_in};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[28:15] == adc_pn_data[28:15]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+
+Clone Blocks 22:
+hdl/library/axi_ad9643/axi_ad9643_pnmon.v@186:196
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_data_in_s[29:15] = {adc_pn_data[29], adc_data_d};
+  assign adc_pn_data_in_s[14:0] = {adc_pn_data[14], adc_data_in};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[28:15] == adc_pn_data[28:15]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13:0] == adc_pn_data[13:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 30'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+Clone Blocks 23:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@195:205
+  assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+
+Clone Blocks 24:
+hdl/library/axi_ad9250/axi_ad9250_pnmon.v@175:185
+  //    the next sequence is generated from the current sequence.
+  //    if 64 sequences mismatch consecutively, oos is set (asserted).
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_data_in_s = {~adc_data[13], adc_data[12:0], ~adc_data[27], adc_data[26:14]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[27:14] == adc_pn_data[27:14]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13: 0] == adc_pn_data[13: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 28'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+
+Clone Blocks 25:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@184:194
+  assign adc_pn_data_in_s[15:0] = {~adc_data[15], adc_data[14:0]};
+  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match);
+
+  // PN running sequence
+
+  always @(posedge adc_clk) begin
+
+Clone Blocks 26:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@194:204
+  assign adc_pn_valid_s = adc_valid & adc_pn_en;
+  assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+Clone Blocks 27:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@181:191
+  // Ideally, processor should make sure both OOS == 0x0 AND ERR == 0x0.
+
+  assign adc_pn_data_in_s[31:16] = {~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_data_in_s[15:0] = {~adc_data[15], adc_data[14:0]};
+  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match);
+
+
+Clone Blocks 28:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@192:202
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_valid_s = adc_valid & adc_pn_en;
+  assign adc_pn_data_in_s = {~adc_data[15], adc_data[14:0], ~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+Clone Blocks 29:
+hdl/library/axi_ad9250/axi_ad9250_pnmon.v@176:186
+  //    if 64 sequences mismatch consecutively, oos is set (asserted).
+  // if oos is de-asserted, any spurious mismatches sets the error register.
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_data_in_s = {~adc_data[13], adc_data[12:0], ~adc_data[27], adc_data[26:14]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[27:14] == adc_pn_data[27:14]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13: 0] == adc_pn_data[13: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 28'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+
+Clone Blocks 30:
+hdl/library/axi_ad9467/axi_ad9467_pnmon.v@179:189
+  //    If 64 sequences mismatch CONSECUTIVELY, OOS is set (asserted).
+  // If OOS is de-asserted, any spurious mismatches sets the ERROR register.
+  // Ideally, processor should make sure both OOS == 0x0 AND ERR == 0x0.
+
+  assign adc_pn_data_in_s[31:16] = {~adc_data_d[15], adc_data_d[14:0]};
+  assign adc_pn_data_in_s[15:0] = {~adc_data[15], adc_data[14:0]};
+  assign adc_pn_match0_s = (adc_pn_data_in_s[31:16] == adc_pn_data[31:16]) ? 1'b1 : 1'b0;
+  assign adc_pn_match1_s = (adc_pn_data_in_s[15:0] == adc_pn_data[15:0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match2_s = ((adc_data == 16'd0) && (adc_data_d == 16'd0)) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match0_s & adc_pn_match1_s & adc_pn_match2_s;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+
+Clone Blocks 31:
+hdl/library/axi_ad9671/axi_ad9671_pnmon.v@197:207
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[15: 0] == adc_pn_data[15: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 32'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+  // pn running sequence
+
+  always @(posedge adc_clk) begin
+    if (adc_valid == 1'b1) begin
+
+Clone Blocks 32:
+hdl/library/axi_ad9250/axi_ad9250_pnmon.v@178:188
+  // ideally, processor should make sure both oos == 0x0 and err == 0x0.
+
+  assign adc_pn_data_in_s = {~adc_data[13], adc_data[12:0], ~adc_data[27], adc_data[26:14]};
+  assign adc_pn_match_d_1_s = (adc_pn_data_in_s[27:14] == adc_pn_data[27:14]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_d_0_s = (adc_pn_data_in_s[13: 0] == adc_pn_data[13: 0]) ? 1'b1 : 1'b0;
+  assign adc_pn_match_z_s = (adc_pn_data_in_s == 28'd0) ? 1'b0 : 1'b1;
+  assign adc_pn_match_s = adc_pn_match_d_1 & adc_pn_match_d_0 & adc_pn_match_z;
+  assign adc_pn_data_s = (adc_pn_oos == 1'b1) ? adc_pn_data_in_s : adc_pn_data;
+  assign adc_pn_update_s = ~(adc_pn_oos ^ adc_pn_match_s);
+  assign adc_pn_err_s = ~(adc_pn_oos | adc_pn_match_s);
+
+

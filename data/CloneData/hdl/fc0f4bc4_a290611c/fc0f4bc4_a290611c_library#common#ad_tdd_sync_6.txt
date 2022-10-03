@@ -1,0 +1,32 @@
+Source Block: hdl/library/common/ad_tdd_sync.v@70:87@HdlStmProcess
+  reg             sync_pulse = 1'b0;
+  reg             sync_period_eof = 1'b0;
+
+  // the sync module can be bypassed
+
+  always @(posedge clk) begin
+    if (rst == 1) begin
+      enable_out <= 1'b0;
+    end else begin
+      enable_out <= (sync_en) ? enable_synced : enable_in;
+      sync <= (sync_en) ? sync_pulse : 1'b0;
+    end
+  end
+
+  // a free running sync pulse generator
+
+  always @(posedge clk) begin
+    if (rst == 1) begin
+
+Diff Content:
+- 75   always @(posedge clk) begin
+- 76     if (rst == 1) begin
+- 77       enable_out <= 1'b0;
+- 78     end else begin
+- 79       enable_out <= (sync_en) ? enable_synced : enable_in;
+- 80       sync <= (sync_en) ? sync_pulse : 1'b0;
+- 81     end
+- 82   end
++ 82   assign sync = sync_pulse;
+
+Clone Blocks:

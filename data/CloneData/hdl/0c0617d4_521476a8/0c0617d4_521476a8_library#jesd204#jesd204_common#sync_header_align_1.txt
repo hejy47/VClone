@@ -1,0 +1,18 @@
+Source Block: hdl/library/jesd204/jesd204_common/sync_header_align.v@56:66@HdlStmAssign
+  output [63:0] o_data,
+  output [1:0] o_header,
+  output o_block_sync
+);
+
+assign {o_header,o_data} = i_data;
+
+// TODO : Add alignment FSM
+localparam STATE_SH_HUNT = 3'b001;
+localparam STATE_SH_SLIP = 3'b010;
+localparam STATE_SH_LOCK = 3'b100;
+
+Diff Content:
+- 61 assign {o_header,o_data} = i_data;
++ 61   assign {o_header,o_data} = i_data;
+
+Clone Blocks:

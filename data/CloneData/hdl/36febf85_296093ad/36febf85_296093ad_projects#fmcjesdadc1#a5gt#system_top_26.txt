@@ -1,0 +1,27 @@
+Source Block: hdl/projects/fmcjesdadc1/a5gt/system_top.v@224:239@HdlStmProcess
+    .outclock (eth_tx_clk),
+    .dataout (eth_tx_clk_out));
+
+  assign eth_tx_reset_s = ~sys_pll_locked_s;
+
+  always @(posedge rx_clk) begin
+    rx_sysref_m1 <= rx_sysref_s;
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  genvar n;
+  generate
+  for (n = 0; n < 4; n = n + 1) begin: g_align_1
+  ad_jesd_align i_jesd_align (
+
+Diff Content:
+- 229   always @(posedge rx_clk) begin
+- 230     rx_sysref_m1 <= rx_sysref_s;
+- 231     rx_sysref_m2 <= rx_sysref_m1;
+- 232     rx_sysref_m3 <= rx_sysref_m2;
+- 233     rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+- 234   end
+
+Clone Blocks:

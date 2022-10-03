@@ -1,0 +1,37 @@
+Source Block: hdl/library/spi_engine/spi_engine_interconnect/spi_engine_interconnect.v@120:137@HdlStmProcess
+assign s1_sync       = m_sync;
+assign m_sync_ready  = `spi_engine_interconnect_mux(s0_sync_ready, s1_sync_ready);
+assign s0_sync_valid = `spi_engine_interconnect_mux(m_sync_valid, 1'b0);
+assign s1_sync_valid = `spi_engine_interconnect_mux(1'b0, m_sync_valid);
+
+always @(posedge clk) begin
+  if (idle == 1'b1) begin
+    if (s0_cmd_valid)
+      s_active <= 1'b0;
+    else if (s1_cmd_valid)
+      s_active <= 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    idle <= 1'b1;
+  end else begin
+
+Diff Content:
+- 125 always @(posedge clk) begin
+- 126   if (idle == 1'b1) begin
+- 127     if (s0_cmd_valid)
+- 128       s_active <= 1'b0;
+- 129     else if (s1_cmd_valid)
+- 130       s_active <= 1'b1;
+- 132 end
++ 130   always @(posedge clk) begin
++ 130     if (idle == 1'b1) begin
++ 130       if (s0_cmd_valid)
++ 130         s_active <= 1'b0;
++ 130       else if (s1_cmd_valid)
++ 130         s_active <= 1'b1;
++ 130     end
+
+Clone Blocks:

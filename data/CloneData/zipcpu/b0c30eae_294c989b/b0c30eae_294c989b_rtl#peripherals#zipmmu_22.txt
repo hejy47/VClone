@@ -1,0 +1,54 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@560:574@HdlStmProcess
+	assign	table_err   = (s_pending)&&(!s_tlb_miss)&&(!s_tlb_hit);
+	assign	cachable    = tlb_flags[s_tlb_addr][1];
+	// assign	tlb_access_flag    = tlb_flags[s_tlb_addr][2];
+
+	initial	p_tlb_miss = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		p_tlb_miss <= 1'b0;
+	else
+		p_tlb_miss <= (i_wbm_cyc)&&((simple_miss)||(ro_miss));
+
+	initial	p_tlb_err  = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		p_tlb_err <= 1'b0;
+
+Diff Content:
+- 569 		p_tlb_miss <= (i_wbm_cyc)&&((simple_miss)||(ro_miss));
++ 569 		p_tlb_miss <= (i_wbm_cyc)&&((simple_miss)||(ro_miss)||(exe_miss));
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/zipmmu.v@559:569
+	assign	ro_miss     = (s_pending)&&(s_tlb_hit)&&(r_we)&&(ro_flag);
+	assign	table_err   = (s_pending)&&(!s_tlb_miss)&&(!s_tlb_hit);
+	assign	cachable    = tlb_flags[s_tlb_addr][1];
+	// assign	tlb_access_flag    = tlb_flags[s_tlb_addr][2];
+
+	initial	p_tlb_miss = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		p_tlb_miss <= 1'b0;
+	else
+		p_tlb_miss <= (i_wbm_cyc)&&((simple_miss)||(ro_miss));
+
+Clone Blocks 2:
+zipcpu/rtl/peripherals/zipmmu.v@567:581
+		p_tlb_miss <= 1'b0;
+	else
+		p_tlb_miss <= (i_wbm_cyc)&&((simple_miss)||(ro_miss));
+
+	initial	p_tlb_err  = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		p_tlb_err <= 1'b0;
+	else
+		p_tlb_err  <= (i_wbm_cyc)&&(s_pending)&&(!s_tlb_miss)&&(!s_tlb_hit);
+
+	initial	pf_cachable = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		pf_cachable <= 1'b0;
+

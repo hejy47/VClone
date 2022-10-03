@@ -1,0 +1,104 @@
+Source Block: hdl/library/common/up_hdmi_tx.v@179:275@HdlStmProcess
+  assign up_rreq_s = (up_raddr[13:12] == 2'd0) ? up_rreq : 1'b0;
+  assign up_preset_s = ~up_resetn;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_resetn <= 'd0;
+      up_full_range <= 'd0;
+      up_csc_bypass <= 'd0;
+      up_ss_bypass <= 'd0;
+      up_srcsel <= 'd1;
+      up_const_rgb <= 'd0;
+      up_vdma_ovf <= 'd0;
+      up_vdma_unf <= 'd0;
+      up_hdmi_tpm_oos <= 'd0;
+      up_vdma_tpm_oos <= 'd0;
+      up_hl_active <= 'd0;
+      up_hl_width <= 'd0;
+      up_hs_width <= 'd0;
+      up_he_max <= 'd0;
+      up_he_min <= 'd0;
+      up_vf_active <= 'd0;
+      up_vf_width <= 'd0;
+      up_vs_width <= 'd0;
+      up_ve_max <= 'd0;
+      up_ve_min <= 'd0;
+    end else begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h002)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h010)) begin
+        up_resetn <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h011)) begin
+        up_ss_bypass <= up_wdata[2];
+        up_full_range <= up_wdata[1];
+        up_csc_bypass <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h012)) begin
+        up_srcsel <= up_wdata[1:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h013)) begin
+        up_const_rgb <= up_wdata[23:0];
+      end
+      if (up_vdma_ovf_s == 1'b1) begin
+        up_vdma_ovf <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h018)) begin
+        up_vdma_ovf <= up_vdma_ovf & ~up_wdata[1];
+      end
+      if (up_vdma_unf_s == 1'b1) begin
+        up_vdma_unf <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h018)) begin
+        up_vdma_unf <= up_vdma_unf & ~up_wdata[0];
+      end
+      if (up_hdmi_tpm_oos_s == 1'b1) begin
+        up_hdmi_tpm_oos <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
+        up_hdmi_tpm_oos <= up_hdmi_tpm_oos & ~up_wdata[1];
+      end
+      if (up_vdma_tpm_oos_s == 1'b1) begin
+        up_vdma_tpm_oos <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h019)) begin
+        up_vdma_tpm_oos <= up_vdma_tpm_oos & ~up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h100)) begin
+        up_hl_active <= up_wdata[31:16];
+        up_hl_width <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h101)) begin
+        up_hs_width <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h102)) begin
+        up_he_max <= up_wdata[31:16];
+        up_he_min <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h110)) begin
+        up_vf_active <= up_wdata[31:16];
+        up_vf_width <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h111)) begin
+        up_vs_width <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[11:0] == 12'h112)) begin
+        up_ve_max <= up_wdata[31:16];
+        up_ve_min <= up_wdata[15:0];
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
++ 185       up_core_preset <= 1'd1;
++ 208       up_core_preset <= ~up_resetn;
+
+Clone Blocks:

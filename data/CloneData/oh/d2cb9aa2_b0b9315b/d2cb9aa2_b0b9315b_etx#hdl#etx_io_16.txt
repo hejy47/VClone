@@ -1,0 +1,49 @@
+Source Block: oh/etx/hdl/etx_io.v@219:230@HdlStmProcess
+   //################################
+   reg [1:0]  txenb_out_sync;
+   wire       txenb_out = txenb_out_sync[0];
+   
+   // sync the enable signal to the phase-shifted output clock
+   always @ (posedge txlclk_out)
+     txenb_out_sync <= {ecfg_tx_enable, txenb_out_sync[1]};
+   
+   ODDR 
+     #(
+       .DDR_CLK_EDGE  ("SAME_EDGE"), 
+	   .INIT          (1'b0),
+
+Diff Content:
+- 224    always @ (posedge txlclk_out)
+- 225      txenb_out_sync <= {ecfg_tx_enable, txenb_out_sync[1]};
++ 225    always @ (posedge tx_lclk_out)
++ 225      txenb_out_sync[1:0] <= {txenb_out_sync[0],ecfg_tx_enable};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/etx/hdl/etx_io.v@216:226
+
+   //################################
+   //# lclk creation
+   //################################
+   reg [1:0]  txenb_out_sync;
+   wire       txenb_out = txenb_out_sync[0];
+   
+   // sync the enable signal to the phase-shifted output clock
+   always @ (posedge txlclk_out)
+     txenb_out_sync <= {ecfg_tx_enable, txenb_out_sync[1]};
+   
+
+Clone Blocks 2:
+oh/etx/hdl/etx_io.v@215:225
+        );
+
+   //################################
+   //# lclk creation
+   //################################
+   reg [1:0]  txenb_out_sync;
+   wire       txenb_out = txenb_out_sync[0];
+   
+   // sync the enable signal to the phase-shifted output clock
+   always @ (posedge txlclk_out)
+     txenb_out_sync <= {ecfg_tx_enable, txenb_out_sync[1]};
+

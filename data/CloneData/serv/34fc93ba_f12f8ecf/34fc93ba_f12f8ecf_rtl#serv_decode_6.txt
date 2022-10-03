@@ -1,0 +1,48 @@
+Source Block: serv/rtl/serv_decode.v@88:100@HdlStmAssign
+
+   assign o_ctrl_auipc = (opcode == OP_AUIPC);
+
+   assign o_ctrl_mret = (opcode == OP_SYSTEM) & imm[21] & !(|o_funct3);
+
+   assign o_rf_rd_en = running & !o_ctrl_trap &
+                       (opcode != OP_STORE) &
+                       (opcode != OP_BRANCH);
+
+   assign o_rf_rs_en = cnt_en;
+
+   assign o_alu_en = cnt_en;
+
+
+Diff Content:
+- 95                        (opcode != OP_BRANCH);
++ 95                        !branch_op;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_decode.v@84:94
+                        (opcode == OP_JALR) |
+                        ((opcode == OP_BRANCH) & i_alu_cmp);
+
+   assign o_ctrl_jalr = (opcode == OP_JALR);
+
+   assign o_ctrl_auipc = (opcode == OP_AUIPC);
+
+   assign o_ctrl_mret = (opcode == OP_SYSTEM) & imm[21] & !(|o_funct3);
+
+   assign o_rf_rd_en = running & !o_ctrl_trap &
+                       (opcode != OP_STORE) &
+
+Clone Blocks 2:
+serv/rtl/serv_decode.v@86:96
+
+   assign o_ctrl_jalr = (opcode == OP_JALR);
+
+   assign o_ctrl_auipc = (opcode == OP_AUIPC);
+
+   assign o_ctrl_mret = (opcode == OP_SYSTEM) & imm[21] & !(|o_funct3);
+
+   assign o_rf_rd_en = running & !o_ctrl_trap &
+                       (opcode != OP_STORE) &
+                       (opcode != OP_BRANCH);
+
+

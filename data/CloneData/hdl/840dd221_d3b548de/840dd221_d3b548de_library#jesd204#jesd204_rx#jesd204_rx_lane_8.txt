@@ -1,0 +1,43 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane.v@127:141@HdlStmFor
+  assign phy_disperr_s[i] = 'd0;
+  assign phy_notintable_s[i] = 'd0;
+  assign unexpected_char_s[i] = 'd0;
+end
+
+for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_err
+  assign phy_disperr_s[i] = phy_disperr[i];
+  assign phy_notintable_s[i] = phy_notintable[i];
+  assign unexpected_char_s[i] = unexpected_char[i];
+end
+
+for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_char
+  assign char[i] = phy_data[i*8+7:i*8];
+  assign char_is_valid[i] = ~(phy_notintable[i] | phy_disperr[i]);
+
+
+Diff Content:
+- 132 for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_err
+- 133   assign phy_disperr_s[i] = phy_disperr[i];
+- 134   assign phy_notintable_s[i] = phy_notintable[i];
+- 135   assign unexpected_char_s[i] = unexpected_char[i];
+- 136 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/jesd204_rx_lane.v@121:135
+assign status_frame_align = frame_align;
+
+genvar i;
+generate
+
+for (i = DATA_PATH_WIDTH; i < MAX_DATA_PATH_WIDTH; i = i + 1) begin: g_defaults
+  assign phy_disperr_s[i] = 'd0;
+  assign phy_notintable_s[i] = 'd0;
+  assign unexpected_char_s[i] = 'd0;
+end
+
+for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: gen_err
+  assign phy_disperr_s[i] = phy_disperr[i];
+  assign phy_notintable_s[i] = phy_notintable[i];
+  assign unexpected_char_s[i] = unexpected_char[i];
+

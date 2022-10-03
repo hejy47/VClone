@@ -1,0 +1,79 @@
+Source Block: serv/rtl/serv_mpram.v@71:107@HdlStmProcess
+//		                    (i_trap ? CSR_MEPC  : i_csr_addr);
+   assign waddr[2:0] = wcnt_hi;
+
+   wire 	     wgo = !(|wcnt_lo) & ((i_run & (i_rd_wen | i_csr_en)) | i_trap);
+
+   always @(posedge i_clk) begin
+      trap_r <= i_trap;
+      trap_2r <= trap_r;
+      trap_3r <= trap_2r;
+
+      if (wgo) begin
+	 wgo_r <= 1'b1;
+	 wen_r <= {(i_run & i_csr_en)|i_trap,(i_rd_wen & i_run)|i_trap};
+	 rd_waddr <= i_rd_waddr;
+      end
+      wdata0 <= {i_trap ? i_mtval : i_rd ,wdata0[4:1]};
+      wdata1 <= {i_trap ? i_mepc  : i_csr,wdata1[5:1]};
+      wcnt_lo <= {wcnt_lo[2:0],wcnt_lo[3] | wgo};
+      if (wcnt_lo[3]) begin
+	 wcnt_hi <= wcnt_hi + 1;
+	 if (wcnt_hi == 3'd7) begin
+	    wgo_r <= !wgo_r;
+	    wcnt_lo[0] <= wgo_r;
+	    wcnt_hi <= wcnt_hi + {2'b00,wgo_r};
+	 end
+      end
+      if (i_rst) begin
+	 wgo_r <= 1'b0;
+	 wcnt_lo <= 4'd0;
+	 wcnt_hi <= 3'd7;
+      end
+   end
+
+   //0 : RS1
+   //1 : RS2
+   //2 : CSR
+   reg [2:0] rcnt_hi;
+
+Diff Content:
+- 77       trap_r <= i_trap;
+- 78       trap_2r <= trap_r;
+- 79       trap_3r <= trap_2r;
+- 81       if (wgo) begin
+- 82 	 wgo_r <= 1'b1;
+- 83 	 wen_r <= {(i_run & i_csr_en)|i_trap,(i_rd_wen & i_run)|i_trap};
+- 84 	 rd_waddr <= i_rd_waddr;
+- 85       end
+- 86       wdata0 <= {i_trap ? i_mtval : i_rd ,wdata0[4:1]};
+- 87       wdata1 <= {i_trap ? i_mepc  : i_csr,wdata1[5:1]};
+- 88       wcnt_lo <= {wcnt_lo[2:0],wcnt_lo[3] | wgo};
+- 89       if (wcnt_lo[3]) begin
+- 90 	 wcnt_hi <= wcnt_hi + 1;
+- 91 	 if (wcnt_hi == 3'd7) begin
+- 92 	    wgo_r <= !wgo_r;
+- 93 	    wcnt_lo[0] <= wgo_r;
+- 94 	    wcnt_hi <= wcnt_hi + {2'b00,wgo_r};
+- 95 	 end
+- 96       end
+- 98 	 wgo_r <= 1'b0;
+- 99 	 wcnt_lo <= 4'd0;
+- 100 	 wcnt_hi <= 3'd7;
++ 96       wreq_r    <= i_wreq | o_rgnt;
++ 96       wdata0_r  <= wdata0;
++ 96       wdata1_r  <= wdata1;
++ 96       wdata1_2r <= wdata1_r;
++ 96       run_r <= i_run;
++ 96       if (wgo)
++ 96 	wcnt <= wcnt+5'd1;
++ 96       if (wreq_r)
++ 96 	 wgo <= 1'b1;
++ 96       if (wcnt == 5'b11111)
++ 96 	wgo <= 1'b0;
++ 100 	 wcnt <= 5'd0;
++ 102    /*
++ 102     ********** Read side ***********
++ 102     */
+
+Clone Blocks:

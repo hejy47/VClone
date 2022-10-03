@@ -1,0 +1,50 @@
+Source Block: hdl/library/axi_sysid/axi_sysid.v@54:65@HdlStmAssign
+
+assign up_clk = s_axi_aclk;
+assign up_rstn = s_axi_aresetn;
+
+assign rom_addr = up_raddr_s [ROM_ADDR_BITS-1:0];
+assign rom_data_s = (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h1) ? sys_rom_data :
+                  (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h2) ? pr_rom_data : 'h0;
+
+up_axi #(
+  .AXI_ADDRESS_WIDTH(ROM_ADDR_BITS+4))
+i_up_axi (
+  .up_rstn (up_rstn),
+
+Diff Content:
+- 59 assign rom_data_s = (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h1) ? sys_rom_data :
+- 60                   (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h2) ? pr_rom_data : 'h0;
++ 60   assign rom_addr = up_raddr_s [ROM_ADDR_BITS-1:0];
++ 60   assign rom_data_s = (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h1) ? sys_rom_data :
++ 60                     (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h2) ? pr_rom_data : 'h0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_sysid/axi_sysid.v@53:63
+wire  [31:0]                    rom_data_s;
+
+assign up_clk = s_axi_aclk;
+assign up_rstn = s_axi_aresetn;
+
+assign rom_addr = up_raddr_s [ROM_ADDR_BITS-1:0];
+assign rom_data_s = (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h1) ? sys_rom_data :
+                  (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h2) ? pr_rom_data : 'h0;
+
+up_axi #(
+  .AXI_ADDRESS_WIDTH(ROM_ADDR_BITS+4))
+
+Clone Blocks 2:
+hdl/library/axi_sysid/axi_sysid.v@51:61
+wire  [(ROM_ADDR_BITS+1):0]     up_waddr_s;
+wire  [31:0]                    up_wdata_s;
+wire  [31:0]                    rom_data_s;
+
+assign up_clk = s_axi_aclk;
+assign up_rstn = s_axi_aresetn;
+
+assign rom_addr = up_raddr_s [ROM_ADDR_BITS-1:0];
+assign rom_data_s = (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h1) ? sys_rom_data :
+                  (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h2) ? pr_rom_data : 'h0;
+
+

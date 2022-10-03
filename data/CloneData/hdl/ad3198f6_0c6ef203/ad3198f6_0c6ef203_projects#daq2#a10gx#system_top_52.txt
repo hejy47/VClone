@@ -1,0 +1,65 @@
+Source Block: hdl/projects/daq2/a10gx/system_top.v@240:255@HdlStmProcess
+    .outclock (eth_tx_clk),
+    .dataout (eth_tx_clk_out));
+
+  assign eth_tx_reset_s = ~sys_pll_locked_s;
+
+  always @(posedge rx_clk) begin
+    rx_sysref_m1 <= rx_sysref_s;
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  always @(posedge rx_clk) begin
+    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+    dma0_wdata <= { adc0_data_b_s[31:16],
+                    adc0_data_a_s[31:16],
+
+Diff Content:
+- 245   always @(posedge rx_clk) begin
+- 246     rx_sysref_m1 <= rx_sysref_s;
+- 247     rx_sysref_m2 <= rx_sysref_m1;
+- 248     rx_sysref_m3 <= rx_sysref_m2;
+- 249     rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+- 250   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcjesdadc1/a5soc/system_top.v@269:284
+  wire              rx_pll_locked_s;
+  wire    [ 15:0]   rx_xcvr_status_s;
+
+  // instantiations
+
+  always @(posedge rx_clk) begin
+    rx_sysref_m1 <= rx_sysref_s;
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  always @(posedge rx_clk) begin
+    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+    dma0_wdata <= { adc0_data_b_s[31:16],
+                    adc0_data_a_s[31:16],
+
+Clone Blocks 2:
+hdl/projects/fmcjesdadc1/a5gt/system_top.v@240:255
+    .outclock (eth_tx_clk),
+    .dataout (eth_tx_clk_out));
+
+  assign eth_tx_reset_s = ~sys_pll_locked_s;
+
+  always @(posedge rx_clk) begin
+    rx_sysref_m1 <= rx_sysref_s;
+    rx_sysref_m2 <= rx_sysref_m1;
+    rx_sysref_m3 <= rx_sysref_m2;
+    rx_sysref <= rx_sysref_m2 & ~rx_sysref_m3;
+  end
+
+  always @(posedge rx_clk) begin
+    dma0_wr <= adc0_enable_a_s & adc0_enable_b_s;
+    dma0_wdata <= { adc0_data_b_s[31:16],
+                    adc0_data_a_s[31:16],
+

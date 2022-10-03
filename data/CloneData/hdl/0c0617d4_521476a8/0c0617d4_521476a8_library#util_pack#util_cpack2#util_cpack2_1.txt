@@ -1,0 +1,17 @@
+Source Block: hdl/library/util_pack/util_cpack2/util_cpack2.v@180:190@HdlIdDef
+  input packed_fifo_wr_overflow,
+  output packed_fifo_wr_sync,
+  output [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] packed_fifo_wr_data
+);
+
+localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
+/*
+ * Round up to the next power of two and zero out the additional channels
+ * internally.
+ */
+localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
+
+Diff Content:
+- 185 localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
+
+Clone Blocks:

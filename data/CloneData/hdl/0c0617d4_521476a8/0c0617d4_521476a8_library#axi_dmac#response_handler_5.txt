@@ -1,0 +1,75 @@
+Source Block: hdl/library/axi_dmac/response_handler.v@67:77@HdlStmAssign
+assign resp_eot = eot;
+
+wire active = id != request_id;
+
+assign bready = active && resp_ready;
+assign resp_valid = active && bvalid;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+
+Diff Content:
+- 72 assign resp_valid = active && bvalid;
++ 72   assign bready = active && resp_ready;
++ 72   assign resp_valid = active && bvalid;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/response_handler.v@64:74
+`include "inc_id.vh"
+
+assign resp_resp = bresp;
+assign resp_eot = eot;
+
+wire active = id != request_id;
+
+assign bready = active && resp_ready;
+assign resp_valid = active && bvalid;
+
+// We have to wait for all responses before we can disable the response handler
+
+Clone Blocks 2:
+hdl/library/axi_dmac/response_handler.v@62:72
+
+`include "resp.vh"
+`include "inc_id.vh"
+
+assign resp_resp = bresp;
+assign resp_eot = eot;
+
+wire active = id != request_id;
+
+assign bready = active && resp_ready;
+assign resp_valid = active && bvalid;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/response_handler.v@66:76
+assign resp_resp = bresp;
+assign resp_eot = eot;
+
+wire active = id != request_id;
+
+assign bready = active && resp_ready;
+assign resp_valid = active && bvalid;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+
+Clone Blocks 4:
+hdl/library/axi_dmac/response_generator.v@60:70
+`include "resp.vh"
+
+assign resp_resp = RESP_OKAY;
+assign resp_eot = eot;
+
+assign resp_valid = request_id != response_id && enabled;
+
+// We have to wait for all responses before we can disable the response handler
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    enabled <= 1'b0;
+

@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/etx_cfg.v@139:153@HdlStmProcess
+   assign gpio_data[8:0] = tx_gpio_reg[8:0];
+   
+   //###########################
+   //# VERSION
+   //###########################
+   always @ (posedge clk)
+     if(!nreset)
+       tx_version_reg[15:0] <= DEFAULT_VERSION;
+     else if (tx_version_write)
+       tx_version_reg[15:0] <= mi_din[15:0];       
+
+   //###########################
+   //# MONITOR
+   //###########################
+   always @ (posedge clk)
+
+Diff Content:
+- 148        tx_version_reg[15:0] <= mi_din[15:0];       
++ 148        tx_version_reg[15:0] <= data_in[15:0];       
+
+Clone Blocks:

@@ -1,0 +1,49 @@
+Source Block: hdl/library/data_offload/data_offload_fsm.v@207:217@HdlStmAssign
+    wr_init_req_d <= wr_init_req_s;
+  end
+  assign wr_init_req_pos_s = ~wr_init_req_d & wr_init_req_s;
+
+  // status bits
+  assign wr_full = (wr_addr == {{(WR_ADDRESS_WIDTH-1){1'b1}}, 1'b0}) ? 1'b1 : 1'b0;
+
+  // generate INIT acknowledge signal in WRITE domain (in case of ADCs)
+  assign wr_init_ack_s = (wr_fsm_state == WR_SYNC) ? 1'b1 : 1'b0;
+
+  // write address generation
+
+Diff Content:
+- 212   assign wr_full = (wr_addr == {{(WR_ADDRESS_WIDTH-1){1'b1}}, 1'b0}) ? 1'b1 : 1'b0;
++ 212   assign wr_almost_full = (wr_addr == {{(WR_ADDRESS_WIDTH-1){1'b1}}, 1'b0}) ? 1'b1 : 1'b0;
++ 212   assign wr_full = &wr_addr;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/data_offload/data_offload_fsm.v@204:214
+
+  // the initialization interface (init_req) is edge sensitive
+  always @(posedge wr_clk) begin
+    wr_init_req_d <= wr_init_req_s;
+  end
+  assign wr_init_req_pos_s = ~wr_init_req_d & wr_init_req_s;
+
+  // status bits
+  assign wr_full = (wr_addr == {{(WR_ADDRESS_WIDTH-1){1'b1}}, 1'b0}) ? 1'b1 : 1'b0;
+
+  // generate INIT acknowledge signal in WRITE domain (in case of ADCs)
+
+Clone Blocks 2:
+hdl/library/data_offload/data_offload_fsm.v@201:213
+
+    end
+  end
+
+  // the initialization interface (init_req) is edge sensitive
+  always @(posedge wr_clk) begin
+    wr_init_req_d <= wr_init_req_s;
+  end
+  assign wr_init_req_pos_s = ~wr_init_req_d & wr_init_req_s;
+
+  // status bits
+  assign wr_full = (wr_addr == {{(WR_ADDRESS_WIDTH-1){1'b1}}, 1'b0}) ? 1'b1 : 1'b0;
+
+

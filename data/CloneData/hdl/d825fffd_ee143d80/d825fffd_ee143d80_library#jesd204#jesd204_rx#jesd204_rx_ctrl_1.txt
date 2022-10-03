@@ -1,0 +1,24 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_ctrl.v@160:175@HdlStmProcess
+  STATE_CGS: next_state <= STATE_SYNCHRONIZED;
+  default: next_state <= state_good ? state : STATE_RESET;
+  endcase
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    state <= STATE_RESET;
+  end else begin
+    if (good_cnt_limit_reached_s) begin
+      state <= next_state;
+    end
+  end
+end
+
+endmodule
+
+Diff Content:
++ 173 assign event_data_phase = state == STATE_CGS &&
++ 173                           next_state == STATE_SYNCHRONIZED &&
++ 173                           good_cnt_limit_reached_s;
+
+Clone Blocks:

@@ -1,0 +1,23 @@
+Source Block: oh/elink/hdl/ecfg_if.v@86:102@HdlStmAssign
+
+   //ENABLE SIGNALS
+   assign mi_match   = access_in & (dstaddr[31:20]==ID);
+   
+   //signal to carry transaction from ETX to ERX block through fifo_cdc
+   assign mi_rx_en = mi_match &
+                     (
+		      ((dstaddr[19:16]==4'hF) & (dstaddr[10:8]==3'h3))  |           //RX-CFG
+		      ((dstaddr[19:16]==4'hF) & (dstaddr[10:8]==3'h5) & dstaddr[5]) | //RX-DMA
+		      ((dstaddr[19:16]==4'hE) & dstaddr[15])                          //RX-EMMU
+
+		     );
+
+   //config select (group 2 and 3)
+   assign mi_cfg_en = mi_match & 
+		      (dstaddr[19:16]==4'hF) &
+		      (dstaddr[10:8]=={2'b01,RX});
+
+Diff Content:
++ 97    assign 	 rx_sel = RX;   
+
+Clone Blocks:

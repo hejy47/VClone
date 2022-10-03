@@ -1,0 +1,39 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@273:283@HdlIdDef
+parameter v_rez        = 720;
+parameter v_sync_start = v_rez+3;
+parameter v_sync_end   = v_rez+3+5;
+parameter v_max        = 749;
+
+reg ZORRO3 = 1;
+
+reg [11:0] screen_w = 1280;
+reg [11:0] screen_h = 720;
+
+// zorro port buffers / flags
+
+Diff Content:
+- 278 reg ZORRO3 = 1;
++ 278 reg [11:0] h_rez        = 1280;
++ 278 reg [11:0] h_sync_start = 1280+72;
++ 278 reg [11:0] h_sync_end   = 1280+80;
++ 278 reg [11:0] h_max        = 1647;
++ 278 reg [11:0] v_rez        = 720;
++ 278 reg [11:0] v_sync_start = 720+3;
++ 278 reg [11:0] v_sync_end   = 720+8;
++ 278 reg [11:0] v_max        = 749;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@275:285
+parameter v_sync_end   = v_rez+3+5;
+parameter v_max        = 749;
+
+reg ZORRO3 = 1;
+
+reg [11:0] screen_w = 1280;
+reg [11:0] screen_h = 720;
+
+// zorro port buffers / flags
+
+reg [23:0] zaddr;
+

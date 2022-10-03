@@ -1,0 +1,21 @@
+Source Block: oh/elink/hdl/etx_remap.v@51:62@HdlStmAssign
+                             {(2){(|addr_in[17:16])}},//ZERO IF NOT SPECIAL
+			     addr_in[15:0]
+			     };
+   			     
+
+   assign addr_out[31:0] = (remap_en & ~remap_bypass) ? addr_remap[31:0] :
+                	                                addr_in[31:0];
+        		
+
+   //stall read/write access appropriately
+   always @ (posedge clk)     
+     if(~(etx_wr_wait | etx_rd_wait))
+
+Diff Content:
+- 56    assign addr_out[31:0] = (remap_en & ~remap_bypass) ? addr_remap[31:0] :
+- 57                 	                                addr_in[31:0];
++ 57    assign addr_out[31:0] = remap_en ? addr_remap[31:0] :
++ 57                 	              addr_in[31:0];
+
+Clone Blocks:

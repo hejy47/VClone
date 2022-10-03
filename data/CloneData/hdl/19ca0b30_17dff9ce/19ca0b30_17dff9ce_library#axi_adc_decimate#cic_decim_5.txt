@@ -1,0 +1,22 @@
+Source Block: hdl/library/axi_adc_decimate/cic_decim.v@88:102@HdlStmProcess
+    end else begin
+      ce_comb <= clk_enable & counter[16];
+    end
+  end
+
+  always @(posedge clk) begin
+    if (clk_enable == 1'b1) begin
+      filter_input_stage <= filter_in;
+    end
+  end
+
+  assign data_stage[0] = $signed(filter_input_stage);
+
+  generate
+    genvar i;
+
+Diff Content:
+- 94     if (clk_enable == 1'b1) begin
++ 94     if (enable[0] == 1'b1) begin
+
+Clone Blocks:

@@ -1,0 +1,32 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@101:111@HdlIdDef
+
+reg idle;
+
+reg [7:0] clk_div_counter = 'h00;
+reg [7:0] clk_div_counter_next = 'h00;
+reg clk_div_last;
+
+reg [(BIT_COUNTER_WIDTH+8):0] counter = 'h00;
+
+wire [7:0] sleep_counter = counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)];
+wire [1:0] cs_sleep_counter = counter[(BIT_COUNTER_WIDTH+2):(BIT_COUNTER_WIDTH+1)];
+
+Diff Content:
+- 106 reg clk_div_last;
++ 106   reg [(BIT_COUNTER_WIDTH+8):0] counter = 'h00;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@100:110
+reg sdo_t_int = 1'b0;
+
+reg idle;
+
+reg [7:0] clk_div_counter = 'h00;
+reg [7:0] clk_div_counter_next = 'h00;
+reg clk_div_last;
+
+reg [(BIT_COUNTER_WIDTH+8):0] counter = 'h00;
+
+wire [7:0] sleep_counter = counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)];
+

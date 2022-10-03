@@ -1,0 +1,77 @@
+Source Block: hdl/library/axi_dac_interpolate/axi_dac_interpolate_reg.v@120:154@HdlStmProcess
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_rack <= up_rreq;
+      if (up_rreq == 1'b1) begin
+        case (up_raddr[4:0])
+          5'h0: up_rdata  <= up_version;
+          5'h1: up_rdata  <= up_scratch;
+          5'h10: up_rdata <= up_interpolation_ratio_a;
+          5'h11: up_rdata <= {29'h0,up_filter_mask_a};
+          5'h12: up_rdata <= up_interpolation_ratio_b;
+          5'h13: up_rdata <= {29'h0,up_filter_mask_b};
+          5'h14: up_rdata <= {31'h0,up_flags};
+          5'h15: up_rdata <= {30'h0,up_config};
+          5'h16: up_rdata <= {16'h0,up_correction_coefficient_a};
+          5'h17: up_rdata <= {16'h0,up_correction_coefficient_b};
+          default: up_rdata <= 0;
+        endcase
+      end else begin
+        up_rdata <= 32'd0;
+      end
+    end
+  end
+
+   up_xfer_cntrl #(.DATA_WIDTH(105)) i_xfer_cntrl (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_data_cntrl ({ up_config[1],               // 1
+
+Diff Content:
+- 139           5'h14: up_rdata <= {31'h0,up_flags};
++ 139           5'h14: up_rdata <= {30'h0,up_flags};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adc_decimate/axi_adc_decimate_reg.v@104:135
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_rack <= up_rreq;
+      if (up_rreq == 1'b1) begin
+        case (up_raddr[4:0])
+          5'h0: up_rdata  <= up_version;
+          5'h1: up_rdata  <= up_scratch;
+          5'h10: up_rdata <= up_decimation_ratio;
+          5'h11: up_rdata <= { 29'h0, up_filter_mask };
+          5'h12: up_rdata <= { 30'h0, up_config };
+          5'h13: up_rdata <= { 16'h0, up_correction_coefficient_a };
+          5'h14: up_rdata <= { 16'h0, up_correction_coefficient_b };
+          default: up_rdata <= 0;
+        endcase
+      end else begin
+        up_rdata <= 32'd0;
+      end
+    end
+  end
+
+   up_xfer_cntrl #(.DATA_WIDTH(69)) i_xfer_cntrl (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_data_cntrl ({ up_config[1],                 // 1
+

@@ -1,0 +1,27 @@
+Source Block: hdl/projects/adrv9009zu11eg/adrv2crr_fmcomms8/system_top.v@345:364@HdlStmProcess
+  wire  [2:0]     fmcomms8_spi_csn;
+  wire            fmcomms8_spi_mosi;
+  wire            fmcomms8_spi1_miso;
+  reg   [7:0]     spi_fmcomms8_3_to_8_csn;
+
+  always @(*) begin
+    case (spi_csn)
+      3'h0: spi_3_to_8_csn = 8'b11111110;
+      3'h1: spi_3_to_8_csn = 8'b11111101;
+      3'h2: spi_3_to_8_csn = 8'b11111011;
+      3'h3: spi_3_to_8_csn = 8'b11110111;
+      3'h4: spi_3_to_8_csn = 8'b11101111;
+      default: spi_3_to_8_csn = 8'b11111111;
+    endcase
+  end
+
+  always @(*) begin
+    case (fmcomms8_spi_csn)
+      3'h0: spi_fmcomms8_3_to_8_csn = 8'b11111110;
+      3'h1: spi_fmcomms8_3_to_8_csn = 8'b11111101;
+
+Diff Content:
++ 356       3'h5: spi_3_to_8_csn = 8'b11011111;
++ 356       3'h6: spi_3_to_8_csn = 8'b10111111;
+
+Clone Blocks:

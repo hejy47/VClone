@@ -1,0 +1,20 @@
+Source Block: oh/accelerator/hdl/accelerator.v@132:143@HdlStmAssign
+   always @ (posedge clk)
+     if(input1_write)
+       reg_input1[31:0] <= data_in[31:0];
+
+   //arithmetic
+   assign result[31:0] = reg_input0[31:0] +
+			 reg_input1[31:0];
+   
+   //#########################
+   //#READBACK WITH PIPELINE
+   //#########################
+   
+
+Diff Content:
+- 137    assign result[31:0] = reg_input0[31:0] +
+- 138 			 reg_input1[31:0];
++ 138    assign result[31:0] = reg_input0[31:0] + reg_input1[31:0];
+
+Clone Blocks:

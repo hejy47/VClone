@@ -1,0 +1,88 @@
+Source Block: verilog-ethernet/rtl/axis_switch.v@109:149@HdlStmProcess
+parameter CL_M_COUNT = $clog2(M_COUNT);
+
+integer i, j;
+
+// check configuration
+initial begin
+    if (2**DEST_WIDTH < CL_M_COUNT) begin
+        $error("Error: DEST_WIDTH too small for port count");
+        $finish;
+    end
+
+    for (i = 0; i < M_COUNT; i = i + 1) begin
+        if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] < 0 || M_BASE[i*DEST_WIDTH +: DEST_WIDTH] > 2**DEST_WIDTH-1 || M_TOP[i*DEST_WIDTH +: DEST_WIDTH] < 0 || M_TOP[i*DEST_WIDTH +: DEST_WIDTH] > 2**DEST_WIDTH-1) begin
+            $error("Error: value out of range");
+            $finish;
+        end
+    end
+
+    for (i = 0; i < M_COUNT; i = i + 1) begin
+        if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] > M_TOP[i*DEST_WIDTH +: DEST_WIDTH]) begin
+            $error("Error: invalid range");
+            $finish;
+        end
+    end
+
+    for (i = 0; i < M_COUNT; i = i + 1) begin
+        for (j = i+1; j < M_COUNT; j = j + 1) begin
+            if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[j*DEST_WIDTH +: DEST_WIDTH] && M_BASE[j*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[i*DEST_WIDTH +: DEST_WIDTH]) begin
+                $display("%d: %08x-%08x", i, M_BASE[i*DEST_WIDTH +: DEST_WIDTH], M_TOP[i*DEST_WIDTH +: DEST_WIDTH]);
+                $display("%d: %08x-%08x", j, M_BASE[j*DEST_WIDTH +: DEST_WIDTH], M_TOP[j*DEST_WIDTH +: DEST_WIDTH]);
+                $error("Error: ranges overlap");
+                $finish;
+            end
+        end
+    end
+end
+
+wire [S_COUNT*DATA_WIDTH-1:0] int_s_axis_tdata;
+wire [S_COUNT*KEEP_WIDTH-1:0] int_s_axis_tkeep;
+wire [S_COUNT-1:0]            int_s_axis_tvalid;
+wire [S_COUNT-1:0]            int_s_axis_tready;
+
+Diff Content:
+- 120     for (i = 0; i < M_COUNT; i = i + 1) begin
+- 121         if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] < 0 || M_BASE[i*DEST_WIDTH +: DEST_WIDTH] > 2**DEST_WIDTH-1 || M_TOP[i*DEST_WIDTH +: DEST_WIDTH] < 0 || M_TOP[i*DEST_WIDTH +: DEST_WIDTH] > 2**DEST_WIDTH-1) begin
+- 122             $error("Error: value out of range");
+- 123             $finish;
+- 125     end
+- 127     for (i = 0; i < M_COUNT; i = i + 1) begin
+- 128         if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] > M_TOP[i*DEST_WIDTH +: DEST_WIDTH]) begin
+- 129             $error("Error: invalid range");
+- 130             $finish;
+- 132     end
+- 134     for (i = 0; i < M_COUNT; i = i + 1) begin
+- 135         for (j = i+1; j < M_COUNT; j = j + 1) begin
+- 136             if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[j*DEST_WIDTH +: DEST_WIDTH] && M_BASE[j*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[i*DEST_WIDTH +: DEST_WIDTH]) begin
+- 137                 $display("%d: %08x-%08x", i, M_BASE[i*DEST_WIDTH +: DEST_WIDTH], M_TOP[i*DEST_WIDTH +: DEST_WIDTH]);
+- 138                 $display("%d: %08x-%08x", j, M_BASE[j*DEST_WIDTH +: DEST_WIDTH], M_TOP[j*DEST_WIDTH +: DEST_WIDTH]);
+- 139                 $error("Error: ranges overlap");
+- 140                 $finish;
++ 123     if (M_BASE == 0) begin
++ 123     end else if (M_TOP == 0) begin
++ 123         for (i = 0; i < M_COUNT; i = i + 1) begin
++ 123             for (j = i+1; j < M_COUNT; j = j + 1) begin
++ 123                 if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] == M_BASE[j*DEST_WIDTH +: DEST_WIDTH]) begin
++ 123                     $display("%d: %08x", i, M_BASE[i*DEST_WIDTH +: DEST_WIDTH]);
++ 123                     $display("%d: %08x", j, M_BASE[j*DEST_WIDTH +: DEST_WIDTH]);
++ 123                     $error("Error: ranges overlap");
++ 123                     $finish;
++ 123                 end
++ 123             end
++ 130     end else begin
++ 130         for (i = 0; i < M_COUNT; i = i + 1) begin
++ 130             if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] > M_TOP[i*DEST_WIDTH +: DEST_WIDTH]) begin
++ 130                 $error("Error: invalid range");
++ 130                 $finish;
++ 130             end
++ 140         for (i = 0; i < M_COUNT; i = i + 1) begin
++ 140             for (j = i+1; j < M_COUNT; j = j + 1) begin
++ 140                 if (M_BASE[i*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[j*DEST_WIDTH +: DEST_WIDTH] && M_BASE[j*DEST_WIDTH +: DEST_WIDTH] <= M_TOP[i*DEST_WIDTH +: DEST_WIDTH]) begin
++ 140                     $display("%d: %08x-%08x", i, M_BASE[i*DEST_WIDTH +: DEST_WIDTH], M_TOP[i*DEST_WIDTH +: DEST_WIDTH]);
++ 140                     $display("%d: %08x-%08x", j, M_BASE[j*DEST_WIDTH +: DEST_WIDTH], M_TOP[j*DEST_WIDTH +: DEST_WIDTH]);
++ 140                     $error("Error: ranges overlap");
++ 140                     $finish;
++ 140                 end
+
+Clone Blocks:

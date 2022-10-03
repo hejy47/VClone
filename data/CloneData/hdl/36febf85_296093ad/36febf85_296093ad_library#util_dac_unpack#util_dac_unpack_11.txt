@@ -1,0 +1,36 @@
+Source Block: hdl/library/util_dac_unpack/util_dac_unpack.v@150:178@HdlStmIf
+  assign dac_data_01 = dac_data[DATA_WIDTH*2-1:DATA_WIDTH*1];
+  assign dac_data_02 = dac_data[DATA_WIDTH*3-1:DATA_WIDTH*2];
+  assign dac_data_03 = dac_data[DATA_WIDTH*4-1:DATA_WIDTH*3];
+
+  generate
+    if (CHANNELS >= 8) begin
+      assign dac_enable[4] = dac_enable_04;
+      assign dac_enable[5] = dac_enable_05;
+      assign dac_enable[6] = dac_enable_06;
+      assign dac_enable[7] = dac_enable_07;
+      assign dac_valid[4] = dac_valid_04;
+      assign dac_valid[5] = dac_valid_05;
+      assign dac_valid[6] = dac_valid_06;
+      assign dac_valid[7] = dac_valid_07;
+      assign dac_data_04 = dac_data[DATA_WIDTH*5-1:DATA_WIDTH*4];
+      assign dac_data_05 = dac_data[DATA_WIDTH*6-1:DATA_WIDTH*5];
+      assign dac_data_06 = dac_data[DATA_WIDTH*7-1:DATA_WIDTH*6];
+      assign dac_data_07 = dac_data[DATA_WIDTH*8-1:DATA_WIDTH*7];
+    end else begin
+      assign dac_data_04 = 'h0;
+      assign dac_data_05 = 'h0;
+      assign dac_data_06 = 'h0;
+      assign dac_data_07 = 'h0;
+    end
+  endgenerate
+
+  function integer enable_reduce;
+    input n;
+    integer n;
+
+Diff Content:
+- 155     if (CHANNELS >= 8) begin
++ 155     if (NUM_OF_CHANNELS >= 8) begin
+
+Clone Blocks:

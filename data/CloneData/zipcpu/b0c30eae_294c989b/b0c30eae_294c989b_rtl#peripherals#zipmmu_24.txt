@@ -1,0 +1,45 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@599:613@HdlStmProcess
+		pf_stb <= 1'b1;
+	end else
+		pf_stb <= 1'b0;
+
+
+	always @(posedge i_clk)
+		if ((table_err)||(ro_miss)||(simple_miss))
+			status_word <= { r_addr[(AW-1):(AW-VAW)],
+				{(LGPGSZW-1){1'b0}}, 
+				(table_err), (ro_miss), (simple_miss) };
+
+	initial	last_page_valid = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		last_page_valid <= 1'b0;
+
+Diff Content:
+- 605 		if ((table_err)||(ro_miss)||(simple_miss))
+- 606 			status_word <= { r_addr[(AW-1):(AW-VAW)],
+- 608 				(table_err), (ro_miss), (simple_miss) };
++ 606 	if (i_reset)
++ 606 		status_word <= 0;
++ 606 	else if (wr_control)
++ 606 		status_word <= 0;
++ 606 	else if ((table_err)||(ro_miss)||(simple_miss)||(exe_miss))
++ 606 		status_word <= { r_addr[(AW-1):(AW-VAW)],
++ 608 				(table_err), (exe_miss),
++ 608 				(ro_miss), (simple_miss) };
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/zipmmu.v@605:615
+		if ((table_err)||(ro_miss)||(simple_miss))
+			status_word <= { r_addr[(AW-1):(AW-VAW)],
+				{(LGPGSZW-1){1'b0}}, 
+				(table_err), (ro_miss), (simple_miss) };
+
+	initial	last_page_valid = 1'b0;
+	always @(posedge i_clk)
+	if (i_reset)
+		last_page_valid <= 1'b0;
+	else if ((i_wbs_cyc_stb)&&(i_wbs_we))
+		last_page_valid <= 1'b0;
+

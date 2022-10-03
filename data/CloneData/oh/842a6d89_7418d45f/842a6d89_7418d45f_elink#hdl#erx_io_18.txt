@@ -1,0 +1,29 @@
+Source Block: oh/elink/hdl/erx_io.v@261:277@HdlStmProcess
+   reg [7:0]   rx_frame_reg;
+
+   
+   wire        rxreset = reset | ~ecfg_rx_enable;
+   
+   always @ (posedge rx_lclk_div4 or posedge rxreset) 
+     begin
+	if(rxreset)
+          rxenb_sync[1:0] <= 'd0;
+	else
+          rxenb_sync[1:0] <= {1'b1, rxenb_sync[1]};
+     end
+
+   //TODO: Is this the right place for the enable signal?
+   always @ (posedge rx_lclk_div4) 
+     begin      
+	rxgpio_sync       <= {ecfg_rx_gpio_enable, rxgpio_sync[1]};      
+
+Diff Content:
+- 266    always @ (posedge rx_lclk_div4 or posedge rxreset) 
+- 267      begin
+- 268 	if(rxreset)
+- 269           rxenb_sync[1:0] <= 'd0;
+- 270 	else
+- 271           rxenb_sync[1:0] <= {1'b1, rxenb_sync[1]};
+- 272      end
+
+Clone Blocks:

@@ -1,0 +1,66 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap.v@165:193@HdlStmProcess
+  end
+end
+
+// Register Interface
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    ctrl_enable <= 1'b0;
+    ctrl_pause <= 1'b0;
+    up_irq_mask <= 2'b11;
+    up_scratch <= 32'h00;
+    up_wack <= 1'b0;
+  end else begin
+    up_wack <= up_wreq;
+
+    if (up_wreq == 1'b1) begin
+      case (up_waddr)
+      9'h002: up_scratch <= up_wdata;
+      9'h020: up_irq_mask <= up_wdata[1:0];
+      9'h100: {ctrl_pause, ctrl_enable} <= up_wdata[1:0];
+      endcase
+    end
+  end
+end
+
+always @(posedge s_axi_aclk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+  end else begin
+
+Diff Content:
+- 170 always @(posedge s_axi_aclk) begin
+- 171   if (s_axi_aresetn == 1'b0) begin
+- 172     ctrl_enable <= 1'b0;
+- 173     ctrl_pause <= 1'b0;
+- 174     up_irq_mask <= 2'b11;
+- 175     up_scratch <= 32'h00;
+- 176     up_wack <= 1'b0;
+- 177   end else begin
+- 178     up_wack <= up_wreq;
+- 180     if (up_wreq == 1'b1) begin
+- 181       case (up_waddr)
+- 182       9'h002: up_scratch <= up_wdata;
+- 183       9'h020: up_irq_mask <= up_wdata[1:0];
+- 184       9'h100: {ctrl_pause, ctrl_enable} <= up_wdata[1:0];
+- 185       endcase
+- 188 end
++ 185   always @(posedge s_axi_aclk) begin
++ 185     if (s_axi_aresetn == 1'b0) begin
++ 185       ctrl_enable <= 1'b0;
++ 185       ctrl_pause <= 1'b0;
++ 185       up_irq_mask <= 2'b11;
++ 185       up_scratch <= 32'h00;
++ 185       up_wack <= 1'b0;
++ 185     end else begin
++ 185       up_wack <= up_wreq;
++ 185       if (up_wreq == 1'b1) begin
++ 185         case (up_waddr)
++ 185         9'h002: up_scratch <= up_wdata;
++ 185         9'h020: up_irq_mask <= up_wdata[1:0];
++ 185         9'h100: {ctrl_pause, ctrl_enable} <= up_wdata[1:0];
++ 185         endcase
++ 185       end
+
+Clone Blocks:

@@ -1,0 +1,51 @@
+Source Block: oh/emesh/hdl/emesh_if.v@84:95@HdlStmAssign
+				                       xmesh_packet_in[PW-1:0];
+   
+   assign cmesh_wait_out = (cmesh_access_in & emesh_wait_in);
+   
+
+   assign rmesh_wait_out = rmesh_access_in & 
+			   (emesh_wait_in | cmesh_access_in);
+				
+
+   assign xmesh_wait_out = xmesh_access_in & 
+			   (emesh_wait_in | cmesh_access_in | rmesh_access_in);
+   
+
+Diff Content:
+- 89    assign rmesh_wait_out = rmesh_access_in & 
+- 90 			   (emesh_wait_in | cmesh_access_in);
++ 90    assign rmesh_ready_out = ~(rmesh_access_in & 
++ 90 			    (~emesh_ready_in | ~cmesh_ready_in));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emesh/hdl/emesh_if.v@81:91
+   //TODO: Make round robin?? (Fancify)
+   assign emesh_packet_out[PW-1:0] = cmesh_access_in ? cmesh_packet_in[PW-1:0] :
+				     rmesh_access_in ? rmesh_packet_in[PW-1:0] :
+				                       xmesh_packet_in[PW-1:0];
+   
+   assign cmesh_wait_out = (cmesh_access_in & emesh_wait_in);
+   
+
+   assign rmesh_wait_out = rmesh_access_in & 
+			   (emesh_wait_in | cmesh_access_in);
+				
+
+Clone Blocks 2:
+oh/emesh/hdl/emesh_if.v@77:89
+			     rmesh_access_in |
+			     xmesh_access_in;
+   
+
+   //TODO: Make round robin?? (Fancify)
+   assign emesh_packet_out[PW-1:0] = cmesh_access_in ? cmesh_packet_in[PW-1:0] :
+				     rmesh_access_in ? rmesh_packet_in[PW-1:0] :
+				                       xmesh_packet_in[PW-1:0];
+   
+   assign cmesh_wait_out = (cmesh_access_in & emesh_wait_in);
+   
+
+   assign rmesh_wait_out = rmesh_access_in & 
+

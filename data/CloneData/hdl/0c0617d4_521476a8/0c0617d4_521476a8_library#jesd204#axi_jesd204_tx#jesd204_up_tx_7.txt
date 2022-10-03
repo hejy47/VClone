@@ -1,0 +1,70 @@
+Source Block: hdl/library/jesd204/axi_jesd204_tx/jesd204_up_tx.v@144:174@HdlStmProcess
+  end
+  endcase
+
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_cfg_skip_ilas <= 1'b0;
+    up_cfg_continuous_ilas <= 1'b0;
+    up_cfg_continuous_cgs <= 1'b0;
+    up_cfg_mframes_per_ilas <= 'h3;
+  end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
+    case (up_waddr)
+    /* JESD TX configuraton */
+    12'h090: begin
+      up_cfg_skip_ilas <= up_wdata[2];
+      up_cfg_continuous_ilas <= up_wdata[1];
+      up_cfg_continuous_cgs <= up_wdata[0];
+    end
+    12'h091: begin
+//      We'll enable this if we ever have a usecase
+//      cfg_mframes_per_ilas <= up_wdata[7:0];
+    end
+    endcase
+  end
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_ctrl_manual_sync_request <= 1'b0;
+  end else if (up_wreq == 1'b1 && up_waddr == 12'h092) begin
+
+Diff Content:
+- 149 always @(posedge up_clk) begin
+- 150   if (up_reset == 1'b1) begin
+- 151     up_cfg_skip_ilas <= 1'b0;
+- 152     up_cfg_continuous_ilas <= 1'b0;
+- 153     up_cfg_continuous_cgs <= 1'b0;
+- 154     up_cfg_mframes_per_ilas <= 'h3;
+- 155   end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
+- 156     case (up_waddr)
+- 157     /* JESD TX configuraton */
+- 158     12'h090: begin
+- 159       up_cfg_skip_ilas <= up_wdata[2];
+- 160       up_cfg_continuous_ilas <= up_wdata[1];
+- 161       up_cfg_continuous_cgs <= up_wdata[0];
+- 162     end
+- 163     12'h091: begin
+- 167     endcase
+- 169 end
++ 163   always @(posedge up_clk) begin
++ 163     if (up_reset == 1'b1) begin
++ 163       up_cfg_skip_ilas <= 1'b0;
++ 163       up_cfg_continuous_ilas <= 1'b0;
++ 163       up_cfg_continuous_cgs <= 1'b0;
++ 163       up_cfg_mframes_per_ilas <= 'h3;
++ 163     end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
++ 163       case (up_waddr)
++ 163       /* JESD TX configuraton */
++ 163       12'h090: begin
++ 163         up_cfg_skip_ilas <= up_wdata[2];
++ 163         up_cfg_continuous_ilas <= up_wdata[1];
++ 163         up_cfg_continuous_cgs <= up_wdata[0];
++ 163       end
++ 163       12'h091: begin
++ 163       end
++ 163       endcase
+
+Clone Blocks:

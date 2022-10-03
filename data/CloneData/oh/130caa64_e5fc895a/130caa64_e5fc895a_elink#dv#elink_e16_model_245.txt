@@ -1,0 +1,30 @@
+Source Block: oh/elink/dv/elink_e16_model.v@2350:2360@HdlIdDef
+
+   // #########
+   // # REGS
+   // #########
+
+   reg [2:0]  launch_pointer;
+
+   // #########
+   // # WIRES
+   // #########
+
+
+Diff Content:
+- 2355    reg [2:0]  launch_pointer;
++ 2355    always @ (posedge rxi_lclk or posedge reset)
++ 2355      if(reset)
++ 2355        start_tran  <= 1'b0;
++ 2355      else if(fifo_read)
++ 2355        start_tran  <= fifo_data_out[2*LW];
++ 2355    always @ (posedge rxi_lclk)
++ 2355      if(fifo_read)
++ 2355        fifo_data_reg[2*LW-1:0] <= fifo_data_out[2*LW-1:0];
++ 2355    always @ (posedge rxi_lclk or posedge reset)
++ 2355      if(reset)
++ 2355        fifo_data_val <= 1'b0;
++ 2355      else
++ 2355        fifo_data_val <= fifo_read;
+
+Clone Blocks:

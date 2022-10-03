@@ -1,0 +1,47 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@190:216@HdlStmProcess
+  assign data_valid_a_trig = data_valid_a_r;
+  assign data_valid_b_trig = data_valid_b_r;
+
+  assign trigger_out_delayed = (trigger_delay_counter == 32'h0) ? 1 : 0;
+
+  always @(posedge clk) begin
+    if (trigger_delay == 0) begin
+      trigger_delay_counter <= 32'h0;
+    end else begin
+      if (data_valid_a_r == 1'b1) begin
+        triggered <= trigger_out_mixed | triggered;
+        if (trigger_delay_counter == 0) begin
+          trigger_delay_counter <= trigger_delay;
+          triggered <= 1'b0;
+        end else begin
+          if(triggered == 1'b1 || trigger_out_mixed == 1'b1) begin
+            trigger_delay_counter <= trigger_delay_counter - 1;
+          end
+        end
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    data_a_r <= data_a[14:0];
+    data_valid_a_r <= data_valid_a;
+    data_b_r <= data_b[14:0];
+
+Diff Content:
++ 211   always @(posedge clk) begin
++ 211     if (data_valid_a_r == 1'b1 && trigger_out_mixed == 1'b1) begin
++ 211       up_triggered_set <= 1'b1;
++ 211     end else if (up_triggered_reset == 1'b1) begin
++ 211       up_triggered_set <= 1'b0;
++ 211     end
++ 211     up_triggered_reset_d1 <= up_triggered;
++ 211     up_triggered_reset_d2 <= up_triggered_reset_d1;
++ 211     up_triggered_reset    <= up_triggered_reset_d2;
++ 211   end
++ 211   always @(posedge up_clk) begin
++ 211     up_triggered_d1 <= up_triggered_set;
++ 211     up_triggered_d2 <= up_triggered_d1;
++ 211     up_triggered    <= up_triggered_d2;
++ 211   end
+
+Clone Blocks:

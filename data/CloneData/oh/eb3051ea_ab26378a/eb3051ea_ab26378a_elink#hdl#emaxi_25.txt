@@ -1,0 +1,63 @@
+Source Block: oh/elink/hdl/emaxi.v@257:306@HdlStmProcess
+	    wstrb_aligned[7:0] = 8'hff;
+	endcase // case (emwr_datamode[1:0])
+     end // always @ *
+   
+   // generate the write-data signals
+   always @ (posedge m_axi_aclk )
+     if(~m_axi_aresetn) 
+       begin	  
+	  m_axi_wvalid      <= 1'b0;
+          m_axi_wdata[63:0] <= 64'b0;
+          m_axi_wstrb[7:0]  <= 8'b0;
+          m_axi_wlast       <= 1'b1; // todo: no bursts for now?	  
+          wvalid_b          <= 1'b0;
+          wdata_b[63:0]     <= 64'b0;
+          wstrb_b[7:0]      <= 8'b0;         
+       end 
+     else 
+       begin
+          if( ~m_axi_wvalid | w_go ) 
+	    begin
+            if( wvalid_b ) 
+	      begin
+		 m_axi_wvalid       <= 1'b1;
+		 m_axi_wdata[63:0]  <= wdata_b[63:0];
+		 m_axi_wstrb[7:0]   <= wstrb_b[7:0];
+              end 
+	    else 
+	      begin
+		 m_axi_wvalid       <= emwr_rd_en;//todo
+		 m_axi_wdata[63:0]  <= wdata_aligned[63:0];
+		 m_axi_wstrb[7:0]   <= wstrb_aligned[7:0];
+              end
+            end // if ( ~axi_wvalid | w_go )
+
+         if( emwr_rd_en & m_axi_wvalid & ~w_go )
+           wvalid_b <= 1'b1;
+         else if( w_go )
+           wvalid_b <= 1'b0;
+	  
+          if( emwr_rd_en ) 
+	    begin
+               wdata_b[63:0] <= wdata_aligned[63:0];
+               wstrb_b[7:0]  <= wstrb_aligned[7:0];
+            end
+       end // else: !if(~m_axi_aresetn)
+   
+   //----------------------------
+   // read handler
+   //   elink read requests generate a transaction on the ar channel,
+   //   buffer the src info to generate an elink write when the
+
+Diff Content:
+- 268           m_axi_wlast       <= 1'b1; // todo: no bursts for now?	  
+- 285 		 m_axi_wvalid       <= emwr_rd_en;//todo
+- 291          if( emwr_rd_en & m_axi_wvalid & ~w_go )
+- 296           if( emwr_rd_en ) 
++ 268           m_axi_wlast       <= 1'b1; // TODO: no bursts for now?	  
++ 285 		 m_axi_wvalid       <= rxwr_access;
++ 291          if( rxwr_access & m_axi_wvalid & ~w_go )
++ 296           if( rxwr_access ) 
+
+Clone Blocks:

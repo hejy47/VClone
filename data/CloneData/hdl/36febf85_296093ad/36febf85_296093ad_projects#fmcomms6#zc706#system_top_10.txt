@@ -1,0 +1,47 @@
+Source Block: hdl/projects/fmcomms6/zc706/system_top.v@167:192@HdlStmProcess
+  wire            adc_enable_1;
+  wire    [15:0]  adc_data_1;
+
+  // pack-unpack place holder
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dwr <= ~adc_dwr;
+        adc_ddata <= {adc_data_1, adc_ddata[31:16]};
+      end
+      2'b01: begin
+        adc_dwr <= ~adc_dwr;
+        adc_ddata <= {adc_data_0, adc_ddata[31:16]};
+      end
+      default: begin
+        adc_dwr <= 1'b1;
+        adc_ddata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
+  // spi
+
+  assign spi_clk = spi0_clk;
+  assign spi_ad9517_csn = spi0_csn[0];
+
+Diff Content:
+- 172   always @(posedge adc_clk) begin
+- 173     case ({adc_enable_1, adc_enable_0})
+- 174       2'b10: begin
+- 175         adc_dwr <= ~adc_dwr;
+- 176         adc_ddata <= {adc_data_1, adc_ddata[31:16]};
+- 177       end
+- 178       2'b01: begin
+- 179         adc_dwr <= ~adc_dwr;
+- 180         adc_ddata <= {adc_data_0, adc_ddata[31:16]};
+- 181       end
+- 182       default: begin
+- 183         adc_dwr <= 1'b1;
+- 184         adc_ddata <= {adc_data_1, adc_data_0};
+- 185       end
+- 186     endcase
+- 187   end
+
+Clone Blocks:

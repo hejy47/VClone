@@ -1,0 +1,42 @@
+Source Block: hdl/library/common/ad_dds_sine_cordic.v@392:421@HdlStmFor
+  // cordic pipeline
+
+  genvar i;
+
+  generate
+  for (i=0; i < PHASE_DW-1; i=i+1) begin: rotation
+      ad_dds_cordic_pipe #(
+        .P_DW (PHASE_DW),
+        .D_DW (CORDIC_DW),
+        .DELAY_DW (DELAY_DW),
+        .SHIFT(i))
+      pipe (
+        .clk (clk),
+        .dataa_x (x_s[i]),
+        .dataa_y (y_s[i]),
+        .dataa_z (z_s[i]),
+        .datab_z (atan_table[i]),
+        .dir (z_s[i][PHASE_DW-1]),
+        .result_x (x_s[i+1]),
+        .result_y (y_s[i+1]),
+        .result_z (z_s[i+1]),
+        .data_delay_in (data_in_d[i]),
+        .data_delay_out (data_in_d[i+1])
+      );
+    end
+  endgenerate
+
+  // x and y are cos(angle) and sin(angle)
+
+  always @(posedge clk) begin
+
+Diff Content:
+- 402         .SHIFT(i))
+- 403       pipe (
+- 414         .data_delay_out (data_in_d[i+1])
+- 415       );
++ 403         .SHIFT(i)
++ 403       ) pipe (
++ 415         .data_delay_out (data_in_d[i+1]));
+
+Clone Blocks:

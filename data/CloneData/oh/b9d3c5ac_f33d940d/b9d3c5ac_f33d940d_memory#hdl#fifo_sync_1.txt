@@ -1,0 +1,58 @@
+Source Block: oh/memory/hdl/fifo_sync.v@45:87@HdlStmProcess
+   
+   reg [AW-1:0]          waddr;
+   reg [AW-1:0]          raddr;
+   reg [AW-1:0]          count;
+   
+   always @ ( posedge clk ) begin
+      if( reset ) 
+	begin	   
+           waddr    <= 1'b0;
+           raddr    <= 1'b0;
+           count    <= 1'b0;
+           rd_empty <= 1'b1;
+           wr_full  <= 1'b0;         
+      end else 
+	begin
+           if( wr_en & rd_en ) 
+	     begin
+		waddr <= waddr + 'd1;
+		raddr <= raddr + 'd1;	      
+             end 
+	   else if( wr_en ) 
+	     begin
+		waddr <= waddr + 'd1;
+		count <= count + 'd1;
+		rd_empty <= 1'b0;
+		if( & count )
+		  wr_full <= 1'b1;		
+         end 
+	   else if( rd_en ) 
+	   begin	      
+              raddr <= raddr + 'd1;
+              count <= count - 'd1;
+              wr_full <= 1'b0;
+              if( count == 'd1 )
+		rd_empty <= 1'b1;	      
+           end
+	end // else: !if( reset )
+   end // always @ ( posedge clk )
+      
+`ifdef TARGET_XILINX 
+   genvar               dn;   
+   generate for(dn=0; dn<DW; dn=dn+1)
+     begin : genbits
+
+Diff Content:
+- 53            waddr    <= 1'b0;
+- 54            raddr    <= 1'b0;
+- 55            count    <= 1'b0;
+- 56            rd_empty <= 1'b1;
+- 57            wr_full  <= 1'b0;         
++ 57            waddr[AW-1:0] <= 'd0;
++ 57            raddr[AW-1:0] <= 'b0;
++ 57            count[AW-1:0] <= 'b0;
++ 57            rd_empty      <= 1'b1;
++ 57            wr_full       <= 1'b0;         
+
+Clone Blocks:

@@ -1,0 +1,81 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@103:145@HdlStmFor
+wire [RATIO*A_ADDRESS-1:0] s_axis_room_int_s;
+
+// instantiate the FIFOs
+genvar i;
+generate
+  for (i=0; i<RATIO; i=i+1) begin
+    util_axis_fifo #(
+      .DATA_WIDTH (A_WIDTH),
+      .ADDRESS_WIDTH (A_ADDRESS),
+      .ASYNC_CLK (ASYNC_CLK),
+      .M_AXIS_REGISTERED (M_AXIS_REGISTERED),
+      .ALMOST_EMPTY_THRESHOLD (A_ALMOST_EMPTY_THRESHOLD),
+      .ALMOST_FULL_THRESHOLD (A_ALMOST_FULL_THRESHOLD),
+      .TKEEP_EN (TKEEP_EN),
+      .TLAST_EN (TLAST_EN))
+    i_fifo (
+      .m_axis_aclk    (m_axis_aclk),
+      .m_axis_aresetn (m_axis_aresetn),
+      .m_axis_ready   (m_axis_ready_int_s[i]),
+      .m_axis_valid   (m_axis_valid_int_s[i]),
+      .m_axis_data    (m_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
+      .m_axis_tlast   (m_axis_tlast_int_s[i]),
+      .m_axis_tkeep   (m_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
+      .m_axis_level   (m_axis_level_int_s[A_ADDRESS*i+:A_ADDRESS]),
+      .m_axis_empty   (m_axis_empty_int_s[i]),
+      .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
+      .s_axis_aclk    (s_axis_aclk),
+      .s_axis_aresetn (s_axis_aresetn),
+      .s_axis_ready   (s_axis_ready_int_s[i]),
+      .s_axis_valid   (s_axis_valid_int_s[i]),
+      .s_axis_data    (s_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
+      .s_axis_tkeep   (s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
+      .s_axis_tlast   (s_axis_tlast_int_s[i]),
+      .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS]),
+      .s_axis_full    (s_axis_full_int_s[i]),
+      .s_axis_almost_full (s_axis_almost_full_int_s[i])
+    );
+  end
+endgenerate
+
+// write or slave logic
+generate
+
+
+Diff Content:
+- 108   for (i=0; i<RATIO; i=i+1) begin
+- 109     util_axis_fifo #(
+- 110       .DATA_WIDTH (A_WIDTH),
+- 111       .ADDRESS_WIDTH (A_ADDRESS),
+- 112       .ASYNC_CLK (ASYNC_CLK),
+- 113       .M_AXIS_REGISTERED (M_AXIS_REGISTERED),
+- 114       .ALMOST_EMPTY_THRESHOLD (A_ALMOST_EMPTY_THRESHOLD),
+- 115       .ALMOST_FULL_THRESHOLD (A_ALMOST_FULL_THRESHOLD),
+- 116       .TKEEP_EN (TKEEP_EN),
+- 117       .TLAST_EN (TLAST_EN))
+- 118     i_fifo (
+- 119       .m_axis_aclk    (m_axis_aclk),
+- 120       .m_axis_aresetn (m_axis_aresetn),
+- 121       .m_axis_ready   (m_axis_ready_int_s[i]),
+- 122       .m_axis_valid   (m_axis_valid_int_s[i]),
+- 123       .m_axis_data    (m_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
+- 124       .m_axis_tlast   (m_axis_tlast_int_s[i]),
+- 125       .m_axis_tkeep   (m_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
+- 126       .m_axis_level   (m_axis_level_int_s[A_ADDRESS*i+:A_ADDRESS]),
+- 127       .m_axis_empty   (m_axis_empty_int_s[i]),
+- 128       .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
+- 129       .s_axis_aclk    (s_axis_aclk),
+- 130       .s_axis_aresetn (s_axis_aresetn),
+- 131       .s_axis_ready   (s_axis_ready_int_s[i]),
+- 132       .s_axis_valid   (s_axis_valid_int_s[i]),
+- 133       .s_axis_data    (s_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
+- 134       .s_axis_tkeep   (s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
+- 135       .s_axis_tlast   (s_axis_tlast_int_s[i]),
+- 136       .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS]),
+- 137       .s_axis_full    (s_axis_full_int_s[i]),
+- 138       .s_axis_almost_full (s_axis_almost_full_int_s[i])
+- 139     );
+- 140   end
+
+Clone Blocks:

@@ -1,0 +1,32 @@
+Source Block: oh/src/spi/hdl/spi_master_io.v@116:126@HdlStmAssign
+   
+   //read fifo on phase match (due to one cycle pipeline latency
+   assign fifo_read = ~fifo_empty & ~spi_wait & period_match;
+
+   //data done whne
+   assign data_done = fifo_empty & ~spi_wait & period_match;
+
+   //shift on every clock cycle while in datamode
+   assign shift     = period_match & (spi_state[1:0]==`SPI_DATA);
+   
+   //load is the result of the fifo_read
+
+Diff Content:
+- 121    assign data_done = fifo_empty & ~spi_wait & period_match;
++ 121    assign data_done = fifo_empty & ~spi_wait & phase_match;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/spi/hdl/spi_master_io.v@113:123
+       `SPI_HOLD : 
+	 spi_state[1:0] <= period_match ? `SPI_IDLE : `SPI_HOLD;
+     endcase // case (spi_state[1:0])
+   
+   //read fifo on phase match (due to one cycle pipeline latency
+   assign fifo_read = ~fifo_empty & ~spi_wait & period_match;
+
+   //data done whne
+   assign data_done = fifo_empty & ~spi_wait & period_match;
+
+   //shift on every clock cycle while in datamode
+

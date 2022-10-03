@@ -1,0 +1,36 @@
+Source Block: oh/elink/hdl/emaxi.v@393:410@HdlStmAssign
+   //#########################################################################
+   //1. read request comes in on ar channel
+   //2. use src address to match with writes coming back
+   //3. Assumes in order returns
+   
+   assign  readinfo_in[47:0] = 
+               {
+		7'b0,
+                rxrd_srcaddr[31:0],//40:9
+                rxrd_dstaddr[2:0], //8:6
+                rxrd_ctrlmode[3:0],//5:2
+                rxrd_datamode[1:0] //1:0
+                };
+   
+
+   //Rest synchronization (for safety, assume incoming reset is async)
+   wire sync_nreset;   
+   dsync dsync(.dout	(sync_nreset),
+
+Diff Content:
+- 398    assign  readinfo_in[47:0] = 
+- 399                {
+- 400 		7'b0,
+- 401                 rxrd_srcaddr[31:0],//40:9
+- 402                 rxrd_dstaddr[2:0], //8:6
+- 403                 rxrd_ctrlmode[3:0],//5:2
+- 404                 rxrd_datamode[1:0] //1:0
+- 405                 };
++ 405    assign  readinfo_in[40:0] = {rxrd_srcaddr[31:0],//40:9
++ 405 				rxrd_dstaddr[2:0], //8:6
++ 405 				rxrd_ctrlmode[3:0],//5:2
++ 405 				rxrd_datamode[1:0] //1:0
++ 405 				};
+
+Clone Blocks:

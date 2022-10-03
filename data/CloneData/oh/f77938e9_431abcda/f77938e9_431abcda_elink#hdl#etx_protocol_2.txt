@@ -1,0 +1,28 @@
+Source Block: oh/elink/hdl/etx_protocol.v@83:103@HdlStmProcess
+     else
+       tx_io_wait <= tx_access & ~burst_in;        
+     
+   //Hold transaction while waiting
+   //This transaction should be flushed out
+   always @ (posedge clk)
+     if(!nreset)
+       begin
+	  tx_packet[PW-1:0] <= 'b0;
+	  tx_access         <= 1'b0;
+       end     
+     else if(~(etx_wr_wait | etx_rd_wait))
+       begin
+	  tx_packet[PW-1:0] <= etx_packet[PW-1:0];
+	  tx_access         <= tx_enable & etx_access;	
+       end
+   
+   //#############################
+   //# Burst Detection
+   //#############################
+   always @ (posedge clk)
+
+Diff Content:
+- 97 	  tx_access         <= tx_enable & etx_access;	
++ 97 	  tx_access         <= tx_enable & etx_access;
+
+Clone Blocks:

@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@95:108@HdlIdDef
+  BURST_LEN > 4 ? 3 :
+  BURST_LEN > 2 ? 2 : 1;
+
+localparam AUX_FIFO_SIZE = 2**(ID_WIDTH-1);
+
+localparam MEM_RATIO_WIDTH =
+    (ALLOW_ASYM_MEM == 0 || MEM_RATIO == 1) ? 0 :
+    MEM_RATIO == 2 ? 1 :
+    MEM_RATIO == 4 ? 2 : 3;
+
+localparam BURST_LEN_WIDTH_SRC = BURST_LEN_WIDTH +
+  (DATA_WIDTH_SRC < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+localparam BURST_LEN_WIDTH_DEST = BURST_LEN_WIDTH +
+  (DATA_WIDTH_DEST < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+
+Diff Content:
+- 100 localparam MEM_RATIO_WIDTH =
+- 101     (ALLOW_ASYM_MEM == 0 || MEM_RATIO == 1) ? 0 :
+- 102     MEM_RATIO == 2 ? 1 :
+- 103     MEM_RATIO == 4 ? 2 : 3;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@100:111
+localparam MEM_RATIO_WIDTH =
+    (ALLOW_ASYM_MEM == 0 || MEM_RATIO == 1) ? 0 :
+    MEM_RATIO == 2 ? 1 :
+    MEM_RATIO == 4 ? 2 : 3;
+
+localparam BURST_LEN_WIDTH_SRC = BURST_LEN_WIDTH +
+  (DATA_WIDTH_SRC < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+localparam BURST_LEN_WIDTH_DEST = BURST_LEN_WIDTH +
+  (DATA_WIDTH_DEST < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+localparam DATA_WIDTH_MEM_SRC = DATA_WIDTH_MEM >>
+  (DATA_WIDTH_SRC < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
+localparam DATA_WIDTH_MEM_DEST = DATA_WIDTH_MEM >>
+

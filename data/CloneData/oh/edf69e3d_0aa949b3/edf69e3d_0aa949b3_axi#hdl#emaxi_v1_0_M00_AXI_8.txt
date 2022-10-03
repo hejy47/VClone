@@ -1,0 +1,133 @@
+Source Block: oh/axi/hdl/emaxi_v1_0_M00_AXI.v@290:331@HdlStmProcess
+      | ( ~emwr_empty & axi_awvalid & M_AXI_AWREADY & axi_wvalid & M_AXI_WREADY)
+      | ( ~emwr_empty & axi_awvalid & M_AXI_AWREADY & w_wait )
+      | ( ~emwr_empty & axi_wvalid  & M_AXI_WREADY & aw_wait );
+
+   // Generate valid signals, internal waits
+   always @( posedge M_AXI_ACLK ) begin
+	  if( M_AXI_ARESETN == 1'b0 ) begin
+
+         axi_awvalid <= 1'b0;
+         axi_wvalid  <= 1'b0;
+         aw_wait     <= 1'b0;
+         w_wait      <= 1'b0;
+         
+      end else begin
+
+         if( ~axi_awvalid & emwr_rd_en )
+           axi_awvalid <= 1'b1;
+         else if( axi_awvalid & M_AXI_AWREADY & ( emwr_empty | aw_wait ))
+           axi_awvalid <= 1'b0;
+
+         if( ~emwr_empty & axi_awvalid & M_AXI_AWREADY & ~M_AXI_WREADY )
+           aw_wait <= 1'b1;
+         else if( emwr_rd_en )
+           aw_wait <= 1'b0;
+
+         if( ~axi_wvalid & emwr_rd_en )
+           axi_wvalid <= 1'b1;
+         else if( axi_wvalid & M_AXI_WREADY & ( emwr_empty | w_wait ))
+           axi_wvalid <= 1'b0;
+
+         if( ~emwr_empty & axi_wvalid & M_AXI_WREADY & ~M_AXI_AWREADY )
+           w_wait <= 1'b1;
+         else if( emwr_rd_en )
+           w_wait <= 1'b0;
+         
+      end // else: !if( M_AXI_ARESETN == 1'b0 )
+   end // always @ ( posedge M_AXI_ACLK )
+
+   // Put the address, info, & data on the AXI signals
+   always @( posedge M_AXI_ACLK ) begin
+	  if( M_AXI_ARESETN == 1'b0 ) begin
+        
+
+Diff Content:
+- 299          axi_wvalid  <= 1'b0;
+- 300          aw_wait     <= 1'b0;
+- 301          w_wait      <= 1'b0;
+- 305          if( ~axi_awvalid & emwr_rd_en )
+- 306            axi_awvalid <= 1'b1;
+- 307          else if( axi_awvalid & M_AXI_AWREADY & ( emwr_empty | aw_wait ))
+- 308            axi_awvalid <= 1'b0;
+- 310          if( ~emwr_empty & axi_awvalid & M_AXI_AWREADY & ~M_AXI_WREADY )
+- 311            aw_wait <= 1'b1;
+- 312          else if( emwr_rd_en )
+- 313            aw_wait <= 1'b0;
+- 315          if( ~axi_wvalid & emwr_rd_en )
+- 316            axi_wvalid <= 1'b1;
+- 317          else if( axi_wvalid & M_AXI_WREADY & ( emwr_empty | w_wait ))
+- 318            axi_wvalid <= 1'b0;
+- 320          if( ~emwr_empty & axi_wvalid & M_AXI_WREADY & ~M_AXI_AWREADY )
+- 321            w_wait <= 1'b1;
+- 322          else if( emwr_rd_en )
+- 323            w_wait <= 1'b0;
++ 301          axi_awaddr  <= 'd0;
++ 301          axi_awlen   <= 'd0;
++ 301          axi_awsize  <= 'd0;
++ 301          awvalid_b   <= 1'b0;
++ 301          awaddr_b    <= 'd0;
++ 301          awlen_b     <= 'd0;
++ 301          awsize_b    <= 'd0;
++ 323          if( ~axi_awvalid | aw_go ) begin
++ 323             if( awvalid_b ) begin
++ 323                axi_awvalid <= 1'b1;
++ 323                axi_awaddr  <= awaddr_b;
++ 323                axi_awlen   <= awlen_b;
++ 323                axi_awsize  <= awsize_b;
++ 323             end else begin
++ 323                axi_awvalid <= emwr_rd_en;
++ 323                axi_awaddr  <= emwr_rd_data[`DSTADDR_RANGE];
++ 323                axi_awlen   <= 'd0;
++ 323                axi_awsize  <= { 1'b0, emwr_rd_data[`DATAMODE_RANGE] };
++ 323             end // else: !if(awvalid_b)
++ 323          end // if (~axi_awvalid | aw_go)
++ 323          if( emwr_rd_en & axi_awvalid & ~aw_go )
++ 323            awvalid_b <= 1'b1;
++ 323          else if( aw_go )
++ 323            awvalid_b <= 1'b0;
++ 323          if( emwr_rd_en ) begin
++ 323             awaddr_b  <= emwr_rd_data[`DSTADDR_RANGE];
++ 323             awlen_b   <= 'd0;
++ 323             awsize_b  <= { 1'b0, emwr_rd_data[`DATAMODE_RANGE] };
++ 323          end
++ 326    reg [C_M_AXI_DATA_WIDTH-1 : 0]   wdata_aligned;
++ 326    reg [C_M_AXI_DATA_WIDTH/8-1 : 0] wstrb_aligned;
++ 326    always @ ( emwr_rd_data ) begin
++ 326       case( emwr_rd_data[`DATAMODE_RANGE] )
++ 326         2'd0: wdata_aligned = { 8{emwr_rd_data[`DATA_LSB+7 -: 8]}};
++ 326         2'd1: wdata_aligned = { 4{emwr_rd_data[`DATA_LSB+15 -: 16]}};
++ 326         2'd2: wdata_aligned = { 2{emwr_rd_data[`DATA_LSB+31 -: 32]}};
++ 326         default: wdata_aligned = { emwr_rd_data[`SRCADDR_RANGE],
++ 326                                 emwr_rd_data[`DATA_RANGE]};
++ 326       endcase // case ( emwr_rd_data[`DATAMODE_RANGE] )
++ 326       case( emwr_rd_data[`DATAMODE_RANGE] )
++ 326         2'd0: // BYTE
++ 326           case( emwr_rd_data[`DSTADDR_LSB+2 -: 3] )
++ 326             3'd0: wstrb_aligned = 8'h01;
++ 326             3'd1: wstrb_aligned = 8'h02;
++ 326             3'd2: wstrb_aligned = 8'h04;
++ 326             3'd3: wstrb_aligned = 8'h08;
++ 326             3'd4: wstrb_aligned = 8'h10;
++ 326             3'd5: wstrb_aligned = 8'h20;
++ 326             3'd6: wstrb_aligned = 8'h40;
++ 326             default: wstrb_aligned = 8'h80;
++ 326           endcase
++ 326         2'd1: // 16b HWORD
++ 326           case( emwr_rd_data[`DSTADDR_LSB+2 -: 2] )
++ 326             2'd0: wstrb_aligned = 8'h03;
++ 326             2'd1: wstrb_aligned = 8'h0C;
++ 326             2'd2: wstrb_aligned = 8'h30;
++ 326             default: wstrb_aligned = 8'hC0;
++ 326           endcase
++ 326         2'd2: // 32b WORD
++ 326           if( emwr_rd_data[`DSTADDR_LSB+2] )
++ 326             wstrb_aligned = 8'hF0;
++ 326           else
++ 326             wstrb_aligned = 8'h0F;
++ 326         default: // 64b DWORD
++ 326           wstrb_aligned = 8'hFF;
++ 326       endcase // case ( emwr_rd_data[`DATAMODE_RANGE] )
++ 326    end // always @ (...
+
+Clone Blocks:

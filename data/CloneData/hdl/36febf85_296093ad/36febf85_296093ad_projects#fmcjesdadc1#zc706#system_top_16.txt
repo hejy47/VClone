@@ -1,0 +1,169 @@
+Source Block: hdl/projects/fmcjesdadc1/zc706/system_top.v@205:246@HdlStmProcess
+        dma_0_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_1_enable_b, adc_1_enable_a})
+      2'b11: begin
+        dma_1_wr <= 1'b1;
+        dma_1_data[63:48] <= adc_1_data_b[31:16];
+        dma_1_data[47:32] <= adc_1_data_a[31:16];
+        dma_1_data[31:16] <= adc_1_data_b[15: 0];
+        dma_1_data[15: 0] <= adc_1_data_a[15: 0];
+      end
+      2'b10: begin
+        dma_1_wr <= ~dma_1_wr;
+        dma_1_data[63:48] <= adc_1_data_b[31:16];
+        dma_1_data[47:32] <= adc_1_data_b[15: 0];
+        dma_1_data[31:16] <= dma_1_data[63:48];
+        dma_1_data[15: 0] <= dma_1_data[47:32];
+      end
+      2'b01: begin
+        dma_1_wr <= ~dma_1_wr;
+        dma_1_data[63:48] <= adc_1_data_a[31:16];
+        dma_1_data[47:32] <= adc_1_data_a[15: 0];
+        dma_1_data[31:16] <= dma_1_data[63:48];
+        dma_1_data[15: 0] <= dma_1_data[47:32];
+      end
+      default: begin
+        dma_1_wr <= 1'b0;
+        dma_1_data[63:48] <= 16'd0;
+        dma_1_data[47:32] <= 16'd0;
+        dma_1_data[31:16] <= 16'd0;
+        dma_1_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  // instantiations
+
+  IBUFDS_GTE2 i_ibufds_rx_ref_clk (
+    .CEB (1'd0),
+
+Diff Content:
+- 210   always @(posedge adc_clk) begin
+- 211     case ({adc_1_enable_b, adc_1_enable_a})
+- 212       2'b11: begin
+- 213         dma_1_wr <= 1'b1;
+- 214         dma_1_data[63:48] <= adc_1_data_b[31:16];
+- 215         dma_1_data[47:32] <= adc_1_data_a[31:16];
+- 216         dma_1_data[31:16] <= adc_1_data_b[15: 0];
+- 217         dma_1_data[15: 0] <= adc_1_data_a[15: 0];
+- 218       end
+- 219       2'b10: begin
+- 220         dma_1_wr <= ~dma_1_wr;
+- 221         dma_1_data[63:48] <= adc_1_data_b[31:16];
+- 222         dma_1_data[47:32] <= adc_1_data_b[15: 0];
+- 223         dma_1_data[31:16] <= dma_1_data[63:48];
+- 224         dma_1_data[15: 0] <= dma_1_data[47:32];
+- 225       end
+- 226       2'b01: begin
+- 227         dma_1_wr <= ~dma_1_wr;
+- 228         dma_1_data[63:48] <= adc_1_data_a[31:16];
+- 229         dma_1_data[47:32] <= adc_1_data_a[15: 0];
+- 230         dma_1_data[31:16] <= dma_1_data[63:48];
+- 231         dma_1_data[15: 0] <= dma_1_data[47:32];
+- 232       end
+- 233       default: begin
+- 234         dma_1_wr <= 1'b0;
+- 235         dma_1_data[63:48] <= 16'd0;
+- 236         dma_1_data[47:32] <= 16'd0;
+- 237         dma_1_data[31:16] <= 16'd0;
+- 238         dma_1_data[15: 0] <= 16'd0;
+- 239       end
+- 240     endcase
+- 241   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcjesdadc1/vc707/system_top.v@231:272
+        dma_0_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_1_enable_b, adc_1_enable_a})
+      2'b11: begin
+        dma_1_wr <= 1'b1;
+        dma_1_data[63:48] <= adc_1_data_b[31:16];
+        dma_1_data[47:32] <= adc_1_data_a[31:16];
+        dma_1_data[31:16] <= adc_1_data_b[15: 0];
+        dma_1_data[15: 0] <= adc_1_data_a[15: 0];
+      end
+      2'b10: begin
+        dma_1_wr <= ~dma_1_wr;
+        dma_1_data[63:48] <= adc_1_data_b[31:16];
+        dma_1_data[47:32] <= adc_1_data_b[15: 0];
+        dma_1_data[31:16] <= dma_1_data[63:48];
+        dma_1_data[15: 0] <= dma_1_data[47:32];
+      end
+      2'b01: begin
+        dma_1_wr <= ~dma_1_wr;
+        dma_1_data[63:48] <= adc_1_data_a[31:16];
+        dma_1_data[47:32] <= adc_1_data_a[15: 0];
+        dma_1_data[31:16] <= dma_1_data[63:48];
+        dma_1_data[15: 0] <= dma_1_data[47:32];
+      end
+      default: begin
+        dma_1_wr <= 1'b0;
+        dma_1_data[63:48] <= 16'd0;
+        dma_1_data[47:32] <= 16'd0;
+        dma_1_data[31:16] <= 16'd0;
+        dma_1_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  // instantiations
+
+  IBUFDS_GTE2 i_ibufds_rx_ref_clk (
+    .CEB (1'd0),
+
+Clone Blocks 2:
+hdl/projects/fmcjesdadc1/kc705/system_top.v@237:278
+        dma_0_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_1_enable_b, adc_1_enable_a})
+      2'b11: begin
+        dma_1_wr <= 1'b1;
+        dma_1_data[63:48] <= adc_1_data_b[31:16];
+        dma_1_data[47:32] <= adc_1_data_a[31:16];
+        dma_1_data[31:16] <= adc_1_data_b[15: 0];
+        dma_1_data[15: 0] <= adc_1_data_a[15: 0];
+      end
+      2'b10: begin
+        dma_1_wr <= ~dma_1_wr;
+        dma_1_data[63:48] <= adc_1_data_b[31:16];
+        dma_1_data[47:32] <= adc_1_data_b[15: 0];
+        dma_1_data[31:16] <= dma_1_data[63:48];
+        dma_1_data[15: 0] <= dma_1_data[47:32];
+      end
+      2'b01: begin
+        dma_1_wr <= ~dma_1_wr;
+        dma_1_data[63:48] <= adc_1_data_a[31:16];
+        dma_1_data[47:32] <= adc_1_data_a[15: 0];
+        dma_1_data[31:16] <= dma_1_data[63:48];
+        dma_1_data[15: 0] <= dma_1_data[47:32];
+      end
+      default: begin
+        dma_1_wr <= 1'b0;
+        dma_1_data[63:48] <= 16'd0;
+        dma_1_data[47:32] <= 16'd0;
+        dma_1_data[31:16] <= 16'd0;
+        dma_1_data[15: 0] <= 16'd0;
+      end
+    endcase
+  end
+
+  // instantiations
+
+  IBUFDS_GTE2 i_ibufds_rx_ref_clk (
+    .CEB (1'd0),
+

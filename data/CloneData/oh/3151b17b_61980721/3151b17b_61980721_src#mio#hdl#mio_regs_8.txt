@@ -1,0 +1,29 @@
+Source Block: oh/src/mio/hdl/mio_regs.v@146:163@HdlStmProcess
+			   rx_full,     //2	 		   
+			   rx_prog_full,//1
+			   rx_empty     //0
+			   };
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       status_reg[7:0] <= 'b0;   
+     else if(status_write)
+       status_reg[7:0] <= data_in[7:0];
+     else
+       status_reg[7:0] <= {(status_reg[15:8] | status_in[7:0]), // sticky bits
+			   status_in[7:0]};                     // immediate bits
+
+   //###############################
+   //# CLKDIV
+   //################################ 
+   always @ (posedge clk or negedge nreset)
+
+Diff Content:
+- 153        status_reg[7:0] <= 'b0;   
+- 155        status_reg[7:0] <= data_in[7:0];
+- 157        status_reg[7:0] <= {(status_reg[15:8] | status_in[7:0]), // sticky bits
++ 153        status_reg[15:0] <= 'b0;   
++ 155        status_reg[15:0] <= data_in[7:0];
++ 157        status_reg[15:0] <= {(status_reg[15:8] | status_in[7:0]), // sticky bits
+
+Clone Blocks:

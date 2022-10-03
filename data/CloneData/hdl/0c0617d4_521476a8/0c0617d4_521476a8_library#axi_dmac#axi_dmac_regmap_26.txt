@@ -1,0 +1,88 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap.v@193:227@HdlStmProcess
+  end else begin
+    up_rack <= up_rreq;
+  end
+end
+
+always @(posedge s_axi_aclk) begin
+  if (up_rreq == 1'b1) begin
+    case (up_raddr)
+    9'h000: up_rdata <= PCORE_VERSION;
+    9'h001: up_rdata <= ID;
+    9'h002: up_rdata <= up_scratch;
+    9'h003: up_rdata <= 32'h444d4143; // "DMAC"
+    9'h004: up_rdata <= {8'b0,
+                         4'b0,BYTES_PER_BURST_WIDTH[3:0],
+                         2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
+                         2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};
+    9'h005: up_rdata <= {31'd0, CACHE_COHERENT_DEST};
+    9'h020: up_rdata <= up_irq_mask;
+    9'h021: up_rdata <= up_irq_pending;
+    9'h022: up_rdata <= up_irq_source;
+    9'h100: up_rdata <= {ctrl_pause, ctrl_enable};
+    9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_dest_addr;
+    9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_src_addr;
+    9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
+    9'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids0;
+    9'h111: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids1;
+    default: up_rdata <= up_rdata_request;
+    endcase
+  end
+end
+
+axi_dmac_regmap_request #(
+  .DISABLE_DEBUG_REGISTERS(DISABLE_DEBUG_REGISTERS),
+  .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
+  .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
+
+Diff Content:
+- 198 always @(posedge s_axi_aclk) begin
+- 199   if (up_rreq == 1'b1) begin
+- 200     case (up_raddr)
+- 201     9'h000: up_rdata <= PCORE_VERSION;
+- 202     9'h001: up_rdata <= ID;
+- 203     9'h002: up_rdata <= up_scratch;
+- 204     9'h003: up_rdata <= 32'h444d4143; // "DMAC"
+- 205     9'h004: up_rdata <= {8'b0,
+- 206                          4'b0,BYTES_PER_BURST_WIDTH[3:0],
+- 207                          2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
+- 208                          2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};
+- 209     9'h005: up_rdata <= {31'd0, CACHE_COHERENT_DEST};
+- 210     9'h020: up_rdata <= up_irq_mask;
+- 211     9'h021: up_rdata <= up_irq_pending;
+- 212     9'h022: up_rdata <= up_irq_source;
+- 213     9'h100: up_rdata <= {ctrl_pause, ctrl_enable};
+- 214     9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_dest_addr;
+- 215     9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_src_addr;
+- 216     9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
+- 217     9'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids0;
+- 218     9'h111: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids1;
+- 219     default: up_rdata <= up_rdata_request;
+- 220     endcase
+- 222 end
++ 220   always @(posedge s_axi_aclk) begin
++ 220     if (up_rreq == 1'b1) begin
++ 220       case (up_raddr)
++ 220       9'h000: up_rdata <= PCORE_VERSION;
++ 220       9'h001: up_rdata <= ID;
++ 220       9'h002: up_rdata <= up_scratch;
++ 220       9'h003: up_rdata <= 32'h444d4143; // "DMAC"
++ 220       9'h004: up_rdata <= {8'b0,
++ 220                            4'b0,BYTES_PER_BURST_WIDTH[3:0],
++ 220                            2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
++ 220                            2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};
++ 220       9'h005: up_rdata <= {31'd0, CACHE_COHERENT_DEST};
++ 220       9'h020: up_rdata <= up_irq_mask;
++ 220       9'h021: up_rdata <= up_irq_pending;
++ 220       9'h022: up_rdata <= up_irq_source;
++ 220       9'h100: up_rdata <= {ctrl_pause, ctrl_enable};
++ 220       9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_dest_addr;
++ 220       9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_src_addr;
++ 220       9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
++ 220       9'h110: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids0;
++ 220       9'h111: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_ids1;
++ 220       default: up_rdata <= up_rdata_request;
++ 220       endcase
++ 220     end
+
+Clone Blocks:

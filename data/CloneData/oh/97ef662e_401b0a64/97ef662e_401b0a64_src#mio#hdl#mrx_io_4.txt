@@ -1,0 +1,48 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@43:65@HdlStmProcess
+   assign dmode16  = (iowidth[1:0]==2'b01);
+   assign dmode32  = (iowidth[1:0]==2'b10);
+   assign dmode64  = (iowidth[1:0]==2'b11);
+
+   //Keep track of valid bytes in shift register
+   always @ (posedge rx_clk or negedge io_nreset)
+     if(!io_nreset)
+       io_valid_reg[7:0] <= 8'b0;
+     else if(io_frame & dmode8)
+       io_valid_reg[7:0] <= {io_valid_reg[6:0],1'b1};
+     else if(io_frame & dmode16)
+       io_valid_reg[7:0] <= {io_valid_reg[5:0],2'b11};
+     else if(io_frame & dmode32)
+       io_valid_reg[7:0] <= {io_valid_reg[3:0],4'b1111};
+     else if(io_frame & dmode64)
+       io_valid_reg[7:0] <= 8'b11111111;
+     else
+       io_valid_reg[7:0] <= 8'b0;
+
+   //Access signal for FIFO
+   assign io_access = (&io_valid_reg[7:0])               | // full vector
+		      (~io_frame | (|io_valid_reg[7:0]));  // partial vector 
+          
+
+Diff Content:
+- 50        io_valid_reg[7:0] <= 8'b0;
+- 51      else if(io_frame & dmode8)
+- 52        io_valid_reg[7:0] <= {io_valid_reg[6:0],1'b1};
+- 53      else if(io_frame & dmode16)
+- 54        io_valid_reg[7:0] <= {io_valid_reg[5:0],2'b11};
+- 55      else if(io_frame & dmode32)
+- 56        io_valid_reg[7:0] <= {io_valid_reg[3:0],4'b1111};
+- 57      else if(io_frame & dmode64)
+- 58        io_valid_reg[7:0] <= 8'b11111111;
+- 60        io_valid_reg[7:0] <= 8'b0;
++ 58        io_valid[7:0] <= 8'b0;
++ 58      else if(reload)
++ 58        io_valid[7:0] <= valid_input[7:0];   
++ 58      else if(io_frame)
++ 58        io_valid[7:0] <= valid_next[7:0];
++ 60        io_valid[7:0] <= 8'b0;
++ 60    assign reload = (io_frame &  transfer_done) |  // continuing stream
++ 60 		   (io_frame & ~transfer_active); // new frame
++ 60    assign transfer_active = |io_valid[7:0];
++ 60    assign transfer_done   = &io_valid[7:0];
+
+Clone Blocks:

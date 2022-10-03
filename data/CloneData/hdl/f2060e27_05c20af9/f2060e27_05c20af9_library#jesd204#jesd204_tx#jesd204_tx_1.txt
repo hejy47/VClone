@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx.v@106:116@HdlIdDef
+  MAX_BEATS_PER_MULTIFRAME > 16 ? 5 :
+  MAX_BEATS_PER_MULTIFRAME > 8 ? 4 :
+  MAX_BEATS_PER_MULTIFRAME > 4 ? 3 :
+  MAX_BEATS_PER_MULTIFRAME > 2 ? 2 : 1;
+
+localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
+
+wire eof_gen_reset;
+wire [DATA_PATH_WIDTH-1:0] eof;
+wire eomf;
+
+
+Diff Content:
++ 111 localparam CW = DATA_PATH_WIDTH * NUM_LANES;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx.v@108:118
+  MAX_BEATS_PER_MULTIFRAME > 4 ? 3 :
+  MAX_BEATS_PER_MULTIFRAME > 2 ? 2 : 1;
+
+localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
+
+wire eof_gen_reset;
+wire [DATA_PATH_WIDTH-1:0] eof;
+wire eomf;
+
+wire [NUM_LANES-1:0] lane_cgs_enable;
+
+

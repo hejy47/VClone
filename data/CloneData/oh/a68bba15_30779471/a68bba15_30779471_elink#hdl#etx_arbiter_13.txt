@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@156:168@HdlStmProcess
+	   etx_access         <= access_in ;
+	   etx_rr             <= txrr_grant & ~txrr_wait;
+	end	   
+   
+   //packet
+   always @ (posedge clk)
+     if (access_in & ~(etx_wr_wait | etx_rd_wait))
+	  etx_packet[PW-1:0] <= etx_mux[PW-1:0];	 
+   
+endmodule // etx_arbiter
+// Local Variables:
+// verilog-library-directories:("." "../../emesh/hdl")
+// End:
+
+Diff Content:
+- 162      if (access_in & ~(etx_wr_wait | etx_rd_wait))
+- 163 	  etx_packet[PW-1:0] <= etx_mux[PW-1:0];	 
++ 163      if (access_in & ~etx_all_wait)
++ 163        etx_packet[PW-1:0] <= etx_mux[PW-1:0];	 
+
+Clone Blocks:

@@ -1,0 +1,128 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3982:3992@HdlStmAssign
+	  rd_binary_pointer_tlc[FAD:0]  <= rd_binary_next_tlc[FAD:0];	  
+	  rd_gray_pointer_tlc[FAD:0]    <= rd_gray_next_tlc[FAD:0];	  
+       end
+
+   assign rd_addr_tlc[FAD-1:0]       = rd_binary_pointer_tlc[FAD-1:0];
+   assign rd_binary_next_tlc[FAD:0]  = rd_binary_pointer_tlc[FAD:0] + rd_read_tlc[FAD:0];
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign rd_gray_next_tlc[FAD:0]  = {1'b0,rd_binary_next_tlc[FAD:1]} ^ 
+                                           rd_binary_next_tlc[FAD:0];
+
+
+Diff Content:
+- 3987    assign rd_binary_next_tlc[FAD:0]  = rd_binary_pointer_tlc[FAD:0] + rd_read_tlc[FAD:0];
++ 3987    wire [3:0]  txo_rotate_dis;
++ 3987    wire        en_arbitration;
++ 3987    wire        en_rotate;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1663:1673
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+   //# Transaction assembly and distribution
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@2283:2293
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign rd_gray_next[FAD:0]  = {1'b0,rd_binary_next[FAD:1]} ^ rd_binary_next[FAD:0];
+
+   //# FIFO empty indication
+   assign fifo_empty_next = (rd_gray_next[FAD:0]==wr_gray_pointer[FAD:0]);
+
+   always @ (posedge cclk or posedge reset)
+
+Clone Blocks 3:
+oh/elink/dv/elink_e16_model.v@1662:1672
+     if(reset)
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+
+Clone Blocks 4:
+oh/elink/dv/elink_e16_model.v@1663:1673
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+   //# Transaction assembly and distribution
+
+Clone Blocks 5:
+oh/elink/dv/elink_e16_model.v@3969:3989
+
+   //#############################
+   //# FIFO Read State Machine
+   //#############################
+    
+   always @(posedge txo_lclk or posedge reset)
+     if(reset)
+       begin
+	  rd_binary_pointer_tlc[FAD:0]  <= {(FAD+1){1'b0}};
+	  rd_gray_pointer_tlc[FAD:0]    <= {(FAD+1){1'b0}};
+       end
+     else if(|(rd_read_tlc[FAD:0]))
+       begin
+	  rd_binary_pointer_tlc[FAD:0]  <= rd_binary_next_tlc[FAD:0];	  
+	  rd_gray_pointer_tlc[FAD:0]    <= rd_gray_next_tlc[FAD:0];	  
+       end
+
+   assign rd_addr_tlc[FAD-1:0]       = rd_binary_pointer_tlc[FAD-1:0];
+   assign rd_binary_next_tlc[FAD:0]  = rd_binary_pointer_tlc[FAD:0] + rd_read_tlc[FAD:0];
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+
+Clone Blocks 6:
+oh/elink/dv/elink_e16_model.v@1662:1672
+     if(reset)
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+
+Clone Blocks 7:
+oh/elink/dv/elink_e16_model.v@3981:3991
+       begin
+	  rd_binary_pointer_tlc[FAD:0]  <= rd_binary_next_tlc[FAD:0];	  
+	  rd_gray_pointer_tlc[FAD:0]    <= rd_gray_next_tlc[FAD:0];	  
+       end
+
+   assign rd_addr_tlc[FAD-1:0]       = rd_binary_pointer_tlc[FAD-1:0];
+   assign rd_binary_next_tlc[FAD:0]  = rd_binary_pointer_tlc[FAD:0] + rd_read_tlc[FAD:0];
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign rd_gray_next_tlc[FAD:0]  = {1'b0,rd_binary_next_tlc[FAD:1]} ^ 
+                                           rd_binary_next_tlc[FAD:0];
+

@@ -1,0 +1,199 @@
+Source Block: hdl/projects/fmcomms1/zed/system_top.v@271:297@HdlStmProcess
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt ;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+      end
+      default: begin
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
+  system_wrapper i_system_wrapper (
+    .ddr_addr (ddr_addr),
+    .ddr_ba (ddr_ba),
+    .ddr_cas_n (ddr_cas_n),
+
+Diff Content:
+- 276   always @(posedge adc_clk) begin
+- 277     adc_data_cnt <= ~adc_data_cnt ;
+- 278     case ({adc_enable_1, adc_enable_0})
+- 279       2'b10: begin
+- 280         adc_dma_wr <= adc_data_cnt;
+- 281         adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+- 282       end
+- 283       2'b01: begin
+- 284         adc_dma_wr <= adc_data_cnt;
+- 285         adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+- 286       end
+- 287       default: begin
+- 288         adc_dma_wr <= 1'b1;
+- 289         adc_dma_wdata <= {adc_data_1, adc_data_0};
+- 290       end
+- 291     endcase
+- 292   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms1/zc702/system_top.v@228:254
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt ;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+      end
+      default: begin
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
+  system_wrapper i_system_wrapper (
+    .ddr_addr (ddr_addr),
+    .ddr_ba (ddr_ba),
+    .ddr_cas_n (ddr_cas_n),
+
+Clone Blocks 2:
+hdl/projects/fmcomms1/ac701/system_top.v@235:261
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+      end
+      default: begin
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
+  system_wrapper i_system_wrapper (
+    .ddr3_addr (ddr3_addr),
+    .ddr3_ba (ddr3_ba),
+    .ddr3_cas_n (ddr3_cas_n),
+
+Clone Blocks 3:
+hdl/projects/fmcomms1/kc705/system_top.v@258:284
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin 
+    adc_data_cnt <= ~adc_data_cnt;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+      end
+      default: begin
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+    .dio_t (gpio_t[16:0]),
+    .dio_i (gpio_o[16:0]),
+    .dio_o (gpio_i[16:0]),
+
+Clone Blocks 4:
+hdl/projects/fmcomms1/zc706/system_top.v@227:253
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin
+    adc_data_cnt <= ~adc_data_cnt ;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+      end
+      default: begin
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
+  system_wrapper i_system_wrapper (
+    .ddr_addr (ddr_addr),
+    .ddr_ba (ddr_ba),
+    .ddr_cas_n (ddr_cas_n),
+
+Clone Blocks 5:
+hdl/projects/fmcomms1/vc707/system_top.v@248:274
+    dac_ddata_0[47:32] <= dac_dma_rdata[47:32];
+    dac_ddata_0[31:16] <= dac_dma_rdata[15: 0];
+    dac_ddata_0[15: 0] <= dac_dma_rdata[15: 0];
+  end
+
+  always @(posedge adc_clk) begin 
+    adc_data_cnt <= ~adc_data_cnt;
+    case ({adc_enable_1, adc_enable_0})
+      2'b10: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_1, adc_dma_wdata[31:16]};
+      end
+      2'b01: begin
+        adc_dma_wr <= adc_data_cnt;
+        adc_dma_wdata <= {adc_data_0, adc_dma_wdata[31:16]};
+      end
+      default: begin
+        adc_dma_wr <= 1'b1;
+        adc_dma_wdata <= {adc_data_1, adc_data_0};
+      end
+    endcase
+  end
+
+  ad_iobuf #(.DATA_WIDTH(21)) i_iobuf_sw_led (
+    .dio_t (gpio_t[20:0]),
+    .dio_i (gpio_o[20:0]),
+    .dio_o (gpio_i[20:0]),
+

@@ -1,0 +1,104 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@1752:1798@HdlStmIf
+    .TXUSRCLK2 (tx_usrclk2));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == GTHE4_TRANSCEIVERS) begin
+  BUFG_GT i_rx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (rx_out_clk_s),
+    .O (rx_out_clk));
+
+  BUFG_GT i_tx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (tx_out_clk_s),
+    .O (tx_out_clk));
+
+  BUFG_GT i_rx_div2_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd1),
+    .I (rx_out_clk_s),
+    .O (rx_out_clk_div2));
+
+    BUFG_GT i_tx_div2_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd1),
+    .I (tx_out_clk_s),
+    .O (tx_out_clk_div2));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == GTHE4_TRANSCEIVERS) begin
+  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_rx_sys_clk_sel[0]};
+
+Diff Content:
+- 1785     BUFG_GT i_tx_div2_bufg (
++ 1785   BUFG_GT i_tx_div2_bufg (
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@979:1025
+  assign rx_prbslocked = ~rx_prbserr_sticky;
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == GTHE3_TRANSCEIVERS) begin
+  BUFG_GT i_rx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (rx_out_clk_s),
+    .O (rx_out_clk));
+
+  BUFG_GT i_tx_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd0),
+    .I (tx_out_clk_s),
+    .O (tx_out_clk));
+
+  BUFG_GT i_rx_div2_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd1),
+    .I (rx_out_clk_s),
+    .O (rx_out_clk_div2));
+
+    BUFG_GT i_tx_div2_bufg (
+    .CE (1'b1),
+    .CEMASK (1'b0),
+    .CLR (1'b0),
+    .CLRMASK (1'b0),
+    .DIV (3'd1),
+    .I (tx_out_clk_s),
+    .O (tx_out_clk_div2));
+  end
+  endgenerate
+
+  generate
+  if (XCVR_TYPE == GTHE3_TRANSCEIVERS) begin
+  assign rx_sys_clk_sel_s = (up_rx_sys_clk_sel[1] == 0) ? 2'b00 : {1'b1,~up_rx_sys_clk_sel[0]};
+

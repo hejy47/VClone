@@ -1,0 +1,85 @@
+Source Block: verilog-ethernet/rtl/eth_axis_tx_64.v@287:341@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        input_eth_hdr_ready_reg <= 0;
+        input_eth_payload_tready_reg <= 0;
+        eth_dest_mac_reg <= 0;
+        eth_src_mac_reg <= 0;
+        eth_type_reg <= 0;
+        save_eth_payload_tdata_reg <= 0;
+        save_eth_payload_tkeep_reg <= 0;
+        save_eth_payload_tlast_reg <= 0;
+        save_eth_payload_tuser_reg <= 0;
+        busy_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_eth_hdr_ready_reg <= input_eth_hdr_ready_next;
+
+        input_eth_payload_tready_reg <= input_eth_payload_tready_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // datapath
+        if (store_eth_hdr) begin
+            eth_dest_mac_reg <= input_eth_dest_mac;
+            eth_src_mac_reg <= input_eth_src_mac;
+            eth_type_reg <= input_eth_type;
+        end
+
+        if (flush_save) begin
+            save_eth_payload_tdata_reg <= 0;
+            save_eth_payload_tkeep_reg <= 0;
+            save_eth_payload_tlast_reg <= 0;
+            save_eth_payload_tuser_reg <= 0;
+        end else if (transfer_in_save) begin
+            save_eth_payload_tdata_reg <= input_eth_payload_tdata;
+            save_eth_payload_tkeep_reg <= input_eth_payload_tkeep;
+            save_eth_payload_tlast_reg <= input_eth_payload_tlast;
+            save_eth_payload_tuser_reg <= input_eth_payload_tuser;
+        end
+    end
+end
+
+// output datapath logic
+reg [63:0] output_axis_tdata_reg = 0;
+reg [7:0]  output_axis_tkeep_reg = 0;
+reg        output_axis_tvalid_reg = 0;
+
+Diff Content:
+- 295         frame_ptr_reg <= 0;
+- 296         input_eth_hdr_ready_reg <= 0;
+- 297         input_eth_payload_tready_reg <= 0;
+- 298         eth_dest_mac_reg <= 0;
+- 299         eth_src_mac_reg <= 0;
+- 300         eth_type_reg <= 0;
+- 301         save_eth_payload_tdata_reg <= 0;
+- 302         save_eth_payload_tkeep_reg <= 0;
+- 303         save_eth_payload_tlast_reg <= 0;
+- 304         save_eth_payload_tuser_reg <= 0;
+- 305         busy_reg <= 0;
+- 325             save_eth_payload_tdata_reg <= 0;
+- 326             save_eth_payload_tkeep_reg <= 0;
+- 327             save_eth_payload_tlast_reg <= 0;
+- 328             save_eth_payload_tuser_reg <= 0;
+- 330             save_eth_payload_tdata_reg <= input_eth_payload_tdata;
+- 331             save_eth_payload_tkeep_reg <= input_eth_payload_tkeep;
+- 333             save_eth_payload_tuser_reg <= input_eth_payload_tuser;
+- 336 end
++ 305         frame_ptr_reg <= 8'd0;
++ 305         input_eth_hdr_ready_reg <= 1'b0;
++ 305         input_eth_payload_tready_reg <= 1'b0;
++ 305         save_eth_payload_tlast_reg <= 1'b0;
++ 305         busy_reg <= 1'b0;
++ 328             save_eth_payload_tlast_reg <= 1'b0;
+
+Clone Blocks:

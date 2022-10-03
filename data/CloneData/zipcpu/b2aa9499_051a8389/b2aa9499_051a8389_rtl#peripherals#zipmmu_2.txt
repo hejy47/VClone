@@ -1,0 +1,17 @@
+Source Block: zipcpu/rtl/peripherals/zipmmu.v@378:388@HdlStmProcess
+	//
+	// Step one -- handle the control bus--i_wbs_cyc_stb
+	//
+	//
+	//////////////////////////////////////////
+	initial	tlb_accessed = -1;
+	always @(posedge i_clk)
+	begin
+		// Write to the Translation lookaside buffer
+		if (wr_vtable)
+			tlb_vdata[wr_tlb_addr]<=i_wbs_data[(DW-1):LGPGSZB];
+
+Diff Content:
+- 383 	initial	tlb_accessed = -1;
+
+Clone Blocks:

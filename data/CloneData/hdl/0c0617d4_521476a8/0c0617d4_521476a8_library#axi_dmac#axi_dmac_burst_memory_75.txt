@@ -1,0 +1,24 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@305:315@HdlStmAssign
+      dest_mem_data_strb <= {DATA_WIDTH_MEM_DEST/8{1'b1}};
+    end
+  end
+end
+
+assign dest_id_next_inc = inc_id(dest_id_next);
+
+always @(posedge dest_clk) begin
+  if (dest_reset == 1'b1) begin
+    dest_id_next <= 'h00;
+    dest_id_reduced_msb_next <= 1'b0;
+
+Diff Content:
+- 310 assign dest_id_next_inc = inc_id(dest_id_next);
++ 310   always @(posedge src_clk) begin
++ 310     if (src_reset == 1'b1 || src_last_beat == 1'b1) begin
++ 310       src_beat_counter <= 'h00;
++ 310     end else if (src_beat == 1'b1) begin
++ 310       src_beat_counter <= src_beat_counter + 1'b1;
++ 310     end
++ 310   end
+
+Clone Blocks:

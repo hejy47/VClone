@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@444:462@HdlStmIf
+
+  assign tx_data_p = tx_data_p_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+  assign tx_data_n = tx_data_n_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+
+  generate
+  if (PCORE_NUM_OF_LANES == PCORE_NUM_OF_TX_LANES) begin
+  assign tx_gt_charisk_s = tx_gt_charisk;
+  assign tx_gt_data_s = tx_gt_data;
+  end else begin
+  assign tx_gt_charisk_s[((PCORE_NUM_OF_LANES* 4)-1):(PCORE_NUM_OF_TX_LANES* 4)] = 'd0;
+  assign tx_gt_data_s[((PCORE_NUM_OF_LANES*32)-1):(PCORE_NUM_OF_TX_LANES*32)] = 'd0;
+  assign tx_gt_charisk_s[((PCORE_NUM_OF_TX_LANES* 4)-1):0] = tx_gt_charisk;
+  assign tx_gt_data_s[((PCORE_NUM_OF_TX_LANES*32)-1):0] = tx_gt_data;
+  end
+  endgenerate
+
+  // transmit data interleave -- since transceivers are shared, lane assignments may not match pin assignments
+
+  assign tx_ip_data = tx_data;
+
+Diff Content:
+- 449   if (PCORE_NUM_OF_LANES == PCORE_NUM_OF_TX_LANES) begin
+- 450   assign tx_gt_charisk_s = tx_gt_charisk;
+- 451   assign tx_gt_data_s = tx_gt_data;
+- 452   end else begin
+- 453   assign tx_gt_charisk_s[((PCORE_NUM_OF_LANES* 4)-1):(PCORE_NUM_OF_TX_LANES* 4)] = 'd0;
+- 454   assign tx_gt_data_s[((PCORE_NUM_OF_LANES*32)-1):(PCORE_NUM_OF_TX_LANES*32)] = 'd0;
+- 455   assign tx_gt_charisk_s[((PCORE_NUM_OF_TX_LANES* 4)-1):0] = tx_gt_charisk;
+- 456   assign tx_gt_data_s[((PCORE_NUM_OF_TX_LANES*32)-1):0] = tx_gt_data;
+- 457   end
+
+Clone Blocks:

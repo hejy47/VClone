@@ -1,0 +1,28 @@
+Source Block: oh/spi/hdl/spi_master_regs.v@130:148@HdlStmProcess
+      
+   //####################################
+   //# STATUS
+   //####################################
+
+   always @ (posedge clk or negedge nreset)
+     if (~nreset)
+       status_reg[7:0] <= 'b0;   
+     else if(status_write)
+       status_reg[7:0] <= reg_wdata[7:0];
+     else
+       status_reg[7:0] <= {4'b0,                        //7:4
+			   spi_state[2:0],              //3:1
+			   (rx_access | status_reg[0])};//0
+   
+			  
+   //####################################
+   //# PSIZE (packet size)
+   //####################################
+
+Diff Content:
+- 141        status_reg[7:0] <= {4'b0,                        //7:4
+- 142 			   spi_state[2:0],              //3:1
++ 142        status_reg[7:0] <= {4'b0,                        //7:3
++ 142 			   spi_state[1:0],              //2:1
+
+Clone Blocks:

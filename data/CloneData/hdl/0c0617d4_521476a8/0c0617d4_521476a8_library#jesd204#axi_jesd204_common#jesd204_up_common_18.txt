@@ -1,0 +1,37 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@134:144@HdlIdDef
+/*
+ * Synchronize the external core reset to the register map domain so the status
+ * can be shown in the register map. This is useful for debugging.
+ */
+reg [1:0] up_core_reset_ext_synchronizer_vector = 2'b11;
+wire up_core_reset_ext;
+
+assign up_core_reset_ext = up_core_reset_ext_synchronizer_vector[0];
+
+/* Transfer two cycles before the core comes out of reset */
+wire core_cfg_transfer_en;
+
+Diff Content:
+- 139 wire up_core_reset_ext;
++ 139   /*
++ 139    * Synchronize the external core reset to the register map domain so the status
++ 139    * can be shown in the register map. This is useful for debugging.
++ 139    */
++ 139   reg [1:0] up_core_reset_ext_synchronizer_vector = 2'b11;
++ 139   wire up_core_reset_ext;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@133:143
+
+/*
+ * Synchronize the external core reset to the register map domain so the status
+ * can be shown in the register map. This is useful for debugging.
+ */
+reg [1:0] up_core_reset_ext_synchronizer_vector = 2'b11;
+wire up_core_reset_ext;
+
+assign up_core_reset_ext = up_core_reset_ext_synchronizer_vector[0];
+
+/* Transfer two cycles before the core comes out of reset */
+

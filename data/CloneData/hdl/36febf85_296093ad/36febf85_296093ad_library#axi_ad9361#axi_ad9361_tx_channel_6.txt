@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tx_channel.v@284:308@HdlStmIf
+      dac_data <= dac_iqcor_data_s[15:4];
+    end
+  end
+
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_iqcor_valid_s = dac_valid;
+  assign dac_iqcor_data_s = {dac_data_out, 4'd0};
+  end else begin
+  ad_iqcor #(.IQSEL (IQSEL)) i_ad_iqcor (
+    .clk (dac_clk),
+    .valid (dac_valid),
+    .data_i ({dac_data_i_s, 4'd0}),
+    .data_q ({dac_data_q_s, 4'd0}),
+    .valid_out (dac_iqcor_valid_s),
+    .data_out (dac_iqcor_data_s),
+    .iqcor_enable (dac_iqcor_enb_s),
+    .iqcor_coeff_1 (dac_iqcor_coeff_1_s),
+    .iqcor_coeff_2 (dac_iqcor_coeff_2_s));
+  end
+  endgenerate
+
+  // dac mux
+
+  always @(posedge dac_clk) begin
+
+Diff Content:
+- 289   if (DP_DISABLE == 1) begin
+- 293   ad_iqcor #(.IQSEL (IQSEL)) i_ad_iqcor (
+- 296     .data_i ({dac_data_i_s, 4'd0}),
+- 297     .data_q ({dac_data_q_s, 4'd0}),
++ 289   if (DATAPATH_DISABLE == 1) begin
++ 293   ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
++ 297     .data_in ({dac_data_out, 4'd0}),
++ 297     .data_iq ({dac_data_in, 4'd0}),
+
+Clone Blocks:

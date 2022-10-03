@@ -1,0 +1,21 @@
+Source Block: oh/elink/hdl/erx_remap.v@60:72@HdlStmAssign
+			     + remap_base[31:0]  //adding back base
+                             - (addr_in[31:26]<<$clog2(colid));
+     			     
+
+   //Static, dynamic, or no remap
+   assign remap_mux[31:0]  = (remap_mode[1:0]==2'b00) ? addr_in[31:0] :
+			     (remap_mode[1:0]==2'b01) ? static_remap[31:0] :
+	  		                                dynamic_remap[31:0];
+
+
+   //Access pipeline
+   always @ (posedge clk)
+       emesh_access_out <= emesh_access_in;
+
+Diff Content:
+- 65    assign remap_mux[31:0]  = (remap_mode[1:0]==2'b00) ? addr_in[31:0] :
++ 65    assign remap_mux[31:0]  = (addr_in[31:20]==ID)     ? addr_in[31:0] : //for write to mailbox
++ 65 			     (remap_mode[1:0]==2'b00) ? addr_in[31:0] :
+
+Clone Blocks:

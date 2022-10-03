@@ -1,0 +1,18 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_response_manager.v@254:264@HdlStmAssign
+  end else if (to_complete_count == 0) begin
+    completion_req_ready <= 1'b1;
+  end
+end
+
+assign completion_req = completion_req_ready && completion_req_valid;
+
+// Track transfers so we can tell when did the destination completed all its
+// transfers
+always @(posedge req_clk) begin
+  if (req_resetn == 1'b0) begin
+
+Diff Content:
+- 259 assign completion_req = completion_req_ready && completion_req_valid;
++ 259   assign completion_req = completion_req_ready && completion_req_valid;
+
+Clone Blocks:

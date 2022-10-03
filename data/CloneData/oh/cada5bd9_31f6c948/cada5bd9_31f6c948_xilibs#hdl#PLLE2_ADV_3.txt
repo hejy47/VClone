@@ -1,0 +1,48 @@
+Source Block: oh/xilibs/hdl/PLLE2_ADV.v@73:83@HdlStmProcess
+     begin
+	vco_clk = 1'b0;	
+     end
+   
+   always
+     #(VCO_PERIOD/2) vco_clk = ~vco_clk;
+   wire 	 reset = POR | RST;
+   
+   //##############
+   //#DIVIDERS
+   //##############
+
+Diff Content:
+- 78      #(VCO_PERIOD/2) vco_clk = ~vco_clk;
++ 78    reg [(phases)-1:0] 	clk_comb;
++ 78     always @ (delay)
++ 78       begin
++ 78 	 for(j=0; j<(phases); j=j+1)
++ 78 	   clk_comb[j] <= delay[2*j] & ~delay[2*j+1];	 
++ 78       end
++ 78    reg vco_clk;   
++ 78    integer k;   
++ 78    always @*
++ 78      begin
++ 78 	vco_clk = 1'b0;
++ 78 	for(k=0; k<(phases); k=k+1)
++ 78 	  vco_clk = vco_clk | clk_comb[k];
++ 78      end
+
+Clone Blocks:
+Clone Blocks 1:
+oh/xilibs/hdl/PLLE2_ADV.v@67:80
+      
+   //##############
+   //#VCO 
+   //##############
+   reg 	  vco_clk;
+   initial
+     begin
+	vco_clk = 1'b0;	
+     end
+   
+   always
+     #(VCO_PERIOD/2) vco_clk = ~vco_clk;
+   wire 	 reset = POR | RST;
+   
+

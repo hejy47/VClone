@@ -1,0 +1,45 @@
+Source Block: serv/rtl/serv_regfile.v@12:22@HdlIdDef
+   output wire 	    o_rs2);
+
+   reg [4:0]   raddr = 5'd1;
+   reg [4:0]   waddr = 5'd0;
+
+   wire [31:0]  rs;
+
+   reg [31:0] mask;
+
+   always @(i_rd_addr)
+     mask = ~(1 << i_rd_addr);
+
+Diff Content:
++ 17    wire [4:0] 	raddr2 = raddr & {5{i_rs_en}};
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_regfile.v@14:24
+   reg [4:0]   raddr = 5'd1;
+   reg [4:0]   waddr = 5'd0;
+
+   wire [31:0]  rs;
+
+   reg [31:0] mask;
+
+   always @(i_rd_addr)
+     mask = ~(1 << i_rd_addr);
+
+   SB_RAM40_4K rf0
+
+Clone Blocks 2:
+serv/rtl/serv_regfile.v@10:20
+   input wire 	    i_rs_en,
+   output wire 	    o_rs1,
+   output wire 	    o_rs2);
+
+   reg [4:0]   raddr = 5'd1;
+   reg [4:0]   waddr = 5'd0;
+
+   wire [31:0]  rs;
+
+   reg [31:0] mask;
+
+

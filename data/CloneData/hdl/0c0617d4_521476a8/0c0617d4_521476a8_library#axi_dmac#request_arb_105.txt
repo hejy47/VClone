@@ -1,0 +1,255 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@607:701@HdlStmIf
+assign fifo_rd_underflow = 1'b0;
+assign fifo_rd_xfer_req = 1'b0;
+
+end endgenerate
+
+generate if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
+
+wire [ID_WIDTH-1:0] src_data_id;
+wire [ID_WIDTH-1:0] src_address_id;
+wire src_address_eot = eot_mem_src[src_address_id];
+
+assign source_id = src_address_id;
+assign source_eot = src_address_eot;
+
+assign src_clk = m_src_axi_aclk;
+assign src_ext_resetn = m_src_axi_aresetn;
+
+assign dbg_src_address_id = src_address_id;
+assign dbg_src_data_id = src_data_id;
+
+src_axi_mm #(
+  .ID_WIDTH(ID_WIDTH),
+  .DMA_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+  .DMA_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
+  .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_SRC),
+  .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_SRC)
+) i_src_dma_mm (
+  .m_axi_aclk(m_src_axi_aclk),
+  .m_axi_aresetn(src_resetn),
+
+  .enable(src_enable),
+  .enabled(src_enabled),
+
+  .req_valid(src_req_valid),
+  .req_ready(src_req_ready),
+  .req_address(src_req_src_address),
+  .req_last_burst_length(src_req_last_burst_length),
+  .req_last_beat_bytes(src_req_last_beat_bytes),
+
+  .bl_valid(src_bl_valid),
+  .bl_ready(src_bl_ready),
+  .measured_last_burst_length(src_burst_length),
+
+/* TODO
+  .response_valid(src_response_valid),
+  .response_ready(src_response_ready),
+  .response_resp(src_response_resp),
+*/
+
+  .request_id(src_throttled_request_id),
+  .response_id(src_response_id),
+  .address_id(src_address_id),
+  .data_id(src_data_id),
+
+  .address_eot(src_address_eot),
+
+  .fifo_valid(src_valid),
+  .fifo_data(src_data),
+  .fifo_valid_bytes(src_valid_bytes),
+  .fifo_last(src_last),
+
+  .m_axi_arready(m_axi_arready),
+  .m_axi_arvalid(m_axi_arvalid),
+  .m_axi_araddr(m_axi_araddr),
+  .m_axi_arlen(m_axi_arlen),
+  .m_axi_arsize(m_axi_arsize),
+  .m_axi_arburst(m_axi_arburst),
+  .m_axi_arprot(m_axi_arprot),
+  .m_axi_arcache(m_axi_arcache),
+
+  .m_axi_rready(m_axi_rready),
+  .m_axi_rvalid(m_axi_rvalid),
+  .m_axi_rdata(m_axi_rdata),
+  .m_axi_rlast(m_axi_rlast),
+  .m_axi_rresp(m_axi_rresp)
+);
+
+end else begin
+
+assign m_axi_arvalid = 1'b0;
+assign m_axi_araddr = 'h00;
+assign m_axi_arlen = 'h00;
+assign m_axi_arsize = 'h00;
+assign m_axi_arburst = 'h00;
+assign m_axi_arcache = 'h00;
+assign m_axi_arprot = 'h00;
+assign m_axi_rready = 1'b0;
+
+end
+
+if (DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
+
+assign src_clk = s_axis_aclk;
+assign src_ext_resetn = 1'b1;
+
+Diff Content:
+- 612 generate if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
+- 614 wire [ID_WIDTH-1:0] src_data_id;
+- 615 wire [ID_WIDTH-1:0] src_address_id;
+- 616 wire src_address_eot = eot_mem_src[src_address_id];
+- 618 assign source_id = src_address_id;
+- 619 assign source_eot = src_address_eot;
+- 621 assign src_clk = m_src_axi_aclk;
+- 622 assign src_ext_resetn = m_src_axi_aresetn;
+- 624 assign dbg_src_address_id = src_address_id;
+- 625 assign dbg_src_data_id = src_data_id;
+- 627 src_axi_mm #(
+- 628   .ID_WIDTH(ID_WIDTH),
+- 629   .DMA_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+- 630   .DMA_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
+- 631   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
+- 632   .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_SRC),
+- 633   .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_SRC)
+- 634 ) i_src_dma_mm (
+- 635   .m_axi_aclk(m_src_axi_aclk),
+- 636   .m_axi_aresetn(src_resetn),
+- 638   .enable(src_enable),
+- 639   .enabled(src_enabled),
+- 641   .req_valid(src_req_valid),
+- 642   .req_ready(src_req_ready),
+- 643   .req_address(src_req_src_address),
+- 644   .req_last_burst_length(src_req_last_burst_length),
+- 645   .req_last_beat_bytes(src_req_last_beat_bytes),
+- 647   .bl_valid(src_bl_valid),
+- 648   .bl_ready(src_bl_ready),
+- 649   .measured_last_burst_length(src_burst_length),
+- 651 /* TODO
+- 652   .response_valid(src_response_valid),
+- 653   .response_ready(src_response_ready),
+- 654   .response_resp(src_response_resp),
+- 655 */
+- 657   .request_id(src_throttled_request_id),
+- 658   .response_id(src_response_id),
+- 659   .address_id(src_address_id),
+- 660   .data_id(src_data_id),
+- 662   .address_eot(src_address_eot),
+- 664   .fifo_valid(src_valid),
+- 665   .fifo_data(src_data),
+- 666   .fifo_valid_bytes(src_valid_bytes),
+- 667   .fifo_last(src_last),
+- 669   .m_axi_arready(m_axi_arready),
+- 670   .m_axi_arvalid(m_axi_arvalid),
+- 671   .m_axi_araddr(m_axi_araddr),
+- 672   .m_axi_arlen(m_axi_arlen),
+- 673   .m_axi_arsize(m_axi_arsize),
+- 674   .m_axi_arburst(m_axi_arburst),
+- 675   .m_axi_arprot(m_axi_arprot),
+- 676   .m_axi_arcache(m_axi_arcache),
+- 678   .m_axi_rready(m_axi_rready),
+- 679   .m_axi_rvalid(m_axi_rvalid),
+- 680   .m_axi_rdata(m_axi_rdata),
+- 681   .m_axi_rlast(m_axi_rlast),
+- 682   .m_axi_rresp(m_axi_rresp)
+- 683 );
+- 685 end else begin
+- 687 assign m_axi_arvalid = 1'b0;
+- 688 assign m_axi_araddr = 'h00;
+- 689 assign m_axi_arlen = 'h00;
+- 690 assign m_axi_arsize = 'h00;
+- 691 assign m_axi_arburst = 'h00;
+- 692 assign m_axi_arcache = 'h00;
+- 693 assign m_axi_arprot = 'h00;
+- 694 assign m_axi_rready = 1'b0;
+- 696 end
++ 683     .response_id(dest_response_id),
++ 683     .data_id(data_id),
++ 685     .data_eot(data_eot),
++ 685     .response_eot(response_eot),
++ 685     .fifo_valid(dest_valid),
++ 685     .fifo_ready(dest_ready),
++ 685     .fifo_data(dest_data),
++ 685     .fifo_last(dest_last),
++ 685     .en(fifo_rd_en),
++ 685     .valid(fifo_rd_valid),
++ 685     .dout(fifo_rd_dout),
++ 685     .underflow(fifo_rd_underflow),
++ 685     .xfer_req(fifo_rd_xfer_req));
++ 685   end else begin
++ 685   assign fifo_rd_valid = 1'b0;
++ 685   assign fifo_rd_dout = 'h0;
++ 685   assign fifo_rd_underflow = 1'b0;
++ 685   assign fifo_rd_xfer_req = 1'b0;
++ 685   end endgenerate
++ 685   generate if (DMA_TYPE_SRC == DMA_TYPE_MM_AXI) begin
++ 685   wire [ID_WIDTH-1:0] src_data_id;
++ 685   wire [ID_WIDTH-1:0] src_address_id;
++ 685   wire src_address_eot = eot_mem_src[src_address_id];
++ 685   assign source_id = src_address_id;
++ 685   assign source_eot = src_address_eot;
++ 685   assign src_clk = m_src_axi_aclk;
++ 685   assign src_ext_resetn = m_src_axi_aresetn;
++ 685   assign dbg_src_address_id = src_address_id;
++ 685   assign dbg_src_data_id = src_data_id;
++ 685   src_axi_mm #(
++ 685     .ID_WIDTH(ID_WIDTH),
++ 685     .DMA_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
++ 685     .DMA_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
++ 685     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
++ 685     .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_SRC),
++ 685     .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_SRC)
++ 685   ) i_src_dma_mm (
++ 685     .m_axi_aclk(m_src_axi_aclk),
++ 685     .m_axi_aresetn(src_resetn),
++ 685     .enable(src_enable),
++ 685     .enabled(src_enabled),
++ 685     .req_valid(src_req_valid),
++ 685     .req_ready(src_req_ready),
++ 685     .req_address(src_req_src_address),
++ 685     .req_last_burst_length(src_req_last_burst_length),
++ 685     .req_last_beat_bytes(src_req_last_beat_bytes),
++ 685     .bl_valid(src_bl_valid),
++ 685     .bl_ready(src_bl_ready),
++ 685     .measured_last_burst_length(src_burst_length),
++ 685   /* TODO
++ 685     .response_valid(src_response_valid),
++ 685     .response_ready(src_response_ready),
++ 685     .response_resp(src_response_resp),
++ 685   */
++ 685     .request_id(src_throttled_request_id),
++ 685     .response_id(src_response_id),
++ 685     .address_id(src_address_id),
++ 685     .data_id(src_data_id),
++ 685     .address_eot(src_address_eot),
++ 685     .fifo_valid(src_valid),
++ 685     .fifo_data(src_data),
++ 685     .fifo_valid_bytes(src_valid_bytes),
++ 685     .fifo_last(src_last),
++ 685     .m_axi_arready(m_axi_arready),
++ 685     .m_axi_arvalid(m_axi_arvalid),
++ 685     .m_axi_araddr(m_axi_araddr),
++ 685     .m_axi_arlen(m_axi_arlen),
++ 685     .m_axi_arsize(m_axi_arsize),
++ 685     .m_axi_arburst(m_axi_arburst),
++ 685     .m_axi_arprot(m_axi_arprot),
++ 685     .m_axi_arcache(m_axi_arcache),
++ 685     .m_axi_rready(m_axi_rready),
++ 685     .m_axi_rvalid(m_axi_rvalid),
++ 685     .m_axi_rdata(m_axi_rdata),
++ 685     .m_axi_rlast(m_axi_rlast),
++ 685     .m_axi_rresp(m_axi_rresp));
++ 685   end else begin
++ 685   assign m_axi_arvalid = 1'b0;
++ 685   assign m_axi_araddr = 'h00;
++ 685   assign m_axi_arlen = 'h00;
++ 685   assign m_axi_arsize = 'h00;
++ 685   assign m_axi_arburst = 'h00;
++ 685   assign m_axi_arcache = 'h00;
++ 685   assign m_axi_arprot = 'h00;
++ 685   assign m_axi_rready = 1'b0;
++ 694   end
++ 696   if (DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
+
+Clone Blocks:

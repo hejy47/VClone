@@ -1,0 +1,116 @@
+Source Block: oh/src/common/hdl/oh_memory_sp.v@36:88@HdlStmIf
+    );
+
+   
+  
+   generate
+      if(ASIC)
+	begin : g0
+	   asic_sram_sp #(.DW(DW),
+			  .DEPTH(DEPTH),
+			  .PROJ(PROJ),
+			  .MCW(MCW))	     
+	   asic_sram_sp (// Outputs
+			 .dout       (dout[DW-1:0]),
+			 // Inputs
+			 .clk        (clk),
+			 .en         (en),
+			 .we         (we),
+			 .wem        (wem[DW-1:0]),
+			 .addr       (addr[AW-1:0]),
+			 .din        (din[DW-1:0]),
+			 .vdd        (vdd),
+			 .vddm       (vddm),
+			 .vss        (vss),
+			 .shutdown   (shutdown),
+			 .memconfig  (memconfig[MCW-1:0]),
+			 .memrepair  (memrepair[MCW-1:0]),
+			 .bist_en    (bist_en),
+			 .bist_we    (bist_we),
+			 .bist_wem   (bist_wem[DW-1:0]),
+			 .bist_addr  (bist_addr[AW-1:0]),
+			 .bist_din   (bist_din[DW-1:0]));
+	end
+      else
+	begin : g0
+	   oh_memory_ram #(.DW(DW),
+			   .DEPTH(DEPTH))	     
+	   oh_memory_ram (//read port
+			  .rd_dout (dout[DW-1:0]),
+			  .rd_clk  (clk),
+			  .rd_addr (addr[AW-1:0]),
+			  .rd_en   (en & ~we),
+			  //write port
+			  .wr_clk  (clk),
+			  .wr_en   (en & we),
+			  .wr_addr (addr[AW-1:0]),
+			  .wr_wem  (wem[DW-1:0]),
+			  .wr_din  (din[DW-1:0]));
+	end
+   endgenerate
+  
+endmodule // oh_memory_sp
+
+
+
+Diff Content:
+- 47 	   asic_sram_sp (// Outputs
+- 48 			 .dout       (dout[DW-1:0]),
+- 50 			 .clk        (clk),
+- 51 			 .en         (en),
+- 52 			 .we         (we),
+- 53 			 .wem        (wem[DW-1:0]),
+- 54 			 .addr       (addr[AW-1:0]),
+- 55 			 .din        (din[DW-1:0]),
+- 56 			 .vdd        (vdd),
+- 57 			 .vddm       (vddm),
+- 58 			 .vss        (vss),
+- 59 			 .shutdown   (shutdown),
+- 60 			 .memconfig  (memconfig[MCW-1:0]),
+- 61 			 .memrepair  (memrepair[MCW-1:0]),
+- 62 			 .bist_en    (bist_en),
+- 63 			 .bist_we    (bist_we),
+- 64 			 .bist_wem   (bist_wem[DW-1:0]),
+- 65 			 .bist_addr  (bist_addr[AW-1:0]),
+- 66 			 .bist_din   (bist_din[DW-1:0]));
+- 72 	   oh_memory_ram (//read port
+- 73 			  .rd_dout (dout[DW-1:0]),
+- 74 			  .rd_clk  (clk),
+- 75 			  .rd_addr (addr[AW-1:0]),
+- 76 			  .rd_en   (en & ~we),
+- 78 			  .wr_clk  (clk),
+- 79 			  .wr_en   (en & we),
+- 80 			  .wr_addr (addr[AW-1:0]),
+- 81 			  .wr_wem  (wem[DW-1:0]),
+- 82 			  .wr_din  (din[DW-1:0]));
++ 66 	   sram_sp (// Outputs
++ 66 		    .dout       (dout[DW-1:0]),
++ 66 		    .clk        (clk),
++ 66 		    .en         (en),
++ 66 		    .we         (we),
++ 66 		    .wem        (wem[DW-1:0]),
++ 66 		    .addr       (addr[AW-1:0]),
++ 66 		    .din        (din[DW-1:0]),
++ 66 		    .vdd        (vdd),
++ 66 		    .vddm       (vddm),
++ 66 		    .vss        (vss),
++ 66 		    .shutdown   (shutdown),
++ 66 		    .memconfig  (memconfig[MCW-1:0]),
++ 66 		    .memrepair  (memrepair[MCW-1:0]),
++ 66 		    .bist_en    (bist_en),
++ 66 		    .bist_we    (bist_we),
++ 66 		    .bist_wem   (bist_wem[DW-1:0]),
++ 66 		    .bist_addr  (bist_addr[AW-1:0]),
++ 66 		    .bist_din   (bist_din[DW-1:0]));
++ 82 	   sram_sp (//read port
++ 82 		    .rd_dout (dout[DW-1:0]),
++ 82 		    .rd_clk  (clk),
++ 82 		    .rd_addr (addr[AW-1:0]),
++ 82 		    .rd_en   (en & ~we),
++ 82 		    .wr_clk  (clk),
++ 82 		    .wr_en   (en & we),
++ 82 		    .wr_addr (addr[AW-1:0]),
++ 82 		    .wr_wem  (wem[DW-1:0]),
++ 82 		    .wr_din  (din[DW-1:0]));
+
+Clone Blocks:

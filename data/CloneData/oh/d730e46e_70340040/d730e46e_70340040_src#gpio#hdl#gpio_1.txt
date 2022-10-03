@@ -1,0 +1,19 @@
+Source Block: oh/src/gpio/hdl/gpio.v@116:127@HdlStmProcess
+   oh_dsync #(.DW(N))
+   dsync (.dout	(gpio_in_sync[N-1:0]),
+          .clk	(clk),
+          .din	(gpio_in[N-1:0]));
+
+   always @ (posedge clk)
+     gpio_in_old[N-1:0] <= gpio_in_sync[N-1:0];
+   
+   //################################
+   //# GPIO_OUT
+   //################################ 
+
+
+Diff Content:
+- 122      gpio_in_old[N-1:0] <= gpio_in_sync[N-1:0];
++ 122        gpio_in_old[N-1:0] <= gpio_in_sync[N-1:0];
+
+Clone Blocks:

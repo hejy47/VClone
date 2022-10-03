@@ -1,0 +1,661 @@
+Source Block: verilog-ethernet/rtl/udp_ip_rx_64.v@511:566@HdlStmProcess
+assign output_udp_payload_tkeep = output_udp_payload_tkeep_reg;
+assign output_udp_payload_tvalid = output_udp_payload_tvalid_reg;
+assign output_udp_payload_tlast = output_udp_payload_tlast_reg;
+assign output_udp_payload_tuser = output_udp_payload_tuser_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_udp_payload_tdata_reg <= 0;
+        output_udp_payload_tkeep_reg <= 0;
+        output_udp_payload_tvalid_reg <= 0;
+        output_udp_payload_tlast_reg <= 0;
+        output_udp_payload_tuser_reg <= 0;
+        output_udp_payload_tready_int <= 0;
+        temp_udp_payload_tdata_reg <= 0;
+        temp_udp_payload_tkeep_reg <= 0;
+        temp_udp_payload_tvalid_reg <= 0;
+        temp_udp_payload_tlast_reg <= 0;
+        temp_udp_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_udp_payload_tready_int <= output_udp_payload_tready_int_early;
+
+        if (output_udp_payload_tready_int) begin
+            // input is ready
+            if (output_udp_payload_tready | ~output_udp_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                output_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
+                output_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                output_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                output_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                temp_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
+                temp_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                temp_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                temp_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end
+        end else if (output_udp_payload_tready) begin
+            // input is not ready, but output is ready
+            output_udp_payload_tdata_reg <= temp_udp_payload_tdata_reg;
+            output_udp_payload_tkeep_reg <= temp_udp_payload_tkeep_reg;
+            output_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+            output_udp_payload_tlast_reg <= temp_udp_payload_tlast_reg;
+            output_udp_payload_tuser_reg <= temp_udp_payload_tuser_reg;
+            temp_udp_payload_tdata_reg <= 0;
+            temp_udp_payload_tkeep_reg <= 0;
+            temp_udp_payload_tvalid_reg <= 0;
+            temp_udp_payload_tlast_reg <= 0;
+            temp_udp_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 518         output_udp_payload_tdata_reg <= 0;
+- 519         output_udp_payload_tkeep_reg <= 0;
+- 520         output_udp_payload_tvalid_reg <= 0;
+- 521         output_udp_payload_tlast_reg <= 0;
+- 522         output_udp_payload_tuser_reg <= 0;
+- 523         output_udp_payload_tready_int <= 0;
+- 524         temp_udp_payload_tdata_reg <= 0;
+- 525         temp_udp_payload_tkeep_reg <= 0;
+- 526         temp_udp_payload_tvalid_reg <= 0;
+- 527         temp_udp_payload_tlast_reg <= 0;
+- 528         temp_udp_payload_tuser_reg <= 0;
+- 531         output_udp_payload_tready_int <= output_udp_payload_tready_int_early;
+- 533         if (output_udp_payload_tready_int) begin
+- 535             if (output_udp_payload_tready | ~output_udp_payload_tvalid_reg) begin
+- 537                 output_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+- 538                 output_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
+- 539                 output_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+- 540                 output_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+- 541                 output_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+- 542             end else begin
+- 544                 temp_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+- 545                 temp_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
+- 546                 temp_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+- 547                 temp_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+- 548                 temp_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+- 549             end
+- 550         end else if (output_udp_payload_tready) begin
+- 552             output_udp_payload_tdata_reg <= temp_udp_payload_tdata_reg;
+- 553             output_udp_payload_tkeep_reg <= temp_udp_payload_tkeep_reg;
+- 554             output_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+- 555             output_udp_payload_tlast_reg <= temp_udp_payload_tlast_reg;
+- 556             output_udp_payload_tuser_reg <= temp_udp_payload_tuser_reg;
+- 557             temp_udp_payload_tdata_reg <= 0;
+- 558             temp_udp_payload_tkeep_reg <= 0;
+- 559             temp_udp_payload_tvalid_reg <= 0;
+- 560             temp_udp_payload_tlast_reg <= 0;
+- 561             temp_udp_payload_tuser_reg <= 0;
+- 562         end
++ 528         output_udp_payload_tvalid_reg <= 1'b0;
++ 528         output_udp_payload_tready_int_reg <= 1'b0;
++ 528         temp_udp_payload_tvalid_reg <= 1'b0;
++ 562         output_udp_payload_tvalid_reg <= output_udp_payload_tvalid_next;
++ 562         output_udp_payload_tready_int_reg <= output_udp_payload_tready_int_early;
++ 562         temp_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_next;
++ 562     end
++ 562     if (store_udp_payload_int_to_output) begin
++ 562         output_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
++ 562         output_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
++ 562         output_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
++ 562         output_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
++ 562     end else if (store_udp_payload_temp_to_output) begin
++ 562         output_udp_payload_tdata_reg <= temp_udp_payload_tdata_reg;
++ 562         output_udp_payload_tkeep_reg <= temp_udp_payload_tkeep_reg;
++ 562         output_udp_payload_tlast_reg <= temp_udp_payload_tlast_reg;
++ 562         output_udp_payload_tuser_reg <= temp_udp_payload_tuser_reg;
++ 562     end
++ 562     if (store_udp_payload_int_to_temp) begin
++ 562         temp_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
++ 562         temp_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
++ 562         temp_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
++ 562         temp_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip_mux_64_4.v@547:602
+assign output_ip_payload_tuser = output_ip_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_ip_payload_tready_int_early = output_ip_payload_tready | (~temp_ip_payload_tvalid_reg & ~output_ip_payload_tvalid_reg) | (~temp_ip_payload_tvalid_reg & ~output_ip_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_ip_payload_tdata_reg <= 0;
+        output_ip_payload_tkeep_reg <= 0;
+        output_ip_payload_tvalid_reg <= 0;
+        output_ip_payload_tlast_reg <= 0;
+        output_ip_payload_tuser_reg <= 0;
+        output_ip_payload_tready_int <= 0;
+        temp_ip_payload_tdata_reg <= 0;
+        temp_ip_payload_tkeep_reg <= 0;
+        temp_ip_payload_tvalid_reg <= 0;
+        temp_ip_payload_tlast_reg <= 0;
+        temp_ip_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_ip_payload_tready_int <= output_ip_payload_tready_int_early;
+
+        if (output_ip_payload_tready_int) begin
+            // input is ready
+            if (output_ip_payload_tready | ~output_ip_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_ip_payload_tdata_reg <= output_ip_payload_tdata_int;
+                output_ip_payload_tkeep_reg <= output_ip_payload_tkeep_int;
+                output_ip_payload_tvalid_reg <= output_ip_payload_tvalid_int;
+                output_ip_payload_tlast_reg <= output_ip_payload_tlast_int;
+                output_ip_payload_tuser_reg <= output_ip_payload_tuser_int;
+            end else begin
+                // output is not ready, store input in temp
+                temp_ip_payload_tdata_reg <= output_ip_payload_tdata_int;
+                temp_ip_payload_tkeep_reg <= output_ip_payload_tkeep_int;
+                temp_ip_payload_tvalid_reg <= output_ip_payload_tvalid_int;
+                temp_ip_payload_tlast_reg <= output_ip_payload_tlast_int;
+                temp_ip_payload_tuser_reg <= output_ip_payload_tuser_int;
+            end
+        end else if (output_ip_payload_tready) begin
+            // input is not ready, but output is ready
+            output_ip_payload_tdata_reg <= temp_ip_payload_tdata_reg;
+            output_ip_payload_tkeep_reg <= temp_ip_payload_tkeep_reg;
+            output_ip_payload_tvalid_reg <= temp_ip_payload_tvalid_reg;
+            output_ip_payload_tlast_reg <= temp_ip_payload_tlast_reg;
+            output_ip_payload_tuser_reg <= temp_ip_payload_tuser_reg;
+            temp_ip_payload_tdata_reg <= 0;
+            temp_ip_payload_tkeep_reg <= 0;
+            temp_ip_payload_tvalid_reg <= 0;
+            temp_ip_payload_tlast_reg <= 0;
+            temp_ip_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 2:
+verilog-ethernet/rtl/udp_ip_rx.v@482:531
+assign output_udp_payload_tdata = output_udp_payload_tdata_reg;
+assign output_udp_payload_tvalid = output_udp_payload_tvalid_reg;
+assign output_udp_payload_tlast = output_udp_payload_tlast_reg;
+assign output_udp_payload_tuser = output_udp_payload_tuser_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_udp_payload_tdata_reg <= 0;
+        output_udp_payload_tvalid_reg <= 0;
+        output_udp_payload_tlast_reg <= 0;
+        output_udp_payload_tuser_reg <= 0;
+        output_udp_payload_tready_int <= 0;
+        temp_udp_payload_tdata_reg <= 0;
+        temp_udp_payload_tvalid_reg <= 0;
+        temp_udp_payload_tlast_reg <= 0;
+        temp_udp_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_udp_payload_tready_int <= output_udp_payload_tready_int_early;
+
+        if (output_udp_payload_tready_int) begin
+            // input is ready
+            if (output_udp_payload_tready | ~output_udp_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                output_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                output_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                output_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                temp_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                temp_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                temp_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end
+        end else if (output_udp_payload_tready) begin
+            // input is not ready, but output is ready
+            output_udp_payload_tdata_reg <= temp_udp_payload_tdata_reg;
+            output_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+            output_udp_payload_tlast_reg <= temp_udp_payload_tlast_reg;
+            output_udp_payload_tuser_reg <= temp_udp_payload_tuser_reg;
+            temp_udp_payload_tdata_reg <= 0;
+            temp_udp_payload_tvalid_reg <= 0;
+            temp_udp_payload_tlast_reg <= 0;
+            temp_udp_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 3:
+verilog-ethernet/rtl/udp_mux_4.v@596:645
+assign output_udp_payload_tuser = output_udp_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_udp_payload_tready_int_early = output_udp_payload_tready | (~temp_udp_payload_tvalid_reg & ~output_udp_payload_tvalid_reg) | (~temp_udp_payload_tvalid_reg & ~output_udp_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_udp_payload_tdata_reg <= 0;
+        output_udp_payload_tvalid_reg <= 0;
+        output_udp_payload_tlast_reg <= 0;
+        output_udp_payload_tuser_reg <= 0;
+        output_udp_payload_tready_int <= 0;
+        temp_udp_payload_tdata_reg <= 0;
+        temp_udp_payload_tvalid_reg <= 0;
+        temp_udp_payload_tlast_reg <= 0;
+        temp_udp_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_udp_payload_tready_int <= output_udp_payload_tready_int_early;
+
+        if (output_udp_payload_tready_int) begin
+            // input is ready
+            if (output_udp_payload_tready | ~output_udp_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                output_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                output_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                output_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end else begin
+                // output is not ready, store input in temp
+                temp_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                temp_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                temp_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                temp_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end
+        end else if (output_udp_payload_tready) begin
+            // input is not ready, but output is ready
+            output_udp_payload_tdata_reg <= temp_udp_payload_tdata_reg;
+            output_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+            output_udp_payload_tlast_reg <= temp_udp_payload_tlast_reg;
+            output_udp_payload_tuser_reg <= temp_udp_payload_tuser_reg;
+            temp_udp_payload_tdata_reg <= 0;
+            temp_udp_payload_tvalid_reg <= 0;
+            temp_udp_payload_tlast_reg <= 0;
+            temp_udp_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 4:
+verilog-ethernet/rtl/udp_ip_tx_64.v@503:558
+assign output_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+assign output_ip_payload_tvalid = output_ip_payload_tvalid_reg;
+assign output_ip_payload_tlast = output_ip_payload_tlast_reg;
+assign output_ip_payload_tuser = output_ip_payload_tuser_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_ip_payload_tdata_reg <= 0;
+        output_ip_payload_tkeep_reg <= 0;
+        output_ip_payload_tvalid_reg <= 0;
+        output_ip_payload_tlast_reg <= 0;
+        output_ip_payload_tuser_reg <= 0;
+        output_ip_payload_tready_int <= 0;
+        temp_ip_payload_tdata_reg <= 0;
+        temp_ip_payload_tkeep_reg <= 0;
+        temp_ip_payload_tvalid_reg <= 0;
+        temp_ip_payload_tlast_reg <= 0;
+        temp_ip_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_ip_payload_tready_int <= output_ip_payload_tready_int_early;
+
+        if (output_ip_payload_tready_int) begin
+            // input is ready
+            if (output_ip_payload_tready | ~output_ip_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_ip_payload_tdata_reg <= output_ip_payload_tdata_int;
+                output_ip_payload_tkeep_reg <= output_ip_payload_tkeep_int;
+                output_ip_payload_tvalid_reg <= output_ip_payload_tvalid_int;
+                output_ip_payload_tlast_reg <= output_ip_payload_tlast_int;
+                output_ip_payload_tuser_reg <= output_ip_payload_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_ip_payload_tdata_reg <= output_ip_payload_tdata_int;
+                temp_ip_payload_tkeep_reg <= output_ip_payload_tkeep_int;
+                temp_ip_payload_tvalid_reg <= output_ip_payload_tvalid_int;
+                temp_ip_payload_tlast_reg <= output_ip_payload_tlast_int;
+                temp_ip_payload_tuser_reg <= output_ip_payload_tuser_int;
+            end
+        end else if (output_ip_payload_tready) begin
+            // input is not ready, but output is ready
+            output_ip_payload_tdata_reg <= temp_ip_payload_tdata_reg;
+            output_ip_payload_tkeep_reg <= temp_ip_payload_tkeep_reg;
+            output_ip_payload_tvalid_reg <= temp_ip_payload_tvalid_reg;
+            output_ip_payload_tlast_reg <= temp_ip_payload_tlast_reg;
+            output_ip_payload_tuser_reg <= temp_ip_payload_tuser_reg;
+            temp_ip_payload_tdata_reg <= 0;
+            temp_ip_payload_tkeep_reg <= 0;
+            temp_ip_payload_tvalid_reg <= 0;
+            temp_ip_payload_tlast_reg <= 0;
+            temp_ip_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 5:
+verilog-ethernet/rtl/ip_mux_64_2.v@419:474
+assign output_ip_payload_tuser = output_ip_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_ip_payload_tready_int_early = output_ip_payload_tready | (~temp_ip_payload_tvalid_reg & ~output_ip_payload_tvalid_reg) | (~temp_ip_payload_tvalid_reg & ~output_ip_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_ip_payload_tdata_reg <= 0;
+        output_ip_payload_tkeep_reg <= 0;
+        output_ip_payload_tvalid_reg <= 0;
+        output_ip_payload_tlast_reg <= 0;
+        output_ip_payload_tuser_reg <= 0;
+        output_ip_payload_tready_int <= 0;
+        temp_ip_payload_tdata_reg <= 0;
+        temp_ip_payload_tkeep_reg <= 0;
+        temp_ip_payload_tvalid_reg <= 0;
+        temp_ip_payload_tlast_reg <= 0;
+        temp_ip_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_ip_payload_tready_int <= output_ip_payload_tready_int_early;
+
+        if (output_ip_payload_tready_int) begin
+            // input is ready
+            if (output_ip_payload_tready | ~output_ip_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_ip_payload_tdata_reg <= output_ip_payload_tdata_int;
+                output_ip_payload_tkeep_reg <= output_ip_payload_tkeep_int;
+                output_ip_payload_tvalid_reg <= output_ip_payload_tvalid_int;
+                output_ip_payload_tlast_reg <= output_ip_payload_tlast_int;
+                output_ip_payload_tuser_reg <= output_ip_payload_tuser_int;
+            end else begin
+                // output is not ready, store input in temp
+                temp_ip_payload_tdata_reg <= output_ip_payload_tdata_int;
+                temp_ip_payload_tkeep_reg <= output_ip_payload_tkeep_int;
+                temp_ip_payload_tvalid_reg <= output_ip_payload_tvalid_int;
+                temp_ip_payload_tlast_reg <= output_ip_payload_tlast_int;
+                temp_ip_payload_tuser_reg <= output_ip_payload_tuser_int;
+            end
+        end else if (output_ip_payload_tready) begin
+            // input is not ready, but output is ready
+            output_ip_payload_tdata_reg <= temp_ip_payload_tdata_reg;
+            output_ip_payload_tkeep_reg <= temp_ip_payload_tkeep_reg;
+            output_ip_payload_tvalid_reg <= temp_ip_payload_tvalid_reg;
+            output_ip_payload_tlast_reg <= temp_ip_payload_tlast_reg;
+            output_ip_payload_tuser_reg <= temp_ip_payload_tuser_reg;
+            temp_ip_payload_tdata_reg <= 0;
+            temp_ip_payload_tkeep_reg <= 0;
+            temp_ip_payload_tvalid_reg <= 0;
+            temp_ip_payload_tlast_reg <= 0;
+            temp_ip_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 6:
+verilog-ethernet/rtl/udp_mux_64_4.v@611:666
+assign output_udp_payload_tuser = output_udp_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_udp_payload_tready_int_early = output_udp_payload_tready | (~temp_udp_payload_tvalid_reg & ~output_udp_payload_tvalid_reg) | (~temp_udp_payload_tvalid_reg & ~output_udp_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_udp_payload_tdata_reg <= 0;
+        output_udp_payload_tkeep_reg <= 0;
+        output_udp_payload_tvalid_reg <= 0;
+        output_udp_payload_tlast_reg <= 0;
+        output_udp_payload_tuser_reg <= 0;
+        output_udp_payload_tready_int <= 0;
+        temp_udp_payload_tdata_reg <= 0;
+        temp_udp_payload_tkeep_reg <= 0;
+        temp_udp_payload_tvalid_reg <= 0;
+        temp_udp_payload_tlast_reg <= 0;
+        temp_udp_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_udp_payload_tready_int <= output_udp_payload_tready_int_early;
+
+        if (output_udp_payload_tready_int) begin
+            // input is ready
+            if (output_udp_payload_tready | ~output_udp_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                output_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
+                output_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                output_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                output_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end else begin
+                // output is not ready, store input in temp
+                temp_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                temp_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
+                temp_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                temp_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                temp_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end
+        end else if (output_udp_payload_tready) begin
+            // input is not ready, but output is ready
+            output_udp_payload_tdata_reg <= temp_udp_payload_tdata_reg;
+            output_udp_payload_tkeep_reg <= temp_udp_payload_tkeep_reg;
+            output_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+            output_udp_payload_tlast_reg <= temp_udp_payload_tlast_reg;
+            output_udp_payload_tuser_reg <= temp_udp_payload_tuser_reg;
+            temp_udp_payload_tdata_reg <= 0;
+            temp_udp_payload_tkeep_reg <= 0;
+            temp_udp_payload_tvalid_reg <= 0;
+            temp_udp_payload_tlast_reg <= 0;
+            temp_udp_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 7:
+verilog-ethernet/rtl/udp_demux_64_4.v@540:608
+assign output_3_udp_payload_tuser = output_udp_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_udp_payload_tready_int_early = current_output_tready | (~temp_udp_payload_tvalid_reg & ~current_output_tvalid) | (~temp_udp_payload_tvalid_reg & ~output_udp_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_udp_payload_tdata_reg <= 0;
+        output_udp_payload_tkeep_reg <= 0;
+        output_0_udp_payload_tvalid_reg <= 0;
+        output_1_udp_payload_tvalid_reg <= 0;
+        output_2_udp_payload_tvalid_reg <= 0;
+        output_3_udp_payload_tvalid_reg <= 0;
+        output_udp_payload_tlast_reg <= 0;
+        output_udp_payload_tuser_reg <= 0;
+        output_udp_payload_tready_int <= 0;
+        temp_udp_payload_tdata_reg <= 0;
+        temp_udp_payload_tkeep_reg <= 0;
+        temp_udp_payload_tvalid_reg <= 0;
+        temp_udp_payload_tlast_reg <= 0;
+        temp_udp_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_udp_payload_tready_int <= output_udp_payload_tready_int_early;
+
+        if (output_udp_payload_tready_int) begin
+            // input is ready
+            if (current_output_tready | ~current_output_tvalid) begin
+                // output is ready or currently not valid, transfer data to output
+                output_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                output_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
+                case (select_reg)
+                    2'd0: output_0_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                    2'd1: output_1_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                    2'd2: output_2_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                    2'd3: output_3_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                endcase
+                output_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                output_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end else begin
+                // output is not ready, store input in temp
+                temp_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                temp_udp_payload_tkeep_reg <= output_udp_payload_tkeep_int;
+                temp_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                temp_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                temp_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end
+        end else if (current_output_tready) begin
+            // input is not ready, but output is ready
+            output_udp_payload_tdata_reg <= temp_udp_payload_tdata_reg;
+            output_udp_payload_tkeep_reg <= temp_udp_payload_tkeep_reg;
+            case (select_reg)
+                2'd0: output_0_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+                2'd1: output_1_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+                2'd2: output_2_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+                2'd3: output_3_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+            endcase
+            output_udp_payload_tlast_reg <= temp_udp_payload_tlast_reg;
+            output_udp_payload_tuser_reg <= temp_udp_payload_tuser_reg;
+            temp_udp_payload_tdata_reg <= 0;
+            temp_udp_payload_tkeep_reg <= 0;
+            temp_udp_payload_tvalid_reg <= 0;
+            temp_udp_payload_tlast_reg <= 0;
+            temp_udp_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 8:
+verilog-ethernet/rtl/ip_eth_rx_64.v@633:688
+assign output_ip_payload_tkeep = output_ip_payload_tkeep_reg;
+assign output_ip_payload_tvalid = output_ip_payload_tvalid_reg;
+assign output_ip_payload_tlast = output_ip_payload_tlast_reg;
+assign output_ip_payload_tuser = output_ip_payload_tuser_reg;
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_ip_payload_tdata_reg <= 0;
+        output_ip_payload_tkeep_reg <= 0;
+        output_ip_payload_tvalid_reg <= 0;
+        output_ip_payload_tlast_reg <= 0;
+        output_ip_payload_tuser_reg <= 0;
+        output_ip_payload_tready_int <= 0;
+        temp_ip_payload_tdata_reg <= 0;
+        temp_ip_payload_tkeep_reg <= 0;
+        temp_ip_payload_tvalid_reg <= 0;
+        temp_ip_payload_tlast_reg <= 0;
+        temp_ip_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_ip_payload_tready_int <= output_ip_payload_tready_int_early;
+
+        if (output_ip_payload_tready_int) begin
+            // input is ready
+            if (output_ip_payload_tready | ~output_ip_payload_tvalid_reg) begin
+                // output is ready or currently not valid, transfer data to output
+                output_ip_payload_tdata_reg <= output_ip_payload_tdata_int;
+                output_ip_payload_tkeep_reg <= output_ip_payload_tkeep_int;
+                output_ip_payload_tvalid_reg <= output_ip_payload_tvalid_int;
+                output_ip_payload_tlast_reg <= output_ip_payload_tlast_int;
+                output_ip_payload_tuser_reg <= output_ip_payload_tuser_int;
+            end else begin
+                // output is not ready and currently valid, store input in temp
+                temp_ip_payload_tdata_reg <= output_ip_payload_tdata_int;
+                temp_ip_payload_tkeep_reg <= output_ip_payload_tkeep_int;
+                temp_ip_payload_tvalid_reg <= output_ip_payload_tvalid_int;
+                temp_ip_payload_tlast_reg <= output_ip_payload_tlast_int;
+                temp_ip_payload_tuser_reg <= output_ip_payload_tuser_int;
+            end
+        end else if (output_ip_payload_tready) begin
+            // input is not ready, but output is ready
+            output_ip_payload_tdata_reg <= temp_ip_payload_tdata_reg;
+            output_ip_payload_tkeep_reg <= temp_ip_payload_tkeep_reg;
+            output_ip_payload_tvalid_reg <= temp_ip_payload_tvalid_reg;
+            output_ip_payload_tlast_reg <= temp_ip_payload_tlast_reg;
+            output_ip_payload_tuser_reg <= temp_ip_payload_tuser_reg;
+            temp_ip_payload_tdata_reg <= 0;
+            temp_ip_payload_tkeep_reg <= 0;
+            temp_ip_payload_tvalid_reg <= 0;
+            temp_ip_payload_tlast_reg <= 0;
+            temp_ip_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+
+Clone Blocks 9:
+verilog-ethernet/rtl/udp_demux_4.v@527:589
+assign output_3_udp_payload_tuser = output_udp_payload_tuser_reg;
+
+// enable ready input next cycle if output is ready or if there is space in both output registers or if there is space in the temp register that will not be filled next cycle
+assign output_udp_payload_tready_int_early = current_output_tready | (~temp_udp_payload_tvalid_reg & ~current_output_tvalid) | (~temp_udp_payload_tvalid_reg & ~output_udp_payload_tvalid_int);
+
+always @(posedge clk) begin
+    if (rst) begin
+        output_udp_payload_tdata_reg <= 0;
+        output_0_udp_payload_tvalid_reg <= 0;
+        output_1_udp_payload_tvalid_reg <= 0;
+        output_2_udp_payload_tvalid_reg <= 0;
+        output_3_udp_payload_tvalid_reg <= 0;
+        output_udp_payload_tlast_reg <= 0;
+        output_udp_payload_tuser_reg <= 0;
+        output_udp_payload_tready_int <= 0;
+        temp_udp_payload_tdata_reg <= 0;
+        temp_udp_payload_tvalid_reg <= 0;
+        temp_udp_payload_tlast_reg <= 0;
+        temp_udp_payload_tuser_reg <= 0;
+    end else begin
+        // transfer sink ready state to source
+        output_udp_payload_tready_int <= output_udp_payload_tready_int_early;
+
+        if (output_udp_payload_tready_int) begin
+            // input is ready
+            if (current_output_tready | ~current_output_tvalid) begin
+                // output is ready or currently not valid, transfer data to output
+                output_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                case (select_reg)
+                    2'd0: output_0_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                    2'd1: output_1_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                    2'd2: output_2_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                    2'd3: output_3_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                endcase
+                output_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                output_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end else begin
+                // output is not ready, store input in temp
+                temp_udp_payload_tdata_reg <= output_udp_payload_tdata_int;
+                temp_udp_payload_tvalid_reg <= output_udp_payload_tvalid_int;
+                temp_udp_payload_tlast_reg <= output_udp_payload_tlast_int;
+                temp_udp_payload_tuser_reg <= output_udp_payload_tuser_int;
+            end
+        end else if (current_output_tready) begin
+            // input is not ready, but output is ready
+            output_udp_payload_tdata_reg <= temp_udp_payload_tdata_reg;
+            case (select_reg)
+                2'd0: output_0_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+                2'd1: output_1_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+                2'd2: output_2_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+                2'd3: output_3_udp_payload_tvalid_reg <= temp_udp_payload_tvalid_reg;
+            endcase
+            output_udp_payload_tlast_reg <= temp_udp_payload_tlast_reg;
+            output_udp_payload_tuser_reg <= temp_udp_payload_tuser_reg;
+            temp_udp_payload_tdata_reg <= 0;
+            temp_udp_payload_tvalid_reg <= 0;
+            temp_udp_payload_tlast_reg <= 0;
+            temp_udp_payload_tuser_reg <= 0;
+        end
+    end
+end
+
+endmodule
+

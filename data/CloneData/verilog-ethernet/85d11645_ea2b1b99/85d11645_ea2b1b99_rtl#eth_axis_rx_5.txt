@@ -1,0 +1,110 @@
+Source Block: verilog-ethernet/rtl/eth_axis_rx.v@277:377@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        input_axis_tready_reg <= 0;
+        output_eth_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_eth_payload_tdata_reg <= 0;
+        output_eth_payload_tvalid_reg <= 0;
+        output_eth_payload_tlast_reg <= 0;
+        output_eth_payload_tuser_reg <= 0;
+        temp_eth_payload_tdata_reg <= 0;
+        temp_eth_payload_tlast_reg <= 0;
+        temp_eth_payload_tuser_reg <= 0;
+        busy_reg <= 0;
+        frame_error_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        output_eth_hdr_valid_reg <= output_eth_hdr_valid_next;
+
+        frame_error_reg <= frame_error_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // generate valid outputs
+        case (state_next)
+            STATE_IDLE: begin
+                // idle; accept new data
+                input_axis_tready_reg <= ~output_eth_hdr_valid;
+                output_eth_payload_tvalid_reg <= 0;
+            end
+            STATE_READ_HEADER: begin
+                // read header; accept new data
+                input_axis_tready_reg <= 1;
+                output_eth_payload_tvalid_reg <= 0;
+            end
+            STATE_READ_PAYLOAD_IDLE: begin
+                // read payload; no data in registers; accept new data
+                input_axis_tready_reg <= 1;
+                output_eth_payload_tvalid_reg <= 0;
+            end
+            STATE_READ_PAYLOAD_TRANSFER: begin
+                // read payload; data in output register; accept new data
+                input_axis_tready_reg <= 1;
+                output_eth_payload_tvalid_reg <= 1;
+            end
+            STATE_READ_PAYLOAD_TRANSFER_WAIT: begin
+                // read payload; data in output and temp registers; do not accept new data
+                input_axis_tready_reg <= 0;
+                output_eth_payload_tvalid_reg <= 1;
+            end
+            STATE_READ_PAYLOAD_TRANSFER_LAST: begin
+                // read last payload word; data in output register; do not accept new data
+                input_axis_tready_reg <= 0;
+                output_eth_payload_tvalid_reg <= 1;
+            end
+        endcase
+
+        // datapath
+        if (store_eth_dest_mac_0) output_eth_dest_mac_reg[ 7: 0] <= input_axis_tdata;
+        if (store_eth_dest_mac_1) output_eth_dest_mac_reg[15: 8] <= input_axis_tdata;
+        if (store_eth_dest_mac_2) output_eth_dest_mac_reg[23:16] <= input_axis_tdata;
+        if (store_eth_dest_mac_3) output_eth_dest_mac_reg[31:24] <= input_axis_tdata;
+        if (store_eth_dest_mac_4) output_eth_dest_mac_reg[39:32] <= input_axis_tdata;
+        if (store_eth_dest_mac_5) output_eth_dest_mac_reg[47:40] <= input_axis_tdata;
+        if (store_eth_src_mac_0) output_eth_src_mac_reg[ 7: 0] <= input_axis_tdata;
+        if (store_eth_src_mac_1) output_eth_src_mac_reg[15: 8] <= input_axis_tdata;
+        if (store_eth_src_mac_2) output_eth_src_mac_reg[23:16] <= input_axis_tdata;
+        if (store_eth_src_mac_3) output_eth_src_mac_reg[31:24] <= input_axis_tdata;
+        if (store_eth_src_mac_4) output_eth_src_mac_reg[39:32] <= input_axis_tdata;
+        if (store_eth_src_mac_5) output_eth_src_mac_reg[47:40] <= input_axis_tdata;
+        if (store_eth_type_0) output_eth_type_reg[ 7: 0] <= input_axis_tdata;
+        if (store_eth_type_1) output_eth_type_reg[15: 8] <= input_axis_tdata;
+
+        if (transfer_in_out) begin
+            output_eth_payload_tdata_reg <= input_axis_tdata;
+            output_eth_payload_tlast_reg <= input_axis_tlast;
+            output_eth_payload_tuser_reg <= input_axis_tuser;
+        end else if (transfer_in_temp) begin
+            temp_eth_payload_tdata_reg <= input_axis_tdata;
+            temp_eth_payload_tlast_reg <= input_axis_tlast;
+            temp_eth_payload_tuser_reg <= input_axis_tuser;
+        end else if (transfer_temp_out) begin
+            output_eth_payload_tdata_reg <= temp_eth_payload_tdata_reg;
+            output_eth_payload_tlast_reg <= temp_eth_payload_tlast_reg;
+            output_eth_payload_tuser_reg <= temp_eth_payload_tuser_reg;
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 299         frame_error_reg <= 0;
+- 307         frame_error_reg <= frame_error_next;
++ 299         error_header_early_termination_reg <= 0;
++ 307         error_header_early_termination_reg <= error_header_early_termination_next;
+
+Clone Blocks:

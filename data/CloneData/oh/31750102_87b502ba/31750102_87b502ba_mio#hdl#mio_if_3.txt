@@ -1,0 +1,19 @@
+Source Block: oh/mio/hdl/mio_if.v@141:152@HdlStmAssign
+   
+   // data in first 64 bits for amode
+   assign data_out[AW-1:0]    = amode ? rx_packet_in[AW-1:0] :
+                                        data_in[AW-1:0];
+
+   assign srcaddr_out[AW-1:0] = amode ? 'b0 :
+                                        srcaddr_in[AW-1:0];
+
+
+   //Construct outgoing packet
+   emesh2packet e2p (/*AUTOINST*/
+		     // Outputs
+
+Diff Content:
+- 146    assign srcaddr_out[AW-1:0] = amode ? 'b0 :
++ 146    assign srcaddr_out[AW-1:0] = amode ? rx_packet_in[63:32] :
+
+Clone Blocks:

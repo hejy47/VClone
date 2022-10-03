@@ -1,0 +1,27 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_header.v@117:127@HdlStmAssign
+
+assign cmd = cfg_header_mode == 0 ? {12'b0,cmd0} :
+             cfg_header_mode == 1 ? {12'b0,cmd1} :
+             cfg_header_mode == 3 ? cmd3 : 'b0;
+
+assign fec = {sync_word[31:10],sync_word[8:5]};
+
+
+assign eomb  = sync_word[4:0] == 5'b00001;
+assign eoemb = sync_word[9] & eomb;
+
+
+Diff Content:
+- 122 assign fec = {sync_word[31:10],sync_word[8:5]};
++ 122   wire header_bit;
++ 122   wire invalid_sequence;
++ 122   wire invalid_eoemb;
++ 122   wire invalid_eomb;
++ 122   wire [6:0] cmd0;
++ 122   wire [6:0] cmd1;
++ 122   wire [18:0] cmd3;
++ 122   wire eoemb;
++ 122   wire eomb;
++ 122   assign header_bit = header == 2'b01;
+
+Clone Blocks:

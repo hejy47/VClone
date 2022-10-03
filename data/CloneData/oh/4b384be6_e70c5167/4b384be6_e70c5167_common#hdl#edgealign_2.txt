@@ -1,0 +1,28 @@
+Source Block: oh/common/hdl/edgealign.v@30:45@HdlStmProcess
+
+   reg 	  clk45;
+   reg 	  clk135;
+   reg 	  firstedge;
+
+   always @ (negedge fastclk) 
+     begin
+	clk45     <= slowclk;
+	clk135    <= clk45;
+	firstedge <= ~clk45 & ~clk135;
+     end
+
+  //TODO: parametrized based on 1/N ratios?
+   
+endmodule // edgealign
+
+
+Diff Content:
+- 37 	clk45     <= slowclk;
+- 38 	clk135    <= clk45;
+- 39 	firstedge <= ~clk45 & ~clk135;
++ 35      clk45     <= slowclk;
++ 35    always @ (posedge fastclk) 
++ 39 	clk90     <= clk45;
++ 39 	firstedge <= ~clk45 & clk90;
+
+Clone Blocks:

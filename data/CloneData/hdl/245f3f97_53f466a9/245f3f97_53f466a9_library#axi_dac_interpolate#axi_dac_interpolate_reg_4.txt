@@ -1,0 +1,106 @@
+Source Block: hdl/library/axi_dac_interpolate/axi_dac_interpolate_reg.v@74:126@HdlStmProcess
+  reg             up_flags = 32'h0;
+  reg     [1:0]   up_config = 2'h0;
+  reg     [15:0]  up_correction_coefficient_a = 16'h0;
+  reg     [15:0]  up_correction_coefficient_b = 16'h0;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_interpolation_ratio_a <= 'd0;
+      up_filter_mask_a <= 'd0;
+      up_interpolation_ratio_b <= 'd0;
+      up_filter_mask_b <= 'd0;
+      up_flags <= 'd0;
+      up_config <= 'd0;
+      up_correction_coefficient_a <= 'd0;
+      up_correction_coefficient_b <= 'd0;
+    end else begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
+        up_interpolation_ratio_a <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
+        up_filter_mask_a <= up_wdata[2:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
+        up_interpolation_ratio_b <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h13)) begin
+        up_filter_mask_b <= up_wdata[2:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h14)) begin
+        up_flags <= {31'h0,up_wdata[0]};
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h15)) begin
+        up_config <= up_wdata[1:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h16)) begin
+        up_correction_coefficient_a <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h17)) begin
+        up_correction_coefficient_b <= up_wdata[15:0];
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 87       up_flags <= 'd0;
+- 109         up_flags <= {31'h0,up_wdata[0]};
++ 87       up_flags <= 'd2;
++ 109         up_flags <= {30'h0,up_wdata[1:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adc_decimate/axi_adc_decimate_reg.v@70:110
+
+  reg     [ 1:0]  up_config = 1'h0;
+  reg     [15:0]  up_correction_coefficient_a = 16'h0;
+  reg     [15:0]  up_correction_coefficient_b = 16'h0;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_decimation_ratio <= 'd0;
+      up_filter_mask <= 'd0;
+      up_config <= 'd0;
+      up_correction_coefficient_a <= 'd0;
+      up_correction_coefficient_b <= 'd0;
+    end else begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h1)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h10)) begin
+        up_decimation_ratio <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h11)) begin
+        up_filter_mask <= up_wdata[2:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h12)) begin
+        up_config <= up_wdata[1:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h13)) begin
+        up_correction_coefficient_a <= up_wdata[15:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h14)) begin
+        up_correction_coefficient_b <= up_wdata[15:0];
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+

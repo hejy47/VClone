@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@193:203@HdlIdDef
+
+// Bytes per burst is the same for both dest and src, but bytes per beat may
+// differ, so beats per burst may also differ
+
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
+
+localparam BURSTS_PER_TRANSFER_WIDTH = DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+
+reg eot_mem_src[0:2**ID_WIDTH-1];
+
+Diff Content:
+- 198 localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BYTES_PER_BEAT_WIDTH_DEST;
+
+Clone Blocks:

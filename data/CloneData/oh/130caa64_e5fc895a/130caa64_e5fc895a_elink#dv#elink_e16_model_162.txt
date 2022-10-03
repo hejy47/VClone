@@ -1,0 +1,37 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1581:1591@HdlStmAssign
+   //# But the uncertainty mentioned above forces us to start from empty fifo
+   //# every time after wait indication is raised in order to ensure that 
+   //# the number of available entries won't be reduced.            
+   //###############################################################################
+
+   assign stop_fifo_read = c0_fifo_full | c1_fifo_full | c2_fifo_full | c3_fifo_full;
+
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       rxi_wait <= 1'b0;
+     else if(stop_fifo_read)
+
+Diff Content:
+- 1586    assign stop_fifo_read = c0_fifo_full | c1_fifo_full | c2_fifo_full | c3_fifo_full;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1583:1599
+   //# the number of available entries won't be reduced.            
+   //###############################################################################
+
+   assign stop_fifo_read = c0_fifo_full | c1_fifo_full | c2_fifo_full | c3_fifo_full;
+
+   always @ (posedge rxi_lclk or posedge reset)
+     if(reset)
+       rxi_wait <= 1'b0;
+     else if(stop_fifo_read)
+       rxi_wait <= 1'b1;
+     else if(fifo_empty)
+       rxi_wait <= 1'b0;
+
+   //##################################
+   //#   Input FIFO of the receiver
+   //##################################
+
+

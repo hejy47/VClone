@@ -1,0 +1,24 @@
+Source Block: hdl/library/common/ad_ss_422to444.v@102:118@HdlStmProcess
+
+
+  // first data on de assertion is cb (0x0), then cr (0x1).
+  // previous data is held when not current
+
+  always @(posedge clk) begin
+    if (s422_de_d == 1'b1) begin
+      cr_cb_sel <= ~cr_cb_sel;
+    end else begin
+      cr_cb_sel <= Cr_Cb_N;
+    end
+  end
+
+  // pipe line stages
+
+  always @(posedge clk) begin
+    s422_de_d <= s422_de;
+
+Diff Content:
+- 111       cr_cb_sel <= Cr_Cb_N;
++ 111       cr_cb_sel <= CR_CB_N;
+
+Clone Blocks:

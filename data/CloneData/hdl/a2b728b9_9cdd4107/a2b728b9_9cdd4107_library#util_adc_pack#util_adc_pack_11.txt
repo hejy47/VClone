@@ -1,0 +1,87 @@
+Source Block: hdl/library/util_adc_pack/util_adc_pack.v@184:233@HdlStmProcess
+    begin
+      temp_data_0 = 64'h0;
+    end
+  end
+
+  always @(chan_data_4, chan_data_5, chan_data_6, chan_data_7, chan_enable_4, chan_enable_5, chan_enable_6, chan_enable_7, chan_valid)
+  begin
+    if(chan_valid == 1'b1)
+    begin
+      casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
+        4'bxxx1: temp_data_1[15:0] = chan_data_4;
+        4'bxx10: temp_data_1[15:0] = chan_data_5;
+        4'bx100: temp_data_1[15:0] = chan_data_6;
+        4'b1000: temp_data_1[15:0] = chan_data_7;
+        default: temp_data_1 [15:0] = 16'h0000;
+      endcase
+
+       casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
+        4'bxx11: temp_data_1[31:16] = chan_data_5;
+        4'bx110: temp_data_1[31:16] = chan_data_6;
+        4'bx101: temp_data_1[31:16] = chan_data_6;
+        4'b1001: temp_data_1[31:16] = chan_data_7;
+        4'b1010: temp_data_1[31:16] = chan_data_7;
+        4'b1100: temp_data_1[31:16] = chan_data_7;
+        default: temp_data_1[31:16] = 16'h0000;
+      endcase
+
+      casex ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
+        4'bx111: temp_data_1[47:32] = chan_data_6;
+        4'b1011: temp_data_1[47:32] = chan_data_7;
+        4'b1101: temp_data_1[47:32] = chan_data_7;
+        4'b1110: temp_data_1[47:32] = chan_data_7;
+        default: temp_data_1[47:32] = 16'h0000;
+      endcase
+
+      case ({chan_enable_7,chan_enable_6,chan_enable_5,chan_enable_4})
+        4'b1111: temp_data_1[63:48] = chan_data_7;
+        default: temp_data_1[63:48] = 16'h0000;
+      endcase
+    end
+    else
+    begin
+      temp_data_1 = 64'h0;
+    end
+  end
+
+  always @(temp_data_0, temp_data_1, enable_cnt_0)
+  begin
+    packed_data = temp_data_0 | temp_data_1 << enable_cnt_0 * 16;
+  end
+
+Diff Content:
+- 189   always @(chan_data_4, chan_data_5, chan_data_6, chan_data_7, chan_enable_4, chan_enable_5, chan_enable_6, chan_enable_7, chan_valid)
+- 194         4'bxxx1: temp_data_1[15:0] = chan_data_4;
+- 195         4'bxx10: temp_data_1[15:0] = chan_data_5;
+- 196         4'bx100: temp_data_1[15:0] = chan_data_6;
+- 197         4'b1000: temp_data_1[15:0] = chan_data_7;
+- 202         4'bxx11: temp_data_1[31:16] = chan_data_5;
+- 203         4'bx110: temp_data_1[31:16] = chan_data_6;
+- 204         4'bx101: temp_data_1[31:16] = chan_data_6;
+- 205         4'b1001: temp_data_1[31:16] = chan_data_7;
+- 206         4'b1010: temp_data_1[31:16] = chan_data_7;
+- 207         4'b1100: temp_data_1[31:16] = chan_data_7;
+- 212         4'bx111: temp_data_1[47:32] = chan_data_6;
+- 213         4'b1011: temp_data_1[47:32] = chan_data_7;
+- 214         4'b1101: temp_data_1[47:32] = chan_data_7;
+- 215         4'b1110: temp_data_1[47:32] = chan_data_7;
+- 220         4'b1111: temp_data_1[63:48] = chan_data_7;
++ 189   always @(chan_data_4_r, chan_data_5_r, chan_data_6_r, chan_data_7_r, chan_enable_4, chan_enable_5, chan_enable_6, chan_enable_7, chan_valid)
++ 197         4'bxxx1: temp_data_1[15:0] = chan_data_4_r;
++ 197         4'bxx10: temp_data_1[15:0] = chan_data_5_r;
++ 197         4'bx100: temp_data_1[15:0] = chan_data_6_r;
++ 197         4'b1000: temp_data_1[15:0] = chan_data_7_r;
++ 207         4'bxx11: temp_data_1[31:16] = chan_data_5_r;
++ 207         4'bx110: temp_data_1[31:16] = chan_data_6_r;
++ 207         4'bx101: temp_data_1[31:16] = chan_data_6_r;
++ 207         4'b1001: temp_data_1[31:16] = chan_data_7_r;
++ 207         4'b1010: temp_data_1[31:16] = chan_data_7_r;
++ 207         4'b1100: temp_data_1[31:16] = chan_data_7_r;
++ 215         4'bx111: temp_data_1[47:32] = chan_data_6_r;
++ 215         4'b1011: temp_data_1[47:32] = chan_data_7_r;
++ 215         4'b1101: temp_data_1[47:32] = chan_data_7_r;
++ 215         4'b1110: temp_data_1[47:32] = chan_data_7_r;
++ 220         4'b1111: temp_data_1[63:48] = chan_data_7_r;
+
+Clone Blocks:

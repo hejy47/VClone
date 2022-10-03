@@ -1,0 +1,60 @@
+Source Block: picorv32/picosoc/hx8kdemo.v@61:71@HdlStmAssign
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	assign leds = gpio >> 12;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+		if (iomem_valid && !iomem_ready && iomem_addr[31:24] == 8'h 02) begin
+			iomem_ready <= 1;
+
+Diff Content:
+- 66 	assign leds = gpio >> 12;
++ 66 	assign leds = gpio >> gpio_shr;
+
+Clone Blocks:
+Clone Blocks 1:
+picorv32/picosoc/testbench.v@70:80
+	wire        iomem_valid;
+	reg         iomem_ready;
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+
+Clone Blocks 2:
+picorv32/picosoc/testbench.v@72:82
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+		if (iomem_valid && !iomem_ready && iomem_addr[31:24] == 8'h 02) begin
+			iomem_ready <= 1;
+
+Clone Blocks 3:
+picorv32/picosoc/hx8kdemo.v@59:69
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	assign leds = gpio >> 12;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+

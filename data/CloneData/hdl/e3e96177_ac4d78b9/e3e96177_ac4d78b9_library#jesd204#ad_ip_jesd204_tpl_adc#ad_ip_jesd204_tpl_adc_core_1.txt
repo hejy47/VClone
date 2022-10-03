@@ -1,0 +1,74 @@
+Source Block: hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@54:64@HdlIdDef
+  input [LINK_DATA_WIDTH-1:0] link_data
+);
+  // Raw and formated channel data widths
+  localparam CDW_RAW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
+  localparam ADC_DATA_WIDTH = CDW_RAW * NUM_CHANNELS;
+  localparam CDW_FMT = 16 * DATA_PATH_WIDTH;
+
+  wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{1'b1}};
+
+Diff Content:
+- 59   localparam CDW_FMT = 16 * DATA_PATH_WIDTH;
++ 59   localparam CDW_FMT = BITS_PER_SAMPLE * DATA_PATH_WIDTH;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@58:68
+  localparam ADC_DATA_WIDTH = CDW_RAW * NUM_CHANNELS;
+  localparam CDW_FMT = 16 * DATA_PATH_WIDTH;
+
+  wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{1'b1}};
+
+  ad_ip_jesd204_tpl_adc_deframer #(
+    .NUM_LANES (NUM_LANES),
+    .NUM_CHANNELS (NUM_CHANNELS),
+
+Clone Blocks 2:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@56:66
+  // Raw and formated channel data widths
+  localparam CDW_RAW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
+  localparam ADC_DATA_WIDTH = CDW_RAW * NUM_CHANNELS;
+  localparam CDW_FMT = 16 * DATA_PATH_WIDTH;
+
+  wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+
+  assign link_ready = 1'b1;
+  assign adc_valid = {NUM_CHANNELS{1'b1}};
+
+  ad_ip_jesd204_tpl_adc_deframer #(
+
+Clone Blocks 3:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@52:62
+  output link_ready,
+  input [OCTETS_PER_BEAT-1:0] link_sof,
+  input [LINK_DATA_WIDTH-1:0] link_data
+);
+  // Raw and formated channel data widths
+  localparam CDW_RAW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
+  localparam ADC_DATA_WIDTH = CDW_RAW * NUM_CHANNELS;
+  localparam CDW_FMT = 16 * DATA_PATH_WIDTH;
+
+  wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+
+
+Clone Blocks 4:
+hdl/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc_core.v@53:63
+  input [OCTETS_PER_BEAT-1:0] link_sof,
+  input [LINK_DATA_WIDTH-1:0] link_data
+);
+  // Raw and formated channel data widths
+  localparam CDW_RAW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
+  localparam ADC_DATA_WIDTH = CDW_RAW * NUM_CHANNELS;
+  localparam CDW_FMT = 16 * DATA_PATH_WIDTH;
+
+  wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+
+  assign link_ready = 1'b1;
+

@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_jesd_gt/axi_jesd_gt.v@440:450@HdlStmAssign
+  end
+  endgenerate
+
+  // asymmetric widths -- transmit
+
+  assign tx_data_p = tx_data_p_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+  assign tx_data_n = tx_data_n_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+
+  generate
+  if (PCORE_NUM_OF_LANES == PCORE_NUM_OF_TX_LANES) begin
+  assign tx_gt_charisk_s = tx_gt_charisk;
+
+Diff Content:
+- 445   assign tx_data_p = tx_data_p_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_jesd_gt/axi_jesd_gt.v@441:451
+  endgenerate
+
+  // asymmetric widths -- transmit
+
+  assign tx_data_p = tx_data_p_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+  assign tx_data_n = tx_data_n_s[((PCORE_NUM_OF_TX_LANES* 1)-1):0];
+
+  generate
+  if (PCORE_NUM_OF_LANES == PCORE_NUM_OF_TX_LANES) begin
+  assign tx_gt_charisk_s = tx_gt_charisk;
+  assign tx_gt_data_s = tx_gt_data;
+

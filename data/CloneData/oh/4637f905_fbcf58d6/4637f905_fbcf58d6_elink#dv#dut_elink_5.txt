@@ -1,0 +1,45 @@
+Source Block: oh/elink/dv/dut_elink.v@352:362@HdlStmAssign
+     if(!nreset)
+       wait_counter[7:0] <= 'b0;   
+     else
+       wait_counter[7:0] <= wait_counter+1'b1;
+      
+   assign elink1_rxwr_wait       = (|wait_counter[4:0]);//(|wait_counter[3:0]);//1'b0;
+   
+endmodule // dv_elink
+// Local Variables:
+// verilog-library-directories:("." "../hdl" "../../emesh/dv" "../../emesh/hdl")
+// End:
+
+Diff Content:
+- 357    assign elink1_rxwr_wait       = (|wait_counter[4:0]);//(|wait_counter[3:0]);//1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emesh/dv/ememory.v@183:193
+     if(!nreset)
+       wait_counter[7:0] <= 'b0;   
+     else
+       wait_counter[7:0] <= wait_counter+1'b1;
+      
+   assign wait_random      = (|wait_counter[4:0]);//(|wait_counter[3:0]);//1'b0;
+
+   assign wait_all = (wait_random | wait_in);
+   
+   
+endmodule // emesh_memory
+
+Clone Blocks 2:
+oh/elink/dv/dut_axi_elink.v@567:577
+     if(!nreset)
+       wait_counter[7:0] <= 'b0;   
+     else
+       wait_counter[7:0] <= wait_counter+1'b1;
+      
+   assign elink1_rxwr_wait       = (|wait_counter[4:0]);//(|wait_counter[3:0]);//1'b0;
+   
+        
+endmodule // dv_elink
+// Local Variables:
+// verilog-library-directories:("." "../hdl" "../../emesh/dv" "../../emesh/hdl" "../../memory/hdl")
+

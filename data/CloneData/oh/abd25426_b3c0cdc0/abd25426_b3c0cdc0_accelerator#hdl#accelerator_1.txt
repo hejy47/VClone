@@ -1,0 +1,20 @@
+Source Block: oh/accelerator/hdl/accelerator.v@109:121@HdlStmAssign
+   //#####################
+   //#ACCELERATOR
+   //#####################
+
+   //registers
+   assign acc_match   = access_in                &
+			(dstaddr_in[31:20]==ID)  &
+		        (dstaddr_in[19:7]==13'b0);
+   
+   assign input0_match  = acc_match & (dstaddr_in[RFAW+1:2]==`REG_INPUT0);
+   assign input1_match  = acc_match & (dstaddr_in[RFAW+1:2]==`REG_INPUT1);
+   assign output0_match = acc_match & (dstaddr_in[RFAW+1:2]==`REG_OUTPUT);
+   
+
+Diff Content:
+- 116 		        (dstaddr_in[19:7]==13'b0);
++ 116 		        (dstaddr_in[19:16]==`EGROUP_MMR);
+
+Clone Blocks:

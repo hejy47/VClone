@@ -1,0 +1,39 @@
+Source Block: oh/ecfg/hdl/ecfg.v@290:304@HdlStmProcess
+   assign ecfg_dataout[10:0] = ecfg_dataout_reg[10:0];
+   
+   //###########################
+   //# ESYSRESET
+   //###########################
+    always @ (posedge mi_clk)
+      if(hw_reset)
+	ecfg_reset_reg <= 1'b0;   
+      else if (ecfg_reset_write)
+	ecfg_reset_reg <= mi_din[0];  
+
+   assign ecfg_reset    = ecfg_reset_reg | hw_reset;
+   assign ecfg_resetb   = ~ecfg_reset;
+   
+   //###############################
+
+Diff Content:
+- 295     always @ (posedge mi_clk)
+- 296       if(hw_reset)
+- 297 	ecfg_reset_reg <= 1'b0;   
+- 298       else if (ecfg_reset_write)
+- 299 	ecfg_reset_reg <= mi_din[0];  
+
+Clone Blocks:
+Clone Blocks 1:
+oh/ecfg/hdl/ecfg.v@296:306
+      if(hw_reset)
+	ecfg_reset_reg <= 1'b0;   
+      else if (ecfg_reset_write)
+	ecfg_reset_reg <= mi_din[0];  
+
+   assign ecfg_reset    = ecfg_reset_reg | hw_reset;
+   assign ecfg_resetb   = ~ecfg_reset;
+   
+   //###############################
+   //# DATA READBACK MUX
+   //###############################
+

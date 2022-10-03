@@ -1,0 +1,26 @@
+Source Block: oh/src/spi/hdl/spi_slave_io.v@184:196@HdlStmProcess
+   oh_rise2pulse r2p (.out  (access_pulse),
+		      .clk  (clk),
+		      .in   (ss_sync));
+
+   // pipeleining and holding pulse if there is wait
+   always @ (posedge clk)
+     if(~wait_in)
+       access_out <= access_pulse;
+
+endmodule // spi_slave_io
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+// End:
+
+Diff Content:
+- 189    always @ (posedge clk)
+- 190      if(~wait_in)
+- 191        access_out <= access_pulse;
++ 191    always @ (posedge clk or negedge nreset)
++ 191      if(!nreset)
++ 191        access_out <= 1'b0;   
++ 191      else if(~wait_in)
++ 191        access_out <= spi_fetch;
+
+Clone Blocks:

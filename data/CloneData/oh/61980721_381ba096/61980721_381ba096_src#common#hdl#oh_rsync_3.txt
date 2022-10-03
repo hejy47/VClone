@@ -1,0 +1,51 @@
+Source Block: oh/src/common/hdl/oh_rsync.v@18:26@HdlStmAssign
+     if(!nrst_in)
+       sync_pipe[PS-1:0] <= 1'b0;
+     else
+       sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      
+   
+   assign nrst_out = sync_pipe[PS-1];
+   		    	
+endmodule // oh_rsync
+
+
+Diff Content:
+- 23    assign nrst_out = sync_pipe[PS-1];
++ 23    generate
++ 23       if(ASIC)	
++ 23 	begin : g0
++ 23 	   asic_rsync asic_rsync (.clk(clk),
++ 23 				  .nrst_in(nrst_in),
++ 23 				  .nrst_out(nrst_out));
++ 23 	end
++ 23       else
++ 23 	begin :g0
++ 23 	   reg [PS-1:0] sync_pipe;   
++ 23 	   always @ (posedge clk or negedge nrst_in)		 
++ 23 	     if(!nrst_in)
++ 23 	       sync_pipe[PS-1:0] <= 1'b0;
++ 23 	     else
++ 23 	       sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      	      
++ 23 	   assign nrst_out = sync_pipe[PS-1];
++ 23 	end
++ 23    endgenerate
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_rsync.v@12:26
+    output nrst_out
+    );
+  
+   reg [PS-1:0] sync_pipe;
+   
+   always @ (posedge clk or negedge nrst_in)		 
+     if(!nrst_in)
+       sync_pipe[PS-1:0] <= 1'b0;
+     else
+       sync_pipe[PS-1:0] <= {sync_pipe[PS-2:0],1'b1};	      
+   
+   assign nrst_out = sync_pipe[PS-1];
+   		    	
+endmodule // oh_rsync
+
+

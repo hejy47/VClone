@@ -1,0 +1,820 @@
+Source Block: verilog-ethernet/rtl/udp_ip_tx_64.v@405:489@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        last_word_data_reg <= 0;
+        last_word_keep_reg <= 0;
+        input_udp_hdr_ready_reg <= 0;
+        input_udp_payload_tready_reg <= 0;
+        udp_source_port_reg <= 0;
+        udp_dest_port_reg <= 0;
+        udp_length_reg <= 0;
+        udp_checksum_reg <= 0;
+        output_ip_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_ip_version_reg <= 0;
+        output_ip_ihl_reg <= 0;
+        output_ip_dscp_reg <= 0;
+        output_ip_ecn_reg <= 0;
+        output_ip_length_reg <= 0;
+        output_ip_identification_reg <= 0;
+        output_ip_flags_reg <= 0;
+        output_ip_fragment_offset_reg <= 0;
+        output_ip_ttl_reg <= 0;
+        output_ip_protocol_reg <= 0;
+        output_ip_header_checksum_reg <= 0;
+        output_ip_source_ip_reg <= 0;
+        output_ip_dest_ip_reg <= 0;
+        busy_reg <= 0;
+        error_payload_early_termination_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_udp_hdr_ready_reg <= input_udp_hdr_ready_next;
+        input_udp_payload_tready_reg <= input_udp_payload_tready_next;
+
+        output_ip_hdr_valid_reg <= output_ip_hdr_valid_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        error_payload_early_termination_reg <= error_payload_early_termination_next;
+
+        // datapath
+        if (store_udp_hdr) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+            output_ip_version_reg <= input_ip_version;
+            output_ip_ihl_reg <= input_ip_ihl;
+            output_ip_dscp_reg <= input_ip_dscp;
+            output_ip_ecn_reg <= input_ip_ecn;
+            output_ip_length_reg <= input_udp_length + 20;
+            output_ip_identification_reg <= input_ip_identification;
+            output_ip_flags_reg <= input_ip_flags;
+            output_ip_fragment_offset_reg <= input_ip_fragment_offset;
+            output_ip_ttl_reg <= input_ip_ttl;
+            output_ip_protocol_reg <= input_ip_protocol;
+            output_ip_header_checksum_reg <= input_ip_header_checksum;
+            output_ip_source_ip_reg <= input_ip_source_ip;
+            output_ip_dest_ip_reg <= input_ip_dest_ip;
+            udp_source_port_reg <= input_udp_source_port;
+            udp_dest_port_reg <= input_udp_dest_port;
+            udp_length_reg <= input_udp_length;
+            udp_checksum_reg <= input_udp_checksum;
+        end
+
+        if (store_last_word) begin
+            last_word_data_reg <= output_ip_payload_tdata_int;
+            last_word_keep_reg <= output_ip_payload_tkeep_int;
+        end
+    end
+end
+
+// output datapath logic
+reg [63:0] output_ip_payload_tdata_reg = 0;
+reg [7:0]  output_ip_payload_tkeep_reg = 0;
+reg        output_ip_payload_tvalid_reg = 0;
+
+Diff Content:
+- 413         frame_ptr_reg <= 0;
+- 414         last_word_data_reg <= 0;
+- 415         last_word_keep_reg <= 0;
+- 416         input_udp_hdr_ready_reg <= 0;
+- 417         input_udp_payload_tready_reg <= 0;
+- 418         udp_source_port_reg <= 0;
+- 419         udp_dest_port_reg <= 0;
+- 420         udp_length_reg <= 0;
+- 421         udp_checksum_reg <= 0;
+- 422         output_ip_hdr_valid_reg <= 0;
+- 423         output_eth_dest_mac_reg <= 0;
+- 424         output_eth_src_mac_reg <= 0;
+- 425         output_eth_type_reg <= 0;
+- 426         output_ip_version_reg <= 0;
+- 427         output_ip_ihl_reg <= 0;
+- 428         output_ip_dscp_reg <= 0;
+- 429         output_ip_ecn_reg <= 0;
+- 430         output_ip_length_reg <= 0;
+- 431         output_ip_identification_reg <= 0;
+- 432         output_ip_flags_reg <= 0;
+- 433         output_ip_fragment_offset_reg <= 0;
+- 434         output_ip_ttl_reg <= 0;
+- 435         output_ip_protocol_reg <= 0;
+- 436         output_ip_header_checksum_reg <= 0;
+- 437         output_ip_source_ip_reg <= 0;
+- 438         output_ip_dest_ip_reg <= 0;
+- 439         busy_reg <= 0;
+- 440         error_payload_early_termination_reg <= 0;
+- 456         if (store_udp_hdr) begin
+- 457             output_eth_dest_mac_reg <= input_eth_dest_mac;
+- 458             output_eth_src_mac_reg <= input_eth_src_mac;
+- 459             output_eth_type_reg <= input_eth_type;
+- 460             output_ip_version_reg <= input_ip_version;
+- 461             output_ip_ihl_reg <= input_ip_ihl;
+- 462             output_ip_dscp_reg <= input_ip_dscp;
+- 463             output_ip_ecn_reg <= input_ip_ecn;
+- 464             output_ip_length_reg <= input_udp_length + 20;
+- 465             output_ip_identification_reg <= input_ip_identification;
+- 466             output_ip_flags_reg <= input_ip_flags;
+- 467             output_ip_fragment_offset_reg <= input_ip_fragment_offset;
+- 468             output_ip_ttl_reg <= input_ip_ttl;
+- 469             output_ip_protocol_reg <= input_ip_protocol;
+- 470             output_ip_header_checksum_reg <= input_ip_header_checksum;
+- 471             output_ip_source_ip_reg <= input_ip_source_ip;
+- 472             output_ip_dest_ip_reg <= input_ip_dest_ip;
+- 473             udp_source_port_reg <= input_udp_source_port;
+- 474             udp_dest_port_reg <= input_udp_dest_port;
+- 475             udp_length_reg <= input_udp_length;
+- 476             udp_checksum_reg <= input_udp_checksum;
+- 477         end
+- 479         if (store_last_word) begin
+- 480             last_word_data_reg <= output_ip_payload_tdata_int;
+- 481             last_word_keep_reg <= output_ip_payload_tkeep_int;
+- 482         end
++ 440         frame_ptr_reg <= 16'd0;
++ 440         input_udp_hdr_ready_reg <= 1'b0;
++ 440         input_udp_payload_tready_reg <= 1'b0;
++ 440         output_ip_hdr_valid_reg <= 1'b0;
++ 440         busy_reg <= 1'b0;
++ 440         error_payload_early_termination_reg <= 1'b0;
++ 453     end
++ 477     if (store_udp_hdr) begin
++ 477         output_eth_dest_mac_reg <= input_eth_dest_mac;
++ 477         output_eth_src_mac_reg <= input_eth_src_mac;
++ 477         output_eth_type_reg <= input_eth_type;
++ 477         output_ip_version_reg <= input_ip_version;
++ 477         output_ip_ihl_reg <= input_ip_ihl;
++ 477         output_ip_dscp_reg <= input_ip_dscp;
++ 477         output_ip_ecn_reg <= input_ip_ecn;
++ 477         output_ip_length_reg <= input_udp_length + 20;
++ 477         output_ip_identification_reg <= input_ip_identification;
++ 477         output_ip_flags_reg <= input_ip_flags;
++ 477         output_ip_fragment_offset_reg <= input_ip_fragment_offset;
++ 477         output_ip_ttl_reg <= input_ip_ttl;
++ 477         output_ip_protocol_reg <= input_ip_protocol;
++ 477         output_ip_header_checksum_reg <= input_ip_header_checksum;
++ 477         output_ip_source_ip_reg <= input_ip_source_ip;
++ 477         output_ip_dest_ip_reg <= input_ip_dest_ip;
++ 477         udp_source_port_reg <= input_udp_source_port;
++ 477         udp_dest_port_reg <= input_udp_dest_port;
++ 477         udp_length_reg <= input_udp_length;
++ 477         udp_checksum_reg <= input_udp_checksum;
++ 477     end
++ 482     if (store_last_word) begin
++ 482         last_word_data_reg <= output_ip_payload_tdata_int;
++ 482         last_word_keep_reg <= output_ip_payload_tkeep_int;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/udp_ip_rx_64.v@405:497
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        last_word_data_reg <= 0;
+        input_ip_hdr_ready_reg <= 0;
+        input_ip_payload_tready_reg <= 0;
+        output_udp_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_ip_version_reg <= 0;
+        output_ip_ihl_reg <= 0;
+        output_ip_dscp_reg <= 0;
+        output_ip_ecn_reg <= 0;
+        output_ip_length_reg <= 0;
+        output_ip_identification_reg <= 0;
+        output_ip_flags_reg <= 0;
+        output_ip_fragment_offset_reg <= 0;
+        output_ip_ttl_reg <= 0;
+        output_ip_protocol_reg <= 0;
+        output_ip_header_checksum_reg <= 0;
+        output_ip_source_ip_reg <= 0;
+        output_ip_dest_ip_reg <= 0;
+        output_udp_source_port_reg <= 0;
+        output_udp_dest_port_reg <= 0;
+        output_udp_length_reg <= 0;
+        output_udp_checksum_reg <= 0;
+        busy_reg <= 0;
+        error_header_early_termination_reg <= 0;
+        error_payload_early_termination_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_ip_hdr_ready_reg <= input_ip_hdr_ready_next;
+        input_ip_payload_tready_reg <= input_ip_payload_tready_next;
+
+        output_udp_hdr_valid_reg <= output_udp_hdr_valid_next;
+
+        error_header_early_termination_reg <= error_header_early_termination_next;
+        error_payload_early_termination_reg <= error_payload_early_termination_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // datapath
+        if (store_ip_hdr) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+            output_ip_version_reg <= input_ip_version;
+            output_ip_ihl_reg <= input_ip_ihl;
+            output_ip_dscp_reg <= input_ip_dscp;
+            output_ip_ecn_reg <= input_ip_ecn;
+            output_ip_length_reg <= input_ip_length;
+            output_ip_identification_reg <= input_ip_identification;
+            output_ip_flags_reg <= input_ip_flags;
+            output_ip_fragment_offset_reg <= input_ip_fragment_offset;
+            output_ip_ttl_reg <= input_ip_ttl;
+            output_ip_protocol_reg <= input_ip_protocol;
+            output_ip_header_checksum_reg <= input_ip_header_checksum;
+            output_ip_source_ip_reg <= input_ip_source_ip;
+            output_ip_dest_ip_reg <= input_ip_dest_ip;
+        end
+
+        if (store_last_word) begin
+            last_word_data_reg <= output_udp_payload_tdata_int;
+            last_word_keep_reg <= output_udp_payload_tkeep_int;
+        end
+
+        if (store_hdr_word_0) begin
+            output_udp_source_port_reg[15: 8] <= input_ip_payload_tdata[ 7: 0];
+            output_udp_source_port_reg[ 7: 0] <= input_ip_payload_tdata[15: 8];
+            output_udp_dest_port_reg[15: 8] <= input_ip_payload_tdata[23:16];
+            output_udp_dest_port_reg[ 7: 0] <= input_ip_payload_tdata[31:24];
+            output_udp_length_reg[15: 8] <= input_ip_payload_tdata[39:32];
+            output_udp_length_reg[ 7: 0] <= input_ip_payload_tdata[47:40];
+            output_udp_checksum_reg[15: 8] <= input_ip_payload_tdata[55:48];
+            output_udp_checksum_reg[ 7: 0] <= input_ip_payload_tdata[63:56];
+        end
+    end
+end
+
+// output datapath logic
+reg [63:0] output_udp_payload_tdata_reg = 0;
+reg [7:0]  output_udp_payload_tkeep_reg = 0;
+reg        output_udp_payload_tvalid_reg = 0;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/ip_eth_tx_64.v@484:569
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        hdr_sum_reg <= 0;
+        last_word_data_reg <= 0;
+        last_word_keep_reg <= 0;
+        input_ip_hdr_ready_reg <= 0;
+        input_ip_payload_tready_reg <= 0;
+        ip_dscp_reg <= 0;
+        ip_ecn_reg <= 0;
+        ip_length_reg <= 0;
+        ip_identification_reg <= 0;
+        ip_flags_reg <= 0;
+        ip_fragment_offset_reg <= 0;
+        ip_ttl_reg <= 0;
+        ip_protocol_reg <= 0;
+        ip_source_ip_reg <= 0;
+        ip_dest_ip_reg <= 0;
+        output_eth_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        busy_reg <= 0;
+        error_payload_early_termination_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        hdr_sum_reg <= hdr_sum_next;
+
+        input_ip_hdr_ready_reg <= input_ip_hdr_ready_next;
+        input_ip_payload_tready_reg <= input_ip_payload_tready_next;
+
+        output_eth_hdr_valid_reg <= output_eth_hdr_valid_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        error_payload_early_termination_reg <= error_payload_early_termination_next;
+
+        // datapath
+        if (store_ip_hdr) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+            ip_dscp_reg <= input_ip_dscp;
+            ip_ecn_reg <= input_ip_ecn;
+            ip_length_reg <= input_ip_length;
+            ip_identification_reg <= input_ip_identification;
+            ip_flags_reg <= input_ip_flags;
+            ip_fragment_offset_reg <= input_ip_fragment_offset;
+            ip_ttl_reg <= input_ip_ttl;
+            ip_protocol_reg <= input_ip_protocol;
+            ip_source_ip_reg <= input_ip_source_ip;
+            ip_dest_ip_reg <= input_ip_dest_ip;
+        end
+
+        if (store_last_word) begin
+            last_word_data_reg <= output_eth_payload_tdata_int;
+            last_word_keep_reg <= output_eth_payload_tkeep_int;
+        end
+
+        if (flush_save) begin
+            save_ip_payload_tdata_reg <= 0;
+            save_ip_payload_tkeep_reg <= 0;
+            save_ip_payload_tlast_reg <= 0;
+            save_ip_payload_tuser_reg <= 0;
+        end else if (transfer_in_save) begin
+            save_ip_payload_tdata_reg <= input_ip_payload_tdata;
+            save_ip_payload_tkeep_reg <= input_ip_payload_tkeep;
+            save_ip_payload_tlast_reg <= input_ip_payload_tlast;
+            save_ip_payload_tuser_reg <= input_ip_payload_tuser;
+        end
+    end
+end
+
+// output datapath logic
+reg [63:0] output_eth_payload_tdata_reg = 0;
+reg [7:0]  output_eth_payload_tkeep_reg = 0;
+reg        output_eth_payload_tvalid_reg = 0;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/udp_demux_64_4.v@435:505
+    output_udp_payload_tvalid_int = input_udp_payload_tvalid & input_udp_payload_tready;
+    output_udp_payload_tlast_int = input_udp_payload_tlast;
+    output_udp_payload_tuser_int = input_udp_payload_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_udp_hdr_ready_reg <= 0;
+        input_udp_payload_tready_reg <= 0;
+        output_0_udp_hdr_valid_reg <= 0;
+        output_1_udp_hdr_valid_reg <= 0;
+        output_2_udp_hdr_valid_reg <= 0;
+        output_3_udp_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_ip_version_reg <= 0;
+        output_ip_ihl_reg <= 0;
+        output_ip_dscp_reg <= 0;
+        output_ip_ecn_reg <= 0;
+        output_ip_length_reg <= 0;
+        output_ip_identification_reg <= 0;
+        output_ip_flags_reg <= 0;
+        output_ip_fragment_offset_reg <= 0;
+        output_ip_ttl_reg <= 0;
+        output_ip_protocol_reg <= 0;
+        output_ip_header_checksum_reg <= 0;
+        output_ip_source_ip_reg <= 0;
+        output_ip_dest_ip_reg <= 0;
+        output_udp_source_port_reg <= 0;
+        output_udp_dest_port_reg <= 0;
+        output_udp_length_reg <= 0;
+        output_udp_checksum_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_udp_hdr_ready_reg <= input_udp_hdr_ready_next;
+        input_udp_payload_tready_reg <= input_udp_payload_tready_next;
+        output_0_udp_hdr_valid_reg <= output_0_udp_hdr_valid_next;
+        output_1_udp_hdr_valid_reg <= output_1_udp_hdr_valid_next;
+        output_2_udp_hdr_valid_reg <= output_2_udp_hdr_valid_next;
+        output_3_udp_hdr_valid_reg <= output_3_udp_hdr_valid_next;
+        output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+        output_eth_src_mac_reg <= output_eth_src_mac_next;
+        output_eth_type_reg <= output_eth_type_next;
+        output_ip_version_reg <= output_ip_version_next;
+        output_ip_ihl_reg <= output_ip_ihl_next;
+        output_ip_dscp_reg <= output_ip_dscp_next;
+        output_ip_ecn_reg <= output_ip_ecn_next;
+        output_ip_length_reg <= output_ip_length_next;
+        output_ip_identification_reg <= output_ip_identification_next;
+        output_ip_flags_reg <= output_ip_flags_next;
+        output_ip_fragment_offset_reg <= output_ip_fragment_offset_next;
+        output_ip_ttl_reg <= output_ip_ttl_next;
+        output_ip_protocol_reg <= output_ip_protocol_next;
+        output_ip_header_checksum_reg <= output_ip_header_checksum_next;
+        output_ip_source_ip_reg <= output_ip_source_ip_next;
+        output_ip_dest_ip_reg <= output_ip_dest_ip_next;
+        output_udp_source_port_reg <= output_udp_source_port_next;
+        output_udp_dest_port_reg <= output_udp_dest_port_next;
+        output_udp_length_reg <= output_udp_length_next;
+        output_udp_checksum_reg <= output_udp_checksum_next;
+    end
+end
+
+// output datapath logic
+reg [63:0] output_udp_payload_tdata_reg = 0;
+reg [7:0]  output_udp_payload_tkeep_reg = 0;
+reg        output_0_udp_payload_tvalid_reg = 0;
+
+Clone Blocks 4:
+verilog-ethernet/rtl/ip_demux_4.v@380:442
+    output_ip_payload_tvalid_int = input_ip_payload_tvalid & input_ip_payload_tready;
+    output_ip_payload_tlast_int = input_ip_payload_tlast;
+    output_ip_payload_tuser_int = input_ip_payload_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_ip_hdr_ready_reg <= 0;
+        input_ip_payload_tready_reg <= 0;
+        output_0_ip_hdr_valid_reg <= 0;
+        output_1_ip_hdr_valid_reg <= 0;
+        output_2_ip_hdr_valid_reg <= 0;
+        output_3_ip_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_ip_version_reg <= 0;
+        output_ip_ihl_reg <= 0;
+        output_ip_dscp_reg <= 0;
+        output_ip_ecn_reg <= 0;
+        output_ip_length_reg <= 0;
+        output_ip_identification_reg <= 0;
+        output_ip_flags_reg <= 0;
+        output_ip_fragment_offset_reg <= 0;
+        output_ip_ttl_reg <= 0;
+        output_ip_protocol_reg <= 0;
+        output_ip_header_checksum_reg <= 0;
+        output_ip_source_ip_reg <= 0;
+        output_ip_dest_ip_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_ip_hdr_ready_reg <= input_ip_hdr_ready_next;
+        input_ip_payload_tready_reg <= input_ip_payload_tready_next;
+        output_0_ip_hdr_valid_reg <= output_0_ip_hdr_valid_next;
+        output_1_ip_hdr_valid_reg <= output_1_ip_hdr_valid_next;
+        output_2_ip_hdr_valid_reg <= output_2_ip_hdr_valid_next;
+        output_3_ip_hdr_valid_reg <= output_3_ip_hdr_valid_next;
+        output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+        output_eth_src_mac_reg <= output_eth_src_mac_next;
+        output_eth_type_reg <= output_eth_type_next;
+        output_ip_version_reg <= output_ip_version_next;
+        output_ip_ihl_reg <= output_ip_ihl_next;
+        output_ip_dscp_reg <= output_ip_dscp_next;
+        output_ip_ecn_reg <= output_ip_ecn_next;
+        output_ip_length_reg <= output_ip_length_next;
+        output_ip_identification_reg <= output_ip_identification_next;
+        output_ip_flags_reg <= output_ip_flags_next;
+        output_ip_fragment_offset_reg <= output_ip_fragment_offset_next;
+        output_ip_ttl_reg <= output_ip_ttl_next;
+        output_ip_protocol_reg <= output_ip_protocol_next;
+        output_ip_header_checksum_reg <= output_ip_header_checksum_next;
+        output_ip_source_ip_reg <= output_ip_source_ip_next;
+        output_ip_dest_ip_reg <= output_ip_dest_ip_next;
+    end
+end
+
+// output datapath logic
+reg [7:0] output_ip_payload_tdata_reg = 0;
+reg       output_0_ip_payload_tvalid_reg = 0;
+reg       output_1_ip_payload_tvalid_reg = 0;
+
+Clone Blocks 5:
+verilog-ethernet/rtl/ip_demux_64_4.v@387:449
+    output_ip_payload_tvalid_int = input_ip_payload_tvalid & input_ip_payload_tready;
+    output_ip_payload_tlast_int = input_ip_payload_tlast;
+    output_ip_payload_tuser_int = input_ip_payload_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_ip_hdr_ready_reg <= 0;
+        input_ip_payload_tready_reg <= 0;
+        output_0_ip_hdr_valid_reg <= 0;
+        output_1_ip_hdr_valid_reg <= 0;
+        output_2_ip_hdr_valid_reg <= 0;
+        output_3_ip_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_ip_version_reg <= 0;
+        output_ip_ihl_reg <= 0;
+        output_ip_dscp_reg <= 0;
+        output_ip_ecn_reg <= 0;
+        output_ip_length_reg <= 0;
+        output_ip_identification_reg <= 0;
+        output_ip_flags_reg <= 0;
+        output_ip_fragment_offset_reg <= 0;
+        output_ip_ttl_reg <= 0;
+        output_ip_protocol_reg <= 0;
+        output_ip_header_checksum_reg <= 0;
+        output_ip_source_ip_reg <= 0;
+        output_ip_dest_ip_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_ip_hdr_ready_reg <= input_ip_hdr_ready_next;
+        input_ip_payload_tready_reg <= input_ip_payload_tready_next;
+        output_0_ip_hdr_valid_reg <= output_0_ip_hdr_valid_next;
+        output_1_ip_hdr_valid_reg <= output_1_ip_hdr_valid_next;
+        output_2_ip_hdr_valid_reg <= output_2_ip_hdr_valid_next;
+        output_3_ip_hdr_valid_reg <= output_3_ip_hdr_valid_next;
+        output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+        output_eth_src_mac_reg <= output_eth_src_mac_next;
+        output_eth_type_reg <= output_eth_type_next;
+        output_ip_version_reg <= output_ip_version_next;
+        output_ip_ihl_reg <= output_ip_ihl_next;
+        output_ip_dscp_reg <= output_ip_dscp_next;
+        output_ip_ecn_reg <= output_ip_ecn_next;
+        output_ip_length_reg <= output_ip_length_next;
+        output_ip_identification_reg <= output_ip_identification_next;
+        output_ip_flags_reg <= output_ip_flags_next;
+        output_ip_fragment_offset_reg <= output_ip_fragment_offset_next;
+        output_ip_ttl_reg <= output_ip_ttl_next;
+        output_ip_protocol_reg <= output_ip_protocol_next;
+        output_ip_header_checksum_reg <= output_ip_header_checksum_next;
+        output_ip_source_ip_reg <= output_ip_source_ip_next;
+        output_ip_dest_ip_reg <= output_ip_dest_ip_next;
+    end
+end
+
+// output datapath logic
+reg [63:0] output_ip_payload_tdata_reg = 0;
+reg [7:0]  output_ip_payload_tkeep_reg = 0;
+reg        output_0_ip_payload_tvalid_reg = 0;
+
+Clone Blocks 6:
+verilog-ethernet/rtl/udp_ip_rx.v@382:471
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        last_word_data_reg <= 0;
+        input_ip_hdr_ready_reg <= 0;
+        input_ip_payload_tready_reg <= 0;
+        output_udp_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_ip_version_reg <= 0;
+        output_ip_ihl_reg <= 0;
+        output_ip_dscp_reg <= 0;
+        output_ip_ecn_reg <= 0;
+        output_ip_length_reg <= 0;
+        output_ip_identification_reg <= 0;
+        output_ip_flags_reg <= 0;
+        output_ip_fragment_offset_reg <= 0;
+        output_ip_ttl_reg <= 0;
+        output_ip_protocol_reg <= 0;
+        output_ip_header_checksum_reg <= 0;
+        output_ip_source_ip_reg <= 0;
+        output_ip_dest_ip_reg <= 0;
+        output_udp_source_port_reg <= 0;
+        output_udp_dest_port_reg <= 0;
+        output_udp_length_reg <= 0;
+        output_udp_checksum_reg <= 0;
+        busy_reg <= 0;
+        error_header_early_termination_reg <= 0;
+        error_payload_early_termination_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_ip_hdr_ready_reg <= input_ip_hdr_ready_next;
+        input_ip_payload_tready_reg <= input_ip_payload_tready_next;
+
+        output_udp_hdr_valid_reg <= output_udp_hdr_valid_next;
+
+        error_header_early_termination_reg <= error_header_early_termination_next;
+        error_payload_early_termination_reg <= error_payload_early_termination_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        // datapath
+        if (store_ip_hdr) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+            output_ip_version_reg <= input_ip_version;
+            output_ip_ihl_reg <= input_ip_ihl;
+            output_ip_dscp_reg <= input_ip_dscp;
+            output_ip_ecn_reg <= input_ip_ecn;
+            output_ip_length_reg <= input_ip_length;
+            output_ip_identification_reg <= input_ip_identification;
+            output_ip_flags_reg <= input_ip_flags;
+            output_ip_fragment_offset_reg <= input_ip_fragment_offset;
+            output_ip_ttl_reg <= input_ip_ttl;
+            output_ip_protocol_reg <= input_ip_protocol;
+            output_ip_header_checksum_reg <= input_ip_header_checksum;
+            output_ip_source_ip_reg <= input_ip_source_ip;
+            output_ip_dest_ip_reg <= input_ip_dest_ip;
+        end
+
+        if (store_last_word) begin
+            last_word_data_reg <= output_udp_payload_tdata_int;
+        end
+
+        if (store_udp_source_port_0) output_udp_source_port_reg[ 7: 0] <= input_ip_payload_tdata;
+        if (store_udp_source_port_1) output_udp_source_port_reg[15: 8] <= input_ip_payload_tdata;
+        if (store_udp_dest_port_0) output_udp_dest_port_reg[ 7: 0] <= input_ip_payload_tdata;
+        if (store_udp_dest_port_1) output_udp_dest_port_reg[15: 8] <= input_ip_payload_tdata;
+        if (store_udp_length_0) output_udp_length_reg[ 7: 0] <= input_ip_payload_tdata;
+        if (store_udp_length_1) output_udp_length_reg[15: 8] <= input_ip_payload_tdata;
+        if (store_udp_checksum_0) output_udp_checksum_reg[ 7: 0] <= input_ip_payload_tdata;
+        if (store_udp_checksum_1) output_udp_checksum_reg[15: 8] <= input_ip_payload_tdata;
+    end
+end
+
+// output datapath logic
+reg [7:0] output_udp_payload_tdata_reg = 0;
+reg       output_udp_payload_tvalid_reg = 0;
+reg       output_udp_payload_tlast_reg = 0;
+
+Clone Blocks 7:
+verilog-ethernet/rtl/udp_ip_tx.v@350:432
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        last_word_data_reg <= 0;
+        input_udp_hdr_ready_reg <= 0;
+        input_udp_payload_tready_reg <= 0;
+        udp_source_port_reg <= 0;
+        udp_dest_port_reg <= 0;
+        udp_length_reg <= 0;
+        udp_checksum_reg <= 0;
+        output_ip_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_ip_version_reg <= 0;
+        output_ip_ihl_reg <= 0;
+        output_ip_dscp_reg <= 0;
+        output_ip_ecn_reg <= 0;
+        output_ip_length_reg <= 0;
+        output_ip_identification_reg <= 0;
+        output_ip_flags_reg <= 0;
+        output_ip_fragment_offset_reg <= 0;
+        output_ip_ttl_reg <= 0;
+        output_ip_protocol_reg <= 0;
+        output_ip_header_checksum_reg <= 0;
+        output_ip_source_ip_reg <= 0;
+        output_ip_dest_ip_reg <= 0;
+        busy_reg <= 0;
+        error_payload_early_termination_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        input_udp_hdr_ready_reg <= input_udp_hdr_ready_next;
+        input_udp_payload_tready_reg <= input_udp_payload_tready_next;
+
+        output_ip_hdr_valid_reg <= output_ip_hdr_valid_next;
+
+        busy_reg <= state_next != STATE_IDLE;
+
+        error_payload_early_termination_reg <= error_payload_early_termination_next;
+
+        // datapath
+        if (store_udp_hdr) begin
+            output_eth_dest_mac_reg <= input_eth_dest_mac;
+            output_eth_src_mac_reg <= input_eth_src_mac;
+            output_eth_type_reg <= input_eth_type;
+            output_ip_version_reg <= input_ip_version;
+            output_ip_ihl_reg <= input_ip_ihl;
+            output_ip_dscp_reg <= input_ip_dscp;
+            output_ip_ecn_reg <= input_ip_ecn;
+            output_ip_length_reg <= input_udp_length + 20;
+            output_ip_identification_reg <= input_ip_identification;
+            output_ip_flags_reg <= input_ip_flags;
+            output_ip_fragment_offset_reg <= input_ip_fragment_offset;
+            output_ip_ttl_reg <= input_ip_ttl;
+            output_ip_protocol_reg <= input_ip_protocol;
+            output_ip_header_checksum_reg <= input_ip_header_checksum;
+            output_ip_source_ip_reg <= input_ip_source_ip;
+            output_ip_dest_ip_reg <= input_ip_dest_ip;
+            udp_source_port_reg <= input_udp_source_port;
+            udp_dest_port_reg <= input_udp_dest_port;
+            udp_length_reg <= input_udp_length;
+            udp_checksum_reg <= input_udp_checksum;
+        end
+
+        if (store_last_word) begin
+            last_word_data_reg <= output_ip_payload_tdata_int;
+        end
+    end
+end
+
+// output datapath logic
+reg [7:0] output_ip_payload_tdata_reg = 0;
+reg       output_ip_payload_tvalid_reg = 0;
+reg       output_ip_payload_tlast_reg = 0;
+
+Clone Blocks 8:
+verilog-ethernet/rtl/udp_demux_4.v@428:498
+    output_udp_payload_tvalid_int = input_udp_payload_tvalid & input_udp_payload_tready;
+    output_udp_payload_tlast_int = input_udp_payload_tlast;
+    output_udp_payload_tuser_int = input_udp_payload_tuser;
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        select_reg <= 0;
+        frame_reg <= 0;
+        input_udp_hdr_ready_reg <= 0;
+        input_udp_payload_tready_reg <= 0;
+        output_0_udp_hdr_valid_reg <= 0;
+        output_1_udp_hdr_valid_reg <= 0;
+        output_2_udp_hdr_valid_reg <= 0;
+        output_3_udp_hdr_valid_reg <= 0;
+        output_eth_dest_mac_reg <= 0;
+        output_eth_src_mac_reg <= 0;
+        output_eth_type_reg <= 0;
+        output_ip_version_reg <= 0;
+        output_ip_ihl_reg <= 0;
+        output_ip_dscp_reg <= 0;
+        output_ip_ecn_reg <= 0;
+        output_ip_length_reg <= 0;
+        output_ip_identification_reg <= 0;
+        output_ip_flags_reg <= 0;
+        output_ip_fragment_offset_reg <= 0;
+        output_ip_ttl_reg <= 0;
+        output_ip_protocol_reg <= 0;
+        output_ip_header_checksum_reg <= 0;
+        output_ip_source_ip_reg <= 0;
+        output_ip_dest_ip_reg <= 0;
+        output_udp_source_port_reg <= 0;
+        output_udp_dest_port_reg <= 0;
+        output_udp_length_reg <= 0;
+        output_udp_checksum_reg <= 0;
+    end else begin
+        select_reg <= select_next;
+        frame_reg <= frame_next;
+        input_udp_hdr_ready_reg <= input_udp_hdr_ready_next;
+        input_udp_payload_tready_reg <= input_udp_payload_tready_next;
+        output_0_udp_hdr_valid_reg <= output_0_udp_hdr_valid_next;
+        output_1_udp_hdr_valid_reg <= output_1_udp_hdr_valid_next;
+        output_2_udp_hdr_valid_reg <= output_2_udp_hdr_valid_next;
+        output_3_udp_hdr_valid_reg <= output_3_udp_hdr_valid_next;
+        output_eth_dest_mac_reg <= output_eth_dest_mac_next;
+        output_eth_src_mac_reg <= output_eth_src_mac_next;
+        output_eth_type_reg <= output_eth_type_next;
+        output_ip_version_reg <= output_ip_version_next;
+        output_ip_ihl_reg <= output_ip_ihl_next;
+        output_ip_dscp_reg <= output_ip_dscp_next;
+        output_ip_ecn_reg <= output_ip_ecn_next;
+        output_ip_length_reg <= output_ip_length_next;
+        output_ip_identification_reg <= output_ip_identification_next;
+        output_ip_flags_reg <= output_ip_flags_next;
+        output_ip_fragment_offset_reg <= output_ip_fragment_offset_next;
+        output_ip_ttl_reg <= output_ip_ttl_next;
+        output_ip_protocol_reg <= output_ip_protocol_next;
+        output_ip_header_checksum_reg <= output_ip_header_checksum_next;
+        output_ip_source_ip_reg <= output_ip_source_ip_next;
+        output_ip_dest_ip_reg <= output_ip_dest_ip_next;
+        output_udp_source_port_reg <= output_udp_source_port_next;
+        output_udp_dest_port_reg <= output_udp_dest_port_next;
+        output_udp_length_reg <= output_udp_length_next;
+        output_udp_checksum_reg <= output_udp_checksum_next;
+    end
+end
+
+// output datapath logic
+reg [7:0] output_udp_payload_tdata_reg = 0;
+reg       output_0_udp_payload_tvalid_reg = 0;
+reg       output_1_udp_payload_tvalid_reg = 0;
+

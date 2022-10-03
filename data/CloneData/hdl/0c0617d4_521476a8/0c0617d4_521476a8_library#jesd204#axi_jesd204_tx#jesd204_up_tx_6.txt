@@ -1,0 +1,108 @@
+Source Block: hdl/library/jesd204/axi_jesd204_tx/jesd204_up_tx.v@110:152@HdlStmProcess
+  .out_event(core_ctrl_manual_sync_request)
+);
+
+integer i;
+
+always @(*) begin
+  case (up_raddr)
+  /* JESD TX configuration */
+  12'h090: up_rdata = {
+    /* 03-31 */ 29'h00, /* Reserved for future additions */
+    /*    02 */ up_cfg_skip_ilas, /* Don't send ILAS, go directly from CGS to DATA */
+    /*    01 */ up_cfg_continuous_ilas, /* Continuously send ILAS sequence */
+    /*    00 */ up_cfg_continuous_cgs /* Continuously send CGS characters */
+  };
+  12'h091: up_rdata = {
+    /* 08-31 */ 24'h00, /* Reserved for future additions */
+    /* 00-07 */ up_cfg_mframes_per_ilas /* Number of multiframes send during the ILAS */
+  };
+
+  /* JESD TX status */
+  12'ha0: up_rdata = {
+    /* 12-31 */ 20'h00, /* Reserved for future additions */
+    /* 04-11 */ up_status_sync, /* Raw value of the SYNC pin */
+    /* 02-03 */ 2'b0, /* Reserved fo future extension of the status_state field */
+    /* 00-01 */ up_status_state /* State of the internal state machine (0=CGS, 1=ILAS, 2=DATA) */
+  };
+  default: begin
+    if (up_raddr[10:3] >= ('h300/32) &&
+        up_raddr[10:3] < (('h300/32) + NUM_LANES) &&
+      up_raddr[2] == 1'b1) begin
+      up_rdata = up_cfg_ilas_data[up_raddr[5:3]][up_raddr[1:0]];
+    end else begin
+       up_rdata = 32'h00000000;
+    end
+  end
+  endcase
+
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_cfg_skip_ilas <= 1'b0;
+    up_cfg_continuous_ilas <= 1'b0;
+
+Diff Content:
+- 115 always @(*) begin
+- 116   case (up_raddr)
+- 117   /* JESD TX configuration */
+- 118   12'h090: up_rdata = {
+- 119     /* 03-31 */ 29'h00, /* Reserved for future additions */
+- 120     /*    02 */ up_cfg_skip_ilas, /* Don't send ILAS, go directly from CGS to DATA */
+- 121     /*    01 */ up_cfg_continuous_ilas, /* Continuously send ILAS sequence */
+- 122     /*    00 */ up_cfg_continuous_cgs /* Continuously send CGS characters */
+- 123   };
+- 124   12'h091: up_rdata = {
+- 125     /* 08-31 */ 24'h00, /* Reserved for future additions */
+- 126     /* 00-07 */ up_cfg_mframes_per_ilas /* Number of multiframes send during the ILAS */
+- 127   };
+- 129   /* JESD TX status */
+- 130   12'ha0: up_rdata = {
+- 131     /* 12-31 */ 20'h00, /* Reserved for future additions */
+- 132     /* 04-11 */ up_status_sync, /* Raw value of the SYNC pin */
+- 133     /* 02-03 */ 2'b0, /* Reserved fo future extension of the status_state field */
+- 134     /* 00-01 */ up_status_state /* State of the internal state machine (0=CGS, 1=ILAS, 2=DATA) */
+- 135   };
+- 136   default: begin
+- 137     if (up_raddr[10:3] >= ('h300/32) &&
+- 138         up_raddr[10:3] < (('h300/32) + NUM_LANES) &&
+- 139       up_raddr[2] == 1'b1) begin
+- 140       up_rdata = up_cfg_ilas_data[up_raddr[5:3]][up_raddr[1:0]];
+- 141     end else begin
+- 142        up_rdata = 32'h00000000;
+- 144   end
+- 145   endcase
+- 147 end
++ 127   always @(*) begin
++ 127     case (up_raddr)
++ 127     /* JESD TX configuration */
++ 127     12'h090: up_rdata = {
++ 127       /* 03-31 */ 29'h00, /* Reserved for future additions */
++ 127       /*    02 */ up_cfg_skip_ilas, /* Don't send ILAS, go directly from CGS to DATA */
++ 127       /*    01 */ up_cfg_continuous_ilas, /* Continuously send ILAS sequence */
++ 127       /*    00 */ up_cfg_continuous_cgs /* Continuously send CGS characters */
++ 127     };
++ 127     12'h091: up_rdata = {
++ 127       /* 08-31 */ 24'h00, /* Reserved for future additions */
++ 127       /* 00-07 */ up_cfg_mframes_per_ilas /* Number of multiframes send during the ILAS */
++ 127     };
++ 142     /* JESD TX status */
++ 142     12'ha0: up_rdata = {
++ 142       /* 12-31 */ 20'h00, /* Reserved for future additions */
++ 142       /* 04-11 */ up_status_sync, /* Raw value of the SYNC pin */
++ 142       /* 02-03 */ 2'b0, /* Reserved fo future extension of the status_state field */
++ 142       /* 00-01 */ up_status_state /* State of the internal state machine (0=CGS, 1=ILAS, 2=DATA) */
++ 142     };
++ 142     default: begin
++ 142       if (up_raddr[10:3] >= ('h300/32) &&
++ 142           up_raddr[10:3] < (('h300/32) + NUM_LANES) &&
++ 142         up_raddr[2] == 1'b1) begin
++ 142         up_rdata = up_cfg_ilas_data[up_raddr[5:3]][up_raddr[1:0]];
++ 142       end else begin
++ 142          up_rdata = 32'h00000000;
++ 142       end
++ 145     endcase
++ 147   end
+
+Clone Blocks:

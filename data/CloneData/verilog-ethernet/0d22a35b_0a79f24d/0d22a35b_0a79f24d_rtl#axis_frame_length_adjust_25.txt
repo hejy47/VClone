@@ -1,0 +1,89 @@
+Source Block: verilog-ethernet/rtl/axis_frame_length_adjust.v@435:483@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+        short_counter_reg <= 0;
+        long_counter_reg <= 0;
+        input_axis_tready_reg <= 0;
+        last_word_data_reg <= 0;
+        last_word_keep_reg <= 0;
+        last_cycle_tuser_reg <= 0;
+        status_valid_reg <= 0;
+        status_frame_pad_reg <= 0;
+        status_frame_truncate_reg <= 0;
+        status_frame_length_reg <= 0;
+        status_frame_original_length_reg <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        short_counter_reg <= short_counter_next;
+        long_counter_reg <= long_counter_next;
+
+        input_axis_tready_reg <= input_axis_tready_next;
+
+        last_cycle_tuser_reg <= last_cycle_tuser_next;
+
+        status_valid_reg <= status_valid_next;
+        status_frame_pad_reg <= status_frame_pad_next;
+        status_frame_truncate_reg <= status_frame_truncate_next;
+        status_frame_length_reg <= status_frame_length_next;
+        status_frame_original_length_reg <= status_frame_original_length_next;
+
+        if (store_last_word) begin
+            last_word_data_reg <= output_axis_tdata_int;
+            last_word_keep_reg <= output_axis_tkeep_int;
+        end
+    end
+end
+
+// output datapath logic
+reg [DATA_WIDTH-1:0] output_axis_tdata_reg = 0;
+reg [KEEP_WIDTH-1:0] output_axis_tkeep_reg = 0;
+reg                  output_axis_tvalid_reg = 0;
+
+Diff Content:
+- 443         frame_ptr_reg <= 0;
+- 444         short_counter_reg <= 0;
+- 445         long_counter_reg <= 0;
+- 446         input_axis_tready_reg <= 0;
+- 447         last_word_data_reg <= 0;
+- 448         last_word_keep_reg <= 0;
+- 449         last_cycle_tuser_reg <= 0;
+- 450         status_valid_reg <= 0;
+- 451         status_frame_pad_reg <= 0;
+- 452         status_frame_truncate_reg <= 0;
+- 453         status_frame_length_reg <= 0;
+- 454         status_frame_original_length_reg <= 0;
+- 465         last_cycle_tuser_reg <= last_cycle_tuser_next;
+- 468         status_frame_pad_reg <= status_frame_pad_next;
+- 469         status_frame_truncate_reg <= status_frame_truncate_next;
+- 470         status_frame_length_reg <= status_frame_length_next;
+- 471         status_frame_original_length_reg <= status_frame_original_length_next;
+- 473         if (store_last_word) begin
+- 474             last_word_data_reg <= output_axis_tdata_int;
+- 475             last_word_keep_reg <= output_axis_tkeep_int;
+- 476         end
++ 454         frame_ptr_reg <= 16'd0;
++ 454         short_counter_reg <= 16'd0;
++ 454         long_counter_reg <= 16'd0;
++ 454         input_axis_tready_reg <= 1'b0;
++ 454         status_valid_reg <= 1'b0;
++ 476     end
++ 476     last_cycle_tuser_reg <= last_cycle_tuser_next;
++ 476     status_frame_pad_reg <= status_frame_pad_next;
++ 476     status_frame_truncate_reg <= status_frame_truncate_next;
++ 476     status_frame_length_reg <= status_frame_length_next;
++ 476     status_frame_original_length_reg <= status_frame_original_length_next;
++ 476     if (store_last_word) begin
++ 476         last_word_data_reg <= output_axis_tdata_int;
++ 476         last_word_keep_reg <= output_axis_tkeep_int;
+
+Clone Blocks:

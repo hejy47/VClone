@@ -1,0 +1,18 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@357:367@HdlStmAssign
+                  data_shift_6[DATA_WIDTH:1] <= data_shift_6[(DATA_WIDTH-1):0];
+                  data_shift_7[DATA_WIDTH:1] <= data_shift_7[(DATA_WIDTH-1):0];
+        end
+end
+
+assign sdo = (inst_d1 == CMD_TRANSFER) ? data_shift[DATA_WIDTH] : SDO_DEFAULT;
+
+assign sdi_data = (NUM_OF_SDI == 1) ? data_shift[(DATA_WIDTH-1):0] :
+                  (NUM_OF_SDI == 2) ? {data_shift_1[(DATA_WIDTH-1):0], data_shift[(DATA_WIDTH-1):0]} :
+                  (NUM_OF_SDI == 3) ? {data_shift_2[(DATA_WIDTH-1):0], data_shift_1[(DATA_WIDTH-1):0],
+                                                                       data_shift[(DATA_WIDTH-1):0]} :
+
+Diff Content:
+- 362 assign sdo = (inst_d1 == CMD_TRANSFER) ? data_shift[DATA_WIDTH] : SDO_DEFAULT;
++ 362 assign sdo = ((inst_d1 == CMD_TRANSFER) && (sdo_enabled)) ? data_shift[DATA_WIDTH] : SDO_DEFAULT;
+
+Clone Blocks:

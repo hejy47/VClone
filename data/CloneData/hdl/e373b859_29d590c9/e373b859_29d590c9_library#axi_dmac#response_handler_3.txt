@@ -1,0 +1,42 @@
+Source Block: hdl/library/axi_dmac/response_handler.v@82:97@HdlStmProcess
+	else if (wait_id == id)
+	    enabled <= 1'b0;
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		id <= 'h0;
+	end else begin
+		if ((bready && bvalid) ||
+		    (sync_id && id != wait_id))
+			id <= inc_id(id);
+	end
+end
+
+endmodule
+
+Diff Content:
+- 92 		    (sync_id && id != wait_id))
++ 92 		    (sync_id && id != request_id))
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@121:136
+			end
+		end
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		id <='h0;
+	end else begin
+		if ((addr_valid && addr_ready) ||
+			(sync_id && id != wait_id))
+			id <= inc_id(id);
+	end
+end
+
+endmodule
+

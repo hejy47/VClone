@@ -1,0 +1,79 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@107:162@HdlStmProcess
+   // FIFO read enables, when we're idle or done with the current datum
+   assign     emrr_rd_en = rr_ready & (~ready | etx_ack);
+   assign     emrq_rd_en = rq_ready & (~ready | etx_ack);
+   assign     emwr_rd_en = wr_ready & (~ready | etx_ack);
+   
+   always @ (posedge tx_lclk_par)
+      if( reset ) 
+	begin
+           ready             <= 1'b0;
+	   etx_write         <= 1'b0;
+	   etx_datamode[1:0] <= 2'b0;
+	   etx_ctrlmode[3:0] <= 4'b0;
+	   etx_dstaddr[31:0] <= 32'b0;
+	   etx_data[31:0]    <= 32'b0;
+	   etx_srcaddr[31:0] <= 32'b0;
+	end 
+      else 
+	begin
+	   etx_write  <= emrr_rd_en ? emrr_fifo_write :
+			 emrq_rd_en ? emrq_fifo_write :
+			              emwr_fifo_write;
+
+	   etx_datamode[1:0] <= emrr_rd_en ? emrr_fifo_datamode[1:0] :
+				emrq_rd_en ? emrq_fifo_datamode[1:0] :
+			        emwr_fifo_datamode[1:0];
+	   
+	   
+	   etx_ctrlmode[3:0] <= emrr_rd_en ? emrr_fifo_ctrlmode[3:0] :
+				emrq_rd_en ? emrq_fifo_ctrlmode[3:0] :
+			        emwr_fifo_ctrlmode[3:0];
+
+
+	   etx_dstaddr[31:0] <= emrr_rd_en ? emrr_fifo_dstaddr[31:0] :
+				emrq_rd_en ? emrq_fifo_dstaddr[31:0] :
+			        emwr_fifo_dstaddr[31:0];
+
+
+	   etx_data[31:0] <= emrr_rd_en ? emrr_fifo_data[31:0] :
+			     emrq_rd_en ? emrq_fifo_data[31:0] :
+			     emwr_fifo_data[31:0];
+	   
+	   
+	   etx_srcaddr[31:0] <= emrr_rd_en ? emrr_fifo_srcaddr[31:0] :
+				emrq_rd_en ? emrq_fifo_srcaddr[31:0] :
+				emwr_fifo_srcaddr[31:0];
+	   
+	   ready   <= (emrr_rd_en | emrq_rd_en | emwr_rd_en ) ? 1'b1 : //ready
+                      (etx_ack)                               ? 1'b0 : //done
+		                                                 ready;//stay ubu
+                                          
+	end // else: !if( reset )
+
+   assign etx_access = ready;
+   
+      
+endmodule // etx_arbiter
+
+Diff Content:
+- 123       else 
+- 125 	   etx_write  <= emrr_rd_en ? emrr_fifo_write :
+- 126 			 emrq_rd_en ? emrq_fifo_write :
+- 127 			              emwr_fifo_write;
+- 153 	   ready   <= (emrr_rd_en | emrq_rd_en | emwr_rd_en ) ? 1'b1 : //ready
+- 154                       (etx_ack)                               ? 1'b0 : //done
+- 155 		                                                 ready;//stay ubu
+- 157 	end // else: !if( reset )
++ 123       else if (emrr_rd_en | emrq_rd_en | emwr_rd_en )
++ 127 	   ready <= 1'b1;	   
++ 127 	   etx_write  <= emrr_rd_en ? 1'b1 :
++ 127 			 emrq_rd_en ? 1'b0 :
++ 127 			              1'b1;
++ 157 	end   
++ 157       else if (etx_ack)
++ 157 	begin
++ 157 	   ready <= 1'b0;	   
++ 157 	end   
+
+Clone Blocks:

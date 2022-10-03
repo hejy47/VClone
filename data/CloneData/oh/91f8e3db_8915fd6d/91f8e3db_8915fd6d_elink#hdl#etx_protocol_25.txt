@@ -1,0 +1,59 @@
+Source Block: oh/elink/hdl/etx_protocol.v@138:148@HdlIdDef
+   assign tx_burst_in =  current_match    &
+			 next_match       &
+			 burst_addr_match;
+
+   reg tx_wr_wait_reg;
+   reg tx_rd_wait_reg;   
+   reg tx_io_wait_reg; 
+   reg tx_burst_reg;
+   //reg tx_burst;   
+   //sample to align up witth tx_access   
+   always @ (posedge clk) 
+
+Diff Content:
+- 143    reg tx_rd_wait_reg;   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_protocol.v@137:147
+     
+   assign tx_burst_in =  current_match    &
+			 next_match       &
+			 burst_addr_match;
+
+   reg tx_wr_wait_reg;
+   reg tx_rd_wait_reg;   
+   reg tx_io_wait_reg; 
+   reg tx_burst_reg;
+   //reg tx_burst;   
+   //sample to align up witth tx_access   
+
+Clone Blocks 2:
+oh/elink/hdl/etx_protocol.v@140:150
+			 burst_addr_match;
+
+   reg tx_wr_wait_reg;
+   reg tx_rd_wait_reg;   
+   reg tx_io_wait_reg; 
+   reg tx_burst_reg;
+   //reg tx_burst;   
+   //sample to align up witth tx_access   
+   always @ (posedge clk) 
+     begin
+	tx_burst_reg      <= tx_burst_in & tx_access_reg;
+
+Clone Blocks 3:
+oh/elink/hdl/etx_protocol.v@139:149
+			 next_match       &
+			 burst_addr_match;
+
+   reg tx_wr_wait_reg;
+   reg tx_rd_wait_reg;   
+   reg tx_io_wait_reg; 
+   reg tx_burst_reg;
+   //reg tx_burst;   
+   //sample to align up witth tx_access   
+   always @ (posedge clk) 
+     begin
+

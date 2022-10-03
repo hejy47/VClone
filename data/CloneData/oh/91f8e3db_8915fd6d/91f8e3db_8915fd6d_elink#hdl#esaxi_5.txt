@@ -1,0 +1,39 @@
+Source Block: oh/elink/hdl/esaxi.v@420:449@HdlStmProcess
+   // -- because elink reads are not generally 
+   // -- returned in order, we will only allow
+   // -- one at a time.
+   //Need to look at txrd_wait signal
+   assign txrd_write         = 1'b0;
+   always @( posedge s_axi_aclk )
+     if (~s_axi_aresetn) 
+       begin
+	  txrd_access         <= 1'b0;      
+	  txrd_datamode[1:0]  <= 2'd0;
+	  txrd_dstaddr[31:0]  <= 32'd0;
+	  txrd_srcaddr[31:0]  <= 32'd0;	 
+          ractive_reg         <= 1'b0;
+          rnext               <= 1'b0;          
+      end 
+     else
+       begin
+          ractive_reg         <= read_active;
+          rnext               <= s_axi_rvalid & s_axi_rready & ~s_axi_rlast;        
+          txrd_access         <= ( ~ractive_reg & read_active ) | rnext;         
+	  txrd_datamode[1:0]  <= axi_arsize[1:0];
+	  txrd_dstaddr[31:0]  <= axi_araddr[31:0];
+	  txrd_srcaddr[31:0]  <= {RETURN_ADDR, 16'd0};
+	  //TODO: use arid+srcaddr for out of order ?
+       end
+   //###################################################
+   //#READ RESPONSE (DATA CHANNEL)
+   //###################################################  
+   //Read response AXI state machine
+   //Only one outstanding read
+
+Diff Content:
+- 438           rnext               <= s_axi_rvalid & s_axi_rready & ~s_axi_rlast;        
+- 439           txrd_access         <= ( ~ractive_reg & read_active ) | rnext;         
++ 439           rnext               <= s_axi_rvalid & s_axi_rready & ~s_axi_rlast;    
++ 439           txrd_access         <= ( ~ractive_reg & read_active ) | rnext;       
+
+Clone Blocks:

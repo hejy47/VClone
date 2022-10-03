@@ -1,0 +1,270 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@693:804@HdlStmIf
+assign m_axi_arprot = 'h00;
+assign m_axi_rready = 1'b0;
+
+end
+
+if (DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
+
+assign src_clk = s_axis_aclk;
+assign src_ext_resetn = 1'b1;
+
+wire src_eot = eot_mem_src[src_response_id];
+
+assign dbg_src_address_id = 'h00;
+assign dbg_src_data_id = 'h00;
+
+/* TODO
+assign src_response_valid = 1'b0;
+assign src_response_resp = 2'b0;
+*/
+
+
+src_axi_stream #(
+  .ID_WIDTH(ID_WIDTH),
+  .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+) i_src_dma_stream (
+  .s_axis_aclk(s_axis_aclk),
+  .s_axis_aresetn(src_resetn),
+
+  .enable(src_enable),
+  .enabled(src_enabled),
+
+  .req_valid(src_req_valid),
+  .req_ready(src_req_ready),
+  .req_last_burst_length(src_req_last_burst_length),
+  .req_sync_transfer_start(src_req_sync_transfer_start),
+  .req_xlast(src_req_xlast),
+
+  .request_id(src_throttled_request_id),
+  .response_id(src_response_id),
+
+  .eot(src_eot),
+
+  .rewind_req_valid(rewind_req_valid),
+  .rewind_req_ready(rewind_req_ready),
+  .rewind_req_data(rewind_req_data),
+
+  .bl_valid(src_bl_valid),
+  .bl_ready(src_bl_ready),
+  .measured_last_burst_length(src_burst_length),
+
+  .block_descr_to_dst(block_descr_to_dst),
+
+  .source_id(source_id),
+  .source_eot(source_eot),
+
+  .fifo_valid(src_valid),
+  .fifo_data(src_data),
+  .fifo_last(src_last),
+  .fifo_partial_burst(src_partial_burst),
+
+  .s_axis_valid(s_axis_valid),
+  .s_axis_ready(s_axis_ready),
+  .s_axis_data(s_axis_data),
+  .s_axis_last(s_axis_last),
+  .s_axis_user(s_axis_user),
+  .s_axis_xfer_req(s_axis_xfer_req)
+);
+
+assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
+
+util_axis_fifo #(
+  .DATA_WIDTH(ID_WIDTH + 3),
+  .ADDRESS_WIDTH(0),
+  .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+) i_rewind_req_fifo (
+  .s_axis_aclk(src_clk),
+  .s_axis_aresetn(src_resetn),
+  .s_axis_valid(rewind_req_valid),
+  .s_axis_ready(rewind_req_ready),
+  .s_axis_full(),
+  .s_axis_data(rewind_req_data),
+  .s_axis_room(),
+
+  .m_axis_aclk(req_clk),
+  .m_axis_aresetn(req_resetn),
+  .m_axis_valid(req_rewind_req_valid),
+  .m_axis_ready(req_rewind_req_ready),
+  .m_axis_data(req_rewind_req_data),
+  .m_axis_level(),
+  .m_axis_empty()
+);
+
+end else begin
+
+assign s_axis_ready = 1'b0;
+assign s_axis_xfer_req = 1'b0;
+assign rewind_req_valid = 1'b0;
+assign rewind_req_data = 'h0;
+
+assign req_rewind_req_valid = 'b0;
+assign req_rewind_req_data = 'h0;
+
+assign src_partial_burst = 1'b0;
+assign block_descr_to_dst = 1'b0;
+
+end
+
+if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
+
+wire src_eot = eot_mem_src[src_response_id];
+
+
+Diff Content:
+- 698 if (DMA_TYPE_SRC == DMA_TYPE_STREAM_AXI) begin
+- 700 assign src_clk = s_axis_aclk;
+- 701 assign src_ext_resetn = 1'b1;
+- 703 wire src_eot = eot_mem_src[src_response_id];
+- 705 assign dbg_src_address_id = 'h00;
+- 706 assign dbg_src_data_id = 'h00;
+- 708 /* TODO
+- 709 assign src_response_valid = 1'b0;
+- 710 assign src_response_resp = 2'b0;
+- 711 */
+- 714 src_axi_stream #(
+- 715   .ID_WIDTH(ID_WIDTH),
+- 716   .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+- 717   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+- 718 ) i_src_dma_stream (
+- 719   .s_axis_aclk(s_axis_aclk),
+- 720   .s_axis_aresetn(src_resetn),
+- 722   .enable(src_enable),
+- 723   .enabled(src_enabled),
+- 725   .req_valid(src_req_valid),
+- 726   .req_ready(src_req_ready),
+- 727   .req_last_burst_length(src_req_last_burst_length),
+- 728   .req_sync_transfer_start(src_req_sync_transfer_start),
+- 729   .req_xlast(src_req_xlast),
+- 731   .request_id(src_throttled_request_id),
+- 732   .response_id(src_response_id),
+- 734   .eot(src_eot),
+- 736   .rewind_req_valid(rewind_req_valid),
+- 737   .rewind_req_ready(rewind_req_ready),
+- 738   .rewind_req_data(rewind_req_data),
+- 740   .bl_valid(src_bl_valid),
+- 741   .bl_ready(src_bl_ready),
+- 742   .measured_last_burst_length(src_burst_length),
+- 744   .block_descr_to_dst(block_descr_to_dst),
+- 746   .source_id(source_id),
+- 747   .source_eot(source_eot),
+- 749   .fifo_valid(src_valid),
+- 750   .fifo_data(src_data),
+- 751   .fifo_last(src_last),
+- 752   .fifo_partial_burst(src_partial_burst),
+- 754   .s_axis_valid(s_axis_valid),
+- 755   .s_axis_ready(s_axis_ready),
+- 756   .s_axis_data(s_axis_data),
+- 757   .s_axis_last(s_axis_last),
+- 758   .s_axis_user(s_axis_user),
+- 759   .s_axis_xfer_req(s_axis_xfer_req)
+- 760 );
+- 762 assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
+- 764 util_axis_fifo #(
+- 765   .DATA_WIDTH(ID_WIDTH + 3),
+- 766   .ADDRESS_WIDTH(0),
+- 767   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+- 768 ) i_rewind_req_fifo (
+- 769   .s_axis_aclk(src_clk),
+- 770   .s_axis_aresetn(src_resetn),
+- 771   .s_axis_valid(rewind_req_valid),
+- 772   .s_axis_ready(rewind_req_ready),
+- 773   .s_axis_full(),
+- 774   .s_axis_data(rewind_req_data),
+- 775   .s_axis_room(),
+- 777   .m_axis_aclk(req_clk),
+- 778   .m_axis_aresetn(req_resetn),
+- 779   .m_axis_valid(req_rewind_req_valid),
+- 780   .m_axis_ready(req_rewind_req_ready),
+- 781   .m_axis_data(req_rewind_req_data),
+- 782   .m_axis_level(),
+- 783   .m_axis_empty()
+- 784 );
+- 786 end else begin
+- 788 assign s_axis_ready = 1'b0;
+- 789 assign s_axis_xfer_req = 1'b0;
+- 790 assign rewind_req_valid = 1'b0;
+- 791 assign rewind_req_data = 'h0;
+- 793 assign req_rewind_req_valid = 'b0;
+- 794 assign req_rewind_req_data = 'h0;
+- 796 assign src_partial_burst = 1'b0;
+- 797 assign block_descr_to_dst = 1'b0;
+- 799 end
++ 698   assign src_clk = s_axis_aclk;
++ 698   assign src_ext_resetn = 1'b1;
++ 701   wire src_eot = eot_mem_src[src_response_id];
++ 703   assign dbg_src_address_id = 'h00;
++ 703   assign dbg_src_data_id = 'h00;
++ 706   /* TODO
++ 706   assign src_response_valid = 1'b0;
++ 706   assign src_response_resp = 2'b0;
++ 706   */
++ 711   src_axi_stream #(
++ 711     .ID_WIDTH(ID_WIDTH),
++ 711     .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
++ 711     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
++ 711   ) i_src_dma_stream (
++ 711     .s_axis_aclk(s_axis_aclk),
++ 711     .s_axis_aresetn(src_resetn),
++ 711     .enable(src_enable),
++ 711     .enabled(src_enabled),
++ 720     .req_valid(src_req_valid),
++ 720     .req_ready(src_req_ready),
++ 720     .req_last_burst_length(src_req_last_burst_length),
++ 720     .req_sync_transfer_start(src_req_sync_transfer_start),
++ 720     .req_xlast(src_req_xlast),
++ 723     .request_id(src_throttled_request_id),
++ 723     .response_id(src_response_id),
++ 729     .eot(src_eot),
++ 732     .rewind_req_valid(rewind_req_valid),
++ 732     .rewind_req_ready(rewind_req_ready),
++ 732     .rewind_req_data(rewind_req_data),
++ 734     .bl_valid(src_bl_valid),
++ 734     .bl_ready(src_bl_ready),
++ 734     .measured_last_burst_length(src_burst_length),
++ 738     .block_descr_to_dst(block_descr_to_dst),
++ 742     .source_id(source_id),
++ 742     .source_eot(source_eot),
++ 744     .fifo_valid(src_valid),
++ 744     .fifo_data(src_data),
++ 744     .fifo_last(src_last),
++ 744     .fifo_partial_burst(src_partial_burst),
++ 747     .s_axis_valid(s_axis_valid),
++ 747     .s_axis_ready(s_axis_ready),
++ 747     .s_axis_data(s_axis_data),
++ 747     .s_axis_last(s_axis_last),
++ 747     .s_axis_user(s_axis_user),
++ 747     .s_axis_xfer_req(s_axis_xfer_req));
++ 752   assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
++ 760   util_axis_fifo #(
++ 760     .DATA_WIDTH(ID_WIDTH + 3),
++ 760     .ADDRESS_WIDTH(0),
++ 760     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
++ 760   ) i_rewind_req_fifo (
++ 760     .s_axis_aclk(src_clk),
++ 760     .s_axis_aresetn(src_resetn),
++ 760     .s_axis_valid(rewind_req_valid),
++ 760     .s_axis_ready(rewind_req_ready),
++ 760     .s_axis_full(),
++ 760     .s_axis_data(rewind_req_data),
++ 760     .s_axis_room(),
++ 784     .m_axis_aclk(req_clk),
++ 784     .m_axis_aresetn(req_resetn),
++ 784     .m_axis_valid(req_rewind_req_valid),
++ 784     .m_axis_ready(req_rewind_req_ready),
++ 784     .m_axis_data(req_rewind_req_data),
++ 784     .m_axis_level(),
++ 784     .m_axis_empty());
++ 786   end else begin
++ 791   assign s_axis_ready = 1'b0;
++ 791   assign s_axis_xfer_req = 1'b0;
++ 791   assign rewind_req_valid = 1'b0;
++ 791   assign rewind_req_data = 'h0;
++ 794   assign req_rewind_req_valid = 'b0;
++ 794   assign req_rewind_req_data = 'h0;
++ 797   assign src_partial_burst = 1'b0;
++ 797   assign block_descr_to_dst = 1'b0;
++ 799   end
+
+Clone Blocks:

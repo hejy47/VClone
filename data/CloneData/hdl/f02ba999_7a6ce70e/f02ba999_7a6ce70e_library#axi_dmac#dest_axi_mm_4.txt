@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_dmac/dest_axi_mm.v@190:200@HdlStmAssign
+	.m_axi_ready(m_axi_wready),
+	.m_axi_data(m_axi_wdata),
+	.m_axi_last(m_axi_wlast)
+);
+
+assign fifo_ready = _fifo_ready | ~enabled;
+
+always @(*)
+begin
+	if (data_eot & m_axi_wlast) begin
+		wstrb <= (1 << (req_last_beat_bytes + 1)) - 1;
+
+Diff Content:
+- 195 assign fifo_ready = _fifo_ready | ~enabled;
+
+Clone Blocks:

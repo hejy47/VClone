@@ -1,0 +1,32 @@
+Source Block: oh/emesh/dv/ememory.v@144:154@HdlStmAssign
+				// Inputs
+				.datamode	(datamode_out[1:0]),
+				.addr		(align_addr[2:0]),
+				.data_in	(dout[2*DW-1:0]));
+
+   assign srcaddr_out[AW-1:0] = dout_aligned[63:32];     
+   assign data_out[DW-1:0]    = dout_aligned[31:0];
+   
+   //Concatenate
+   emesh2packet #(.PW(PW)) 
+   e2p (.packet_out	(packet_out[PW-1:0]),
+
+Diff Content:
+- 149    assign srcaddr_out[AW-1:0] = dout_aligned[63:32];     
++ 149    assign srcaddr_out[AW-1:0] = (datamode_out[1:0]==2'b11) ? dout[63:32] : 32'b0;   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emesh/dv/ememory.v@145:155
+				.datamode	(datamode_out[1:0]),
+				.addr		(align_addr[2:0]),
+				.data_in	(dout[2*DW-1:0]));
+
+   assign srcaddr_out[AW-1:0] = dout_aligned[63:32];     
+   assign data_out[DW-1:0]    = dout_aligned[31:0];
+   
+   //Concatenate
+   emesh2packet #(.PW(PW)) 
+   e2p (.packet_out	(packet_out[PW-1:0]),
+	.write_in	(write_out),
+

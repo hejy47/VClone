@@ -1,0 +1,39 @@
+Source Block: oh/elink/hdl/etx_io.v@179:191@HdlStmProcess
+     begin
+	tx_wr_wait_sync <= tx_wr_wait_async;
+	tx_rd_wait_sync <= tx_rd_wait_async;
+     end
+
+   always @ (posedge tx_lclk_io)
+     if(firstedge)
+       tx_wait <= tx_wr_wait_sync | tx_rd_wait_sync;
+   
+   always @ (posedge tx_lclk_div4)
+     begin
+	tx_wr_wait <= tx_wr_wait_sync;
+	tx_rd_wait <= tx_rd_wait_sync;
+
+Diff Content:
+- 184    always @ (posedge tx_lclk_io)
+- 185      if(firstedge)
+- 186        tx_wait <= tx_wr_wait_sync | tx_rd_wait_sync;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_io.v@173:187
+   reg tx_wr_wait_sync;
+   reg tx_rd_wait_sync; 
+   reg tx_wr_wait;
+   reg tx_rd_wait;
+   reg tx_wait;   
+   always @ (posedge tx_lclk_io)
+     begin
+	tx_wr_wait_sync <= tx_wr_wait_async;
+	tx_rd_wait_sync <= tx_rd_wait_async;
+     end
+
+   always @ (posedge tx_lclk_io)
+     if(firstedge)
+       tx_wait <= tx_wr_wait_sync | tx_rd_wait_sync;
+   
+

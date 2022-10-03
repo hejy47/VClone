@@ -1,0 +1,72 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3904:3917@HdlStmProcess
+   always @ (posedge cclk)
+     if (cclk_en)
+       if(!wr_fifo_full)
+	 even_byte[LW-1:0] <= tran_in[LW-1:0];
+
+   always @ (posedge cclk)
+     if (cclk_en)
+       if (wr_write)
+	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
+   
+   //# Read (for dispatch)
+   assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+   //# Read (first short word of the next transaction to dispatch)
+
+Diff Content:
+- 3909    always @ (posedge cclk)
+- 3910      if (cclk_en)
+- 3911        if (wr_write)
+- 3912 	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
++ 3912    link_txo_interface link_txo_interface(
++ 3912 					 .txo_data		(txo_data[LW-1:0]),
++ 3912 					 .txo_frame		(txo_frame),
++ 3912 					 .txo_wr_wait_int	(txo_wr_wait_int),
++ 3912 					 .txo_rd_wait_int	(txo_rd_wait_int),
++ 3912 					 .txo_lclk		(txo_lclk),
++ 3912 					 .reset			(reset),
++ 3912 					 .txo_wr_data_even	(txo_wr_data_even[LW-1:0]),
++ 3912 					 .txo_wr_data_odd	(txo_wr_data_odd[LW-1:0]),
++ 3912 					 .txo_wr_frame		(txo_wr_frame),
++ 3912 					 .txo_wr_launch_req_tlc	(txo_wr_launch_req_tlc),
++ 3912 					 .txo_wr_rotate_dis	(txo_wr_rotate_dis),
++ 3912 					 .txo_rd_data_even	(8'd0),
++ 3912 					 .txo_rd_data_odd	(8'd0),
++ 3912 					 .txo_rd_frame		(1'd0),
++ 3912 					 .txo_rd_launch_req_tlc	(1'd0),
++ 3912 					 .txo_rd_rotate_dis	(1'd0)
++ 3912 					 ); 
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3910:3920
+     if (cclk_en)
+       if (wr_write)
+	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
+   
+   //# Read (for dispatch)
+   assign fifo_out_tlc[2*LW-1:0] = fifo_mem[rd_addr_tlc[FAD-1:0]];
+
+   //# Read (first short word of the next transaction to dispatch)
+   assign traninfo0_tlc[2*LW-1:0] = fifo_mem[rd_addr_traninfo0_tlc[FAD-1:0]];
+
+   //# Read (second short word of the next transaction to dispatch)
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@3899:3912
+   //# entries only.
+   //# In this case byte0 of the first entry of the transaction
+   //# ({byte0,ctrlmode[3:0],dstaddr[31:28]}) will be a "zevel" but we don't care
+   //# since this byte is replaced later anyway.
+   
+   always @ (posedge cclk)
+     if (cclk_en)
+       if(!wr_fifo_full)
+	 even_byte[LW-1:0] <= tran_in[LW-1:0];
+
+   always @ (posedge cclk)
+     if (cclk_en)
+       if (wr_write)
+	 fifo_mem[wr_addr[FAD-1:0]] <= {even_byte[LW-1:0],tran_in[2*LW-1:LW]};
+

@@ -1,0 +1,36 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@66:76@HdlIdDef
+
+parameter C_ID_WIDTH = 3;
+parameter C_DATA_WIDTH = 64;
+parameter C_DISABLE_WAIT_FOR_ID = 1;
+parameter C_BEATS_PER_BURST_WIDTH = 4;
+localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
+
+`include "inc_id.h"
+
+reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
+
+Diff Content:
+- 71 localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
++ 71 parameter ID_WIDTH = 3;
++ 71 parameter DATA_WIDTH = 64;
++ 71 parameter DISABLE_WAIT_FOR_ID = 1;
++ 71 parameter BEATS_PER_BURST_WIDTH = 4;
++ 71 localparam MAX_BEATS_PER_BURST = 2**(BEATS_PER_BURST_WIDTH);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/data_mover.v@70:80
+parameter C_BEATS_PER_BURST_WIDTH = 4;
+localparam MAX_BEATS_PER_BURST = 2**(C_BEATS_PER_BURST_WIDTH);
+
+`include "inc_id.h"
+
+reg [C_BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
+reg [C_BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
+reg [C_ID_WIDTH-1:0] id = 'h00;
+reg [C_ID_WIDTH-1:0] id_next = 'h00;
+
+reg pending_burst = 1'b0;
+

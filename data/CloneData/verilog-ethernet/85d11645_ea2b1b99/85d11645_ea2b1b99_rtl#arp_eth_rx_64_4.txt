@@ -1,0 +1,89 @@
+Source Block: verilog-ethernet/rtl/arp_eth_rx_64.v@152:231@HdlStmProcess
+assign output_arp_tpa = output_arp_tpa_reg;
+
+assign busy = busy_reg;
+assign frame_error = frame_error_reg;
+
+always @* begin
+    state_next = 2'bz;
+
+    store_eth_hdr = 0;
+    store_arp_hdr_word_0 = 0;
+    store_arp_hdr_word_1 = 0;
+    store_arp_hdr_word_2 = 0;
+    store_arp_hdr_word_3 = 0;
+
+    frame_ptr_next = frame_ptr_reg;
+
+    output_frame_valid_next = output_frame_valid_reg & ~output_frame_ready;
+
+    frame_error_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for data
+            frame_ptr_next = 0;
+
+            if (input_eth_hdr_ready & input_eth_hdr_valid) begin
+                frame_ptr_next = 0;
+                store_eth_hdr = 1;
+                state_next = STATE_READ_HEADER;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_READ_HEADER: begin
+            // read header state
+            if (input_eth_payload_tvalid) begin
+                // word transfer in - store it
+                frame_ptr_next = frame_ptr_reg+1;
+                state_next = STATE_READ_HEADER;
+                case (frame_ptr_reg)
+                    8'h00: store_arp_hdr_word_0 = 1;
+                    8'h01: store_arp_hdr_word_1 = 1;
+                    8'h02: store_arp_hdr_word_2 = 1;
+                    8'h03: begin
+                        store_arp_hdr_word_3 = 1;
+                        output_frame_valid_next = 1;
+                        state_next = STATE_WAIT_LAST;
+                    end
+                endcase
+                if (input_eth_payload_tlast) begin
+                    state_next = STATE_IDLE;
+                    if (frame_ptr_reg != 8'h03 | (input_eth_payload_tkeep & 8'h0F) != 8'h0F) begin
+                        frame_error_next = 1;
+                    end
+                end
+            end else begin
+                state_next = STATE_READ_HEADER;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // read last payload word; data in output register; do not accept new data
+            if (input_eth_payload_tvalid) begin
+                // word transfer out - done
+                if (input_eth_payload_tlast) begin
+                    state_next = STATE_IDLE;
+                end else begin
+                    state_next = STATE_WAIT_LAST;
+                end
+            end else begin
+                // wait for end of frame; read and discard
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        frame_ptr_reg <= 0;
+
+Diff Content:
+- 170     frame_error_next = 0;
+- 204                         frame_error_next = 1;
++ 170     error_header_early_termination_next = 0;
++ 204                         error_header_early_termination_next = 1;
+
+Clone Blocks:

@@ -1,0 +1,43 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3315:3326@HdlStmAssign
+
+   //#############################################################
+   //# creating requests information for the additional
+   //# arbitration which is performed in the txo_interface
+   //#############################################################
+   assign txo_launch_req_tlc = c0_txo_launch_req_tlc | c1_txo_launch_req_tlc |
+			       c2_txo_launch_req_tlc | c3_txo_launch_req_tlc;
+
+   assign txo_rotate_dis_tlc = c0_txo_rotate_dis | c1_txo_rotate_dis |
+			       c2_txo_rotate_dis | c3_txo_rotate_dis;
+
+   //###########################################
+
+Diff Content:
+- 3320    assign txo_launch_req_tlc = c0_txo_launch_req_tlc | c1_txo_launch_req_tlc |
+- 3321 			       c2_txo_launch_req_tlc | c3_txo_launch_req_tlc;
++ 3321    input             reset;     // reset input
++ 3321    input [3:0] 	     ext_yid_k; // external y-id 
++ 3321    input [3:0] 	     ext_xid_k; // external x-id
++ 3321    input             vertical_k;// specifies if block is vertical or horizontal
++ 3321    input [3:0] 	     who_am_i;  // specifies what link is that (north,east,south,west)
++ 3321    input 	     cfg_extcomp_dis;// Disable external coordinates comparison
++ 3321    input [LW-1:0]    rxi_data;  // Byte word
++ 3321    input             rxi_lclk;  // receive clock (adjusted to the frame/data)
++ 3321    input             rxi_frame; // indicates new transmission
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3318:3329
+   //# arbitration which is performed in the txo_interface
+   //#############################################################
+   assign txo_launch_req_tlc = c0_txo_launch_req_tlc | c1_txo_launch_req_tlc |
+			       c2_txo_launch_req_tlc | c3_txo_launch_req_tlc;
+
+   assign txo_rotate_dis_tlc = c0_txo_rotate_dis | c1_txo_rotate_dis |
+			       c2_txo_rotate_dis | c3_txo_rotate_dis;
+
+   //###########################################
+   //# Rotation mechanism and requests creation
+   //###########################################
+   always @ (posedge txo_lclk or posedge reset)
+

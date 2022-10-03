@@ -1,0 +1,107 @@
+Source Block: oh/elink/dv/dv_elink.v@73:159@HdlStmProcess
+   reg [3:0]  s_axicfg_wstrb;
+   reg 	      s_axicfg_wvalid;
+   reg 	      s_axicfg_awvalid;
+   
+    //Reset
+   initial
+     begin
+	$display($time, " << Starting the Simulation >>");	
+	#0
+	reset_in          = 1'b1;
+	clkin             = 1'b0;
+        rx_lclk_p         = 1'b0;
+	rx_lclk_n         = 1'b1;
+        rx_frame_p        = 1'b0;
+	rx_data_p[7:0]    = 8'h00; 
+    	tx_wr_wait_p      = 1'b0;
+    	tx_rd_wait_p      = 1'b0;
+    	m_axi_aclk        = 1'b0;
+    	m_axi_aresetn     = 1'b0;
+    	m_axi_arready     = 1'b0;
+    	m_axi_awready     = 1'b0;
+	m_axi_bid         = 1'b0;  
+	m_axi_bresp[1:0]  = 2'b0;
+    	m_axi_bvalid      = 1'b0;
+	m_axi_rdata[63:0] = 64'b0;
+	m_axi_rid[0:0]    = 1'b0;
+    	m_axi_rlast       = 1'b0;
+	m_axi_rresp[1:0]  = 2'b0; 
+    	m_axi_rvalid      = 1'b0;
+    	m_axi_wready      = 1'b0;
+    	s_axi_aclk        = 1'b0;
+    	s_axi_aresetn     = 1'b0;
+	s_axi_araddr[29:0]= 30'b0;
+	s_axi_arburst[1:0]= 2'b0;
+	s_axi_arcache[3:0]= 4'b0;
+	s_axi_arid[11:0]  = 12'b0;
+	s_axi_arlen[7:0]  = 8'b0;
+	s_axi_arlock[0:0] = 1'b0;
+	s_axi_arprot[2:0] = 2'b0;
+	s_axi_arqos[3:0]  = 4'b0;
+	s_axi_arregion[3:0]=4'b0;	
+	s_axi_arsize[2:0] = 2'b0;
+    	s_axi_arvalid     = 1'b0;
+	s_axi_awaddr[29:0]= 30'b0;
+	s_axi_awburst[1:0]= 2'b0;
+	s_axi_awcache[3:0]= 4'b0;
+	s_axi_awid[11:0]  = 12'b0;
+	s_axi_awlen[7:0]  = 8'b0;
+	s_axi_awlock[0:0] = 1'b0;	
+	s_axi_awprot[2:0] = 3'b0;
+	s_axi_awqos[3:0]  = 4'b0;
+	s_axi_awregion[3:0]= 4'b0;
+	s_axi_awsize[2:0]  = 3'b0;
+    	s_axi_awvalid      = 1'b0;
+    	s_axi_bready       = 1'b0;
+    	s_axi_rready       = 1'b0;
+	s_axi_wdata[31:0]  = 32'b0;
+    	s_axi_wlast        = 1'b0;
+	s_axi_wstrb[3:0]   = 4'b0;
+    	s_axi_wvalid       = 1'b0;
+	s_axicfg_aclk        = 1'b0;
+    	s_axicfg_aresetn     = 1'b0;
+	s_axicfg_araddr[12:0]=13'b0;
+	s_axicfg_arprot[2:0] = 1'b0;
+    	s_axicfg_arvalid     = 1'b0;
+	s_axicfg_awaddr[12:0]= 13'b0;
+	s_axicfg_awprot[2:0] = 3'b0;
+    	s_axicfg_bready      = 1'b0;
+	s_axicfg_awvalid     = 1'b0;	
+    	s_axicfg_rready      = 1'b0;
+	s_axicfg_wdata[31:0] = 32'b0;
+	s_axicfg_wstrb[3:0]  = 4'b0;
+        s_axicfg_wvalid      = 1'b0;
+       
+	#100 
+	  reset_in           = 1'b0;    // at time 100 release reset
+   	  s_axi_aresetn      = 1'b1;
+   	  s_axicfg_aresetn   = 1'b1;
+   	  m_axi_aresetn      = 1'b1;
+	#10000	  
+	  $finish;
+     end
+   
+   //Clock
+   always
+     begin
+       #10 
+
+Diff Content:
+- 80 	$display($time, " << Starting the Simulation >>");	
+- 133 	s_axicfg_aclk        = 1'b0;
+- 134     	s_axicfg_aresetn     = 1'b0;
+- 135 	s_axicfg_araddr[12:0]=13'b0;
+- 136 	s_axicfg_arprot[2:0] = 1'b0;
+- 137     	s_axicfg_arvalid     = 1'b0;
+- 138 	s_axicfg_awaddr[12:0]= 13'b0;
+- 139 	s_axicfg_awprot[2:0] = 3'b0;
+- 140     	s_axicfg_bready      = 1'b0;
+- 141 	s_axicfg_awvalid     = 1'b0;	
+- 142     	s_axicfg_rready      = 1'b0;
+- 143 	s_axicfg_wdata[31:0] = 32'b0;
+- 144 	s_axicfg_wstrb[3:0]  = 4'b0;
+- 145         s_axicfg_wvalid      = 1'b0;
+- 150    	  s_axicfg_aresetn   = 1'b1;
+
+Clone Blocks:

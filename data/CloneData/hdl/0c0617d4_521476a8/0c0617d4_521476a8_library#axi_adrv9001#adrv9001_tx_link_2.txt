@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_tx_link.v@133:146@HdlStmAssign
+     end
+    end
+  end
+
+  // Double each bit due to the DDR PHY
+  assign data16sdr_0 = {data16_0[15],data16_0[15],
+                        data16_0[14],data16_0[14],
+                        data16_0[13],data16_0[13],
+                        data16_0[12],data16_0[12]}; 
+  assign strobe16sdr = {strobe16[15],strobe16[15],
+                        strobe16[14],strobe16[14],
+                        strobe16[13],strobe16[13],
+                        strobe16[12],strobe16[12]};
+
+
+Diff Content:
+- 141                         data16_0[12],data16_0[12]}; 
++ 141                         data16_0[12],data16_0[12]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adrv9001/adrv9001_tx_link.v@137:150
+  // Double each bit due to the DDR PHY
+  assign data16sdr_0 = {data16_0[15],data16_0[15],
+                        data16_0[14],data16_0[14],
+                        data16_0[13],data16_0[13],
+                        data16_0[12],data16_0[12]}; 
+  assign strobe16sdr = {strobe16[15],strobe16[15],
+                        strobe16[14],strobe16[14],
+                        strobe16[13],strobe16[13],
+                        strobe16[12],strobe16[12]};
+
+  // Serialization factor Per data lane 8
+  always @(posedge tx_clk) begin
+    if (tx_data_valid) begin
+      data8_0 <= tx_data_i[7:0];
+

@@ -1,0 +1,17 @@
+Source Block: oh/emailbox/hdl/emailbox.v@102:112@HdlStmAssign
+   
+   /*****************************/
+   /*READ BACK DATA             */
+   /*****************************/  
+
+   assign mi_rd =  mi_en & ~mi_we;
+   
+   wire emailbox_read  = mi_rd & (mi_addr[RFAW+1:2]==`E_MAILBOXHI); //fifo read
+
+   always @ (posedge rd_clk)
+     if(mi_rd)
+
+Diff Content:
+- 107    assign mi_rd =  mi_en & ~mi_we;
+
+Clone Blocks:

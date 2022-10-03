@@ -1,0 +1,52 @@
+Source Block: hdl/library/axi_ad9434/axi_ad9434_if.v@147:185@HdlStmFor
+  // output assignment for adc clock (1:4 of the sampling clock)
+  assign  adc_clk = adc_div_clk;
+
+  // data interface
+  generate
+  for (l_inst = 0; l_inst <= 11; l_inst = l_inst + 1) begin : g_adc_if
+    ad_serdes_in #(
+      .DEVICE_TYPE(PCORE_DEVTYPE),
+      .IODELAY_CTRL(0),
+      .IODELAY_GROUP(PCORE_IODELAY_GROUP),
+      .IF_TYPE(SDR),
+      .PARALLEL_WIDTH(4))
+    i_adc_data (
+      .rst(adc_rst),
+      .clk(adc_clk_in),
+      .div_clk(adc_div_clk),
+      .data_s0(adc_data[(3*12)+l_inst]),
+      .data_s1(adc_data[(2*12)+l_inst]),
+      .data_s2(adc_data[(1*12)+l_inst]),
+      .data_s3(adc_data[(0*12)+l_inst]),
+      .data_s4(),
+      .data_s5(),
+      .data_s6(),
+      .data_s7(),
+      .data_in_p(adc_data_in_p[l_inst]),
+      .data_in_n(adc_data_in_n[l_inst]),
+      .up_clk (up_clk),
+      .up_dld (up_adc_dld[l_inst]),
+      .up_dwdata (up_adc_dwdata[((l_inst*5)+4):(l_inst*5)]),
+      .up_drdata (up_adc_drdata[((l_inst*5)+4):(l_inst*5)]),
+      .delay_clk(delay_clk),
+      .delay_rst(delay_rst),
+      .delay_locked());
+    end
+  endgenerate
+
+  // over-range interface
+  ad_serdes_in #(
+    .DEVICE_TYPE(PCORE_DEVTYPE),
+
+Diff Content:
+- 154       .DEVICE_TYPE(PCORE_DEVTYPE),
+- 156       .IODELAY_GROUP(PCORE_IODELAY_GROUP),
+- 157       .IF_TYPE(SDR),
+- 158       .PARALLEL_WIDTH(4))
++ 154       .DEVICE_TYPE(DEVICE_TYPE),
++ 158       .IODELAY_GROUP(IO_DELAY_GROUP),
++ 158       .DDR_OR_SDR_N(SDR),
++ 158       .DATA_WIDTH(4))
+
+Clone Blocks:

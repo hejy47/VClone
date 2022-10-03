@@ -1,0 +1,57 @@
+Source Block: oh/elink/dv/elink_e16_model.v@6023:6037@HdlStmProcess
+
+   //reset
+   input  reset;
+   reg 	  out_reg;
+         
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       out_reg <= 1'b0;
+     else
+       out_reg <= in;
+      
+   assign out = in ^ out_reg;
+
+endmodule 
+
+
+Diff Content:
+- 6028    always @ (posedge clk or posedge reset)
+- 6029      if(reset)
+- 6030        out_reg <= 1'b0;
+- 6031      else
+- 6032        out_reg <= in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@6021:6031
+   input  in;   
+   output out;
+
+   //reset
+   input  reset;
+   reg 	  out_reg;
+         
+   always @ (posedge clk or posedge reset)
+     if(reset)
+       out_reg <= 1'b0;
+     else
+
+Clone Blocks 2:
+oh/common/hdl/toggle2pulse.v@14:28
+
+   //reset
+   input  reset;
+   reg 	  out_reg;
+         
+   always @ (posedge clk)
+     if(reset)
+       out_reg <= 1'b0;
+     else
+       out_reg <= in;
+      
+   assign out = in ^ out_reg;
+
+endmodule 
+
+

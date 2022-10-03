@@ -1,0 +1,66 @@
+Source Block: hdl/library/xilinx/util_adxcvr/util_adxcvr_xch.v@464:521@HdlStmIf
+
+  assign rx_usrclk2 = rx_clk;
+  assign tx_usrclk2 = tx_clk;
+
+  generate
+    if (LINK_MODE[1]) begin
+
+      reg [3:0] rx_bitslip_d = 'h0;
+      reg rx_bitslip_req_s_d = 1'b0;
+      always @(posedge rx_clk) begin
+         rx_bitslip_d <= {rx_bitslip_d,rx_bitslip_s};
+         rx_bitslip_req_s_d <= rx_bitslip_req_s;
+      end
+      assign rx_bitslip_s = rx_bitslip_req_s & ~rx_bitslip_req_s_d;
+
+      // Sync header alignment
+      sync_header_align i_sync_header_align (
+        .clk(rx_clk),
+        .reset(~rx_rst_done_s),
+        .i_data({rx_header_s,rx_data_s[63:0]}),
+        .i_slip(rx_bitslip_req_s),
+        .i_slip_done(rx_bitslip_d[3]),
+        .o_data(rx_data),
+        .o_header(rx_header),
+        .o_block_sync(rx_block_sync)
+      );
+      assign tx_data_s = {64'd0, tx_data};
+
+      assign rx_usrclk = (XCVR_TYPE==GTHE3_TRANSCEIVERS) ||
+                         (XCVR_TYPE==GTHE4_TRANSCEIVERS) ? rx_clk_2x : rx_clk;
+      assign tx_usrclk = (XCVR_TYPE==GTHE3_TRANSCEIVERS) ||
+                         (XCVR_TYPE==GTHE4_TRANSCEIVERS) ? tx_clk_2x : tx_clk;
+						 
+      assign rx_bufstatus[0] = rx_bufstatus_sticky_0;
+      assign rx_bufstatus[1] = rx_bufstatus_sticky_1;
+	  
+      assign tx_bufstatus = tx_bufstatus_s;
+	  
+    end else begin
+
+      assign {rx_data_open_s, rx_data} = rx_data_s;
+      assign rx_bitslip_s = 1'b0;
+      assign tx_data_s = {96'd0, tx_data};
+
+      assign rx_usrclk = rx_clk;
+      assign tx_usrclk = tx_clk;
+	  
+      assign rx_bufstatus[0] = rx_bufstatus_sticky_1;
+      assign rx_bufstatus[1] = rx_bufstatus_sticky_1;
+	  
+      assign tx_bufstatus[0] = tx_bufstatus_s[1];
+      assign tx_bufstatus[1] = tx_bufstatus_s[1];
+    end
+  endgenerate
+
+  // instantiations
+
+  generate
+
+Diff Content:
+- 488         .o_block_sync(rx_block_sync)
+- 489       );
++ 489         .o_block_sync(rx_block_sync));
+
+Clone Blocks:

@@ -1,0 +1,40 @@
+Source Block: hdl/library/prcfg/bist/prcfg_dac.v@208:232@HdlStmProcess
+    src_dac_en     <= (mode == 0) ? dst_dac_en  : 1'b0;
+    dst_dac_dvalid <= (mode == 0) ? src_dac_dvalid  : dst_dac_en;
+    dst_dac_dunf   <= (mode == 0) ? src_dac_dunf : 1'b0;
+  end
+
+  always @(posedge clk) begin
+    case(mode)
+      4'h0    : begin
+                  dst_dac_ddata <= src_dac_ddata;
+                end
+      4'h1    : begin
+                  dst_dac_ddata <= {cos_tone, sin_tone};
+                end
+      4'h2    : begin
+                  dst_dac_ddata <= dac_prbs;
+                end
+      4'h3    : begin
+                  dst_dac_ddata <= dac_pattern_s;
+                end
+      default : begin
+                  dst_dac_ddata <= src_dac_ddata;
+                end
+    endcase
+  end
+endmodule
+
+Diff Content:
+- 216                   dst_dac_ddata <= src_dac_ddata;
+- 219                   dst_dac_ddata <= {cos_tone, sin_tone};
+- 222                   dst_dac_ddata <= dac_prbs;
+- 225                   dst_dac_ddata <= dac_pattern_s;
+- 228                   dst_dac_ddata <= src_dac_ddata;
++ 216                   dst_dac_data <= src_dac_data;
++ 219                   dst_dac_data <= {cos_tone, sin_tone};
++ 222                   dst_dac_data <= dac_prbs;
++ 225                   dst_dac_data <= dac_pattern_s;
++ 228                   dst_dac_data <= src_dac_data;
+
+Clone Blocks:

@@ -1,0 +1,37 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@432:442@HdlStmAssign
+  .out_resetn (1'b1),
+  .out_bits (src_dest_id)
+);
+
+assign dest_request_id = dest_src_id;
+assign dest_data_response_id = dest_id;
+
+generate if (ENABLE_DIAGNOSTICS_IF == 1) begin
+
+  reg [ID_WIDTH-1:0] _dest_diag_level_bursts = 'h0;
+
+
+Diff Content:
+- 437 assign dest_data_response_id = dest_id;
++ 437   always @(posedge dest_clk) begin
++ 437     if (dest_burst_ready == 1'b1) begin
++ 437       dest_id <= dest_id_next;
++ 437       dest_id_reduced_msb <= dest_id_reduced_msb_next;
++ 437     end
++ 437   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@431:441
+  .out_clk (src_clk),
+  .out_resetn (1'b1),
+  .out_bits (src_dest_id)
+);
+
+assign dest_request_id = dest_src_id;
+assign dest_data_response_id = dest_id;
+
+generate if (ENABLE_DIAGNOSTICS_IF == 1) begin
+
+  reg [ID_WIDTH-1:0] _dest_diag_level_bursts = 'h0;
+

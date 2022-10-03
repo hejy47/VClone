@@ -1,0 +1,33 @@
+Source Block: zipcpu/rtl/core/prefetch.v@85:108@HdlStmProcess
+	// we do one bus cycle to get the instruction.  Later we should
+	// pipeline this, but for now let's just do one at a time.
+	initial	o_wb_cyc = 1'b0;
+	initial	o_wb_stb = 1'b0;
+	initial	o_wb_addr= 0;
+	always @(posedge i_clk)
+		if ((i_rst)||(i_wb_ack)||(i_wb_err))
+		begin
+			o_wb_cyc <= 1'b0;
+			o_wb_stb <= 1'b0;
+		end else if ((!o_wb_cyc)&&((i_stalled_n)||(!o_valid)))
+		begin // Initiate a bus cycle
+			o_wb_cyc <= 1'b1;
+			o_wb_stb <= 1'b1;
+		end else if (o_wb_cyc) // Independent of ce
+		begin
+			if (~i_wb_stall)
+				o_wb_stb <= 1'b0;
+		end
+
+	reg	invalid;
+	initial	invalid = 1'b0;
+	always @(posedge i_clk)
+		if (!o_wb_cyc)
+
+Diff Content:
+- 95 		end else if ((!o_wb_cyc)&&((i_stalled_n)||(!o_valid)))
+- 101 			if (~i_wb_stall)
++ 95 		end else if ((!o_wb_cyc)&&((i_stalled_n)||(!o_valid)||(i_new_pc)))
++ 101 			if (!i_wb_stall)
+
+Clone Blocks:

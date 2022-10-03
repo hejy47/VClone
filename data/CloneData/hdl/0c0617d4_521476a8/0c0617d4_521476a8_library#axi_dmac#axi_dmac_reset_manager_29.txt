@@ -1,0 +1,47 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@213:223@HdlIdDef
+
+assign reset_async_chain[0] = 1'b0;
+assign reset_sync_chain[0] = reset_async_chain[3];
+
+generate
+genvar i;
+
+for (i = 0; i < 3; i = i + 1) begin: reset_gen
+
+  if (GEN_ASYNC_RESET[i] == 1'b1) begin
+
+
+Diff Content:
+- 218 genvar i;
++ 218   generate
++ 218   genvar i;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@209:219
+  ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
+  ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
+  1'b1
+};
+
+assign reset_async_chain[0] = 1'b0;
+assign reset_sync_chain[0] = reset_async_chain[3];
+
+generate
+genvar i;
+
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@210:220
+  ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
+  1'b1
+};
+
+assign reset_async_chain[0] = 1'b0;
+assign reset_sync_chain[0] = reset_async_chain[3];
+
+generate
+genvar i;
+
+for (i = 0; i < 3; i = i + 1) begin: reset_gen
+

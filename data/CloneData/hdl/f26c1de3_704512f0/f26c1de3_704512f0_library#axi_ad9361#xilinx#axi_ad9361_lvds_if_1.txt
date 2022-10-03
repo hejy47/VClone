@@ -1,0 +1,28 @@
+Source Block: hdl/library/axi_ad9361/xilinx/axi_ad9361_lvds_if.v@209:227@HdlStmProcess
+    rx_data_0 <= rx_data_0_s;
+  end
+
+  // frame check
+ 
+  always @(posedge l_clk) begin
+    if (rx_valid == 1'd1) begin
+      if (rx_r1_mode == 1'd1) begin
+        rx_frame_d <= {rx_frame_s, rx_frame};
+      end else begin
+        rx_frame_d <= {~rx_frame_s, ~rx_frame};
+      end
+    end
+  end
+
+  // data hold
+ 
+  always @(posedge l_clk) begin
+    if (rx_valid == 1'd1) begin
+
+Diff Content:
+- 217         rx_frame_d <= {rx_frame_s, rx_frame};
+- 219         rx_frame_d <= {~rx_frame_s, ~rx_frame};
++ 217         rx_frame_d <= rx_frame_d_s;
++ 219         rx_frame_d <= ~rx_frame_d_s;
+
+Clone Blocks:

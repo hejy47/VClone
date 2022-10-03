@@ -1,0 +1,57 @@
+Source Block: hdl/library/util_axis_fifo/address_gray_pipelined.v@117:139@HdlStmProcess
+  .out_resetn(s_axis_aresetn),
+  .in_count(_m_axis_raddr),
+  .out_count(_s_axis_raddr)
+);
+
+always @(posedge s_axis_aclk)
+begin
+  if (s_axis_aresetn == 1'b0) begin
+    s_axis_ready <= 1'b1;
+    s_axis_empty <= 1'b1;
+    s_axis_room <= 2**ADDRESS_WIDTH;
+  end else begin
+    s_axis_ready <= (_s_axis_raddr[ADDRESS_WIDTH] == _s_axis_waddr_next[ADDRESS_WIDTH] ||
+      _s_axis_raddr[ADDRESS_WIDTH-1:0] != _s_axis_waddr_next[ADDRESS_WIDTH-1:0]);
+    s_axis_empty <= _s_axis_raddr == _s_axis_waddr_next;
+    s_axis_room <= _s_axis_raddr - _s_axis_waddr_next + 2**ADDRESS_WIDTH;
+  end
+end
+
+always @(posedge m_axis_aclk)
+begin
+  if (m_axis_aresetn == 1'b0) begin
+    m_axis_valid <= 1'b0;
+
+Diff Content:
+- 127     s_axis_room <= 2**ADDRESS_WIDTH;
+- 132     s_axis_room <= _s_axis_raddr - _s_axis_waddr_next + 2**ADDRESS_WIDTH;
++ 127     s_axis_room <= MAX_ROOM;
++ 132     s_axis_room <= _s_axis_raddr - _s_axis_waddr_next + MAX_ROOM;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/address_gray.v@125:146
+  .out_resetn(s_axis_aresetn),
+  .in(m_axis_raddr_gray),
+  .out(s_axis_raddr_gray)
+);
+
+always @(posedge s_axis_aclk)
+begin
+  if (s_axis_aresetn == 1'b0) begin
+    s_axis_ready <= 1'b1;
+    s_axis_empty <= 1'b1;
+  end else begin
+    s_axis_ready <= (s_axis_raddr_gray[ADDRESS_WIDTH] == s_axis_waddr_gray_next[ADDRESS_WIDTH] ||
+      s_axis_raddr_gray[ADDRESS_WIDTH-1] == s_axis_waddr_gray_next[ADDRESS_WIDTH-1] ||
+      s_axis_raddr_gray[ADDRESS_WIDTH-2:0] != s_axis_waddr_gray_next[ADDRESS_WIDTH-2:0]);
+    s_axis_empty <= s_axis_raddr_gray == s_axis_waddr_gray_next;
+  end
+end
+
+always @(posedge m_axis_aclk)
+begin
+  if (s_axis_aresetn == 1'b0)
+    m_axis_valid <= 1'b0;
+

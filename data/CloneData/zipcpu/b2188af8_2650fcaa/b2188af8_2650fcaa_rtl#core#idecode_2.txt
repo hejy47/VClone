@@ -1,0 +1,33 @@
+Source Block: zipcpu/rtl/core/idecode.v@417:435@HdlStmProcess
+			if ((!OPT_LOCK)&&(w_lock))
+				o_illegal <= 1'b1;
+		end
+
+	initial	o_gie = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+		o_gie <= i_gie;
+	else if (OPT_CIS)
+	begin
+		if ((i_ce)&&(!o_phase))
+			o_gie <= i_gie;
+	end else if (i_ce)
+		o_gie <= i_gie;
+
+	initial	o_pc = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+		o_pc <= 0;
+
+Diff Content:
+- 422 	always @(posedge i_clk)
+- 423 	if (i_reset)
+- 424 		o_gie <= i_gie;
+- 425 	else if (OPT_CIS)
+- 426 	begin
+- 427 		if ((i_ce)&&(!o_phase))
+- 428 			o_gie <= i_gie;
+- 429 	end else if (i_ce)
+- 430 		o_gie <= i_gie;
+
+Clone Blocks:

@@ -1,0 +1,43 @@
+Source Block: hdl/library/axi_fifo2s/axi_fifo2s_rd.v@152:181@HdlStmProcess
+
+  // read is way too slow- buffer mode 
+
+  assign axi_ready_s = (~axi_arvalid | axi_arready) & ~axi_mwpfull;
+
+  always @(posedge axi_clk or negedge axi_resetn) begin
+    if (axi_resetn == 1'b0) begin
+      axi_rd <= 'd0;
+      axi_rd_active <= 'd0;
+      axi_xfer_req_m <= 'd0;
+      axi_xfer_init <= 'd0;
+    end else begin
+      if (axi_rd_active == 1'b1) begin
+        axi_rd <= 1'b0;
+        if (axi_rlast == 1'b1) begin
+          axi_rd_active <= 1'b0;
+        end
+      end else if ((axi_ready_s == 1'b1) && (axi_araddr < axi_rd_addr)) begin
+        axi_rd <= 1'b1;
+        axi_rd_active <= 1'b1;
+      end
+      axi_xfer_req_m <= {axi_xfer_req_m[1:0], axi_xfer_req};
+      axi_xfer_init <= axi_xfer_req_m[1] & ~axi_xfer_req_m[2];
+    end
+  end
+
+  // address channel
+
+  assign axi_arid  = 4'b0000;
+  assign axi_arburst  = 2'b01;
+
+Diff Content:
+- 169       end else if ((axi_ready_s == 1'b1) && (axi_araddr < axi_rd_addr)) begin
++ 158       axi_rd_addr_h <= 'd0;
++ 163       if (axi_xfer_init == 1'b1) begin
++ 163         axi_rd_addr_h <= AXI_ADDRESS;
++ 163       end else if (axi_rd_req == 1'b1) begin
++ 163         axi_rd_addr_h <= axi_rd_addr;
++ 163       end
++ 169       end else if ((axi_ready_s == 1'b1) && (axi_araddr < axi_rd_addr_h)) begin
+
+Clone Blocks:

@@ -1,0 +1,62 @@
+Source Block: oh/src/common/hdl/oh_bin2onehot.v@9:19@HdlIdDef
+(
+ input [NB-1:0]  in, // unsigned binary input  
+ output [DW-1:0] out   // one hot output vector
+ );
+   
+   localparam NB = $clog2(DW);  // encoded bit width
+   
+   integer 	  i;      
+   reg [DW-1:0] 	  out;  
+
+   always @*
+
+Diff Content:
+- 14    localparam NB = $clog2(DW);  // encoded bit width
++ 14    parameter NB = $clog2(DW);  // encoded bit width
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_bin2onehot.v@14:26
+   localparam NB = $clog2(DW);  // encoded bit width
+   
+   integer 	  i;      
+   reg [DW-1:0] 	  out;  
+
+   always @*
+     for(i=0;i<DW;i=i+1)
+       out[i]=(in[NB-1:0]==i);
+   
+endmodule // oh_bin2onehot
+
+
+
+
+Clone Blocks 2:
+oh/src/common/hdl/oh_bin2onehot.v@11:21
+ output [DW-1:0] out   // one hot output vector
+ );
+   
+   localparam NB = $clog2(DW);  // encoded bit width
+   
+   integer 	  i;      
+   reg [DW-1:0] 	  out;  
+
+   always @*
+     for(i=0;i<DW;i=i+1)
+       out[i]=(in[NB-1:0]==i);
+
+Clone Blocks 3:
+oh/src/common/hdl/oh_bitreverse.v@12:22
+    output [DW-1:0] out // bit reversed output
+    );
+   
+   
+   reg [DW-1:0]    out;        
+   integer 	   i;
+   
+   always @*
+     for (i=0;i<DW;i=i+1)
+       out[i]=in[DW-1-i];   
+   
+

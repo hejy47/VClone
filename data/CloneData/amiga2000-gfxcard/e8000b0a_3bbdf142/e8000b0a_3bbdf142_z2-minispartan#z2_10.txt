@@ -1,0 +1,117 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@527:615@HdlStmProcess
+reg z2_uds = 0;
+reg z2_lds = 0;
+
+reg z3_din_latch = 0;
+
+always @(posedge z_sample_clk) begin
+  znUDS_sync  <= {znUDS_sync[1:0],znUDS};
+  znLDS_sync  <= {znLDS_sync[1:0],znLDS};
+  znAS_sync   <= {znAS_sync[1:0],znAS};
+  zREAD_sync  <= {zREAD_sync[1:0],zREAD};
+  
+  znDS1_sync  <= {znDS1_sync[1:0],znDS1};
+  znDS0_sync  <= {znDS0_sync[1:0],znDS0};
+  zDOE_sync   <= {zDOE_sync[0],zDOE};
+  zE7M_sync   <= {zE7M_sync[0],zE7M};
+  znRST_sync  <= {znRST_sync[0],znRST};
+  znCFGIN_sync  <= {znCFGIN_sync[1:0],znCFGIN};
+  znFCS_sync <= {znFCS_sync[1:0],znFCS};
+  
+  z2_addr_valid <= (znAS_sync==0); //(znAS_sync[0] == 0);
+  
+  data_in <= zD;
+  data_in_z3_low16 <= zA[22:7]; // FIXME why sample this twice?
+  zdata_in_sync <= data_in;
+  
+  zorro_read  <= (zREAD_sync == 3'b111);//(zREAD_sync[2:0]==3'b111)?1'b1:1'b0;
+  zorro_write <= (zREAD_sync[0] == 0);//(zREAD_sync[1:0]==2'b00)?1'b1:1'b0;
+  
+  z_ready_latch <= z_ready; // timing fix
+  vga_clk_sel0_latch <= vga_clk_sel[0];
+  
+  //if (znUDS_sync==3'b000 || znLDS_sync==3'b000 || znDS1_sync==3'b000 || znDS0_sync==3'b000)
+  if (znUDS_sync[1]==0 || znLDS_sync[1]==0 || znDS1_sync[1]==0 || znDS0_sync[1]==0)
+    z3_din_latch <= 1;
+  else
+    z3_din_latch <= 0;
+  
+  // pipelined for better timing
+  if (z3_din_latch) begin
+    z3_din_high_s2 <= zD;
+    z3_din_low_s2  <= zA[22:7];
+  end
+  
+  // pipelined for better timing
+  data_z3_hi16_latched <= data_z3_hi16;
+  data_z3_low16_latched <= data_z3_low16;
+  dataout_z3_latched <= dataout_z3;
+  
+  need_row_fetch_y_latched <= need_row_fetch_y;
+  
+  zaddr <= {zA[22:0],1'b0};
+  zaddr_sync  <= zaddr;
+  zaddr_sync2 <= zaddr_sync;
+  
+  z2_mapped_addr <= ((zaddr_sync2-ram_low)>>1);
+  
+  z3addr2 <= {zD[15:8],zA[22:1],2'b00};
+  
+  // sample z3addr on falling edge of /FCS
+  if (znFCS_sync[1]==1 && znFCS_sync[0]==0) begin
+    z3addr <= z3addr2;
+  end
+  z3_mapped_addr <= ((z3addr)&'h01ffffff)>>1;
+  
+  datastrobe_synced <= (znUDS_sync==0 || znLDS_sync==0);
+  z2_uds <= (znUDS_sync==0);
+  z2_lds <= (znLDS_sync==0);
+  
+  // CHECK
+  zaddr_in_ram <= (/*zaddr_sync==zaddr_sync2 &&*/ zaddr_sync>=ram_low && zaddr_sync<ram_high);
+  zaddr_in_reg <= (/*zaddr_sync==zaddr_sync2 &&*/ zaddr_sync>=reg_low && zaddr_sync<reg_high);
+  if (znAS_sync[1]==0 && zaddr_sync>=autoconf_low && zaddr_sync<autoconf_high)
+    zaddr_autoconfig <= 1'b1;
+  else
+    zaddr_autoconfig <= 1'b0;
+  
+  z_reset <= (znRST_sync==3'b000);
+  z_cfgin <= (znCFGIN_sync==3'b000);
+  z_cfgin_lo <= (znCFGIN_sync==3'b111);
+  
+  z3addr_in_ram <= (z3addr >= z3_ram_low) && (z3addr < z3_ram_high);
+  z3addr_in_reg <= (z3addr >= z3_reg_low) && (z3addr < z3_reg_high);
+  z3addr_autoconfig <= (z3addr[31:16]=='hff00);
+end
+
+// ram arbiter
+reg zorro_ram_read_request = 0;
+reg zorro_ram_read_done = 1;
+reg zorro_ram_write_request = 0;
+
+Diff Content:
+- 552   zorro_read  <= (zREAD_sync == 3'b111);//(zREAD_sync[2:0]==3'b111)?1'b1:1'b0;
+- 553   zorro_write <= (zREAD_sync[0] == 0);//(zREAD_sync[1:0]==2'b00)?1'b1:1'b0;
+- 586   if (znFCS_sync[1]==1 && znFCS_sync[0]==0) begin
+- 587     z3addr <= z3addr2;
+- 607   z3addr_in_ram <= (z3addr >= z3_ram_low) && (z3addr < z3_ram_high);
++ 562   z3_end_cycle <= (z3_fcs_state==1); //(znFCS_sync[0]==1); //(znFCS_sync==3'b111);
++ 583   z3addr3 <= z3addr2;
++ 587   if (z3_fcs_state==0) begin
++ 587     if (znFCS_sync==3'b111)
++ 587       z3_fcs_state<=1;
++ 587   end else
++ 587   if (z3_fcs_state==1) begin
++ 587     if (znFCS_sync==3'b000 && z3addr3==z3addr2) begin
++ 587       z3_fcs_state<=0;
++ 587       z3addr <= z3addr2;
++ 587       zorro_read  <= zREAD_sync[1];
++ 587       zorro_write  <= ~zREAD_sync[1];
++ 587     end
++ 588   if (z3_fcs_state==0) begin
++ 588     z3addr_in_ram <= (z3addr >= z3_ram_low) && (z3addr < z3_ram_high);
++ 588   end else begin
++ 588     z3addr_in_ram <= 0;
++ 588   end
+
+Clone Blocks:

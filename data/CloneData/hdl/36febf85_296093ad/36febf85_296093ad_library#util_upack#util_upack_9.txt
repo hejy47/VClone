@@ -1,0 +1,29 @@
+Source Block: hdl/library/util_upack/util_upack.v@184:205@HdlStmProcess
+  assign upack_valid_4  = | dac_dmx_enable & dac_enable_4 & dac_xfer_out;
+  assign upack_valid_5  = | dac_dmx_enable & dac_enable_5 & dac_xfer_out;
+  assign upack_valid_6  = | dac_dmx_enable & dac_enable_6 & dac_xfer_out;
+  assign upack_valid_7  = | dac_dmx_enable & dac_enable_7 & dac_xfer_out;
+
+  always @(posedge dac_clk) begin
+    xfer_valid_d1   <= dma_xfer_in;
+    xfer_valid_d2   <= xfer_valid_d1;
+    xfer_valid_d3   <= xfer_valid_d2;
+    xfer_valid_d4   <= xfer_valid_d3;
+    xfer_valid_d5   <= xfer_valid_d4;
+    if (dac_dmx_enable[P_CNT-1] == 1'b1) begin
+      dac_xfer_out  <= xfer_valid_d4;
+    end else begin
+      dac_xfer_out  <= xfer_valid_d5;
+    end
+  end
+
+  always @(posedge dac_clk) begin
+    dac_valid <=    dac_dsf_valid_s[7] | dac_dsf_valid_s[6] |
+                    dac_dsf_valid_s[5] | dac_dsf_valid_s[4] |
+                    dac_dsf_valid_s[3] | dac_dsf_valid_s[2] |
+
+Diff Content:
+- 195     if (dac_dmx_enable[P_CNT-1] == 1'b1) begin
++ 195     if (dac_dmx_enable[NUM_OF_CHANNELS_P-1] == 1'b1) begin
+
+Clone Blocks:

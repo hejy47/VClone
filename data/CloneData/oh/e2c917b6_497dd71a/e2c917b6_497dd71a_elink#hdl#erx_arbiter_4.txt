@@ -1,0 +1,28 @@
+Source Block: oh/elink/hdl/erx_arbiter.v@62:72@HdlStmAssign
+   wire [11:0] 	   myid;
+
+   //####################################
+   //Splicing pakets
+   //####################################
+   assign 	 myid[11:0] = ID;   
+   
+   //####################################
+   //Read response path (from IO or cfg)
+   //####################################
+   
+
+Diff Content:
+- 67    assign 	 myid[11:0] = ID;   
++ 67    wire 	   emmu_write;
++ 67    wire [AW-1:0]   emmu_dstaddr;
++ 67    wire 	   emmu_read;
++ 67    packet2emesh p2e (// Outputs
++ 67 		     .write_out		(emmu_write),
++ 67 		     .datamode_out	(),
++ 67 		     .ctrlmode_out	(),
++ 67 		     .data_out		(),
++ 67 		     .dstaddr_out	(emmu_dstaddr[AW-1:0]),
++ 67 		     .srcaddr_out	(),
++ 67 		     .packet_in		(emmu_packet[PW-1:0]));
+
+Clone Blocks:

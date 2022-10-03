@@ -1,0 +1,36 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_lane_64b.v@209:227@HdlStmProcess
+// Control when data is written to the elastic buffer
+// Start writing to the buffer when current lane is multiblock locked, but if
+// other lanes are not writing in the next half multiblock period stop
+// writing.
+// This limits the supported lane skew to half of the multiframe
+always @(posedge clk) begin
+  if (reset | ~emb_lock) begin
+    buffer_ready_n <= 1'b1;
+  end else if (sh_count == {1'b0,cfg_beats_per_multiframe[7:1]} && all_buffer_ready_n) begin
+    buffer_ready_n <= 1'b1;
+  end else if (eoemb) begin
+    buffer_ready_n <= 1'b0;
+  end
+end
+
+
+elastic_buffer #(
+  .IWIDTH(64),
+  .OWIDTH(TPL_DATA_PATH_WIDTH*8),
+
+Diff Content:
+- 214 always @(posedge clk) begin
+- 215   if (reset | ~emb_lock) begin
+- 216     buffer_ready_n <= 1'b1;
+- 217   end else if (sh_count == {1'b0,cfg_beats_per_multiframe[7:1]} && all_buffer_ready_n) begin
+- 218     buffer_ready_n <= 1'b1;
+- 219   end else if (eoemb) begin
+- 220     buffer_ready_n <= 1'b0;
+- 222 end
++ 220   always @(posedge clk) begin
++ 220     if (eomb) begin
++ 220       crc12_calculated_prev <= crc12_calculated;
++ 220     end
+
+Clone Blocks:

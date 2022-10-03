@@ -1,0 +1,33 @@
+Source Block: serv/rtl/serv_csr.v@66:78@HdlStmAssign
+
+   assign o_q = csr_out;
+
+   assign 	o_timer_irq_en = mstatus_mie & mie_mtie;
+
+   assign mcause = (i_cnt[4:2] == 3'd0) ? mcause3_0[0] : //[3:0]
+		   ((i_cnt[4:2] == 3'd7) & i_cnt_r[3]) ? mcause31 //[31]
+		   : 1'b0;
+
+   always @(posedge i_clk) begin
+      if (i_mstatus_en & (i_cnt[4:2] == 3'd0) & i_cnt_r[3])
+	mstatus_mie <= csr_in;
+
+
+Diff Content:
++ 73    assign o_csr_in = csr_in;
+
+Clone Blocks:
+Clone Blocks 1:
+serv/rtl/serv_csr.v@64:74
+		    (i_mcause_en & mcause) |
+		    (i_mtval_en & mtval[0]);
+
+   assign o_q = csr_out;
+
+   assign 	o_timer_irq_en = mstatus_mie & mie_mtie;
+
+   assign mcause = (i_cnt[4:2] == 3'd0) ? mcause3_0[0] : //[3:0]
+		   ((i_cnt[4:2] == 3'd7) & i_cnt_r[3]) ? mcause31 //[31]
+		   : 1'b0;
+
+

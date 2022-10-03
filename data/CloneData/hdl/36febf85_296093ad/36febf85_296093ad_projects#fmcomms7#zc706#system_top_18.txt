@@ -1,0 +1,171 @@
+Source Block: hdl/projects/fmcomms7/zc706/system_top.v@329:416@HdlStmProcess
+  wire            adc_valid_0;
+  wire            adc_valid_1;
+
+  // adc-dac data
+
+  always @(posedge dac_clk) begin
+    case ({dac_enable_3, dac_enable_2, dac_enable_1, dac_enable_0})
+      4'b1111: begin
+        dac_drd <= dac_valid_0 & dac_valid_1 & dac_valid_2 & dac_valid_3;
+        dac_ddata_0[15: 0] <= dac_ddata[((16* 0)+15):(16* 0)];
+        dac_ddata_1[15: 0] <= dac_ddata[((16* 1)+15):(16* 1)];
+        dac_ddata_2[15: 0] <= dac_ddata[((16* 2)+15):(16* 2)];
+        dac_ddata_3[15: 0] <= dac_ddata[((16* 3)+15):(16* 3)];
+        dac_ddata_0[31:16] <= dac_ddata[((16* 4)+15):(16* 4)];
+        dac_ddata_1[31:16] <= dac_ddata[((16* 5)+15):(16* 5)];
+        dac_ddata_2[31:16] <= dac_ddata[((16* 6)+15):(16* 6)];
+        dac_ddata_3[31:16] <= dac_ddata[((16* 7)+15):(16* 7)];
+        dac_ddata_0[47:32] <= dac_ddata[((16* 8)+15):(16* 8)];
+        dac_ddata_1[47:32] <= dac_ddata[((16* 9)+15):(16* 9)];
+        dac_ddata_2[47:32] <= dac_ddata[((16*10)+15):(16*10)];
+        dac_ddata_3[47:32] <= dac_ddata[((16*11)+15):(16*11)];
+        dac_ddata_0[63:48] <= dac_ddata[((16*12)+15):(16*12)];
+        dac_ddata_1[63:48] <= dac_ddata[((16*13)+15):(16*13)];
+        dac_ddata_2[63:48] <= dac_ddata[((16*14)+15):(16*14)];
+        dac_ddata_3[63:48] <= dac_ddata[((16*15)+15):(16*15)];
+      end
+      4'b1100: begin
+        dac_drd <= dac_valid_2 & dac_valid_3 & ~dac_drd;
+        dac_ddata_0 <= 64'd0;
+        dac_ddata_1 <= 64'd0;
+        if (dac_drd == 1'b1) begin
+          dac_ddata_2[15: 0] <= dac_ddata[((16* 0)+15):(16* 0)];
+          dac_ddata_3[15: 0] <= dac_ddata[((16* 1)+15):(16* 1)];
+          dac_ddata_2[31:16] <= dac_ddata[((16* 2)+15):(16* 2)];
+          dac_ddata_3[31:16] <= dac_ddata[((16* 3)+15):(16* 3)];
+          dac_ddata_2[47:32] <= dac_ddata[((16* 4)+15):(16* 4)];
+          dac_ddata_3[47:32] <= dac_ddata[((16* 5)+15):(16* 5)];
+          dac_ddata_2[63:48] <= dac_ddata[((16* 6)+15):(16* 6)];
+          dac_ddata_3[63:48] <= dac_ddata[((16* 7)+15):(16* 7)];
+        end else begin
+          dac_ddata_2[15: 0] <= dac_ddata[((16* 8)+15):(16* 8)];
+          dac_ddata_3[15: 0] <= dac_ddata[((16* 9)+15):(16* 9)];
+          dac_ddata_2[31:16] <= dac_ddata[((16*10)+15):(16*10)];
+          dac_ddata_3[31:16] <= dac_ddata[((16*11)+15):(16*11)];
+          dac_ddata_2[47:32] <= dac_ddata[((16*12)+15):(16*12)];
+          dac_ddata_3[47:32] <= dac_ddata[((16*13)+15):(16*13)];
+          dac_ddata_2[63:48] <= dac_ddata[((16*14)+15):(16*14)];
+          dac_ddata_3[63:48] <= dac_ddata[((16*15)+15):(16*15)];
+        end
+      end
+      4'b0011: begin
+        dac_drd <= dac_valid_0 & dac_valid_1 & ~dac_drd;
+        dac_ddata_2 <= 64'd0;
+        dac_ddata_3 <= 64'd0;
+        if (dac_drd == 1'b1) begin
+          dac_ddata_0[15: 0] <= dac_ddata[((16* 0)+15):(16* 0)];
+          dac_ddata_1[15: 0] <= dac_ddata[((16* 1)+15):(16* 1)];
+          dac_ddata_0[31:16] <= dac_ddata[((16* 2)+15):(16* 2)];
+          dac_ddata_1[31:16] <= dac_ddata[((16* 3)+15):(16* 3)];
+          dac_ddata_0[47:32] <= dac_ddata[((16* 4)+15):(16* 4)];
+          dac_ddata_1[47:32] <= dac_ddata[((16* 5)+15):(16* 5)];
+          dac_ddata_0[63:48] <= dac_ddata[((16* 6)+15):(16* 6)];
+          dac_ddata_1[63:48] <= dac_ddata[((16* 7)+15):(16* 7)];
+        end else begin
+          dac_ddata_0[15: 0] <= dac_ddata[((16* 8)+15):(16* 8)];
+          dac_ddata_1[15: 0] <= dac_ddata[((16* 9)+15):(16* 9)];
+          dac_ddata_0[31:16] <= dac_ddata[((16*10)+15):(16*10)];
+          dac_ddata_1[31:16] <= dac_ddata[((16*11)+15):(16*11)];
+          dac_ddata_0[47:32] <= dac_ddata[((16*12)+15):(16*12)];
+          dac_ddata_1[47:32] <= dac_ddata[((16*13)+15):(16*13)];
+          dac_ddata_0[63:48] <= dac_ddata[((16*14)+15):(16*14)];
+          dac_ddata_1[63:48] <= dac_ddata[((16*15)+15):(16*15)];
+        end
+      end
+      default: begin
+        dac_drd <= 1'b0;
+        dac_ddata_0 <= 64'd0;
+        dac_ddata_1 <= 64'd0;
+        dac_ddata_2 <= 64'd0;
+        dac_ddata_3 <= 64'd0;
+      end
+    endcase
+  end
+
+  always @(posedge adc_clk) begin
+    case ({adc_enable_1, adc_enable_0})
+      2'b11: begin
+        adc_dsync <= 1'b1;
+
+Diff Content:
+- 334   always @(posedge dac_clk) begin
+- 335     case ({dac_enable_3, dac_enable_2, dac_enable_1, dac_enable_0})
+- 336       4'b1111: begin
+- 337         dac_drd <= dac_valid_0 & dac_valid_1 & dac_valid_2 & dac_valid_3;
+- 338         dac_ddata_0[15: 0] <= dac_ddata[((16* 0)+15):(16* 0)];
+- 339         dac_ddata_1[15: 0] <= dac_ddata[((16* 1)+15):(16* 1)];
+- 340         dac_ddata_2[15: 0] <= dac_ddata[((16* 2)+15):(16* 2)];
+- 341         dac_ddata_3[15: 0] <= dac_ddata[((16* 3)+15):(16* 3)];
+- 342         dac_ddata_0[31:16] <= dac_ddata[((16* 4)+15):(16* 4)];
+- 343         dac_ddata_1[31:16] <= dac_ddata[((16* 5)+15):(16* 5)];
+- 344         dac_ddata_2[31:16] <= dac_ddata[((16* 6)+15):(16* 6)];
+- 345         dac_ddata_3[31:16] <= dac_ddata[((16* 7)+15):(16* 7)];
+- 346         dac_ddata_0[47:32] <= dac_ddata[((16* 8)+15):(16* 8)];
+- 347         dac_ddata_1[47:32] <= dac_ddata[((16* 9)+15):(16* 9)];
+- 348         dac_ddata_2[47:32] <= dac_ddata[((16*10)+15):(16*10)];
+- 349         dac_ddata_3[47:32] <= dac_ddata[((16*11)+15):(16*11)];
+- 350         dac_ddata_0[63:48] <= dac_ddata[((16*12)+15):(16*12)];
+- 351         dac_ddata_1[63:48] <= dac_ddata[((16*13)+15):(16*13)];
+- 352         dac_ddata_2[63:48] <= dac_ddata[((16*14)+15):(16*14)];
+- 353         dac_ddata_3[63:48] <= dac_ddata[((16*15)+15):(16*15)];
+- 354       end
+- 355       4'b1100: begin
+- 356         dac_drd <= dac_valid_2 & dac_valid_3 & ~dac_drd;
+- 357         dac_ddata_0 <= 64'd0;
+- 358         dac_ddata_1 <= 64'd0;
+- 359         if (dac_drd == 1'b1) begin
+- 360           dac_ddata_2[15: 0] <= dac_ddata[((16* 0)+15):(16* 0)];
+- 361           dac_ddata_3[15: 0] <= dac_ddata[((16* 1)+15):(16* 1)];
+- 362           dac_ddata_2[31:16] <= dac_ddata[((16* 2)+15):(16* 2)];
+- 363           dac_ddata_3[31:16] <= dac_ddata[((16* 3)+15):(16* 3)];
+- 364           dac_ddata_2[47:32] <= dac_ddata[((16* 4)+15):(16* 4)];
+- 365           dac_ddata_3[47:32] <= dac_ddata[((16* 5)+15):(16* 5)];
+- 366           dac_ddata_2[63:48] <= dac_ddata[((16* 6)+15):(16* 6)];
+- 367           dac_ddata_3[63:48] <= dac_ddata[((16* 7)+15):(16* 7)];
+- 368         end else begin
+- 369           dac_ddata_2[15: 0] <= dac_ddata[((16* 8)+15):(16* 8)];
+- 370           dac_ddata_3[15: 0] <= dac_ddata[((16* 9)+15):(16* 9)];
+- 371           dac_ddata_2[31:16] <= dac_ddata[((16*10)+15):(16*10)];
+- 372           dac_ddata_3[31:16] <= dac_ddata[((16*11)+15):(16*11)];
+- 373           dac_ddata_2[47:32] <= dac_ddata[((16*12)+15):(16*12)];
+- 374           dac_ddata_3[47:32] <= dac_ddata[((16*13)+15):(16*13)];
+- 375           dac_ddata_2[63:48] <= dac_ddata[((16*14)+15):(16*14)];
+- 376           dac_ddata_3[63:48] <= dac_ddata[((16*15)+15):(16*15)];
+- 377         end
+- 378       end
+- 379       4'b0011: begin
+- 380         dac_drd <= dac_valid_0 & dac_valid_1 & ~dac_drd;
+- 381         dac_ddata_2 <= 64'd0;
+- 382         dac_ddata_3 <= 64'd0;
+- 383         if (dac_drd == 1'b1) begin
+- 384           dac_ddata_0[15: 0] <= dac_ddata[((16* 0)+15):(16* 0)];
+- 385           dac_ddata_1[15: 0] <= dac_ddata[((16* 1)+15):(16* 1)];
+- 386           dac_ddata_0[31:16] <= dac_ddata[((16* 2)+15):(16* 2)];
+- 387           dac_ddata_1[31:16] <= dac_ddata[((16* 3)+15):(16* 3)];
+- 388           dac_ddata_0[47:32] <= dac_ddata[((16* 4)+15):(16* 4)];
+- 389           dac_ddata_1[47:32] <= dac_ddata[((16* 5)+15):(16* 5)];
+- 390           dac_ddata_0[63:48] <= dac_ddata[((16* 6)+15):(16* 6)];
+- 391           dac_ddata_1[63:48] <= dac_ddata[((16* 7)+15):(16* 7)];
+- 392         end else begin
+- 393           dac_ddata_0[15: 0] <= dac_ddata[((16* 8)+15):(16* 8)];
+- 394           dac_ddata_1[15: 0] <= dac_ddata[((16* 9)+15):(16* 9)];
+- 395           dac_ddata_0[31:16] <= dac_ddata[((16*10)+15):(16*10)];
+- 396           dac_ddata_1[31:16] <= dac_ddata[((16*11)+15):(16*11)];
+- 397           dac_ddata_0[47:32] <= dac_ddata[((16*12)+15):(16*12)];
+- 398           dac_ddata_1[47:32] <= dac_ddata[((16*13)+15):(16*13)];
+- 399           dac_ddata_0[63:48] <= dac_ddata[((16*14)+15):(16*14)];
+- 400           dac_ddata_1[63:48] <= dac_ddata[((16*15)+15):(16*15)];
+- 401         end
+- 402       end
+- 403       default: begin
+- 404         dac_drd <= 1'b0;
+- 405         dac_ddata_0 <= 64'd0;
+- 406         dac_ddata_1 <= 64'd0;
+- 407         dac_ddata_2 <= 64'd0;
+- 408         dac_ddata_3 <= 64'd0;
+- 409       end
+- 410     endcase
+- 411   end
+
+Clone Blocks:

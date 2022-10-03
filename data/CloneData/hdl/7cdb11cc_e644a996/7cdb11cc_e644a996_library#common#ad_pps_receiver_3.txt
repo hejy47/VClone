@@ -1,0 +1,31 @@
+Source Block: hdl/library/common/ad_pps_receiver.v@68:88@HdlStmProcess
+      gps_pps_m <= {gps_pps_m[1:0], gps_pps};
+    end
+  end
+  assign pps_posedge_s = ~gps_pps_m[2] & gps_pps_m[1];
+
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      free_rcounter <= 32'b0;
+      pps_rcounter <= 32'b0;
+    end else if (pps_posedge_s == 1'b1) begin
+      free_rcounter <= 32'b0;
+      pps_rcounter <= free_rcounter;
+    end else begin
+      free_rcounter <= free_rcounter + 32'b1;
+    end
+  end
+
+  // up_tdd_pps_rcounter CDC
+
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+
+Diff Content:
++ 76       pps_status <= 1'b1;
++ 79       pps_status <= 1'b0;
++ 81       if (free_rcounter[28] == 1'b1) begin
++ 81         pps_status <= 1'b1;
++ 81       end
+
+Clone Blocks:

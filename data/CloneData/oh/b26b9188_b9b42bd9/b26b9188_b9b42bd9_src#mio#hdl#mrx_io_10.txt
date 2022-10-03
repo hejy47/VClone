@@ -1,0 +1,31 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@99:112@HdlStmAssign
+
+   //########################################
+   //# HANDL DDR/SDR
+   //########################################
+   
+   assign io_packet[2*NMIO-1:0] =  ~ddr_mode             ? sdr_data[2*NMIO-1:0] :
+			  	    ddr_mode & ~lsbfirst ? {ddr_data[NMIO-1:0],
+				   		           ddr_data[2*NMIO-1:NMIO]} :
+			                                   ddr_data[2*NMIO-1:0];
+   
+endmodule // mrx_io
+
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+
+Diff Content:
+- 104    assign io_packet[2*NMIO-1:0] =  ~ddr_mode             ? sdr_data[2*NMIO-1:0] :
+- 105 			  	    ddr_mode & ~lsbfirst ? {ddr_data[NMIO-1:0],
+- 106 				   		           ddr_data[2*NMIO-1:NMIO]} :
+- 107 			                                   ddr_data[2*NMIO-1:0];
++ 107    integer 	      i;   
++ 107    always @ (posedge rx_clk)
++ 107      for (i=0;i<8;i=i+1)
++ 107        shiftreg[i*8+:8] <= data_select[i] ? mux_data[i*8+:8] : shiftreg[i*8+:8];
++ 107    assign io_packet[63:0] = shiftreg[63:0];
++ 107    oh_rsync oh_rsync(.nrst_out	(io_nreset),
++ 107 		     .clk	(rx_clk),
++ 107 		     .nrst_in	(nreset));
+
+Clone Blocks:

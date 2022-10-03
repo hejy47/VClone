@@ -1,0 +1,53 @@
+Source Block: hdl/library/axi_hdmi_tx/axi_hdmi_tx_core.v@290:336@HdlStmProcess
+      hdmi_fs_waddr <= vdma_fs_waddr;
+  end
+
+  // hdmi sync signals
+
+  always @(posedge hdmi_clk) begin
+    if (EMBEDDED_SYNC == 1) begin
+      hdmi_hs <= 1'b0;
+      hdmi_vs <= 1'b0;
+      if (hdmi_hs_count <= hdmi_he_width_s) begin
+        hdmi_hs_de <= 1'b0;
+      end else begin
+        hdmi_hs_de <= hdmi_enable;
+      end
+      if (hdmi_vs_count <= hdmi_ve_width_s) begin
+        hdmi_vs_de <= 1'b0;
+      end else begin
+        hdmi_vs_de <= hdmi_enable;
+      end
+    end else begin
+      if (hdmi_hs_count < hdmi_hs_width) begin
+        hdmi_hs <= hdmi_enable;
+      end else begin
+        hdmi_hs <= 1'b0;
+      end
+      if (hdmi_vs_count < hdmi_vs_width) begin
+        hdmi_vs <= hdmi_enable;
+      end else begin
+        hdmi_vs <= 1'b0;
+      end
+      if ((hdmi_hs_count < hdmi_he_min) || (hdmi_hs_count >= hdmi_he_max)) begin
+        hdmi_hs_de <= 1'b0;
+      end else begin
+        hdmi_hs_de <= hdmi_enable;
+      end
+      if ((hdmi_vs_count < hdmi_ve_min) || (hdmi_vs_count >= hdmi_ve_max)) begin
+        hdmi_vs_de <= 1'b0;
+      end else begin
+        hdmi_vs_de <= hdmi_enable;
+      end
+    end
+  end
+
+  // hdmi read data
+
+  assign hdmi_de_s = hdmi_hs_de & hdmi_vs_de;
+
+
+Diff Content:
+- 298       hdmi_vs <= 1'b0;
+
+Clone Blocks:

@@ -1,0 +1,36 @@
+Source Block: oh/mio/hdl/mio_regs.v@163:177@HdlStmProcess
+   assign clkphase1[15:0] = clkphase_reg[31:16];
+     
+   //###############################
+   //# RX DESTINATION ADDR (DMODE)
+   //################################ 
+   always @ (posedge clk)
+     if(addr0_write)
+       addr_reg[31:0]  <= data_in[31:0];
+     else if(addr1_write)
+       addr_reg[63:32] <= data_in[31:0];
+   
+   assign dstaddr[AW-1:0] = addr_reg[AW-1:0];
+   
+endmodule // io_cfg
+// Local Variables:
+
+Diff Content:
++ 172      else
++ 172        addr_reg[63:0] <= addr_reg[63:0] + addrincr[3:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/mio/hdl/mio_regs.v@169:179
+     if(addr0_write)
+       addr_reg[31:0]  <= data_in[31:0];
+     else if(addr1_write)
+       addr_reg[63:32] <= data_in[31:0];
+   
+   assign dstaddr[AW-1:0] = addr_reg[AW-1:0];
+   
+endmodule // io_cfg
+// Local Variables:
+// verilog-library-directories:("." "../../../oh/emesh/hdl" "../../../oh/common/hdl") 
+// End:
+

@@ -1,0 +1,62 @@
+Source Block: oh/src/emailbox/hdl/emailbox.v@147:199@HdlStmIf
+
+   //###########################################
+   // FIFO
+   //###########################################  
+generate
+   if(TYPE=="ASYNC")
+     begin
+	oh_fifo_async #(.DW(MW),
+			.DEPTH(DEPTH)
+			)
+	fifo(// Outputs
+	     .dout      (mailbox_data[MW-1:0]),
+	     .empty     (mailbox_empty),
+	     .full      (mailbox_full),
+     	     .prog_full (mailbox_prog_full),
+	     .rd_count  (message_count[CW-1:0]),
+	     //Common async reset
+	     .nreset    (nreset),  
+	     //Read Port
+	     .rd_en     (mailbox_read), 
+	     .rd_clk    (rd_clk),  
+	     //Write Port 
+	     .din       ({40'b0,emesh_din[63:0]}),
+	     .wr_en     (mailbox_write),
+	     .wr_clk    (wr_clk)  			     
+	     ); 
+     end // if (TYPE=="ASYNC")
+   else
+     begin
+	oh_fifo_sync #(.DW(MW),
+			.DEPTH(DEPTH)
+			)
+	fifo(// Outputs
+	     .dout      (mailbox_data[MW-1:0]),
+	     .empty     (mailbox_empty),
+	     .full      (mailbox_full),
+     	     .prog_full (mailbox_prog_full),
+	     .rd_count  (message_count[CW-1:0]),
+	     //Common async reset,clk
+	     .nreset    (nreset),  
+	     .clk       (wr_clk),  
+	     //Read Port
+	     .rd_en     (mailbox_read), 
+	     //Write Port 
+	     .din       ({40'b0,emesh_din[63:0]}),
+	     .wr_en     (mailbox_write)
+	     ); 	
+     end
+
+endgenerate
+      
+   //###########################################
+   // MAILBOX STATUS
+
+Diff Content:
+- 154 	oh_fifo_async #(.DW(MW),
+- 155 			.DEPTH(DEPTH)
+- 156 			)
++ 156 	oh_fifo_async #(.DW(MW), .DEPTH(DEPTH), .TARGET(TARGET))
+
+Clone Blocks:

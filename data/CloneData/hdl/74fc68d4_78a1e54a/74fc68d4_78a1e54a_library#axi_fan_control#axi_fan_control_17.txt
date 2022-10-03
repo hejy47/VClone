@@ -1,0 +1,71 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@510:548@HdlStmProcess
+    end
+  end
+end
+
+//axi registers read
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+    up_rdata <= 'd0;
+  end else begin
+    up_rack <= up_rreq_s;
+    if (up_rreq_s == 1'b1) begin
+      case (up_raddr_s)
+        8'h00: up_rdata <= CORE_VERSION;
+        8'h01: up_rdata <= ID;
+        8'h02: up_rdata <= up_scratch;
+        8'h03: up_rdata <= CORE_MAGIC;
+        8'h20: up_rdata <= up_resetn;
+        8'h21: up_rdata <= pwm_width;
+        8'h30: up_rdata <= PWM_PERIOD;
+        8'h31: up_rdata <= up_tacho_avg_sum;
+        8'h32: up_rdata <= sysmone_temp;
+        8'h22: up_rdata <= up_tacho_val;
+        8'h23: up_rdata <= up_tacho_tol;
+        8'h10: up_rdata <= up_irq_mask;
+        8'h11: up_rdata <= up_irq_pending;
+        8'h12: up_rdata <= up_irq_source;
+        default: up_rdata <= 0;
+      endcase
+    end else begin
+      up_rdata <= 32'd0;
+    end
+  end
+end
+
+//IRQ handling
+always @(posedge up_clk) begin
+  if (up_resetn == 1'b0) begin
+    irq <= 1'b0;
+
+Diff Content:
+- 532         8'h22: up_rdata <= up_tacho_val;
+- 533         8'h23: up_rdata <= up_tacho_tol;
+- 534         8'h10: up_rdata <= up_irq_mask;
+- 535         8'h11: up_rdata <= up_irq_pending;
+- 536         8'h12: up_rdata <= up_irq_source;
++ 526         8'h10: up_rdata <= up_irq_mask;
++ 526         8'h11: up_rdata <= up_irq_pending;
++ 526         8'h12: up_rdata <= up_irq_source;
++ 528         8'h22: up_rdata <= up_tacho_val;
++ 528         8'h23: up_rdata <= up_tacho_tol;
++ 528         8'h24: up_rdata <= INTERNAL_SYSMONE;
++ 536         8'h40: up_rdata <= up_temp_00_h;
++ 536         8'h41: up_rdata <= up_temp_25_l;
++ 536         8'h42: up_rdata <= up_temp_25_h;
++ 536         8'h43: up_rdata <= up_temp_50_l;
++ 536         8'h44: up_rdata <= up_temp_50_h;
++ 536         8'h45: up_rdata <= up_temp_75_l;
++ 536         8'h46: up_rdata <= up_temp_75_h;
++ 536         8'h47: up_rdata <= up_temp_100_l;
++ 536         8'h50: up_rdata <= up_tacho_25;
++ 536         8'h51: up_rdata <= up_tacho_50;
++ 536         8'h52: up_rdata <= up_tacho_75;
++ 536         8'h53: up_rdata <= up_tacho_100;
++ 536         8'h54: up_rdata <= up_tacho_25_tol;
++ 536         8'h55: up_rdata <= up_tacho_50_tol;
++ 536         8'h56: up_rdata <= up_tacho_75_tol;
++ 536         8'h57: up_rdata <= up_tacho_100_tol;
+
+Clone Blocks:

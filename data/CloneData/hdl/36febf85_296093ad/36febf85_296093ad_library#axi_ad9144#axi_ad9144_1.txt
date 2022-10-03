@@ -1,0 +1,46 @@
+Source Block: hdl/library/axi_ad9144/axi_ad9144.v@182:192@HdlStmAssign
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  // dual/quad cores
+
+  assign tx_data = (PCORE_QUAD_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
+
+  // device interface
+
+  axi_ad9144_if i_if (
+    .tx_clk (tx_clk),
+
+Diff Content:
+- 187   assign tx_data = (PCORE_QUAD_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
++ 187   assign tx_data = (QUAD_OR_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9144/axi_ad9144.v@177:187
+  wire    [ 31:0]                           up_rdata_s;
+  wire                                      up_rack_s;
+
+  // signal name changes
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  // dual/quad cores
+
+  assign tx_data = (PCORE_QUAD_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
+
+Clone Blocks 2:
+hdl/library/axi_ad9144/axi_ad9144.v@178:188
+  wire                                      up_rack_s;
+
+  // signal name changes
+
+  assign up_clk = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  // dual/quad cores
+
+  assign tx_data = (PCORE_QUAD_DUAL_N == 1) ? tx_data_s : tx_data_s[127:0];
+
+

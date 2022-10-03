@@ -1,0 +1,18 @@
+Source Block: hdl/library/prcfg/qpsk/prcfg_dac.v@126:136@HdlStmAssign
+      pn_data <= pn(pn_data);
+    end
+  end
+
+  // data for the modulator (prbs or dma)
+  assign mod_data = (mode == 1) ? pn_data[ 1:0] : src_dac_ddata[ 1:0];
+
+  // qpsk modulator
+  qpsk_mod i_qpsk_mod (
+    .clk(clk),
+    .data_input(mod_data),
+
+Diff Content:
+- 131   assign mod_data = (mode == 1) ? pn_data[ 1:0] : src_dac_ddata[ 1:0];
++ 131   assign mod_data = (mode == 1) ? pn_data[ 1:0] : src_dac_data[ 1:0];
+
+Clone Blocks:

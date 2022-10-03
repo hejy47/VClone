@@ -1,0 +1,74 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@204:220@HdlStmProcess
+    lmc_edge <= 1'b1;
+  end else begin
+    lmc_edge <= 1'b0;
+  end
+end
+always @(posedge clk) begin
+  if (lmfc_counter[2:0] == 'h00 && lmfc_active == 1'b1) begin
+    lmc_quarter_edge <= 1'b1;
+  end else begin
+    lmc_quarter_edge <= 1'b0;
+  end
+end
+// End of Extended MultiBlock
+always @(posedge clk) begin
+  if (lmfc_active == 1'b1) begin
+    eoemb <= lmfc_counter[7:5] == cfg_whole_beats_per_multiframe[7:5];
+  end else begin
+
+Diff Content:
+- 209 always @(posedge clk) begin
+- 210   if (lmfc_counter[2:0] == 'h00 && lmfc_active == 1'b1) begin
+- 211     lmc_quarter_edge <= 1'b1;
+- 212   end else begin
+- 213     lmc_quarter_edge <= 1'b0;
+- 215 end
++ 213   always @(posedge clk) begin
++ 213     if (lmfc_counter[2:0] == 'h00 && lmfc_active == 1'b1) begin
++ 213       lmc_quarter_edge <= 1'b1;
++ 213     end else begin
++ 213       lmc_quarter_edge <= 1'b0;
++ 213     end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@197:213
+    lmfc_edge <= 1'b0;
+  end
+end
+
+// 1 MultiBlock = 32 blocks
+always @(posedge clk) begin
+  if (lmfc_counter[4:0] == 'h00 && lmfc_active == 1'b1) begin
+    lmc_edge <= 1'b1;
+  end else begin
+    lmc_edge <= 1'b0;
+  end
+end
+always @(posedge clk) begin
+  if (lmfc_counter[2:0] == 'h00 && lmfc_active == 1'b1) begin
+    lmc_quarter_edge <= 1'b1;
+  end else begin
+    lmc_quarter_edge <= 1'b0;
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@212:228
+  end else begin
+    lmc_quarter_edge <= 1'b0;
+  end
+end
+// End of Extended MultiBlock
+always @(posedge clk) begin
+  if (lmfc_active == 1'b1) begin
+    eoemb <= lmfc_counter[7:5] == cfg_whole_beats_per_multiframe[7:5];
+  end else begin
+    eoemb <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    lmfc_clk_p1 <= 1'b0;
+  end else if (lmfc_active == 1'b1) begin
+

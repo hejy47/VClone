@@ -1,0 +1,27 @@
+Source Block: hdl/library/util_upack/util_upack_dsf.v@102:117@HdlStmIf
+
+  // bypass 
+
+  genvar i;
+  generate
+  if (CH_OCNT == P_CNT) begin
+  for (i = 0; i < CH_SCNT ; i = i +1) begin: g_dsf_data
+    assign dac_dsf_data_s[(((i +1) * M_CNT * 16)-1):(i*M_CNT*16)] =
+      dac_data[(((i+1)*16*P_CNT)-1): (i*16*P_CNT)];
+  end
+  end
+  endgenerate
+
+  generate
+  if (CH_OCNT == P_CNT) begin
+
+
+Diff Content:
+- 107   if (CH_OCNT == P_CNT) begin
+- 109     assign dac_dsf_data_s[(((i +1) * M_CNT * 16)-1):(i*M_CNT*16)] =
+- 110       dac_data[(((i+1)*16*P_CNT)-1): (i*16*P_CNT)];
++ 107   if (NUM_OF_CHANNELS_O == NUM_OF_CHANNELS_P) begin
++ 110     assign dac_dsf_data_s[(((i +1) * NUM_OF_CHANNELS_M * 16)-1):(i*NUM_OF_CHANNELS_M*16)] =
++ 110       dac_data[(((i+1)*16*NUM_OF_CHANNELS_P)-1): (i*16*NUM_OF_CHANNELS_P)];
+
+Clone Blocks:

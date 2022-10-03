@@ -1,0 +1,40 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@270:283@HdlIdDef
+
+/* AXI3 supports a maximum of 16 beats per burst. AXI4 supports a maximum of
+   256 beats per burst. If either bus is AXI3 set the maximum number of beats
+   per burst to 16. For non AXI interfaces the maximum beats per burst is in
+   theory unlimted. Set it to 1024 to provide a reasonable upper threshold */
+localparam BEATS_PER_BURST_LIMIT_DEST =
+  (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_DEST =
+    BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+localparam BEATS_PER_BURST_LIMIT_SRC =
+  (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
+
+Diff Content:
+- 275 localparam BEATS_PER_BURST_LIMIT_DEST =
+- 276   (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
+- 277     (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
+- 278     1024;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac.v@276:289
+  (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_DEST =
+    BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+localparam BEATS_PER_BURST_LIMIT_SRC =
+  (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_SRC =
+    BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
+
+/* The smaller bus limits the maximum bytes per burst. */
+localparam BYTES_PER_BURST_LIMIT =
+

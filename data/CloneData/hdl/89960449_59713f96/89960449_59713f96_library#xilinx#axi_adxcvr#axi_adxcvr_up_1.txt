@@ -1,0 +1,102 @@
+Source Block: hdl/library/xilinx/axi_adxcvr/axi_adxcvr_up.v@378:472@HdlStmIf
+  assign up_es_hmin = up_ies_hoffset_min;
+  assign up_es_hstep = up_ies_hoffset_step;
+  assign up_es_saddr = up_ies_start_addr;
+
+  generate
+  if (TX_OR_RX_N == 1) begin
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_ies_sel <= 'd0;
+      up_ies_req <= 'd0;
+      up_ies_prescale <= 'd0;
+      up_ies_voffset_range <= 'd0;
+      up_ies_voffset_step <= 'd0;
+      up_ies_voffset_max <= 'd0;
+      up_ies_voffset_min <= 'd0;
+      up_ies_hoffset_max <= 'd0;
+      up_ies_hoffset_min <= 'd0;
+      up_ies_hoffset_step <= 'd0;
+      up_ies_start_addr <= 'd0;
+      up_ies_status <= 'd0;
+    end else begin
+      up_ies_sel <= 'd0;
+      up_ies_req <= 'd0;
+      up_ies_prescale <= 'd0;
+      up_ies_voffset_range <= 'd0;
+      up_ies_voffset_step <= 'd0;
+      up_ies_voffset_max <= 'd0;
+      up_ies_voffset_min <= 'd0;
+      up_ies_hoffset_max <= 'd0;
+      up_ies_hoffset_min <= 'd0;
+      up_ies_hoffset_step <= 'd0;
+      up_ies_start_addr <= 'd0;
+      up_ies_status <= 'd0;
+    end
+  end
+  end else begin
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_ies_sel <= 'd0;
+      up_ies_req <= 'd0;
+      up_ies_prescale <= 'd0;
+      up_ies_voffset_range <= 'd0;
+      up_ies_voffset_step <= 'd0;
+      up_ies_voffset_max <= 'd0;
+      up_ies_voffset_min <= 'd0;
+      up_ies_hoffset_max <= 'd0;
+      up_ies_hoffset_min <= 'd0;
+      up_ies_hoffset_step <= 'd0;
+      up_ies_start_addr <= 'd0;
+      up_ies_status <= 'd0;
+      up_es_reset <= 'd0;
+    end else begin
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h020)) begin
+        up_ies_sel <= up_wdata[7:0];
+      end
+      if (up_es_ack == 1'b1) begin
+        up_ies_req <= 1'b0;
+      end else if ((up_wreq == 1'b1) && (up_waddr == 10'h028)) begin
+        up_ies_req <= up_wdata[0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h029)) begin
+        up_ies_prescale <= up_wdata[4:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h02a)) begin
+        up_ies_voffset_range <= up_wdata[25:24];
+        up_ies_voffset_step <= up_wdata[23:16];
+        up_ies_voffset_max <= up_wdata[15:8];
+        up_ies_voffset_min <= up_wdata[7:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h02b)) begin
+        up_ies_hoffset_max <= up_wdata[27:16];
+        up_ies_hoffset_min <= up_wdata[11:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h02c)) begin
+        up_ies_hoffset_step <= up_wdata[11:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h02d)) begin
+        up_ies_start_addr <= up_wdata;
+      end
+      if (up_es_status == 1'b1) begin
+        up_ies_status <= 1'b1;
+      end else if ((up_wreq == 1'b1) && (up_waddr == 10'h02e)) begin
+        up_ies_status <= up_ies_status & ~up_wdata[0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 10'h02f)) begin
+        up_es_reset <= up_wdata[15:0];
+      end
+    end
+  end
+  end
+  endgenerate
+
+  // read interface
+
+  assign up_rack = up_rreq_d;
+
+Diff Content:
++ 397       up_es_reset <= 'd0;
++ 410       up_es_reset <= 'd0;
+
+Clone Blocks:

@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/etx_io.v@77:93@HdlStmProcess
+   
+   
+   //#############################
+   //# Transaction state machine
+   //#############################  
+   always @ (posedge tx_lclk)
+     if (~tx_access)
+       tx_pointer[7:0] <= 8'b00000001; //new transaction
+     else if (tx_pointer[6] & tx_burst)
+       tx_pointer[7:0] <= 8'b00001000; //burst
+     else
+       tx_pointer[7:0] <= {tx_pointer[6:0],tx_pointer[7]};
+
+   //#############################
+   //# Frame Signal
+   //#############################  
+   //TODO: cleanup
+
+Diff Content:
+- 87      else
++ 87      else 
+
+Clone Blocks:

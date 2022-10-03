@@ -1,0 +1,24 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@128:142@HdlStmAssign
+		      etx_rd_wait  |
+		      etx_cfg_wait |
+		      txwr_access;
+
+   //Host read request (self throttling, one read at a time)
+   assign txrd_wait = etx_rd_wait  |
+		      etx_wr_wait  |
+		      etx_cfg_wait |
+		      txrr_access  |
+		      txwr_access;
+   
+   //#####################################################################
+   //# Pipeline stage (arbiter+mux takes time..)
+   //#####################################################################
+   assign access_in = (txwr_grant & ~txwr_wait) |
+
+Diff Content:
+- 133    assign txrd_wait = etx_rd_wait  |
+- 134 		      etx_wr_wait  |
+- 135 		      etx_cfg_wait |
++ 135    assign txrd_wait = etx_all_wait |
+
+Clone Blocks:

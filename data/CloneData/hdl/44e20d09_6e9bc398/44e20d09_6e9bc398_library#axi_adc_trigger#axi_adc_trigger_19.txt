@@ -1,0 +1,87 @@
+Source Block: hdl/library/axi_adc_trigger/axi_adc_trigger.v@191:201@HdlStmAssign
+  assign trigger_b_rise_edge = (trigger_b_d2 == 1'b1 && trigger_b_d3 == 1'b0) ? 1'b1: 1'b0;
+  assign trigger_b_any_edge = trigger_b_rise_edge | trigger_b_fall_edge;
+
+  assign data_a_cmp   = {!data_a[15],data_a[14:0]};
+  assign data_b_cmp   = {!data_b[15],data_b[14:0]};
+  assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
+  assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
+
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_a_r} : {trigger_out_delayed |streaming_on, data_a_r};
+  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_b_r} : {trigger_out_delayed |streaming_on, data_b_r};
+  assign data_valid_a_trig = data_valid_a_r;
+
+Diff Content:
+- 196   assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@192:202
+  assign trigger_b_any_edge = trigger_b_rise_edge | trigger_b_fall_edge;
+
+  assign data_a_cmp   = {!data_a[15],data_a[14:0]};
+  assign data_b_cmp   = {!data_b[15],data_b[14:0]};
+  assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
+  assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
+
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_a_r} : {trigger_out_delayed |streaming_on, data_a_r};
+  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_b_r} : {trigger_out_delayed |streaming_on, data_b_r};
+  assign data_valid_a_trig = data_valid_a_r;
+  assign data_valid_b_trig = data_valid_b_r;
+
+Clone Blocks 2:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@189:199
+  assign trigger_a_any_edge = trigger_a_rise_edge | trigger_a_fall_edge;
+  assign trigger_b_fall_edge = (trigger_b_d2 == 1'b0 && trigger_b_d3 == 1'b1) ? 1'b1: 1'b0;
+  assign trigger_b_rise_edge = (trigger_b_d2 == 1'b1 && trigger_b_d3 == 1'b0) ? 1'b1: 1'b0;
+  assign trigger_b_any_edge = trigger_b_rise_edge | trigger_b_fall_edge;
+
+  assign data_a_cmp   = {!data_a[15],data_a[14:0]};
+  assign data_b_cmp   = {!data_b[15],data_b[14:0]};
+  assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
+  assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
+
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_a_r} : {trigger_out_delayed |streaming_on, data_a_r};
+
+Clone Blocks 3:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@190:200
+  assign trigger_b_fall_edge = (trigger_b_d2 == 1'b0 && trigger_b_d3 == 1'b1) ? 1'b1: 1'b0;
+  assign trigger_b_rise_edge = (trigger_b_d2 == 1'b1 && trigger_b_d3 == 1'b0) ? 1'b1: 1'b0;
+  assign trigger_b_any_edge = trigger_b_rise_edge | trigger_b_fall_edge;
+
+  assign data_a_cmp   = {!data_a[15],data_a[14:0]};
+  assign data_b_cmp   = {!data_b[15],data_b[14:0]};
+  assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
+  assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
+
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_a_r} : {trigger_out_delayed |streaming_on, data_a_r};
+  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_b_r} : {trigger_out_delayed |streaming_on, data_b_r};
+
+Clone Blocks 4:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@195:205
+  assign data_b_cmp   = {!data_b[15],data_b[14:0]};
+  assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
+  assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
+
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_a_r} : {trigger_out_delayed |streaming_on, data_a_r};
+  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_b_r} : {trigger_out_delayed |streaming_on, data_b_r};
+  assign data_valid_a_trig = data_valid_a_r;
+  assign data_valid_b_trig = data_valid_b_r;
+
+  assign trigger_out_delayed = (trigger_delay_counter == 32'h0) ? 1 : 0;
+
+
+Clone Blocks 5:
+hdl/library/axi_adc_trigger/axi_adc_trigger.v@194:204
+  assign data_a_cmp   = {!data_a[15],data_a[14:0]};
+  assign data_b_cmp   = {!data_b[15],data_b[14:0]};
+  assign limit_a_cmp  = {!limit_a[15],limit_a[14:0]};
+  assign limit_b_cmp  = {!limit_b[15],limit_b[14:0]};
+
+  assign data_a_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_a_r} : {trigger_out_delayed |streaming_on, data_a_r};
+  assign data_b_trig = trigger_delay == 32'h0 ? {trigger_out_mixed | streaming_on, data_b_r} : {trigger_out_delayed |streaming_on, data_b_r};
+  assign data_valid_a_trig = data_valid_a_r;
+  assign data_valid_b_trig = data_valid_b_r;
+
+  assign trigger_out_delayed = (trigger_delay_counter == 32'h0) ? 1 : 0;
+

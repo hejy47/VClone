@@ -1,0 +1,26 @@
+Source Block: oh/elink/hdl/etx_io.v@183:197@HdlStmProcess
+
+   always @ (posedge tx_lclk_io)
+     if(firstedge)
+       tx_wait <= tx_wr_wait_sync | tx_rd_wait_sync;
+   
+   always @ (posedge tx_lclk_div4)
+     begin
+	tx_wr_wait <= tx_wr_wait_sync;
+	tx_rd_wait <= tx_rd_wait_sync;
+     end
+         
+   //#############################
+   //# IO DRIVER STUFF
+   //#############################  
+
+
+Diff Content:
+- 188    always @ (posedge tx_lclk_div4)
+- 190 	tx_wr_wait <= tx_wr_wait_sync;
+- 191 	tx_rd_wait <= tx_rd_wait_sync;
++ 188    always @ (negedge tx_lclk_div4)
++ 191 	tx_wr_wait      <= tx_wr_wait_sync;
++ 191 	tx_rd_wait      <= tx_rd_wait_sync;
+
+Clone Blocks:

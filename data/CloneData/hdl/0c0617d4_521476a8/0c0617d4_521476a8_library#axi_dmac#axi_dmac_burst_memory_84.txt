@@ -1,0 +1,17 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@346:356@HdlStmAssign
+
+always @(posedge dest_clk) begin
+  dest_burst_info_write <= (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1);
+end
+
+assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH_DEST];
+
+axi_dmac_resize_src #(
+  .DATA_WIDTH_SRC (DATA_WIDTH_SRC),
+  .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC),
+  .DATA_WIDTH_MEM (DATA_WIDTH_MEM_SRC),
+
+Diff Content:
+- 351 assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH_DEST];
+
+Clone Blocks:

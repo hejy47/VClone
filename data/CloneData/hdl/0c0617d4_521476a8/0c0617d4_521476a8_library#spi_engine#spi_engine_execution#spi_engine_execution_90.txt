@@ -1,0 +1,44 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@390:400@HdlStmAssign
+
+always @(posedge clk) begin
+  trigger_rx_d <= {trigger_rx_d, trigger_rx};
+end
+
+assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
+
+// Load the serial data into SDI shift register(s), then link it to the output
+// register of the module
+// NOTE: ECHO_SCLK mode can be used when the SCLK line is looped back to the FPGA
+// through an other level shifter, in order to remove the round-trip timing delays
+
+Diff Content:
+- 395 assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
++ 395   always @(posedge clk) begin
++ 395     if ((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) begin
++ 395       data_sdo_shift <= {DATA_WIDTH{SDO_DEFAULT}};
++ 395     end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
++ 395       if (first_bit == 1'b1)
++ 395         data_sdo_shift <= sdo_data << left_aligned;
++ 395       else
++ 395         data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
++ 395     end
++ 395   end
++ 395   assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@386:398
+// the SDI line can be delayed with 1, 2 or 3 SPI core clock cycle.
+// Taking the fact that in high SCLK frequencies the pre-scaler most likely will
+// be set to 0, to reduce the core clock's speed, this delay will mean that SDI will
+// be latched at one of the next consecutive SCLK edge.
+
+always @(posedge clk) begin
+  trigger_rx_d <= {trigger_rx_d, trigger_rx};
+end
+
+assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
+
+// Load the serial data into SDI shift register(s), then link it to the output
+// register of the module
+

@@ -1,0 +1,136 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@472:517@HdlStmProcess
+        state <= DRP_READ_TEMP;
+    endcase
+  end
+
+//axi registers write
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_wack <= 'd0;
+    up_pwm_width <= 'd0;
+    up_tacho_val <= 'd0;
+    up_tacho_tol <= 'd0;
+    up_tacho_en <= 'd0;
+    up_scratch <= 'd0;
+    up_irq_mask <= 4'b1111;
+    up_resetn <= 1'd0;
+  end else begin
+    up_wack <= up_wreq_s;
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
+      up_resetn <= up_wdata_s[0];
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
+      up_scratch <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h21)) begin
+      up_pwm_width <= up_wdata_s;
+      up_tacho_en <= 1'b0;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h22)) begin
+      up_tacho_val <= up_wdata_s;
+    end
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h23)) begin
+      up_tacho_tol <= up_wdata_s;
+      up_tacho_en <= 1'b1;
+    end else if (temp_increase_alarm) begin
+      up_tacho_en <= 1'b0;
+    end 
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h10)) begin
+      up_irq_mask <= up_wdata_s[3:0];
+    end
+  end
+end
+
+//axi registers read
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+
+Diff Content:
+- 478   if (s_axi_aresetn == 1'b0) begin
+- 479     up_wack <= 'd0;
+- 486     up_resetn <= 1'd0;
+- 488     up_wack <= up_wreq_s;
+- 489     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
+- 490       up_resetn <= up_wdata_s[0];
+- 491     end
+- 507     end 
++ 479   if (up_resetn == 1'b0) begin
++ 484     up_temp_00_h <= THRESH_PWM_000;
++ 484     up_temp_25_l <= THRESH_PWM_025_L;
++ 484     up_temp_25_h <= THRESH_PWM_025_H;
++ 484     up_temp_50_l <= THRESH_PWM_050_L;
++ 484     up_temp_50_h <= THRESH_PWM_050_H;
++ 484     up_temp_75_l <= THRESH_PWM_075_L;
++ 484     up_temp_75_h <= THRESH_PWM_075_H;
++ 484     up_temp_100_l <= THRESH_PWM_100;
++ 484     up_tacho_25 <= TACHO_T25;
++ 484     up_tacho_50 <= TACHO_T50;
++ 484     up_tacho_75 <= TACHO_T75;
++ 484     up_tacho_100 <= TACHO_T100;
++ 484     up_tacho_25_tol <= TACHO_T25 * TACHO_TOL_PERCENT / 100;
++ 484     up_tacho_50_tol <= TACHO_T50 * TACHO_TOL_PERCENT / 100;
++ 484     up_tacho_75_tol <= TACHO_T75 * TACHO_TOL_PERCENT / 100;
++ 484     up_tacho_100_tol <= TACHO_T100 * TACHO_TOL_PERCENT / 100;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h40)) begin
++ 507       up_temp_00_h <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h41)) begin
++ 507       up_temp_25_l <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h42)) begin
++ 507       up_temp_25_h <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h43)) begin
++ 507       up_temp_50_l <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h44)) begin
++ 507      up_temp_50_h <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h45)) begin
++ 507       up_temp_75_l <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h46)) begin
++ 507       up_temp_75_h <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h47)) begin
++ 507       up_temp_100_l <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h50)) begin
++ 507       up_tacho_25 <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h51)) begin
++ 507       up_tacho_50 <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h52)) begin
++ 507       up_tacho_75 <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h53)) begin
++ 507       up_tacho_100 <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h54)) begin
++ 507       up_tacho_25_tol <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h55)) begin
++ 507       up_tacho_50_tol <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h56)) begin
++ 507       up_tacho_75_tol <= up_wdata_s;
++ 507     end
++ 507     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h57)) begin
++ 507       up_tacho_100_tol <= up_wdata_s;
++ 507     end
++ 512 always @(posedge up_clk) begin
++ 512   if (s_axi_aresetn == 1'b0) begin
++ 512     up_wack <= 'd0;
++ 512     up_resetn <= 1'd1;
++ 512   end else begin
++ 512     up_wack <= up_wreq_s;
++ 512     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
++ 512       up_resetn <= up_wdata_s[0];
++ 512     end
++ 512   end
++ 512 end
+
+Clone Blocks:

@@ -1,0 +1,174 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_tx.v@171:245@HdlStmIf
+
+    assign {tx_dclk_out_n_NC,
+            tx_strobe_out_n_NC} = 2'b0;
+  end
+
+  if (USE_RX_CLK_FOR_TX == 0) begin
+
+    if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+
+      // SERDES fast clock
+      BUFIO i_dac_clk_in_gbuf (
+        .I (tx_dclk_in_s),
+        .O (dac_fast_clk));
+
+      // SERDES slow clock
+      BUFR #(.BUFR_DIVIDE("4")) i_dac_div_clk_rbuf (
+        .CLR (mssi_sync),
+        .CE (1'b1),
+        .I (tx_dclk_in_s),
+        .O (dac_clk_div_s));
+
+      BUFG I_bufg (
+        .I (dac_clk_div_s),
+        .O (dac_clk_div)
+      );
+
+      assign ssi_rst = mssi_sync;
+
+    end else begin
+
+      reg mssi_sync_d = 1'b0;
+      reg mssi_sync_2d = 1'b0;
+      always @(posedge dac_fast_clk) begin
+        mssi_sync_d <= mssi_sync;
+        mssi_sync_2d <= mssi_sync_d;
+      end
+
+      BUFGCE #(
+         .CE_TYPE ("SYNC"),
+         .IS_CE_INVERTED (1'b0),
+         .IS_I_INVERTED (1'b0)
+      ) i_dac_clk_in_gbuf (
+         .O (dac_fast_clk),
+         .CE (1'b1),
+         .I (tx_dclk_in_s)
+      );
+
+      BUFGCE_DIV #(
+         .BUFGCE_DIVIDE (4),
+         .IS_CE_INVERTED (1'b0),
+         .IS_CLR_INVERTED (1'b0),
+         .IS_I_INVERTED (1'b0)
+      ) i_dac_div_clk_rbuf (
+         .O (dac_clk_div),
+         .CE (1'b1),
+         .CLR (mssi_sync_2d),
+         .I (tx_dclk_in_s)
+      );
+
+      assign ssi_rst = mssi_sync_2d;
+
+    end
+
+  end else begin
+
+    assign dac_fast_clk = rx_clk;
+    assign dac_clk_div = rx_clk_div;
+    assign ssi_rst = rx_ssi_rst;
+
+  end
+
+  endgenerate
+
+  assign dac_clk_ratio = 4;
+
+
+Diff Content:
+- 197       assign ssi_rst = mssi_sync;
++ 190 /*
++ 197 */
++ 197       assign dac_clk_div = dac_clk_div_s;
++ 197       xpm_cdc_async_rst
++ 197       # (
++ 197          .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
++ 197          .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
++ 197          .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
++ 197         )
++ 197       rst_syncro
++ 197       (
++ 197        .src_arst (mssi_sync  ),
++ 197        .dest_clk (dac_clk_div),
++ 197        .dest_arst(ssi_rst    )
++ 197       );
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adrv9001/adrv9001_tx.v@171:245
+
+    assign {tx_dclk_out_n_NC,
+            tx_strobe_out_n_NC} = 2'b0;
+  end
+
+  if (USE_RX_CLK_FOR_TX == 0) begin
+
+    if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+
+      // SERDES fast clock
+      BUFIO i_dac_clk_in_gbuf (
+        .I (tx_dclk_in_s),
+        .O (dac_fast_clk));
+
+      // SERDES slow clock
+      BUFR #(.BUFR_DIVIDE("4")) i_dac_div_clk_rbuf (
+        .CLR (mssi_sync),
+        .CE (1'b1),
+        .I (tx_dclk_in_s),
+        .O (dac_clk_div_s));
+
+      BUFG I_bufg (
+        .I (dac_clk_div_s),
+        .O (dac_clk_div)
+      );
+
+      assign ssi_rst = mssi_sync;
+
+    end else begin
+
+      reg mssi_sync_d = 1'b0;
+      reg mssi_sync_2d = 1'b0;
+      always @(posedge dac_fast_clk) begin
+        mssi_sync_d <= mssi_sync;
+        mssi_sync_2d <= mssi_sync_d;
+      end
+
+      BUFGCE #(
+         .CE_TYPE ("SYNC"),
+         .IS_CE_INVERTED (1'b0),
+         .IS_I_INVERTED (1'b0)
+      ) i_dac_clk_in_gbuf (
+         .O (dac_fast_clk),
+         .CE (1'b1),
+         .I (tx_dclk_in_s)
+      );
+
+      BUFGCE_DIV #(
+         .BUFGCE_DIVIDE (4),
+         .IS_CE_INVERTED (1'b0),
+         .IS_CLR_INVERTED (1'b0),
+         .IS_I_INVERTED (1'b0)
+      ) i_dac_div_clk_rbuf (
+         .O (dac_clk_div),
+         .CE (1'b1),
+         .CLR (mssi_sync_2d),
+         .I (tx_dclk_in_s)
+      );
+
+      assign ssi_rst = mssi_sync_2d;
+
+    end
+
+  end else begin
+
+    assign dac_fast_clk = rx_clk;
+    assign dac_clk_div = rx_clk_div;
+    assign ssi_rst = rx_ssi_rst;
+
+  end
+
+  endgenerate
+
+  assign dac_clk_ratio = 4;
+
+

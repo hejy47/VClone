@@ -1,0 +1,94 @@
+Source Block: oh/spi/hdl/spi_slave_io.v@141:151@HdlStmAssign
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = command_reg[5:0];   
+   assign spi_read      = command_reg[7:6]==2'b11;   
+   assign spi_write     = command_reg[7:6]==2'b00;
+   assign spi_remote    = command_reg[7:6]==2'b01;   
+   assign spi_data[7:0] = rx_data[7:0];
+ 
+   //###################################
+   //# SYNCHRONIZATION TO CORE
+   //###################################
+   
+
+Diff Content:
+- 146    assign spi_data[7:0] = rx_data[7:0];
++ 146    assign spi_write     = byte_done &
++ 146 			  (command_reg[7:6]==2'b00) &
++ 146 			  (spi_state[1:0]==`SPI_DATA);
++ 146    assign spi_read      = 
++ 146 			  command_reg[7:6]==2'b11; //read from sclk reg  
++ 146    assign spi_remote    = command_reg[7:6]==2'b10; //send remote request
++ 146    assign spi_wdata[7:0] = rx_data[7:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_slave_io.v@139:149
+   //# REGISTER FILE INTERFACE
+   //#################################
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = command_reg[5:0];   
+   assign spi_read      = command_reg[7:6]==2'b11;   
+   assign spi_write     = command_reg[7:6]==2'b00;
+   assign spi_remote    = command_reg[7:6]==2'b01;   
+   assign spi_data[7:0] = rx_data[7:0];
+ 
+   //###################################
+   //# SYNCHRONIZATION TO CORE
+
+Clone Blocks 2:
+oh/spi/hdl/spi_slave_io.v@136:146
+	    );
+   
+   //#################################
+   //# REGISTER FILE INTERFACE
+   //#################################
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = command_reg[5:0];   
+   assign spi_read      = command_reg[7:6]==2'b11;   
+   assign spi_write     = command_reg[7:6]==2'b00;
+   assign spi_remote    = command_reg[7:6]==2'b01;   
+   assign spi_data[7:0] = rx_data[7:0];
+
+Clone Blocks 3:
+oh/spi/hdl/spi_slave_io.v@140:150
+   //#################################
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = command_reg[5:0];   
+   assign spi_read      = command_reg[7:6]==2'b11;   
+   assign spi_write     = command_reg[7:6]==2'b00;
+   assign spi_remote    = command_reg[7:6]==2'b01;   
+   assign spi_data[7:0] = rx_data[7:0];
+ 
+   //###################################
+   //# SYNCHRONIZATION TO CORE
+   //###################################
+
+Clone Blocks 4:
+oh/spi/hdl/spi_slave_io.v@138:148
+   //#################################
+   //# REGISTER FILE INTERFACE
+   //#################################
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = command_reg[5:0];   
+   assign spi_read      = command_reg[7:6]==2'b11;   
+   assign spi_write     = command_reg[7:6]==2'b00;
+   assign spi_remote    = command_reg[7:6]==2'b01;   
+   assign spi_data[7:0] = rx_data[7:0];
+ 
+   //###################################
+
+Clone Blocks 5:
+oh/spi/hdl/spi_slave_io.v@137:147
+   
+   //#################################
+   //# REGISTER FILE INTERFACE
+   //#################################
+   assign spi_clk       = sclk;
+   assign spi_addr[5:0] = command_reg[5:0];   
+   assign spi_read      = command_reg[7:6]==2'b11;   
+   assign spi_write     = command_reg[7:6]==2'b00;
+   assign spi_remote    = command_reg[7:6]==2'b01;   
+   assign spi_data[7:0] = rx_data[7:0];
+ 
+

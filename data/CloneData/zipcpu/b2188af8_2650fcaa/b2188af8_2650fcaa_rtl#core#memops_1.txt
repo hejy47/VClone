@@ -1,0 +1,60 @@
+Source Block: zipcpu/rtl/core/memops.v@161:171@HdlStmProcess
+		o_wb_stb_lcl  <= (lcl_stb)&&(!misaligned);
+
+	reg	[3:0]	r_op;
+	initial	o_wb_we   = 1'b0;
+	initial	o_wb_data = 0;
+	initial	o_wb_sel = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		o_wb_we   <= 0;
+		o_wb_data <= 0;
+
+Diff Content:
+- 166 	initial	o_wb_sel = 0;
++ 166 	initial	o_wb_sel  = 0;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/memops.v@159:169
+	else
+		// Grab wishbone on any new transaction to the lcl bus
+		o_wb_stb_lcl  <= (lcl_stb)&&(!misaligned);
+
+	reg	[3:0]	r_op;
+	initial	o_wb_we   = 1'b0;
+	initial	o_wb_data = 0;
+	initial	o_wb_sel = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+
+Clone Blocks 2:
+zipcpu/rtl/core/memops.v@158:168
+		o_wb_stb_lcl <= (o_wb_stb_lcl)&&(i_wb_stall);
+	else
+		// Grab wishbone on any new transaction to the lcl bus
+		o_wb_stb_lcl  <= (lcl_stb)&&(!misaligned);
+
+	reg	[3:0]	r_op;
+	initial	o_wb_we   = 1'b0;
+	initial	o_wb_data = 0;
+	initial	o_wb_sel = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+
+Clone Blocks 3:
+zipcpu/rtl/core/memops.v@160:170
+		// Grab wishbone on any new transaction to the lcl bus
+		o_wb_stb_lcl  <= (lcl_stb)&&(!misaligned);
+
+	reg	[3:0]	r_op;
+	initial	o_wb_we   = 1'b0;
+	initial	o_wb_data = 0;
+	initial	o_wb_sel = 0;
+	always @(posedge i_clk)
+	if (i_reset)
+	begin
+		o_wb_we   <= 0;
+

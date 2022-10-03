@@ -1,0 +1,33 @@
+Source Block: hdl/library/util_cpack/util_cpack.v@184:203@HdlStmFor
+  end
+
+  // mw requires unused to be zero
+
+  generate
+  for (n = 0; n < CH_MCNT; n = n + 1) begin: g_in
+  always @(posedge adc_clk) begin
+    if ((adc_rst == 1'b1) && (adc_enable_s[n] == 1'b0)) begin
+      adc_data_d[((CH_DW*(n+1))-1):(CH_DW*n)] <= 'd0;
+    end else if (adc_valid_s[n] == 1'b1) begin
+      adc_data_d[((CH_DW*(n+1))-1):(CH_DW*n)] <=
+        adc_data_s[((CH_DW*(n+1))-1):(CH_DW*n)];
+    end
+  end
+  end
+  endgenerate
+
+  // interleave data
+
+  generate
+
+Diff Content:
+- 189   for (n = 0; n < CH_MCNT; n = n + 1) begin: g_in
+- 192       adc_data_d[((CH_DW*(n+1))-1):(CH_DW*n)] <= 'd0;
+- 194       adc_data_d[((CH_DW*(n+1))-1):(CH_DW*n)] <=
+- 195         adc_data_s[((CH_DW*(n+1))-1):(CH_DW*n)];
++ 189   for (n = 0; n < NUM_OF_CHANNELS_M; n = n + 1) begin: g_in
++ 192       adc_data_d[((CHANNEL_DATA_WIDTH*(n+1))-1):(CHANNEL_DATA_WIDTH*n)] <= 'd0;
++ 195       adc_data_d[((CHANNEL_DATA_WIDTH*(n+1))-1):(CHANNEL_DATA_WIDTH*n)] <=
++ 195         adc_data_s[((CHANNEL_DATA_WIDTH*(n+1))-1):(CHANNEL_DATA_WIDTH*n)];
+
+Clone Blocks:

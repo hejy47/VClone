@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tdd.v@218:229@HdlStmAssign
+                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
+  assign  tdd_rx_valid_q0 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q0 & tdd_rx_rf_en) : rx_valid_q0;
+  assign  tdd_rx_valid_i1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
+  assign  tdd_rx_valid_q1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
+
+  // instantiations
+
+  up_tdd_cntrl i_up_tdd_cntrl(
+    .clk(clk),
+
+Diff Content:
++ 224   assign  tdd_enabled = tdd_enable_synced_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_tdd.v@216:227
+
+  assign  tdd_rx_valid_i0 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i0 & tdd_rx_rf_en) : rx_valid_i0;
+  assign  tdd_rx_valid_q0 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q0 & tdd_rx_rf_en) : rx_valid_q0;
+  assign  tdd_rx_valid_i1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_i1 & tdd_rx_rf_en) : rx_valid_i1;
+  assign  tdd_rx_valid_q1 = ((tdd_enable_synced_s & tdd_gated_rx_dmapath_s) == 1'b1) ?
+                                    (rx_valid_q1 & tdd_rx_rf_en) : rx_valid_q1;
+
+  // instantiations
+
+

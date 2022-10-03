@@ -1,0 +1,40 @@
+Source Block: oh/emaxi/hdl/emaxi_v1_0_M00_AXI.v@282:292@HdlIdDef
+   //--------------------
+   //Write Address Channel
+   //--------------------
+
+   // Holding buffers for AW and W channels
+   reg                              awvalid_b;
+   reg [C_M_AXI_ADDR_WIDTH-1 : 0]   awaddr_b;
+   reg [2:0]                        awsize_b;
+   reg [7:0]                        awlen_b;
+
+   reg                              wvalid_b;
+
+Diff Content:
+- 287    reg            w_wait;
++ 287    reg                              awvalid_b;
++ 287    reg [C_M_AXI_ADDR_WIDTH-1 : 0]   awaddr_b;
++ 287    reg [2:0]                        awsize_b;
++ 287    reg [7:0]                        awlen_b;
++ 287    reg                              wvalid_b;
++ 287    reg [C_M_AXI_DATA_WIDTH-1 : 0]   wdata_b;
++ 287    reg [C_M_AXI_DATA_WIDTH/8-1 : 0] wstrb_b;
++ 287    wire                             aw_go = axi_awvalid & M_AXI_AWREADY;
++ 287    wire                             w_go  = axi_wvalid & M_AXI_WREADY;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/emaxi/hdl/emaxi_v1_0_M00_AXI.v@283:293
+   //Write Address Channel
+   //--------------------
+
+   // Holding buffers for AW and W channels
+   reg                              awvalid_b;
+   reg [C_M_AXI_ADDR_WIDTH-1 : 0]   awaddr_b;
+   reg [2:0]                        awsize_b;
+   reg [7:0]                        awlen_b;
+
+   reg                              wvalid_b;
+   reg [C_M_AXI_DATA_WIDTH-1 : 0]   wdata_b;
+

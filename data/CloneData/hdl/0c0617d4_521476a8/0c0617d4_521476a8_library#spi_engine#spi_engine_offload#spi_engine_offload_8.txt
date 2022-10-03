@@ -1,0 +1,73 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@94:104@HdlIdDef
+reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
+reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+
+wire [15:0] cmd_int_s;
+wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+assign sdo_data_valid = spi_active;
+
+Diff Content:
+- 99 wire [15:0] cmd_int_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@89:99
+reg spi_active = 1'b0;
+
+reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
+reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
+reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+
+wire [15:0] cmd_int_s;
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@92:102
+reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
+reg [SDO_MEM_ADDRESS_WIDTH-1:0] ctrl_sdo_wr_addr = 'h00;
+reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
+reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+
+wire [15:0] cmd_int_s;
+wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+
+Clone Blocks 3:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@95:105
+
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
+reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+
+wire [15:0] cmd_int_s;
+wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+assign sdo_data_valid = spi_active;
+
+
+Clone Blocks 4:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@96:106
+reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
+reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+
+wire [15:0] cmd_int_s;
+wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
+wire spi_enable;
+
+assign cmd_valid = spi_active;
+assign sdo_data_valid = spi_active;
+
+assign offload_sdi_valid = sdi_data_valid;
+

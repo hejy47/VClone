@@ -1,0 +1,66 @@
+Source Block: oh/elink/hdl/etx_arbiter.v@108:163@HdlStmProcess
+   // FIFO read enables, when we're idle or done with the current datum
+   assign     emrr_rd_en = rr_ready & (~ready | etx_ack);
+   assign     emrq_rd_en = rq_ready & (~ready | etx_ack);
+   assign     emwr_rd_en = wr_ready & (~ready | etx_ack);
+   
+   always @ (posedge tx_lclk_par)
+      if( reset ) 
+	begin
+           ready             <= 1'b0;
+	   etx_access        <= 1'b0;
+	   etx_write         <= 1'b0;
+	   etx_datamode[1:0] <= 2'b0;
+	   etx_ctrlmode[3:0] <= 4'b0;
+	   etx_dstaddr[31:0] <= 32'b0;
+	   etx_data[31:0]    <= 32'b0;
+	   etx_srcaddr[31:0] <= 32'b0;
+	end 
+      else 
+	begin
+	   etx_access <= 1'b0;
+
+	   etx_write  <= emrr_rd_en ? emrr_fifo_write :
+			 emrq_rd_en ? emrq_fifo_write :
+			 emwr_fifo_write;
+
+	   etx_datamode[1:0] <= emrr_rd_en ? emrr_fifo_datamode[1:0] :
+				emrq_rd_en ? emrq_fifo_datamode[1:0] :
+			        emwr_fifo_datamode[1:0];
+	   
+	   
+	   etx_ctrlmode[3:0] <= emrr_rd_en ? emrr_fifo_ctrlmode[3:0] :
+				emrq_rd_en ? emrq_fifo_ctrlmode[3:0] :
+			        emwr_fifo_ctrlmode[3:0];
+
+
+	   etx_dstaddr[31:0] <= emrr_rd_en ? emrr_fifo_dstaddr[31:0] :
+				emrq_rd_en ? emrq_fifo_dstaddr[31:0] :
+			        emwr_fifo_dstaddr[31:0];
+
+
+	   etx_data[31:0] <= emrr_rd_en ? emrr_fifo_data[31:0] :
+			     emrq_rd_en ? emrq_fifo_data[31:0] :
+			     emwr_fifo_data[31:0];
+	   
+	   
+	   etx_srcaddr[31:0] <= emrr_rd_en ? emrr_fifo_srcaddr[31:0] :
+				emrq_rd_en ? emrq_fifo_srcaddr[31:0] :
+				emwr_fifo_srcaddr[31:0];
+	   
+	   ready <= emrr_rd_en | emrq_rd_en | emwr_rd_en | ~etx_ack;//TODO: check last term
+	end // else: !if( reset )
+      
+endmodule // etx_arbiter
+
+/*
+  File: etx_arbiter.v
+
+Diff Content:
+- 117 	   etx_access        <= 1'b0;
+- 127 	   etx_access <= 1'b0;
+- 131 			 emwr_fifo_write;
++ 131 			              emwr_fifo_write;
++ 158    assign etx_access = ready;
+
+Clone Blocks:

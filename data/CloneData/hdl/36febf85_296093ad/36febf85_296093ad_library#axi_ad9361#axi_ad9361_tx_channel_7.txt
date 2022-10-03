@@ -1,0 +1,129 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tx_channel.v@364:385@HdlStmIf
+  end
+
+  // dds
+
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_s = 16'd0;
+  end else begin
+  ad_dds i_dds (
+    .clk (dac_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_s));
+  end
+  endgenerate
+
+  // single channel processor
+
+  up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
+
+Diff Content:
+- 369   if (DP_DISABLE == 1) begin
++ 369   if (DATAPATH_DISABLE == 1) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9739a/axi_ad9739a_channel.v@620:641
+    .dds_data (dac_dds_data_14_s));
+  end
+  endgenerate
+  
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_15_s = 16'd0;
+  end else begin
+  ad_dds i_dds_0 (
+    .clk (dac_div_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_15_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_15_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_15_s));
+  end
+  endgenerate
+  
+  // single channel processor
+
+  up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
+
+Clone Blocks 2:
+hdl/library/axi_ad9144/axi_ad9144_channel.v@538:559
+    .dds_data (dac_dds_data_2_s));
+  end
+  endgenerate
+  
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_3_s = 16'd0;
+  end else begin
+  ad_dds i_dds_3 (
+    .clk (dac_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_3_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_3_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_3_s));
+  end
+  endgenerate
+  
+  // single channel processor
+
+  up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
+
+Clone Blocks 3:
+hdl/library/axi_ad9122/axi_ad9122_channel.v@227:248
+    .dds_data (dac_dds_data_2_s));
+  end
+  endgenerate
+  
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_3_s = 16'd0;
+  end else begin
+  ad_dds i_dds_3 (
+    .clk (dac_div_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_3_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_3_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_3_s));
+  end
+  endgenerate
+  
+  // single channel processor
+
+  up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
+
+Clone Blocks 4:
+hdl/library/axi_ad9152/axi_ad9152_channel.v@538:559
+    .dds_data (dac_dds_data_2_s));
+  end
+  endgenerate
+  
+  generate
+  if (DP_DISABLE == 1) begin
+  assign dac_dds_data_3_s = 16'd0;
+  end else begin
+  ad_dds i_dds_3 (
+    .clk (dac_clk),
+    .dds_format (dac_dds_format),
+    .dds_phase_0 (dac_dds_phase_3_0),
+    .dds_scale_0 (dac_dds_scale_1_s),
+    .dds_phase_1 (dac_dds_phase_3_1),
+    .dds_scale_1 (dac_dds_scale_2_s),
+    .dds_data (dac_dds_data_3_s));
+  end
+  endgenerate
+  
+  // single channel processor
+
+  up_dac_channel #(.PCORE_DAC_CHID(CHID)) i_up_dac_channel (
+

@@ -1,0 +1,109 @@
+Source Block: miaow/scripts/xilinx/axi_slave_v1_0_S00_AXI.v@518:557@HdlStmProcess
+
+	// Implement memory mapped register select and read logic generation
+	// Slave register read enable is asserted when valid address is available
+	// and the slave is ready to accept the read address.
+	assign slv_reg_rden = axi_arready & S_AXI_ARVALID & ~axi_rvalid;
+	always @(*)
+    begin
+      // Address decoding for reading registers
+      case ( axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] )
+        7'h00   : reg_data_out <= resultsReady;
+        7'h01   : reg_data_out <= waveID;
+        7'h02   : reg_data_out <= baseVGPR;
+        7'h03   : reg_data_out <= baseSGPR;
+        7'h04   : reg_data_out <= baseLDS;
+        7'h05   : reg_data_out <= waveCount;
+        7'h06   : reg_data_out <= pcStart;
+        7'h07   : reg_data_out <= instrAddrReg;
+        7'h08   : reg_data_out <= instruction_buff_out_a_in;
+        7'h09   : reg_data_out <= resultsReadyTag;
+        //7'h0A   : unused
+        7'h0B   : reg_data_out <= quadBaseAddress;
+        7'h0C   : reg_data_out <= quadData_in[31:0];
+        7'h0D   : reg_data_out <= quadData_in[63:32];
+        7'h0E   : reg_data_out <= quadData_in[95:64];
+        7'h0F   : reg_data_out <= quadData_in[127:96];
+        
+        7'h20   : reg_data_out <= fpgamem2mb_op_net;
+        7'h21   : reg_data_out <= fpgamem2mb_data;
+        7'h22   : reg_data_out <= fpgamem2mb_addr;
+        
+        7'h30   : reg_data_out <= cycle_counter;
+        7'h31   : reg_data_out <= pc_value;
+        default : reg_data_out <= 0;
+      endcase
+    end
+
+	// Output register or memory read data
+	always @( posedge S_AXI_ACLK )
+	begin
+	  if ( S_AXI_ARESETN == 1'b0 )
+
+Diff Content:
++ 549         7'h35   : reg_data_out <= singleVectorData_in[31:0];
++ 549         7'h36   : reg_data_out <= singleVectorData_in[63:32];
++ 549         7'h37   : reg_data_out <= singleVectorData_in[95:64];
++ 549         7'h38   : reg_data_out <= singleVectorData_in[127:96];
++ 549         7'h39   : reg_data_out <= singleVectorData_in[159:128];
++ 549         7'h3A   : reg_data_out <= singleVectorData_in[191:160];
++ 549         7'h3B   : reg_data_out <= singleVectorData_in[223:192];
++ 549         7'h3C   : reg_data_out <= singleVectorData_in[255:224];
++ 549         7'h3D   : reg_data_out <= singleVectorData_in[287:256];
++ 549         7'h3E   : reg_data_out <= singleVectorData_in[319:288];
++ 549         7'h3F   : reg_data_out <= singleVectorData_in[351:320];
++ 549         7'h40   : reg_data_out <= singleVectorData_in[383:352];
++ 549         7'h41   : reg_data_out <= singleVectorData_in[415:384];
++ 549         7'h42   : reg_data_out <= singleVectorData_in[447:416];
++ 549         7'h43   : reg_data_out <= singleVectorData_in[479:448];
++ 549         7'h44   : reg_data_out <= singleVectorData_in[511:480];
++ 549         7'h45   : reg_data_out <= singleVectorData_in[543:512];
++ 549         7'h46   : reg_data_out <= singleVectorData_in[575:544];
++ 549         7'h47   : reg_data_out <= singleVectorData_in[607:576];
++ 549         7'h48   : reg_data_out <= singleVectorData_in[639:608];
++ 549         7'h49   : reg_data_out <= singleVectorData_in[671:640];
++ 549         7'h4A   : reg_data_out <= singleVectorData_in[703:672];
++ 549         7'h4B   : reg_data_out <= singleVectorData_in[735:704];
++ 549         7'h4C   : reg_data_out <= singleVectorData_in[767:736];
++ 549         7'h4D   : reg_data_out <= singleVectorData_in[799:768];
++ 549         7'h4E   : reg_data_out <= singleVectorData_in[831:800];
++ 549         7'h4F   : reg_data_out <= singleVectorData_in[863:832];
++ 549         7'h50   : reg_data_out <= singleVectorData_in[895:864];
++ 549         7'h51   : reg_data_out <= singleVectorData_in[927:896];
++ 549         7'h52   : reg_data_out <= singleVectorData_in[959:928];
++ 549         7'h53   : reg_data_out <= singleVectorData_in[991:960];
++ 549         7'h54   : reg_data_out <= singleVectorData_in[1023:992];
++ 549         7'h55   : reg_data_out <= singleVectorData_in[1055:1024];
++ 549         7'h56   : reg_data_out <= singleVectorData_in[1087:1056];
++ 549         7'h57   : reg_data_out <= singleVectorData_in[1119:1088];
++ 549         7'h58   : reg_data_out <= singleVectorData_in[1151:1120];
++ 549         7'h59   : reg_data_out <= singleVectorData_in[1183:1152];
++ 549         7'h5A   : reg_data_out <= singleVectorData_in[1215:1184];
++ 549         7'h5B   : reg_data_out <= singleVectorData_in[1247:1216];
++ 549         7'h5C   : reg_data_out <= singleVectorData_in[1279:1248];
++ 549         7'h5D   : reg_data_out <= singleVectorData_in[1311:1280];
++ 549         7'h5E   : reg_data_out <= singleVectorData_in[1343:1312];
++ 549         7'h5F   : reg_data_out <= singleVectorData_in[1375:1344];
++ 549         7'h60   : reg_data_out <= singleVectorData_in[1407:1376];
++ 549         7'h61   : reg_data_out <= singleVectorData_in[1439:1408];
++ 549         7'h62   : reg_data_out <= singleVectorData_in[1471:1440];
++ 549         7'h63   : reg_data_out <= singleVectorData_in[1503:1472];
++ 549         7'h64   : reg_data_out <= singleVectorData_in[1535:1504];
++ 549         7'h65   : reg_data_out <= singleVectorData_in[1567:1536];
++ 549         7'h66   : reg_data_out <= singleVectorData_in[1599:1568];
++ 549         7'h67   : reg_data_out <= singleVectorData_in[1631:1600];
++ 549         7'h68   : reg_data_out <= singleVectorData_in[1663:1632];
++ 549         7'h69   : reg_data_out <= singleVectorData_in[1695:1664];
++ 549         7'h6A   : reg_data_out <= singleVectorData_in[1727:1696];
++ 549         7'h6B   : reg_data_out <= singleVectorData_in[1759:1728];
++ 549         7'h6C   : reg_data_out <= singleVectorData_in[1791:1760];
++ 549         7'h6D   : reg_data_out <= singleVectorData_in[1823:1792];
++ 549         7'h6E   : reg_data_out <= singleVectorData_in[1855:1824];
++ 549         7'h6F   : reg_data_out <= singleVectorData_in[1887:1856];
++ 549         7'h70   : reg_data_out <= singleVectorData_in[1919:1888];
++ 549         7'h71   : reg_data_out <= singleVectorData_in[1951:1920];
++ 549         7'h72   : reg_data_out <= singleVectorData_in[1983:1952];
++ 549         7'h73   : reg_data_out <= singleVectorData_in[2015:1984];
++ 549         7'h74   : reg_data_out <= singleVectorData_in[2047:2016];
+
+Clone Blocks:

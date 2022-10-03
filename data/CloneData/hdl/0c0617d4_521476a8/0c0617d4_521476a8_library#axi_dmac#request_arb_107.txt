@@ -1,0 +1,166 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@796:867@HdlStmIf
+assign src_partial_burst = 1'b0;
+assign block_descr_to_dst = 1'b0;
+
+end
+
+if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
+
+wire src_eot = eot_mem_src[src_response_id];
+
+assign source_id = src_response_id;
+assign source_eot = src_eot;
+
+assign src_clk = fifo_wr_clk;
+assign src_ext_resetn = 1'b1;
+
+assign dbg_src_address_id = 'h00;
+assign dbg_src_data_id = 'h00;
+
+/* TODO
+assign src_response_valid = 1'b0;
+assign src_response_resp = 2'b0;
+*/
+
+src_fifo_inf #(
+  .ID_WIDTH(ID_WIDTH),
+  .DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+  .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+) i_src_dma_fifo (
+  .clk(fifo_wr_clk),
+  .resetn(src_resetn),
+
+  .enable(src_enable),
+  .enabled(src_enabled),
+
+  .req_valid(src_req_valid),
+  .req_ready(src_req_ready),
+  .req_last_burst_length(src_req_last_burst_length),
+  .req_sync_transfer_start(src_req_sync_transfer_start),
+
+  .request_id(src_throttled_request_id),
+  .response_id(src_response_id),
+
+  .eot(src_eot),
+
+  .bl_valid(src_bl_valid),
+  .bl_ready(src_bl_ready),
+  .measured_last_burst_length(src_burst_length),
+
+  .fifo_valid(src_valid),
+  .fifo_data(src_data),
+  .fifo_last(src_last),
+
+  .en(fifo_wr_en),
+  .din(fifo_wr_din),
+  .overflow(fifo_wr_overflow),
+  .sync(fifo_wr_sync),
+  .xfer_req(fifo_wr_xfer_req)
+);
+
+assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
+
+end else begin
+
+assign fifo_wr_overflow = 1'b0;
+assign fifo_wr_xfer_req = 1'b0;
+
+end endgenerate
+
+sync_bits #(
+  .NUM_OF_BITS(ID_WIDTH),
+  .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+) i_sync_src_request_id (
+
+Diff Content:
+- 801 if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
+- 803 wire src_eot = eot_mem_src[src_response_id];
+- 805 assign source_id = src_response_id;
+- 806 assign source_eot = src_eot;
+- 808 assign src_clk = fifo_wr_clk;
+- 809 assign src_ext_resetn = 1'b1;
+- 811 assign dbg_src_address_id = 'h00;
+- 812 assign dbg_src_data_id = 'h00;
+- 814 /* TODO
+- 815 assign src_response_valid = 1'b0;
+- 816 assign src_response_resp = 2'b0;
+- 817 */
+- 819 src_fifo_inf #(
+- 820   .ID_WIDTH(ID_WIDTH),
+- 821   .DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+- 822   .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
+- 823 ) i_src_dma_fifo (
+- 824   .clk(fifo_wr_clk),
+- 825   .resetn(src_resetn),
+- 827   .enable(src_enable),
+- 828   .enabled(src_enabled),
+- 830   .req_valid(src_req_valid),
+- 831   .req_ready(src_req_ready),
+- 832   .req_last_burst_length(src_req_last_burst_length),
+- 833   .req_sync_transfer_start(src_req_sync_transfer_start),
+- 835   .request_id(src_throttled_request_id),
+- 836   .response_id(src_response_id),
+- 838   .eot(src_eot),
+- 840   .bl_valid(src_bl_valid),
+- 841   .bl_ready(src_bl_ready),
+- 842   .measured_last_burst_length(src_burst_length),
+- 844   .fifo_valid(src_valid),
+- 845   .fifo_data(src_data),
+- 846   .fifo_last(src_last),
+- 848   .en(fifo_wr_en),
+- 849   .din(fifo_wr_din),
+- 850   .overflow(fifo_wr_overflow),
+- 851   .sync(fifo_wr_sync),
+- 852   .xfer_req(fifo_wr_xfer_req)
+- 853 );
+- 855 assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
+- 857 end else begin
+- 859 assign fifo_wr_overflow = 1'b0;
+- 860 assign fifo_wr_xfer_req = 1'b0;
+- 862 end endgenerate
++ 801   if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
++ 803   wire src_eot = eot_mem_src[src_response_id];
++ 806   assign source_id = src_response_id;
++ 806   assign source_eot = src_eot;
++ 809   assign src_clk = fifo_wr_clk;
++ 809   assign src_ext_resetn = 1'b1;
++ 812   assign dbg_src_address_id = 'h00;
++ 812   assign dbg_src_data_id = 'h00;
++ 817   /* TODO
++ 817   assign src_response_valid = 1'b0;
++ 817   assign src_response_resp = 2'b0;
++ 817   */
++ 825   src_fifo_inf #(
++ 825     .ID_WIDTH(ID_WIDTH),
++ 825     .DATA_WIDTH(DMA_DATA_WIDTH_SRC),
++ 825     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
++ 825   ) i_src_dma_fifo (
++ 825     .clk(fifo_wr_clk),
++ 825     .resetn(src_resetn),
++ 828     .enable(src_enable),
++ 828     .enabled(src_enabled),
++ 833     .req_valid(src_req_valid),
++ 833     .req_ready(src_req_ready),
++ 833     .req_last_burst_length(src_req_last_burst_length),
++ 833     .req_sync_transfer_start(src_req_sync_transfer_start),
++ 836     .request_id(src_throttled_request_id),
++ 836     .response_id(src_response_id),
++ 838     .eot(src_eot),
++ 842     .bl_valid(src_bl_valid),
++ 842     .bl_ready(src_bl_ready),
++ 842     .measured_last_burst_length(src_burst_length),
++ 846     .fifo_valid(src_valid),
++ 846     .fifo_data(src_data),
++ 846     .fifo_last(src_last),
++ 853     .en(fifo_wr_en),
++ 853     .din(fifo_wr_din),
++ 853     .overflow(fifo_wr_overflow),
++ 853     .sync(fifo_wr_sync),
++ 853     .xfer_req(fifo_wr_xfer_req));
++ 855   assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
++ 857   end else begin
++ 860   assign fifo_wr_overflow = 1'b0;
++ 860   assign fifo_wr_xfer_req = 1'b0;
++ 862   end endgenerate
+
+Clone Blocks:

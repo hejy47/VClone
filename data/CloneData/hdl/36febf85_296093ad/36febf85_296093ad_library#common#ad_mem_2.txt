@@ -1,0 +1,36 @@
+Source Block: hdl/library/common/ad_mem.v@62:72@HdlIdDef
+
+  input           clkb;
+  input   [AW:0]  addrb;
+  output  [DW:0]  doutb;
+
+  reg     [DW:0]  m_ram[0:((2**ADDR_WIDTH)-1)];
+  reg     [DW:0]  doutb;
+
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[addra] <= dina;
+
+Diff Content:
+- 67   reg     [DW:0]  m_ram[0:((2**ADDR_WIDTH)-1)];
++ 67   reg     [DW:0]  m_ram[0:((2**ADDRESS_WIDTH)-1)];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_mem.v@65:79
+  output  [DW:0]  doutb;
+
+  reg     [DW:0]  m_ram[0:((2**ADDR_WIDTH)-1)];
+  reg     [DW:0]  doutb;
+
+  always @(posedge clka) begin
+    if (wea == 1'b1) begin
+      m_ram[addra] <= dina;
+    end
+  end
+
+  always @(posedge clkb) begin
+    doutb <= m_ram[addrb];
+  end
+
+

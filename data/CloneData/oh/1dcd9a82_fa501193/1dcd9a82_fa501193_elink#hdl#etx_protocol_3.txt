@@ -1,0 +1,28 @@
+Source Block: oh/elink/hdl/etx_protocol.v@106:123@HdlStmProcess
+	tx_packet[PW-1:0] <= etx_packet[PW-1:0];
+	tx_access         <= etx_valid;
+       end
+
+   
+   always @ (posedge clk)
+     if(!nreset)
+       tx_burst <= 1'b0;   
+     else       
+       tx_burst          <= (etx_write                 & //write 
+	       	            (etx_datamode[1:0]==2'b11) & //double only
+			    burst_type_match           & //same types
+			    burst_addr_match);           //inc by 8
+   
+   //#############################
+   //# Burst Detection
+   //#############################
+
+
+Diff Content:
+- 115        tx_burst          <= (etx_write                 & //write 
+- 116 	       	            (etx_datamode[1:0]==2'b11) & //double only
+- 117 			    burst_type_match           & //same types
+- 118 			    burst_addr_match);           //inc by 8
++ 118        tx_burst          <= burst_in;
+
+Clone Blocks:

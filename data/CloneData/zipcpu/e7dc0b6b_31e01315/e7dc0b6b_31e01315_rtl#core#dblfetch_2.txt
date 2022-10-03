@@ -1,0 +1,54 @@
+Source Block: zipcpu/rtl/core/dblfetch.v@209:223@HdlStmProcess
+			o_pc[AW+1:2] <= o_pc[AW+1:2] + 1'b1;
+
+	assign	o_valid = cache_valid[cache_read_addr];
+
+	initial	o_illegal = 1'b0;
+	always @(posedge i_clk)
+		if ((o_wb_cyc)&&(i_wb_err))
+			o_illegal <= 1'b1;
+		else if ((!o_wb_cyc)&&((i_new_pc)||(invalid_bus_cycle)))
+			o_illegal <= 1'b0;
+
+`ifdef	FORMAL
+//
+//
+// Generic setup
+
+Diff Content:
+- 215 		if ((o_wb_cyc)&&(i_wb_err))
+- 216 			o_illegal <= 1'b1;
+- 217 		else if ((!o_wb_cyc)&&((i_new_pc)||(invalid_bus_cycle)))
++ 217 		if ((invalid_bus_cycle)||(i_new_pc))
++ 218 		else if ((o_wb_cyc)&&(i_wb_err))
++ 218 			o_illegal <= 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/dblfetch.v@206:216
+		if (i_new_pc)
+			o_pc <= i_pc;
+		else if ((o_valid)&&(i_stall_n))
+			o_pc[AW+1:2] <= o_pc[AW+1:2] + 1'b1;
+
+	assign	o_valid = cache_valid[cache_read_addr];
+
+	initial	o_illegal = 1'b0;
+	always @(posedge i_clk)
+		if ((o_wb_cyc)&&(i_wb_err))
+			o_illegal <= 1'b1;
+
+Clone Blocks 2:
+zipcpu/rtl/core/dblfetch.v@208:218
+		else if ((o_valid)&&(i_stall_n))
+			o_pc[AW+1:2] <= o_pc[AW+1:2] + 1'b1;
+
+	assign	o_valid = cache_valid[cache_read_addr];
+
+	initial	o_illegal = 1'b0;
+	always @(posedge i_clk)
+		if ((o_wb_cyc)&&(i_wb_err))
+			o_illegal <= 1'b1;
+		else if ((!o_wb_cyc)&&((i_new_pc)||(invalid_bus_cycle)))
+			o_illegal <= 1'b0;
+

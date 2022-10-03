@@ -1,0 +1,40 @@
+Source Block: serv/rtl/serv_mpram.v@65:94@HdlStmProcess
+   wire       wen = wgo & (i_trap | (wport ? i_csr_en : i_rd_wen & run_r));
+
+   reg 	      wreq_r;
+   reg 	      run_r;
+
+   always @(posedge i_clk) begin
+      wreq_r    <= i_wreq | o_rgnt;
+      wdata0_r  <= wdata0;
+      wdata1_r  <= wdata1;
+      wdata1_2r <= wdata1_r;
+      run_r <= i_run;
+
+
+      if (wgo)
+	wcnt <= wcnt+5'd1;
+
+      if (wreq_r)
+	 wgo <= 1'b1;
+      if (wcnt == 5'b11111)
+	wgo <= 1'b0;
+
+      if (i_rst) begin
+	 wcnt <= 5'd0;
+      end
+   end
+
+   /*
+    ********** Read side ***********
+    */
+
+
+Diff Content:
+- 71       wreq_r    <= i_wreq | o_rgnt;
+- 75       run_r <= i_run;
++ 71       wen0_r    <= wen0;
++ 71       wen1_r    <= wen1;
++ 71       wreq_r    <= i_wreq;
+
+Clone Blocks:

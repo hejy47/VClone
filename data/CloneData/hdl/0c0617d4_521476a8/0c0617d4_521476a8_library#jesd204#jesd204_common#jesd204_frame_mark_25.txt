@@ -1,0 +1,119 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_frame_mark.v@101:162@HdlStmIf
+reg [DATA_PATH_WIDTH-1:0] eof_f_6[2:0];
+reg [DATA_PATH_WIDTH-1:0] sof_f_12[2:0];
+reg [DATA_PATH_WIDTH-1:0] eof_f_12[2:0];
+
+generate
+if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
+initial begin
+  sof_f_3[0] = {4'b1001};
+  sof_f_3[1] = {4'b0100};
+  sof_f_3[2] = {4'b0010};
+  eof_f_3[0] = {4'b0100};
+  eof_f_3[1] = {4'b0010};
+  eof_f_3[2] = {4'b1001};
+  sof_f_6[0] = {4'b0001};
+  sof_f_6[1] = {4'b0100};
+  sof_f_6[2] = {4'b0000};
+  eof_f_6[0] = {4'b0000};
+  eof_f_6[1] = {4'b0010};
+  eof_f_6[2] = {4'b1000};
+end
+end else if(DATA_PATH_WIDTH == 6) begin : gen_dp_6
+initial begin
+  sof_f_3[0] = {6'b001001};
+  sof_f_3[1] = {6'b001001};
+  sof_f_3[2] = {6'b001001};
+  eof_f_3[0] = {6'b100100};
+  eof_f_3[1] = {6'b100100};
+  eof_f_3[2] = {6'b100100};
+  sof_f_6[0] = {6'b000001};
+  sof_f_6[1] = {6'b000001};
+  sof_f_6[2] = {6'b000001};
+  eof_f_6[0] = {6'b100000};
+  eof_f_6[1] = {6'b100000};
+  eof_f_6[2] = {6'b100000};
+end
+end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+initial begin
+  sof_f_3[0]  = {8'b01001001};
+  sof_f_3[1]  = {8'b10010010};
+  sof_f_3[2]  = {8'b00100100};
+  eof_f_3[0]  = {8'b00100100};
+  eof_f_3[1]  = {8'b01001001};
+  eof_f_3[2]  = {8'b10010010};
+  sof_f_6[0]  = {8'b01000001};
+  sof_f_6[1]  = {8'b00010000};
+  sof_f_6[2]  = {8'b00000100};
+  eof_f_6[0]  = {8'b00100000};
+  eof_f_6[1]  = {8'b00001000};
+  eof_f_6[2]  = {8'b10000010};
+  sof_f_12[0] = {8'b00000001};
+  sof_f_12[1] = {8'b00010000};
+  sof_f_12[2] = {8'b00000000};
+  eof_f_12[0] = {8'b00000000};
+  eof_f_12[1] = {8'b00001000};
+  eof_f_12[2] = {8'b10000000};
+end
+end
+// Beat count % 3, to support F=3, 6, 12
+always @(posedge clk) begin
+  if(reset) begin
+    beat_cnt_mod_3 <= 2'd0;
+  end else begin
+
+Diff Content:
+- 106 if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
+- 107 initial begin
+- 108   sof_f_3[0] = {4'b1001};
+- 109   sof_f_3[1] = {4'b0100};
+- 110   sof_f_3[2] = {4'b0010};
+- 111   eof_f_3[0] = {4'b0100};
+- 112   eof_f_3[1] = {4'b0010};
+- 113   eof_f_3[2] = {4'b1001};
+- 114   sof_f_6[0] = {4'b0001};
+- 115   sof_f_6[1] = {4'b0100};
+- 116   sof_f_6[2] = {4'b0000};
+- 117   eof_f_6[0] = {4'b0000};
+- 118   eof_f_6[1] = {4'b0010};
+- 119   eof_f_6[2] = {4'b1000};
+- 120 end
+- 121 end else if(DATA_PATH_WIDTH == 6) begin : gen_dp_6
+- 122 initial begin
+- 123   sof_f_3[0] = {6'b001001};
+- 124   sof_f_3[1] = {6'b001001};
+- 125   sof_f_3[2] = {6'b001001};
+- 126   eof_f_3[0] = {6'b100100};
+- 127   eof_f_3[1] = {6'b100100};
+- 128   eof_f_3[2] = {6'b100100};
+- 129   sof_f_6[0] = {6'b000001};
+- 130   sof_f_6[1] = {6'b000001};
+- 131   sof_f_6[2] = {6'b000001};
+- 132   eof_f_6[0] = {6'b100000};
+- 133   eof_f_6[1] = {6'b100000};
+- 134   eof_f_6[2] = {6'b100000};
+- 135 end
+- 136 end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+- 137 initial begin
+- 138   sof_f_3[0]  = {8'b01001001};
+- 139   sof_f_3[1]  = {8'b10010010};
+- 140   sof_f_3[2]  = {8'b00100100};
+- 141   eof_f_3[0]  = {8'b00100100};
+- 142   eof_f_3[1]  = {8'b01001001};
+- 143   eof_f_3[2]  = {8'b10010010};
+- 144   sof_f_6[0]  = {8'b01000001};
+- 145   sof_f_6[1]  = {8'b00010000};
+- 146   sof_f_6[2]  = {8'b00000100};
+- 147   eof_f_6[0]  = {8'b00100000};
+- 148   eof_f_6[1]  = {8'b00001000};
+- 149   eof_f_6[2]  = {8'b10000010};
+- 150   sof_f_12[0] = {8'b00000001};
+- 151   sof_f_12[1] = {8'b00010000};
+- 152   sof_f_12[2] = {8'b00000000};
+- 153   eof_f_12[0] = {8'b00000000};
+- 154   eof_f_12[1] = {8'b00001000};
+- 155   eof_f_12[2] = {8'b10000000};
+- 156 end
+- 157 end
+
+Clone Blocks:

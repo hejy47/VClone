@@ -1,0 +1,79 @@
+Source Block: hdl/library/common/util_dec256sinc24b.v@113:139@HdlStmProcess
+
+  /* Differentiator (including decimation stage)
+   * Perform the differentiation stage (FIR) at a lower speed.
+   * Z = one sample delay WORD_EN = output word rate */
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      acc3_d <= 37'd0;
+      diff1_d <= 37'd0;
+      diff2_d <= 37'd0;
+      diff1   <= 37'd0;
+      diff2   <= 37'd0;
+      diff3   <= 37'd0;
+    end else if (word_en == 1'b1) begin
+      diff1   <= acc3 - acc3_d;
+      diff2   <= diff1 - diff1_d;
+      diff3   <= diff2 - diff2_d;
+      acc3_d  <= acc3;
+      diff1_d <= diff1;
+      diff2_d <= diff2;
+    end
+  end
+
+  /* Clock the Sinc output into an output register
+   * WORD_EN = output word rate */
+
+  always @(posedge clk) begin
+
+Diff Content:
+- 123       diff1   <= 37'd0;
+- 124       diff2   <= 37'd0;
+- 125       diff3   <= 37'd0;
+- 127       diff1   <= acc3 - acc3_d;
+- 128       diff2   <= diff1 - diff1_d;
+- 129       diff3   <= diff2 - diff2_d;
+- 131       diff1_d <= diff1;
+- 132       diff2_d <= diff2;
++ 132       diff1_d <= diff1_s;
++ 132       diff2_d <= diff2_s;
++ 134   assign diff1_s = acc3 - acc3_d;
++ 134   assign diff2_s = diff1_s - diff1_d;
++ 134   assign diff3_s = diff2_s - diff2_d;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_mc_current_monitor/dec256sinc24b.v@125:155
+end
+
+/*DIFFERENTIATOR (including decimation stage)
+* Perform the differentiation stage (FIR) at a lower speed.
+WORD_CLK = output word rate */
+always @(posedge word_clk or posedge reset_i)
+begin
+    if(reset_i == 1'b1)
+    begin
+        acc3_d2 <= 0;
+        diff1_d <= 0;
+        diff2_d <= 0;
+        diff1   <= 0;
+        diff2   <= 0;
+        diff3   <= 0;
+    end
+    else
+    begin
+        diff1   <= acc3 - acc3_d2;
+        diff2   <= diff1 - diff1_d;
+        diff3   <= diff2 - diff2_d;
+        acc3_d2 <= acc3;
+        diff1_d <= diff1;
+        diff2_d <= diff2;
+    end
+end
+
+/*  Clock the Sinc output into an output register
+    Clocking Sinc Output into an Output Register
+WORD_CLK = output word rate */
+always @(posedge word_clk)
+

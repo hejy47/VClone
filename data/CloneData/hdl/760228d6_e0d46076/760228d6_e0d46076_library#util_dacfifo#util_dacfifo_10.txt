@@ -1,0 +1,51 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@105:123@HdlStmProcess
+  wire                                dma_wren;
+  wire    [(DATA_WIDTH-1):0]          dac_data_s;
+
+  // write interface
+
+  always @(posedge dma_clk) begin
+    if(dma_rst == 1'b1) begin
+      dma_ready_d <= 1'b0;
+      dma_xfer_req_ff <= 1'b0;
+    end else begin
+      dma_ready_d <= 1'b1;                                // Fifo is always ready
+      dma_xfer_req_ff <= dma_xfer_req;
+    end
+  end
+
+  always @(posedge dma_clk) begin
+    if(dma_rst == 1'b1) begin
+      dma_waddr <= 'b0;
+      dma_lastaddr <= 'b0;
+
+Diff Content:
+- 112       dma_ready_d <= 1'b0;
+- 113       dma_xfer_req_ff <= 1'b0;
+- 115       dma_ready_d <= 1'b1;                                // Fifo is always ready
+- 116       dma_xfer_req_ff <= dma_xfer_req;
++ 113       dma_ready_fifo <= 1'b0;
++ 116       dma_ready_fifo <= 1'b1;
++ 118   assign dma_addr_diff_s = {1'b1, dma_waddr} - dma_raddr;
++ 118   always @(posedge dma_clk) begin
++ 118     if (dma_rst == 1'b1) begin
++ 118       dma_addr_diff <= 'b0;
++ 118       dma_raddr_m1 <= 'b0;
++ 118       dma_raddr_m2 <= 'b0;
++ 118       dma_raddr <= 'b0;
++ 118       dma_ready_bypass <= 1'b0;
++ 118     end else begin
++ 118       dma_raddr_m1 <= dac_raddr_g;
++ 118       dma_raddr_m2 <= dma_raddr_m1;
++ 118       dma_raddr <= g2b(dma_raddr_m2);
++ 118       dma_addr_diff <= dma_addr_diff_s[ADDRESS_WIDTH-1:0];
++ 118       if (dma_addr_diff >= FIFO_THRESHOLD_HI) begin
++ 118         dma_ready_bypass <= 1'b0;
++ 118       end else begin
++ 118         dma_ready_bypass <= 1'b1;
++ 118       end
++ 118     end
++ 118   end
++ 118   assign dma_wren_s = dma_valid & dma_xfer_req & dma_ready;
+
+Clone Blocks:

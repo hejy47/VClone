@@ -1,0 +1,28 @@
+Source Block: oh/emesh/dv/ememory.v@130:148@HdlStmProcess
+       access_out <=1'b0;   
+     else if(~wait_in)
+       access_out                    <= mem_rd;
+                 
+   //Other emesh signals "dataload"
+   always @ (posedge clk)
+     if(mem_rd & ~wait_in)   
+       begin
+	  write_out           <= 1'b1;
+          align_addr[2:0]     <= dstaddr_in[2:0];
+	  datamode_out[1:0]   <= datamode_in[1:0];
+	  ctrlmode_out[4:0]   <= ctrlmode_in[3:0];                  
+          dstaddr_out[AW-1:0] <= srcaddr_in[AW-1:0];
+       end
+
+   
+   //Data alignment for readback
+   emesh_rdalign emesh_rdalign (// Outputs
+				.data_out	(dout_aligned[DW-1:0]),
+
+Diff Content:
+- 135    always @ (posedge clk)
+- 136      if(mem_rd & ~wait_in)   
++ 136      else
++ 137 	  access_out          <= mem_rd;
+
+Clone Blocks:

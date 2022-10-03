@@ -1,0 +1,48 @@
+Source Block: oh/src/mio/hdl/mio_if.v@72:82@HdlStmAssign
+
+   // pass throughs
+   assign rx_wait_out   = wait_in;
+   assign access_out    = rx_access_in;
+   assign tx_access_out = access_in;
+   assign wait_out      = tx_wait_in;
+   
+   // adapter for PW-->MPW width (MPW>=PW)
+   // shift up data on msbfirst shift 
+   assign tx_packet_out[MPW-1:0] = (~lsbfirst & emode ) ? {packet_in[PW-1:0],{(MPW-PW-8){1'b0}}} :
+				   (~lsbfirst )         ? {packet_in[PW-1:0],{(MPW-PW){1'b0}}}   :
+
+Diff Content:
+- 77    assign wait_out      = tx_wait_in;
++ 77    wire [3:0] 		datasize;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mio_if.v@71:81
+   /*AUTOINPUT*/
+
+   // pass throughs
+   assign rx_wait_out   = wait_in;
+   assign access_out    = rx_access_in;
+   assign tx_access_out = access_in;
+   assign wait_out      = tx_wait_in;
+   
+   // adapter for PW-->MPW width (MPW>=PW)
+   // shift up data on msbfirst shift 
+   assign tx_packet_out[MPW-1:0] = (~lsbfirst & emode ) ? {packet_in[PW-1:0],{(MPW-PW-8){1'b0}}} :
+
+Clone Blocks 2:
+oh/src/mio/hdl/mio_if.v@76:88
+   assign tx_access_out = access_in;
+   assign wait_out      = tx_wait_in;
+   
+   // adapter for PW-->MPW width (MPW>=PW)
+   // shift up data on msbfirst shift 
+   assign tx_packet_out[MPW-1:0] = (~lsbfirst & emode ) ? {packet_in[PW-1:0],{(MPW-PW-8){1'b0}}} :
+				   (~lsbfirst )         ? {packet_in[PW-1:0],{(MPW-PW){1'b0}}}   :
+				                          packet_in[PW-1:0];
+
+   //#################################################
+   // TRANSACTION FOR CORE (FROM RX)
+   //#################################################
+
+

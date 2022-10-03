@@ -1,0 +1,66 @@
+Source Block: hdl/library/common/up_xfer_cntrl.v@98:124@HdlStmProcess
+    end
+  end
+
+  assign d_xfer_toggle_s = d_xfer_toggle_m3 ^ d_xfer_toggle_m2;
+
+  always @(posedge d_clk or posedge d_rst) begin
+    if (d_rst == 1'b1) begin
+      d_xfer_toggle_m1 <= 'd0;
+      d_xfer_toggle_m2 <= 'd0;
+      d_xfer_toggle_m3 <= 'd0;
+      d_xfer_toggle <= 'd0;
+      d_data_cntrl <= 'd0;
+    end else begin
+      d_xfer_toggle_m1 <= up_xfer_toggle;
+      d_xfer_toggle_m2 <= d_xfer_toggle_m1;
+      d_xfer_toggle_m3 <= d_xfer_toggle_m2;
+      d_xfer_toggle <= d_xfer_toggle_m3;
+      if (d_xfer_toggle_s == 1'b1) begin
+        d_data_cntrl <= up_xfer_data;
+      end
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 109       d_data_cntrl <= 'd0;
+- 116         d_data_cntrl <= up_xfer_data;
++ 109       d_data_cntrl_int <= 'd0;
++ 116         d_data_cntrl_int <= up_xfer_data;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/up_xfer_status.v@102:128
+    end
+  end
+
+  assign up_xfer_toggle_s = up_xfer_toggle_m3 ^ up_xfer_toggle_m2;
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_xfer_toggle_m1 <= 'd0;
+      up_xfer_toggle_m2 <= 'd0;
+      up_xfer_toggle_m3 <= 'd0;
+      up_xfer_toggle <= 'd0;
+      up_data_status <= 'd0;
+    end else begin
+      up_xfer_toggle_m1 <= d_xfer_toggle;
+      up_xfer_toggle_m2 <= up_xfer_toggle_m1;
+      up_xfer_toggle_m3 <= up_xfer_toggle_m2;
+      up_xfer_toggle <= up_xfer_toggle_m3;
+      if (up_xfer_toggle_s == 1'b1) begin
+        up_data_status <= d_xfer_data;
+      end
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+

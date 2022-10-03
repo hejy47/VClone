@@ -1,0 +1,157 @@
+Source Block: hdl/library/axi_adrv9001/axi_adrv9001_if.v@410:495@HdlStmIf
+    .tx_single_lane (tx1_single_lane),
+    .tx_symb_op (tx1_symb_op),
+    .tx_symb_8_16b (tx1_symb_8_16b)
+  );
+
+  generate if (DISABLE_TX2_SSI == 0) begin
+    adrv9001_tx #(
+     .CMOS_LVDS_N (CMOS_LVDS_N),
+     .NUM_LANES (TX_NUM_LANES),
+     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+     .USE_BUFG (TX_USE_BUFG),
+     .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
+    ) i_tx_2_phy (
+
+     .ref_clk (ref_clk),
+     .up_clk (up_clk),
+
+     .tx_output_enable(tx_output_enable),
+
+     .tx_dclk_out_n_NC (tx2_dclk_out_n_NC),
+     .tx_dclk_out_p_dclk_out (tx2_dclk_out_p_dclk_out),
+     .tx_dclk_in_n_NC (tx2_dclk_in_n_NC),
+     .tx_dclk_in_p_dclk_in (tx2_dclk_in_p_dclk_in),
+     .tx_idata_out_n_idata0 (tx2_idata_out_n_idata0),
+     .tx_idata_out_p_idata1 (tx2_idata_out_p_idata1),
+     .tx_qdata_out_n_qdata2 (tx2_qdata_out_n_qdata2),
+     .tx_qdata_out_p_qdata3 (tx2_qdata_out_p_qdata3),
+     .tx_strobe_out_n_NC (tx2_strobe_out_n_NC),
+     .tx_strobe_out_p_strobe_out (tx2_strobe_out_p_strobe_out),
+
+     .rx_clk_div (adc_2_clk_div),
+     .rx_clk (adc_2_clk),
+     .rx_ssi_rst (adc_2_ssi_rst),
+
+     .dac_rst (tx2_rst),
+     .dac_clk_div (dac_2_clk_div),
+
+     .dac_data_0 (dac_2_data_0),
+     .dac_data_1 (dac_2_data_1),
+     .dac_data_2 (dac_2_data_2),
+     .dac_data_3 (dac_2_data_3),
+     .dac_data_strb (dac_2_data_strobe),
+     .dac_data_clk (dac_2_data_clk),
+     .dac_data_valid (dac_2_data_valid),
+
+     .mssi_sync (mssi_sync)
+    );
+
+    adrv9001_tx_link #(
+      .CMOS_LVDS_N (CMOS_LVDS_N),
+      .CLK_DIV_IS_FAST_CLK (FPGA_TECHNOLOGY >= 100)
+    ) i_tx_2_link (
+      .dac_clk_div (dac_2_clk_div),
+      .dac_data_0 (dac_2_data_0),
+      .dac_data_1 (dac_2_data_1),
+      .dac_data_2 (dac_2_data_2),
+      .dac_data_3 (dac_2_data_3),
+      .dac_data_strobe (dac_2_data_strobe),
+      .dac_data_clk (dac_2_data_clk),
+      .dac_data_valid (dac_2_data_valid),
+      // DAC interface
+      .tx_clk (tx2_clk),
+      .tx_rst (tx2_rst),
+      .tx_data_valid (tx2_data_valid),
+      .tx_data_i (tx2_data_i),
+      .tx_data_q (tx2_data_q),
+      .tx_sdr_ddr_n (tx2_sdr_ddr_n),
+      .tx_single_lane (tx2_single_lane),
+      .tx_symb_op (tx2_symb_op),
+      .tx_symb_8_16b (tx2_symb_8_16b)
+    );
+  end else begin
+    assign tx2_clk = 1'b0;
+    assign tx2_dclk_out_n_NC = 1'b0;
+    assign tx2_dclk_out_p_dclk_out = 1'b0;
+    assign tx2_idata_out_n_idata0 = 1'b0;
+    assign tx2_idata_out_p_idata1 = 1'b0;
+    assign tx2_qdata_out_n_qdata2 = 1'b0;
+    assign tx2_qdata_out_p_qdata3 = 1'b0;
+    assign tx2_strobe_out_n_NC = 1'b0;
+    assign tx2_strobe_out_p_strobe_out = 1'b0;
+  end
+  endgenerate
+
+endmodule
+
+
+Diff Content:
+- 417      .CMOS_LVDS_N (CMOS_LVDS_N),
+- 418      .NUM_LANES (TX_NUM_LANES),
+- 419      .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+- 420      .USE_BUFG (TX_USE_BUFG),
+- 421      .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
+- 424      .ref_clk (ref_clk),
+- 425      .up_clk (up_clk),
+- 427      .tx_output_enable(tx_output_enable),
+- 429      .tx_dclk_out_n_NC (tx2_dclk_out_n_NC),
+- 430      .tx_dclk_out_p_dclk_out (tx2_dclk_out_p_dclk_out),
+- 431      .tx_dclk_in_n_NC (tx2_dclk_in_n_NC),
+- 432      .tx_dclk_in_p_dclk_in (tx2_dclk_in_p_dclk_in),
+- 433      .tx_idata_out_n_idata0 (tx2_idata_out_n_idata0),
+- 434      .tx_idata_out_p_idata1 (tx2_idata_out_p_idata1),
+- 435      .tx_qdata_out_n_qdata2 (tx2_qdata_out_n_qdata2),
+- 436      .tx_qdata_out_p_qdata3 (tx2_qdata_out_p_qdata3),
+- 437      .tx_strobe_out_n_NC (tx2_strobe_out_n_NC),
+- 438      .tx_strobe_out_p_strobe_out (tx2_strobe_out_p_strobe_out),
+- 440      .rx_clk_div (adc_2_clk_div),
+- 441      .rx_clk (adc_2_clk),
+- 442      .rx_ssi_rst (adc_2_ssi_rst),
+- 444      .dac_rst (tx2_rst),
+- 445      .dac_clk_div (dac_2_clk_div),
+- 447      .dac_data_0 (dac_2_data_0),
+- 448      .dac_data_1 (dac_2_data_1),
+- 449      .dac_data_2 (dac_2_data_2),
+- 450      .dac_data_3 (dac_2_data_3),
+- 451      .dac_data_strb (dac_2_data_strobe),
+- 452      .dac_data_clk (dac_2_data_clk),
+- 453      .dac_data_valid (dac_2_data_valid),
+- 455      .mssi_sync (mssi_sync)
+- 456     );
+- 479       .tx_symb_8_16b (tx2_symb_8_16b)
+- 480     );
++ 421       .CMOS_LVDS_N (CMOS_LVDS_N),
++ 421       .NUM_LANES (TX_NUM_LANES),
++ 421       .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
++ 421       .USE_BUFG (TX_USE_BUFG),
++ 421       .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
++ 422       .ref_clk (ref_clk),
++ 422       .up_clk (up_clk),
++ 456       .tx_output_enable(tx_output_enable),
++ 456       .tx_dclk_out_n_NC (tx2_dclk_out_n_NC),
++ 456       .tx_dclk_out_p_dclk_out (tx2_dclk_out_p_dclk_out),
++ 456       .tx_dclk_in_n_NC (tx2_dclk_in_n_NC),
++ 456       .tx_dclk_in_p_dclk_in (tx2_dclk_in_p_dclk_in),
++ 456       .tx_idata_out_n_idata0 (tx2_idata_out_n_idata0),
++ 456       .tx_idata_out_p_idata1 (tx2_idata_out_p_idata1),
++ 456       .tx_qdata_out_n_qdata2 (tx2_qdata_out_n_qdata2),
++ 456       .tx_qdata_out_p_qdata3 (tx2_qdata_out_p_qdata3),
++ 456       .tx_strobe_out_n_NC (tx2_strobe_out_n_NC),
++ 456       .tx_strobe_out_p_strobe_out (tx2_strobe_out_p_strobe_out),
++ 456       .rx_clk_div (adc_2_clk_div),
++ 456       .rx_clk (adc_2_clk),
++ 456       .rx_ssi_rst (adc_2_ssi_rst),
++ 456       .dac_rst (tx2_rst),
++ 456       .dac_clk_div (dac_2_clk_div),
++ 456       .dac_data_0 (dac_2_data_0),
++ 456       .dac_data_1 (dac_2_data_1),
++ 456       .dac_data_2 (dac_2_data_2),
++ 456       .dac_data_3 (dac_2_data_3),
++ 456       .dac_data_strb (dac_2_data_strobe),
++ 456       .dac_data_clk (dac_2_data_clk),
++ 456       .dac_data_valid (dac_2_data_valid),
++ 456       .mssi_sync (mssi_sync));
++ 480       .tx_symb_8_16b (tx2_symb_8_16b));
+
+Clone Blocks:

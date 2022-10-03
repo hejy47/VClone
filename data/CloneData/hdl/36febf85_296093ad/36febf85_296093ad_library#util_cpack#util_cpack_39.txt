@@ -1,0 +1,74 @@
+Source Block: hdl/library/util_cpack/util_cpack.v@243:279@HdlStmProcess
+  end
+  endgenerate
+
+  // concat
+
+  always @(posedge adc_clk) begin
+    adc_mux_valid <= & adc_mux_valid_s;
+    adc_mux_enable[0] <= & adc_mux_enable_0_s;
+    adc_mux_enable[1] <= & adc_mux_enable_1_s;
+    adc_mux_enable[2] <= & adc_mux_enable_2_s;
+    adc_mux_enable[3] <= & adc_mux_enable_3_s;
+    adc_mux_enable[4] <= & adc_mux_enable_4_s;
+    adc_mux_enable[5] <= & adc_mux_enable_5_s;
+    adc_mux_enable[6] <= & adc_mux_enable_6_s;
+    adc_mux_enable[7] <= & adc_mux_enable_7_s;
+    adc_mux_data[((CH_SCNT*16* 9)-1):(CH_SCNT*16* 1)] <= 'd0;
+    adc_mux_data[((CH_SCNT*16*19)-1):(CH_SCNT*16*12)] <= 'd0;
+    adc_mux_data[((CH_SCNT*16*29)-1):(CH_SCNT*16*23)] <= 'd0;
+    adc_mux_data[((CH_SCNT*16*39)-1):(CH_SCNT*16*34)] <= 'd0;
+    adc_mux_data[((CH_SCNT*16*49)-1):(CH_SCNT*16*45)] <= 'd0;
+    adc_mux_data[((CH_SCNT*16*59)-1):(CH_SCNT*16*56)] <= 'd0;
+    adc_mux_data[((CH_SCNT*16*69)-1):(CH_SCNT*16*67)] <= 'd0;
+    adc_mux_data[((CH_SCNT*16*79)-1):(CH_SCNT*16*78)] <= 'd0;
+    adc_mux_data[((CH_SCNT*16* 1)-1):(CH_SCNT*16* 0)] <= adc_mux_data_0_s;
+    adc_mux_data[((CH_SCNT*16*12)-1):(CH_SCNT*16*10)] <= adc_mux_data_1_s;
+    adc_mux_data[((CH_SCNT*16*23)-1):(CH_SCNT*16*20)] <= adc_mux_data_2_s;
+    adc_mux_data[((CH_SCNT*16*34)-1):(CH_SCNT*16*30)] <= adc_mux_data_3_s;
+    adc_mux_data[((CH_SCNT*16*45)-1):(CH_SCNT*16*40)] <= adc_mux_data_4_s;
+    adc_mux_data[((CH_SCNT*16*56)-1):(CH_SCNT*16*50)] <= adc_mux_data_5_s;
+    adc_mux_data[((CH_SCNT*16*67)-1):(CH_SCNT*16*60)] <= adc_mux_data_6_s;
+    adc_mux_data[((CH_SCNT*16*78)-1):(CH_SCNT*16*70)] <= adc_mux_data_7_s;
+  end
+
+  // store & fwd
+
+  generate
+  for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
+
+Diff Content:
+- 258     adc_mux_data[((CH_SCNT*16* 9)-1):(CH_SCNT*16* 1)] <= 'd0;
+- 259     adc_mux_data[((CH_SCNT*16*19)-1):(CH_SCNT*16*12)] <= 'd0;
+- 260     adc_mux_data[((CH_SCNT*16*29)-1):(CH_SCNT*16*23)] <= 'd0;
+- 261     adc_mux_data[((CH_SCNT*16*39)-1):(CH_SCNT*16*34)] <= 'd0;
+- 262     adc_mux_data[((CH_SCNT*16*49)-1):(CH_SCNT*16*45)] <= 'd0;
+- 263     adc_mux_data[((CH_SCNT*16*59)-1):(CH_SCNT*16*56)] <= 'd0;
+- 264     adc_mux_data[((CH_SCNT*16*69)-1):(CH_SCNT*16*67)] <= 'd0;
+- 265     adc_mux_data[((CH_SCNT*16*79)-1):(CH_SCNT*16*78)] <= 'd0;
+- 266     adc_mux_data[((CH_SCNT*16* 1)-1):(CH_SCNT*16* 0)] <= adc_mux_data_0_s;
+- 267     adc_mux_data[((CH_SCNT*16*12)-1):(CH_SCNT*16*10)] <= adc_mux_data_1_s;
+- 268     adc_mux_data[((CH_SCNT*16*23)-1):(CH_SCNT*16*20)] <= adc_mux_data_2_s;
+- 269     adc_mux_data[((CH_SCNT*16*34)-1):(CH_SCNT*16*30)] <= adc_mux_data_3_s;
+- 270     adc_mux_data[((CH_SCNT*16*45)-1):(CH_SCNT*16*40)] <= adc_mux_data_4_s;
+- 271     adc_mux_data[((CH_SCNT*16*56)-1):(CH_SCNT*16*50)] <= adc_mux_data_5_s;
+- 272     adc_mux_data[((CH_SCNT*16*67)-1):(CH_SCNT*16*60)] <= adc_mux_data_6_s;
+- 273     adc_mux_data[((CH_SCNT*16*78)-1):(CH_SCNT*16*70)] <= adc_mux_data_7_s;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16* 9)-1):(SAMPLES_PCHANNEL*16* 1)] <= 'd0;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*19)-1):(SAMPLES_PCHANNEL*16*12)] <= 'd0;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*29)-1):(SAMPLES_PCHANNEL*16*23)] <= 'd0;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*39)-1):(SAMPLES_PCHANNEL*16*34)] <= 'd0;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*49)-1):(SAMPLES_PCHANNEL*16*45)] <= 'd0;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*59)-1):(SAMPLES_PCHANNEL*16*56)] <= 'd0;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*69)-1):(SAMPLES_PCHANNEL*16*67)] <= 'd0;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*79)-1):(SAMPLES_PCHANNEL*16*78)] <= 'd0;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16* 1)-1):(SAMPLES_PCHANNEL*16* 0)] <= adc_mux_data_0_s;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*12)-1):(SAMPLES_PCHANNEL*16*10)] <= adc_mux_data_1_s;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*23)-1):(SAMPLES_PCHANNEL*16*20)] <= adc_mux_data_2_s;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*34)-1):(SAMPLES_PCHANNEL*16*30)] <= adc_mux_data_3_s;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*45)-1):(SAMPLES_PCHANNEL*16*40)] <= adc_mux_data_4_s;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*56)-1):(SAMPLES_PCHANNEL*16*50)] <= adc_mux_data_5_s;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*67)-1):(SAMPLES_PCHANNEL*16*60)] <= adc_mux_data_6_s;
++ 273     adc_mux_data[((SAMPLES_PCHANNEL*16*78)-1):(SAMPLES_PCHANNEL*16*70)] <= adc_mux_data_7_s;
+
+Clone Blocks:

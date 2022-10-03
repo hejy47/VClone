@@ -1,0 +1,30 @@
+Source Block: hdl/library/common/up_clock_mon.v@112:132@HdlStmProcess
+      d_count_run_m2 <= d_count_run_m1;
+      d_count_run_m3 <= d_count_run_m2;
+    end
+  end
+
+  always @(posedge d_clk) begin
+    if (d_count_reset_s == 1'b1) begin
+      d_count <= 'h00;
+    end else if (d_count_run_m3 == 1'b1) begin
+      if (d_count[32] == 1'b0) begin
+        d_count <= d_count + 1'b1;
+      end else begin
+        d_count <= {33{1'b1}};
+      end
+    end
+  end
+
+endmodule
+
+// ***************************************************************************
+// ***************************************************************************
+
+Diff Content:
+- 121       if (d_count[32] == 1'b0) begin
+- 124         d_count <= {33{1'b1}};
++ 121       if (d_count[TOTAL_WIDTH] == 1'b0) begin
++ 124         d_count <= {TOTAL_WIDTH+1{1'b1}};
+
+Clone Blocks:

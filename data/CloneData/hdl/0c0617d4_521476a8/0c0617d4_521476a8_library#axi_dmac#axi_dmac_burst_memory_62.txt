@@ -1,0 +1,52 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@221:237@HdlStmProcess
+    src_id <= src_id_next;
+    src_id_reduced_msb <= ^src_id_next[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_reset == 1'b1 || src_last_beat == 1'b1) begin
+    src_beat_counter <= 'h00;
+  end else if (src_beat == 1'b1) begin
+    src_beat_counter <= src_beat_counter + 1'b1;
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_last_beat == 1'b1) begin
+    burst_len_mem[src_id_reduced] <= src_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN];
+  end
+
+Diff Content:
+- 226 always @(posedge src_clk) begin
+- 227   if (src_reset == 1'b1 || src_last_beat == 1'b1) begin
+- 228     src_beat_counter <= 'h00;
+- 229   end else if (src_beat == 1'b1) begin
+- 230     src_beat_counter <= src_beat_counter + 1'b1;
+- 231   end
+- 232 end
++ 232   assign src_data_request_id = src_dest_id;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_burst_memory.v@211:229
+  end else begin
+    src_id_next = src_id;
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_reset == 1'b1) begin
+    src_id <= 'h00;
+    src_id_reduced_msb <= 1'b0;
+  end else begin
+    src_id <= src_id_next;
+    src_id_reduced_msb <= ^src_id_next[ID_WIDTH-1-:2];
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_reset == 1'b1 || src_last_beat == 1'b1) begin
+    src_beat_counter <= 'h00;
+  end else if (src_beat == 1'b1) begin
+

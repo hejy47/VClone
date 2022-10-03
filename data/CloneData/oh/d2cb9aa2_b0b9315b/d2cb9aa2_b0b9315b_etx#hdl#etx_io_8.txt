@@ -1,0 +1,101 @@
+Source Block: oh/etx/hdl/etx_io.v@79:89@HdlIdDef
+   //#############################
+
+   reg [63:0]   pdata;
+   reg [7:0]    pframe;
+   reg [1:0]    txenb_sync;
+   wire         txenb = txenb_sync[0];
+   reg [1:0]    txgpio_sync;
+   wire         txgpio = txgpio_sync[0];
+   integer      n;
+   
+      // Sync these control bits into our domain
+
+Diff Content:
+- 84    wire         txenb = txenb_sync[0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/etx/hdl/etx_io.v@76:86
+   
+   //#############################
+   //# Serializer instantiations
+   //#############################
+
+   reg [63:0]   pdata;
+   reg [7:0]    pframe;
+   reg [1:0]    txenb_sync;
+   wire         txenb = txenb_sync[0];
+   reg [1:0]    txgpio_sync;
+   wire         txgpio = txgpio_sync[0];
+
+Clone Blocks 2:
+oh/etx/hdl/etx_io.v@81:91
+   reg [63:0]   pdata;
+   reg [7:0]    pframe;
+   reg [1:0]    txenb_sync;
+   wire         txenb = txenb_sync[0];
+   reg [1:0]    txgpio_sync;
+   wire         txgpio = txgpio_sync[0];
+   integer      n;
+   
+      // Sync these control bits into our domain
+   always @ (posedge txlclk_p) begin
+
+
+Clone Blocks 3:
+oh/etx/hdl/etx_io.v@80:90
+
+   reg [63:0]   pdata;
+   reg [7:0]    pframe;
+   reg [1:0]    txenb_sync;
+   wire         txenb = txenb_sync[0];
+   reg [1:0]    txgpio_sync;
+   wire         txgpio = txgpio_sync[0];
+   integer      n;
+   
+      // Sync these control bits into our domain
+   always @ (posedge txlclk_p) begin
+
+Clone Blocks 4:
+oh/etx/hdl/etx_io.v@77:87
+   //#############################
+   //# Serializer instantiations
+   //#############################
+
+   reg [63:0]   pdata;
+   reg [7:0]    pframe;
+   reg [1:0]    txenb_sync;
+   wire         txenb = txenb_sync[0];
+   reg [1:0]    txgpio_sync;
+   wire         txgpio = txgpio_sync[0];
+   integer      n;
+
+Clone Blocks 5:
+oh/etx/hdl/etx_io.v@78:88
+   //# Serializer instantiations
+   //#############################
+
+   reg [63:0]   pdata;
+   reg [7:0]    pframe;
+   reg [1:0]    txenb_sync;
+   wire         txenb = txenb_sync[0];
+   reg [1:0]    txgpio_sync;
+   wire         txgpio = txgpio_sync[0];
+   integer      n;
+   
+
+Clone Blocks 6:
+oh/etx/hdl/etx_io.v@82:92
+   reg [7:0]    pframe;
+   reg [1:0]    txenb_sync;
+   wire         txenb = txenb_sync[0];
+   reg [1:0]    txgpio_sync;
+   wire         txgpio = txgpio_sync[0];
+   integer      n;
+   
+      // Sync these control bits into our domain
+   always @ (posedge txlclk_p) begin
+
+      txenb_sync <= {ecfg_tx_enable, txenb_sync[1]};
+

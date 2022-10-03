@@ -1,0 +1,57 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4266:4276@HdlIdDef
+   wire sel_ref_byte0; // select byte0 from the reference information of the transaction 
+   wire sel_ref_byte1; // select byte1 from the reference information of the transaction 
+   wire sel_ref_byte2; // select byte2 from the reference information of the transaction 
+   wire sel_ref_byte3; // select byte3 from the reference information of the transaction 
+   wire sel_ref_byte4; // select byte4 from the reference information of the transaction 
+   wire sel_ref_byte5; // select byte5 from the reference information of the transaction 
+
+   //####################################################
+   //#               Interface to the arbiter
+   //#
+   //#####################################################
+
+Diff Content:
+- 4271    wire sel_ref_byte5; // select byte5 from the reference information of the transaction 
++ 4271    reg 		 frame_del;
++ 4271    reg [FAD:0] 	 wr_binary_pointer;
++ 4271    reg 		 wr_fifo_full;
++ 4271    wire [FAD-1:0]  rd_addr_tlc;
++ 4271    wire [FAD:0]    rd_binary_next_tlc;
++ 4271    wire [FAD:0]    rd_gray_next_tlc;
++ 4271    wire [FAD:0]    rd_addr_traninfo0_next_tlc;
++ 4271    wire [FAD-1:0]  rd_addr_traninfo1_tlc;
++ 4271    wire [FAD-1:0]  rd_addr_traninfo2_tlc;
++ 4271    wire [2*LW-1:0] traninfo0_tlc;
++ 4271    wire [2*LW-1:0] traninfo1_tlc;
++ 4271    wire [2*LW-1:0] traninfo2_tlc;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4264:4274
+   wire [1:0] 	  burst_backup_next_cnt; // Next burst backup counter value
+   wire 	  freeze_fifo;           // FIFO and main counter advance should stoped
+   wire sel_ref_byte0; // select byte0 from the reference information of the transaction 
+   wire sel_ref_byte1; // select byte1 from the reference information of the transaction 
+   wire sel_ref_byte2; // select byte2 from the reference information of the transaction 
+   wire sel_ref_byte3; // select byte3 from the reference information of the transaction 
+   wire sel_ref_byte4; // select byte4 from the reference information of the transaction 
+   wire sel_ref_byte5; // select byte5 from the reference information of the transaction 
+
+   //####################################################
+   //#               Interface to the arbiter
+
+Clone Blocks 2:
+oh/elink/dv/elink_e16_model.v@4265:4275
+   wire 	  freeze_fifo;           // FIFO and main counter advance should stoped
+   wire sel_ref_byte0; // select byte0 from the reference information of the transaction 
+   wire sel_ref_byte1; // select byte1 from the reference information of the transaction 
+   wire sel_ref_byte2; // select byte2 from the reference information of the transaction 
+   wire sel_ref_byte3; // select byte3 from the reference information of the transaction 
+   wire sel_ref_byte4; // select byte4 from the reference information of the transaction 
+   wire sel_ref_byte5; // select byte5 from the reference information of the transaction 
+
+   //####################################################
+   //#               Interface to the arbiter
+   //#
+

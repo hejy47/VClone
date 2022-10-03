@@ -1,0 +1,25 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1650:1664@HdlStmProcess
+
+   //#############################
+   //# FIFO Read State Machine
+   //#############################
+   
+   always @(posedge rxi_lclk or posedge reset)
+     if(reset)
+       fifo_read <= 1'b0;
+     else
+       fifo_read <= ~(fifo_empty | stop_fifo_read);
+
+   always @(posedge rxi_lclk or posedge reset)
+     if(reset)
+       rd_binary_pointer[FAD:0]  <= {(FAD+1){1'b0}};
+     else if(fifo_read)
+
+Diff Content:
+- 1655    always @(posedge rxi_lclk or posedge reset)
+- 1656      if(reset)
+- 1657        fifo_read <= 1'b0;
+- 1658      else
+- 1659        fifo_read <= ~(fifo_empty | stop_fifo_read);
+
+Clone Blocks:

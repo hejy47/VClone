@@ -1,0 +1,40 @@
+Source Block: hdl/library/jesd204/axi_jesd204_tx/jesd204_up_tx.v@166:184@HdlStmProcess
+    end
+    endcase
+  end
+end
+
+always @(posedge up_clk) begin
+  if (up_reset == 1'b1) begin
+    up_ctrl_manual_sync_request <= 1'b0;
+  end else if (up_wreq == 1'b1 && up_waddr == 12'h092) begin
+    up_ctrl_manual_sync_request <= up_wdata[0];
+  end else begin
+    up_ctrl_manual_sync_request <= 1'b0;
+  end
+end
+
+/* Shared ILAS data can be access through any lane register map window */
+
+/* Shared ILAS data */
+reg [7:0] up_cfg_ilas_data_did = 'h00;
+
+Diff Content:
+- 171 always @(posedge up_clk) begin
+- 172   if (up_reset == 1'b1) begin
+- 173     up_ctrl_manual_sync_request <= 1'b0;
+- 174   end else if (up_wreq == 1'b1 && up_waddr == 12'h092) begin
+- 175     up_ctrl_manual_sync_request <= up_wdata[0];
+- 176   end else begin
+- 177     up_ctrl_manual_sync_request <= 1'b0;
+- 179 end
++ 177   always @(posedge up_clk) begin
++ 177     if (up_reset == 1'b1) begin
++ 177       up_ctrl_manual_sync_request <= 1'b0;
++ 177     end else if (up_wreq == 1'b1 && up_waddr == 12'h092) begin
++ 177       up_ctrl_manual_sync_request <= up_wdata[0];
++ 177     end else begin
++ 177       up_ctrl_manual_sync_request <= 1'b0;
++ 177     end
+
+Clone Blocks:

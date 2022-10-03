@@ -1,0 +1,63 @@
+Source Block: zipcpu/rtl/core/pipemem.v@214:225@HdlStmProcess
+			o_wb_we   <= i_op[0];
+		else if ((OPT_ZERO_ON_IDLE)&&(!cyc))
+			o_wb_we   <= 1'b0;
+
+	initial	o_valid = 1'b0;
+	always @(posedge i_clk)
+		o_valid <= (cyc)&&(i_wb_ack)&&(!o_wb_we);
+	initial	o_err = 1'b0;
+	always @(posedge i_clk)
+		o_err <= ((cyc)&&(i_wb_err))||((i_pipe_stb)&&(misaligned));
+	assign	o_busy = cyc;
+
+
+Diff Content:
++ 219 	if (i_reset)
++ 219 		o_valid <= 1'b0;
++ 219 	else
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/pipemem.v@216:226
+			o_wb_we   <= 1'b0;
+
+	initial	o_valid = 1'b0;
+	always @(posedge i_clk)
+		o_valid <= (cyc)&&(i_wb_ack)&&(!o_wb_we);
+	initial	o_err = 1'b0;
+	always @(posedge i_clk)
+		o_err <= ((cyc)&&(i_wb_err))||((i_pipe_stb)&&(misaligned));
+	assign	o_busy = cyc;
+
+	wire	[8:0]	w_wreg;
+
+Clone Blocks 2:
+zipcpu/rtl/core/pipemem.v@213:223
+		if ((i_pipe_stb)&&(!cyc))
+			o_wb_we   <= i_op[0];
+		else if ((OPT_ZERO_ON_IDLE)&&(!cyc))
+			o_wb_we   <= 1'b0;
+
+	initial	o_valid = 1'b0;
+	always @(posedge i_clk)
+		o_valid <= (cyc)&&(i_wb_ack)&&(!o_wb_we);
+	initial	o_err = 1'b0;
+	always @(posedge i_clk)
+		o_err <= ((cyc)&&(i_wb_err))||((i_pipe_stb)&&(misaligned));
+
+Clone Blocks 3:
+zipcpu/rtl/core/pipemem.v@217:228
+
+	initial	o_valid = 1'b0;
+	always @(posedge i_clk)
+		o_valid <= (cyc)&&(i_wb_ack)&&(!o_wb_we);
+	initial	o_err = 1'b0;
+	always @(posedge i_clk)
+		o_err <= ((cyc)&&(i_wb_err))||((i_pipe_stb)&&(misaligned));
+	assign	o_busy = cyc;
+
+	wire	[8:0]	w_wreg;
+	assign	w_wreg = fifo_oreg[rdaddr];
+	always @(posedge i_clk)
+

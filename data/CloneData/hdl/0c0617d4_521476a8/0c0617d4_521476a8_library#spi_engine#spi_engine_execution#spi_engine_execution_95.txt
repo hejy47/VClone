@@ -1,0 +1,51 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@575:585@HdlStmAssign
+
+// end_of_word will signal the end of a transaction, pushing the command
+// stream execution to the next command. end_of_word in normal mode can be
+// generated using the global bit_counter
+assign last_bit = bit_counter == word_length - 1;
+assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (transfer_active == 1'b1) begin
+    sclk_int <= cpol ^ cpha ^ ntx_rx;
+  end else begin
+
+Diff Content:
+- 580 assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@574:584
+endgenerate
+
+// end_of_word will signal the end of a transaction, pushing the command
+// stream execution to the next command. end_of_word in normal mode can be
+// generated using the global bit_counter
+assign last_bit = bit_counter == word_length - 1;
+assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (transfer_active == 1'b1) begin
+    sclk_int <= cpol ^ cpha ^ ntx_rx;
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@577:593
+// stream execution to the next command. end_of_word in normal mode can be
+// generated using the global bit_counter
+assign last_bit = bit_counter == word_length - 1;
+assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
+
+always @(posedge clk) begin
+  if (transfer_active == 1'b1) begin
+    sclk_int <= cpol ^ cpha ^ ntx_rx;
+  end else begin
+    sclk_int <= cpol;
+  end
+end
+
+// Additional register stage to improve timing
+always @(posedge clk) begin
+  sclk <= sclk_int;
+  sdo <= sdo_int_s;
+

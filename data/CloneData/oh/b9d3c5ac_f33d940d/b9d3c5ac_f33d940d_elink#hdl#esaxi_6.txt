@@ -1,0 +1,92 @@
+Source Block: oh/elink/hdl/esaxi.v@517:527@HdlStmAssign
+   		
+   //Block select
+   assign mi_ecfg_sel     = mi_en & (mi_addr[19:16]==EGROUP_MMR);
+   assign mi_rx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_RXMMU);
+   assign mi_tx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_TXMMU);
+   assign mi_embox_sel    = mi_en & (mi_addr[19:16]==EGROUP_EMBOX);
+   				  
+   //Data
+   assign mi_din[31:0]     = emwr_data[31:0];
+	 
+   //Readback
+
+Diff Content:
+- 522    assign mi_embox_sel    = mi_en & (mi_addr[19:16]==EGROUP_EMBOX);
++ 522    assign mi_ecfg_sel     = mi_en & (mi_addr[19:16]==`EGROUP_MMR);
++ 522    assign mi_rx_emmu_sel  = mi_en & (mi_addr[19:16]==`EGROUP_RXMMU);
++ 522    assign mi_tx_emmu_sel  = mi_en & (mi_addr[19:16]==`EGROUP_TXMMU);
++ 522    assign mi_embox_sel    = mi_en & (mi_addr[19:16]==`EGROUP_EMBOX);
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/esaxi.v@516:526
+			           emrq_dstaddr[19:0];
+   		
+   //Block select
+   assign mi_ecfg_sel     = mi_en & (mi_addr[19:16]==EGROUP_MMR);
+   assign mi_rx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_RXMMU);
+   assign mi_tx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_TXMMU);
+   assign mi_embox_sel    = mi_en & (mi_addr[19:16]==EGROUP_EMBOX);
+   				  
+   //Data
+   assign mi_din[31:0]     = emwr_data[31:0];
+	 
+
+Clone Blocks 2:
+oh/elink/hdl/esaxi.v@520:530
+   assign mi_rx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_RXMMU);
+   assign mi_tx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_TXMMU);
+   assign mi_embox_sel    = mi_en & (mi_addr[19:16]==EGROUP_EMBOX);
+   				  
+   //Data
+   assign mi_din[31:0]     = emwr_data[31:0];
+	 
+   //Readback
+   always@ (posedge mi_clk)
+     begin
+	mi_ecfg_reg    <= mi_ecfg_sel;
+
+Clone Blocks 3:
+oh/elink/hdl/esaxi.v@514:524
+   //Read/write address
+   assign mi_addr[19:0] =  mi_we ? emwr_dstaddr[19:0] :
+			           emrq_dstaddr[19:0];
+   		
+   //Block select
+   assign mi_ecfg_sel     = mi_en & (mi_addr[19:16]==EGROUP_MMR);
+   assign mi_rx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_RXMMU);
+   assign mi_tx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_TXMMU);
+   assign mi_embox_sel    = mi_en & (mi_addr[19:16]==EGROUP_EMBOX);
+   				  
+   //Data
+
+Clone Blocks 4:
+oh/elink/hdl/esaxi.v@510:521
+   //Only 32 bit writes supported
+   assign mi_we         =  mi_wr;   
+   assign mi_en         =  mi_wr | mi_rd;
+
+   //Read/write address
+   assign mi_addr[19:0] =  mi_we ? emwr_dstaddr[19:0] :
+			           emrq_dstaddr[19:0];
+   		
+   //Block select
+   assign mi_ecfg_sel     = mi_en & (mi_addr[19:16]==EGROUP_MMR);
+   assign mi_rx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_RXMMU);
+   assign mi_tx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_TXMMU);
+
+Clone Blocks 5:
+oh/elink/hdl/esaxi.v@515:525
+   assign mi_addr[19:0] =  mi_we ? emwr_dstaddr[19:0] :
+			           emrq_dstaddr[19:0];
+   		
+   //Block select
+   assign mi_ecfg_sel     = mi_en & (mi_addr[19:16]==EGROUP_MMR);
+   assign mi_rx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_RXMMU);
+   assign mi_tx_emmu_sel  = mi_en & (mi_addr[19:16]==EGROUP_TXMMU);
+   assign mi_embox_sel    = mi_en & (mi_addr[19:16]==EGROUP_EMBOX);
+   				  
+   //Data
+   assign mi_din[31:0]     = emwr_data[31:0];
+

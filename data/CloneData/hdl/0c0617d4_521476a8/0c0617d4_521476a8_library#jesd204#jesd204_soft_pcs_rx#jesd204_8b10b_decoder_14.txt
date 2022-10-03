@@ -1,0 +1,331 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v@303:392@HdlStmProcess
+    disparity3b = 2'b00;
+  end
+  endcase
+end
+
+always @(*) begin
+  notintable3b = 1'b0;
+
+  if (charisk == 1'b1) begin
+    case (in_char[9:6] ^ {4{in_char[5]}})
+    4'b1101: begin
+      data3b = 3'd0;
+    end
+    4'b0011: begin
+      data3b = 3'd3;
+    end
+    4'b1011: begin
+      data3b = 3'd4;
+    end
+    4'b1010: begin
+      data3b = 3'd5;
+    end
+    4'b1110: begin
+      data3b = 3'd7;
+    end
+    default: begin
+      data3b = 3'd0;
+      notintable3b = 1'b1;
+    end
+    endcase
+  end else begin
+    case (in_char[9:6])
+    4'b0010: begin
+      data3b = 3'd0;
+    end
+    4'b1101: begin
+      data3b = 3'd0;
+    end
+    4'b1001: begin
+      data3b = 3'd1;
+    end
+    4'b1010: begin
+      data3b = 3'd2;
+    end
+    4'b1100: begin
+      data3b = 3'd3;
+    end
+    4'b0011: begin
+      data3b = 3'd3;
+    end
+    4'b0100: begin
+      data3b = 3'd4;
+    end
+    4'b1011: begin
+      data3b = 3'd4;
+    end
+    4'b0101: begin
+      data3b = 3'd5;
+    end
+    4'b0110: begin
+      data3b = 3'd6;
+    end
+    4'b1000: begin
+      data3b = 3'd7;
+      notintable3b = in_char[5:4] == 2'b00;
+    end
+    4'b0111: begin
+      data3b = 3'd7;
+      notintable3b = in_char[5:4] == 2'b11;
+    end
+    4'b0001: begin
+      data3b = 3'd7;
+      notintable3b = in_char[5:4] != 2'b00;
+    end
+    4'b1110: begin
+      data3b = 3'd7;
+      notintable3b = in_char[5:4] != 2'b11;
+    end
+    default: begin
+      data3b = 3'd0;
+      notintable3b = 1'b1;
+    end
+    endcase
+  end
+end
+
+always @(*) begin
+  if (disparity3b == disparity5b && disparity3b != 2'b00) begin
+    notintable_disparity = 1'b1;
+  end else begin
+
+Diff Content:
+- 308 always @(*) begin
+- 309   notintable3b = 1'b0;
+- 311   if (charisk == 1'b1) begin
+- 312     case (in_char[9:6] ^ {4{in_char[5]}})
+- 313     4'b1101: begin
+- 314       data3b = 3'd0;
+- 316     4'b0011: begin
+- 317       data3b = 3'd3;
+- 319     4'b1011: begin
+- 320       data3b = 3'd4;
+- 322     4'b1010: begin
+- 323       data3b = 3'd5;
+- 325     4'b1110: begin
+- 326       data3b = 3'd7;
+- 329       data3b = 3'd0;
+- 330       notintable3b = 1'b1;
+- 333   end else begin
+- 336       data3b = 3'd0;
+- 339       data3b = 3'd0;
+- 340     end
+- 341     4'b1001: begin
+- 342       data3b = 3'd1;
+- 343     end
+- 344     4'b1010: begin
+- 345       data3b = 3'd2;
+- 348       data3b = 3'd3;
+- 351       data3b = 3'd3;
+- 354       data3b = 3'd4;
+- 357       data3b = 3'd4;
+- 358     end
+- 359     4'b0101: begin
+- 360       data3b = 3'd5;
+- 361     end
+- 362     4'b0110: begin
+- 363       data3b = 3'd6;
+- 366       data3b = 3'd7;
+- 367       notintable3b = in_char[5:4] == 2'b00;
+- 370       data3b = 3'd7;
+- 371       notintable3b = in_char[5:4] == 2'b11;
+- 374       data3b = 3'd7;
+- 375       notintable3b = in_char[5:4] != 2'b00;
+- 378       data3b = 3'd7;
+- 379       notintable3b = in_char[5:4] != 2'b11;
+- 382       data3b = 3'd0;
+- 383       notintable3b = 1'b1;
+- 387 end
++ 314     case (in_char[5:0])
++ 314     6'b000011: begin
++ 314       data5b = 5'd28;
++ 314       disparity5b = 2'b11;
++ 317     6'b111100: begin
++ 317       data5b = 5'd28;
++ 317       disparity5b = 2'b01;
++ 320     6'b000110: begin
++ 320       data5b = 5'd00;
++ 320       disparity5b = 2'b11;
++ 323     6'b111001: begin
++ 323       data5b = 5'd00;
++ 323       disparity5b = 2'b01;
++ 326     6'b010001: begin
++ 326       data5b = 5'd01;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b101110: begin
++ 326       data5b = 5'd01;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b010010: begin
++ 326       data5b = 5'd02;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b101101: begin
++ 326       data5b = 5'd02;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b100011: begin
++ 326       data5b = 5'd03;
++ 326     end
++ 326     6'b010100: begin
++ 326       data5b = 5'd04;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b101011: begin
++ 326       data5b = 5'd04;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b100101: begin
++ 326       data5b = 5'd05;
++ 326     end
++ 326     6'b100110: begin
++ 326       data5b = 5'd06;
++ 326     end
++ 326     6'b000111: begin
++ 326       data5b = 5'd7;
++ 326       disparity5b = 2'b11;
++ 326       ignore5b = 1'b1;
++ 326     end
++ 326     6'b111000: begin
++ 326       data5b = 5'd7;
++ 326       disparity5b = 2'b01;
++ 326       ignore5b = 1'b1;
++ 326     end
++ 326     6'b011000: begin
++ 326       data5b = 5'd8;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b100111: begin
++ 326       data5b = 5'd8;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b101001: begin
++ 326       data5b = 5'd9;
++ 326     end
++ 326     6'b101010: begin
++ 326       data5b = 5'd10;
++ 326     end
++ 326     6'b001011: begin
++ 326       data5b = 5'd11;
++ 326     end
++ 326     6'b101100: begin
++ 326       data5b = 5'd12;
++ 326     end
++ 326     6'b001101: begin
++ 326       data5b = 5'd13;
++ 326     end
++ 326     6'b001110: begin
++ 326       data5b = 5'd14;
++ 326     end
++ 326     6'b000101: begin
++ 326       data5b = 5'd15;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b111010: begin
++ 326       data5b = 5'd15;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b001001: begin
++ 326       data5b = 5'd16;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b110110: begin
++ 326       data5b = 5'd16;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b110001: begin
++ 326       data5b = 5'd17;
++ 326     end
++ 326     6'b110010: begin
++ 326       data5b = 5'd18;
++ 326     end
++ 326     6'b010011: begin
++ 326       data5b = 5'd19;
++ 326     end
++ 326     6'b110100: begin
++ 326       data5b = 5'd20;
++ 326     end
++ 326     6'b010101: begin
++ 326       data5b = 5'd21;
++ 326     end
++ 326     6'b010110: begin
++ 326       data5b = 5'd22;
++ 326     end
++ 326     6'b101000: begin
++ 326       data5b = 5'd23;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b010111: begin
++ 326       data5b = 5'd23;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b001100: begin
++ 326       data5b = 5'd24;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b110011: begin
++ 326       data5b = 5'd24;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b011001: begin
++ 326       data5b = 5'd25;
++ 326     end
++ 326     6'b011010: begin
++ 326       data5b = 5'd26;
++ 326     end
++ 326     6'b100100: begin
++ 326       data5b = 5'd27;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b011011: begin
++ 326       data5b = 5'd27;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b011100: begin
++ 326       data5b = 5'd28;
++ 326     end
++ 326     6'b100010: begin
++ 326       data5b = 5'd29;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b011101: begin
++ 326       data5b = 5'd29;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b100001: begin
++ 326       data5b = 5'd30;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b011110: begin
++ 326       data5b = 5'd30;
++ 326       disparity5b = 2'b01;
++ 326     end
++ 326     6'b001010: begin
++ 326       data5b = 5'd31;
++ 326       disparity5b = 2'b11;
++ 326     end
++ 326     6'b110101: begin
++ 326       data5b = 5'd31;
++ 326       disparity5b = 2'b01;
++ 330       data5b = 5'd00;
++ 330       notintable5b = 1'b1;
++ 333   end
++ 333   always @(*) begin
++ 333     ignore3b = 1'b0;
++ 336       disparity3b = 2'b11;
++ 345       disparity3b = 2'b01;
++ 348       disparity3b = 2'b11;
++ 348       ignore3b = 1'b1;
++ 351       disparity3b = 2'b01;
++ 351       ignore3b = 1'b1;
++ 354       disparity3b = 2'b11;
++ 363       disparity3b = 2'b01;
++ 367       disparity3b = 2'b11;
++ 371       disparity3b = 2'b01;
++ 375       disparity3b = 2'b11;
++ 379       disparity3b = 2'b01;
++ 383       disparity3b = 2'b00;
+
+Clone Blocks:

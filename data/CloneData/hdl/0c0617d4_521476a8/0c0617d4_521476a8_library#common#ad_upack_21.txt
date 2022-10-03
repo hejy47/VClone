@@ -1,0 +1,64 @@
+Source Block: hdl/library/common/ad_upack.v@133:143@HdlStmAssign
+  if (ovalid_s) begin
+    idata_d <= idata_d_nx >> O_W*UNIT_W;
+  end
+end
+
+assign iready = ~unit_valid[LATENCY*O_W + O_W -1];
+
+assign odata_s = idata_d_nx[O_W*UNIT_W-1:0];
+assign ovalid_s = unit_valid[O_W-1];
+
+generate
+
+Diff Content:
+- 138 assign iready = ~unit_valid[LATENCY*O_W + O_W -1];
++ 138   assign iready = ~unit_valid[LATENCY*O_W + O_W -1];
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_upack.v@127:141
+      end
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (ovalid_s) begin
+    idata_d <= idata_d_nx >> O_W*UNIT_W;
+  end
+end
+
+assign iready = ~unit_valid[LATENCY*O_W + O_W -1];
+
+assign odata_s = idata_d_nx[O_W*UNIT_W-1:0];
+assign ovalid_s = unit_valid[O_W-1];
+
+Clone Blocks 2:
+hdl/library/common/ad_upack.v@135:145
+  end
+end
+
+assign iready = ~unit_valid[LATENCY*O_W + O_W -1];
+
+assign odata_s = idata_d_nx[O_W*UNIT_W-1:0];
+assign ovalid_s = unit_valid[O_W-1];
+
+generate
+  if (O_REG) begin : o_reg
+
+
+Clone Blocks 3:
+hdl/library/common/ad_upack.v@136:146
+end
+
+assign iready = ~unit_valid[LATENCY*O_W + O_W -1];
+
+assign odata_s = idata_d_nx[O_W*UNIT_W-1:0];
+assign ovalid_s = unit_valid[O_W-1];
+
+generate
+  if (O_REG) begin : o_reg
+
+    always @(posedge clk) begin
+

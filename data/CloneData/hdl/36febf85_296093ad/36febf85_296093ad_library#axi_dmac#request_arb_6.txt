@@ -1,0 +1,46 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@179:189@HdlIdDef
+
+parameter BYTES_PER_BURST_WIDTH = $clog2(C_MAX_BYTES_PER_BURST);
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
+
+localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+reg [0:2**C_ID_WIDTH-1] eot_mem;
+wire request_eot;
+
+wire [C_ID_WIDTH-1:0] request_id;
+
+Diff Content:
+- 184 localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
++ 184 localparam BURSTS_PER_TRANSFER_WIDTH = DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/request_arb.v@177:187
+// Bytes per burst is the same for both dest and src, but bytes per beat may
+// differ, so beats per burst may also differ
+
+parameter BYTES_PER_BURST_WIDTH = $clog2(C_MAX_BYTES_PER_BURST);
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
+
+localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+reg [0:2**C_ID_WIDTH-1] eot_mem;
+wire request_eot;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/request_arb.v@181:191
+localparam BEATS_PER_BURST_WIDTH_SRC = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_SRC;
+localparam BEATS_PER_BURST_WIDTH_DEST = BYTES_PER_BURST_WIDTH - C_BYTES_PER_BEAT_WIDTH_DEST;
+
+localparam BURSTS_PER_TRANSFER_WIDTH = C_DMA_LENGTH_WIDTH - BYTES_PER_BURST_WIDTH;
+
+reg [0:2**C_ID_WIDTH-1] eot_mem;
+wire request_eot;
+
+wire [C_ID_WIDTH-1:0] request_id;
+wire [C_ID_WIDTH-1:0] response_id;
+
+

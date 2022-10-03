@@ -1,0 +1,50 @@
+Source Block: oh/elink/hdl/esaxi.v@428:454@HdlStmProcess
+	       emwr_dstaddr_reg[1:0] <= 2'd3;
+	    end
+       end // else: !if(~s_axi_aresetn)
+
+//Pipeline stage
+ always @( posedge s_axi_aclk ) 
+     if (~s_axi_aresetn)
+       begin
+	  emwr_srcaddr[31:0]  <= 32'd0;	 
+          emwr_data[31:0]     <= 32'd0;	  
+          emwr_dstaddr[31:0]  <= 32'd0;	 
+	  emwr_ctrlmode[3:0]  <= 4'd0;
+          emwr_datamode[1:0]  <= 2'd0;
+       end
+     else
+       begin
+          emwr_srcaddr[31:0]  <= 32'b0;	  
+          emwr_data[31:0]     <= emwr_data_reg[31:0];	  
+          emwr_dstaddr[31:0]  <= emwr_dstaddr_reg[31:0];	  
+	  emwr_ctrlmode[3:0]  <= emwr_ctrlmode_reg[3:0];	  
+          emwr_datamode[1:0]  <= emwr_datamode_reg[1:0];	  
+       end // else: !if(~s_axi_aresetn)
+
+   assign emwr_access=emwr_access_all & ~(emwr_dstaddr[31:20]==elinkid[11:0]);
+   
+   
+   //###################################################
+
+Diff Content:
+- 433  always @( posedge s_axi_aclk ) 
+- 436 	  emwr_srcaddr[31:0]  <= 32'd0;	 
+- 437           emwr_data[31:0]     <= 32'd0;	  
+- 438           emwr_dstaddr[31:0]  <= 32'd0;	 
+- 439 	  emwr_ctrlmode[3:0]  <= 4'd0;
+- 440           emwr_datamode[1:0]  <= 2'd0;
+- 444           emwr_srcaddr[31:0]  <= 32'b0;	  
+- 445           emwr_data[31:0]     <= emwr_data_reg[31:0];	  
+- 446           emwr_dstaddr[31:0]  <= emwr_dstaddr_reg[31:0];	  
+- 447 	  emwr_ctrlmode[3:0]  <= emwr_ctrlmode_reg[3:0];	  
+- 448           emwr_datamode[1:0]  <= emwr_datamode_reg[1:0];	  
++ 433    always @( posedge s_axi_aclk ) 
++ 440           txwr_data[31:0]     <= 32'd0;	  
++ 440           txwr_dstaddr[31:0]  <= 32'd0;	 
++ 440           txwr_datamode[1:0]  <= 2'd0;
++ 448           txwr_data[31:0]     <= txwr_data_reg[31:0];	  
++ 448           txwr_dstaddr[31:0]  <= txwr_dstaddr_reg[31:0];	  
++ 448           txwr_datamode[1:0]  <= txwr_datamode_reg[1:0];	  
+
+Clone Blocks:

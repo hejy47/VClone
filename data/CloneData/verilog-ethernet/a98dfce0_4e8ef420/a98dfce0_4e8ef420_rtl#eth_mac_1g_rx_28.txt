@@ -1,0 +1,127 @@
+Source Block: verilog-ethernet/rtl/eth_mac_1g_rx.v@109:188@HdlStmProcess
+    .data_in(gmii_rxd_d4),
+    .crc_state(crc_state),
+    .crc_next(crc_next)
+);
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    reset_crc = 0;
+    update_crc = 0;
+
+    output_axis_tdata_next = 0;
+    output_axis_tvalid_next = 0;
+    output_axis_tlast_next = 0;
+    output_axis_tuser_next = 0;
+
+    error_bad_frame_next = 0;
+    error_bad_fcs_next = 0;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // idle state - wait for packet
+            reset_crc = 1;
+
+            if (gmii_rx_dv_d4 && ~gmii_rx_er_d4 && gmii_rxd_d4 == 8'hD5) begin
+                state_next = STATE_PAYLOAD;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_PAYLOAD: begin
+            // read payload
+            update_crc = 1;
+
+            output_axis_tdata_next = gmii_rxd_d4;
+            output_axis_tvalid_next = 1;
+
+            if (gmii_rx_dv_d4 & gmii_rx_er_d4) begin
+                // error
+                output_axis_tlast_next = 1;
+                output_axis_tuser_next = 1;
+                error_bad_frame_next = 1;
+                state_next = STATE_WAIT_LAST;
+            end else if (~gmii_rx_dv) begin
+                // end of packet
+                output_axis_tlast_next = 1;
+                if (gmii_rx_er_d0 | gmii_rx_er_d1 | gmii_rx_er_d2 | gmii_rx_er_d3) begin
+                    // error received in FCS bytes
+                    output_axis_tuser_next = 1;
+                    error_bad_frame_next = 1;
+                end else if ({gmii_rxd_d0, gmii_rxd_d1, gmii_rxd_d2, gmii_rxd_d3} == ~crc_next) begin
+                    // FCS good
+                    output_axis_tuser_next = 0;
+                end else begin
+                    // FCS bad
+                    output_axis_tuser_next = 1;
+                    error_bad_frame_next = 1;
+                    error_bad_fcs_next = 1;
+                end
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_PAYLOAD;
+            end
+        end
+        STATE_WAIT_LAST: begin
+            // wait for end of packet
+
+            if (~gmii_rx_dv) begin
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_WAIT_LAST;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+
+
+Diff Content:
+- 117     reset_crc = 0;
+- 118     update_crc = 0;
+- 120     output_axis_tdata_next = 0;
+- 121     output_axis_tvalid_next = 0;
+- 122     output_axis_tlast_next = 0;
+- 123     output_axis_tuser_next = 0;
+- 125     error_bad_frame_next = 0;
+- 126     error_bad_fcs_next = 0;
+- 131             reset_crc = 1;
+- 141             update_crc = 1;
+- 144             output_axis_tvalid_next = 1;
+- 148                 output_axis_tlast_next = 1;
+- 149                 output_axis_tuser_next = 1;
+- 150                 error_bad_frame_next = 1;
+- 154                 output_axis_tlast_next = 1;
+- 157                     output_axis_tuser_next = 1;
+- 158                     error_bad_frame_next = 1;
+- 161                     output_axis_tuser_next = 0;
+- 164                     output_axis_tuser_next = 1;
+- 165                     error_bad_frame_next = 1;
+- 166                     error_bad_fcs_next = 1;
++ 118     reset_crc = 1'b0;
++ 118     update_crc = 1'b0;
++ 123     output_axis_tdata_next = 8'd0;
++ 123     output_axis_tvalid_next = 1'b0;
++ 123     output_axis_tlast_next = 1'b0;
++ 123     output_axis_tuser_next = 1'b0;
++ 126     error_bad_frame_next = 1'b0;
++ 126     error_bad_fcs_next = 1'b0;
++ 131             reset_crc = 1'b1;
++ 141             update_crc = 1'b1;
++ 144             output_axis_tvalid_next = 1'b1;
++ 150                 output_axis_tlast_next = 1'b1;
++ 150                 output_axis_tuser_next = 1'b1;
++ 150                 error_bad_frame_next = 1'b1;
++ 154                 output_axis_tlast_next = 1'b1;
++ 158                     output_axis_tuser_next = 1'b1;
++ 158                     error_bad_frame_next = 1'b1;
++ 161                     output_axis_tuser_next = 1'b0;
++ 166                     output_axis_tuser_next = 1'b1;
++ 166                     error_bad_frame_next = 1'b1;
++ 166                     error_bad_fcs_next = 1'b1;
+
+Clone Blocks:

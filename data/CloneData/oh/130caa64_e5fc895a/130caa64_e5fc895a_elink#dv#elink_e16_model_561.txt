@@ -1,0 +1,25 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4453:4463@HdlStmAssign
+     if(reset)
+       burst_backup_cnt[1:0] <= 2'b00;
+     else
+       burst_backup_cnt[1:0] <= burst_backup_next_cnt[1:0];
+
+   assign freeze_fifo = |(burst_backup_cnt[1:0]);
+
+   //###################################################################
+   //#       Launch Counter vs. FIFO Read Pointer:
+   //# FIFO Read Pointer is incremented in the range 0-6
+   //# relative to any particular entry pointed out in a particular
+
+Diff Content:
+- 4458    assign freeze_fifo = |(burst_backup_cnt[1:0]);
++ 4458 endmodule // link_txo_fifo
++ 4458 module link_txo_interface (/*AUTOARG*/
++ 4458    txo_data, txo_frame, txo_wr_wait_int, txo_rd_wait_int,
++ 4458    txo_lclk, reset, txo_wr_data_even, txo_wr_data_odd, txo_wr_frame,
++ 4458    txo_wr_launch_req_tlc, txo_wr_rotate_dis, txo_rd_data_even,
++ 4458    txo_rd_data_odd, txo_rd_frame, txo_rd_launch_req_tlc,
++ 4458    txo_rd_rotate_dis
++ 4458    );
+
+Clone Blocks:

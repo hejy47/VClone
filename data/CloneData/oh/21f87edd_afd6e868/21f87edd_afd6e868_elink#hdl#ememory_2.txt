@@ -1,0 +1,28 @@
+Source Block: oh/elink/hdl/ememory.v@118:137@HdlStmProcess
+   //Outgoing transaction     
+   always @ (posedge  clk)
+     access_out                    <= mem_rd;
+                 
+   //Other emesh signals "dataload"
+   always @ (posedge clk)
+     if(mem_rd)   
+       begin
+	  write_out           <= 1'b1;
+          hilo_sel            <= dstaddr_in[2];
+	  datamode_out[1:0]   <= datamode_in[1:0];
+	  ctrlmode_out[3:0]   <= ctrlmode_in[3:0];                  
+          srcaddr_out[AW-1:0] <= dout[63:32];	  
+          dstaddr_out[AW-1:0] <= srcaddr_in[AW-1:0];
+       end
+
+   assign data_out[DW-1:0]     = hilo_sel ? dout[63:32] :
+				            dout[31:0]; 
+   
+   //Concatenate
+
+Diff Content:
+- 130           srcaddr_out[AW-1:0] <= dout[63:32];	  
++ 132    assign srcaddr_out[AW-1:0] = (datamode_out[1:0]==2'b11) ? dout[63:32] :
++ 132 				                             32'b0;
+
+Clone Blocks:

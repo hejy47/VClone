@@ -1,0 +1,40 @@
+Source Block: hdl/library/axi_dmac/dest_fifo_inf.v@109:127@HdlStmProcess
+  end else if (fifo_last_beat == 1'b1) begin
+    data_id <= inc_id(data_id);
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    active <= 1'b0;
+  end else if (req_valid == 1'b1) begin
+    active <= 1'b1;
+  end else if (fifo_eot_beat == 1'b1) begin
+    active <= 1'b0;
+  end
+end
+
+response_generator # (
+  .ID_WIDTH(ID_WIDTH)
+) i_response_generator (
+  .clk(clk),
+
+Diff Content:
+- 114 always @(posedge clk) begin
+- 115   if (resetn == 1'b0) begin
+- 116     active <= 1'b0;
+- 117   end else if (req_valid == 1'b1) begin
+- 118     active <= 1'b1;
+- 119   end else if (fifo_eot_beat == 1'b1) begin
+- 120     active <= 1'b0;
+- 122 end
++ 120   always @(posedge clk) begin
++ 120     if (resetn == 1'b0) begin
++ 120       active <= 1'b0;
++ 120     end else if (req_valid == 1'b1) begin
++ 120       active <= 1'b1;
++ 120     end else if (fifo_eot_beat == 1'b1) begin
++ 120       active <= 1'b0;
++ 120     end
+
+Clone Blocks:

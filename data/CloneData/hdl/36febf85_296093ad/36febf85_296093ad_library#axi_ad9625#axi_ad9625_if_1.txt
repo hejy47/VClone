@@ -1,0 +1,18 @@
+Source Block: hdl/library/axi_ad9625/axi_ad9625_if.v@125:135@HdlStmAssign
+  assign adc_clk = rx_clk;
+  assign adc_or = 1'b0;
+
+  // synchronization mode, multiple instances
+
+  assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
+
+  always @(posedge rx_clk) begin
+    adc_data <= adc_rdata_s;
+    if (adc_sref_s != 16'd0) begin
+      adc_sref <= adc_sref_s;
+
+Diff Content:
+- 130   assign adc_raddr_s = (PCORE_ID == 0) ? adc_raddr_out : adc_raddr_in;
++ 130   assign adc_raddr_s = (ID == 0) ? adc_raddr_out : adc_raddr_in;
+
+Clone Blocks:

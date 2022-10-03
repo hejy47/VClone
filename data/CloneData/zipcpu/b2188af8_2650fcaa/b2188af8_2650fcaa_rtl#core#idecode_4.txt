@@ -1,0 +1,39 @@
+Source Block: zipcpu/rtl/core/idecode.v@674:690@HdlStmProcess
+	end else begin
+		assign o_pipe = 1'b0;
+	end endgenerate
+
+	initial	r_valid = 1'b0;
+	always @(posedge i_clk)
+		if (i_reset)
+			r_valid <= 1'b0;
+		else if (i_ce)
+			r_valid <= ((pf_valid)||(o_phase))&&(!o_ljmp);
+		else if (!i_stalled)
+			r_valid <= 1'b0;
+
+	assign	o_valid = r_valid;
+
+
+	assign	o_I = { {(32-22){r_I[22]}}, r_I[21:0] };
+
+Diff Content:
+- 679 	always @(posedge i_clk)
+- 682 		else if (i_ce)
+- 683 			r_valid <= ((pf_valid)||(o_phase))&&(!o_ljmp);
++ 679 	generate if (OPT_PIPELINED)
++ 679 	begin : GEN_DCD_VALID
++ 679 		always @(posedge i_clk)
++ 679 			if (i_reset)
++ 679 				r_valid <= 1'b0;
++ 679 			else if (i_ce)
++ 679 				r_valid <= ((pf_valid)||(o_phase))&&(!o_ljmp);
++ 679 			else if (!i_stalled)
++ 679 				r_valid <= 1'b0;
++ 679 	end else begin : GEN_DCD_VALID
++ 679 		always @(posedge i_clk)
++ 684 			r_valid <= ((pf_valid)||(o_phase))&&(!o_ljmp);
++ 684 		else
++ 685 	end endgenerate
+
+Clone Blocks:

@@ -1,0 +1,35 @@
+Source Block: oh/emesh/hdl/emesh_mux.v@38:61@HdlStmIf
+   reg [PW-1:0]     packet_out;
+   integer 	    i;
+   
+   //arbiter
+   generate
+      if(CFG=="STATIC")		
+	begin
+	   oh_arbiter #(.N(N))
+	   arbiter(// Outputs
+		   .grants   (grants[N-1:0]),
+		   // Inputs
+		   .requests (access_in[N-1:0])
+		   );      
+	end
+      else if (CFG=="DYNAMIC")
+	begin
+	   initial
+	     $display("ROUND ROBIN ARBITER NOT IMPLEMENTED\n");	   
+	end
+   endgenerate
+   
+   //access signal
+   assign access_out = |(access_in[N-1:0]);
+
+
+Diff Content:
+- 44 	begin
+- 53 	begin
++ 44 	begin : arbiter_static
++ 53 	begin : arbiter_dynamic
++ 53 `ifdef TARGET_SIM
++ 55 `endif
+
+Clone Blocks:

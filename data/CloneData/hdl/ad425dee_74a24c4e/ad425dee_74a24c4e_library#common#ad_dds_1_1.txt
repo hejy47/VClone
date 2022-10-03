@@ -1,0 +1,54 @@
+Source Block: hdl/library/common/ad_dds_1.v@64:106@HdlStmIf
+  assign zeros = 0;
+
+  // sine
+
+  generate
+    if (DDS_TYPE == DDS_CORDIC_TYPE) begin
+
+      // the cordic module input angle width must be equal with it's width
+      wire    [CORDIC_DW-1:0] angle_s;
+
+      if (CORDIC_DW >= 16) begin
+        assign angle_s = {angle,zeros[CORDIC_DW-16:0]};
+        assign sine16_s = sine_s[CORDIC_DW-1:CORDIC_DW-16];
+      end else begin
+        assign angle_s = angle[15:16-CORDIC_DW];
+        assign sine16_s = {sine_s,zeros[15-CORDIC_DW:0]};
+      end
+
+      ad_dds_sine_cordic #(
+        .CORDIC_DW(CORDIC_DW),
+        .DELAY_DW(1))
+      i_dds_sine (
+        .clk (clk),
+        .angle (angle_s),
+        .sine (sine_s),
+        .ddata_in (1'b0),
+        .ddata_out ());
+
+    end else begin
+
+      assign sine16_s = sine_s;
+      ad_dds_sine i_dds_sine (
+        .clk (clk),
+        .angle (angle),
+        .sine (sine_s),
+        .ddata_in (1'b0),
+        .ddata_out ());
+    end
+  endgenerate
+
+  // scale for a 16 bit sine generator
+
+  ad_mul #(.DELAY_DATA_WIDTH(1)) i_dds_scale (
+
+Diff Content:
+- 72       wire    [CORDIC_DW-1:0] angle_s;
+- 78         assign angle_s = angle[15:16-CORDIC_DW];
+- 87         .angle (angle_s),
++ 72       wire    [CORDIC_DW:0] angle_s;
++ 78         assign angle_s = {angle[15:16-CORDIC_DW],1'b0};
++ 87         .angle (angle_s[CORDIC_DW:1]),
+
+Clone Blocks:

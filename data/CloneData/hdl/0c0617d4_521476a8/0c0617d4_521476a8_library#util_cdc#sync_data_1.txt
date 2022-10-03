@@ -1,0 +1,126 @@
+Source Block: hdl/library/util_cdc/sync_data.v@44:97@HdlStmIf
+  input out_clk,
+  output reg [NUM_OF_BITS-1:0] out_data
+);
+
+generate
+if (ASYNC_CLK == 1) begin
+
+wire out_toggle;
+wire in_toggle;
+
+reg out_toggle_d1 = 1'b0;
+reg in_toggle_d1 = 1'b0;
+
+reg [NUM_OF_BITS-1:0] cdc_hold;
+
+sync_bits i_sync_out (
+  .in_bits(in_toggle_d1),
+  .out_clk(out_clk),
+  .out_resetn(1'b1),
+  .out_bits(out_toggle)
+);
+
+sync_bits i_sync_in (
+  .in_bits(out_toggle_d1),
+  .out_clk(in_clk),
+  .out_resetn(1'b1),
+  .out_bits(in_toggle)
+);
+
+wire in_load = in_toggle == in_toggle_d1;
+wire out_load = out_toggle ^ out_toggle_d1;
+
+always @(posedge in_clk) begin
+  if (in_load == 1'b1) begin
+    cdc_hold <= in_data;
+    in_toggle_d1 <= ~in_toggle_d1;
+  end
+end
+
+always @(posedge out_clk) begin
+  if (out_load == 1'b1) begin
+    out_data <= cdc_hold;
+  end
+  out_toggle_d1 <= out_toggle;
+end
+
+end else begin
+  always @(*) begin
+    out_data <= in_data;
+  end
+end
+endgenerate
+
+endmodule
+
+Diff Content:
+- 49 if (ASYNC_CLK == 1) begin
+- 51 wire out_toggle;
+- 52 wire in_toggle;
+- 54 reg out_toggle_d1 = 1'b0;
+- 55 reg in_toggle_d1 = 1'b0;
+- 57 reg [NUM_OF_BITS-1:0] cdc_hold;
+- 59 sync_bits i_sync_out (
+- 60   .in_bits(in_toggle_d1),
+- 61   .out_clk(out_clk),
+- 62   .out_resetn(1'b1),
+- 63   .out_bits(out_toggle)
+- 64 );
+- 66 sync_bits i_sync_in (
+- 67   .in_bits(out_toggle_d1),
+- 68   .out_clk(in_clk),
+- 69   .out_resetn(1'b1),
+- 70   .out_bits(in_toggle)
+- 71 );
+- 73 wire in_load = in_toggle == in_toggle_d1;
+- 74 wire out_load = out_toggle ^ out_toggle_d1;
+- 76 always @(posedge in_clk) begin
+- 77   if (in_load == 1'b1) begin
+- 78     cdc_hold <= in_data;
+- 79     in_toggle_d1 <= ~in_toggle_d1;
+- 81 end
+- 83 always @(posedge out_clk) begin
+- 84   if (out_load == 1'b1) begin
+- 85     out_data <= cdc_hold;
+- 87   out_toggle_d1 <= out_toggle;
+- 88 end
+- 90 end else begin
+- 91   always @(*) begin
+- 92     out_data <= in_data;
+- 94 end
++ 49   generate
++ 49   if (ASYNC_CLK == 1) begin
++ 52   wire out_toggle;
++ 52   wire in_toggle;
++ 55   reg out_toggle_d1 = 1'b0;
++ 55   reg in_toggle_d1 = 1'b0;
++ 57   reg [NUM_OF_BITS-1:0] cdc_hold;
++ 64   sync_bits i_sync_out (
++ 64     .in_bits(in_toggle_d1),
++ 64     .out_clk(out_clk),
++ 64     .out_resetn(1'b1),
++ 64     .out_bits(out_toggle));
++ 71   sync_bits i_sync_in (
++ 71     .in_bits(out_toggle_d1),
++ 71     .out_clk(in_clk),
++ 71     .out_resetn(1'b1),
++ 71     .out_bits(in_toggle));
++ 74   wire in_load = in_toggle == in_toggle_d1;
++ 74   wire out_load = out_toggle ^ out_toggle_d1;
++ 79   always @(posedge in_clk) begin
++ 79     if (in_load == 1'b1) begin
++ 79       cdc_hold <= in_data;
++ 79       in_toggle_d1 <= ~in_toggle_d1;
++ 79     end
++ 85   always @(posedge out_clk) begin
++ 85     if (out_load == 1'b1) begin
++ 85       out_data <= cdc_hold;
++ 85     end
++ 85     out_toggle_d1 <= out_toggle;
++ 92   end else begin
++ 92     always @(*) begin
++ 92       out_data <= in_data;
++ 92     end
+
+Clone Blocks:

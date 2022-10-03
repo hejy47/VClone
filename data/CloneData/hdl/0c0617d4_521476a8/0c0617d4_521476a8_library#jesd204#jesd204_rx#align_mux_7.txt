@@ -1,0 +1,55 @@
+Source Block: hdl/library/jesd204/jesd204_rx/align_mux.v@61:74@HdlStmProcess
+reg  [DATA_PATH_WIDTH*8-1:0]       in_data_d1;
+reg  [DATA_PATH_WIDTH-1:0]         in_charisk_d1;
+wire [(DATA_PATH_WIDTH*8*2)-1:0]   data;
+wire [(DATA_PATH_WIDTH*2)-1:0]     charisk;
+
+always @(posedge clk) begin
+  in_data_d1 <= in_data;
+  in_charisk_d1 <= in_charisk;
+end
+
+assign data = {in_data, in_data_d1};
+assign charisk = {in_charisk, in_charisk_d1};
+
+assign align_int = align[DPW_LOG2-1:0];
+
+Diff Content:
+- 66 always @(posedge clk) begin
+- 67   in_data_d1 <= in_data;
+- 68   in_charisk_d1 <= in_charisk;
+- 69 end
++ 69   always @(posedge clk) begin
++ 69     in_data_d1 <= in_data;
++ 69     in_charisk_d1 <= in_charisk;
++ 69   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_rx/align_mux.v@58:68
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+
+wire [DPW_LOG2-1:0]                align_int;
+reg  [DATA_PATH_WIDTH*8-1:0]       in_data_d1;
+reg  [DATA_PATH_WIDTH-1:0]         in_charisk_d1;
+wire [(DATA_PATH_WIDTH*8*2)-1:0]   data;
+wire [(DATA_PATH_WIDTH*2)-1:0]     charisk;
+
+always @(posedge clk) begin
+  in_data_d1 <= in_data;
+  in_charisk_d1 <= in_charisk;
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_rx/align_mux.v@59:69
+
+wire [DPW_LOG2-1:0]                align_int;
+reg  [DATA_PATH_WIDTH*8-1:0]       in_data_d1;
+reg  [DATA_PATH_WIDTH-1:0]         in_charisk_d1;
+wire [(DATA_PATH_WIDTH*8*2)-1:0]   data;
+wire [(DATA_PATH_WIDTH*2)-1:0]     charisk;
+
+always @(posedge clk) begin
+  in_data_d1 <= in_data;
+  in_charisk_d1 <= in_charisk;
+end
+

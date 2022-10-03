@@ -1,0 +1,18 @@
+Source Block: oh/common/hdl/oh_standby.v@60:70@HdlStmAssign
+   // Clock gating circuit for output clock
+   // EVent can be used to boot a CPU andcany other master as an example
+   //####################################################################
+
+   //Adding reset to wakeup signal
+   assign wakeup_now = sync_reset_pulse | wakeup;   
+
+   // Stay awake for PD cycles
+   always @ (posedge clkin or negedge nreset)
+     if(!nreset)
+       wakeup_pipe[PD-1:0] <= 'b0;   
+
+Diff Content:
+- 65    assign wakeup_now = sync_reset_pulse | wakeup;   
++ 65    assign wakeup_now = sync_reset_pulse | wakeup;
+
+Clone Blocks:

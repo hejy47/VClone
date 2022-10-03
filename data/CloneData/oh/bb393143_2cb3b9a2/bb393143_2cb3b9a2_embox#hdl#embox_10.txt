@@ -1,0 +1,54 @@
+Source Block: oh/embox/hdl/embox.v@121:133@HdlStmAssign
+   /*****************************/
+   /*READ BACK DATA             */
+   /*****************************/
+   assign embox_not_empty         = ~embox_empty;
+
+   assign embox_read_data[DW-1:0] = embox_status_read ? {{(DW-2){1'b0}},embox_full,embox_not_empty}  :
+				    embox_w0_read     ? embox_fifo_data[DW-1:0]                             :
+	                    	  	                embox_fifo_data[2*DW-1:DW];   
+   always @ (posedge clk)
+     if(embox_read)
+       begin
+	  mi_data_out[DW-1:0] <= embox_read_data[DW-1:0];
+	  mi_data_sel         <= embox_match;
+
+Diff Content:
+- 126    assign embox_read_data[DW-1:0] = embox_status_read ? {{(DW-2){1'b0}},embox_full,embox_not_empty}  :
+- 127 				    embox_w0_read     ? embox_fifo_data[DW-1:0]                             :
+- 128 	                    	  	                embox_fifo_data[2*DW-1:DW];   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/embox/hdl/embox.v@119:129
+       embox_data_reg[DW-1:0] <=mi_data_in[DW-1:0];
+   
+   /*****************************/
+   /*READ BACK DATA             */
+   /*****************************/
+   assign embox_not_empty         = ~embox_empty;
+
+   assign embox_read_data[DW-1:0] = embox_status_read ? {{(DW-2){1'b0}},embox_full,embox_not_empty}  :
+				    embox_w0_read     ? embox_fifo_data[DW-1:0]                             :
+	                    	  	                embox_fifo_data[2*DW-1:DW];   
+   always @ (posedge clk)
+
+Clone Blocks 2:
+oh/embox/hdl/embox.v@124:139
+   assign embox_not_empty         = ~embox_empty;
+
+   assign embox_read_data[DW-1:0] = embox_status_read ? {{(DW-2){1'b0}},embox_full,embox_not_empty}  :
+				    embox_w0_read     ? embox_fifo_data[DW-1:0]                             :
+	                    	  	                embox_fifo_data[2*DW-1:DW];   
+   always @ (posedge clk)
+     if(embox_read)
+       begin
+	  mi_data_out[DW-1:0] <= embox_read_data[DW-1:0];
+	  mi_data_sel         <= embox_match;
+       end
+   
+   /*****************************/
+   /*FIFO                       */
+   /*****************************/
+   fifo #(.DW(2*DW), .AW(FAW)) mbox_fifo(
+

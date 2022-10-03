@@ -1,0 +1,114 @@
+Source Block: hdl/library/data_offload/data_offload_regmap.v@156:255@HdlStmProcess
+      end
+    end
+  end
+
+  //read interface for common registers
+  always @(posedge up_clk) begin
+    if (up_rstn == 1'b0) begin
+      up_rack <= 1'b0;
+      up_rdata <= 14'b0;
+    end else begin
+      up_rack <= up_rreq;
+      case(up_raddr)
+
+        /* Version Register */
+        14'h000:  up_rdata <= {
+                          CORE_VERSION[31:16], /* MAJOR */
+                          CORE_VERSION[15: 8], /* MINOR */
+                          CORE_VERSION[ 7: 0]  /* PATCH */
+        };
+        /* Peripheral ID Register */
+        14'h001:  up_rdata <= ID;
+
+        /* Peripheral ID Register */
+        14'h002:  up_rdata <= up_scratch;
+
+        /* Identification Register */
+        14'h003:  up_rdata <= CORE_MAGIC;
+
+        /* Configuration Register */
+        14'h004:  up_rdata <= {
+                          31'b0,
+           /*   0   */    MEM_TYPE
+        };
+        /* Configuration Storage Unit Size LSB Register */
+        14'h005:  up_rdata <= MEM_SIZE[31:0];
+
+        /* Configuration Storage Unit Size MSB Register */
+        14'h006:  up_rdata <= {
+                          29'b0,
+           /* 00-01 */    MEM_SIZE[33:32]
+        };
+
+        /* Configuration data transfer length */
+        14'h007:  up_rdata <= up_transfer_length;
+
+        /* 0x08-0x1f reserved for future use */
+
+        /* Memory Physical Interface Status */
+        14'h020:  up_rdata <= {
+                          31'b0,
+           /*   0   */    up_ddr_calib_done_s
+        };
+        /* Reset Offload Register */
+        14'h021:  up_rdata <= {
+                          31'b0,
+           /*   0   */    up_sw_resetn
+        };
+        /* Control Register */
+        14'h022:  up_rdata <= {
+                          30'b0,
+           /*   1   */    up_oneshot,
+           /*   0   */    up_bypass
+        };
+        /* 0x24-0x3f reserved for future use */
+
+        /* SYNC Offload Register */
+        14'h040:  up_rdata <= {
+                          31'b0,
+           /*   0   */    up_sync
+        };
+        /* SYNC RX Configuration Register */
+        14'h041:  up_rdata <= {
+                          30'b0,
+           /* 00-01 */    up_sync_config
+        };
+        /* 0x42-0x7f reserved for future use */
+
+        /* FMS Debug Register */
+        14'h080:  up_rdata <= {
+                          16'b0,
+           /* 07-06 */    2'b0,
+           /* 05-04 */    up_rd_fsm_status_s,
+           /* 03-02 */    2'b0,
+           /* 01-00 */    up_wr_fsm_status_s
+        };
+        /* Sample Count LSB Register */
+        14'h081:  up_rdata <= up_sample_count_lsb_s;
+
+        /* Sample Count MSB Register */
+        14'h082:  up_rdata <= up_sample_count_msb_s;
+
+        default: up_rdata <= 32'h00000000;
+      endcase
+    end
+  end /* read interface */
+
+  // Clock Domain Crossing Logic for reset, control and status signals
+
+  sync_data #(
+    .NUM_OF_BITS (2),
+
+Diff Content:
+- 186                           31'b0,
+- 187            /*   0   */    MEM_TYPE
+- 194                           29'b0,
+- 235                           16'b0,
++ 187                           30'b0,
++ 187            /*   1   */    TX_OR_RXN_PATH[0],
++ 187            /*   0   */    MEM_TYPE[0]
++ 194                           30'b0,
++ 235                           24'b0,
+
+Clone Blocks:

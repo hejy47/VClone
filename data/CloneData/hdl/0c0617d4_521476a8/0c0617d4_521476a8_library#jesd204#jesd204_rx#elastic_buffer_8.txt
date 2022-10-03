@@ -1,0 +1,60 @@
+Source Block: hdl/library/jesd204/jesd204_rx/elastic_buffer.v@79:106@HdlStmIf
+(* ram_style = "distributed" *) reg [WIDTH-1:0] mem[0:SIZE - 1];
+
+wire mem_wr;
+wire [WIDTH-1:0] mem_wr_data;
+
+generate if ((OWIDTH > IWIDTH) && ASYNC_CLK) begin
+  ad_pack #(
+    .I_W(IWIDTH/8),
+    .O_W(OWIDTH/8),
+    .UNIT_W(8)
+  ) i_ad_pack (
+    .clk(clk),
+    .reset(ready_n),
+    .idata(wr_data),
+    .ivalid(1'b1),
+
+    .odata(mem_wr_data),
+    .ovalid(mem_wr)
+  );
+end else begin
+  assign mem_wr = 1'b1;
+  assign mem_wr_data = wr_data;
+end
+endgenerate
+
+always @(posedge clk) begin
+  if (ready_n == 1'b1) begin
+    wr_addr <= 'h00;
+
+Diff Content:
+- 84 generate if ((OWIDTH > IWIDTH) && ASYNC_CLK) begin
+- 85   ad_pack #(
+- 86     .I_W(IWIDTH/8),
+- 87     .O_W(OWIDTH/8),
+- 88     .UNIT_W(8)
+- 89   ) i_ad_pack (
+- 90     .clk(clk),
+- 91     .reset(ready_n),
+- 92     .idata(wr_data),
+- 93     .ivalid(1'b1),
+- 95     .odata(mem_wr_data),
+- 96     .ovalid(mem_wr)
+- 97   );
+- 98 end else begin
+- 99   assign mem_wr = 1'b1;
+- 100   assign mem_wr_data = wr_data;
+- 101 end
++ 93   generate if ((OWIDTH > IWIDTH) && ASYNC_CLK) begin
++ 93     ad_pack #(
++ 93       .I_W(IWIDTH/8),
++ 93       .O_W(OWIDTH/8),
++ 93       .UNIT_W(8)
++ 93     ) i_ad_pack (
++ 93       .clk(clk),
++ 93       .reset(ready_n),
++ 93       .idata(wr_data),
++ 93       .ivalid(1'b1),
+
+Clone Blocks:

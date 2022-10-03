@@ -1,0 +1,418 @@
+Source Block: hdl/library/common/up_gt.v@383:582@HdlStmProcess
+  assign rx_rst_done_up  = up_rx_rst_done_s;
+  assign tx_rst_done_up  = up_tx_rst_done_s;
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_scratch <= 'd0;
+      up_lpm_dfe_n <= 'd0;
+      up_cpll_pd <= 'd1;
+      up_drp_resetn <= 'd0;
+      up_gt_pll_resetn <= 'd0;
+      up_gt_rx_resetn <= 'd0;
+      up_rx_resetn <= 'd0;
+      up_rx_sys_clk_sel <= 2'b11;
+      up_rx_out_clk_sel <= 3'b010;
+      up_rx_sysref_sel <= 'd0;
+      up_rx_sysref <= 'd0;
+      up_rx_sync <= 'd0;
+      up_gt_tx_resetn <= 'd0;
+      up_tx_resetn <= 'd0;
+      up_tx_sys_clk_sel <= 2'b11;
+      up_tx_out_clk_sel <= 3'b010;
+      up_tx_sysref_sel <= 'd0;
+      up_tx_sysref <= 'd0;
+      up_tx_sync <= 'd0;
+      up_drp_lanesel <= 'd0;
+      up_drp_sel_int <= 'd0;
+      up_drp_wr_int <= 'd0;
+      up_drp_status <= 'd0;
+      up_drp_rwn <= 'd0;
+      up_drp_addr_int <= 'd0;
+      up_drp_wdata_int <= 'd0;
+      up_drp_rdata_hold <= 'd0;
+      up_es_init <= 'd0;
+      up_es_stop <= 'd0;
+      up_es_stop_hold <= 'd0;
+      up_es_start <= 'd0;
+      up_es_start_hold <= 'd0;
+      up_es_prescale <= 'd0;
+      up_es_voffset_range <= 'd0;
+      up_es_voffset_step <= 'd0;
+      up_es_voffset_max <= 'd0;
+      up_es_voffset_min <= 'd0;
+      up_es_hoffset_max <= 'd0;
+      up_es_hoffset_min <= 'd0;
+      up_es_hoffset_step <= 'd0;
+      up_es_start_addr <= 'd0;
+      up_es_sdata1 <= 'd0;
+      up_es_sdata0 <= 'd0;
+      up_es_sdata3 <= 'd0;
+      up_es_sdata2 <= 'd0;
+      up_es_sdata4 <= 'd0;
+      up_es_qdata1 <= 'd0;
+      up_es_qdata0 <= 'd0;
+      up_es_qdata3 <= 'd0;
+      up_es_qdata2 <= 'd0;
+      up_es_qdata4 <= 'd0;
+      up_es_dmaerr_hold <= 'd0;
+    end else begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
+        up_lpm_dfe_n <= up_wdata[1];
+        up_cpll_pd <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h05)) begin
+        up_drp_resetn <= up_wdata[1];
+        up_gt_pll_resetn <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h08)) begin
+        up_gt_rx_resetn <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h09)) begin
+        up_rx_resetn <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0a)) begin
+        up_rx_sys_clk_sel <= up_wdata[5:4];
+        up_rx_out_clk_sel <= up_wdata[2:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0b)) begin
+        up_rx_sysref_sel <= up_wdata[1];
+        up_rx_sysref <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0c)) begin
+        up_rx_sync <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h18)) begin
+        up_gt_tx_resetn <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h19)) begin
+        up_tx_resetn <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1a)) begin
+        up_tx_sys_clk_sel <= up_wdata[5:4];
+        up_tx_out_clk_sel <= up_wdata[2:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1b)) begin
+        up_tx_sysref_sel <= up_wdata[1];
+        up_tx_sysref <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+        up_tx_sync <= up_wdata[0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+        up_drp_lanesel <= up_wdata[7:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h24)) begin
+        up_drp_sel_int <= 1'b1;
+        up_drp_wr_int <= ~up_wdata[28];
+      end else begin
+        up_drp_sel_int <= 1'b0;
+        up_drp_wr_int <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h24)) begin
+        up_drp_status <= 1'b1;
+      end else if (up_drp_ready == 1'b1) begin
+        up_drp_status <= 1'b0;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h24)) begin
+        up_drp_rwn <= up_wdata[28];
+        up_drp_addr_int <= up_wdata[27:16];
+        up_drp_wdata_int <= up_wdata[15:0];
+      end
+      if (up_drp_ready_int == 1'b1) begin
+        up_drp_rdata_hold <= up_drp_rdata_int;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+        up_es_init <= up_wdata[2];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+        up_es_stop <= up_wdata[1];
+        up_es_stop_hold <= up_wdata[1];
+      end else begin
+        up_es_stop <= 1'd0;
+        up_es_stop_hold <= up_es_stop_hold;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+        up_es_start <= up_wdata[0];
+        up_es_start_hold <= up_wdata[0];
+      end else begin
+        up_es_start <= 1'd0;
+        up_es_start_hold <= up_es_start_hold;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
+        up_es_prescale <= up_wdata[4:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2a)) begin
+        up_es_voffset_range <= up_wdata[25:24];
+        up_es_voffset_step <= up_wdata[23:16];
+        up_es_voffset_max <= up_wdata[15:8];
+        up_es_voffset_min <= up_wdata[7:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2b)) begin
+        up_es_hoffset_max <= up_wdata[27:16];
+        up_es_hoffset_min <= up_wdata[11:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2c)) begin
+        up_es_hoffset_step <= up_wdata[11:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2d)) begin
+        up_es_start_addr <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2e)) begin
+        up_es_sdata1 <= up_wdata[31:16];
+        up_es_sdata0 <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2f)) begin
+        up_es_sdata3 <= up_wdata[31:16];
+        up_es_sdata2 <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h30)) begin
+        up_es_sdata4 <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h31)) begin
+        up_es_qdata1 <= up_wdata[31:16];
+        up_es_qdata0 <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
+        up_es_qdata3 <= up_wdata[31:16];
+        up_es_qdata2 <= up_wdata[15:0];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
+        up_es_qdata4 <= up_wdata[15:0];
+      end
+      if (up_es_dmaerr == 1'b1) begin
+        up_es_dmaerr_hold <= 1'b1;
+      end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h38)) begin
+        up_es_dmaerr_hold <= up_es_dmaerr_hold & ~up_wdata[1];
+      end
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+
+Diff Content:
+- 391       up_scratch <= 'd0;
+- 392       up_lpm_dfe_n <= 'd0;
+- 393       up_cpll_pd <= 'd1;
+- 394       up_drp_resetn <= 'd0;
+- 395       up_gt_pll_resetn <= 'd0;
+- 396       up_gt_rx_resetn <= 'd0;
+- 397       up_rx_resetn <= 'd0;
+- 398       up_rx_sys_clk_sel <= 2'b11;
+- 399       up_rx_out_clk_sel <= 3'b010;
+- 400       up_rx_sysref_sel <= 'd0;
+- 401       up_rx_sysref <= 'd0;
+- 402       up_rx_sync <= 'd0;
+- 403       up_gt_tx_resetn <= 'd0;
+- 404       up_tx_resetn <= 'd0;
+- 405       up_tx_sys_clk_sel <= 2'b11;
+- 406       up_tx_out_clk_sel <= 3'b010;
+- 407       up_tx_sysref_sel <= 'd0;
+- 408       up_tx_sysref <= 'd0;
+- 409       up_tx_sync <= 'd0;
+- 410       up_drp_lanesel <= 'd0;
+- 411       up_drp_sel_int <= 'd0;
+- 412       up_drp_wr_int <= 'd0;
+- 413       up_drp_status <= 'd0;
+- 414       up_drp_rwn <= 'd0;
+- 415       up_drp_addr_int <= 'd0;
+- 416       up_drp_wdata_int <= 'd0;
+- 417       up_drp_rdata_hold <= 'd0;
+- 418       up_es_init <= 'd0;
+- 419       up_es_stop <= 'd0;
+- 420       up_es_stop_hold <= 'd0;
+- 421       up_es_start <= 'd0;
+- 422       up_es_start_hold <= 'd0;
+- 423       up_es_prescale <= 'd0;
+- 424       up_es_voffset_range <= 'd0;
+- 425       up_es_voffset_step <= 'd0;
+- 426       up_es_voffset_max <= 'd0;
+- 427       up_es_voffset_min <= 'd0;
+- 428       up_es_hoffset_max <= 'd0;
+- 429       up_es_hoffset_min <= 'd0;
+- 430       up_es_hoffset_step <= 'd0;
+- 431       up_es_start_addr <= 'd0;
+- 432       up_es_sdata1 <= 'd0;
+- 433       up_es_sdata0 <= 'd0;
+- 434       up_es_sdata3 <= 'd0;
+- 435       up_es_sdata2 <= 'd0;
+- 436       up_es_sdata4 <= 'd0;
+- 437       up_es_qdata1 <= 'd0;
+- 438       up_es_qdata0 <= 'd0;
+- 439       up_es_qdata3 <= 'd0;
+- 440       up_es_qdata2 <= 'd0;
+- 441       up_es_qdata4 <= 'd0;
+- 442       up_es_dmaerr_hold <= 'd0;
+- 445       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+- 446         up_scratch <= up_wdata;
+- 447       end
+- 448       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h04)) begin
+- 449         up_lpm_dfe_n <= up_wdata[1];
+- 450         up_cpll_pd <= up_wdata[0];
+- 451       end
+- 452       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h05)) begin
+- 453         up_drp_resetn <= up_wdata[1];
+- 454         up_gt_pll_resetn <= up_wdata[0];
+- 455       end
+- 456       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h08)) begin
+- 457         up_gt_rx_resetn <= up_wdata[0];
+- 458       end
+- 459       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h09)) begin
+- 460         up_rx_resetn <= up_wdata[0];
+- 461       end
+- 462       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0a)) begin
+- 463         up_rx_sys_clk_sel <= up_wdata[5:4];
+- 464         up_rx_out_clk_sel <= up_wdata[2:0];
+- 465       end
+- 466       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0b)) begin
+- 467         up_rx_sysref_sel <= up_wdata[1];
+- 468         up_rx_sysref <= up_wdata[0];
+- 469       end
+- 470       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h0c)) begin
+- 471         up_rx_sync <= up_wdata[0];
+- 472       end
+- 473       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h18)) begin
+- 474         up_gt_tx_resetn <= up_wdata[0];
+- 475       end
+- 476       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h19)) begin
+- 477         up_tx_resetn <= up_wdata[0];
+- 478       end
+- 479       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1a)) begin
+- 480         up_tx_sys_clk_sel <= up_wdata[5:4];
+- 481         up_tx_out_clk_sel <= up_wdata[2:0];
+- 483       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1b)) begin
+- 484         up_tx_sysref_sel <= up_wdata[1];
+- 485         up_tx_sysref <= up_wdata[0];
+- 487       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h1c)) begin
+- 488         up_tx_sync <= up_wdata[0];
+- 490       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h23)) begin
+- 491         up_drp_lanesel <= up_wdata[7:0];
+- 494         up_drp_sel_int <= 1'b1;
+- 495         up_drp_wr_int <= ~up_wdata[28];
+- 497         up_drp_sel_int <= 1'b0;
+- 498         up_drp_wr_int <= 1'b0;
+- 501         up_drp_status <= 1'b1;
+- 502       end else if (up_drp_ready == 1'b1) begin
+- 503         up_drp_status <= 1'b0;
+- 506         up_drp_rwn <= up_wdata[28];
+- 507         up_drp_addr_int <= up_wdata[27:16];
+- 508         up_drp_wdata_int <= up_wdata[15:0];
+- 509       end
+- 510       if (up_drp_ready_int == 1'b1) begin
+- 511         up_drp_rdata_hold <= up_drp_rdata_int;
+- 512       end
+- 513       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+- 514         up_es_init <= up_wdata[2];
+- 515       end
+- 516       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+- 517         up_es_stop <= up_wdata[1];
+- 518         up_es_stop_hold <= up_wdata[1];
+- 519       end else begin
+- 520         up_es_stop <= 1'd0;
+- 521         up_es_stop_hold <= up_es_stop_hold;
+- 522       end
+- 523       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h28)) begin
+- 524         up_es_start <= up_wdata[0];
+- 525         up_es_start_hold <= up_wdata[0];
+- 526       end else begin
+- 527         up_es_start <= 1'd0;
+- 528         up_es_start_hold <= up_es_start_hold;
+- 529       end
+- 530       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h29)) begin
+- 531         up_es_prescale <= up_wdata[4:0];
+- 532       end
+- 533       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2a)) begin
+- 534         up_es_voffset_range <= up_wdata[25:24];
+- 535         up_es_voffset_step <= up_wdata[23:16];
+- 536         up_es_voffset_max <= up_wdata[15:8];
+- 537         up_es_voffset_min <= up_wdata[7:0];
+- 538       end
+- 539       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2b)) begin
+- 540         up_es_hoffset_max <= up_wdata[27:16];
+- 541         up_es_hoffset_min <= up_wdata[11:0];
+- 542       end
+- 543       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2c)) begin
+- 544         up_es_hoffset_step <= up_wdata[11:0];
+- 545       end
+- 546       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2d)) begin
+- 547         up_es_start_addr <= up_wdata;
+- 548       end
+- 549       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2e)) begin
+- 550         up_es_sdata1 <= up_wdata[31:16];
+- 551         up_es_sdata0 <= up_wdata[15:0];
+- 552       end
+- 553       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h2f)) begin
+- 554         up_es_sdata3 <= up_wdata[31:16];
+- 555         up_es_sdata2 <= up_wdata[15:0];
+- 556       end
+- 557       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h30)) begin
+- 558         up_es_sdata4 <= up_wdata[15:0];
+- 559       end
+- 560       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h31)) begin
+- 561         up_es_qdata1 <= up_wdata[31:16];
+- 562         up_es_qdata0 <= up_wdata[15:0];
+- 563       end
+- 564       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h32)) begin
+- 565         up_es_qdata3 <= up_wdata[31:16];
+- 566         up_es_qdata2 <= up_wdata[15:0];
+- 567       end
+- 568       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h33)) begin
+- 569         up_es_qdata4 <= up_wdata[15:0];
+- 571       if (up_es_dmaerr == 1'b1) begin
+- 572         up_es_dmaerr_hold <= 1'b1;
+- 573       end else if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h38)) begin
+- 574         up_es_dmaerr_hold <= up_es_dmaerr_hold & ~up_wdata[1];
++ 442       up_drp_qpll0_sel <= 'd0;
++ 442       up_drp_qpll0_wr <= 'd0;
++ 442       up_drp_qpll0_status <= 'd0;
++ 442       up_drp_qpll0_rwn <= 'd0;
++ 442       up_drp_qpll0_addr <= 'd0;
++ 442       up_drp_qpll0_wdata <= 'd0;
++ 442       up_drp_qpll0_rdata_hold <= 'd0;
++ 442       up_drp_qpll1_sel <= 'd0;
++ 442       up_drp_qpll1_wr <= 'd0;
++ 442       up_drp_qpll1_status <= 'd0;
++ 442       up_drp_qpll1_rwn <= 'd0;
++ 442       up_drp_qpll1_addr <= 'd0;
++ 442       up_drp_qpll1_wdata <= 'd0;
++ 442       up_drp_qpll1_rdata_hold <= 'd0;
++ 481       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
++ 481         up_drp_qpll0_sel <= 1'b1;
++ 481         up_drp_qpll0_wr <= ~up_wdata[28];
++ 481       end else begin
++ 481         up_drp_qpll0_sel <= 1'b0;
++ 481         up_drp_qpll0_wr <= 1'b0;
++ 485       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
++ 485         up_drp_qpll0_status <= 1'b1;
++ 485       end else if (up_drp_qpll0_ready == 1'b1) begin
++ 485         up_drp_qpll0_status <= 1'b0;
++ 488       if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
++ 488         up_drp_qpll0_rwn <= up_wdata[28];
++ 488         up_drp_qpll0_addr <= up_wdata[27:16];
++ 488         up_drp_qpll0_wdata <= up_wdata[15:0];
++ 491       if (up_drp_qpll0_ready == 1'b1) begin
++ 491         up_drp_qpll0_rdata_hold <= up_drp_qpll0_rdata;
++ 495         up_drp_qpll1_sel <= 1'b1;
++ 495         up_drp_qpll1_wr <= ~up_wdata[28];
++ 498         up_drp_qpll1_sel <= 1'b0;
++ 498         up_drp_qpll1_wr <= 1'b0;
++ 503         up_drp_qpll1_status <= 1'b1;
++ 503       end else if (up_drp_qpll1_ready == 1'b1) begin
++ 503         up_drp_qpll1_status <= 1'b0;
++ 569         up_drp_qpll1_rwn <= up_wdata[28];
++ 569         up_drp_qpll1_addr <= up_wdata[27:16];
++ 569         up_drp_qpll1_wdata <= up_wdata[15:0];
++ 574       if (up_drp_qpll1_ready == 1'b1) begin
++ 574         up_drp_qpll1_rdata_hold <= up_drp_qpll1_rdata;
+
+Clone Blocks:

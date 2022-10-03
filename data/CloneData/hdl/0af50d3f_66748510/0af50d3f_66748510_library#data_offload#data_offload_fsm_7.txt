@@ -1,0 +1,33 @@
+Source Block: hdl/library/data_offload/data_offload_fsm.v@253:264@HdlStmAssign
+      end
+    end
+  end
+
+  // flush out the DMA if the transfer is bigger than the storage size
+  assign wr_ready = ((wr_fsm_state == WR_WRITE_TO_MEM) ||
+                     ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in)) ? 1'b1 : 1'b0;
+
+  // write control
+  assign wr_valid_out = (wr_fsm_state == WR_WRITE_TO_MEM) & wr_valid_in;
+
+  // sample counter for debug purposes, the value of the counter resets at
+
+Diff Content:
+- 259                      ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in)) ? 1'b1 : 1'b0;
++ 259                      ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in && wr_ready_d && wr_full)) ? 1'b1 : 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/data_offload/data_offload_fsm.v@257:267
+  // flush out the DMA if the transfer is bigger than the storage size
+  assign wr_ready = ((wr_fsm_state == WR_WRITE_TO_MEM) ||
+                     ((wr_fsm_state == WR_WAIT_TO_END) && wr_valid_in)) ? 1'b1 : 1'b0;
+
+  // write control
+  assign wr_valid_out = (wr_fsm_state == WR_WRITE_TO_MEM) & wr_valid_in;
+
+  // sample counter for debug purposes, the value of the counter resets at
+  // every new incoming request
+
+  always @(posedge wr_clk) begin
+

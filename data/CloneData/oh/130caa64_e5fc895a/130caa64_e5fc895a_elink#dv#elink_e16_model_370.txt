@@ -1,0 +1,38 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3318:3329@HdlStmAssign
+   //# arbitration which is performed in the txo_interface
+   //#############################################################
+   assign txo_launch_req_tlc = c0_txo_launch_req_tlc | c1_txo_launch_req_tlc |
+			       c2_txo_launch_req_tlc | c3_txo_launch_req_tlc;
+
+   assign txo_rotate_dis_tlc = c0_txo_rotate_dis | c1_txo_rotate_dis |
+			       c2_txo_rotate_dis | c3_txo_rotate_dis;
+
+   //###########################################
+   //# Rotation mechanism and requests creation
+   //###########################################
+   always @ (posedge txo_lclk or posedge reset)
+
+Diff Content:
+- 3323    assign txo_rotate_dis_tlc = c0_txo_rotate_dis | c1_txo_rotate_dis |
+- 3324 			       c2_txo_rotate_dis | c3_txo_rotate_dis;
++ 3324    input             c0_clk_in; // clock of the core
++ 3324    input             c1_clk_in; // clock of the core
++ 3324    input             c2_clk_in; // clock of the core
++ 3324    input             c3_clk_in; // clock of the core
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@3315:3326
+
+   //#############################################################
+   //# creating requests information for the additional
+   //# arbitration which is performed in the txo_interface
+   //#############################################################
+   assign txo_launch_req_tlc = c0_txo_launch_req_tlc | c1_txo_launch_req_tlc |
+			       c2_txo_launch_req_tlc | c3_txo_launch_req_tlc;
+
+   assign txo_rotate_dis_tlc = c0_txo_rotate_dis | c1_txo_rotate_dis |
+			       c2_txo_rotate_dis | c3_txo_rotate_dis;
+
+   //###########################################
+

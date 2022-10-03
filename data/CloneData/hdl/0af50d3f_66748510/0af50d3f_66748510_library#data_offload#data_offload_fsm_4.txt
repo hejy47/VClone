@@ -1,0 +1,80 @@
+Source Block: hdl/library/data_offload/data_offload_fsm.v@138:208@HdlStmProcess
+
+  (* DONT_TOUCH = "TRUE" *) reg [1:0] wr_fsm_state = 2'b00;
+  (* DONT_TOUCH = "TRUE" *) reg [1:0] rd_fsm_state = 2'b00;
+
+  // Mealy state machine for write control
+  always @(posedge wr_clk) begin
+    if (wr_resetn_in == 1'b0) begin
+      wr_fsm_state <= WR_IDLE;
+    end else begin
+      case (wr_fsm_state)
+
+          WR_IDLE: begin
+            if (wr_init_req_s) begin
+              wr_fsm_state <= (TX_OR_RXN_PATH) ? WR_WRITE_TO_MEM : WR_SYNC;
+            end else begin
+              wr_fsm_state <= WR_IDLE;
+            end
+          end
+
+          WR_SYNC: begin
+            // do not lock the FSM if something goes wrong
+            if (TX_OR_RXN_PATH) begin
+              wr_fsm_state <= WR_WRITE_TO_MEM;
+            end else begin // SOURCE_IS_BACK_END
+              case (sync_config)
+                AUTOMATIC: begin
+                  wr_fsm_state <= WR_WRITE_TO_MEM;
+                end
+                HARDWARE: begin
+                  if (wr_sync_external_s) begin
+                    wr_fsm_state <= WR_WRITE_TO_MEM;
+                  end
+                end
+                SOFTWARE: begin
+                  if (wr_sync_internal_s) begin
+                    wr_fsm_state <= WR_WRITE_TO_MEM;
+                  end
+                end
+                default: begin
+                  wr_fsm_state <= WR_WRITE_TO_MEM;
+                end
+              endcase
+            end
+          end
+
+          WR_WRITE_TO_MEM: begin
+            if ((wr_full || wr_last) && wr_valid_out) begin
+              wr_fsm_state <= WR_WAIT_TO_END;
+            end else begin
+              wr_fsm_state <= WR_WRITE_TO_MEM;
+            end
+          end
+
+          WR_WAIT_TO_END: begin
+            if ((wr_isempty_s) || (wr_init_req_pos_s)) begin
+              wr_fsm_state <= WR_IDLE;
+            end else begin
+              wr_fsm_state <= WR_WAIT_TO_END;
+            end
+          end
+
+          default: wr_fsm_state <= WR_IDLE;
+      endcase
+
+    end
+  end
+
+  // the initialization interface (init_req) is edge sensitive
+  always @(posedge wr_clk) begin
+    wr_init_req_d <= wr_init_req_s;
+  end
+
+Diff Content:
+- 184             if ((wr_full || wr_last) && wr_valid_out) begin
+- 192             if ((wr_isempty_s) || (wr_init_req_pos_s)) begin
++ 184             if ((wr_almost_full || wr_last) && wr_valid_out) begin
++ 192             if (wr_isempty_s && (wr_oneshot || wr_init_req_s)) begin
+
+Clone Blocks:

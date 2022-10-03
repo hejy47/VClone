@@ -1,0 +1,115 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@72:82@HdlIdDef
+
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+
+wire                                  single_eof = cfg_octets_per_frame >= (DATA_PATH_WIDTH-1);
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d1;
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+wire [DATA_PATH_WIDTH-1:0]            char_is_align;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d1;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d2;
+wire [((DATA_PATH_WIDTH*2)+4)*8-1:0]  saved_data;
+wire [((DATA_PATH_WIDTH*2)+4)-1:0]    saved_char_is_align;
+
+Diff Content:
+- 77 reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@77:87
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+wire [DATA_PATH_WIDTH-1:0]            char_is_align;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d1;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d2;
+wire [((DATA_PATH_WIDTH*2)+4)*8-1:0]  saved_data;
+wire [((DATA_PATH_WIDTH*2)+4)-1:0]    saved_char_is_align;
+wire [DATA_PATH_WIDTH*8-1:0]          data_replaced;
+wire [DATA_PATH_WIDTH*8-1:0]          data_prev_eof;
+wire [DATA_PATH_WIDTH*8-1:0]          data_prev_prev_eof;
+reg  [7:0]                            data_prev_eof_single;
+reg  [7:0]                            data_prev_eof_single_int;
+
+Clone Blocks 2:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@74:84
+
+wire                                  single_eof = cfg_octets_per_frame >= (DATA_PATH_WIDTH-1);
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d1;
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+wire [DATA_PATH_WIDTH-1:0]            char_is_align;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d1;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d2;
+wire [((DATA_PATH_WIDTH*2)+4)*8-1:0]  saved_data;
+wire [((DATA_PATH_WIDTH*2)+4)-1:0]    saved_char_is_align;
+wire [DATA_PATH_WIDTH*8-1:0]          data_replaced;
+wire [DATA_PATH_WIDTH*8-1:0]          data_prev_eof;
+
+Clone Blocks 3:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@75:85
+wire                                  single_eof = cfg_octets_per_frame >= (DATA_PATH_WIDTH-1);
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d1;
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+wire [DATA_PATH_WIDTH-1:0]            char_is_align;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d1;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d2;
+wire [((DATA_PATH_WIDTH*2)+4)*8-1:0]  saved_data;
+wire [((DATA_PATH_WIDTH*2)+4)-1:0]    saved_char_is_align;
+wire [DATA_PATH_WIDTH*8-1:0]          data_replaced;
+wire [DATA_PATH_WIDTH*8-1:0]          data_prev_eof;
+wire [DATA_PATH_WIDTH*8-1:0]          data_prev_prev_eof;
+
+Clone Blocks 4:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@71:81
+);
+
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+
+wire                                  single_eof = cfg_octets_per_frame >= (DATA_PATH_WIDTH-1);
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d1;
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+wire [DATA_PATH_WIDTH-1:0]            char_is_align;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d1;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d2;
+wire [((DATA_PATH_WIDTH*2)+4)*8-1:0]  saved_data;
+
+Clone Blocks 5:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@73:83
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+
+wire                                  single_eof = cfg_octets_per_frame >= (DATA_PATH_WIDTH-1);
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d1;
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+wire [DATA_PATH_WIDTH-1:0]            char_is_align;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d1;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d2;
+wire [((DATA_PATH_WIDTH*2)+4)*8-1:0]  saved_data;
+wire [((DATA_PATH_WIDTH*2)+4)-1:0]    saved_char_is_align;
+wire [DATA_PATH_WIDTH*8-1:0]          data_replaced;
+
+Clone Blocks 6:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@76:86
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d1;
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+wire [DATA_PATH_WIDTH-1:0]            char_is_align;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d1;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d2;
+wire [((DATA_PATH_WIDTH*2)+4)*8-1:0]  saved_data;
+wire [((DATA_PATH_WIDTH*2)+4)-1:0]    saved_char_is_align;
+wire [DATA_PATH_WIDTH*8-1:0]          data_replaced;
+wire [DATA_PATH_WIDTH*8-1:0]          data_prev_eof;
+wire [DATA_PATH_WIDTH*8-1:0]          data_prev_prev_eof;
+reg  [7:0]                            data_prev_eof_single;
+
+Clone Blocks 7:
+hdl/library/jesd204/jesd204_common/jesd204_frame_align_replace.v@70:80
+  output [DATA_PATH_WIDTH-1:0]      charisk_out
+);
+
+localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
+
+wire                                  single_eof = cfg_octets_per_frame >= (DATA_PATH_WIDTH-1);
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d1;
+reg  [DATA_PATH_WIDTH*8-1:0]          data_d2;
+wire [DATA_PATH_WIDTH-1:0]            char_is_align;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d1;
+reg  [DATA_PATH_WIDTH-1:0]            char_is_align_d2;
+

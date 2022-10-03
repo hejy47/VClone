@@ -1,0 +1,77 @@
+Source Block: oh/src/mio/hdl/mrx_io.v@40:50@HdlStmAssign
+   
+   //########################################
+   //# STATE MACHINE
+   //########################################
+
+   assign dmode8   = (iowidth[1:0]==2'b00) & ~ddr_mode;   
+   assign dmode16  = ((iowidth[1:0]==2'b01) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b00) & ddr_mode;   
+   assign dmode32  = ((iowidth[1:0]==2'b10) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b01) & ddr_mode;   
+   assign dmode64  = ((iowidth[1:0]==2'b11) & ~ddr_mode) |
+
+Diff Content:
+- 45    assign dmode8   = (iowidth[1:0]==2'b00) & ~ddr_mode;   
++ 45    assign dmode8   = (iowidth[1:0]==2'b00);   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/mio/hdl/mtx_io.v@38:49
+   //########################################
+   //# STATE MACHINE
+   //########################################   
+
+   assign dmode8   = (iowidth[1:0]==2'b00) & ~ddr_mode;   
+   assign dmode16  = ((iowidth[1:0]==2'b01) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b00) & ddr_mode;   
+   assign dmode32  = ((iowidth[1:0]==2'b10) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b01) & ddr_mode;   
+   assign dmode64  = ((iowidth[1:0]==2'b11) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b10) & ddr_mode;   
+
+
+Clone Blocks 2:
+oh/src/mio/hdl/mrx_io.v@41:52
+   //########################################
+   //# STATE MACHINE
+   //########################################
+
+   assign dmode8   = (iowidth[1:0]==2'b00) & ~ddr_mode;   
+   assign dmode16  = ((iowidth[1:0]==2'b01) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b00) & ddr_mode;   
+   assign dmode32  = ((iowidth[1:0]==2'b10) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b01) & ddr_mode;   
+   assign dmode64  = ((iowidth[1:0]==2'b11) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b10) & ddr_mode;   
+
+
+Clone Blocks 3:
+oh/src/mio/hdl/mtx_io.v@37:47
+   
+   //########################################
+   //# STATE MACHINE
+   //########################################   
+
+   assign dmode8   = (iowidth[1:0]==2'b00) & ~ddr_mode;   
+   assign dmode16  = ((iowidth[1:0]==2'b01) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b00) & ddr_mode;   
+   assign dmode32  = ((iowidth[1:0]==2'b10) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b01) & ddr_mode;   
+   assign dmode64  = ((iowidth[1:0]==2'b11) & ~ddr_mode) |
+
+Clone Blocks 4:
+oh/src/mio/hdl/mrx_io.v@43:54
+   //########################################
+
+   assign dmode8   = (iowidth[1:0]==2'b00) & ~ddr_mode;   
+   assign dmode16  = ((iowidth[1:0]==2'b01) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b00) & ddr_mode;   
+   assign dmode32  = ((iowidth[1:0]==2'b10) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b01) & ddr_mode;   
+   assign dmode64  = ((iowidth[1:0]==2'b11) & ~ddr_mode) |
+                     (iowidth[1:0]==2'b10) & ddr_mode;   
+
+   assign valid_input[7:0] = dmode8  ? 8'b00000001 :
+			     dmode16 ? 8'b00000011 :
+

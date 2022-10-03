@@ -1,0 +1,45 @@
+Source Block: hdl/projects/daq2/a10gx/system_top.v@191:201@HdlIdDef
+  wire              spi_miso_s;
+  wire              spi_mosi_s;
+  wire    [  7:0]   spi_csn_s;
+  wire              xcvr_pll_locked;
+  wire    [  3:0]   xcvr_rx_ready;
+  wire    [  3:0]   xcvr_tx_ready;
+
+  // daq2
+
+  assign spi_csn_adc = spi_csn_s[2];
+  assign spi_csn_dac = spi_csn_s[1];
+
+Diff Content:
+- 196   wire    [  3:0]   xcvr_tx_ready;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/daq2/a10gx/system_top.v@195:205
+  wire    [  3:0]   xcvr_rx_ready;
+  wire    [  3:0]   xcvr_tx_ready;
+
+  // daq2
+
+  assign spi_csn_adc = spi_csn_s[2];
+  assign spi_csn_dac = spi_csn_s[1];
+  assign spi_csn_clk = spi_csn_s[0];
+
+  daq2_spi i_daq2_spi (
+    .spi_csn (spi_csn_s[2:0]),
+
+Clone Blocks 2:
+hdl/projects/daq2/a10gx/system_top.v@190:200
+  wire    [ 63:0]   gpio_o;
+  wire              spi_miso_s;
+  wire              spi_mosi_s;
+  wire    [  7:0]   spi_csn_s;
+  wire              xcvr_pll_locked;
+  wire    [  3:0]   xcvr_rx_ready;
+  wire    [  3:0]   xcvr_tx_ready;
+
+  // daq2
+
+  assign spi_csn_adc = spi_csn_s[2];
+

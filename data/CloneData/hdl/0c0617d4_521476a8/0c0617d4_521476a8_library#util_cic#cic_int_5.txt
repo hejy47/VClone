@@ -1,0 +1,87 @@
+Source Block: hdl/library/util_cic/cic_int.v@49:59@HdlStmAssign
+reg [DATA_WIDTH-1:0] state = 'h00;
+wire [DATA_WIDTH-1:0] sum;
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+genvar i;
+
+for (i = 0; i < NUM_STAGES; i = i + 1) begin
+  localparam j = NUM_STAGES - i - 1;
+
+Diff Content:
+- 54 assign sum = (data_in & mask) + (state & mask);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_cic/cic_int.v@48:58
+
+reg [DATA_WIDTH-1:0] state = 'h00;
+wire [DATA_WIDTH-1:0] sum;
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+genvar i;
+
+for (i = 0; i < NUM_STAGES; i = i + 1) begin
+
+Clone Blocks 2:
+hdl/library/util_cic/cic_int.v@44:54
+  input [NUM_STAGES-1:0] ce,
+  input [DATA_WIDTH-1:0] data_in,
+  output [DATA_WIDTH-1:0] data_out
+);
+
+reg [DATA_WIDTH-1:0] state = 'h00;
+wire [DATA_WIDTH-1:0] sum;
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+
+Clone Blocks 3:
+hdl/library/util_cic/cic_int.v@45:55
+  input [DATA_WIDTH-1:0] data_in,
+  output [DATA_WIDTH-1:0] data_out
+);
+
+reg [DATA_WIDTH-1:0] state = 'h00;
+wire [DATA_WIDTH-1:0] sum;
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+
+Clone Blocks 4:
+hdl/library/util_cic/cic_int.v@51:61
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+genvar i;
+
+for (i = 0; i < NUM_STAGES; i = i + 1) begin
+  localparam j = NUM_STAGES - i - 1;
+  localparam H = DATA_WIDTH - STAGE_WIDTH * i - 1;
+  localparam L = j == 0 ? 0 : DATA_WIDTH - STAGE_WIDTH * (i+1);
+
+Clone Blocks 5:
+hdl/library/util_cic/cic_int.v@46:56
+  output [DATA_WIDTH-1:0] data_out
+);
+
+reg [DATA_WIDTH-1:0] state = 'h00;
+wire [DATA_WIDTH-1:0] sum;
+wire [DATA_WIDTH-1:0] mask;
+
+assign data_out = state;
+assign sum = (data_in & mask) + (state & mask);
+generate
+genvar i;
+

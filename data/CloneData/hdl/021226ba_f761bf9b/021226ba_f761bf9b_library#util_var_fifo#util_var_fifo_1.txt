@@ -1,0 +1,60 @@
+Source Block: hdl/library/util_var_fifo/util_var_fifo.v@83:93@HdlStmAssign
+  wire  [DATA_WIDTH-1:0]  data_out_s;
+  wire                    data_out_valid_s;
+
+  assign reset = ((rst == 1'b1) || (depth != depth_d1)) ? 1 : 0;
+
+  assign data_out = (depth == 0) ? data_in_d2 : data_out_s;
+  assign data_out_valid_s = data_active & data_in_valid;
+  assign data_out_valid = (depth == 0) ? data_in_valid : data_out_valid_s;
+
+  assign wea_w = data_in_valid & fifo_active;
+  assign en_w = fifo_active;
+
+Diff Content:
+- 88   assign data_out = (depth == 0) ? data_in_d2 : data_out_s;
++ 88   assign data_out = fifo_active ? data_out_s : data_in_d2;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_var_fifo/util_var_fifo.v@84:94
+  wire                    data_out_valid_s;
+
+  assign reset = ((rst == 1'b1) || (depth != depth_d1)) ? 1 : 0;
+
+  assign data_out = (depth == 0) ? data_in_d2 : data_out_s;
+  assign data_out_valid_s = data_active & data_in_valid;
+  assign data_out_valid = (depth == 0) ? data_in_valid : data_out_valid_s;
+
+  assign wea_w = data_in_valid & fifo_active;
+  assign en_w = fifo_active;
+  assign addr_w = addra;
+
+Clone Blocks 2:
+hdl/library/util_var_fifo/util_var_fifo.v@81:91
+
+  wire                    reset;
+  wire  [DATA_WIDTH-1:0]  data_out_s;
+  wire                    data_out_valid_s;
+
+  assign reset = ((rst == 1'b1) || (depth != depth_d1)) ? 1 : 0;
+
+  assign data_out = (depth == 0) ? data_in_d2 : data_out_s;
+  assign data_out_valid_s = data_active & data_in_valid;
+  assign data_out_valid = (depth == 0) ? data_in_valid : data_out_valid_s;
+
+
+Clone Blocks 3:
+hdl/library/util_var_fifo/util_var_fifo.v@85:95
+
+  assign reset = ((rst == 1'b1) || (depth != depth_d1)) ? 1 : 0;
+
+  assign data_out = (depth == 0) ? data_in_d2 : data_out_s;
+  assign data_out_valid_s = data_active & data_in_valid;
+  assign data_out_valid = (depth == 0) ? data_in_valid : data_out_valid_s;
+
+  assign wea_w = data_in_valid & fifo_active;
+  assign en_w = fifo_active;
+  assign addr_w = addra;
+  assign din_w = data_in;
+

@@ -1,0 +1,22 @@
+Source Block: oh/elink/hdl/etx_cfg.v@100:114@HdlStmProcess
+   assign gpio_enable     = (ecfg_tx_config_reg[10:9]==2'b01);
+
+   //###########################
+   //# STATUS REGISTER
+   //###########################   
+   always @ (posedge clk)
+     if(!nreset)
+       ecfg_tx_status_reg[2:0] <= 'd0;
+     else
+       ecfg_tx_status_reg[2:0]<= ecfg_tx_status_reg[2:0] | tx_status[2:0];
+
+   //###########################
+   //# GPIO DATA
+   //###########################
+   always @ (posedge clk)
+
+Diff Content:
++ 107      else if (ecfg_tx_status_write)
++ 107        ecfg_tx_status_reg[2:0] <= mi_din[2:0];   
+
+Clone Blocks:

@@ -1,0 +1,73 @@
+Source Block: hdl/library/xilinx/axi_dacfifo/util_dacfifo_bypass.v@238:266@HdlStmProcess
+    end
+  end
+
+  // The memory module is ready if it's not empty
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_mem_addr_diff <= 'b0;
+      dac_mem_waddr_m1 <= 'b0;
+      dac_mem_waddr_m2 <= 'b0;
+      dac_mem_waddr <= 'b0;
+      dac_mem_ready <= 1'b0;
+    end else begin
+      dac_mem_waddr_m1 <= dma_mem_waddr_g;
+      dac_mem_waddr_m2 <= dac_mem_waddr_m1;
+      dac_mem_waddr <= g2b(dac_mem_waddr_m2);
+      dac_mem_addr_diff <= dac_address_diff_s[DAC_ADDRESS_WIDTH-1:0];
+      if (dac_mem_addr_diff > 0) begin
+        dac_mem_ready <= 1'b1;
+      end else begin
+        dac_mem_ready <= 1'b0;
+      end
+    end
+  end
+
+  // define underflow
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+
+Diff Content:
+- 253       dac_mem_waddr <= g2b(dac_mem_waddr_m2);
++ 253       dac_mem_waddr <= dac_mem_waddr_m2_g2b_s;
++ 261   ad_g2b #(
++ 261     .DATA_WIDTH (DMA_ADDRESS_WIDTH))
++ 261   i_dac_mem_waddr_g2b (
++ 261     .din (dac_mem_waddr_m2),
++ 261     .dout (dac_mem_waddr_m2_g2b_s));
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/altera/avl_dacfifo/util_dacfifo_bypass.v@233:261
+    end
+  end
+
+  // The memory module is ready if it's not empty
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_mem_addr_diff <= 'b0;
+      dac_mem_waddr_m1 <= 'b0;
+      dac_mem_waddr_m2 <= 'b0;
+      dac_mem_waddr <= 'b0;
+      dac_mem_ready <= 1'b0;
+    end else begin
+      dac_mem_waddr_m1 <= dma_mem_waddr_g;
+      dac_mem_waddr_m2 <= dac_mem_waddr_m1;
+      dac_mem_waddr <= g2b(dac_mem_waddr_m2);
+      dac_mem_addr_diff <= dac_address_diff_s[DAC_ADDRESS_WIDTH-1:0];
+      if (dac_mem_addr_diff > 0) begin
+        dac_mem_ready <= 1'b1;
+      end else begin
+        dac_mem_ready <= 1'b0;
+      end
+    end
+  end
+
+  // define underflow
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+

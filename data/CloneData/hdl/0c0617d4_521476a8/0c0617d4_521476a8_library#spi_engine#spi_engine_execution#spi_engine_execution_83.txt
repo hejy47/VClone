@@ -1,0 +1,78 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@319:330@HdlStmAssign
+    sdo_data_ready <= 1'b0;
+end
+
+assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+
+always @(posedge clk) begin
+  if (idle == 1'b1) begin
+    last_transfer <= 1'b0;
+  end else if (trigger_tx == 1'b1 && transfer_active == 1'b1) begin
+
+Diff Content:
+- 324 assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
+- 325         (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@317:328
+    sdo_data_ready <= 1'b1;
+  else if (sdo_data_valid == 1'b1)
+    sdo_data_ready <= 1'b0;
+end
+
+assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+
+always @(posedge clk) begin
+  if (idle == 1'b1) begin
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@308:325
+  end
+end
+
+assign sync = cmd_d1[7:0];
+
+always @(posedge clk) begin
+  if (resetn == 1'b0)
+    sdo_data_ready <= 1'b0;
+  else if (sdo_enabled == 1'b1 && first_bit == 1'b1 && trigger_tx == 1'b1 && transfer_active == 1'b1)
+    sdo_data_ready <= 1'b1;
+  else if (sdo_data_valid == 1'b1)
+    sdo_data_ready <= 1'b0;
+end
+
+assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+
+Clone Blocks 3:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@322:341
+assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
+        (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+
+always @(posedge clk) begin
+  if (idle == 1'b1) begin
+    last_transfer <= 1'b0;
+  end else if (trigger_tx == 1'b1 && transfer_active == 1'b1) begin
+    if (transfer_counter == cmd_d1[7:0])
+      last_transfer <= 1'b1;
+    else
+      last_transfer <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    transfer_active <= 1'b0;
+    wait_for_io <= 1'b0;
+

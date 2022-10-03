@@ -1,0 +1,37 @@
+Source Block: oh/elink/hdl/erx_arbiter.v@103:117@HdlStmAssign
+
+   //####################################
+   //Read response path, bypass mmu
+   //####################################
+
+   assign erx_rr_access         = (erx_access & 
+				   erx_write & 
+				  (erx_dstaddr[31:20] == myid[11:0]) & 
+				  (erx_dstaddr[19:16] == 4'hD)
+				  );
+   
+   assign rxrr_access = erx_rr_access   |
+			ecfg_access;
+   
+   assign rxrr_packet[PW-1:0] = erx_rr_access ?  erx_packet[PW-1:0] :
+
+Diff Content:
+- 111 				  (erx_dstaddr[19:16] == 4'hD)
++ 111 				  (erx_dstaddr[19:16] == `EGROUP_RR) // Not sure about this...
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_arbiter.v@109:120
+				   erx_write & 
+				  (erx_dstaddr[31:20] == myid[11:0]) & 
+				  (erx_dstaddr[19:16] == 4'hD)
+				  );
+   
+   assign rxrr_access = erx_rr_access   |
+			ecfg_access;
+   
+   assign rxrr_packet[PW-1:0] = erx_rr_access ?  erx_packet[PW-1:0] :
+			 	                 ecfg_packet[PW-1:0];
+
+   assign ecfg_wait = erx_rr_access;
+

@@ -1,0 +1,45 @@
+Source Block: oh/elink/hdl/erx_io.v@256:266@HdlIdDef
+   reg [1:0]   rxgpio_sync;
+   wire        rxgpio = rxgpio_sync[0];
+   
+   // Register outputs once for good measure, then mux in loopback data if enabled
+   reg [63:0]  rx_data_reg;
+   reg [7:0]   rx_frame_reg;
+
+   
+   wire        rxreset = reset | ~ecfg_rx_enable;
+   
+   always @ (posedge rx_lclk_div4 or posedge rxreset) 
+
+Diff Content:
+- 261    reg [7:0]   rx_frame_reg;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_io.v@259:269
+   // Register outputs once for good measure, then mux in loopback data if enabled
+   reg [63:0]  rx_data_reg;
+   reg [7:0]   rx_frame_reg;
+
+   
+   wire        rxreset = reset | ~ecfg_rx_enable;
+   
+   always @ (posedge rx_lclk_div4 or posedge rxreset) 
+     begin
+	if(rxreset)
+          rxenb_sync[1:0] <= 'd0;
+
+Clone Blocks 2:
+oh/elink/hdl/erx_io.v@255:265
+   assign      serdes_reset = ~rxenb;
+   reg [1:0]   rxgpio_sync;
+   wire        rxgpio = rxgpio_sync[0];
+   
+   // Register outputs once for good measure, then mux in loopback data if enabled
+   reg [63:0]  rx_data_reg;
+   reg [7:0]   rx_frame_reg;
+
+   
+   wire        rxreset = reset | ~ecfg_rx_enable;
+   
+

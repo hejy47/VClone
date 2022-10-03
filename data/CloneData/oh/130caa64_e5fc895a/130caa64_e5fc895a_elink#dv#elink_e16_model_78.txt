@@ -1,0 +1,34 @@
+Source Block: oh/elink/dv/elink_e16_model.v@1239:1257@HdlStmAssign
+
+   //##############################
+   //# Assembled data and controls
+   //##############################
+
+   assign rxi_assembled_tran[14*LW-1:0]={
+                                         srcaddr[7:0],{(LW){1'b0}},
+				               srcaddr[23:8],
+			                 data[7:0],srcaddr[31:24],
+				                 data[23:8],
+	                    dstaddr[3:0],datamode[1:0],write,access,data[31:24],
+				                dstaddr[19:4],
+			                 ctrlmode[3:0],dstaddr[31:20]
+                                        };
+ 
+   //####################
+   //# Byte0 detection
+   //####################
+
+
+Diff Content:
+- 1244    assign rxi_assembled_tran[14*LW-1:0]={
+- 1245                                          srcaddr[7:0],{(LW){1'b0}},
+- 1246 				               srcaddr[23:8],
+- 1247 			                 data[7:0],srcaddr[31:24],
+- 1248 				                 data[23:8],
+- 1249 	                    dstaddr[3:0],datamode[1:0],write,access,data[31:24],
+- 1250 				                dstaddr[19:4],
+- 1251 			                 ctrlmode[3:0],dstaddr[31:20]
+- 1252                                         };
++ 1252    input  reset;  //do we need this???
+
+Clone Blocks:

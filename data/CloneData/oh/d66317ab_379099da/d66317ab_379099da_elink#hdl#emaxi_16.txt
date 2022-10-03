@@ -1,0 +1,17 @@
+Source Block: oh/elink/hdl/emaxi.v@486:496@HdlStmAssign
+   assign    fifo_rd_en           = m_axi_rvalid & ~txrr_wait;
+				      
+   //#################################################################
+   //Read response channel
+   //#################################################################
+   assign    m_axi_rready         = ~txrr_wait;
+
+   always @( posedge m_axi_aclk )
+       if ( ~m_axi_aresetn )
+           m_axi_rdata_reg <= 'b0;
+       else
+
+Diff Content:
+- 491    assign    m_axi_rready         = ~txrr_wait;
+
+Clone Blocks:

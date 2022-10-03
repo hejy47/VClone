@@ -1,0 +1,665 @@
+Source Block: hdl/library/axi_adrv9001/axi_adrv9001_tx.v@107:427@HdlStmIf
+  input       [ 13:0]     up_raddr,
+  output  reg [ 31:0]     up_rdata,
+  output  reg             up_rack
+);
+generate
+if (ENABLED == 0) begin : core_disabled
+
+  assign dac_rst = 1'b0;
+  assign dac_data_valid_A = 1'b0;
+  assign dac_data_i_A = 16'b0;
+  assign dac_data_q_A = 16'b0;
+  assign dac_data_valid_B = 1'b0;
+  assign dac_data_i_B = 16'b0;
+  assign dac_data_q_B = 16'b0;
+  assign dac_single_lane = 1'b0;
+  assign dac_sdr_ddr_n = 1'b0;
+  assign dac_symb_op = 1'b0;
+  assign dac_symb_8_16b = 1'b0;
+  assign up_dac_r1_mode = 1'b0;
+  assign dac_sync_out = 1'b0;
+  assign dac_valid = 1'b0;
+  assign dac_enable_i0 = 1'b0;
+  assign dac_enable_q0 = 1'b0;
+  assign dac_enable_i1 = 1'b0;
+  assign dac_enable_q1 = 1'b0;
+
+  always @(*) begin
+    up_wack = 1'b0;
+    up_rdata = 32'b0;
+    up_rack = 1'b0;
+  end
+
+end else begin : core_enabled
+
+  // configuration settings
+
+  localparam  CONFIG =  (USE_RX_CLK_FOR_TX * 1024) +
+                        (CMOS_LVDS_N * 128) +
+                        (MODE_R1 * 16) +
+                        (DDS_DISABLE * 64) +
+                        (IQCORRECTION_DISABLE * 1);
+
+  // internal registers
+
+  reg               dac_data_sync = 'd0;
+  reg     [15:0]    dac_rate_cnt = 'd0;
+  reg               dac_valid_int = 'd0;
+
+  // internal signals
+
+  wire              dac_data_sync_s;
+  wire    [ 15:0]   dac_data_iq_i0_s;
+  wire    [ 15:0]   dac_data_iq_q0_s;
+  wire    [ 15:0]   dac_data_iq_i1_s;
+  wire    [ 15:0]   dac_data_iq_q1_s;
+  wire              dac_dds_format_s;
+  wire    [ 15:0]   dac_datarate_s;
+  wire      [4:0]   dac_num_lanes;
+  wire    [  4:0]   up_wack_s;
+  wire    [  4:0]   up_rack_s;
+  wire    [ 31:0]   up_rdata_s[0:4];
+
+  // master/slave
+
+  assign dac_data_sync_s = (EXT_SYNC == 0) ? dac_sync_out : dac_sync_in;
+
+  always @(posedge dac_clk) begin
+    dac_data_sync <= dac_data_sync_s;
+  end
+
+  // rate counters and data sync signals
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_rate_cnt <= 16'b0;
+    end else begin
+      if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
+        dac_rate_cnt <= dac_datarate_s;
+      end else begin
+        dac_rate_cnt <= dac_rate_cnt - 1'b1;
+      end
+    end
+  end
+
+  // dma interface
+
+  assign dac_data_valid_A = dac_valid_int;
+  assign dac_data_valid_B = dac_valid_int;
+
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_valid_int <= 1'b0;
+    end else begin
+      dac_valid_int <= (dac_rate_cnt == 16'd0) ? tdd_tx_valid : 1'b0;
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_wack <= | up_wack_s;
+      up_rack <= | up_rack_s;
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
+                  up_rdata_s[3] | up_rdata_s[4];
+    end
+  end
+
+  // dac channel 0
+
+  axi_adrv9001_tx_channel #(
+    .CHANNEL_ID (0),
+    .COMMON_ID (CHANNEL_BASE_ADDR),
+    .Q_OR_I_N (0),
+    .DISABLE (DISABLE),
+    .DDS_DISABLE (DDS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
+  i_tx_channel_0 (
+    .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
+    .dac_data_in_req (dac_valid),
+    .dac_data_in (dac_data_i0),
+    .dac_data_out_req (dac_data_valid_A),
+    .dac_data_out (dac_data_i_A[15:0]),
+    .dac_data_iq_in (dac_data_iq_q0_s),
+    .dac_data_iq_out (dac_data_iq_i0_s),
+    .dac_enable (dac_enable_i0),
+    .dac_data_sync (dac_data_sync),
+    .dac_dds_format (dac_dds_format_s),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[0]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[0]),
+    .up_rack (up_rack_s[0]));
+
+  // dac channel 1
+
+  axi_adrv9001_tx_channel #(
+    .CHANNEL_ID (1),
+    .COMMON_ID (CHANNEL_BASE_ADDR),
+    .Q_OR_I_N (1),
+    .DISABLE (DISABLE),
+    .DDS_DISABLE (DDS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
+  i_tx_channel_1 (
+    .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
+    .dac_data_in_req (),
+    .dac_data_in (dac_data_q0),
+    .dac_data_out_req (dac_data_valid_A),
+    .dac_data_out (dac_data_q_A[15:0]),
+    .dac_data_iq_in (dac_data_iq_i0_s),
+    .dac_data_iq_out (dac_data_iq_q0_s),
+    .dac_enable (dac_enable_q0),
+    .dac_data_sync (dac_data_sync),
+    .dac_dds_format (dac_dds_format_s),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[1]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[1]),
+    .up_rack (up_rack_s[1]));
+
+  // dac channel 2 - disabled in 1R1T mode
+
+  axi_adrv9001_tx_channel #(
+    .CHANNEL_ID (2),
+    .COMMON_ID (CHANNEL_BASE_ADDR),
+    .Q_OR_I_N (0),
+    .DISABLE (MODE_R1),
+    .DDS_DISABLE (DDS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
+  i_tx_channel_2 (
+    .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
+    .dac_data_in_req (),
+    .dac_data_in (dac_data_i1),
+    .dac_data_out_req (dac_data_valid_B),
+    .dac_data_out (dac_data_i_B[15:0]),
+    .dac_data_iq_in (dac_data_iq_q1_s),
+    .dac_data_iq_out (dac_data_iq_i1_s),
+    .dac_enable (dac_enable_i1),
+    .dac_data_sync (dac_data_sync),
+    .dac_dds_format (dac_dds_format_s),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[2]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[2]),
+    .up_rack (up_rack_s[2]));
+
+  // dac channel 3 - disabled in 1R1T mode
+
+  axi_adrv9001_tx_channel #(
+    .CHANNEL_ID (3),
+    .COMMON_ID (CHANNEL_BASE_ADDR),
+    .Q_OR_I_N (1),
+    .DISABLE (MODE_R1),
+    .DDS_DISABLE (DDS_DISABLE),
+    .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+    .DAC_DDS_TYPE (DAC_DDS_TYPE),
+    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
+  i_tx_channel_3 (
+    .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
+    .dac_data_in_req (),
+    .dac_data_in (dac_data_q1),
+    .dac_data_out_req (dac_data_valid_B),
+    .dac_data_out (dac_data_q_B[15:0]),
+    .dac_data_iq_in (dac_data_iq_i1_s),
+    .dac_data_iq_out (dac_data_iq_q1_s),
+    .dac_enable (dac_enable_q1),
+    .dac_data_sync (dac_data_sync),
+    .dac_dds_format (dac_dds_format_s),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[3]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[3]),
+    .up_rack (up_rack_s[3]));
+
+  // dac common processor interface
+
+  up_dac_common #(
+    .ID (ID),
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .FPGA_FAMILY (FPGA_FAMILY),
+    .SPEED_GRADE (SPEED_GRADE),
+    .DEV_PACKAGE (DEV_PACKAGE),
+    .CONFIG(CONFIG),
+    .CLK_EDGE_SEL(0),
+    .COMMON_ID(COMMON_BASE_ADDR),
+    .DRP_DISABLE(1),
+    .USERPORTS_DISABLE(1),
+    .GPIO_DISABLE(1))
+  i_up_dac_common (
+    .mmcm_rst (),
+    .dac_clk (dac_clk),
+    .dac_rst (dac_rst),
+    .dac_num_lanes (dac_num_lanes),
+    .dac_sdr_ddr_n (dac_sdr_ddr_n),
+    .dac_symb_op (dac_symb_op),
+    .dac_symb_8_16b (dac_symb_8_16b),
+    .dac_sync (dac_sync_out),
+    .dac_ext_sync_arm (dac_ext_sync_arm),
+    .dac_frame (),
+    .dac_clksel (),
+    .dac_par_type (),
+    .dac_par_enb (),
+    .dac_r1_mode (),
+    .up_dac_r1_mode (up_dac_r1_mode),
+    .dac_datafmt (dac_dds_format_s),
+    .dac_datarate (dac_datarate_s),
+    .dac_status (1'b1),
+    .dac_status_unf (dac_dunf),
+    .dac_clk_ratio (dac_clk_ratio),
+    .up_dac_ce (),
+    .up_pps_rcounter(32'h0),
+    .up_pps_status(1'b0),
+    .up_pps_irq_mask(),
+    .up_drp_sel (),
+    .up_drp_wr (),
+    .up_drp_addr (),
+    .up_drp_wdata (),
+    .up_drp_rdata (32'd0),
+    .up_drp_ready (1'd0),
+    .up_drp_locked (1'd1),
+    .up_usr_chanmax (),
+    .dac_usr_chanmax (8'd3),
+    .up_dac_gpio_in (32'd0),
+    .up_dac_gpio_out (),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[4]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[4]),
+    .up_rack (up_rack_s[4]));
+
+  assign dac_single_lane = dac_num_lanes[0];
+
+end
+endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 112 if (ENABLED == 0) begin : core_disabled
+- 114   assign dac_rst = 1'b0;
+- 115   assign dac_data_valid_A = 1'b0;
+- 116   assign dac_data_i_A = 16'b0;
+- 117   assign dac_data_q_A = 16'b0;
+- 118   assign dac_data_valid_B = 1'b0;
+- 119   assign dac_data_i_B = 16'b0;
+- 120   assign dac_data_q_B = 16'b0;
+- 121   assign dac_single_lane = 1'b0;
+- 122   assign dac_sdr_ddr_n = 1'b0;
+- 123   assign dac_symb_op = 1'b0;
+- 124   assign dac_symb_8_16b = 1'b0;
+- 125   assign up_dac_r1_mode = 1'b0;
+- 126   assign dac_sync_out = 1'b0;
+- 127   assign dac_valid = 1'b0;
+- 128   assign dac_enable_i0 = 1'b0;
+- 129   assign dac_enable_q0 = 1'b0;
+- 130   assign dac_enable_i1 = 1'b0;
+- 131   assign dac_enable_q1 = 1'b0;
+- 133   always @(*) begin
+- 134     up_wack = 1'b0;
+- 135     up_rdata = 32'b0;
+- 136     up_rack = 1'b0;
+- 137   end
+- 139 end else begin : core_enabled
+- 143   localparam  CONFIG =  (USE_RX_CLK_FOR_TX * 1024) +
+- 144                         (CMOS_LVDS_N * 128) +
+- 145                         (MODE_R1 * 16) +
+- 146                         (DDS_DISABLE * 64) +
+- 147                         (IQCORRECTION_DISABLE * 1);
+- 151   reg               dac_data_sync = 'd0;
+- 152   reg     [15:0]    dac_rate_cnt = 'd0;
+- 153   reg               dac_valid_int = 'd0;
+- 157   wire              dac_data_sync_s;
+- 158   wire    [ 15:0]   dac_data_iq_i0_s;
+- 159   wire    [ 15:0]   dac_data_iq_q0_s;
+- 160   wire    [ 15:0]   dac_data_iq_i1_s;
+- 161   wire    [ 15:0]   dac_data_iq_q1_s;
+- 162   wire              dac_dds_format_s;
+- 163   wire    [ 15:0]   dac_datarate_s;
+- 164   wire      [4:0]   dac_num_lanes;
+- 165   wire    [  4:0]   up_wack_s;
+- 166   wire    [  4:0]   up_rack_s;
+- 167   wire    [ 31:0]   up_rdata_s[0:4];
+- 171   assign dac_data_sync_s = (EXT_SYNC == 0) ? dac_sync_out : dac_sync_in;
+- 173   always @(posedge dac_clk) begin
+- 174     dac_data_sync <= dac_data_sync_s;
+- 175   end
+- 179   always @(posedge dac_clk) begin
+- 180     if (dac_rst == 1'b1) begin
+- 181       dac_rate_cnt <= 16'b0;
+- 182     end else begin
+- 183       if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
+- 184         dac_rate_cnt <= dac_datarate_s;
+- 186         dac_rate_cnt <= dac_rate_cnt - 1'b1;
+- 189   end
+- 193   assign dac_data_valid_A = dac_valid_int;
+- 194   assign dac_data_valid_B = dac_valid_int;
+- 196   always @(posedge dac_clk) begin
+- 197     if (dac_rst == 1'b1) begin
+- 198       dac_valid_int <= 1'b0;
+- 199     end else begin
+- 200       dac_valid_int <= (dac_rate_cnt == 16'd0) ? tdd_tx_valid : 1'b0;
+- 202   end
+- 206   always @(negedge up_rstn or posedge up_clk) begin
+- 207     if (up_rstn == 0) begin
+- 208       up_wack <= 'd0;
+- 209       up_rack <= 'd0;
+- 210       up_rdata <= 'd0;
+- 211     end else begin
+- 212       up_wack <= | up_wack_s;
+- 213       up_rack <= | up_rack_s;
+- 214       up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
+- 215                   up_rdata_s[3] | up_rdata_s[4];
+- 217   end
+- 221   axi_adrv9001_tx_channel #(
+- 222     .CHANNEL_ID (0),
+- 223     .COMMON_ID (CHANNEL_BASE_ADDR),
+- 224     .Q_OR_I_N (0),
+- 225     .DISABLE (DISABLE),
+- 226     .DDS_DISABLE (DDS_DISABLE),
+- 227     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+- 228     .DAC_DDS_TYPE (DAC_DDS_TYPE),
+- 229     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+- 230     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
+- 231   i_tx_channel_0 (
+- 232     .dac_clk (dac_clk),
+- 233     .dac_rst (dac_rst),
+- 234     .dac_data_in_req (dac_valid),
+- 235     .dac_data_in (dac_data_i0),
+- 236     .dac_data_out_req (dac_data_valid_A),
+- 237     .dac_data_out (dac_data_i_A[15:0]),
+- 238     .dac_data_iq_in (dac_data_iq_q0_s),
+- 239     .dac_data_iq_out (dac_data_iq_i0_s),
+- 240     .dac_enable (dac_enable_i0),
+- 241     .dac_data_sync (dac_data_sync),
+- 242     .dac_dds_format (dac_dds_format_s),
+- 243     .up_rstn (up_rstn),
+- 244     .up_clk (up_clk),
+- 245     .up_wreq (up_wreq),
+- 246     .up_waddr (up_waddr),
+- 247     .up_wdata (up_wdata),
+- 248     .up_wack (up_wack_s[0]),
+- 249     .up_rreq (up_rreq),
+- 250     .up_raddr (up_raddr),
+- 251     .up_rdata (up_rdata_s[0]),
+- 252     .up_rack (up_rack_s[0]));
+- 256   axi_adrv9001_tx_channel #(
+- 257     .CHANNEL_ID (1),
+- 258     .COMMON_ID (CHANNEL_BASE_ADDR),
+- 259     .Q_OR_I_N (1),
+- 260     .DISABLE (DISABLE),
+- 261     .DDS_DISABLE (DDS_DISABLE),
+- 262     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+- 263     .DAC_DDS_TYPE (DAC_DDS_TYPE),
+- 264     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+- 265     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
+- 266   i_tx_channel_1 (
+- 267     .dac_clk (dac_clk),
+- 268     .dac_rst (dac_rst),
+- 269     .dac_data_in_req (),
+- 270     .dac_data_in (dac_data_q0),
+- 271     .dac_data_out_req (dac_data_valid_A),
+- 272     .dac_data_out (dac_data_q_A[15:0]),
+- 273     .dac_data_iq_in (dac_data_iq_i0_s),
+- 274     .dac_data_iq_out (dac_data_iq_q0_s),
+- 275     .dac_enable (dac_enable_q0),
+- 276     .dac_data_sync (dac_data_sync),
+- 277     .dac_dds_format (dac_dds_format_s),
+- 278     .up_rstn (up_rstn),
+- 279     .up_clk (up_clk),
+- 280     .up_wreq (up_wreq),
+- 281     .up_waddr (up_waddr),
+- 282     .up_wdata (up_wdata),
+- 283     .up_wack (up_wack_s[1]),
+- 284     .up_rreq (up_rreq),
+- 285     .up_raddr (up_raddr),
+- 286     .up_rdata (up_rdata_s[1]),
+- 287     .up_rack (up_rack_s[1]));
+- 291   axi_adrv9001_tx_channel #(
+- 292     .CHANNEL_ID (2),
+- 293     .COMMON_ID (CHANNEL_BASE_ADDR),
+- 294     .Q_OR_I_N (0),
+- 295     .DISABLE (MODE_R1),
+- 296     .DDS_DISABLE (DDS_DISABLE),
+- 297     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+- 298     .DAC_DDS_TYPE (DAC_DDS_TYPE),
+- 299     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+- 300     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
+- 301   i_tx_channel_2 (
+- 302     .dac_clk (dac_clk),
+- 303     .dac_rst (dac_rst),
+- 304     .dac_data_in_req (),
+- 305     .dac_data_in (dac_data_i1),
+- 306     .dac_data_out_req (dac_data_valid_B),
+- 307     .dac_data_out (dac_data_i_B[15:0]),
+- 308     .dac_data_iq_in (dac_data_iq_q1_s),
+- 309     .dac_data_iq_out (dac_data_iq_i1_s),
+- 310     .dac_enable (dac_enable_i1),
+- 311     .dac_data_sync (dac_data_sync),
+- 312     .dac_dds_format (dac_dds_format_s),
+- 313     .up_rstn (up_rstn),
+- 314     .up_clk (up_clk),
+- 315     .up_wreq (up_wreq),
+- 316     .up_waddr (up_waddr),
+- 317     .up_wdata (up_wdata),
+- 318     .up_wack (up_wack_s[2]),
+- 319     .up_rreq (up_rreq),
+- 320     .up_raddr (up_raddr),
+- 321     .up_rdata (up_rdata_s[2]),
+- 322     .up_rack (up_rack_s[2]));
+- 326   axi_adrv9001_tx_channel #(
+- 327     .CHANNEL_ID (3),
+- 328     .COMMON_ID (CHANNEL_BASE_ADDR),
+- 329     .Q_OR_I_N (1),
+- 330     .DISABLE (MODE_R1),
+- 331     .DDS_DISABLE (DDS_DISABLE),
+- 332     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE),
+- 333     .DAC_DDS_TYPE (DAC_DDS_TYPE),
+- 334     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+- 335     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW))
+- 336   i_tx_channel_3 (
+- 337     .dac_clk (dac_clk),
+- 338     .dac_rst (dac_rst),
+- 339     .dac_data_in_req (),
+- 340     .dac_data_in (dac_data_q1),
+- 341     .dac_data_out_req (dac_data_valid_B),
+- 342     .dac_data_out (dac_data_q_B[15:0]),
+- 343     .dac_data_iq_in (dac_data_iq_i1_s),
+- 344     .dac_data_iq_out (dac_data_iq_q1_s),
+- 345     .dac_enable (dac_enable_q1),
+- 346     .dac_data_sync (dac_data_sync),
+- 347     .dac_dds_format (dac_dds_format_s),
+- 348     .up_rstn (up_rstn),
+- 349     .up_clk (up_clk),
+- 350     .up_wreq (up_wreq),
+- 351     .up_waddr (up_waddr),
+- 352     .up_wdata (up_wdata),
+- 353     .up_wack (up_wack_s[3]),
+- 354     .up_rreq (up_rreq),
+- 355     .up_raddr (up_raddr),
+- 356     .up_rdata (up_rdata_s[3]),
+- 357     .up_rack (up_rack_s[3]));
+- 361   up_dac_common #(
+- 362     .ID (ID),
+- 363     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+- 364     .FPGA_FAMILY (FPGA_FAMILY),
+- 365     .SPEED_GRADE (SPEED_GRADE),
+- 366     .DEV_PACKAGE (DEV_PACKAGE),
+- 367     .CONFIG(CONFIG),
+- 368     .CLK_EDGE_SEL(0),
+- 369     .COMMON_ID(COMMON_BASE_ADDR),
+- 370     .DRP_DISABLE(1),
+- 371     .USERPORTS_DISABLE(1),
+- 372     .GPIO_DISABLE(1))
+- 373   i_up_dac_common (
+- 374     .mmcm_rst (),
+- 375     .dac_clk (dac_clk),
+- 376     .dac_rst (dac_rst),
+- 377     .dac_num_lanes (dac_num_lanes),
+- 378     .dac_sdr_ddr_n (dac_sdr_ddr_n),
+- 379     .dac_symb_op (dac_symb_op),
+- 380     .dac_symb_8_16b (dac_symb_8_16b),
+- 381     .dac_sync (dac_sync_out),
+- 382     .dac_ext_sync_arm (dac_ext_sync_arm),
+- 383     .dac_frame (),
+- 384     .dac_clksel (),
+- 385     .dac_par_type (),
+- 386     .dac_par_enb (),
+- 387     .dac_r1_mode (),
+- 388     .up_dac_r1_mode (up_dac_r1_mode),
+- 389     .dac_datafmt (dac_dds_format_s),
+- 390     .dac_datarate (dac_datarate_s),
+- 391     .dac_status (1'b1),
+- 392     .dac_status_unf (dac_dunf),
+- 393     .dac_clk_ratio (dac_clk_ratio),
+- 394     .up_dac_ce (),
+- 395     .up_pps_rcounter(32'h0),
+- 396     .up_pps_status(1'b0),
+- 397     .up_pps_irq_mask(),
+- 398     .up_drp_sel (),
+- 399     .up_drp_wr (),
+- 400     .up_drp_addr (),
+- 401     .up_drp_wdata (),
+- 402     .up_drp_rdata (32'd0),
+- 403     .up_drp_ready (1'd0),
+- 404     .up_drp_locked (1'd1),
+- 405     .up_usr_chanmax (),
+- 406     .dac_usr_chanmax (8'd3),
+- 407     .up_dac_gpio_in (32'd0),
+- 408     .up_dac_gpio_out (),
+- 409     .up_rstn (up_rstn),
+- 410     .up_clk (up_clk),
+- 411     .up_wreq (up_wreq),
+- 412     .up_waddr (up_waddr),
+- 413     .up_wdata (up_wdata),
+- 414     .up_wack (up_wack_s[4]),
+- 415     .up_rreq (up_rreq),
+- 416     .up_raddr (up_raddr),
+- 417     .up_rdata (up_rdata_s[4]),
+- 418     .up_rack (up_rack_s[4]));
+- 420   assign dac_single_lane = dac_num_lanes[0];
+- 422 end
++ 139   generate
++ 139   if (ENABLED == 0) begin : core_disabled
++ 139     assign dac_rst = 1'b0;
++ 139     assign dac_data_valid_A = 1'b0;
++ 139     assign dac_data_i_A = 16'b0;
++ 139     assign dac_data_q_A = 16'b0;
++ 139     assign dac_data_valid_B = 1'b0;
++ 139     assign dac_data_i_B = 16'b0;
++ 139     assign dac_data_q_B = 16'b0;
++ 139     assign dac_single_lane = 1'b0;
++ 139     assign dac_sdr_ddr_n = 1'b0;
++ 139     assign dac_symb_op = 1'b0;
++ 139     assign dac_symb_8_16b = 1'b0;
++ 139     assign up_dac_r1_mode = 1'b0;
++ 139     assign dac_sync_out = 1'b0;
++ 139     assign dac_valid = 1'b0;
++ 139     assign dac_enable_i0 = 1'b0;
++ 139     assign dac_enable_q0 = 1'b0;
++ 139     assign dac_enable_i1 = 1'b0;
++ 139     assign dac_enable_q1 = 1'b0;
++ 139     always @(*) begin
++ 139       up_wack = 1'b0;
++ 139       up_rdata = 32'b0;
++ 139       up_rack = 1'b0;
++ 139     end
++ 139   end else begin : core_enabled
++ 147     localparam  CONFIG =  (USE_RX_CLK_FOR_TX * 1024) +
++ 147                           (CMOS_LVDS_N * 128) +
++ 147                           (MODE_R1 * 16) +
++ 147                           (DDS_DISABLE * 64) +
++ 147                           (IQCORRECTION_DISABLE * 1);
++ 153     reg               dac_data_sync = 'd0;
++ 153     reg     [15:0]    dac_rate_cnt = 'd0;
++ 153     reg               dac_valid_int = 'd0;
++ 167     wire              dac_data_sync_s;
++ 167     wire    [ 15:0]   dac_data_iq_i0_s;
++ 167     wire    [ 15:0]   dac_data_iq_q0_s;
++ 167     wire    [ 15:0]   dac_data_iq_i1_s;
++ 167     wire    [ 15:0]   dac_data_iq_q1_s;
++ 167     wire              dac_dds_format_s;
++ 167     wire    [ 15:0]   dac_datarate_s;
++ 167     wire      [4:0]   dac_num_lanes;
++ 167     wire    [  4:0]   up_wack_s;
++ 167     wire    [  4:0]   up_rack_s;
++ 167     wire    [ 31:0]   up_rdata_s[0:4];
++ 175     assign dac_data_sync_s = (EXT_SYNC == 0) ? dac_sync_out : dac_sync_in;
++ 175     always @(posedge dac_clk) begin
++ 175       dac_data_sync <= dac_data_sync_s;
++ 175     end
++ 184     always @(posedge dac_clk) begin
++ 184       if (dac_rst == 1'b1) begin
++ 184         dac_rate_cnt <= 16'b0;
++ 186         if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
++ 186           dac_rate_cnt <= dac_datarate_s;
++ 186         end else begin
++ 186           dac_rate_cnt <= dac_rate_cnt - 1'b1;
++ 186         end
++ 194     assign dac_data_valid_A = dac_valid_int;
++ 194     assign dac_data_valid_B = dac_valid_int;
++ 200     always @(posedge dac_clk) begin
++ 200       if (dac_rst == 1'b1) begin
++ 200         dac_valid_int <= 1'b0;
++ 200       end else begin
++ 200         dac_valid_int <= (dac_rate_cnt == 16'd0) ? tdd_tx_valid : 1'b0;
++ 200       end
++ 215     always @(negedge up_rstn or posedge up_clk) begin
++ 215       if (up_rstn == 0) begin
++ 215         up_wack <= 'd0;
++ 215         up_rack <= 'd0;
++ 215         up_rdata <= 'd0;
++ 215       end else begin
++ 215         up_wack <= | up_wack_s;
++ 215         up_rack <= | up_rack_s;
++ 215         up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
++ 215                     up_rdata_s[3] | up_rdata_s[4];
++ 215       end
+
+Clone Blocks:

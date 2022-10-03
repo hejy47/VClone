@@ -1,0 +1,73 @@
+Source Block: oh/elink/hdl/emaxi.v@483:493@HdlIdDef
+   //#################################################################
+   assign    m_axi_rready         = ~txrr_wait; //BUG!: 1'b1
+
+   wire [1:0] 	 txrr_datamode_fifo;
+   wire [3:0] 	 txrr_ctrlmode_fifo;
+   wire [31:0] 	 txrr_dstaddr_fifo;
+   wire [2:0] 	 txrr_srcaddr_fifo;
+   reg [1:0] 	 txrr_datamode;
+   reg [3:0] 	 txrr_ctrlmode;
+   reg [31:0] 	 txrr_dstaddr;
+   
+
+Diff Content:
+- 488    wire [31:0] 	 txrr_dstaddr_fifo;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/emaxi.v@484:494
+   assign    m_axi_rready         = ~txrr_wait; //BUG!: 1'b1
+
+   wire [1:0] 	 txrr_datamode_fifo;
+   wire [3:0] 	 txrr_ctrlmode_fifo;
+   wire [31:0] 	 txrr_dstaddr_fifo;
+   wire [2:0] 	 txrr_srcaddr_fifo;
+   reg [1:0] 	 txrr_datamode;
+   reg [3:0] 	 txrr_ctrlmode;
+   reg [31:0] 	 txrr_dstaddr;
+   
+   assign  txrr_datamode_fifo[1:0] = readinfo_out[1:0];
+
+Clone Blocks 2:
+oh/elink/hdl/emaxi.v@482:492
+   //Read response channel
+   //#################################################################
+   assign    m_axi_rready         = ~txrr_wait; //BUG!: 1'b1
+
+   wire [1:0] 	 txrr_datamode_fifo;
+   wire [3:0] 	 txrr_ctrlmode_fifo;
+   wire [31:0] 	 txrr_dstaddr_fifo;
+   wire [2:0] 	 txrr_srcaddr_fifo;
+   reg [1:0] 	 txrr_datamode;
+   reg [3:0] 	 txrr_ctrlmode;
+   reg [31:0] 	 txrr_dstaddr;
+
+Clone Blocks 3:
+oh/elink/hdl/emaxi.v@481:491
+   //#################################################################
+   //Read response channel
+   //#################################################################
+   assign    m_axi_rready         = ~txrr_wait; //BUG!: 1'b1
+
+   wire [1:0] 	 txrr_datamode_fifo;
+   wire [3:0] 	 txrr_ctrlmode_fifo;
+   wire [31:0] 	 txrr_dstaddr_fifo;
+   wire [2:0] 	 txrr_srcaddr_fifo;
+   reg [1:0] 	 txrr_datamode;
+   reg [3:0] 	 txrr_ctrlmode;
+
+Clone Blocks 4:
+oh/elink/hdl/emaxi.v@479:489
+   assign    fifo_rd_en           = m_axi_rready & m_axi_rvalid;//BUG & ~txrr_wait
+				      
+   //#################################################################
+   //Read response channel
+   //#################################################################
+   assign    m_axi_rready         = ~txrr_wait; //BUG!: 1'b1
+
+   wire [1:0] 	 txrr_datamode_fifo;
+   wire [3:0] 	 txrr_ctrlmode_fifo;
+   wire [31:0] 	 txrr_dstaddr_fifo;
+   wire [2:0] 	 txrr_srcaddr_fifo;
+

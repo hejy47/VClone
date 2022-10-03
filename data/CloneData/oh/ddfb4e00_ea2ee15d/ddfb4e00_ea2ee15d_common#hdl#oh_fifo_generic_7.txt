@@ -1,0 +1,71 @@
+Source Block: oh/common/hdl/oh_fifo_generic.v@66:90@HdlStmProcess
+       end
+     else if(rd_en_sync) 
+       wr_count[AW-1:0]<= wr_count[AW-1:0] - 'd1;	
+
+   // read side state machine
+   always @ ( posedge rd_clk or negedge nreset) 
+     if(!nreset) 
+       begin	   
+          rd_addr[AW-1:0]   <= 'd0;
+	  rd_count[AW-1:0]  <= 'd0;
+       end 
+     else if(rd_en & wr_en_sync) 
+       rd_addr[AW-1:0] <= rd_addr[AW-1:0] + 'd1;
+     else if(rd_en) 
+       begin
+	  rd_addr[AW-1:0] <= rd_addr[AW-1:0]  + 'd1;
+	  rd_count[AW-1:0] <= rd_count[AW-1:0] - 'd1;	
+       end
+     else if(wr_en_sync) 
+       rd_count[AW-1:0] <= rd_count[AW-1:0] + 'd1;	
+         
+   // clock domain synchronizers
+   oh_dsync wr_sync(.dout (wr_en_sync),
+		    .clk  (rd_clk),
+		    .din  (wr_en));
+
+Diff Content:
+- 73        begin	   
+- 74           rd_addr[AW-1:0]   <= 'd0;
+- 75 	  rd_count[AW-1:0]  <= 'd0;
+- 76        end 
+- 77      else if(rd_en & wr_en_sync) 
+- 78        rd_addr[AW-1:0] <= rd_addr[AW-1:0] + 'd1;
+- 80        begin
+- 81 	  rd_addr[AW-1:0] <= rd_addr[AW-1:0]  + 'd1;
+- 82 	  rd_count[AW-1:0] <= rd_count[AW-1:0] - 'd1;	
+- 83        end
+- 84      else if(wr_en_sync) 
+- 85        rd_count[AW-1:0] <= rd_count[AW-1:0] + 'd1;	
++ 78        rd_addr[AW:0] <= 'd0;   
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_fifo_generic.v@49:73
+   assign empty     = (rd_count[AW-1:0] == 'b0);
+   assign full      = (wr_count[AW-1:0] == DEPTH);
+   assign prog_full = (wr_count[AW-1:0] >= PROG_FULL);   
+
+   // write side state machine
+   always @ ( posedge wr_clk or negedge nreset) 
+     if(!nreset) 
+       begin	   
+          wr_addr[AW-1:0]   <= 'd0;
+	  wr_count[AW-1:0]  <= 'd0;
+       end 
+     else if(wr_en & rd_en_sync) 
+	  wr_addr[AW-1:0] <= wr_addr[AW-1:0] + 'd1;
+     else if(wr_en) 
+       begin
+	  wr_addr[AW-1:0] <= wr_addr[AW-1:0]  + 'd1;
+	  wr_count[AW-1:0]<= wr_count[AW-1:0] + 'd1;	
+       end
+     else if(rd_en_sync) 
+       wr_count[AW-1:0]<= wr_count[AW-1:0] - 'd1;	
+
+   // read side state machine
+   always @ ( posedge rd_clk or negedge nreset) 
+     if(!nreset) 
+       begin	   
+

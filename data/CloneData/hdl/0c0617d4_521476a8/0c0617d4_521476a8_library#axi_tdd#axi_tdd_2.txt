@@ -1,0 +1,64 @@
+Source Block: hdl/library/axi_tdd/axi_tdd.v@172:188@HdlStmProcess
+    end else begin
+      tdd_tx_valid <= 1'b1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if((tdd_enable_s == 1) && (tdd_gated_rx_dmapath_s == 1)) begin
+      tdd_rx_valid <= tdd_rx_dp_en_s;
+    end else begin
+      tdd_rx_valid <= 1'b1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_vco_overlap <= 1'b0;
+      tdd_rf_overlap <= 1'b0;
+
+Diff Content:
+- 178     if((tdd_enable_s == 1) && (tdd_gated_rx_dmapath_s == 1)) begin
++ 178     if ((tdd_enable_s == 1) && (tdd_gated_rx_dmapath_s == 1)) begin
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_tdd/axi_tdd.v@164:180
+    end
+  end
+
+  // tx/rx data flow control
+
+  always @(posedge clk) begin
+    if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+      tdd_tx_valid <= tdd_tx_dp_en_s;
+    end else begin
+      tdd_tx_valid <= 1'b1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if((tdd_enable_s == 1) && (tdd_gated_rx_dmapath_s == 1)) begin
+      tdd_rx_valid <= tdd_rx_dp_en_s;
+    end else begin
+
+Clone Blocks 2:
+hdl/library/axi_ad9361/axi_ad9361_tdd.v@132:148
+    end
+  end
+
+  // tx/rx data flow control
+
+  always @(posedge clk) begin
+    if((tdd_enable_s == 1) && (tdd_gated_tx_dmapath_s == 1)) begin
+      tdd_tx_valid <= tdd_tx_dp_en_s;
+    end else begin
+      tdd_tx_valid <= 1'b1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if((tdd_enable_s == 1) && (tdd_gated_rx_dmapath_s == 1)) begin
+      tdd_rx_valid <= tdd_rx_dp_en_s;
+    end else begin
+

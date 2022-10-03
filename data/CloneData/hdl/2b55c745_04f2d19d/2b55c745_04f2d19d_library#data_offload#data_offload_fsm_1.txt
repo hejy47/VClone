@@ -1,0 +1,17 @@
+Source Block: hdl/library/data_offload/data_offload_fsm.v@372:382@HdlStmAssign
+          rd_addr <= (rd_last_addr == rd_addr) ? {RD_ADDRESS_WIDTH{1'b0}} : rd_addr + 1'b1;
+      end
+    end
+  end
+
+  assign rd_empty_s = (rd_addr == rd_last_addr) ? 1'b1 : 1'b0;
+  always @(posedge rd_clk) begin
+    if (rd_resetn_in == 1'b0) begin
+      rd_last <= 1'b0;
+      rd_isempty <= 1'b0;
+    end else begin
+
+Diff Content:
++ 377   assign rd_last = rd_oneshot & rd_empty_s;
+
+Clone Blocks:

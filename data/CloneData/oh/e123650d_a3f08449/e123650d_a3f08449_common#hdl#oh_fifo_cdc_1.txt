@@ -1,0 +1,45 @@
+Source Block: oh/common/hdl/oh_fifo_cdc.v@47:57@HdlStmAssign
+	 .din	    (packet_in[DW-1:0]),
+	 .rd_en	    (rd_en));
+
+   // FIFO control logic
+   assign wr_en    = valid_in;
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out = prog_full;
+
+
+   //async asser, sync deassert of reset
+   oh_rsync sync_reset(.nrst_out  (nreset_out),
+
+Diff Content:
+- 52    assign rd_en    = ~empty & ~wait_in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_fifo_cdc.v@46:56
+	 .wr_en	    (wr_en),
+	 .din	    (packet_in[DW-1:0]),
+	 .rd_en	    (rd_en));
+
+   // FIFO control logic
+   assign wr_en    = valid_in;
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out = prog_full;
+
+
+   //async asser, sync deassert of reset
+
+Clone Blocks 2:
+oh/common/hdl/oh_fifo_cdc.v@48:58
+	 .rd_en	    (rd_en));
+
+   // FIFO control logic
+   assign wr_en    = valid_in;
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out = prog_full;
+
+
+   //async asser, sync deassert of reset
+   oh_rsync sync_reset(.nrst_out  (nreset_out),
+                       .clk       (clk_out),
+

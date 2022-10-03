@@ -1,0 +1,36 @@
+Source Block: oh/ecfg/hdl/ecfg.v@279:293@HdlStmProcess
+     ecfg_datain_reg[10:0] <= ecfg_datain[10:0];
+   
+   //###########################
+   //# ESYSDATAOUT
+   //###########################
+   always @ (posedge mi_clk)
+     if(hw_reset)
+       ecfg_dataout_reg[10:0] <= 11'd0;   
+     else if (ecfg_dataout_write)
+       ecfg_dataout_reg[10:0] <= mi_din[10:0];
+
+   assign ecfg_dataout[10:0] = ecfg_dataout_reg[10:0];
+   
+   //###########################
+   //# ESYSRESET
+
+Diff Content:
+- 284    always @ (posedge mi_clk)
++ 284    always @ (posedge clk)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/ecfg/hdl/ecfg.v@285:295
+     if(hw_reset)
+       ecfg_dataout_reg[10:0] <= 11'd0;   
+     else if (ecfg_dataout_write)
+       ecfg_dataout_reg[10:0] <= mi_din[10:0];
+
+   assign ecfg_dataout[10:0] = ecfg_dataout_reg[10:0];
+   
+   //###########################
+   //# ESYSRESET
+   //###########################
+    always @ (posedge mi_clk)
+

@@ -1,0 +1,67 @@
+Source Block: hdl/library/common/ad_tdd_control.v@481:501@HdlStmProcess
+    else begin
+      counter_at_tdd_tx_dp_off_1 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_dp_off_2 <= 1'b0;
+    end else
+    if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_dp_off_2_s)) begin
+      counter_at_tdd_tx_dp_off_2 <= 1'b1;
+    end
+    else begin
+      counter_at_tdd_tx_dp_off_2 <= 1'b0;
+    end
+  end
+
+  // internal datapath delay compensation
+
+  ad_addsub #(
+    .A_WIDTH(24),
+
+Diff Content:
+- 489     end else
+- 490     if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_dp_off_2_s)) begin
+- 492     end
+- 493     else begin
++ 490     end else if((tdd_secondary == 1'b1) && (tdd_counter == tdd_tx_dp_off_2_s)) begin
++ 493     end else begin
++ 496   ad_addsub #(
++ 496     .A_DATA_WIDTH(24),
++ 496     .B_DATA_VALUE(CONTROL_PATH_DELAY),
++ 496     .ADD_OR_SUB_N(0)
++ 496   ) i_vco_rx_on_1_comp (
++ 496     .clk(clk),
++ 496     .A(tdd_vco_rx_on_1),
++ 496     .Amax(tdd_frame_length),
++ 496     .out(tdd_vco_rx_on_1_s),
++ 496     .CE(1'b1)
++ 496   );
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/common/ad_tdd_control.v@469:489
+    else begin
+      counter_at_tdd_tx_dp_on_2 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_dp_off_1 <= 1'b0;
+    end else
+    if(tdd_counter == tdd_tx_dp_off_1_s) begin
+      counter_at_tdd_tx_dp_off_1 <= 1'b1;
+    end
+    else begin
+      counter_at_tdd_tx_dp_off_1 <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      counter_at_tdd_tx_dp_off_2 <= 1'b0;
+    end else
+

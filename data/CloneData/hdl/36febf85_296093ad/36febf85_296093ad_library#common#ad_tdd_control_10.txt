@@ -1,0 +1,32 @@
+Source Block: hdl/library/common/ad_tdd_control.v@218:238@HdlStmProcess
+
+  assign tdd_endof_frame = (tdd_counter == tdd_frame_length) ? 1'b1 : 1'b0;
+  assign tdd_endof_burst = ((tdd_last_burst == 1'b1) && (tdd_counter == tdd_frame_length)) ? 1'b1 : 1'b0;
+
+  // tdd free running counter
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      tdd_counter <= tdd_counter_init;
+    end else begin
+      if (tdd_cstate == ON) begin
+        tdd_counter <= (tdd_counter < tdd_frame_length) ? tdd_counter + 1 : 24'b0;
+      end else begin
+        tdd_counter <= tdd_counter_init;
+      end
+    end
+  end
+
+  // tdd burst counter
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      tdd_burst_counter <= tdd_burst_count;
+
+Diff Content:
+- 228         tdd_counter <= (tdd_counter < tdd_frame_length) ? tdd_counter + 1 : 24'b0;
++ 228         if ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) begin
++ 228           tdd_counter <= 24'b0;
++ 228         end else begin
++ 228           tdd_counter <= (tdd_counter < tdd_frame_length) ? tdd_counter + 1 : 24'b0;
++ 228         end
+
+Clone Blocks:

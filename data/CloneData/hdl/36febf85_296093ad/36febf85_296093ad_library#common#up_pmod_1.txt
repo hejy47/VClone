@@ -1,0 +1,37 @@
+Source Block: hdl/library/common/up_pmod.v@118:147@HdlStmProcess
+    end
+  end
+
+  // processor read interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_rack <= up_rreq_s;
+      if (up_rreq_s == 1'b1) begin
+        case (up_raddr[7:0])
+          8'h00:  up_rdata <= PCORE_VERSION;
+          8'h01:  up_rdata <= PCORE_ID;
+          8'h02:  up_rdata <= up_scratch;
+          8'h03:  up_rdata <= up_pmod_signal_freq_s;
+          8'h10:  up_rdata <= up_resetn;
+          default: up_rdata <= 0;
+        endcase
+      end else begin
+        up_rdata <= 32'd0;
+      end
+    end
+  end
+
+  // resets
+
+  ad_rst i_adc_rst_reg    (.preset(up_preset_s),      .clk(pmod_clk),    .rst(pmod_rst));
+
+
+Diff Content:
+- 132           8'h01:  up_rdata <= PCORE_ID;
++ 132           8'h01:  up_rdata <= ID;
+
+Clone Blocks:

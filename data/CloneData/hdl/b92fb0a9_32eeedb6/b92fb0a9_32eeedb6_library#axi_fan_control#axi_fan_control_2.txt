@@ -1,0 +1,30 @@
+Source Block: hdl/library/axi_fan_control/axi_fan_control.v@623:643@HdlStmProcess
+    end
+  end
+end
+
+//writing reset
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_wack <= 'd0;
+    up_resetn <= 1'd1;
+  end else begin
+    up_wack <= up_wreq_s;
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20)) begin
+      up_resetn <= up_wdata_s[0];
+    end
+  end
+end
+
+//axi registers read
+always @(posedge up_clk) begin
+  if (s_axi_aresetn == 1'b0) begin
+    up_rack <= 'd0;
+
+Diff Content:
+- 631     up_resetn <= 1'd1;
++ 631     up_resetn <= 1'd0;
++ 635     end else begin
++ 635       up_resetn <= 1'd1;
+
+Clone Blocks:

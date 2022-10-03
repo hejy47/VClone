@@ -1,0 +1,37 @@
+Source Block: oh/elink/hdl/erx_remap.v@56:69@HdlStmAssign
+			        (~remap_sel[11:0] & addr_in[31:20]);
+
+   assign static_remap[19:0]  = addr_in[19:0];
+    
+   //more complex compresssed map
+   assign dynamic_remap[31:0] = addr_in[31:0]      //input
+			     - (colid << 20)    //subtracing elink (start at 0)
+			     + remap_base[31:0]  //adding back base
+                             - (addr_in[31:26]<<$clog2(colid));
+     			     
+
+   wire 	   remap_en = ~(remap_mode[1:0]==2'b00);
+   
+   assign remap_mux[31:0]  = (remap_bypass | ~remap_en)  ? addr_in[31:0] :
+
+Diff Content:
+- 61    assign dynamic_remap[31:0] = addr_in[31:0]      //input
+- 62 			     - (colid << 20)    //subtracing elink (start at 0)
++ 62    assign dynamic_remap[31:0] = addr_in[31:0]    //input
++ 62 			     - (colid << 20)     //subtracing elink (start at 0)
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_remap.v@62:72
+			     - (colid << 20)    //subtracing elink (start at 0)
+			     + remap_base[31:0]  //adding back base
+                             - (addr_in[31:26]<<$clog2(colid));
+     			     
+
+   wire 	   remap_en = ~(remap_mode[1:0]==2'b00);
+   
+   assign remap_mux[31:0]  = (remap_bypass | ~remap_en)  ? addr_in[31:0] :
+			     (remap_mode[1:0]==2'b01)    ? static_remap[31:0] :
+	  		                                   dynamic_remap[31:0];
+      
+

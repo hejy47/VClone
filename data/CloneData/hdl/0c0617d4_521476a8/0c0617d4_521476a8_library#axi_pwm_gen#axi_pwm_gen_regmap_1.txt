@@ -1,0 +1,94 @@
+Source Block: hdl/library/axi_pwm_gen/axi_pwm_gen_regmap.v@201:273@HdlStmIf
+      end
+    end
+  end
+
+  generate
+  if (ASYNC_CLK_EN) begin : counter_external_clock
+
+    assign clk_out = ext_clk;
+
+    ad_rst i_d_rst_reg (
+      .rst_async (up_reset),
+      .clk (clk_out),
+      .rstn (pwm_gen_resetn),
+      .rst ());
+
+    sync_data #(
+      .NUM_OF_BITS (128),
+      .ASYNC_CLK (1))
+    i_pwm_period_sync (
+      .in_clk (up_clk),
+      .in_data ({up_pwm_period_3,
+                 up_pwm_period_2,
+                 up_pwm_period_1,
+                 up_pwm_period_0}),
+      .out_clk (clk_out),
+      .out_data (pwm_period));
+
+    sync_data #(
+      .NUM_OF_BITS (128),
+      .ASYNC_CLK (1))
+    i_pwm_width_sync (
+      .in_clk (up_clk),
+      .in_data ({up_pwm_width_3,
+                 up_pwm_width_2,
+                 up_pwm_width_1,
+                 up_pwm_width_0}),
+      .out_clk (clk_out),
+      .out_data (pwm_width));
+
+    sync_data #(
+      .NUM_OF_BITS (128),
+      .ASYNC_CLK (1))
+    i_pwm_offset_sync (
+      .in_clk (up_clk),
+      .in_data ({up_pwm_offset_3,
+                 up_pwm_offset_2,
+                 up_pwm_offset_1,
+                 32'd0}),
+      .out_clk (clk_out),
+      .out_data (pwm_offset));
+
+    sync_event #(
+      .NUM_OF_EVENTS (1),
+      .ASYNC_CLK (1))
+    i_load_config_sync (
+      .in_clk (up_clk),
+      .in_event (up_load_config),
+      .out_clk (clk_out),
+      .out_event (load_config));
+
+  end else begin : counter_sys_clock        // counter is running on system clk
+
+    assign clk_out = up_clk;
+    assign pwm_gen_resetn = ~up_reset;
+    assign pwm_period = {up_pwm_period_3, up_pwm_period_2, up_pwm_period_1, up_pwm_period_0};
+    assign pwm_width = {up_pwm_width_3, up_pwm_width_2, up_pwm_width_1, up_pwm_width_0};
+    assign pwm_offset = {up_pwm_offset_3, up_pwm_offset_2, up_pwm_offset_1, 32'd0};
+    assign load_config = up_load_config;
+
+  end
+  endgenerate
+
+endmodule
+
+Diff Content:
+- 218       .ASYNC_CLK (1))
+- 219     i_pwm_period_sync (
+- 230       .ASYNC_CLK (1))
+- 231     i_pwm_width_sync (
+- 242       .ASYNC_CLK (1))
+- 243     i_pwm_offset_sync (
+- 254       .ASYNC_CLK (1))
+- 255     i_load_config_sync (
++ 219       .ASYNC_CLK (1)
++ 219     ) i_pwm_period_sync (
++ 231       .ASYNC_CLK (1)
++ 231     ) i_pwm_width_sync (
++ 243       .ASYNC_CLK (1)
++ 243     ) i_pwm_offset_sync (
++ 255       .ASYNC_CLK (1)
++ 255     ) i_load_config_sync (
+
+Clone Blocks:

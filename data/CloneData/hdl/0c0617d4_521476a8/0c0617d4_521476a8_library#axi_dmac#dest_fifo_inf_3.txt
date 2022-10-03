@@ -1,0 +1,47 @@
+Source Block: hdl/library/axi_dmac/dest_fifo_inf.v@78:88@HdlIdDef
+reg active = 1'b0;
+
+/* Last beat of the burst */
+wire fifo_last_beat;
+/* Last beat of the segment */
+wire fifo_eot_beat;
+
+assign enabled = enable;
+assign fifo_ready = en & (fifo_valid | ~enable);
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+
+Diff Content:
+- 83 wire fifo_eot_beat;
++ 83   wire fifo_last_beat;
++ 83   wire fifo_eot_beat;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/dest_fifo_inf.v@76:86
+`include "inc_id.vh"
+
+reg active = 1'b0;
+
+/* Last beat of the burst */
+wire fifo_last_beat;
+/* Last beat of the segment */
+wire fifo_eot_beat;
+
+assign enabled = enable;
+assign fifo_ready = en & (fifo_valid | ~enable);
+
+Clone Blocks 2:
+hdl/library/axi_dmac/dest_axi_stream.v@80:90
+reg active = 1'b0;
+
+reg [ID_WIDTH-1:0] id = 'h0;
+
+/* Last beat of the burst */
+wire fifo_last_beat;
+/* Last beat of the segment */
+wire fifo_eot_beat;
+
+/* fifo_last == 1'b1 implies fifo_valid == 1'b1 */
+assign fifo_last_beat = fifo_ready & fifo_last;
+

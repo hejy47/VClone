@@ -1,0 +1,65 @@
+Source Block: verilog-ethernet/rtl/axis_async_fifo.v@158:168@HdlIdDef
+             (wr_ptr_gray_reg[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2_reg[ADDR_WIDTH-2:0]));
+wire full_cur = ((wr_ptr_cur_gray_reg[ADDR_WIDTH] != rd_ptr_gray_sync2_reg[ADDR_WIDTH]) &&
+                 (wr_ptr_cur_gray_reg[ADDR_WIDTH-1] != rd_ptr_gray_sync2_reg[ADDR_WIDTH-1]) &&
+                 (wr_ptr_cur_gray_reg[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2_reg[ADDR_WIDTH-2:0]));
+// empty when pointers match exactly
+wire empty = rd_ptr_gray_reg == wr_ptr_gray_sync2_reg;
+// overflow within packet
+wire full_wr = ((wr_ptr_reg[ADDR_WIDTH] != wr_ptr_cur_reg[ADDR_WIDTH]) &&
+                (wr_ptr_reg[ADDR_WIDTH-1:0] == wr_ptr_cur_reg[ADDR_WIDTH-1:0]));
+
+// control signals
+
+Diff Content:
+- 163 wire empty = rd_ptr_gray_reg == wr_ptr_gray_sync2_reg;
++ 163 wire empty = rd_ptr_gray_reg == (FRAME_FIFO ? wr_ptr_gray_sync1_reg : wr_ptr_gray_sync2_reg);
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_async_fifo.v@160:171
+                 (wr_ptr_cur_gray_reg[ADDR_WIDTH-1] != rd_ptr_gray_sync2_reg[ADDR_WIDTH-1]) &&
+                 (wr_ptr_cur_gray_reg[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2_reg[ADDR_WIDTH-2:0]));
+// empty when pointers match exactly
+wire empty = rd_ptr_gray_reg == wr_ptr_gray_sync2_reg;
+// overflow within packet
+wire full_wr = ((wr_ptr_reg[ADDR_WIDTH] != wr_ptr_cur_reg[ADDR_WIDTH]) &&
+                (wr_ptr_reg[ADDR_WIDTH-1:0] == wr_ptr_cur_reg[ADDR_WIDTH-1:0]));
+
+// control signals
+reg write;
+reg read;
+reg store_output;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/axis_async_fifo.v@151:163
+reg [WIDTH-1:0] m_axis_reg;
+reg m_axis_tvalid_reg = 1'b0, m_axis_tvalid_next;
+
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+wire full = ((wr_ptr_gray_reg[ADDR_WIDTH] != rd_ptr_gray_sync2_reg[ADDR_WIDTH]) &&
+             (wr_ptr_gray_reg[ADDR_WIDTH-1] != rd_ptr_gray_sync2_reg[ADDR_WIDTH-1]) &&
+             (wr_ptr_gray_reg[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2_reg[ADDR_WIDTH-2:0]));
+wire full_cur = ((wr_ptr_cur_gray_reg[ADDR_WIDTH] != rd_ptr_gray_sync2_reg[ADDR_WIDTH]) &&
+                 (wr_ptr_cur_gray_reg[ADDR_WIDTH-1] != rd_ptr_gray_sync2_reg[ADDR_WIDTH-1]) &&
+                 (wr_ptr_cur_gray_reg[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2_reg[ADDR_WIDTH-2:0]));
+// empty when pointers match exactly
+wire empty = rd_ptr_gray_reg == wr_ptr_gray_sync2_reg;
+
+Clone Blocks 3:
+verilog-ethernet/rtl/axis_async_fifo.v@154:166
+// full when first TWO MSBs do NOT match, but rest matches
+// (gray code equivalent of first MSB different but rest same)
+wire full = ((wr_ptr_gray_reg[ADDR_WIDTH] != rd_ptr_gray_sync2_reg[ADDR_WIDTH]) &&
+             (wr_ptr_gray_reg[ADDR_WIDTH-1] != rd_ptr_gray_sync2_reg[ADDR_WIDTH-1]) &&
+             (wr_ptr_gray_reg[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2_reg[ADDR_WIDTH-2:0]));
+wire full_cur = ((wr_ptr_cur_gray_reg[ADDR_WIDTH] != rd_ptr_gray_sync2_reg[ADDR_WIDTH]) &&
+                 (wr_ptr_cur_gray_reg[ADDR_WIDTH-1] != rd_ptr_gray_sync2_reg[ADDR_WIDTH-1]) &&
+                 (wr_ptr_cur_gray_reg[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2_reg[ADDR_WIDTH-2:0]));
+// empty when pointers match exactly
+wire empty = rd_ptr_gray_reg == wr_ptr_gray_sync2_reg;
+// overflow within packet
+wire full_wr = ((wr_ptr_reg[ADDR_WIDTH] != wr_ptr_cur_reg[ADDR_WIDTH]) &&
+                (wr_ptr_reg[ADDR_WIDTH-1:0] == wr_ptr_cur_reg[ADDR_WIDTH-1:0]));
+

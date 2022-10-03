@@ -1,0 +1,65 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_ilas_monitor.v@100:120@HdlStmProcess
+  end else begin
+    prev_was_last <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    ilas_config_valid_i <= 1'b0;
+  end else if (state == STATE_ILAS) begin
+    if (ilas_config_start) begin
+      ilas_config_valid_i <= 1'b1;
+    end else if (ilas_config_addr_i == (ILAS_DATA_LENGTH-1)) begin
+      ilas_config_valid_i <= 1'b0;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (ilas_config_valid_i == 1'b0) begin
+    ilas_config_addr_i <= 1'b0;
+  end else if (ilas_config_valid_i == 1'b1) begin
+
+Diff Content:
+- 105 always @(posedge clk) begin
+- 106   if (reset == 1'b1) begin
+- 107     ilas_config_valid_i <= 1'b0;
+- 108   end else if (state == STATE_ILAS) begin
+- 109     if (ilas_config_start) begin
+- 110       ilas_config_valid_i <= 1'b1;
+- 111     end else if (ilas_config_addr_i == (ILAS_DATA_LENGTH-1)) begin
+- 115 end
++ 111   always @(posedge clk) begin
++ 111     if (reset == 1'b1) begin
++ 112     end else if (state == STATE_ILAS) begin
++ 112       if (ilas_config_start) begin
++ 112         ilas_config_valid_i <= 1'b1;
++ 112       end else if (ilas_config_addr_i == (ILAS_DATA_LENGTH-1)) begin
++ 112         ilas_config_valid_i <= 1'b0;
++ 112       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx_ctrl.v@247:266
+  end else if (lmfc_edge_d1 == 1'b1) begin
+    mframe_counter <= mframe_counter + 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (ilas_reset == 1'b1) begin
+    ilas_config_rd <= 1'b0;
+  end else if (ilas_config_rd_start == 1'b1) begin
+    ilas_config_rd <= 1'b1;
+  end else if (ilas_config_addr == (ILAS_DATA_LENGTH-1)) begin
+    ilas_config_rd <= 1'b0;
+  end
+  ilas_config_rd_d1 <= ilas_config_rd;
+end
+
+always @(posedge clk) begin
+  if (ilas_config_rd == 1'b0) begin
+    ilas_config_addr <= 'h00;
+  end else begin
+

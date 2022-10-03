@@ -1,0 +1,50 @@
+Source Block: hdl/library/axi_logic_analyzer/axi_logic_analyzer_trigger.v@70:94@HdlStmProcess
+
+  // trigger logic:
+  // 0 OR
+  // 1 AND
+
+  always @(*) begin
+    case (trigger_logic)
+      0: trigger_active = | ((edge_detect & edge_detect_enable) |
+                          (rise_edge & rise_edge_enable) |
+                          (fall_edge & fall_edge_enable) |
+                          (low_level & low_level_enable) |
+                          (high_level & high_level_enable));
+      1: trigger_active = | (((edge_detect & edge_detect_enable) | !(|edge_detect_enable)) &
+                          ((rise_edge & rise_edge_enable) | !(|rise_edge_enable)) &
+                          ((fall_edge & fall_edge_enable) | !(|fall_edge_enable)) &
+                          ((low_level & low_level_enable) | !(|low_level_enable)) &
+                          ((high_level & high_level_enable) | !(|high_level_enable)));
+      default: trigger_active = 1'b1;
+    endcase
+  end
+
+  // internal signals
+
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+
+Diff Content:
+- 77       0: trigger_active = | ((edge_detect & edge_detect_enable) |
+- 78                           (rise_edge & rise_edge_enable) |
+- 79                           (fall_edge & fall_edge_enable) |
+- 80                           (low_level & low_level_enable) |
+- 81                           (high_level & high_level_enable));
+- 82       1: trigger_active = | (((edge_detect & edge_detect_enable) | !(|edge_detect_enable)) &
+- 83                           ((rise_edge & rise_edge_enable) | !(|rise_edge_enable)) &
+- 84                           ((fall_edge & fall_edge_enable) | !(|fall_edge_enable)) &
+- 85                           ((low_level & low_level_enable) | !(|low_level_enable)) &
+- 86                           ((high_level & high_level_enable) | !(|high_level_enable)));
++ 86       0: trigger_active = |((edge_detect & edge_detect_enable) |
++ 86                             (rise_edge & rise_edge_enable) |
++ 86                             (fall_edge & fall_edge_enable) |
++ 86                             (low_level & low_level_enable) |
++ 86                             (high_level & high_level_enable));
++ 86       1: trigger_active = &((edge_detect | ~edge_detect_enable) &
++ 86                             (rise_edge | ~rise_edge_enable) &
++ 86                             (fall_edge | ~fall_edge_enable) &
++ 86                             (low_level | ~low_level_enable) &
++ 86                             (high_level | ~high_level_enable));
+
+Clone Blocks:

@@ -1,0 +1,25 @@
+Source Block: oh/elink/hdl/etx_protocol.v@133:145@HdlStmAssign
+
+   //#############################
+   //# Pipeline stall
+   //#############################
+
+   assign etx_wait = etx_cycle   |
+		     etx_rd_wait | 
+		     etx_wr_wait;
+   
+   
+endmodule // etx_protocol
+// Local Variables:
+// verilog-library-directories:("." "../../common/hdl")
+
+Diff Content:
+- 138    assign etx_wait = etx_cycle   |
+- 139 		     etx_rd_wait | 
+- 140 		     etx_wr_wait;
++ 140    assign etx_io_wait = ~etx_sample;
++ 140    assign etx_wait    = etx_io_wait |
++ 140 			etx_rd_wait |
++ 140 			etx_wr_wait;
+
+Clone Blocks:

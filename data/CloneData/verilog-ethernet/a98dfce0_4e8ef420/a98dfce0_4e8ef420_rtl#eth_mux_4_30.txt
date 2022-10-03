@@ -1,0 +1,90 @@
+Source Block: verilog-ethernet/rtl/eth_mux_4.v@146:183@HdlStmProcess
+// mux for start of packet detection
+reg selected_input_eth_hdr_valid;
+reg [47:0] selected_input_eth_dest_mac;
+reg [47:0] selected_input_eth_src_mac;
+reg [15:0] selected_input_eth_type;
+always @* begin
+    case (select)
+        2'd0: begin
+            selected_input_eth_hdr_valid = input_0_eth_hdr_valid;
+            selected_input_eth_dest_mac = input_0_eth_dest_mac;
+            selected_input_eth_src_mac = input_0_eth_src_mac;
+            selected_input_eth_type = input_0_eth_type;
+        end
+        2'd1: begin
+            selected_input_eth_hdr_valid = input_1_eth_hdr_valid;
+            selected_input_eth_dest_mac = input_1_eth_dest_mac;
+            selected_input_eth_src_mac = input_1_eth_src_mac;
+            selected_input_eth_type = input_1_eth_type;
+        end
+        2'd2: begin
+            selected_input_eth_hdr_valid = input_2_eth_hdr_valid;
+            selected_input_eth_dest_mac = input_2_eth_dest_mac;
+            selected_input_eth_src_mac = input_2_eth_src_mac;
+            selected_input_eth_type = input_2_eth_type;
+        end
+        2'd3: begin
+            selected_input_eth_hdr_valid = input_3_eth_hdr_valid;
+            selected_input_eth_dest_mac = input_3_eth_dest_mac;
+            selected_input_eth_src_mac = input_3_eth_src_mac;
+            selected_input_eth_type = input_3_eth_type;
+        end
+    endcase
+end
+
+// mux for incoming packet
+reg [7:0] current_input_tdata;
+reg current_input_tvalid;
+reg current_input_tready;
+
+Diff Content:
++ 176         default: begin
++ 176             selected_input_eth_hdr_valid = 1'b0;
++ 176             selected_input_eth_dest_mac = 48'd0;
++ 176             selected_input_eth_src_mac = 48'd0;
++ 176             selected_input_eth_type = 16'd0;
++ 176         end
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/eth_mux_64_4.v@152:189
+// mux for start of packet detection
+reg selected_input_eth_hdr_valid;
+reg [47:0] selected_input_eth_dest_mac;
+reg [47:0] selected_input_eth_src_mac;
+reg [15:0] selected_input_eth_type;
+always @* begin
+    case (select)
+        2'd0: begin
+            selected_input_eth_hdr_valid = input_0_eth_hdr_valid;
+            selected_input_eth_dest_mac = input_0_eth_dest_mac;
+            selected_input_eth_src_mac = input_0_eth_src_mac;
+            selected_input_eth_type = input_0_eth_type;
+        end
+        2'd1: begin
+            selected_input_eth_hdr_valid = input_1_eth_hdr_valid;
+            selected_input_eth_dest_mac = input_1_eth_dest_mac;
+            selected_input_eth_src_mac = input_1_eth_src_mac;
+            selected_input_eth_type = input_1_eth_type;
+        end
+        2'd2: begin
+            selected_input_eth_hdr_valid = input_2_eth_hdr_valid;
+            selected_input_eth_dest_mac = input_2_eth_dest_mac;
+            selected_input_eth_src_mac = input_2_eth_src_mac;
+            selected_input_eth_type = input_2_eth_type;
+        end
+        2'd3: begin
+            selected_input_eth_hdr_valid = input_3_eth_hdr_valid;
+            selected_input_eth_dest_mac = input_3_eth_dest_mac;
+            selected_input_eth_src_mac = input_3_eth_src_mac;
+            selected_input_eth_type = input_3_eth_type;
+        end
+    endcase
+end
+
+// mux for incoming packet
+reg [63:0] current_input_tdata;
+reg [7:0]  current_input_tkeep;
+reg current_input_tvalid;
+

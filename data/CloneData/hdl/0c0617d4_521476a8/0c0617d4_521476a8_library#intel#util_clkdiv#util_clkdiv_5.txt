@@ -1,0 +1,24 @@
+Source Block: hdl/library/intel/util_clkdiv/util_clkdiv.v@56:68@HdlStmProcess
+
+always @(posedge clk) begin
+  reset_d1 <= reset;
+end
+
+always @(posedge clk) begin
+  enable <= ~enable;
+end
+
+generate if (SIM_DEVICE == "CYCLONE5") begin
+	cyclonev_clkena #(
+		.clock_type ("Global Clock"),
+		.ena_register_mode ("falling edge"),
+
+Diff Content:
+- 61 always @(posedge clk) begin
+- 62   enable <= ~enable;
+- 63 end
++ 63   always @(posedge clk) begin
++ 63     enable <= ~enable;
++ 63   end
+
+Clone Blocks:

@@ -1,0 +1,26 @@
+Source Block: hdl/library/common/ad_dds_2.v@94:112@HdlStmProcess
+      dds_data_out[DDS_DW-1] <= dds_data_width[DDS_DW-1] ^ dds_format;
+      dds_data_out[DDS_DW-2: 0] <= dds_data_width[DDS_DW-2: 0];
+    end
+
+    // set desired data width
+    always @(posedge clk) begin
+      if (DDS_DW <= DDS_D_DW) begin // truncation
+        // fair rownding
+        dds_data_rownd <= dds_data_int + {(C_T_WIDTH){dds_data_int[DDS_D_DW-1]}};
+        dds_data_width <= dds_data_rownd[DDS_D_DW-1:DDS_D_DW-DDS_DW];
+      end else begin // concatenation
+        dds_data_width <= dds_data_int << C_T_WIDTH;
+      end
+    end
+
+    // dual tone
+    always @(posedge clk) begin
+      dds_data_int <= dds_data_0_s + dds_data_1_s;
+    end
+
+Diff Content:
+- 100       if (DDS_DW <= DDS_D_DW) begin // truncation
++ 100       if (DDS_DW < DDS_D_DW) begin // truncation
+
+Clone Blocks:

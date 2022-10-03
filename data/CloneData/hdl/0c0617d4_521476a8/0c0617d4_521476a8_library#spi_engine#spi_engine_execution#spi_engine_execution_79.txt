@@ -1,0 +1,65 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@294:314@HdlStmProcess
+  end else if (cs_gen) begin
+    cs <= cmd_d1[NUM_OF_CS-1:0];
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    sync_valid <= 1'b0;
+  end else begin
+    if (exec_sync_cmd == 1'b1) begin
+      sync_valid <= 1'b1;
+    end else if (sync_ready == 1'b1) begin
+      sync_valid <= 1'b0;
+    end
+  end
+end
+
+assign sync = cmd_d1[7:0];
+
+always @(posedge clk) begin
+  if (resetn == 1'b0)
+
+Diff Content:
+- 299 always @(posedge clk) begin
+- 300   if (resetn == 1'b0) begin
+- 301     sync_valid <= 1'b0;
+- 302   end else begin
+- 303     if (exec_sync_cmd == 1'b1) begin
+- 304       sync_valid <= 1'b1;
+- 305     end else if (sync_ready == 1'b1) begin
+- 309 end
++ 305   always @(posedge clk) begin
++ 305     if (resetn == 1'b0) begin
++ 306     end else begin
++ 306       if (exec_sync_cmd == 1'b1) begin
++ 306         sync_valid <= 1'b1;
++ 306       end else if (sync_ready == 1'b1) begin
++ 306         sync_valid <= 1'b0;
++ 306       end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@181:200
+always @(posedge clk) begin
+  if (cmd_ready & cmd_valid)
+   cmd_d1 <= cmd;
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    active <= 1'b0;
+  end else begin
+    if (exec_cmd == 1'b1)
+      active <= 1'b1;
+    else if (sync_ready == 1'b1 && sync_valid == 1'b1)
+      active <= 1'b0;
+  end
+end
+
+// Load the interface configurations from the 'Configuration Write'
+// instruction
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+

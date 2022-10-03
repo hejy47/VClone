@@ -1,0 +1,41 @@
+Source Block: hdl/library/util_pmod_adc/util_pmod_adc.v@161:194@HdlStmProcess
+    end
+  end
+
+  // update the ADC timing counters
+
+  always @(posedge clk)
+  begin
+    if(reset == 1'b1) begin
+      adc_tconvst_cnt  <= ADC_CONVST_CNT;
+      adc_tconvert_cnt <= ADC_CONVERT_CNT;
+      adc_tquiet_cnt   <= ADC_TQUITE_CNT;
+    end else begin
+      if(adc_state == ADC_START_CNV) begin
+        adc_tconvst_cnt <= adc_tconvst_cnt - 1;
+      end else begin
+        adc_tconvst_cnt <= ADC_CONVST_CNT;
+      end
+      if((adc_state == ADC_START_CNV) || (adc_state == ADC_WAIT_CNV_DONE)) begin
+        adc_tconvert_cnt <= adc_tconvert_cnt - 1;
+      end else begin
+        adc_tconvert_cnt <= ADC_CONVERT_CNT;
+      end
+      if(adc_state == ADC_TQUIET) begin
+        adc_tquiet_cnt <= adc_tquiet_cnt - 1;
+      end else begin
+        adc_tquiet_cnt <= ADC_TQUITE_CNT;
+      end
+    end
+  end
+
+  // determine when the ADC clock is valid
+
+  always @(negedge adc_spi_clk) begin
+    adc_clk_en <= ((adc_state == ADC_READ_CNV_RESULT) && (sclk_clk_cnt != 0)) ? 1'b1 : 1'b0;
+
+Diff Content:
+- 168     if(reset == 1'b1) begin
++ 168     if(resetn == 1'b0) begin
+
+Clone Blocks:

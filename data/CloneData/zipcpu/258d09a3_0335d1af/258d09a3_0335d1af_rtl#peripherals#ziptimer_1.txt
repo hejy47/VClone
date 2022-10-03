@@ -1,0 +1,50 @@
+Source Block: zipcpu/rtl/peripherals/ziptimer.v@152:173@HdlStmProcess
+		end
+
+	// Set the interrupt on our last tick, as we transition from one to
+	// zero.
+	reg	r_zero  = 1'b1;
+	always @(posedge i_clk)
+		if (i_reset)
+			r_zero = 1'b1;
+		else if (wb_write)
+			r_zero <= (i_wb_data[(VW-1):0] == 0);
+		else if ((r_running)&&(i_ce))
+		begin
+			if (r_value == {{(VW-1){1'b0}}, 1'b1 })
+				r_zero <= 1'b1;
+			else if ((r_zero)&&(auto_reload))
+				r_zero <= 1'b0;
+		end
+
+	initial	o_int   = 1'b0;
+	always @(posedge i_clk)
+		if ((i_reset)||(wb_write))
+			o_int <= 1'b0;
+
+Diff Content:
+- 159 			r_zero = 1'b1;
++ 159 			r_zero <= 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/peripherals/ziptimer.v@166:183
+			else if ((r_zero)&&(auto_reload))
+				r_zero <= 1'b0;
+		end
+
+	initial	o_int   = 1'b0;
+	always @(posedge i_clk)
+		if ((i_reset)||(wb_write))
+			o_int <= 1'b0;
+		else if (i_ce)
+			o_int <= (!o_int)&&(r_running)
+				&&(r_value == { {(VW-1){1'b0}}, 1'b1 });
+		else
+			o_int <= 1'b0;
+
+	initial	o_wb_ack = 1'b0;
+	always @(posedge i_clk)
+		o_wb_ack <= (!i_reset)&&(i_wb_stb);
+	assign	o_wb_stall = 1'b0;
+

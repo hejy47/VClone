@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_dmac/address_generator.v@73:83@HdlIdDef
+  output     [ 2:0]               prot,
+  output     [ 3:0]               cache
+);
+
+localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
+localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
+
+`include "inc_id.vh"
+
+assign burst = 2'b01;
+assign prot = 3'b000;
+
+Diff Content:
+- 78 localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
++ 78   localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
++ 78   localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/address_generator.v@72:82
+  output     [ 1:0]               burst,
+  output     [ 2:0]               prot,
+  output     [ 3:0]               cache
+);
+
+localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};
+localparam MAX_LENGTH = {BEATS_PER_BURST_WIDTH{1'b1}};
+
+`include "inc_id.vh"
+
+assign burst = 2'b01;
+

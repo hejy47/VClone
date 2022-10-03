@@ -1,0 +1,47 @@
+Source Block: oh/elink/hdl/emaxi.v@161:171@HdlStmAssign
+   //--------------------
+   //write address channel
+   //--------------------
+   assign aw_go       = m_axi_awvalid & m_axi_awready;
+   assign w_go        = m_axi_wvalid & m_axi_wready;
+   assign emwr_rd_en  = ( emwr_access & ~awvalid_b & ~wvalid_b);
+
+   // generate write-address signals
+   always @( posedge m_axi_aclk )     
+     if(~m_axi_aresetn) 
+       begin
+
+Diff Content:
+- 166    assign emwr_rd_en  = ( emwr_access & ~awvalid_b & ~wvalid_b);
++ 166    assign w_go        = m_axi_wvalid  & m_axi_wready;
++ 166    assign rxwr_wait   = awvalid_b     | wvalid_b;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/emaxi.v@159:169
+   assign m_axi_arqos[3:0]	= 4'h0;
+
+   //--------------------
+   //write address channel
+   //--------------------
+   assign aw_go       = m_axi_awvalid & m_axi_awready;
+   assign w_go        = m_axi_wvalid & m_axi_wready;
+   assign emwr_rd_en  = ( emwr_access & ~awvalid_b & ~wvalid_b);
+
+   // generate write-address signals
+   always @( posedge m_axi_aclk )     
+
+Clone Blocks 2:
+oh/elink/hdl/emaxi.v@160:170
+
+   //--------------------
+   //write address channel
+   //--------------------
+   assign aw_go       = m_axi_awvalid & m_axi_awready;
+   assign w_go        = m_axi_wvalid & m_axi_wready;
+   assign emwr_rd_en  = ( emwr_access & ~awvalid_b & ~wvalid_b);
+
+   // generate write-address signals
+   always @( posedge m_axi_aclk )     
+     if(~m_axi_aresetn) 
+

@@ -1,0 +1,71 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@333:364@HdlStmProcess
+    else
+      last_transfer <= 1'b0;
+  end
+end
+
+always @(posedge clk) begin
+  if (resetn == 1'b0) begin
+    transfer_active <= 1'b0;
+    wait_for_io <= 1'b0;
+  end else begin
+    if (exec_transfer_cmd == 1'b1) begin
+      wait_for_io <= 1'b1;
+      transfer_active <= 1'b0;
+    end else if (wait_for_io == 1'b1 && io_ready1 == 1'b1) begin
+      wait_for_io <= 1'b0;
+      if (last_transfer == 1'b0)
+        transfer_active <= 1'b1;
+      else
+        transfer_active <= 1'b0;
+    end else if (transfer_active == 1'b1 && end_of_word == 1'b1) begin
+      if (last_transfer == 1'b1 || io_ready2 == 1'b0)
+        transfer_active <= 1'b0;
+      if (io_ready2 == 1'b0)
+        wait_for_io <= 1'b1;
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (transfer_active == 1'b1 || wait_for_io == 1'b1)
+  begin
+    sdo_t_int <= ~sdo_enabled;
+
+Diff Content:
+- 338 always @(posedge clk) begin
+- 339   if (resetn == 1'b0) begin
+- 340     transfer_active <= 1'b0;
+- 341     wait_for_io <= 1'b0;
+- 342   end else begin
+- 343     if (exec_transfer_cmd == 1'b1) begin
+- 344       wait_for_io <= 1'b1;
+- 346     end else if (wait_for_io == 1'b1 && io_ready1 == 1'b1) begin
+- 348       if (last_transfer == 1'b0)
+- 349         transfer_active <= 1'b1;
+- 350       else
+- 351         transfer_active <= 1'b0;
+- 352     end else if (transfer_active == 1'b1 && end_of_word == 1'b1) begin
+- 353       if (last_transfer == 1'b1 || io_ready2 == 1'b0)
+- 354         transfer_active <= 1'b0;
+- 355       if (io_ready2 == 1'b0)
+- 359 end
++ 344   always @(posedge clk) begin
++ 344     if (resetn == 1'b0) begin
++ 355     end else begin
++ 355       if (exec_transfer_cmd == 1'b1) begin
++ 356         transfer_active <= 1'b0;
++ 356       end else if (wait_for_io == 1'b1 && io_ready1 == 1'b1) begin
++ 356         wait_for_io <= 1'b0;
++ 356         if (last_transfer == 1'b0)
++ 356           transfer_active <= 1'b1;
++ 356         else
++ 356           transfer_active <= 1'b0;
++ 356       end else if (transfer_active == 1'b1 && end_of_word == 1'b1) begin
++ 356         if (last_transfer == 1'b1 || io_ready2 == 1'b0)
++ 356           transfer_active <= 1'b0;
++ 356         if (io_ready2 == 1'b0)
++ 356           wait_for_io <= 1'b1;
++ 356       end
+
+Clone Blocks:

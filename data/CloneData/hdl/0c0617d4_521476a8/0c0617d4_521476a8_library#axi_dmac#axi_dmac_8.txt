@@ -1,0 +1,29 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@257:273@HdlIdDef
+  DMA_DATA_WIDTH_SRC > 128 ? 5 :
+  DMA_DATA_WIDTH_SRC > 64 ? 4 :
+  DMA_DATA_WIDTH_SRC > 32 ? 3 :
+  DMA_DATA_WIDTH_SRC > 16 ? 2 :
+  DMA_DATA_WIDTH_SRC > 8 ? 1 : 0;
+localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
+  (FIFO_SIZE) > 32 ? 7 :
+  (FIFO_SIZE) > 16 ? 6 :
+  (FIFO_SIZE) > 8 ? 5 :
+  (FIFO_SIZE) > 4 ? 4 :
+  (FIFO_SIZE) > 2 ? 3 :
+  (FIFO_SIZE) > 1 ? 2 : 1;
+localparam DBG_ID_PADDING = ID_WIDTH > 8 ? 0 : 8 - ID_WIDTH;
+
+/* AXI3 supports a maximum of 16 beats per burst. AXI4 supports a maximum of
+   256 beats per burst. If either bus is AXI3 set the maximum number of beats
+   per burst to 16. For non AXI interfaces the maximum beats per burst is in
+
+Diff Content:
+- 262 localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
+- 263   (FIFO_SIZE) > 32 ? 7 :
+- 264   (FIFO_SIZE) > 16 ? 6 :
+- 265   (FIFO_SIZE) > 8 ? 5 :
+- 266   (FIFO_SIZE) > 4 ? 4 :
+- 267   (FIFO_SIZE) > 2 ? 3 :
+- 268   (FIFO_SIZE) > 1 ? 2 : 1;
+
+Clone Blocks:

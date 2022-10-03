@@ -1,0 +1,52 @@
+Source Block: verilog-ethernet/rtl/axis_fifo.v@98:118@HdlStmProcess
+            wr_ptr_next = wr_ptr_reg + 1;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        wr_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+    end else begin
+        wr_ptr_reg <= wr_ptr_next;
+    end
+
+    if (write) begin
+        mem[wr_ptr_reg[ADDR_WIDTH-1:0]] <= {input_axis_tlast, input_axis_tuser, input_axis_tdata};
+    end
+end
+
+// Read logic
+always @* begin
+    read = 1'b0;
+
+
+Diff Content:
+- 111         mem[wr_ptr_reg[ADDR_WIDTH-1:0]] <= {input_axis_tlast, input_axis_tuser, input_axis_tdata};
++ 111         mem[wr_ptr_reg[ADDR_WIDTH-1:0]] <= mem_write_data;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/axis_fifo_64.v@103:123
+            wr_ptr_next = wr_ptr_reg + 1;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        wr_ptr_reg <= {ADDR_WIDTH+1{1'b0}};
+    end else begin
+        wr_ptr_reg <= wr_ptr_next;
+    end
+
+    if (write) begin
+        mem[wr_ptr_reg[ADDR_WIDTH-1:0]] <= {input_axis_tlast, input_axis_tuser, input_axis_tkeep, input_axis_tdata};
+    end
+end
+
+// FIFO read logic
+always @* begin
+    read = 1'b0;
+
+

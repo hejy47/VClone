@@ -1,0 +1,22 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_common.v@127:137@HdlStmAssign
+
+/* Transfer the reset signal back to the up domain, used to keep the
+ * synchronizers in reset until the core is ready. This is done in order to
+ * prevent bogus data to propagate to the register map. */
+reg [1:0] up_reset_synchronizer_vector = 2'b11;
+assign up_reset_synchronizer = up_reset_synchronizer_vector[0];
+
+/*
+ * Synchronize the external core reset to the register map domain so the status
+ * can be shown in the register map. This is useful for debugging.
+ */
+
+Diff Content:
+- 132 assign up_reset_synchronizer = up_reset_synchronizer_vector[0];
++ 132   /* Transfer the reset signal back to the up domain, used to keep the
++ 132    * synchronizers in reset until the core is ready. This is done in order to
++ 132    * prevent bogus data to propagate to the register map. */
++ 132   reg [1:0] up_reset_synchronizer_vector = 2'b11;
++ 132   assign up_reset_synchronizer = up_reset_synchronizer_vector[0];
+
+Clone Blocks:

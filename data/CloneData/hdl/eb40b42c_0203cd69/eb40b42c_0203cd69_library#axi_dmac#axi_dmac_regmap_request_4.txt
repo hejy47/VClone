@@ -1,0 +1,60 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_regmap_request.v@178:188@HdlStmAssign
+end
+endgenerate
+
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot;
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+// Request ID and Request done bitmap handling
+
+Diff Content:
+- 183 assign up_eot = up_dma_cyclic ? 1'b0 : response_eot;
++ 183 assign up_eot = up_dma_cyclic ? 1'b0 : response_eot & response_valid & response_ready;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_regmap_request.v@177:187
+  assign request_src_stride = 'h0;
+end
+endgenerate
+
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot;
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac_regmap_request.v@180:190
+
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot;
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+// Request ID and Request done bitmap handling
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+
+Clone Blocks 3:
+hdl/library/axi_dmac/axi_dmac_regmap_request.v@181:191
+// In cyclic mode the same transfer is submitted over and over again
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : response_eot;
+
+assign request_valid = up_dma_req_valid;
+assign up_dma_req_ready = request_ready;
+
+// Request ID and Request done bitmap handling
+always @(posedge clk) begin
+  if (ctrl_enable == 1'b0) begin
+    up_transfer_id <= 2'h0;
+

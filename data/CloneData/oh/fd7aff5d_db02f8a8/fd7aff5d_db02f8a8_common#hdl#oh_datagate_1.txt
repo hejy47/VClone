@@ -1,0 +1,58 @@
+Source Block: oh/common/hdl/oh_datagate.v@11:21@HdlIdDef
+   input           clk;
+   input           en;
+   input [DW-1:0]  din;   
+   output [DW-1:0] dout;	  
+	 
+   reg [PS-1:0]    enable_pipe;   
+
+   always @ (posedge clk)
+     enable_pipe[PS-1:0] <= {enable_pipe[PS-2:0],en};
+   
+   assign enable = {enable_pipe[PS-1:0],en};
+
+Diff Content:
++ 16    wire 	   enable;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_datagate.v@16:26
+   reg [PS-1:0]    enable_pipe;   
+
+   always @ (posedge clk)
+     enable_pipe[PS-1:0] <= {enable_pipe[PS-2:0],en};
+   
+   assign enable = {enable_pipe[PS-1:0],en};
+
+   assign dout[DW-1:0] =  {(DW){enable}} & din[DW-1:0];
+   
+   
+endmodule // oh_datagate
+
+Clone Blocks 2:
+oh/common/hdl/oh_datagate.v@13:24
+   input [DW-1:0]  din;   
+   output [DW-1:0] dout;	  
+	 
+   reg [PS-1:0]    enable_pipe;   
+
+   always @ (posedge clk)
+     enable_pipe[PS-1:0] <= {enable_pipe[PS-2:0],en};
+   
+   assign enable = {enable_pipe[PS-1:0],en};
+
+   assign dout[DW-1:0] =  {(DW){enable}} & din[DW-1:0];
+   
+
+Clone Blocks 3:
+oh/common/hdl/oh_datagate.v@18:26
+   always @ (posedge clk)
+     enable_pipe[PS-1:0] <= {enable_pipe[PS-2:0],en};
+   
+   assign enable = {enable_pipe[PS-1:0],en};
+
+   assign dout[DW-1:0] =  {(DW){enable}} & din[DW-1:0];
+   
+   
+endmodule // oh_datagate
+

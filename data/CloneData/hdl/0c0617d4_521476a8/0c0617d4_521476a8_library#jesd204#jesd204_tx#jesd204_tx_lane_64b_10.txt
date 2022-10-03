@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_lane_64b.v@75:85@HdlIdDef
+wire [63:0] tx_data_msb_s;
+wire [63:0] scrambled_data_r;
+wire [11:0] crc12;
+
+/* Reorder octets MSB first */
+genvar i;
+generate
+  for (i = 0; i < 64; i = i + 8) begin: g_link_data
+    assign tx_data_msb_s[i+:8] = tx_data[64-1-i-:8];
+  end
+endgenerate
+
+Diff Content:
+- 80 genvar i;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/jesd204_tx/jesd204_tx_lane_64b.v@72:82
+reg lmc_quarter_edge_d2 = 'b0;
+reg tx_ready_d1 = 'b0;
+
+wire [63:0] tx_data_msb_s;
+wire [63:0] scrambled_data_r;
+wire [11:0] crc12;
+
+/* Reorder octets MSB first */
+genvar i;
+generate
+  for (i = 0; i < 64; i = i + 8) begin: g_link_data
+

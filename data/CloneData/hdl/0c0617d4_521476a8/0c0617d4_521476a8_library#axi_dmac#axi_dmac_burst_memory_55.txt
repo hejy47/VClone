@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@187:205@HdlStmIf
+wire [DATA_WIDTH_MEM_DEST-1:0] dest_mem_data;
+wire dest_mem_data_ready;
+
+`include "inc_id.vh"
+
+generate if (ID_WIDTH >= 3) begin
+  assign src_id_reduced = {src_id_reduced_msb,src_id[ID_WIDTH-3:0]};
+  assign dest_id_reduced_next = {dest_id_reduced_msb_next,dest_id_next[ID_WIDTH-3:0]};
+  assign dest_id_reduced = {dest_id_reduced_msb,dest_id[ID_WIDTH-3:0]};
+end else begin
+  assign src_id_reduced = src_id_reduced_msb;
+  assign dest_id_reduced_next = dest_id_reduced_msb_next;
+  assign dest_id_reduced = dest_id_reduced_msb;
+end endgenerate
+
+assign src_beat = src_mem_data_valid;
+assign src_last_beat = src_beat & src_mem_data_last;
+assign src_waddr = {src_id_reduced,src_beat_counter};
+
+
+Diff Content:
+- 192 generate if (ID_WIDTH >= 3) begin
+- 193   assign src_id_reduced = {src_id_reduced_msb,src_id[ID_WIDTH-3:0]};
+- 194   assign dest_id_reduced_next = {dest_id_reduced_msb_next,dest_id_next[ID_WIDTH-3:0]};
+- 195   assign dest_id_reduced = {dest_id_reduced_msb,dest_id[ID_WIDTH-3:0]};
+- 196 end else begin
+- 197   assign src_id_reduced = src_id_reduced_msb;
+- 198   assign dest_id_reduced_next = dest_id_reduced_msb_next;
+- 199   assign dest_id_reduced = dest_id_reduced_msb;
+- 200 end endgenerate
+
+Clone Blocks:

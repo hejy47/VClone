@@ -1,0 +1,86 @@
+Source Block: oh/elink/hdl/erx_cfg.v@87:97@HdlStmAssign
+   /*ADDRESS DECODE LOGIC       */
+   /*****************************/
+
+   //read/write decode
+   assign ecfg_write  = mi_en &  mi_we;
+   assign ecfg_read   = mi_en & ~mi_we;   
+
+   //Config write enables
+   assign rx_cfg_write      = ecfg_write & (mi_addr[RFAW+1:2]==`ERX_CFG);
+   assign rx_offset_write   = ecfg_write & (mi_addr[RFAW+1:2]==`ERX_OFFSET);
+   assign rx_idelay0_write  = ecfg_write & (mi_addr[RFAW+1:2]==`ERX_IDELAY0);
+
+Diff Content:
+- 92    assign ecfg_read   = mi_en & ~mi_we;   
++ 92    assign cfg_access     = erx_cfg_access &
++ 92 		         (dstaddr_in[19:16] ==`EGROUP_MMR) &
++ 92 		         (dstaddr_in[10:8]  ==`EGROUP_RX)  &
++ 92 			 ~dstaddr_in[5];  //reserveed for mailbox
++ 92    assign mailbox_access = erx_cfg_access &
++ 92 		          (dstaddr_in[19:16] ==`EGROUP_MMR) &
++ 92 		          (dstaddr_in[10:8]  ==`EGROUP_RX)  &
++ 92 			  dstaddr_in[5];
++ 92    assign dma_access     =  erx_cfg_access & 
++ 92 			  (dstaddr_in[19:16] ==`EGROUP_MMR) &
++ 92 			  (dstaddr_in[10:8]  ==`EGROUP_DMA);
++ 92    assign ecfg_read      = cfg_access & ~write_in;
++ 92    assign ecfg_write     = cfg_access & write_in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/elink_cfg.v@84:94
+		  (mi_addr[10:8]==3'h2);
+   
+
+   //read/write decode
+   assign ecfg_write  = mi_en &  mi_we;
+   assign ecfg_read   = mi_en & ~mi_we;   
+
+   //Config write enables
+   assign ecfg_reset_write    = ecfg_write & (mi_addr[RFAW+1:2]==`E_RESET);
+   assign ecfg_clk_write      = ecfg_write & (mi_addr[RFAW+1:2]==`E_CLK);
+   assign ecfg_chipid_write   = ecfg_write & (mi_addr[RFAW+1:2]==`E_CHIPID);
+
+Clone Blocks 2:
+oh/elink/hdl/etx_cfg.v@81:91
+   /*ADDRESS DECODE LOGIC       */
+   /*****************************/
+
+   //read/write decode
+   assign ecfg_write  = mi_en &  mi_we;
+   assign ecfg_read   = mi_en & ~mi_we;   
+
+   //Config write enables 
+   assign tx_version_write  = ecfg_write & (mi_addr[RFAW+1:2]==`E_VERSION);
+   assign tx_cfg_write      = ecfg_write & (mi_addr[RFAW+1:2]==`ETX_CFG);
+   assign tx_status_write   = ecfg_write & (mi_addr[RFAW+1:2]==`ETX_STATUS);
+
+Clone Blocks 3:
+oh/elink/hdl/elink_cfg.v@83:93
+		  (mi_addr[31:20]==ID) &
+		  (mi_addr[10:8]==3'h2);
+   
+
+   //read/write decode
+   assign ecfg_write  = mi_en &  mi_we;
+   assign ecfg_read   = mi_en & ~mi_we;   
+
+   //Config write enables
+   assign ecfg_reset_write    = ecfg_write & (mi_addr[RFAW+1:2]==`E_RESET);
+   assign ecfg_clk_write      = ecfg_write & (mi_addr[RFAW+1:2]==`E_CLK);
+
+Clone Blocks 4:
+oh/elink/hdl/erx_cfg.v@86:96
+   /*****************************/
+   /*ADDRESS DECODE LOGIC       */
+   /*****************************/
+
+   //read/write decode
+   assign ecfg_write  = mi_en &  mi_we;
+   assign ecfg_read   = mi_en & ~mi_we;   
+
+   //Config write enables
+   assign rx_cfg_write      = ecfg_write & (mi_addr[RFAW+1:2]==`ERX_CFG);
+   assign rx_offset_write   = ecfg_write & (mi_addr[RFAW+1:2]==`ERX_OFFSET);
+

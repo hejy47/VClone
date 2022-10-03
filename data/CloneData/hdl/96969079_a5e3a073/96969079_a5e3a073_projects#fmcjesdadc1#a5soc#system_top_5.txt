@@ -1,0 +1,23 @@
+Source Block: hdl/projects/fmcjesdadc1/a5soc/system_top.v@433:446@HdlStmProcess
+    .spi_miso (spi_miso),
+    .spi_sdio (spi_sdio));
+
+  // pipe line to fix timing
+
+  always @(posedge sys_clk) begin
+    sys_hdmi_pll_reconfig_in <= sys_hdmi_pll_reconfig_reconfig_out;
+    sys_hdmi_pll_reconfig_reconfig_in <= sys_hdmi_pll_reconfig_out;
+  end
+
+  system_bd i_system_bd (
+    .memory_mem_a (ddr3_a),
+    .memory_mem_ba (ddr3_ba),
+    .memory_mem_ck (ddr3_ck_p),
+
+Diff Content:
+- 438   always @(posedge sys_clk) begin
+- 439     sys_hdmi_pll_reconfig_in <= sys_hdmi_pll_reconfig_reconfig_out;
+- 440     sys_hdmi_pll_reconfig_reconfig_in <= sys_hdmi_pll_reconfig_out;
+- 441   end
+
+Clone Blocks:

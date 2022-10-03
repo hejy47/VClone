@@ -1,0 +1,51 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@277:287@HdlIdDef
+    end
+  end
+
+  reg offload0_enable_reg;
+  reg offload0_mem_reset_reg;
+  wire offload0_enabled_s;
+
+  // the software reset should reset all the registers
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+      up_irq_mask <= 'h00;
+
+Diff Content:
++ 282   always @(posedge clk) begin
++ 282     if ((up_waddr_s == 8'h48) && (up_wreq_s == 1'b1)) begin
++ 282       pulse_gen_load <= 1'b1;
++ 282     end else begin
++ 282       pulse_gen_load <= 1'b0;
++ 282     end
++ 282   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@276:286
+      end
+    end
+  end
+
+  reg offload0_enable_reg;
+  reg offload0_mem_reset_reg;
+  wire offload0_enabled_s;
+
+  // the software reset should reset all the registers
+  always @(posedge clk) begin
+    if (up_sw_resetn == 1'b0) begin
+
+Clone Blocks 2:
+hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@275:285
+        endcase
+      end
+    end
+  end
+
+  reg offload0_enable_reg;
+  reg offload0_mem_reset_reg;
+  wire offload0_enabled_s;
+
+  // the software reset should reset all the registers
+  always @(posedge clk) begin
+

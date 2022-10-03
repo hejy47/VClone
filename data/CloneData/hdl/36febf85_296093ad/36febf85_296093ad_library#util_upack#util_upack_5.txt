@@ -1,0 +1,36 @@
+Source Block: hdl/library/util_upack/util_upack.v@91:101@HdlIdDef
+
+  localparam  M_CNT     = 8;
+  localparam  P_CNT     = CH_CNT;
+  localparam  CH_SCNT   = CH_DW/16;
+  localparam  M_WIDTH   = CH_DW*M_CNT;
+  localparam  P_WIDTH   = CH_DW*P_CNT;
+
+  // dac interface
+
+  input                             dac_clk;
+  input                             dac_enable_0;
+
+Diff Content:
+- 96   localparam  P_WIDTH   = CH_DW*P_CNT;
++ 96   localparam  NUM_OF_CHANNELS_M     = 8;
++ 96   localparam  NUM_OF_CHANNELS_P     = NUM_OF_CHANNELS;
++ 96   localparam  CH_SCNT   = CHANNEL_DATA_WIDTH/16;
++ 96   localparam  M_WIDTH   = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_M;
++ 96   localparam  P_WIDTH   = CHANNEL_DATA_WIDTH*NUM_OF_CHANNELS_P;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_upack/util_upack.v@90:100
+  parameter   CH_CNT    = 8;
+
+  localparam  M_CNT     = 8;
+  localparam  P_CNT     = CH_CNT;
+  localparam  CH_SCNT   = CH_DW/16;
+  localparam  M_WIDTH   = CH_DW*M_CNT;
+  localparam  P_WIDTH   = CH_DW*P_CNT;
+
+  // dac interface
+
+  input                             dac_clk;
+

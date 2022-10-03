@@ -1,0 +1,68 @@
+Source Block: hdl/library/jesd204/jesd204_soft_pcs_rx/jesd204_pattern_align.v@127:155@HdlStmProcess
+      end
+    end
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    pattern_sync <= 1'b0;
+    match_counter <= 2'h0;
+  end else begin
+    if (match_counter == 2'h0) begin
+      pattern_sync <= 1'b0;
+    end else if (match_counter == 2'h3) begin
+      pattern_sync <= 1'b1;
+    end
+
+    if (pattern_match == 1'b1) begin
+      if (match_counter != 2'h3) begin
+        match_counter <= match_counter + 1'b1;
+      end
+    end else begin
+      if (match_counter != 2'h0) begin
+        match_counter <= match_counter - 1'b1;
+      end
+    end
+  end
+end
+
+endmodule
+
+Diff Content:
+- 132 always @(posedge clk) begin
+- 133   if (reset == 1'b1) begin
+- 134     pattern_sync <= 1'b0;
+- 135     match_counter <= 2'h0;
+- 136   end else begin
+- 137     if (match_counter == 2'h0) begin
+- 138       pattern_sync <= 1'b0;
+- 139     end else if (match_counter == 2'h3) begin
+- 140       pattern_sync <= 1'b1;
+- 141     end
+- 143     if (pattern_match == 1'b1) begin
+- 144       if (match_counter != 2'h3) begin
+- 145         match_counter <= match_counter + 1'b1;
+- 146       end
+- 148       if (match_counter != 2'h0) begin
+- 149         match_counter <= match_counter - 1'b1;
+- 153 end
++ 146   always @(posedge clk) begin
++ 146     if (reset == 1'b1) begin
++ 146       pattern_sync <= 1'b0;
++ 146       match_counter <= 2'h0;
++ 149       if (match_counter == 2'h0) begin
++ 149         pattern_sync <= 1'b0;
++ 149       end else if (match_counter == 2'h3) begin
++ 149         pattern_sync <= 1'b1;
++ 149       end
++ 149       if (pattern_match == 1'b1) begin
++ 149         if (match_counter != 2'h3) begin
++ 149           match_counter <= match_counter + 1'b1;
++ 149         end
++ 149       end else begin
++ 149         if (match_counter != 2'h0) begin
++ 149           match_counter <= match_counter - 1'b1;
++ 149         end
+
+Clone Blocks:

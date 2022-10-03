@@ -1,0 +1,35 @@
+Source Block: hdl/library/common/sync_gray.v@92:111@HdlStmProcess
+	end else begin
+		in_count_gray <= b2g(in_count);
+	end
+end
+
+always @(posedge out_clk) begin
+	if (out_resetn == 1'b0) begin
+		out_count_gray_m1 <= 'h00;
+		out_count_gray_m2 <= 'h00;
+		out_count_m <= 'h00;
+	end else begin
+		out_count_gray_m1 <= in_count_gray;
+		out_count_gray_m2 <= out_count_gray_m1;
+		out_count_m <= g2b(out_count_gray_m2);
+	end
+end
+
+assign out_count = CLK_ASYNC ? out_count_m : in_count;
+
+endmodule
+
+Diff Content:
+- 99 		out_count_gray_m1 <= 'h00;
+- 100 		out_count_gray_m2 <= 'h00;
+- 103 		out_count_gray_m1 <= in_count_gray;
+- 104 		out_count_gray_m2 <= out_count_gray_m1;
+- 105 		out_count_m <= g2b(out_count_gray_m2);
++ 100 		cdc_sync_stage1 <= 'h00;
++ 100 		cdc_sync_stage2 <= 'h00;
++ 105 		cdc_sync_stage1 <= cdc_sync_stage0;
++ 105 		cdc_sync_stage2 <= cdc_sync_stage1;
++ 105 		out_count_m <= g2b(cdc_sync_stage2);
+
+Clone Blocks:

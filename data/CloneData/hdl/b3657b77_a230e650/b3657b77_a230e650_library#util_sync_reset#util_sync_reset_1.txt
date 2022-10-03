@@ -1,0 +1,32 @@
+Source Block: hdl/library/util_sync_reset/util_sync_reset.v@5:15@HdlIdDef
+	input clk,
+	output sync_resetn
+);
+
+// Keep it asserted for three clock cycles
+reg [2:0] reset = 3'b111;
+
+assign sync_resetn = reset[2];
+
+always @(posedge clk or negedge async_resetn) begin
+	if (async_resetn == 1'b0) begin
+
+Diff Content:
+- 10 reg [2:0] reset = 3'b111;
++ 10 reg [2:0] resetn = 3'b000;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_sync_reset/util_sync_reset.v@7:17
+);
+
+// Keep it asserted for three clock cycles
+reg [2:0] reset = 3'b111;
+
+assign sync_resetn = reset[2];
+
+always @(posedge clk or negedge async_resetn) begin
+	if (async_resetn == 1'b0) begin
+		reset <= 3'b111;
+	end else begin
+

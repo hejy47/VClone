@@ -1,0 +1,60 @@
+Source Block: serv/rtl/serv_state.v@94:138@HdlStmProcess
+   assign o_rf_rd_en = i_rd_op & o_cnt_en & !o_init;
+
+   //Shift operations require bufreg to hold for one cycle between INIT and RUN before shifting
+   assign o_bufreg_hold = !o_cnt_en & (stage_two_req | ~i_shift_op);
+
+   always @(posedge i_clk) begin
+      if (o_cnt_done)
+	o_ctrl_jump <= o_init & take_branch;
+
+      if (o_cnt_en)
+	stage_two_pending <= o_init;
+
+      o_cnt_done <= (o_cnt[4:2] == 3'b111) & o_cnt_r[2];
+
+      //Need a strobe for the first cycle in the IDLE state after INIT
+      stage_two_req <= o_cnt_done & o_init;
+
+      if (i_rf_ready & !stage_two_pending)
+	o_init <= two_stage_op & !o_pending_irq;
+
+      if (o_cnt_done)
+	o_init <= 1'b0;
+
+      if (i_rf_ready)
+	o_cnt_en <= 1'b1;
+
+      if (o_cnt_done)
+        o_cnt_en <= 1'b0;
+
+      o_cnt <= o_cnt + {2'd0,o_cnt_r[3]};
+      if (o_cnt_en)
+	o_cnt_r <= {o_cnt_r[2:0],o_cnt_r[3]};
+
+      if (i_rst) begin
+	 o_cnt   <= 3'd0;
+	 stage_two_pending <= 1'b0;
+	 o_ctrl_jump <= 1'b0;
+	 o_cnt_r <= 4'b0001;
+      end
+   end
+
+   generate
+      if (WITH_CSR) begin
+   reg 	irq_sync;
+   reg 	misalign_trap_sync;
+
+Diff Content:
+- 128 	 o_cnt   <= 3'd0;
+- 129 	 stage_two_pending <= 1'b0;
+- 130 	 o_ctrl_jump <= 1'b0;
+- 131 	 o_cnt_r <= 4'b0001;
++ 131 	 if (RESET_STRATEGY != "NONE") begin
++ 131 	    o_cnt   <= 3'd0;
++ 131 	    stage_two_pending <= 1'b0;
++ 131 	    o_ctrl_jump <= 1'b0;
++ 131 	    o_cnt_r <= 4'b0001;
++ 131 	 end
+
+Clone Blocks:

@@ -1,0 +1,190 @@
+Source Block: oh/stdcells/hdl/oh_dffsq.v@11:22@HdlStmProcess
+    input [DW-1:0]     clk,
+    input [DW-1:0]     nset,
+    output reg [DW-1:0] q
+    );
+   
+   always @ (posedge clk or negedge nset)
+     if(!nset)
+       q <= {{(DW)}{1'b1}};
+     else
+       q <= d;
+      
+endmodule
+
+Diff Content:
+- 18        q <= {{(DW)}{1'b1}};
++ 18        q <= {DW{1'b1}};
+
+Clone Blocks:
+Clone Blocks 1:
+oh/stdcells/hdl/oh_sdffq.v@12:20
+    input [DW-1:0] 	se,
+    input [DW-1:0] 	clk,
+    output reg [DW-1:0] q
+    );
+
+   always @ (posedge clk)
+       q <= se ? si : d;
+   
+endmodule
+
+Clone Blocks 2:
+oh/stdcells/hdl/oh_sdffqn.v@12:20
+    input [DW-1:0] 	se,
+    input [DW-1:0] 	clk, 
+    output reg [DW-1:0] qn
+    );
+   
+   always @ (posedge clk)
+     qn <= se ? ~si : ~d;
+      
+endmodule
+
+Clone Blocks 3:
+oh/stdcells/hdl/oh_sdffsqn.v@13:24
+    input [DW-1:0] 	clk,
+    input [DW-1:0] 	nset,
+    output reg [DW-1:0] qn
+    );
+   
+   always @ (posedge clk or negedge nset)
+     if(!nset)
+       qn <= 'b0;   
+     else
+       qn <= se ? ~si : ~d;
+   
+endmodule
+
+Clone Blocks 4:
+oh/stdcells/hdl/oh_sdffsq.v@13:24
+    input [DW-1:0] 	clk,
+    input [DW-1:0] 	nset,
+    output reg [DW-1:0] q
+    );
+   
+   always @ (posedge clk or negedge nset)
+     if(!nset)
+       q <= {{(DW)}{1'b1}};
+     else
+       q <= se ? si : d;
+      
+endmodule
+
+Clone Blocks 5:
+oh/stdcells/hdl/oh_dffrq.v@12:23
+    input [DW-1:0] 	clk,
+    input [DW-1:0] 	nreset,
+    output reg [DW-1:0] q
+    );
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       q <= 'b0;
+     else
+       q <= d;
+      
+endmodule
+
+Clone Blocks 6:
+oh/common/hdl/oh_edge2pulse.v@11:21
+    input 	    nreset, // async active low reset   
+    input [DW-1:0]  in, // edge input
+    output [DW-1:0] out     // one cycle pulse
+    );
+     
+   reg [DW-1:0]    in_reg;   
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       in_reg[DW-1:0]  <= 'b0 ;
+     else
+
+Clone Blocks 7:
+oh/stdcells/hdl/oh_sdffrqn.v@11:22
+    input [DW-1:0] 	clk,
+    input [DW-1:0] 	nreset,
+    output reg [DW-1:0] qn
+    );
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       qn <= {{(DW)}{1'b1}};
+     else
+       qn <=  se ? ~si : ~d;
+   
+endmodule
+
+Clone Blocks 8:
+oh/common/hdl/oh_fall2pulse.v@11:21
+      input 	      nreset, // async active low reset   
+      input [DW-1:0]  in, // edge input
+      output [DW-1:0] out     // one cycle pulse
+    );
+   
+   reg [DW-1:0]    in_reg;
+
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       in_reg[DW-1:0]  <= 'b0 ;
+     else
+
+Clone Blocks 9:
+oh/stdcells/hdl/oh_sdffrq.v@14:25
+    input [DW-1:0] 	clk,
+    input [DW-1:0] 	nreset,
+    output reg [DW-1:0] q
+    );
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       q <= 'b0;
+     else
+       q <= se ? si : d;
+      
+endmodule
+
+Clone Blocks 10:
+oh/stdcells/hdl/oh_dffrqn.v@11:22
+    input [DW-1:0] 	clk,
+    input [DW-1:0] 	nreset,
+    output reg [DW-1:0] qn
+    );
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       qn <= {{(DW)}{1'b1}};
+     else
+       qn <= ~d;
+   
+endmodule
+
+Clone Blocks 11:
+oh/stdcells/hdl/oh_dffsqn.v@11:22
+    input [DW-1:0] 	clk,
+    input [DW-1:0] 	nset,
+    output reg [DW-1:0] qn
+    );
+   
+   always @ (posedge clk or negedge nset)
+     if(!nset)
+       qn <= 'b0;
+     else
+       qn <= ~d;
+   
+endmodule
+
+Clone Blocks 12:
+oh/common/hdl/oh_rise2pulse.v@11:21
+      input 	      nreset, // async active low reset   
+      input [DW-1:0]  in, // edge input
+      output [DW-1:0] out     // one cycle pulse
+      );
+  
+   reg [DW-1:0]    in_reg;
+   
+   always @ (posedge clk or negedge nreset)
+     if(!nreset)
+       in_reg[DW-1:0]  <= 'b0 ;
+     else
+

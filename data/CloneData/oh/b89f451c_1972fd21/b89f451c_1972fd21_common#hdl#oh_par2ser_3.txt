@@ -1,0 +1,21 @@
+Source Block: oh/common/hdl/oh_par2ser.v@65:76@HdlStmAssign
+   
+   //data valid while shifter is busy
+   assign access_out = busy;
+      
+   //wait until valid data is finished
+   assign wait_out  = (busy & ~access_out) |
+		      wait_in;
+   
+   //##########################
+   //# SHIFT REGISTER
+   //##########################
+   
+
+Diff Content:
+- 70    assign wait_out  = (busy & ~access_out) |
+- 71 		      wait_in;
++ 71    assign wait_out  = wait_in |
++ 71 		      busy;
+
+Clone Blocks:

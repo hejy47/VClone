@@ -1,0 +1,37 @@
+Source Block: oh/emmu/hdl/emmu.v@99:118@HdlStmProcess
+   //pipeline to compensate for table lookup pipeline 
+   //assumes one cycle memory access!     
+   always @ (posedge clk)
+     emesh_access_out                  <= emesh_access_in;
+   
+   always @ (posedge clk)
+     if(emesh_access_in)   
+       begin
+	  emesh_write_out              <= emesh_write_in;
+	  emesh_data_out[DW-1:0]       <= emesh_data_in[DW-1:0];
+	  emesh_srcaddr_out[AW-1:0]    <= emesh_srcaddr_in[AW-1:0];
+	  emesh_dstaddr_reg[AW-1:0]    <= emesh_dstaddr_in[AW-1:0];
+	  emesh_ctrlmode_out[3:0]      <= emesh_ctrlmode_in[3:0];
+	  emesh_datamode_out[1:0]      <= emesh_datamode_in[1:0];
+       end
+   
+   //TODO: make the 32 vs 64 bit configurable, for now assume 64 bit support (a few more gates...)
+
+   assign emesh_dstaddr_out[63:0]   = mmu_en ? {emmu_lookup_data[MW-1:0],emesh_dstaddr_reg[19:0]} :
+				               {32'b0,emesh_dstaddr_reg[AW-1:0]};
+
+Diff Content:
+- 107 	  emesh_write_out              <= emesh_write_in;
+- 108 	  emesh_data_out[DW-1:0]       <= emesh_data_in[DW-1:0];
+- 109 	  emesh_srcaddr_out[AW-1:0]    <= emesh_srcaddr_in[AW-1:0];
+- 110 	  emesh_dstaddr_reg[AW-1:0]    <= emesh_dstaddr_in[AW-1:0];
+- 111 	  emesh_ctrlmode_out[3:0]      <= emesh_ctrlmode_in[3:0];
+- 112 	  emesh_datamode_out[1:0]      <= emesh_datamode_in[1:0];
++ 112 	  emmu_write_out           <= emesh_write_in;
++ 112 	  emmu_data_out[DW-1:0]    <= emesh_data_in[DW-1:0];
++ 112 	  emmu_srcaddr_out[AW-1:0] <= emesh_srcaddr_in[AW-1:0];
++ 112 	  emmu_dstaddr_reg[AW-1:0] <= emesh_dstaddr_in[AW-1:0];
++ 112 	  emmu_ctrlmode_out[3:0]   <= emesh_ctrlmode_in[3:0];
++ 112 	  emmu_datamode_out[1:0]   <= emesh_datamode_in[1:0];
+
+Clone Blocks:

@@ -1,0 +1,53 @@
+Source Block: hdl/library/util_cic/cic_comb.v@54:68@HdlStmProcess
+reg [2:0] counter = 'h00;
+reg active = 1'b0;
+
+integer x;
+
+initial begin
+  for (x = 0; x < DATA_WIDTH; x = x + 1) begin
+    storage[x] = 'h00;
+  end
+end
+
+generate if (SEQ != 1) begin
+
+always @(posedge clk) begin
+  if (ce == 1'b1) begin
+
+Diff Content:
+- 59 initial begin
+- 60   for (x = 0; x < DATA_WIDTH; x = x + 1) begin
+- 61     storage[x] = 'h00;
+- 62   end
+- 63 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_cic/cic_comb.v@52:62
+reg [DATA_WIDTH-1:0] state = 'h00;
+
+reg [2:0] counter = 'h00;
+reg active = 1'b0;
+
+integer x;
+
+initial begin
+  for (x = 0; x < DATA_WIDTH; x = x + 1) begin
+    storage[x] = 'h00;
+  end
+
+Clone Blocks 2:
+hdl/library/util_cic/cic_comb.v@50:60
+
+reg [SEQ-1:0] storage[0:DATA_WIDTH-1];
+reg [DATA_WIDTH-1:0] state = 'h00;
+
+reg [2:0] counter = 'h00;
+reg active = 1'b0;
+
+integer x;
+
+initial begin
+  for (x = 0; x < DATA_WIDTH; x = x + 1) begin
+

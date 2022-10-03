@@ -1,0 +1,39 @@
+Source Block: serv/servant/servant_timer.v@19:30@HdlStmProcess
+   always @(mtimeslice) begin
+      o_wb_dat = 32'd0;
+      o_wb_dat[HIGH:0] = mtimeslice;
+   end
+
+   always @(posedge i_clk) begin
+      if (i_wb_cyc & i_wb_we)
+	mtimecmp <= i_wb_dat[HIGH:0];
+      mtime <= mtime + 'd1;
+      o_irq <= (mtimeslice >= mtimecmp);
+   end
+endmodule
+
+Diff Content:
++ 28       if (RESET_STRATEGY != "NONE")
++ 28 	if (i_rst) begin
++ 28 	   mtime <= 0;
++ 28 	   mtimecmp <= 0;
++ 28 	end
+
+Clone Blocks:
+Clone Blocks 1:
+serv/servant/servant_timer.v@14:27
+   reg [WIDTH-1:0]   mtime;
+   reg [HIGH:0]      mtimecmp;
+
+   wire [HIGH:0]     mtimeslice = mtime[WIDTH-1:DIVIDER];
+
+   always @(mtimeslice) begin
+      o_wb_dat = 32'd0;
+      o_wb_dat[HIGH:0] = mtimeslice;
+   end
+
+   always @(posedge i_clk) begin
+      if (i_wb_cyc & i_wb_we)
+	mtimecmp <= i_wb_dat[HIGH:0];
+      mtime <= mtime + 'd1;
+

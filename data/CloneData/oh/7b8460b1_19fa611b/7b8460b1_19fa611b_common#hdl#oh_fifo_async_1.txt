@@ -1,0 +1,57 @@
+Source Block: oh/common/hdl/oh_fifo_async.v@42:89@HdlStmIf
+   wire 	   wait_random;
+   
+   assign prog_full = fifo_prog_full | wait_random;
+   
+generate
+if(TYPE=="BASIC") begin : basic   
+   oh_fifo_async_model 
+     #(.DEPTH(DEPTH),
+       .DW(DW))
+   fifo_model (
+	       // Outputs
+	       .full			(full),
+	       .prog_full		(prog_full),
+	       .dout			(dout[DW-1:0]),
+	       .empty			(empty),
+	       .valid			(valid),
+	       // Inputs
+	       .rst			(rst),
+	       .wr_clk			(wr_clk),
+	       .rd_clk			(rd_clk),
+	       .wr_en			(wr_en),
+	       .din			(din[DW-1:0]),
+	       .rd_en			(rd_en));
+end
+else if (TYPE=="XILINX") begin : xilinx
+   if((DW==104) & (DEPTH==32))
+     begin	
+	fifo_async_104x32 fifo (
+	       // Outputs
+	       .full			(full),
+	       .prog_full		(prog_full),
+	       .dout			(dout[DW-1:0]),
+	       .empty			(empty),
+	       .valid			(valid),
+	       // Inputs
+	       .rst			(rst),
+	       .wr_clk			(wr_clk),
+	       .rd_clk			(rd_clk),
+	       .wr_en			(wr_en),
+	       .din			(din[DW-1:0]),
+	       .rd_en			(rd_en));
+     end // if ((DW==104) & (DEPTH==32))
+end // block: xilinx   
+endgenerate
+
+ //Random wait generator
+   generate
+      if(WAIT>0)
+
+Diff Content:
+- 54 	       .prog_full		(prog_full),
+- 72 	       .prog_full		(prog_full),
++ 54 	       .prog_full		(fifo_prog_full),
++ 72 	       .prog_full		(fifo_prog_full),
+
+Clone Blocks:

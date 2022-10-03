@@ -1,0 +1,129 @@
+Source Block: picorv32/picosoc/hx8kdemo.v@59:69@HdlIdDef
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	assign leds = gpio >> 12;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+
+Diff Content:
++ 64 	reg [4:0] gpio_shr;
+
+Clone Blocks:
+Clone Blocks 1:
+picorv32/picosoc/hx8kdemo.v@54:64
+		.D_IN_0({flash_io3_di, flash_io2_di, flash_io1_di, flash_io0_di})
+	);
+
+	wire        iomem_valid;
+	reg         iomem_ready;
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+Clone Blocks 2:
+picorv32/picosoc/hx8kdemo.v@56:66
+
+	wire        iomem_valid;
+	reg         iomem_ready;
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	assign leds = gpio >> 12;
+
+Clone Blocks 3:
+picorv32/picosoc/hx8kdemo.v@57:67
+	wire        iomem_valid;
+	reg         iomem_ready;
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	assign leds = gpio >> 12;
+
+
+Clone Blocks 4:
+picorv32/picosoc/hx8kdemo.v@61:71
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	assign leds = gpio >> 12;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+		if (iomem_valid && !iomem_ready && iomem_addr[31:24] == 8'h 02) begin
+			iomem_ready <= 1;
+
+Clone Blocks 5:
+picorv32/picosoc/testbench.v@70:80
+	wire        iomem_valid;
+	reg         iomem_ready;
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	always @(posedge clk) begin
+		iomem_ready <= 0;
+
+Clone Blocks 6:
+picorv32/picosoc/hx8kdemo.v@55:65
+	);
+
+	wire        iomem_valid;
+	reg         iomem_ready;
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+
+Clone Blocks 7:
+picorv32/picosoc/testbench.v@69:79
+
+	wire        iomem_valid;
+	reg         iomem_ready;
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+	always @(posedge clk) begin
+
+Clone Blocks 8:
+picorv32/picosoc/testbench.v@68:78
+	assign flash_io3 = flash_io3_oe ? flash_io3_do : 1'bz;
+
+	wire        iomem_valid;
+	reg         iomem_ready;
+	wire [3:0]  iomem_wstrb;
+	wire [31:0] iomem_addr;
+	wire [31:0] iomem_wdata;
+	reg  [31:0] iomem_rdata;
+
+	reg [31:0] gpio;
+
+

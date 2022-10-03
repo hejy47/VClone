@@ -1,0 +1,44 @@
+Source Block: hdl/library/axi_ad7616/axi_ad7616_control.v@140:177@HdlStmProcess
+  assign up_read_valid_s = (IF_TYPE == PARALLEL) ? up_read_valid : 1'b1;
+  assign up_read_data_s = (IF_TYPE == PARALLEL) ? {16'h0, up_read_data} : {2{16'hDEAD}};
+
+  // processor write interface
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack <= 1'h0;
+      up_scratch <= 32'b0;
+      up_resetn <= 1'b0;
+      up_cnvst_en <= 1'b0;
+      up_conv_rate <= 32'b0;
+      up_burst_length <= 5'h0;
+    end else begin
+      up_wack <= up_wreq_s;
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h02)) begin
+        up_scratch <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h10)) begin
+        up_resetn <= up_wdata[0];
+        up_cnvst_en <= up_wdata[1];
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h11)) begin
+        up_conv_rate <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h12)) begin
+        up_burst_length <= up_wdata;
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[7:0] == 8'h14)) begin
+        up_write_data <= up_wdata;
+      end
+    end
+  end
+
+  assign up_write_req = (up_waddr[7:0] == 8'h14) ? up_wreq_s : 1'h0;
+
+  // processor read interface
+
+
+Diff Content:
++ 152       up_write_data <= 16'h0;
+
+Clone Blocks:

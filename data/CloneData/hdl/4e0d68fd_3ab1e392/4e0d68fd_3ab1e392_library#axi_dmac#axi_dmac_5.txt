@@ -1,0 +1,89 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@475:485@HdlIdDef
+end
+
+wire dma_req_valid;
+wire dma_req_ready;
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
+wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
+wire dma_req_eot;
+wire dma_req_sync_transfer_start;
+wire up_req_eot;
+
+
+Diff Content:
+- 480 wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
++ 480 wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
++ 480 wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac.v@474:484
+  end
+end
+
+wire dma_req_valid;
+wire dma_req_ready;
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
+wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
+wire dma_req_eot;
+wire dma_req_sync_transfer_start;
+wire up_req_eot;
+
+Clone Blocks 2:
+hdl/library/axi_dmac/axi_dmac.v@473:483
+    end
+  end
+end
+
+wire dma_req_valid;
+wire dma_req_ready;
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
+wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
+wire dma_req_eot;
+wire dma_req_sync_transfer_start;
+
+Clone Blocks 3:
+hdl/library/axi_dmac/axi_dmac.v@476:486
+
+wire dma_req_valid;
+wire dma_req_ready;
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
+wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
+wire dma_req_eot;
+wire dma_req_sync_transfer_start;
+wire up_req_eot;
+
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+
+Clone Blocks 4:
+hdl/library/axi_dmac/axi_dmac.v@472:482
+      up_transfer_id_eot <= up_transfer_id_eot + 1'b1;
+    end
+  end
+end
+
+wire dma_req_valid;
+wire dma_req_ready;
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
+wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
+wire dma_req_eot;
+
+Clone Blocks 5:
+hdl/library/axi_dmac/axi_dmac.v@479:489
+wire [31:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
+wire [31:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
+wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
+wire dma_req_eot;
+wire dma_req_sync_transfer_start;
+wire up_req_eot;
+
+assign up_sot = up_dma_cyclic ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
+assign up_eot = up_dma_cyclic ? 1'b0 : up_req_eot;
+
+
+

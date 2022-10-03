@@ -1,0 +1,37 @@
+Source Block: hdl/projects/fmcomms2/zc702/system_top.v@172:182@HdlIdDef
+  wire    [63:0]  gpio_t;
+
+  wire            spi_udc_csn_tx;
+  wire            spi_udc_csn_rx;
+  wire            spi_udc_sclk;
+  wire            spi_udc_data;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(29)) i_iobuf (
+    .dio_t ({gpio_t[48:32],gpio_t[15:8], gpio_t[3:0]}),
+
+Diff Content:
++ 177   wire            tdd_enable_s;
++ 177   wire            gpio_enable;
++ 177   wire            gpio_txnrx;
++ 177   wire            enable_s;
++ 177   wire            txnrx_s;
++ 177   assign enable = (tdd_enable_s == 1'b1) ? enable_s : gpio_enable;
++ 177   assign txnrx  = (tdd_enable_s == 1'b1) ? txnrx_s  : gpio_txnrx;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcomms2/zc702/system_top.v@171:181
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
+
+  wire            spi_udc_csn_tx;
+  wire            spi_udc_csn_rx;
+  wire            spi_udc_sclk;
+  wire            spi_udc_data;
+
+  // instantiations
+
+  ad_iobuf #(.DATA_WIDTH(29)) i_iobuf (
+

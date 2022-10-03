@@ -1,0 +1,57 @@
+Source Block: oh/elink/hdl/etx_remap.v@36:46@HdlStmAssign
+   reg 		   emesh_access_out;
+   reg [PW-1:0]    emesh_packet_out;
+
+   
+   assign addr_in[31:0]   =  emesh_packet_in[39:8];
+   assign write_in        =  emesh_packet_in[1];
+      
+   assign addr_remap[31:0] = {addr_in[29:18],//ID
+			      addr_in[17:16],//SPECIAL GROUP
+                             {(2){(|addr_in[17:16])}},//ZERO IF NOT SPECIAL
+			     addr_in[15:0]
+
+Diff Content:
+- 41    assign write_in        =  emesh_packet_in[1];
++ 41    packet2emesh p2e (// Outputs
++ 41 		     .write_out		(write_in),
++ 41 		     .datamode_out	(),
++ 41 		     .ctrlmode_out	(),
++ 41 		     .data_out		(),
++ 41 		     .dstaddr_out	(addr_in[31:0]),
++ 41 		     .srcaddr_out	(),
++ 41 		     .packet_in		(emesh_packet_in[PW-1:0]));
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/etx_remap.v@38:52
+
+   
+   assign addr_in[31:0]   =  emesh_packet_in[39:8];
+   assign write_in        =  emesh_packet_in[1];
+      
+   assign addr_remap[31:0] = {addr_in[29:18],//ID
+			      addr_in[17:16],//SPECIAL GROUP
+                             {(2){(|addr_in[17:16])}},//ZERO IF NOT SPECIAL
+			     addr_in[15:0]
+			     };
+   			     
+   assign addr_out[31:0] = (remap_en & ~remap_bypass) ? addr_remap[31:0] :
+                	                                addr_in[31:0];
+        		
+
+
+Clone Blocks 2:
+oh/elink/hdl/etx_remap.v@35:45
+   
+   reg 		   emesh_access_out;
+   reg [PW-1:0]    emesh_packet_out;
+
+   
+   assign addr_in[31:0]   =  emesh_packet_in[39:8];
+   assign write_in        =  emesh_packet_in[1];
+      
+   assign addr_remap[31:0] = {addr_in[29:18],//ID
+			      addr_in[17:16],//SPECIAL GROUP
+                             {(2){(|addr_in[17:16])}},//ZERO IF NOT SPECIAL
+

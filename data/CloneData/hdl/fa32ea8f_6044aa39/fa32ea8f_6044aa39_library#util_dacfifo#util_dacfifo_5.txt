@@ -1,0 +1,36 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@111:139@HdlStmProcess
+
+  // DMA / Write interface
+
+  assign dma_addr_diff_s = {1'b1, dma_waddr} - dma_raddr;
+
+  always @(posedge dma_clk) begin
+    if (dma_rst == 1'b1) begin
+      dma_addr_diff <= 'b0;
+      dma_raddr_m1 <= 'b0;
+      dma_raddr_m2 <= 'b0;
+      dma_raddr <= 'b0;
+      dma_ready_fifo <= 1'b0;
+    end else begin
+      dma_raddr_m1 <= dac_raddr_g;
+      dma_raddr_m2 <= dma_raddr_m1;
+      dma_raddr <= dma_raddr_g2b_s;
+      dma_addr_diff <= dma_addr_diff_s[ADDRESS_WIDTH-1:0];
+      if (dma_addr_diff >= FIFO_THRESHOLD_HI) begin
+        dma_ready_fifo <= 1'b0;
+      end else begin
+        dma_ready_fifo <= 1'b1;
+      end
+    end
+  end
+
+  ad_g2b #(
+    .DATA_WIDTH (ADDRESS_WIDTH))
+  i_dma_raddr_g2b (
+    .din (dma_raddr_m2),
+
+Diff Content:
+- 117     if (dma_rst == 1'b1) begin
++ 117     if (dma_rst_int_s == 1'b1) begin
+
+Clone Blocks:

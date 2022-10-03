@@ -1,0 +1,29 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4548:4563@HdlStmProcess
+   // synthesis translate_off
+   always @*
+     if(~(|(fifo_trans[AE+1:0])) & $time>0)
+       $display("ERROR>>link launcher mechanism is broken in cell %m");
+
+   always @*
+     if(((jump_4entries       & (jump_3entries_read | jump_3entries_write | jump_1entry))|
+	 (jump_3entries_read  & (                     jump_3entries_write | jump_1entry))|
+	 (jump_3entries_write & (                                           jump_1entry)))
+	& $time>0)
+       $display("ERROR>>detected more than one jump for launcher mechanism in cell %m");
+   // synthesis translate_on
+
+
+endmodule // link_txo_launcher
+module link_txo_mesh_channel (/*AUTOARG*/
+
+Diff Content:
+- 4553    always @*
+- 4554      if(((jump_4entries       & (jump_3entries_read | jump_3entries_write | jump_1entry))|
+- 4555 	 (jump_3entries_read  & (                     jump_3entries_write | jump_1entry))|
+- 4556 	 (jump_3entries_write & (                                           jump_1entry)))
+- 4557 	& $time>0)
+- 4558        $display("ERROR>>detected more than one jump for launcher mechanism in cell %m");
++ 4558    assign txo_data[LW-1:0] = txo_lclk ? data_even_lsh[LW-1:0]://stable high data
++ 4558                                         data_odd_lsl[LW-1:0]; //stable low data
+
+Clone Blocks:

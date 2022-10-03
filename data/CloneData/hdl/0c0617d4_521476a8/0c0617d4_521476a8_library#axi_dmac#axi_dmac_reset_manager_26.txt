@@ -1,0 +1,44 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_reset_manager.v@203:217@HdlIdDef
+
+wire [3:0] reset_async_chain;
+wire [3:0] reset_sync_chain;
+wire [2:0] reset_chain_clks = {clk, src_clk, dest_clk};
+
+localparam GEN_ASYNC_RESET = {
+  ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
+  ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
+  1'b1
+};
+
+assign reset_async_chain[0] = 1'b0;
+assign reset_sync_chain[0] = reset_async_chain[3];
+
+generate
+
+Diff Content:
+- 208 localparam GEN_ASYNC_RESET = {
+- 209   ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
+- 210   ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
+- 211   1'b1
+- 212 };
++ 212   localparam GEN_ASYNC_RESET = {
++ 212     ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
++ 212     ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
++ 212     1'b1
++ 212   };
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_dmac/axi_dmac_reset_manager.v@201:211
+ * successive domains have the same clock they'll share their reset signal.
+ */
+
+wire [3:0] reset_async_chain;
+wire [3:0] reset_sync_chain;
+wire [2:0] reset_chain_clks = {clk, src_clk, dest_clk};
+
+localparam GEN_ASYNC_RESET = {
+  ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
+  ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
+  1'b1
+

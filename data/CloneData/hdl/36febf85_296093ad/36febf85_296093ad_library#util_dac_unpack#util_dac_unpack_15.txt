@@ -1,0 +1,28 @@
+Source Block: hdl/library/util_dac_unpack/util_dac_unpack.v@215:235@HdlStmFor
+    end
+  endgenerate
+
+  generate
+    genvar j;
+    for (j = 0; j < CHANNELS; j = j + 1) begin : gen_dac_data
+      assign offset[j] = rd_counter + enable_reduce(j);
+      always @(posedge clk) begin
+        if (dac_chan_valid) begin
+          if (dac_enable[j])
+            dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= data_array[offset[j]];
+          else
+            dac_data[DATA_WIDTH+j*DATA_WIDTH-1:j*DATA_WIDTH] <= 'h0000;
+        end
+      end
+    end
+  endgenerate
+
+endmodule
+
+// ***************************************************************************
+
+Diff Content:
+- 220     for (j = 0; j < CHANNELS; j = j + 1) begin : gen_dac_data
++ 220     for (j = 0; j < NUM_OF_CHANNELS; j = j + 1) begin : gen_dac_data
+
+Clone Blocks:

@@ -1,0 +1,62 @@
+Source Block: oh/common/hdl/oh_oddr.v@31:42@HdlStmProcess
+     q1[DW-1:0] <= din1[DW-1:0];
+
+   always @ (posedge clk)
+     q2[DW-1:0] <= din2[DW-1:0];
+  
+   always @ (negedge clk)
+     q2_reg[DW-1:0] <= q2[DW-1:0];
+       
+   assign q = clk ? q1[DW-1:0] : q2_reg[DW-1:0];
+      
+endmodule // oh_oddr
+
+
+Diff Content:
+- 37      q2_reg[DW-1:0] <= q2[DW-1:0];
++ 37      q2_sh[DW-1:0] <= #(0.1) q2_sl[DW-1:0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/common/hdl/oh_oddr.v@34:43
+     q2[DW-1:0] <= din2[DW-1:0];
+  
+   always @ (negedge clk)
+     q2_reg[DW-1:0] <= q2[DW-1:0];
+       
+   assign q = clk ? q1[DW-1:0] : q2_reg[DW-1:0];
+      
+endmodule // oh_oddr
+
+
+
+Clone Blocks 2:
+oh/common/hdl/oh_oddr.v@28:39
+   
+   //Generate different logic based on parameters
+   always @ (posedge clk)
+     q1[DW-1:0] <= din1[DW-1:0];
+
+   always @ (posedge clk)
+     q2[DW-1:0] <= din2[DW-1:0];
+  
+   always @ (negedge clk)
+     q2_reg[DW-1:0] <= q2[DW-1:0];
+       
+   assign q = clk ? q1[DW-1:0] : q2_reg[DW-1:0];
+
+Clone Blocks 3:
+oh/common/hdl/oh_oddr.v@25:36
+   reg [DW-1:0]    q1;   
+   reg [DW-1:0]    q2;
+   reg [DW-1:0]    q2_reg;
+   
+   //Generate different logic based on parameters
+   always @ (posedge clk)
+     q1[DW-1:0] <= din1[DW-1:0];
+
+   always @ (posedge clk)
+     q2[DW-1:0] <= din2[DW-1:0];
+  
+   always @ (negedge clk)
+

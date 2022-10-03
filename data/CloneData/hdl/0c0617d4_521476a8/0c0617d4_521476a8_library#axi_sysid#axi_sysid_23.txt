@@ -1,0 +1,41 @@
+Source Block: hdl/library/axi_sysid/axi_sysid.v@118:135@HdlStmProcess
+    end
+  end
+end
+
+//axi registers write
+always @(posedge up_clk) begin
+  if (up_rstn == 1'b0) begin
+    up_wack <= 'd0;
+    up_scratch <= 'd0;
+  end else begin
+    up_wack <= up_wreq_s;
+    if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
+      up_scratch <= up_wdata_s;
+    end
+  end
+end
+
+endmodule
+
+Diff Content:
+- 123 always @(posedge up_clk) begin
+- 124   if (up_rstn == 1'b0) begin
+- 125     up_wack <= 'd0;
+- 126     up_scratch <= 'd0;
+- 127   end else begin
+- 128     up_wack <= up_wreq_s;
+- 129     if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
+- 130       up_scratch <= up_wdata_s;
+- 133 end
++ 130   always @(posedge up_clk) begin
++ 130     if (up_rstn == 1'b0) begin
++ 130       up_wack <= 'd0;
++ 130       up_scratch <= 'd0;
++ 130     end else begin
++ 130       up_wack <= up_wreq_s;
++ 130       if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h02)) begin
++ 130         up_scratch <= up_wdata_s;
++ 130       end
+
+Clone Blocks:

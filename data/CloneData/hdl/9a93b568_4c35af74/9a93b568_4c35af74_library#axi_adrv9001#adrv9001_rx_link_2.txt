@@ -1,0 +1,33 @@
+Source Block: hdl/library/axi_adrv9001/adrv9001_rx_link.v@243:268@HdlStmIf
+    .strobe (data_strobe),
+    .odata (rx_data8_1_aligned),
+    .ovalid (rx_data8_1_aligned_valid)
+  );
+
+  generate if (CMOS_LVDS_N) begin : cmos_aligner8
+    adrv9001_aligner8 i_rx_aligner8_2(
+      .clk (adc_clk_div),
+      .idata (data_2),
+      .ivalid (data_valid),
+      .strobe (data_strobe),
+      .odata (rx_data8_2_aligned)
+    );
+    adrv9001_aligner8 i_rx_aligner8_3(
+      .clk (adc_clk_div),
+      .idata (data_3),
+      .ivalid (data_valid),
+      .strobe (data_strobe),
+      .odata (rx_data8_3_aligned)
+    );
+  end
+  endgenerate
+
+  adrv9001_aligner8 i_rx_strobe_aligner(
+    .clk (adc_clk_div),
+    .idata (data_strobe),
+
+Diff Content:
++ 250       .rst (adc_rst),
++ 257       .rst (adc_rst),
+
+Clone Blocks:

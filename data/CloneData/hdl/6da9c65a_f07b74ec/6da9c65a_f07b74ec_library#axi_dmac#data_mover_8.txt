@@ -1,0 +1,66 @@
+Source Block: hdl/library/axi_dmac/data_mover.v@106:135@HdlStmProcess
+			end
+		end
+	end
+end
+
+always @(posedge clk) begin
+	if (resetn == 1'b0) begin
+		beat_counter <= 'h0;
+		req_ready <= 1'b1;
+	end else begin
+		if (~enabled) begin
+			req_ready <= 1'b1;
+		end else if (req_ready) begin
+			if (req_valid && enabled) begin
+				last_burst_length <= req_last_burst_length;
+				req_ready <= 1'b0;
+				beat_counter <= 'h0;
+			end
+		end else if (s_axi_ready && s_axi_valid) begin
+			if (last && eot)
+				req_ready <= 1'b1;
+			beat_counter <= beat_counter + 1'b1;
+		end
+	end
+end
+
+always @(*)
+begin
+	if ((s_axi_ready && s_axi_valid && last) ||
+		(sync_id && id != request_id))
+
+Diff Content:
+- 114 		req_ready <= 1'b1;
+- 116 		if (~enabled) begin
+- 117 			req_ready <= 1'b1;
+- 118 		end else if (req_ready) begin
+- 119 			if (req_valid && enabled) begin
+- 120 				last_burst_length <= req_last_burst_length;
+- 121 				req_ready <= 1'b0;
+- 122 				beat_counter <= 'h0;
+- 123 			end
+- 125 			if (last && eot)
+- 126 				req_ready <= 1'b1;
++ 123 		if (req_ready && req_valid) begin
++ 123 			beat_counter <= 'h0;
++ 130 always @(posedge clk) begin
++ 130 	if (req_ready && req_valid) begin
++ 130 		last_burst_length <= req_last_burst_length;
++ 130 	end
++ 130 end
++ 130 always @(posedge clk) begin
++ 130 	if (resetn == 1'b0) begin
++ 130 		active <= 1'b0;
++ 130 	end else begin
++ 130 		if (~enabled) begin
++ 130 			active <= 1'b0;
++ 130 		end else if (req_ready && req_valid) begin
++ 130 			active <= 1'b1;
++ 130 		end else if (last_load) begin
++ 130 			active <= 1'b0;
++ 130 		end
++ 130 	end
++ 130 end
+
+Clone Blocks:

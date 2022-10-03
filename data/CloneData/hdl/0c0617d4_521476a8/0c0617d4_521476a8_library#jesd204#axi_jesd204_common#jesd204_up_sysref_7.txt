@@ -1,0 +1,31 @@
+Source Block: hdl/library/jesd204/axi_jesd204_common/jesd204_up_sysref.v@134:147@HdlStmProcess
+    end
+    endcase
+  end
+end
+
+always @(*) begin
+  if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
+    up_sysref_status_clear = up_wdata[1:0];
+  end else begin
+    up_sysref_status_clear = 2'b00;
+  end
+end
+
+endmodule
+
+Diff Content:
+- 139 always @(*) begin
+- 140   if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
+- 141     up_sysref_status_clear = up_wdata[1:0];
+- 142   end else begin
+- 143     up_sysref_status_clear = 2'b00;
+- 145 end
++ 143   always @(*) begin
++ 143     if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
++ 143       up_sysref_status_clear = up_wdata[1:0];
++ 143     end else begin
++ 143       up_sysref_status_clear = 2'b00;
++ 143     end
+
+Clone Blocks:

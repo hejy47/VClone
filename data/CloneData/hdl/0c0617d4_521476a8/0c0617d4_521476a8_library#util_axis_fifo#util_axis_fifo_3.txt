@@ -1,0 +1,31 @@
+Source Block: hdl/library/util_axis_fifo/util_axis_fifo.v@72:82@HdlIdDef
+                      (TKEEP_EN)            ? (DATA_WIDTH+DATA_WIDTH/8)   :
+                      (TLAST_EN)            ? (DATA_WIDTH+1)              :
+                                              (DATA_WIDTH);
+
+wire [MEM_WORD-1:0] s_axis_data_int_s;
+wire [MEM_WORD-1:0] m_axis_data_int_s;
+
+generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just a 1 stage pipeline */
+
+  if (ASYNC_CLK) begin
+
+
+Diff Content:
+- 77 wire [MEM_WORD-1:0] m_axis_data_int_s;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/util_axis_fifo/util_axis_fifo.v@71:81
+localparam MEM_WORD = (TKEEP_EN & TLAST_EN) ? (DATA_WIDTH+DATA_WIDTH/8+1) :
+                      (TKEEP_EN)            ? (DATA_WIDTH+DATA_WIDTH/8)   :
+                      (TLAST_EN)            ? (DATA_WIDTH+1)              :
+                                              (DATA_WIDTH);
+
+wire [MEM_WORD-1:0] s_axis_data_int_s;
+wire [MEM_WORD-1:0] m_axis_data_int_s;
+
+generate if (ADDRESS_WIDTH == 0) begin : zerodeep /* it's not a real FIFO, just a 1 stage pipeline */
+
+  if (ASYNC_CLK) begin
+

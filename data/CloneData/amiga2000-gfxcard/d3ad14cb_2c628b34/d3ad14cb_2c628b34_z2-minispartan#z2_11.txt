@@ -1,0 +1,19 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@509:519@HdlIdDef
+reg rec_statew [0:255];
+reg rec_ready [0:255];
+reg [3:0] rec_zaddr [0:255];
+`endif
+
+reg row_fetched = 0;
+
+always @(posedge z_sample_clk) begin
+  znUDS_sync  <= {znUDS_sync[1:0],znUDS};
+  znLDS_sync  <= {znLDS_sync[1:0],znLDS};
+  znDS1_sync  <= {znDS1_sync[1:0],znDS1};
+
+Diff Content:
++ 514 reg z2_uds = 0;
++ 514 reg z2_lds = 0;
++ 514 reg z3_din_latch = 0;
+
+Clone Blocks:

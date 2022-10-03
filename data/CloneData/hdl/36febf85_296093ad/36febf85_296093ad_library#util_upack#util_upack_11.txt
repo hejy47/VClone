@@ -1,0 +1,40 @@
+Source Block: hdl/library/util_upack/util_upack.v@231:255@HdlStmFor
+      assign dac_dsf_sync_s[n] = 'd0;
+      assign dac_dsf_data_s[n] = 'd0;
+    end
+  end
+
+  for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
+  util_upack_dsf #(
+    .P_CNT (P_CNT),
+    .M_CNT (M_CNT),
+    .CH_DW (CH_DW),
+    .CH_OCNT ((n+1)))
+  i_dsf (
+    .dac_clk (dac_clk),
+    .dac_valid (dac_valid_s),
+    .dac_data (dac_data),
+    .dac_dmx_enable (dac_dmx_enable[n]),
+    .dac_dsf_valid (dac_dsf_valid_s[n]),
+    .dac_dsf_sync (dac_dsf_sync_s[n]),
+    .dac_dsf_data (dac_dsf_data_s[n]));
+  end
+  endgenerate
+
+  // demux
+
+  generate
+
+Diff Content:
+- 236   for (n = 0; n < P_CNT; n = n + 1) begin: g_dsf
+- 238     .P_CNT (P_CNT),
+- 239     .M_CNT (M_CNT),
+- 240     .CH_DW (CH_DW),
+- 241     .CH_OCNT ((n+1)))
++ 236   for (n = 0; n < NUM_OF_CHANNELS_P; n = n + 1) begin: g_dsf
++ 241     .NUM_OF_CHANNELS_P (NUM_OF_CHANNELS_P),
++ 241     .NUM_OF_CHANNELS_M (NUM_OF_CHANNELS_M),
++ 241     .CHANNEL_DATA_WIDTH (CHANNEL_DATA_WIDTH),
++ 241     .NUM_OF_CHANNELS_O ((n+1)))
+
+Clone Blocks:

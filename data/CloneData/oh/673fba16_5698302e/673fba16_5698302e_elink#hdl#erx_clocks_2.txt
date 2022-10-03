@@ -1,0 +1,47 @@
+Source Block: oh/elink/hdl/erx_clocks.v@19:29@HdlIdDef
+   parameter RXCLK_PHASE     = 0;   //270;  //-90 deg rxclk phase shift      
+   parameter PLL_VCO_MULT    = 4;   //RX
+
+   //Don't touch these! (derived parameters)
+   localparam real    RXCLK_PERIOD  = 1000.000000/FREQ_RXCLK; 
+   localparam integer IREF_DIVIDE   = PLL_VCO_MULT * FREQ_RXCLK/FREQ_IDELAY;
+   localparam integer RXCLK_DIVIDE  = PLL_VCO_MULT; //1:1
+      
+   //Input clock, reset, config interface
+   input      sys_nreset;        // active low system reset (hw)
+   input      soft_reset;        // rx enable signal (sw)
+
+Diff Content:
+- 24    localparam integer IREF_DIVIDE   = PLL_VCO_MULT * FREQ_RXCLK/FREQ_IDELAY;
++ 24    localparam real    RXCLK_PERIOD  = 1000.000000 / FREQ_RXCLK; 
++ 24    localparam integer IREF_DIVIDE   = PLL_VCO_MULT * FREQ_RXCLK / FREQ_IDELAY;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_clocks.v@18:28
+   parameter FREQ_IDELAY     = 200;   
+   parameter RXCLK_PHASE     = 0;   //270;  //-90 deg rxclk phase shift      
+   parameter PLL_VCO_MULT    = 4;   //RX
+
+   //Don't touch these! (derived parameters)
+   localparam real    RXCLK_PERIOD  = 1000.000000/FREQ_RXCLK; 
+   localparam integer IREF_DIVIDE   = PLL_VCO_MULT * FREQ_RXCLK/FREQ_IDELAY;
+   localparam integer RXCLK_DIVIDE  = PLL_VCO_MULT; //1:1
+      
+   //Input clock, reset, config interface
+   input      sys_nreset;        // active low system reset (hw)
+
+Clone Blocks 2:
+oh/elink/hdl/erx_clocks.v@20:30
+   parameter PLL_VCO_MULT    = 4;   //RX
+
+   //Don't touch these! (derived parameters)
+   localparam real    RXCLK_PERIOD  = 1000.000000/FREQ_RXCLK; 
+   localparam integer IREF_DIVIDE   = PLL_VCO_MULT * FREQ_RXCLK/FREQ_IDELAY;
+   localparam integer RXCLK_DIVIDE  = PLL_VCO_MULT; //1:1
+      
+   //Input clock, reset, config interface
+   input      sys_nreset;        // active low system reset (hw)
+   input      soft_reset;        // rx enable signal (sw)
+   input      tx_active;         // tx active input
+

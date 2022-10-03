@@ -1,0 +1,37 @@
+Source Block: hdl/library/util_do_ram/util_do_ram.v@123:141@HdlStmProcess
+  end
+
+wire wr_last_beat;
+assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
+
+always @(posedge s_axis_aclk) begin
+  if (~wr_request_enable)
+    s_axis_ready <= 1'b0;
+  else if (wr_request_valid & wr_request_ready)
+    s_axis_ready <= 1'b1;
+  else if (wr_last_beat) begin
+    s_axis_ready <= 1'b0;
+  end
+end
+
+always @(posedge s_axis_aclk) begin
+  if (s_axis_valid & s_axis_ready)
+    wr_response_eot <= s_axis_last | (wr_addr == wr_length);
+  else
+
+Diff Content:
+- 128 always @(posedge s_axis_aclk) begin
+- 129   if (~wr_request_enable)
+- 130     s_axis_ready <= 1'b0;
+- 131   else if (wr_request_valid & wr_request_ready)
+- 132     s_axis_ready <= 1'b1;
+- 133   else if (wr_last_beat) begin
+- 134     s_axis_ready <= 1'b0;
+- 136 end
++ 134   always @(posedge s_axis_aclk) begin
++ 134     if (s_axis_valid & s_axis_ready)
++ 134       wr_response_eot <= s_axis_last | (wr_addr == wr_length);
++ 134     else
++ 134       wr_response_eot <= 1'b0;
+
+Clone Blocks:

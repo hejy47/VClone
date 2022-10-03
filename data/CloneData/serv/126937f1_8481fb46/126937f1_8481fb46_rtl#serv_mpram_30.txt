@@ -1,0 +1,65 @@
+Source Block: serv/rtl/serv_mpram.v@117:151@HdlStmProcess
+   //reg [3:0] rdata3;
+
+   reg [2:0] rreq;
+
+
+   always @(posedge i_clk) begin
+      {o_rgnt,rreq} <= {rreq[2:0],i_rreq};
+      if (rcnt_lo[3])
+	rcnt_hi <= rcnt_hi + 1;
+      if (i_rreq) begin
+	 rcnt_lo <= 4'd1;
+	 rcnt_hi <= 3'd0;
+      end else
+	rcnt_lo <= {rcnt_lo[2:0],rcnt_lo[3]};
+
+      rdata0[4:0] <= rdata0[5:1];
+      rdata1[3:0] <= rdata1[4:1];
+      rdata2[2:0] <= rdata2[3:1];
+      //rdata3[2:0] <= rdata3[3:1];
+
+      if (rcnt_lo[1]) rdata0[5:2] <= rdata;
+      if (rcnt_lo[2]) rdata1[4:1] <= rdata;
+      if (rcnt_lo[3]) rdata2[3:0] <= rdata;
+      //if (rcnt_lo[0]) rdata3[3:0] <= rdata;
+
+      if (i_rst) begin
+	 o_rgnt <= 1'b0;
+	 rreq <= 3'd0;
+      end
+   end
+
+   assign raddr[8] = rcnt_lo[2];
+   assign raddr[7:5] = rcnt_lo[0] ? i_rs1_raddr[4:2] :
+		       rcnt_lo[1] ? i_rs2_raddr[4:2] : 3'd0;
+   assign raddr[4:3] = rcnt_lo[0] ? i_rs1_raddr[1:0] :
+
+Diff Content:
+- 123       {o_rgnt,rreq} <= {rreq[2:0],i_rreq};
+- 124       if (rcnt_lo[3])
+- 125 	rcnt_hi <= rcnt_hi + 1;
+- 126       if (i_rreq) begin
+- 127 	 rcnt_lo <= 4'd1;
+- 128 	 rcnt_hi <= 3'd0;
+- 129       end else
+- 130 	rcnt_lo <= {rcnt_lo[2:0],rcnt_lo[3]};
+- 132       rdata0[4:0] <= rdata0[5:1];
+- 133       rdata1[3:0] <= rdata1[4:1];
+- 134       rdata2[2:0] <= rdata2[3:1];
+- 137       if (rcnt_lo[1]) rdata0[5:2] <= rdata;
+- 138       if (rcnt_lo[2]) rdata1[4:1] <= rdata;
+- 139       if (rcnt_lo[3]) rdata2[3:0] <= rdata;
+- 144 	 rreq <= 3'd0;
++ 139       rcnt <= rcnt+5'd1;
++ 139       if (i_rreq)
++ 139 	 rcnt <= 5'd0;
++ 139       rreq_r <= i_rreq;
++ 139       o_rgnt <= rreq_r;
++ 139       if (rport)
++ 139 	rdata0 <= rdata;
++ 139       if (!rport)
++ 139 	rdata1 <= rdata[1];
++ 144 	 rreq_r <= 1'b0;
+
+Clone Blocks:

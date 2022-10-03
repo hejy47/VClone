@@ -1,0 +1,34 @@
+Source Block: oh/embox/hdl/embox.v@102:112@HdlStmAssign
+   assign  embox_w0_write    = embox_w0_access & embox_write;
+   assign  embox_w1_write    = embox_w1_access & embox_write;      //causes FIFO write
+
+   //read logic
+   assign embox_read         = mi_en & ~mi_we[0];
+   assign embox_w1_read      = embox_w1_access & embox_read;       //causes FIFO read		      
+
+   /*****************************/
+   /*WRITE ACTION               */
+   /*****************************/
+   //hold lower data word until upper word arrives
+
+Diff Content:
+- 107    assign embox_w1_read      = embox_w1_access & embox_read;       //causes FIFO read		      
++ 107    assign  embox_lo_write    = embox_write & (mi_addr[RFAW-1:2]==`EMBOXLO); //write to shadow
++ 107    assign  embox_push_fifo   = embox_write & (mi_addr[RFAW-1:2]==`EMBOXHI); //initiates FIFO write
++ 107    assign embox_pop_fifo     = embox_read & (mi_addr[RFAW-1:2]==`EMBOXHI); //fifo read      
+
+Clone Blocks:
+Clone Blocks 1:
+oh/embox/hdl/embox.v@101:111
+   assign  embox_write       = mi_en &  mi_we[0];
+   assign  embox_w0_write    = embox_w0_access & embox_write;
+   assign  embox_w1_write    = embox_w1_access & embox_write;      //causes FIFO write
+
+   //read logic
+   assign embox_read         = mi_en & ~mi_we[0];
+   assign embox_w1_read      = embox_w1_access & embox_read;       //causes FIFO read		      
+
+   /*****************************/
+   /*WRITE ACTION               */
+   /*****************************/
+

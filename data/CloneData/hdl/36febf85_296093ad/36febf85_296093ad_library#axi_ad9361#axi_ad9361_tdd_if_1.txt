@@ -1,0 +1,38 @@
+Source Block: hdl/library/axi_ad9361/axi_ad9361_tdd_if.v@109:122@HdlStmAssign
+  always @(posedge clk) begin
+    tdd_rx_rf_en_d <= tdd_rx_rf_en;
+    tdd_tx_rf_en_d <= tdd_tx_rf_en;
+  end
+
+  assign ad9361_enable_s = (MODE_OF_ENABLE == PULSE_MODE) ?
+                          ((~tdd_rx_rf_en_d & tdd_rx_rf_en) | (tdd_rx_rf_en_d & ~tdd_rx_rf_en) |
+                           (~tdd_tx_rf_en_d & tdd_tx_rf_en) | (tdd_tx_rf_en_d & ~tdd_tx_rf_en)) :
+                           (tdd_rx_rf_en | tdd_tx_rf_en);
+
+  always @(posedge clk) begin
+    if(rst == 1'b1) begin
+      tdd_vco_overlap <= 1'b0;
+      tdd_rf_overlap <= 1'b0;
+
+Diff Content:
+- 114   assign ad9361_enable_s = (MODE_OF_ENABLE == PULSE_MODE) ?
++ 114   assign ad9361_enable_s = (LEVEL_OR_PULSE_N == PULSE_MODE) ?
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad9361/axi_ad9361_tdd_if.v@104:117
+  wire            ad9361_enable_s;
+
+  // just one VCO can be enabled at a time
+  assign ad9361_txnrx_s = tdd_tx_vco_en & ~tdd_rx_vco_en;
+
+  always @(posedge clk) begin
+    tdd_rx_rf_en_d <= tdd_rx_rf_en;
+    tdd_tx_rf_en_d <= tdd_tx_rf_en;
+  end
+
+  assign ad9361_enable_s = (MODE_OF_ENABLE == PULSE_MODE) ?
+                          ((~tdd_rx_rf_en_d & tdd_rx_rf_en) | (tdd_rx_rf_en_d & ~tdd_rx_rf_en) |
+                           (~tdd_tx_rf_en_d & tdd_tx_rf_en) | (tdd_tx_rf_en_d & ~tdd_tx_rf_en)) :
+                           (tdd_rx_rf_en | tdd_tx_rf_en);
+

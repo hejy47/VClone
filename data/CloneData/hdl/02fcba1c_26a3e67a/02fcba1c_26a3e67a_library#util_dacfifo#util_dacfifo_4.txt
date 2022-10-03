@@ -1,0 +1,28 @@
+Source Block: hdl/library/util_dacfifo/util_dacfifo.v@147:165@HdlStmProcess
+
+  assign dac_xfer_out = dac_xfer_out_m[2];
+
+  // generate dac read address
+
+  always @(posedge dac_clk) begin
+    if(dac_valid == 1'b1) begin
+      if (dma_lastaddr_2d == 'h0) begin
+        dac_raddr <= dac_raddr + 1;
+      end else begin
+        dac_raddr <= (dac_raddr < dma_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
+      end
+    end
+  end
+
+  // memory instantiation
+
+  ad_mem #(
+    .ADDRESS_WIDTH (ADDRESS_WIDTH),
+
+Diff Content:
+- 154       if (dma_lastaddr_2d == 'h0) begin
+- 157         dac_raddr <= (dac_raddr < dma_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
++ 154       if (dac_lastaddr_2d == 'h0) begin
++ 157         dac_raddr <= (dac_raddr < dac_lastaddr_2d) ? (dac_raddr + 1) : 'b0;
+
+Clone Blocks:

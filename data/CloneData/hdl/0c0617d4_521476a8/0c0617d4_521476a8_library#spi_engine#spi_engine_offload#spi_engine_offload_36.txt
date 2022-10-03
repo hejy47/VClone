@@ -1,0 +1,99 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@287:300@HdlStmProcess
+    ctrl_cmd_wr_addr <= 'h00;
+  else if (ctrl_cmd_wr_en == 1'b1)
+    ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1'b1;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_cmd_wr_en == 1'b1)
+    cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1)
+    ctrl_sdo_wr_addr <= 'h00;
+  else if (ctrl_sdo_wr_en == 1'b1)
+
+Diff Content:
+- 292 always @(posedge ctrl_clk) begin
+- 293   if (ctrl_cmd_wr_en == 1'b1)
+- 294     cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+- 295 end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_ad5766/axi_ad5766.v@258:272
+    end else if (sdo_data_ready == 1'b1) begin
+      spi_sdo_rd_addr <= spi_sdo_rd_addr + 1'b1;
+    end
+  end
+
+  always @(posedge ctrl_clk) begin
+    if (ctrl_cmd_wr_en == 1'b1) begin
+      cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+    end
+  end
+
+  always @(posedge ctrl_clk) begin
+    if (ctrl_mem_reset == 1'b1) begin
+      ctrl_cmd_wr_addr <= 0;
+    end else if (ctrl_cmd_wr_en == 1'b1) begin
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@280:295
+  end else if (sdo_data_ready == 1'b1) begin
+    spi_sdo_rd_addr <= spi_sdo_rd_addr + 1'b1;
+  end
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1)
+    ctrl_cmd_wr_addr <= 'h00;
+  else if (ctrl_cmd_wr_en == 1'b1)
+    ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1'b1;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_cmd_wr_en == 1'b1)
+    cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+end
+
+Clone Blocks 3:
+hdl/library/axi_ad5766/axi_ad5766.v@264:280
+    if (ctrl_cmd_wr_en == 1'b1) begin
+      cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+    end
+  end
+
+  always @(posedge ctrl_clk) begin
+    if (ctrl_mem_reset == 1'b1) begin
+      ctrl_cmd_wr_addr <= 0;
+    end else if (ctrl_cmd_wr_en == 1'b1) begin
+      ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1;
+    end
+  end
+
+  // request data from the DMA at the desired rate
+
+  always @(posedge dma_clk) begin
+    if (dma_xfer_req == 1'b0) begin
+
+Clone Blocks 4:
+hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@292:307
+always @(posedge ctrl_clk) begin
+  if (ctrl_cmd_wr_en == 1'b1)
+    cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_mem_reset == 1'b1)
+    ctrl_sdo_wr_addr <= 'h00;
+  else if (ctrl_sdo_wr_en == 1'b1)
+    ctrl_sdo_wr_addr <= ctrl_sdo_wr_addr + 1'b1;
+end
+
+always @(posedge ctrl_clk) begin
+  if (ctrl_sdo_wr_en == 1'b1)
+    sdo_mem[ctrl_sdo_wr_addr] <= ctrl_sdo_wr_data;
+end
+

@@ -1,0 +1,35 @@
+Source Block: hdl/library/axi_adrv9001/axi_adrv9001_rx_channel.v@138:163@HdlStmFor
+  assign adc_valid_in_s = (adc_data_sel_s == 4'h0) ? adc_valid_in_2d : dac_valid_in_2d;
+
+  // iq correction inputs
+
+  generate
+  for (n = 0; n < NUM_OF_SAMPLES; n = n + 1) begin: g_datafmt
+  if (DISABLE == 1 || DATAFORMAT_DISABLE == 1) begin
+  assign adc_dfmt_valid_s[n] = adc_valid_in_s;
+  assign adc_dfmt_data_s[((16*n)+15):(16*n)] = adc_data_in_s[((16*n)+15):(16*n)];
+  end else begin
+  ad_datafmt #(.DATA_WIDTH (16)) i_ad_datafmt (
+    .clk (adc_clk),
+    .valid (adc_valid_in_s),
+    .data (adc_data_in_s[((16*n)+15):(16*n)]),
+    .valid_out (adc_dfmt_valid_s[n]),
+    .data_out (adc_dfmt_data_s[((16*n)+15):(16*n)]),
+    .dfmt_enable (adc_dfmt_enable_s),
+    .dfmt_type (adc_dfmt_type_s),
+    .dfmt_se (adc_dfmt_se_s));
+  end
+  end
+
+  for (n = 0; n < NUM_OF_SAMPLES; n = n + 1) begin: g_dcfilter
+  if (DISABLE == 1 || DCFILTER_DISABLE == 1) begin
+  assign adc_dcfilter_valid_s[n] = adc_dfmt_valid_s[n];
+  assign adc_dcfilter_data_s[((16*n)+15):(16*n)] = adc_dfmt_data_s[((16*n)+15):(16*n)];
+
+Diff Content:
+- 148   ad_datafmt #(.DATA_WIDTH (16)) i_ad_datafmt (
++ 148   ad_datafmt #(
++ 148     .DATA_WIDTH (16)
++ 148   ) i_ad_datafmt (
+
+Clone Blocks:

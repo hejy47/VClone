@@ -1,0 +1,46 @@
+Source Block: verilog-ethernet/rtl/gmii_phy_if.v@158:168@HdlIdDef
+(* IOB = "TRUE" *)
+reg [7:0] gmii_rxd_reg = 0;
+(* IOB = "TRUE" *)
+reg gmii_rx_dv_reg = 0;
+(* IOB = "TRUE" *)
+reg gmii_rx_er_reg = 0;
+
+always @(posedge phy_gmii_rx_clk_io) begin
+    gmii_rxd_reg <= phy_gmii_rxd;
+    gmii_rx_dv_reg <= phy_gmii_rx_dv;
+    gmii_rx_er_reg <= phy_gmii_rx_er;
+
+Diff Content:
+- 163 reg gmii_rx_er_reg = 0;
++ 163 reg gmii_rx_er_reg = 1'b0;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/gmii_phy_if.v@167:177
+    gmii_rx_dv_reg <= phy_gmii_rx_dv;
+    gmii_rx_er_reg <= phy_gmii_rx_er;
+end
+
+assign mac_gmii_rxd = gmii_rxd_reg;
+assign mac_gmii_rx_dv = gmii_rx_dv_reg;
+assign mac_gmii_rx_er = gmii_rx_er_reg;
+
+// register TX data from MAC to PHY
+(* IOB = "TRUE" *)
+reg [7:0] gmii_txd_reg = 0;
+
+Clone Blocks 2:
+verilog-ethernet/rtl/gmii_phy_if.v@156:166
+
+// register RX data from PHY to MAC
+(* IOB = "TRUE" *)
+reg [7:0] gmii_rxd_reg = 0;
+(* IOB = "TRUE" *)
+reg gmii_rx_dv_reg = 0;
+(* IOB = "TRUE" *)
+reg gmii_rx_er_reg = 0;
+
+always @(posedge phy_gmii_rx_clk_io) begin
+    gmii_rxd_reg <= phy_gmii_rxd;
+

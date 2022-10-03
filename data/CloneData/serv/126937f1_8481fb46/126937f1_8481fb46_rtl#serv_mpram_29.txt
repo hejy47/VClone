@@ -1,0 +1,20 @@
+Source Block: serv/rtl/serv_mpram.v@114:124@HdlIdDef
+   reg [5:0] rdata0;
+   reg [4:0] rdata1;
+   reg [3:0] rdata2;
+   //reg [3:0] rdata3;
+
+   reg [2:0] rreq;
+
+
+   always @(posedge i_clk) begin
+      {o_rgnt,rreq} <= {rreq[2:0],i_rreq};
+      if (rcnt_lo[3])
+
+Diff Content:
+- 119    reg [2:0] rreq;
++ 119    assign o_csr = o_rs2 & i_csr_en;
++ 119    assign o_csr_pc = o_rs2;
++ 119    reg 	      rreq_r;
+
+Clone Blocks:

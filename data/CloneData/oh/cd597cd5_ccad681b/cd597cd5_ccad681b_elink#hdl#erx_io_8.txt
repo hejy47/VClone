@@ -1,0 +1,44 @@
+Source Block: oh/elink/hdl/erx_io.v@281:317@HdlStmFor
+   //###################################
+
+   assign  rxi_delay_in[9:0] ={rxi_lclk,rxi_frame,rxi_data[7:0]};
+   
+   genvar        j;
+   generate for(j=0; j<10; j=j+1)
+     begin : gen_idelay
+	(* IODELAY_GROUP = "IDELAY_GROUP" *) // Group name for IDELAYCTRL
+	
+	IDELAYE2 #(.CINVCTRL_SEL("FALSE"),
+		   .DELAY_SRC("IDATAIN"), 
+		   .HIGH_PERFORMANCE_MODE("FALSE"),
+		   .IDELAY_TYPE("VAR_LOAD"),
+		   .IDELAY_VALUE(5'b0),
+		   .PIPE_SEL("FALSE"),
+		   .REFCLK_FREQUENCY(200.0),
+		   .SIGNAL_PATTERN("DATA"))
+
+	idelay_inst (.CNTVALUEOUT(),             // monitoring value       
+		     .DATAOUT(rxi_delay_out[j]), // delayed data
+		     .C(rx_lclk_div4),           // variable tap delay clock 
+		     .CE(1'b0),                  // inc/dec tap value
+		     .CINVCTRL(1'b0),            // inverts clock polarity 
+		     .CNTVALUEIN(idelay_value[(j+1)*5-1:j*5]), //variable tap
+		     .DATAIN(1'b0),              // data from FPGA
+		     .IDATAIN(rxi_delay_in[j]),  // data from ibuf
+		     .INC(1'b0),                 // increment tap
+		     .LD(load_taps),             // load new  
+		     .LDPIPEEN(1'b0),            // only for pipeline mode
+		     .REGRST(1'b0)               // only for pipeline mode
+		     );
+     end // block: gen_idelay
+   endgenerate
+   
+   //#############################
+   //# IDDR SAMPLERS
+   //#############################  
+
+Diff Content:
+- 286    generate for(j=0; j<10; j=j+1)
++ 286    generate for(j=0; j<9; j=j+1)
+
+Clone Blocks:

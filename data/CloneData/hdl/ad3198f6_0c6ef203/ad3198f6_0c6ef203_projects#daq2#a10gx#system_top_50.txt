@@ -1,0 +1,65 @@
+Source Block: hdl/projects/daq2/a10gx/system_top.v@218:233@HdlStmProcess
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+    end
+  end
+
+  altddio_out #(.width(1)) i_eth_tx_clk_out (
+    .aset (1'b0),
+    .sset (1'b0),
+    .sclr (1'b0),
+
+Diff Content:
+- 223   always@ (posedge eth_mdc) begin
+- 224     phy_rst_cnt <= phy_rst_cnt + 4'd1;
+- 225     if (phy_rst_cnt == 4'h0) begin
+- 226       phy_rst_reg <= sys_pll_locked_s;
+- 227     end
+- 228   end
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/projects/fmcjesdadc1/a5gt/system_top.v@218:233
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+    end
+  end
+
+  altddio_out #(.width(1)) i_eth_tx_clk_out (
+    .aset (1'b0),
+    .sset (1'b0),
+    .sclr (1'b0),
+
+Clone Blocks 2:
+hdl/projects/usdrx1/a5gt/system_top.v@291:306
+  assign eth_tx_clk = (eth_tx_mode_1g_s == 1'b1) ? sys_125m_clk :
+    (eth_tx_mode_10m_100m_n_s == 1'b0) ? sys_25m_clk : sys_2m5_clk;
+
+  assign eth_phy_resetn = phy_rst_reg;
+
+  always@ (posedge eth_mdc) begin
+    phy_rst_cnt <= phy_rst_cnt + 4'd1;
+    if (phy_rst_cnt == 4'h0) begin
+      phy_rst_reg <= sys_pll_locked_s;
+    end
+  end
+
+  altddio_out #(.width(1)) i_eth_tx_clk_out (
+    .aset (1'b0),
+    .sset (1'b0),
+    .sclr (1'b0),
+

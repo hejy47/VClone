@@ -1,0 +1,37 @@
+Source Block: oh/spi/hdl/spi_master_io.v@89:99@HdlStmAssign
+     else if(baud_match)
+       bit_count[7:0] <=  bit_count[7:0] + 1'b1;
+
+   assign byte_done     = &bit_count[2:0];
+
+   assign packet_done   = (bit_count[7:0]==psize_reg[7:0]);
+   
+   //#################################
+   //# BAUD COUNTER
+   //#################################
+
+
+Diff Content:
+- 94    assign packet_done   = (bit_count[7:0]==psize_reg[7:0]);
++ 94    assign load_byte = baud_match & byte_done & (spi_state[1:0]!=`SPI_IDLE);
++ 94    assign shift = baud_match & (spi_state[1:0]==`SPI_DATA);
++ 94    reg 		   fifo_empty_reg;
++ 94    always @ (posedge clk)
++ 94      if(baud_match)
++ 94        fifo_empty_reg <= fifo_empty;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/spi/hdl/spi_master_io.v@87:97
+     if(spi_state[2:0]==`SPI_IDLE)
+       bit_count[7:0] <= 'b0;
+     else if(baud_match)
+       bit_count[7:0] <=  bit_count[7:0] + 1'b1;
+
+   assign byte_done     = &bit_count[2:0];
+
+   assign packet_done   = (bit_count[7:0]==psize_reg[7:0]);
+   
+   //#################################
+   //# BAUD COUNTER
+

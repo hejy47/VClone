@@ -1,0 +1,17 @@
+Source Block: hdl/library/util_axis_fifo_asym/util_axis_fifo_asym.v@101:111@HdlIdDef
+wire [RATIO-1:0] s_axis_full_int_s;
+wire [RATIO-1:0] s_axis_almost_full_int_s;
+wire [RATIO*A_ADDRESS-1:0] s_axis_room_int_s;
+
+// instantiate the FIFOs
+genvar i;
+generate
+  for (i=0; i<RATIO; i=i+1) begin
+    util_axis_fifo #(
+      .DATA_WIDTH (A_WIDTH),
+      .ADDRESS_WIDTH (A_ADDRESS),
+
+Diff Content:
+- 106 genvar i;
+
+Clone Blocks:

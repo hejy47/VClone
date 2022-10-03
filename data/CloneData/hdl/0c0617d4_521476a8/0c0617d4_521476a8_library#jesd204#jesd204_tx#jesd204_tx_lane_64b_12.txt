@@ -1,0 +1,27 @@
+Source Block: hdl/library/jesd204/jesd204_tx/jesd204_tx_lane_64b.v@93:108@HdlStmProcess
+  .enable(~cfg_disable_scrambler),
+  .data_in(tx_data_msb_s),
+  .data_out(scrambled_data_r)
+);
+
+always @(posedge clk) begin
+  lmc_edge_d1 <= lmc_edge;
+  lmc_edge_d2 <= lmc_edge_d1;
+  lmc_quarter_edge_d1 <= lmc_quarter_edge;
+  lmc_quarter_edge_d2 <= lmc_quarter_edge_d1;
+end
+
+always @(posedge clk) begin
+  scrambled_data <= scrambled_data_r;
+  phy_data <= scrambled_data;
+end
+
+Diff Content:
+- 98 always @(posedge clk) begin
+- 99   lmc_edge_d1 <= lmc_edge;
+- 100   lmc_edge_d2 <= lmc_edge_d1;
+- 101   lmc_quarter_edge_d1 <= lmc_quarter_edge;
+- 102   lmc_quarter_edge_d2 <= lmc_quarter_edge_d1;
+- 103 end
+
+Clone Blocks:

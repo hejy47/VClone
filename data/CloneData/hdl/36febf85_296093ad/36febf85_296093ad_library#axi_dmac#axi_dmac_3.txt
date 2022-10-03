@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/axi_dmac.v@205:222@HdlIdDef
+
+localparam HAS_DEST_ADDR = C_DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
+localparam HAS_SRC_ADDR = C_DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
+
+// Argh... "[Synth 8-2722] system function call clog2 is not allowed here"
+localparam BYTES_PER_BEAT_WIDTH_DEST = C_DMA_DATA_WIDTH_DEST > 1024 ? 8 :
+	C_DMA_DATA_WIDTH_DEST > 512 ? 7 :
+	C_DMA_DATA_WIDTH_DEST > 256 ? 6 :
+	C_DMA_DATA_WIDTH_DEST > 128 ? 5 :
+	C_DMA_DATA_WIDTH_DEST > 64 ? 4 :
+	C_DMA_DATA_WIDTH_DEST > 32 ? 3 :
+	C_DMA_DATA_WIDTH_DEST > 16 ? 2 :
+	C_DMA_DATA_WIDTH_DEST > 8 ? 1 : 0;
+localparam BYTES_PER_BEAT_WIDTH_SRC = C_DMA_DATA_WIDTH_SRC > 1024 ? 8 :
+	C_DMA_DATA_WIDTH_SRC > 512 ? 7 :
+	C_DMA_DATA_WIDTH_SRC > 256 ? 6 :
+	C_DMA_DATA_WIDTH_SRC > 128 ? 5 :
+	C_DMA_DATA_WIDTH_SRC > 64 ? 4 :
+
+Diff Content:
+- 210 localparam BYTES_PER_BEAT_WIDTH_DEST = C_DMA_DATA_WIDTH_DEST > 1024 ? 8 :
+- 211 	C_DMA_DATA_WIDTH_DEST > 512 ? 7 :
+- 212 	C_DMA_DATA_WIDTH_DEST > 256 ? 6 :
+- 213 	C_DMA_DATA_WIDTH_DEST > 128 ? 5 :
+- 214 	C_DMA_DATA_WIDTH_DEST > 64 ? 4 :
+- 215 	C_DMA_DATA_WIDTH_DEST > 32 ? 3 :
+- 216 	C_DMA_DATA_WIDTH_DEST > 16 ? 2 :
+- 217 	C_DMA_DATA_WIDTH_DEST > 8 ? 1 : 0;
+
+Clone Blocks:

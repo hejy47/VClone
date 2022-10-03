@@ -1,0 +1,129 @@
+Source Block: hdl/library/axi_dmac/axi_dmac_burst_memory.v@203:219@HdlStmProcess
+assign src_last_beat = src_beat & src_mem_data_last;
+assign src_waddr = {src_id_reduced,src_beat_counter};
+
+assign src_data_request_id = src_dest_id;
+
+always @(*) begin
+  if (src_last_beat == 1'b1) begin
+    src_id_next = inc_id(src_id);
+  end else begin
+    src_id_next = src_id;
+  end
+end
+
+always @(posedge src_clk) begin
+  if (src_reset == 1'b1) begin
+    src_id <= 'h00;
+    src_id_reduced_msb <= 1'b0;
+
+Diff Content:
+- 208 always @(*) begin
+- 209   if (src_last_beat == 1'b1) begin
+- 210     src_id_next = inc_id(src_id);
+- 212     src_id_next = src_id;
+- 213   end
+- 214 end
++ 210   localparam DATA_WIDTH_MEM = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
++ 210     DATA_WIDTH_SRC : DATA_WIDTH_DEST;
++ 210   localparam MEM_RATIO = DATA_WIDTH_SRC > DATA_WIDTH_DEST ?
++ 210     DATA_WIDTH_SRC / DATA_WIDTH_DEST : DATA_WIDTH_DEST / DATA_WIDTH_SRC;
++ 210   localparam BURST_LEN = MAX_BYTES_PER_BURST / (DATA_WIDTH_MEM / 8);
++ 210   localparam BURST_LEN_WIDTH = BURST_LEN > 128 ? 8 :
++ 210     BURST_LEN > 64 ? 7 :
++ 210     BURST_LEN > 32 ? 6 :
++ 210     BURST_LEN > 16 ? 5 :
++ 210     BURST_LEN > 8 ? 4 :
++ 210     BURST_LEN > 4 ? 3 :
++ 210     BURST_LEN > 2 ? 2 : 1;
++ 210   localparam AUX_FIFO_SIZE = 2**(ID_WIDTH-1);
++ 210   localparam MEM_RATIO_WIDTH =
++ 210       (ALLOW_ASYM_MEM == 0 || MEM_RATIO == 1) ? 0 :
++ 210       MEM_RATIO == 2 ? 1 :
++ 210       MEM_RATIO == 4 ? 2 : 3;
++ 210   localparam BURST_LEN_WIDTH_SRC = BURST_LEN_WIDTH +
++ 210     (DATA_WIDTH_SRC < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
++ 210   localparam BURST_LEN_WIDTH_DEST = BURST_LEN_WIDTH +
++ 210     (DATA_WIDTH_DEST < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
++ 210   localparam DATA_WIDTH_MEM_SRC = DATA_WIDTH_MEM >>
++ 210     (DATA_WIDTH_SRC < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
++ 210   localparam DATA_WIDTH_MEM_DEST = DATA_WIDTH_MEM >>
++ 210     (DATA_WIDTH_DEST < DATA_WIDTH_MEM ? MEM_RATIO_WIDTH : 0);
++ 210   localparam ADDRESS_WIDTH_SRC = BURST_LEN_WIDTH_SRC + ID_WIDTH - 1;
++ 210   localparam ADDRESS_WIDTH_DEST = BURST_LEN_WIDTH_DEST + ID_WIDTH - 1;
++ 210   localparam BYTES_PER_BEAT_WIDTH_MEM_SRC = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_SRC;
++ 210   localparam BYTES_PER_BEAT_WIDTH_DEST = BYTES_PER_BURST_WIDTH - BURST_LEN_WIDTH_DEST;
++ 210   /*
++ 210    * The burst memory is separated into 2**(ID_WIDTH-1) segments. Each segment can
++ 210    * hold up to BURST_LEN beats. The addresses that are used to access the memory
++ 210    * are split into two parts. The MSBs index the segment and the LSBs index a
++ 210    * beat in a specific segment.
++ 210    *
++ 210    * src_id and dest_id are used to index the segment of the burst memory on the
++ 210    * write and read side respectively. The IDs are 1 bit wider than the address of
++ 210    * the burst memory. So we can't use them directly as an index into the burst
++ 210    * memory.  Since the IDs are gray counted we also can't just leave out the MSB
++ 210    * like with a binary counter. But XOR-ing the two MSBs of a gray counter gives
++ 210    * us a gray counter of 1 bit less. Use this to generate the segment index.
++ 210    * These addresses are captured in the src_id_reduced and dest_id_reduced
++ 210    * signals.
++ 210    *
++ 210    * src_beat_counter and dest_beat_counter are used to index the beat on the
++ 210    * write and read side respectively. They will be incremented for each beat that
++ 210    * is written/read. Note that the beat counters are not reset to 0 on the last
++ 210    * beat of a burst. This means the first beat of a burst might not be stored at
++ 210    * offset 0 in the segment memory. But this is OK since the beat counter
++ 210    * increments modulo the segment size and both the write and read side agree on
++ 210    * the order.
++ 210    */
++ 210   reg [ID_WIDTH-1:0] src_id_next;
++ 210   reg [ID_WIDTH-1:0] src_id = 'h0;
++ 210   reg src_id_reduced_msb = 1'b0;
++ 210   reg [BURST_LEN_WIDTH_SRC-1:0] src_beat_counter = 'h00;
++ 210   reg [ID_WIDTH-1:0] dest_id_next = 'h0;
++ 210   reg dest_id_reduced_msb_next = 1'b0;
++ 210   reg dest_id_reduced_msb = 1'b0;
++ 210   reg [ID_WIDTH-1:0] dest_id = 'h0;
++ 210   reg [BURST_LEN_WIDTH_DEST-1:0] dest_beat_counter = 'h00;
++ 210   wire [BURST_LEN_WIDTH_DEST-1:0] dest_burst_len;
++ 210   reg dest_valid = 1'b0;
++ 210   reg dest_mem_data_valid = 1'b0;
++ 210   reg dest_mem_data_last = 1'b0;
++ 210   reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
++ 210   reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
++ 210   wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
++ 210   reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
++ 210   wire src_beat;
++ 210   wire src_last_beat;
++ 210   wire [ID_WIDTH-1:0] src_dest_id;
++ 210   wire [ADDRESS_WIDTH_SRC-1:0] src_waddr;
++ 210   wire [ID_WIDTH-2:0] src_id_reduced;
++ 210   wire src_mem_data_valid;
++ 210   wire src_mem_data_last;
++ 210   wire [DATA_WIDTH_MEM_SRC-1:0] src_mem_data;
++ 210   wire [BYTES_PER_BEAT_WIDTH_MEM_SRC-1:0] src_mem_data_valid_bytes;
++ 210   wire src_mem_data_partial_burst;
++ 210   wire dest_beat;
++ 210   wire dest_last_beat;
++ 210   wire dest_last;
++ 210   wire [ID_WIDTH-1:0] dest_src_id;
++ 210   wire [ADDRESS_WIDTH_DEST-1:0] dest_raddr;
++ 210   wire [ID_WIDTH-2:0] dest_id_reduced_next;
++ 210   wire [ID_WIDTH-1:0] dest_id_next_inc;
++ 210   wire [ID_WIDTH-2:0] dest_id_reduced;
++ 210   wire dest_burst_valid;
++ 210   wire dest_burst_ready;
++ 210   wire dest_ready;
++ 210   wire [DATA_WIDTH_MEM_DEST-1:0] dest_mem_data;
++ 210   wire dest_mem_data_ready;
++ 210   `include "inc_id.vh"
++ 210   generate if (ID_WIDTH >= 3) begin
++ 210     assign src_id_reduced = {src_id_reduced_msb,src_id[ID_WIDTH-3:0]};
++ 210     assign dest_id_reduced_next = {dest_id_reduced_msb_next,dest_id_next[ID_WIDTH-3:0]};
++ 210     assign dest_id_reduced = {dest_id_reduced_msb,dest_id[ID_WIDTH-3:0]};
++ 214     assign src_id_reduced = src_id_reduced_msb;
++ 214     assign dest_id_reduced_next = dest_id_reduced_msb_next;
++ 214     assign dest_id_reduced = dest_id_reduced_msb;
++ 214   end endgenerate
+
+Clone Blocks:

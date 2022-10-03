@@ -1,0 +1,18 @@
+Source Block: hdl/library/jesd204/jesd204_rx/jesd204_rx_frame_align.v@156:166@HdlStmAssign
+
+    align_err <= |({eomf_err, eof_err});
+  end
+end
+
+assign align_err_cnt_next = {1'b0, align_err_cnt} + cur_align_err_cnt;
+
+// Alignment error counter
+// Resets upon good alignment
+always @(posedge clk) begin
+  if(reset) begin
+
+Diff Content:
+- 161 assign align_err_cnt_next = {1'b0, align_err_cnt} + cur_align_err_cnt;
++ 161   assign align_err_cnt_next = {1'b0, align_err_cnt} + cur_align_err_cnt;
+
+Clone Blocks:

@@ -1,0 +1,44 @@
+Source Block: hdl/library/spi_engine/spi_engine_offload/spi_engine_offload.v@159:179@HdlStmProcess
+    .out_clk(spi_clk),
+    .out_resetn(1'b1),
+    .out_bits(spi_sync_id_init_s)
+);
+
+always @(posedge spi_clk) begin
+  if (spi_resetn == 1'b0) begin
+    spi_sync_id_counter <= 8'b0;
+  end else begin
+    if (spi_sync_id_load_s) begin
+      spi_sync_id_counter <= spi_sync_id_init_s;
+    end else if(cmd_valid && cmd_ready && (cmd[15:8] == 8'h30)) begin
+      spi_sync_id_counter <= spi_sync_id_counter + 1'b1;
+    end
+  end
+end
+
+assign cmd = (cmd_int_s[15:8] == 8'h30) ? {cmd_int_s[15:8], spi_sync_id_counter} : cmd_int_s;
+
+/*
+ * Forwarded SYNC interface, this can be used to monitor the state of the
+
+Diff Content:
+- 164 always @(posedge spi_clk) begin
+- 165   if (spi_resetn == 1'b0) begin
+- 166     spi_sync_id_counter <= 8'b0;
+- 167   end else begin
+- 168     if (spi_sync_id_load_s) begin
+- 169       spi_sync_id_counter <= spi_sync_id_init_s;
+- 170     end else if(cmd_valid && cmd_ready && (cmd[15:8] == 8'h30)) begin
+- 171       spi_sync_id_counter <= spi_sync_id_counter + 1'b1;
+- 174 end
++ 171   always @(posedge spi_clk) begin
++ 171     if (spi_resetn == 1'b0) begin
++ 171       spi_sync_id_counter <= 8'b0;
++ 171     end else begin
++ 171       if (spi_sync_id_load_s) begin
++ 171         spi_sync_id_counter <= spi_sync_id_init_s;
++ 171       end else if(cmd_valid && cmd_ready && (cmd[15:8] == 8'h30)) begin
++ 171         spi_sync_id_counter <= spi_sync_id_counter + 1'b1;
++ 171       end
+
+Clone Blocks:

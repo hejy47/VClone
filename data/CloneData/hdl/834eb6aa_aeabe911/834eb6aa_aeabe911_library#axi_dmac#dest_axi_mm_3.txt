@@ -1,0 +1,18 @@
+Source Block: hdl/library/axi_dmac/dest_axi_mm.v@203:213@HdlStmAssign
+  end else begin
+    wstrb <= {(DMA_DATA_WIDTH/8){1'b1}};
+  end
+end
+
+assign m_axi_wstrb = wstrb;
+
+dmac_response_handler #(
+  .ID_WIDTH(ID_WIDTH)
+) i_response_handler (
+  .clk(m_axi_aclk),
+
+Diff Content:
+- 208 assign m_axi_wstrb = wstrb;
++ 208 assign m_axi_wstrb = {(DMA_DATA_WIDTH/8){1'b1}};
+
+Clone Blocks:

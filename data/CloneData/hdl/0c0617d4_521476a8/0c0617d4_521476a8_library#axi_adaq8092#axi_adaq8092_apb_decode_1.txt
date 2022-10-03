@@ -1,0 +1,60 @@
+Source Block: hdl/library/axi_adaq8092/axi_adaq8092_apb_decode.v@47:57@HdlIdDef
+ 
+  reg        [27:0]      adc_data_decoded_s;
+
+  // internal variable
+
+  integer i; 
+
+  assign adc_data_decoded = adc_abp_enb ? adc_data_decoded_s : adc_data ;
+
+  always @(posedge adc_clk) begin 
+    for (i = 0; i <= 13; i = i + 1) begin
+
+Diff Content:
+- 52   integer i; 
++ 52   integer i;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/axi_adaq8092/axi_adaq8092_rand_decode.v@47:57
+  
+  // internal register 
+
+  reg [27:0] adc_data_decoded_s;
+
+  integer i;
+
+  assign adc_data_decoded = adc_rand_enb ? adc_data_decoded_s : adc_data ;
+
+  // DATA DECODING
+
+
+Clone Blocks 2:
+hdl/library/axi_adaq8092/axi_adaq8092_rand_decode.v@49:59
+
+  reg [27:0] adc_data_decoded_s;
+
+  integer i;
+
+  assign adc_data_decoded = adc_rand_enb ? adc_data_decoded_s : adc_data ;
+
+  // DATA DECODING
+
+  always @(posedge adc_clk) begin 
+    for (i = 1; i <= 13; i = i + 1) begin
+
+Clone Blocks 3:
+hdl/library/axi_adaq8092/axi_adaq8092_rand_decode.v@45:55
+  input                   adc_rand_enb,
+  output      [27:0]      adc_data_decoded);
+  
+  // internal register 
+
+  reg [27:0] adc_data_decoded_s;
+
+  integer i;
+
+  assign adc_data_decoded = adc_rand_enb ? adc_data_decoded_s : adc_data ;
+
+

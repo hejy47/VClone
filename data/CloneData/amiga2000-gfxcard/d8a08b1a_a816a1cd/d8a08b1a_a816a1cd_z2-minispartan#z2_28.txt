@@ -1,0 +1,31 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@370:380@HdlIdDef
+
+// memory map
+
+parameter autoconf_low  = 24'he80000;
+parameter autoconf_high = 24'he80080;
+reg [31:0] ram_low  = 32'h48000000;
+parameter ram_size = 32'h5f0000;
+parameter reg_base = ram_size;
+parameter reg_size = 32'h001000;
+reg [31:0] ram_high = 32'h48000000 + ram_size-4;
+reg [31:0] reg_low  = 32'h48000000 + reg_base;
+
+Diff Content:
+- 375 reg [31:0] ram_low  = 32'h48000000;
+
+Clone Blocks:
+Clone Blocks 1:
+amiga2000-gfxcard/z2-minispartan/z2.v@374:384
+parameter autoconf_high = 24'he80080;
+reg [31:0] ram_low  = 32'h48000000;
+parameter ram_size = 32'h5f0000;
+parameter reg_base = ram_size;
+parameter reg_size = 32'h001000;
+reg [31:0] ram_high = 32'h48000000 + ram_size-4;
+reg [31:0] reg_low  = 32'h48000000 + reg_base;
+reg [31:0] reg_high = 32'h48000000 + reg_base + reg_size;
+
+reg [7:0] read_counter = 0;
+reg [9:0] margin_x = 8; // 8f0006
+

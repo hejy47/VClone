@@ -1,0 +1,45 @@
+Source Block: oh/etx/hdl/etx_arbiter.v@84:94@HdlIdDef
+
+   //############
+   //# Arbitrate & forward
+   //############
+
+   reg            ready;
+   reg [102:0]    fifo_data;
+
+   // priority-based ready signals
+   wire           rr_ready = ~emrr_empty & ~emm_tx_wr_wait;
+   wire           rq_ready = ~emrq_empty & ~emm_tx_rd_wait & ~rr_ready;
+
+Diff Content:
+- 89    reg            ready;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/e_transmit/hdl/e_tx_arbiter.v@84:94
+
+   //############
+   //# Arbitrate & forward
+   //############
+
+   reg            ready;
+   reg [102:0]    fifo_data;
+
+   // priority-based ready signals
+   wire           rr_ready = ~emrr_empty & ~emm_tx_wr_wait;
+   wire           rq_ready = ~emrq_empty & ~emm_tx_rd_wait & ~rr_ready;
+
+Clone Blocks 2:
+oh/earb/hdl/earb.v@93:103
+   
+   //############
+   //# Arbitrate & forward
+   //############
+
+   reg            ready;
+   reg [102:0]    fifo_data;
+
+   // priority-based ready signals
+   wire           rr_ready = ~emrr_empty & ~emm_tx_wr_wait;
+   wire           rq_ready = ~emrq_empty & ~emm_tx_rd_wait & ~rr_ready;
+

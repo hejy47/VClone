@@ -1,0 +1,31 @@
+Source Block: hdl/library/axi_dmac/request_arb.v@297:314@HdlStmProcess
+always @(posedge src_clk)
+begin
+  eot_mem_dest[source_id] <= source_eot;
+end
+
+always @(posedge req_clk)
+begin
+  if (req_resetn == 1'b0) begin
+    eot <= 1'b0;
+  end else begin
+    eot <= response_dest_valid & response_dest_ready & response_dest_resp_eot;
+  end
+end
+
+generate if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
+
+wire                                  dest_bl_valid;
+wire                                  dest_bl_ready;
+
+Diff Content:
+- 302 always @(posedge req_clk)
+- 303 begin
+- 304   if (req_resetn == 1'b0) begin
+- 305     eot <= 1'b0;
+- 306   end else begin
+- 307     eot <= response_dest_valid & response_dest_ready & response_dest_resp_eot;
+- 308   end
+- 309 end
+
+Clone Blocks:

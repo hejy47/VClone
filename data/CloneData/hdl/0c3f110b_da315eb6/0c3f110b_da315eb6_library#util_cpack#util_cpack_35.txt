@@ -1,0 +1,28 @@
+Source Block: hdl/library/util_cpack/util_cpack.v@197:217@HdlStmFor
+  endgenerate
+
+  // interleave data
+
+  generate
+  for (n = 0; n < CH_SCNT; n = n + 1) begin: g_intlv
+  assign adc_data_intlv_s[((16*NUM_OF_CHANNELS_M*(n+1))-1):(16*NUM_OF_CHANNELS_M*n)] =
+          { adc_data_d[(((CHANNEL_DATA_WIDTH*7)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*7)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*6)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*6)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*5)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*5)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*4)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*4)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*3)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*3)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*2)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*2)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*1)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*1)+(16*n))],
+            adc_data_d[(((CHANNEL_DATA_WIDTH*0)+(16*(n+1)))-1):((CHANNEL_DATA_WIDTH*0)+(16*n))]};
+  end
+  endgenerate
+
+  // mux
+
+  generate
+
+Diff Content:
+- 202   for (n = 0; n < CH_SCNT; n = n + 1) begin: g_intlv
++ 202   for (n = 0; n < SAMPLES_PCHANNEL; n = n + 1) begin: g_intlv
+
+Clone Blocks:

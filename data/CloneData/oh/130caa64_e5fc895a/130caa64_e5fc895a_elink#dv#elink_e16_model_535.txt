@@ -1,0 +1,32 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4317:4333@HdlStmProcess
+   //#######################################
+   //# Architectural entries state tracking
+   //# (written/read transactions tracking)
+   //#######################################
+
+   always @ (posedge txo_lclk or posedge reset)
+     if(reset)
+       fifo_trans[AE+1:0] <= {{(AE+1){1'b0}},1'b1};
+     else if(tran_written & ~tran_read)
+       fifo_trans[AE+1:0] <= {fifo_trans[AE:0],1'b0};
+     else if(tran_read & ~tran_written)
+       fifo_trans[AE+1:0] <= {1'b0,fifo_trans[AE+1:1]};
+
+   //# we start new read if:
+   //# 1. there is an indication of the first written transaction
+   //# 2. transaction is read and the new one is written at the same cycle
+   //# 3. transaction is read but there are more already written indicated by fifo_trans
+
+Diff Content:
+- 4322    always @ (posedge txo_lclk or posedge reset)
+- 4323      if(reset)
+- 4324        fifo_trans[AE+1:0] <= {{(AE+1){1'b0}},1'b1};
+- 4325      else if(tran_written & ~tran_read)
+- 4326        fifo_trans[AE+1:0] <= {fifo_trans[AE:0],1'b0};
+- 4327      else if(tran_read & ~tran_written)
+- 4328        fifo_trans[AE+1:0] <= {1'b0,fifo_trans[AE+1:1]};
++ 4328    assign next_dstaddr_tlc[AW-1:0] = {traninfo0_tlc[3:0],
++ 4328                                       traninfo1_tlc[2*LW-1:0],
++ 4328                                       traninfo2_tlc[2*LW-1:4]};
+
+Clone Blocks:

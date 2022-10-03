@@ -1,0 +1,32 @@
+Source Block: oh/elink/dv/elink_e16_model.v@4975:4985@HdlStmAssign
+
+   //############################################
+   //# Transaction launcher state machine
+   //############################################
+
+   assign mesh_last_tran = mesh_pointer[2] & mesh_pointer[1] & ~mesh_pointer[0];
+                        
+   assign mesh_pointer_incr[2:0] = mesh_last_tran ? 3'b000 :
+				   (mesh_pointer[2:0] + 3'b001);
+
+   always @ (posedge cclk or posedge reset)
+
+Diff Content:
+- 4980    assign mesh_last_tran = mesh_pointer[2] & mesh_pointer[1] & ~mesh_pointer[0];
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@4977:4988
+   //# Transaction launcher state machine
+   //############################################
+
+   assign mesh_last_tran = mesh_pointer[2] & mesh_pointer[1] & ~mesh_pointer[0];
+                        
+   assign mesh_pointer_incr[2:0] = mesh_last_tran ? 3'b000 :
+				   (mesh_pointer[2:0] + 3'b001);
+
+   always @ (posedge cclk or posedge reset)
+     if(reset)
+       mesh_pointer[2:0] <= 3'b000;
+     else if(cclk_en)
+

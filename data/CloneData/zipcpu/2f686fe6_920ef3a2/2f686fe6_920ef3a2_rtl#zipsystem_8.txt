@@ -1,0 +1,35 @@
+Source Block: zipcpu/rtl/zipsystem.v@827:839@HdlIdDef
+	//	(~cmd_addr[5])		we are trying to read a CPU register
+	//			while in motion.  Let the user beware that,
+	//			by not waiting for the CPU to fully halt,
+	//			his results may not be what he expects.
+	//
+	wire	sys_dbg_cyc = ((dbg_cyc)&&(!cpu_lcl_cyc)&&(dbg_addr))
+				&&(((cpu_halt)&&(!cpu_dbg_stall))
+					||(!cmd_addr[5]));
+	assign	sys_cyc = (cpu_lcl_cyc)||(sys_dbg_cyc);
+	assign	sys_stb = (cpu_lcl_cyc)
+				? (cpu_lcl_stb)
+				: ((dbg_stb)&&(dbg_addr)&&(cmd_addr[5]));
+
+
+Diff Content:
+- 833 				&&(((cpu_halt)&&(!cpu_dbg_stall))
+- 834 					||(!cmd_addr[5]));
++ 834 				&&(cmd_addr[5]);
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/zipsystem.v@830:840
+	//			his results may not be what he expects.
+	//
+	wire	sys_dbg_cyc = ((dbg_cyc)&&(!cpu_lcl_cyc)&&(dbg_addr))
+				&&(((cpu_halt)&&(!cpu_dbg_stall))
+					||(!cmd_addr[5]));
+	assign	sys_cyc = (cpu_lcl_cyc)||(sys_dbg_cyc);
+	assign	sys_stb = (cpu_lcl_cyc)
+				? (cpu_lcl_stb)
+				: ((dbg_stb)&&(dbg_addr)&&(cmd_addr[5]));
+
+	assign	sys_we  = (cpu_lcl_cyc) ? cpu_we : dbg_we;
+

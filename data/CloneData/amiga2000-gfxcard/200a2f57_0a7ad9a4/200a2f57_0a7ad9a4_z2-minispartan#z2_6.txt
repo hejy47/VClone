@@ -1,0 +1,141 @@
+Source Block: amiga2000-gfxcard/z2-minispartan/z2.v@710:836@HdlStmProcess
+    videocap_x2 <= videocap_x2 + 1'b1;
+    videocap_buf2[videocap_x2-videocap_prex] <= videocap_rgbin2;
+  end
+end
+
+always @(posedge z_sample_clk) begin
+  znUDS_sync  <= {znUDS_sync[1:0],znUDS};
+  znLDS_sync  <= {znLDS_sync[1:0],znLDS};
+  znAS_sync   <= {znAS_sync[1:0],znAS};
+  zREAD_sync  <= {zREAD_sync[1:0],zREAD};
+  
+  znDS1_sync  <= {znDS1_sync[1:0],znDS1};
+  znDS0_sync  <= {znDS0_sync[1:0],znDS0};
+  zDOE_sync   <= {zDOE_sync[0],zDOE};
+  zE7M_sync   <= {zE7M_sync[3:0],zE7M};
+  znRST_sync  <= {znRST_sync[0],znRST};
+  znCFGIN_sync  <= {znCFGIN_sync[1:0],znCFGIN};
+  znFCS_sync <= {znFCS_sync[1:0],znFCS};
+  
+  // unused signals ------------------------------------
+  SD_DAT1_sync <= SD_DAT1;
+  SD_DAT2_sync <= SD_DAT2;
+  zFC0_sync <= zFC0;
+  zFC1_sync <= zFC1;
+  zFC2_sync <= zFC2;
+  zSENSEZ3_sync <= zSENSEZ3;
+  znBERR_sync <= znBERR;
+  
+  // Z2 ------------------------------------------------
+  z2_addr_valid <= (znAS_sync[2]==0);
+  
+  data_in <= zD;
+  zdata_in_sync <= data_in;
+  
+  need_row_fetch_y_latched <= need_row_fetch_y;
+  
+  zaddr <= {zA[22:0],1'b0};
+  zaddr_sync  <= zaddr;
+  zaddr_sync2 <= zaddr_sync;
+  
+  z2_mapped_addr <= ((zaddr_sync2-ram_low)>>1);
+  z2_read  <= (zREAD_sync[0] == 1'b1);
+  z2_write <= (zREAD_sync[0] == 1'b0);
+  
+  datastrobe_synced <= (znUDS_sync==0 || znLDS_sync==0);
+  z2_uds <= (znUDS_sync==0);
+  z2_lds <= (znLDS_sync==0);
+  
+  // CHECK
+  zaddr_in_ram <= (zaddr_sync==zaddr_sync2 && zaddr_sync2>=ram_low && zaddr_sync2<ram_high);
+  zaddr_in_reg <= (zaddr_sync==zaddr_sync2 && zaddr_sync2>=reg_low && zaddr_sync2<reg_high);
+  if (znAS_sync[1]==0 && zaddr_sync2>=autoconf_low && zaddr_sync2<autoconf_high)
+    zaddr_autoconfig <= 1'b1;
+  else
+    zaddr_autoconfig <= 1'b0;
+  
+  // Z3 ------------------------------------------------
+  z3addr2 <= {zD[15:8],zA[22:1],2'b00};
+  //z3addr2 <= {zD[15:8],zaddr[23:2],2'b00};
+  
+  // sample z3addr on falling edge of /FCS
+  if (z3_fcs_state==0) begin
+    if (znFCS_sync[0]==1 /*3'b111*/) begin
+      z3_fcs_state <= 1;
+      z3_end_cycle <= 1;
+      z3addr <= 0; 
+    end
+  end else
+  if (z3_fcs_state==1) begin
+    if (znFCS_sync[0]==0 /*3'b000*/) begin // CHECK: if responding too quickly, this causes crashes
+      z3_fcs_state <= 0;
+      z3_end_cycle <= 0;
+      z3addr <= z3addr2;
+      zorro_read  <= zREAD_sync[1];
+      zorro_write  <= ~zREAD_sync[1];
+    end
+  end
+  
+  if (z3_fcs_state==0) begin
+    z3addr_in_ram <= (z3addr >= z3_ram_low) && (z3addr < z3_ram_high);
+    z3addr_in_reg <= (z3addr >= z3_reg_low) && (z3addr < z3_reg_high);
+  end else begin
+    z3addr_in_ram <= 0;
+    z3addr_in_reg <= 0;
+  end
+  
+  z3addr_autoconfig <= (z3addr[31:16]=='hff00);
+  
+  z3_mapped_addr <= (z3addr-z3_ram_low)>>1;
+  data_in_z3_low16 <= zaddr[23:8]; //zA[22:7]; // FIXME why sample this twice?
+  
+  //if (znUDS_sync==3'b000 || znLDS_sync==3'b000 || znDS1_sync==3'b000 || znDS0_sync==3'b000)
+  if (znUDS_sync[1]==0 || znLDS_sync[1]==0 || znDS1_sync[1]==0 || znDS0_sync[1]==0)
+    z3_din_latch <= 1;
+  else
+    z3_din_latch <= 0;
+
+  //z3_end_cycle <= (z3_fcs_state==1); //(znFCS_sync[0]==1); //(znFCS_sync==3'b111);
+  
+  // pipelined for better timing
+  if (z3_din_latch) begin
+    z3_din_high_s2 <= data_in; //zD;
+    z3_din_low_s2  <= data_in_z3_low16; //zA[22:7];
+  end
+  
+  // pipelined for better timing
+  data_z3_hi16_latched <= data_z3_hi16;
+  data_z3_low16_latched <= data_z3_low16;
+  dataout_z3_latched <= dataout_z3;
+  dtack_latched <= dtack;
+  
+  // RESET, CONFIG
+  z_reset <= (znRST_sync==3'b000);
+  z_cfgin <= (znCFGIN_sync==3'b000);
+  z_cfgin_lo <= (znCFGIN_sync==3'b111);
+  
+  // SD sync
+  sd_handshake_out_sync <= sd_handshake_out;
+  sd_data_out_sync <= sd_data_out;
+  sd_busy_sync <= sd_busy;
+  sd_error_sync <= sd_error;
+end
+
+// ram arbiter
+reg zorro_ram_read_request = 0;
+reg zorro_ram_read_done = 1;
+reg zorro_ram_write_request = 0;
+
+Diff Content:
+- 744   need_row_fetch_y_latched <= need_row_fetch_y;
++ 744   if (videocap_mode) begin
++ 744     if (need_row_fetch_y>((vga_screen_h>>vga_scalemode_v) - videocap_interlace)) // FIXME sync
++ 744       need_row_fetch_y_latched <= 1;
++ 744     else
++ 744       need_row_fetch_y_latched <= need_row_fetch_y+1'b1;
++ 744   end else
++ 744     need_row_fetch_y_latched <= need_row_fetch_y;
++ 819   dvi_vsync_reg <= dvi_vsync;
+
+Clone Blocks:

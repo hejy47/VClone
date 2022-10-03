@@ -1,0 +1,36 @@
+Source Block: oh/common/dv/stimulus.v@53:81@HdlStmProcess
+   reg [128*8:0]   str;
+   reg [31:0] 	   stim_end;
+   wire 	   stall_random;
+   
+   //Read Stimulus
+   initial begin
+      $sformat(testfile[255:0],"%0s_%0d%s",NAME,INDEX,".memh");
+      fd = $fopen(testfile, "r");
+      if(!fd)
+	begin
+	   $display("could not open the file %0s\n", testfile);
+	   $finish;
+	end
+      //Read stimulus from file      
+      j=0;      
+      while ($fgets(str, fd)) begin 
+	 if ($sscanf(str,"%h", stimarray[j]))
+	   begin
+	      //$display("%0s %0d data=%0h", testfile, j, stimarray[j]);
+	      j=j+1;
+	   end	 
+      end
+      stim_end[31:0]=j;      
+   end
+
+   
+`define IDLE  2'b00
+`define DONE  2'b10
+`define GO    2'b01
+
+Diff Content:
+- 59       $sformat(testfile[255:0],"%0s_%0d%s",NAME,INDEX,".memh");
++ 59       $sformat(testfile[255:0],"%0s_%0d%s",NAME,INDEX,".emf");
+
+Clone Blocks:

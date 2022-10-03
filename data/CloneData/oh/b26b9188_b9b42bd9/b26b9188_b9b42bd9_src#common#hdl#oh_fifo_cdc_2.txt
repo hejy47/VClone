@@ -1,0 +1,45 @@
+Source Block: oh/src/common/hdl/oh_fifo_cdc.v@27:37@HdlStmAssign
+   wire 	   wr_en;
+   wire 	   rd_en;
+   
+   // FIFO control logic
+   assign wr_en    = access_in;
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out = prog_full;        //wait_out should stall access_in signal
+
+   //Holds access high while waiting
+   always @ (posedge clk_out or negedge nreset)
+     if(!nreset)
+
+Diff Content:
+- 32    assign rd_en    = ~empty & ~wait_in;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/src/common/hdl/oh_fifo_cdc.v@26:36
+   
+   wire 	   wr_en;
+   wire 	   rd_en;
+   
+   // FIFO control logic
+   assign wr_en    = access_in;
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out = prog_full;        //wait_out should stall access_in signal
+
+   //Holds access high while waiting
+   always @ (posedge clk_out or negedge nreset)
+
+Clone Blocks 2:
+oh/src/common/hdl/oh_fifo_cdc.v@28:38
+   wire 	   rd_en;
+   
+   // FIFO control logic
+   assign wr_en    = access_in;
+   assign rd_en    = ~empty & ~wait_in;
+   assign wait_out = prog_full;        //wait_out should stall access_in signal
+
+   //Holds access high while waiting
+   always @ (posedge clk_out or negedge nreset)
+     if(!nreset)
+       access_out <= 1'b0;   
+

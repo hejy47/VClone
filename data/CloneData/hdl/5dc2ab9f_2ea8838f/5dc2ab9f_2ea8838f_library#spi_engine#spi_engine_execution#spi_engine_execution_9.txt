@@ -1,0 +1,51 @@
+Source Block: hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@150:163@HdlIdDef
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+
+// supporting max 8 SDI channel
+reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_1 = 'h0;
+
+Diff Content:
+- 155 wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+- 156                     (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+- 157                     (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+- 158                     (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@156:166
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+
+// supporting max 8 SDI channel
+reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_1 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_2 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_3 = 'h0;
+reg [(DATA_WIDTH-1):0] data_sdi_shift_4 = 'h0;
+
+Clone Blocks 2:
+hdl/library/spi_engine/spi_engine_execution/spi_engine_execution.v@148:158
+wire trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
+wire trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
+
+reg trigger_rx_d1 = 1'b0;
+reg trigger_rx_d2 = 1'b0;
+reg trigger_rx_d3 = 1'b0;
+
+wire trigger_rx_s = (SDI_DELAY == 2'b00) ? trigger_rx :
+                    (SDI_DELAY == 2'b01) ? trigger_rx_d1 :
+                    (SDI_DELAY == 2'b10) ? trigger_rx_d2 :
+                    (SDI_DELAY == 2'b11) ? trigger_rx_d3 : trigger_rx;
+

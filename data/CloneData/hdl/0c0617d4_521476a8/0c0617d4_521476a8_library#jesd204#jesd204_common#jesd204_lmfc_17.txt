@@ -1,0 +1,54 @@
+Source Block: hdl/library/jesd204/jesd204_common/jesd204_lmfc.v@145:161@HdlStmProcess
+  end else begin
+    cfg_whole_beats_per_multiframe = cfg_beats_per_multiframe;
+  end
+end
+
+always @(*) begin
+  if (lmfc_counter == cfg_whole_beats_per_multiframe) begin
+    lmfc_counter_next = 'h00;
+  end else begin
+    lmfc_counter_next = lmfc_counter + 1'b1;
+  end
+end
+
+always @(posedge clk) begin
+  if (reset == 1'b1) begin
+    lmfc_counter <= 'h01;
+    lmfc_active <= cfg_sysref_disable;
+
+Diff Content:
+- 150 always @(*) begin
+- 151   if (lmfc_counter == cfg_whole_beats_per_multiframe) begin
+- 152     lmfc_counter_next = 'h00;
+- 153   end else begin
+- 154     lmfc_counter_next = lmfc_counter + 1'b1;
+- 156 end
++ 154   /*
++ 154    * The configuration must be static when the core is out of reset. Otherwise
++ 154    * undefined behaviour might occur.
++ 154    * E.g. lmfc_counter > beats_per_multiframe
++ 154    *
++ 154    * To change the configuration first assert reset, then update the configuration
++ 154    * setting, finally deassert reset.
++ 154    */
++ 154   /*
++ 154    * For DATA_PATH_WIDTH == 8, F*K%8=4, set
++ 154    * cfg_beats_per_multiframe = cfg_beats_per_multiframe*2
++ 154    * LMFC will be twice the actual length
++ 154    */
++ 154   always @(*) begin
++ 154     if((LINK_MODE == 1) && (DATA_PATH_WIDTH == 8) && ~cfg_octets_per_multiframe[2]) begin
++ 154       cfg_whole_beats_per_multiframe = cfg_beats_per_multiframe*2;
++ 154     end else begin
++ 154       cfg_whole_beats_per_multiframe = cfg_beats_per_multiframe;
++ 154     end
++ 154   end
++ 154   always @(*) begin
++ 154     if (lmfc_counter == cfg_whole_beats_per_multiframe) begin
++ 154       lmfc_counter_next = 'h00;
++ 154     end else begin
++ 154       lmfc_counter_next = lmfc_counter + 1'b1;
++ 154     end
+
+Clone Blocks:

@@ -1,0 +1,47 @@
+Source Block: oh/elink/hdl/erx_arbiter.v@131:141@HdlStmAssign
+         
+   //####################################
+   //Read Path 
+   //####################################
+
+   assign emmu_read           = (emmu_access & ~emmu_write);
+   
+   assign rxrd_access         = emmu_read | edma_access;
+   
+   assign rxrd_packet[PW-1:0] = emmu_read ? emmu_packet[PW-1:0] : 
+				            edma_packet[PW-1:0];
+
+Diff Content:
+- 136    assign emmu_read           = (emmu_access & ~emmu_write);
++ 136    assign emmu_read           = emmu_access & ~emmu_write;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/hdl/erx_arbiter.v@135:146
+
+   assign emmu_read           = (emmu_access & ~emmu_write);
+   
+   assign rxrd_access         = emmu_read | edma_access;
+   
+   assign rxrd_packet[PW-1:0] = emmu_read ? emmu_packet[PW-1:0] : 
+				            edma_packet[PW-1:0];
+   
+   //####################################
+   //Wait Signals
+   //####################################   
+   
+
+Clone Blocks 2:
+oh/elink/hdl/erx_arbiter.v@133:143
+   //Read Path 
+   //####################################
+
+   assign emmu_read           = (emmu_access & ~emmu_write);
+   
+   assign rxrd_access         = emmu_read | edma_access;
+   
+   assign rxrd_packet[PW-1:0] = emmu_read ? emmu_packet[PW-1:0] : 
+				            edma_packet[PW-1:0];
+   
+   //####################################
+

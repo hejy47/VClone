@@ -1,0 +1,13 @@
+Source Block: zipcpu/rtl/core/dblfetch.v@228:234@HdlStmAssign
+		if ((o_wb_cyc)&&(i_wb_err))
+			o_illegal <= 1'b1;
+		else if ((!o_wb_cyc)&&((i_new_pc)||(invalid_bus_cycle)))
+			o_illegal <= 1'b0;
+
+	assign	o_dbg = { last_stb, last_ack };
+endmodule
+
+Diff Content:
+- 233 	assign	o_dbg = { last_stb, last_ack };
+
+Clone Blocks:

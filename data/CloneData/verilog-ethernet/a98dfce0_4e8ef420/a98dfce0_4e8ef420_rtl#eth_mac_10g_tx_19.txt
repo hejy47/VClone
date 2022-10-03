@@ -1,0 +1,104 @@
+Source Block: verilog-ethernet/rtl/eth_mac_10g_tx.v@542:614@HdlStmProcess
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        
+        frame_ptr_reg <= 0;
+
+        ifg_count_reg <= 0;
+        deficit_idle_count_reg <= 0;
+
+        input_tdata_reg <= 0;
+        input_tkeep_reg <= 0;
+        
+        input_axis_tready_reg <= 0;
+
+        xgmii_txd_reg <= 64'h0707070707070707;
+        xgmii_txc_reg <= 8'b11111111;
+
+        crc_state <= 32'hFFFFFFFF;
+
+        lanes_swapped <= 0;
+        swap_txd <= 0;
+        swap_txc <= 0;
+    end else begin
+        state_reg <= state_next;
+
+        frame_ptr_reg <= frame_ptr_next;
+
+        ifg_count_reg <= ifg_count_next;
+        deficit_idle_count_reg <= deficit_idle_count_next;
+
+        input_tdata_reg <= input_tdata_next;
+        input_tkeep_reg <= input_tkeep_next;
+
+        input_axis_tready_reg <= input_axis_tready_next;
+
+        if (lanes_swapped) begin
+            if (unswap_lanes) begin
+                lanes_swapped <= 0;
+                xgmii_txd_reg <= xgmii_txd_next;
+                xgmii_txc_reg <= xgmii_txc_next;
+            end else begin
+                xgmii_txd_reg <= {xgmii_txd_next[31:0], swap_txd};
+                xgmii_txc_reg <= {xgmii_txc_next[3:0], swap_txc};
+            end
+        end else begin
+            if (swap_lanes) begin
+                lanes_swapped <= 1;
+                xgmii_txd_reg <= {xgmii_txd_next[31:0], 32'h07070707};
+                xgmii_txc_reg <= {xgmii_txc_next[3:0], 4'b1111};
+            end else begin
+                xgmii_txd_reg <= xgmii_txd_next;
+                xgmii_txc_reg <= xgmii_txc_next;
+            end
+        end
+
+        swap_txd <= xgmii_txd_next[63:32];
+        swap_txc <= xgmii_txc_next[7:4];
+
+        // datapath
+        if (reset_crc) begin
+            crc_state <= 32'hFFFFFFFF;
+        end else if (update_crc) begin
+            crc_state <= crc_next7;
+        end
+    end
+end
+
+endmodule
+
+Diff Content:
+- 551         frame_ptr_reg <= 0;
+- 553         ifg_count_reg <= 0;
+- 554         deficit_idle_count_reg <= 0;
+- 556         input_tdata_reg <= 0;
+- 557         input_tkeep_reg <= 0;
+- 559         input_axis_tready_reg <= 0;
+- 566         lanes_swapped <= 0;
+- 567         swap_txd <= 0;
+- 568         swap_txc <= 0;
+- 577         input_tdata_reg <= input_tdata_next;
+- 578         input_tkeep_reg <= input_tkeep_next;
+- 584                 lanes_swapped <= 0;
+- 593                 lanes_swapped <= 1;
+- 602         swap_txd <= xgmii_txd_next[63:32];
+- 603         swap_txc <= xgmii_txc_next[7:4];
++ 554         frame_ptr_reg <= 16'd0;
++ 559         ifg_count_reg <= 8'd0;
++ 559         deficit_idle_count_reg <= 2'd0;
++ 559         input_axis_tready_reg <= 1'b0;
++ 568         lanes_swapped <= 1'b0;
++ 584                 lanes_swapped <= 1'b0;
++ 593                 lanes_swapped <= 1'b1;
++ 611     input_tdata_reg <= input_tdata_next;
++ 611     input_tkeep_reg <= input_tkeep_next;
++ 611     swap_txd <= xgmii_txd_next[63:32];
++ 611     swap_txc <= xgmii_txc_next[7:4];
+
+Clone Blocks:

@@ -1,0 +1,28 @@
+Source Block: zipcpu/rtl/core/idecode.v@120:140@HdlStmIf
+	wire	[31:0]	iword;
+
+
+	reg	[15:0]	r_nxt_half;
+
+	generate if (OPT_CIS)
+	begin : SET_IWORD
+
+		assign	iword = (o_phase)
+				// set second half as a NOOP ... but really
+				// shouldn't matter
+			? { r_nxt_half[15:0], i_instruction[15:0] }
+			: i_instruction;
+	end else begin : CLR_IWORD
+		assign	iword = { 1'b0, i_instruction[30:0] };
+	end endgenerate
+
+	generate
+	if (OPT_EARLY_BRANCHING)
+	begin
+		if (OPT_CIS)
+
+Diff Content:
++ 134 		wire	[15:0]	unused_nxt_half;
++ 134 		assign		unused_nxt_half = r_nxt_half;
+
+Clone Blocks:

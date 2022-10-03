@@ -1,0 +1,150 @@
+Source Block: hdl/library/spi_engine/axi_spi_engine/axi_spi_engine.v@494:626@HdlStmIf
+    .m_axis_level(sdi_fifo_level),
+    .m_axis_empty(),
+    .m_axis_almost_empty()
+  );
+
+  generate if (ASYNC_SPI_CLK) begin
+
+    // synchronization FIFO for the SYNC interface
+    util_axis_fifo #(
+      .DATA_WIDTH(8),
+      .ASYNC_CLK(ASYNC_SPI_CLK),
+      .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+      .M_AXIS_REGISTERED(0)
+    ) i_sync_fifo (
+      .s_axis_aclk(spi_clk),
+      .s_axis_aresetn(spi_resetn),
+      .s_axis_ready(sync_ready),
+      .s_axis_valid(sync_valid),
+      .s_axis_data(sync_data),
+      .s_axis_room(),
+      .s_axis_full(),
+      .m_axis_aclk(clk),
+      .m_axis_aresetn(up_sw_resetn),
+      .m_axis_ready(1'b1),
+      .m_axis_valid(sync_fifo_valid),
+      .m_axis_data(sync_fifo_data),
+      .m_axis_level(),
+      .m_axis_empty()
+    );
+
+    // synchronization FIFO for the offload command interface
+    wire up_offload0_cmd_wr_en_s;
+    wire [15:0] up_offload0_cmd_wr_data_s;
+
+    util_axis_fifo #(
+      .DATA_WIDTH(16),
+      .ASYNC_CLK(ASYNC_SPI_CLK),
+      .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+      .M_AXIS_REGISTERED(0)
+    ) i_offload_cmd_fifo (
+      .s_axis_aclk(clk),
+      .s_axis_aresetn(up_sw_resetn),
+      .s_axis_ready(),
+      .s_axis_valid(up_offload0_cmd_wr_en_s),
+      .s_axis_data(up_offload0_cmd_wr_data_s),
+      .s_axis_room(),
+      .s_axis_full(),
+      .m_axis_aclk(spi_clk),
+      .m_axis_aresetn(spi_resetn),
+      .m_axis_ready(1'b1),
+      .m_axis_valid(offload0_cmd_wr_en),
+      .m_axis_data(offload0_cmd_wr_data),
+      .m_axis_level(),
+      .m_axis_empty()
+    );
+
+    assign up_offload0_cmd_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
+    assign up_offload0_cmd_wr_data_s = up_wdata_s[15:0];
+
+    // synchronization FIFO for the offload SDO interface
+    wire up_offload0_sdo_wr_en_s;
+    wire [DATA_WIDTH-1:0] up_offload0_sdo_wr_data_s;
+
+    util_axis_fifo #(
+      .DATA_WIDTH(DATA_WIDTH),
+      .ASYNC_CLK(ASYNC_SPI_CLK),
+      .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+      .M_AXIS_REGISTERED(0)
+    ) i_offload_sdo_fifo (
+      .s_axis_aclk(clk),
+      .s_axis_aresetn(up_sw_resetn),
+      .s_axis_ready(),
+      .s_axis_valid(up_offload0_sdo_wr_en_s),
+      .s_axis_data(up_offload0_sdo_wr_data_s),
+      .s_axis_room(),
+      .s_axis_full(),
+      .m_axis_aclk(spi_clk),
+      .m_axis_aresetn(spi_resetn),
+      .m_axis_ready(1'b1),
+      .m_axis_valid(offload0_sdo_wr_en),
+      .m_axis_data(offload0_sdo_wr_data),
+      .m_axis_level(),
+      .m_axis_empty()
+    );
+
+    assign up_offload0_sdo_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
+    assign up_offload0_sdo_wr_data_s = up_wdata_s[DATA_WIDTH-1:0];
+
+    // synchronization FIFO for the Offload SYNC interface
+    util_axis_fifo #(
+      .DATA_WIDTH(8),
+      .ASYNC_CLK(ASYNC_SPI_CLK),
+      .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
+      .M_AXIS_REGISTERED(0)
+    ) i_offload_sync_fifo (
+      .s_axis_aclk(spi_clk),
+      .s_axis_aresetn(spi_resetn),
+      .s_axis_ready(offload_sync_ready),
+      .s_axis_valid(offload_sync_valid),
+      .s_axis_data(offload_sync_data),
+      .s_axis_room(),
+      .s_axis_full(),
+      .m_axis_aclk(clk),
+      .m_axis_aresetn(up_sw_resetn),
+      .m_axis_ready(1'b1),
+      .m_axis_valid(offload_sync_fifo_valid),
+      .m_axis_data(offload_sync_fifo_data),
+      .m_axis_level(),
+      .m_axis_empty()
+    );
+
+  end else begin /* ASYNC_SPI_CLK == 0 */
+
+      assign sync_fifo_valid = sync_valid;
+      assign sync_fifo_data = sync_data;
+      assign sync_ready = 1'b1;
+
+      assign offload0_cmd_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h44;
+      assign offload0_cmd_wr_data = up_wdata_s[15:0];
+
+      assign offload0_sdo_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
+      assign offload0_sdo_wr_data = up_wdata_s[DATA_WIDTH-1:0];
+
+      assign offload_sync_fifo_valid = offload_sync_valid;
+      assign offload_sync_fifo_data = offload_sync_data;
+      assign offload_sync_ready = 1'b1;
+
+  end
+  endgenerate
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_SPI_CLK)
+
+Diff Content:
+- 521       .m_axis_empty()
+- 522     );
+- 547       .m_axis_empty()
+- 548     );
+- 576       .m_axis_empty()
+- 577     );
+- 602       .m_axis_empty()
+- 603     );
++ 522       .m_axis_empty());
++ 548       .m_axis_empty());
++ 577       .m_axis_empty());
++ 603       .m_axis_empty());
+
+Clone Blocks:

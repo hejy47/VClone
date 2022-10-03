@@ -1,0 +1,46 @@
+Source Block: hdl/library/jesd204/axi_jesd204_rx/jesd204_up_ilas_mem.v@61:71@HdlIdDef
+  input [DATA_PATH_WIDTH*8-1:0] core_ilas_config_data,
+
+  output up_ilas_ready
+);
+
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+
+reg [DATA_PATH_WIDTH*8-1:0] mem[0:ILAS_DATA_LENGTH-1];
+reg core_ilas_captured = 1'b0;
+
+sync_bits i_cdc_ilas_ready (
+
+Diff Content:
+- 66 localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
++ 66   localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+
+Clone Blocks:
+Clone Blocks 1:
+hdl/library/jesd204/axi_jesd204_rx/jesd204_up_ilas_mem.v@64:74
+);
+
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+
+reg [DATA_PATH_WIDTH*8-1:0] mem[0:ILAS_DATA_LENGTH-1];
+reg core_ilas_captured = 1'b0;
+
+sync_bits i_cdc_ilas_ready (
+  .in_bits(core_ilas_captured),
+  .out_resetn(1'b1),
+  .out_clk(up_clk),
+
+Clone Blocks 2:
+hdl/library/jesd204/axi_jesd204_rx/jesd204_up_ilas_mem.v@63:73
+  output up_ilas_ready
+);
+
+localparam ILAS_DATA_LENGTH = (DATA_PATH_WIDTH == 4) ? 4 : 2;
+
+reg [DATA_PATH_WIDTH*8-1:0] mem[0:ILAS_DATA_LENGTH-1];
+reg core_ilas_captured = 1'b0;
+
+sync_bits i_cdc_ilas_ready (
+  .in_bits(core_ilas_captured),
+  .out_resetn(1'b1),
+

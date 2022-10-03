@@ -1,0 +1,26 @@
+Source Block: oh/elink/hdl/etx_protocol.v@137:150@HdlStmAssign
+     tx_burst_reg <=tx_burst;
+
+   //############################################################
+   //# TRANSMIT STATE MACHINE
+   //#############################################################
+   assign etx_valid = tx_enable & 
+		      etx_access &
+		      ~(etx_dstaddr[31:20]==ID) & 
+		       ~tx_wait;
+   
+`define TX_IDLE  3'b000
+`define TX_START 3'b001
+`define TX_ACK   3'b010
+`define TX_BURST 3'b011
+
+Diff Content:
+- 142    assign etx_valid = tx_enable & 
+- 143 		      etx_access &
+- 144 		      ~(etx_dstaddr[31:20]==ID) & 
+- 145 		       ~tx_wait;
++ 145    assign etx_valid = tx_enable  & 
++ 145 		      etx_access & 
++ 145 		      ~tx_wait;
+
+Clone Blocks:

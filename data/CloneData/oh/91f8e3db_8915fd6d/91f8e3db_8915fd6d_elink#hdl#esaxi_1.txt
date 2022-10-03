@@ -1,0 +1,29 @@
+Source Block: oh/elink/hdl/esaxi.v@260:279@HdlStmProcess
+   //###################################################
+   //#WRITE RESPONSE CHANNEL
+   //###################################################
+    assign s_axi_bid = axi_bid;
+   
+   always @ (posedge s_axi_aclk)
+     if(~s_axi_aresetn) 
+       s_axi_wready <= 1'b0;      
+     else
+       begin
+	  if( last_wr_beat )
+	    s_axi_wready <= 1'b0;
+	  else if( write_active )
+	    s_axi_wready <= ~txwr_wait;//this signal needs to be a programmable fifo full to work	  
+       end                             //regular pushback won't work FIX!
+   
+   always @( posedge s_axi_aclk )
+     if (~s_axi_aresetn) 
+       begin
+          s_axi_bvalid      <= 1'b0;
+
+Diff Content:
+- 273 	    s_axi_wready <= ~txwr_wait;//this signal needs to be a programmable fifo full to work	  
+- 274        end                             //regular pushback won't work FIX!
++ 274 	    s_axi_wready <= ~txwr_wait;
++ 274        end                             
+
+Clone Blocks:

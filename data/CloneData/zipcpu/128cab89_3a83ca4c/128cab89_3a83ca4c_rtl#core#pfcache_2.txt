@@ -1,0 +1,200 @@
+Source Block: zipcpu/rtl/core/pfcache.v@135:145@HdlIdDef
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+	wire	[(AW-1):PW]	lasttag;
+
+Diff Content:
+- 140 	wire			w_new_request, w_v_from_pc, w_v_from_last;
++ 140 	wire			w_v_from_pc, w_v_from_last;
+
+Clone Blocks:
+Clone Blocks 1:
+zipcpu/rtl/core/pfcache.v@131:141
+
+
+	wire			r_v;
+	reg	[(BUSW-1):0]	cache	[0:((1<<CW)-1)];
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+
+Clone Blocks 2:
+zipcpu/rtl/core/pfcache.v@138:148
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+	wire	[(AW-1):PW]	lasttag;
+	reg			illegal_valid;
+	reg	[(AW-1):PW]	illegal_cache;
+
+
+Clone Blocks 3:
+zipcpu/rtl/core/pfcache.v@134:144
+	reg	[(BUSW-1):0]	cache	[0:((1<<CW)-1)];
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+
+Clone Blocks 4:
+zipcpu/rtl/core/pfcache.v@135:145
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+	wire	[(AW-1):PW]	lasttag;
+
+Clone Blocks 5:
+zipcpu/rtl/core/pfcache.v@133:143
+	wire			r_v;
+	reg	[(BUSW-1):0]	cache	[0:((1<<CW)-1)];
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+
+Clone Blocks 6:
+zipcpu/rtl/core/pfcache.v@138:148
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+	wire	[(AW-1):PW]	lasttag;
+	reg			illegal_valid;
+	reg	[(AW-1):PW]	illegal_cache;
+
+
+Clone Blocks 7:
+zipcpu/rtl/core/pfcache.v@133:143
+	wire			r_v;
+	reg	[(BUSW-1):0]	cache	[0:((1<<CW)-1)];
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+
+Clone Blocks 8:
+zipcpu/rtl/core/pfcache.v@136:146
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+	wire	[(AW-1):PW]	lasttag;
+	reg			illegal_valid;
+
+Clone Blocks 9:
+zipcpu/rtl/core/pfcache.v@133:143
+	wire			r_v;
+	reg	[(BUSW-1):0]	cache	[0:((1<<CW)-1)];
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+
+Clone Blocks 10:
+zipcpu/rtl/core/pfcache.v@139:149
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+	wire	[(AW-1):PW]	lasttag;
+	reg			illegal_valid;
+	reg	[(AW-1):PW]	illegal_cache;
+
+	// initial	o_i = 32'h76_00_00_00;	// A NOOP instruction
+
+Clone Blocks 11:
+zipcpu/rtl/core/pfcache.v@137:147
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+	wire	[(AW-1):PW]	lasttag;
+	reg			illegal_valid;
+	reg	[(AW-1):PW]	illegal_cache;
+
+Clone Blocks 12:
+zipcpu/rtl/core/pfcache.v@135:145
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+	wire	[(AW-1):PW]	lasttag;
+
+Clone Blocks 13:
+zipcpu/rtl/core/pfcache.v@134:144
+	reg	[(BUSW-1):0]	cache	[0:((1<<CW)-1)];
+	reg	[(AW-CW-1):0]	tags	[0:((1<<(LGLINES))-1)];
+	reg	[((1<<(LGLINES))-1):0]	vmask;
+
+	reg			r_v_from_pc, r_v_from_last, r_new_request;
+	reg			rvsrc, tagsrc;
+	wire			w_new_request, w_v_from_pc, w_v_from_last;
+	reg	[(AW+1):0]	lastpc;
+	reg	[(CW-1):0]	wraddr;
+	reg	[(AW-1):CW]	tagvalipc, tagvallst;
+	wire	[(AW-1):CW]	tagval;
+

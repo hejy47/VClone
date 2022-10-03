@@ -1,0 +1,162 @@
+Source Block: verilog-ethernet/rtl/ip.v@250:316@HdlStmProcess
+assign arp_request_valid = arp_request_valid_reg | (input_ip_hdr_valid & ~input_ip_hdr_ready_reg);
+assign arp_request_ip = input_ip_dest_ip;
+
+assign tx_error_arp_failed = arp_response_error;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    arp_request_valid_next = 0;
+    drop_packet_next = 0;
+
+    input_ip_hdr_ready_next = 0;
+
+    outgoing_ip_hdr_valid_next = outgoing_ip_hdr_valid_reg & ~outgoing_ip_hdr_ready;
+    outgoing_eth_dest_mac_next = outgoing_eth_dest_mac_reg;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // wait for outgoing packet
+            if (input_ip_hdr_valid) begin
+                // initiate ARP request
+                arp_request_valid_next = 1;
+                state_next = STATE_ARP_QUERY;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_ARP_QUERY: begin
+            arp_request_valid_next = 1;
+
+            if (arp_response_valid) begin
+                // wait for ARP reponse
+                if (arp_response_error) begin
+                    // did not get MAC address; drop packet
+                    input_ip_hdr_ready_next = 1;
+                    arp_request_valid_next = 0;
+                    drop_packet_next = 1;
+                    state_next = STATE_WAIT_PACKET;
+                end else begin
+                    // got MAC address; send packet
+                    input_ip_hdr_ready_next = 1;
+                    arp_request_valid_next = 0;
+                    outgoing_ip_hdr_valid_next = 1;
+                    outgoing_eth_dest_mac_next = arp_response_mac;
+                    state_next = STATE_WAIT_PACKET;
+                end
+            end else begin
+                state_next = STATE_ARP_QUERY;
+            end
+        end
+        STATE_WAIT_PACKET: begin
+            drop_packet_next = drop_packet_reg;
+
+            // wait for packet transfer to complete
+            if (input_ip_payload_tlast & input_ip_payload_tready & input_ip_payload_tvalid) begin
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_WAIT_PACKET;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        arp_request_valid_reg <= 0;
+
+Diff Content:
+- 258     arp_request_valid_next = 0;
+- 259     drop_packet_next = 0;
+- 261     input_ip_hdr_ready_next = 0;
+- 271                 arp_request_valid_next = 1;
+- 284                     input_ip_hdr_ready_next = 1;
+- 285                     arp_request_valid_next = 0;
+- 286                     drop_packet_next = 1;
+- 290                     input_ip_hdr_ready_next = 1;
+- 291                     arp_request_valid_next = 0;
+- 292                     outgoing_ip_hdr_valid_next = 1;
++ 259     arp_request_valid_next = 1'b0;
++ 259     drop_packet_next = 1'b0;
++ 261     input_ip_hdr_ready_next = 1'b0;
++ 271                 arp_request_valid_next = 1'b1;
++ 286                     input_ip_hdr_ready_next = 1'b1;
++ 286                     arp_request_valid_next = 1'b0;
++ 286                     drop_packet_next = 1'b1;
++ 292                     input_ip_hdr_ready_next = 1'b1;
++ 292                     arp_request_valid_next = 1'b0;
++ 292                     outgoing_ip_hdr_valid_next = 1'b1;
+
+Clone Blocks:
+Clone Blocks 1:
+verilog-ethernet/rtl/ip_64.v@259:325
+assign arp_request_valid = arp_request_valid_reg | (input_ip_hdr_valid & ~input_ip_hdr_ready_reg);
+assign arp_request_ip = input_ip_dest_ip;
+
+assign tx_error_arp_failed = arp_response_error;
+
+always @* begin
+    state_next = STATE_IDLE;
+
+    arp_request_valid_next = 0;
+    drop_packet_next = 0;
+
+    input_ip_hdr_ready_next = 0;
+
+    outgoing_ip_hdr_valid_next = outgoing_ip_hdr_valid_reg & ~outgoing_ip_hdr_ready;
+    outgoing_eth_dest_mac_next = outgoing_eth_dest_mac_reg;
+
+    case (state_reg)
+        STATE_IDLE: begin
+            // wait for outgoing packet
+            if (input_ip_hdr_valid) begin
+                // initiate ARP request
+                arp_request_valid_next = 1;
+                state_next = STATE_ARP_QUERY;
+            end else begin
+                state_next = STATE_IDLE;
+            end
+        end
+        STATE_ARP_QUERY: begin
+            arp_request_valid_next = 1;
+
+            if (arp_response_valid) begin
+                // wait for ARP reponse
+                if (arp_response_error) begin
+                    // did not get MAC address; drop packet
+                    input_ip_hdr_ready_next = 1;
+                    arp_request_valid_next = 0;
+                    drop_packet_next = 1;
+                    state_next = STATE_WAIT_PACKET;
+                end else begin
+                    // got MAC address; send packet
+                    input_ip_hdr_ready_next = 1;
+                    arp_request_valid_next = 0;
+                    outgoing_ip_hdr_valid_next = 1;
+                    outgoing_eth_dest_mac_next = arp_response_mac;
+                    state_next = STATE_WAIT_PACKET;
+                end
+            end else begin
+                state_next = STATE_ARP_QUERY;
+            end
+        end
+        STATE_WAIT_PACKET: begin
+            drop_packet_next = drop_packet_reg;
+
+            // wait for packet transfer to complete
+            if (input_ip_payload_tlast & input_ip_payload_tready & input_ip_payload_tvalid) begin
+                state_next = STATE_IDLE;
+            end else begin
+                state_next = STATE_WAIT_PACKET;
+            end
+        end
+    endcase
+end
+
+always @(posedge clk) begin
+    if (rst) begin
+        state_reg <= STATE_IDLE;
+        arp_request_valid_reg <= 0;
+

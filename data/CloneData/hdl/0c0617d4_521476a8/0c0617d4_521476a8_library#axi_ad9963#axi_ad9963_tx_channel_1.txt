@@ -1,0 +1,34 @@
+Source Block: hdl/library/axi_ad9963/axi_ad9963_tx_channel.v@122:146@HdlStmIf
+      dac_data <= dac_iqcor_data_s[15:4];
+    end
+  end
+
+  generate
+  if (DATAPATH_DISABLE == 1) begin
+  assign dac_iqcor_valid_s = data_source_valid;
+  assign dac_iqcor_data_s = {dac_data_out, 4'd0};
+  end else begin
+  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
+    .clk (dac_clk),
+    .valid (data_source_valid),
+    .data_in ({dac_data_out, 4'd0}),
+    .data_iq ({dac_data_in, 4'd0}),
+    .valid_out (dac_iqcor_valid_s),
+    .data_out (dac_iqcor_data_s),
+    .iqcor_enable (dac_iqcor_enb_s),
+    .iqcor_coeff_1 (dac_iqcor_coeff_1_s),
+    .iqcor_coeff_2 (dac_iqcor_coeff_2_s));
+  end
+  endgenerate
+
+  // dac mux
+
+  always @(posedge dac_clk) begin
+
+Diff Content:
+- 131   ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
++ 131   ad_iqcor #(
++ 131     .Q_OR_I_N (Q_OR_I_N)
++ 131   ) i_ad_iqcor (
+
+Clone Blocks:

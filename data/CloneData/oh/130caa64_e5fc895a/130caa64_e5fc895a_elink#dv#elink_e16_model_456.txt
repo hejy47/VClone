@@ -1,0 +1,52 @@
+Source Block: oh/elink/dv/elink_e16_model.v@3985:3996@HdlStmAssign
+
+   assign rd_addr_tlc[FAD-1:0]       = rd_binary_pointer_tlc[FAD-1:0];
+   assign rd_binary_next_tlc[FAD:0]  = rd_binary_pointer_tlc[FAD:0] + rd_read_tlc[FAD:0];
+
+   //# Gray Pointer Conversion (for more reliable synchronization)!
+   assign rd_gray_next_tlc[FAD:0]  = {1'b0,rd_binary_next_tlc[FAD:1]} ^ 
+                                           rd_binary_next_tlc[FAD:0];
+
+   //#
+   //# address and controls of the next transaction to be dispatch
+   //# * the size is actually FAD-1:0 but since FAD=3 causes syntax
+   //#   error for (FAD-3){1'b0} expression, we use a biger range
+
+Diff Content:
+- 3990    assign rd_gray_next_tlc[FAD:0]  = {1'b0,rd_binary_next_tlc[FAD:1]} ^ 
+- 3991                                            rd_binary_next_tlc[FAD:0];
++ 3991    wire [3:0]   grants;             //one-hot grants signals
++ 3991    wire [3:0] 	requests_unmasked;  //unmasked (original) requests
++ 3991    wire [3:0]   requests;           //requests
++ 3991    wire 	txo_wait_tlc;
+
+Clone Blocks:
+Clone Blocks 1:
+oh/elink/dv/elink_e16_model.v@1665:1675
+       rd_binary_pointer[FAD:0]  <= rd_binary_next[FAD:0];	  
+
+   assign rd_addr[FAD-1:0]       = rd_binary_pointer[FAD-1:0];
+   assign rd_binary_next[FAD:0]  = rd_binary_pointer[FAD:0] + {{(FAD){1'b0}},fifo_read};
+
+   assign fifo_empty = (rd_binary_next[FAD:0] == wr_binary_next[FAD:0]);
+
+   //########################################
+   //# Transaction assembly and distribution
+   //########################################
+
+
+Clone Blocks 2:
+oh/memory/hdl/fifo_empty_block.v@54:65
+
+   //Read Address
+   assign rd_addr[AW-1:0]        = rd_binary_pointer[AW-1:0];
+
+   //Updating binary pointer
+   assign rd_binary_next[AW:0]  = rd_binary_pointer[AW:0] + 
+				  {{(AW){1'b0}},rd_read};
+
+   //Gray Pointer Conversion (for more reliable synchronization)!
+   assign rd_gray_next[AW:0] = {1'b0,rd_binary_next[AW:1]} ^ 
+			       rd_binary_next[AW:0];
+
+
